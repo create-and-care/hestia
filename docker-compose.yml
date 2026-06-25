@@ -3,9 +3,9 @@ services:
     image: postgres:17
     restart: unless-stopped
     environment:
-      POSTGRES_USER: helia
+      POSTGRES_USER: hestia
       POSTGRES_PASSWORD: changeme_dev_only
-      POSTGRES_DB: helia_development
+      POSTGRES_DB: hestia_development
     ports:
       - "5432:5432"
     volumes:
