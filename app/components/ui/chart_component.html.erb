@@ -1,0 +1,8 @@
+<div class="flex items-end gap-3" style="height: <%= @height %>px">
+  <% @data.each_with_index do |(label, value), index| %>
+    <div class="flex flex-1 flex-col items-center justify-end gap-2 h-full">
+      <div class="w-full rounded-t-sm <%= COLORS[index % COLORS.size] %>" style="height: <%= (value / @max * 100).round(2) %>%"></div>
+      <span class="text-xs text-secondary"><%= label %></span>
+    </div>
+  <% end %>
+</div>

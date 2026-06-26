@@ -1,0 +1,6 @@
+<div class="flex flex-col items-center gap-2 rounded-lg border border-dashed border-primary py-12 px-6 text-center">
+  <% if icon? %><div class="mb-2 text-subdued"><%= icon %></div><% end %>
+  <% if title? %><p class="text-sm font-medium text-primary"><%= title %></p><% end %>
+  <% if description? %><p class="text-sm text-secondary max-w-sm"><%= description %></p><% end %>
+  <% if action? %><div class="mt-3"><%= action %></div><% end %>
+</div>

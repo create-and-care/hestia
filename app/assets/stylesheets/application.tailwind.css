@@ -1,70 +1,432 @@
 @import "tailwindcss";
 
-  :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --radius: 0;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
-  }
+/*
+  Hestia design tokens — single source of truth, hand-edited (no build step).
+  Tailwind v4 reads custom properties directly; dark mode overrides live in `.dark`.
+*/
 
-  .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+@theme {
+  --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Sans', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --radius-md: 8px;
+  --radius-lg: 10px;
+
+  /* raw palette */
+  --color-white: #ffffff;
+  --color-black: #0B0B0B;
+
+  --color-gray-25: #FAFAFA;
+  --color-gray-50: #F7F7F7;
+  --color-gray-100: #F0F0F0;
+  --color-gray-200: #E7E7E7;
+  --color-gray-300: #CFCFCF;
+  --color-gray-400: #9E9E9E;
+  --color-gray-500: #737373;
+  --color-gray-600: #5C5C5C;
+  --color-gray-700: #363636;
+  --color-gray-800: #242424;
+  --color-gray-900: #171717;
+
+  --color-red-25: #FFFBFB;
+  --color-red-50: #FFF1F0;
+  --color-red-100: #FFDEDB;
+  --color-red-200: #FEB9B3;
+  --color-red-300: #F88C86;
+  --color-red-400: #ED4E4E;
+  --color-red-500: #F13636;
+  --color-red-600: #EC2222;
+  --color-red-700: #C91313;
+  --color-red-800: #A40E0E;
+  --color-red-900: #7E0707;
+
+  --color-green-25: #F6FEF9;
+  --color-green-50: #ECFDF3;
+  --color-green-100: #D1FADF;
+  --color-green-200: #A6F4C5;
+  --color-green-300: #6CE9A6;
+  --color-green-400: #32D583;
+  --color-green-500: #12B76A;
+  --color-green-600: #10A861;
+  --color-green-700: #078C52;
+  --color-green-800: #05603A;
+  --color-green-900: #054F31;
+
+  --color-yellow-25: #FFFCF5;
+  --color-yellow-50: #FFFAEB;
+  --color-yellow-100: #FEF0C7;
+  --color-yellow-200: #FEDF89;
+  --color-yellow-300: #FEC84B;
+  --color-yellow-400: #FDB022;
+  --color-yellow-500: #F79009;
+  --color-yellow-600: #DC6803;
+  --color-yellow-700: #B54708;
+  --color-yellow-800: #93370D;
+  --color-yellow-900: #7A2E0E;
+
+  --color-cyan-25: #F5FEFF;
+  --color-cyan-50: #ECFDFF;
+  --color-cyan-100: #CFF9FE;
+  --color-cyan-200: #A5F0FC;
+  --color-cyan-300: #67E3F9;
+  --color-cyan-400: #22CCEE;
+  --color-cyan-500: #06AED4;
+  --color-cyan-600: #088AB2;
+  --color-cyan-700: #0E7090;
+  --color-cyan-800: #155B75;
+  --color-cyan-900: #164E63;
+
+  --color-blue-25: #F5FAFF;
+  --color-blue-50: #EFF8FF;
+  --color-blue-100: #D1E9FF;
+  --color-blue-200: #B2DDFF;
+  --color-blue-300: #84CAFF;
+  --color-blue-400: #53B1FD;
+  --color-blue-500: #2E90FA;
+  --color-blue-600: #1570EF;
+  --color-blue-700: #175CD3;
+  --color-blue-800: #1849A9;
+  --color-blue-900: #194185;
+
+  --color-indigo-25: #F5F8FF;
+  --color-indigo-50: #EFF4FF;
+  --color-indigo-100: #E0EAFF;
+  --color-indigo-200: #C7D7FE;
+  --color-indigo-300: #A4BCFD;
+  --color-indigo-400: #8098F9;
+  --color-indigo-500: #6172F3;
+  --color-indigo-600: #444CE7;
+  --color-indigo-700: #3538CD;
+  --color-indigo-800: #2D31A6;
+  --color-indigo-900: #2D3282;
+
+  --color-violet-25: #FBFAFF;
+  --color-violet-50: #F5F3FF;
+  --color-violet-100: #ECE9FE;
+  --color-violet-200: #DDD6FE;
+  --color-violet-300: #C3B5FD;
+  --color-violet-400: #A48AFB;
+  --color-violet-500: #875BF7;
+  --color-violet-600: #7839EE;
+  --color-violet-700: #6927DA;
+
+  --color-fuchsia-25: #FEFAFF;
+  --color-fuchsia-50: #FDF4FF;
+  --color-fuchsia-100: #FBE8FF;
+  --color-fuchsia-200: #F6D0FE;
+  --color-fuchsia-300: #EEAAFD;
+  --color-fuchsia-400: #E478FA;
+  --color-fuchsia-500: #D444F1;
+  --color-fuchsia-600: #BA24D5;
+  --color-fuchsia-700: #9F1AB1;
+  --color-fuchsia-800: #821890;
+  --color-fuchsia-900: #6F1877;
+
+  --color-pink-25: #FFFAFC;
+  --color-pink-50: #FEF0F7;
+  --color-pink-100: #FFD1E2;
+  --color-pink-200: #FFB1CE;
+  --color-pink-300: #FD8FBA;
+  --color-pink-400: #F86BA7;
+  --color-pink-500: #F23E94;
+  --color-pink-600: #D5327F;
+  --color-pink-700: #BA256B;
+  --color-pink-800: #9E1958;
+  --color-pink-900: #840B45;
+
+  --color-orange-25: #FFF9F5;
+  --color-orange-50: #FFF4ED;
+  --color-orange-100: #FFE6D5;
+  --color-orange-200: #FFD6AE;
+  --color-orange-300: #FF9C66;
+  --color-orange-400: #FF692E;
+  --color-orange-500: #FF4405;
+  --color-orange-600: #E62E05;
+  --color-orange-700: #BC1B06;
+  --color-orange-800: #97180C;
+  --color-orange-900: #771A0D;
+
+  /* semantic colors — values swap in `.dark`, see below */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-destructive: var(--destructive);
+  --color-destructive-subtle: var(--destructive-subtle);
+  --color-info: var(--info);
+  --color-shadow: var(--shadow-color);
+  --color-link: var(--link);
+  --color-tertiary: var(--tertiary);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-inset: var(--surface-inset);
+  --color-surface-inset-hover: var(--surface-inset-hover);
+  --color-container: var(--container);
+  --color-container-hover: var(--container-hover);
+  --color-container-inset: var(--container-inset);
+  --color-container-inset-hover: var(--container-inset-hover);
+  --color-nav-indicator: var(--nav-indicator);
+  --color-toggle-track: var(--toggle-track);
+  --color-budget-unused-fill: var(--budget-unused-fill);
+  --color-budget-unallocated-fill: var(--budget-unallocated-fill);
+
+  --shadow-xs: var(--shadow-xs-value);
+  --shadow-sm: var(--shadow-sm-value);
+  --shadow-md: var(--shadow-md-value);
+  --shadow-lg: var(--shadow-lg-value);
+  --shadow-xl: var(--shadow-xl-value);
+}
+
+:root {
+  --background: var(--color-white);
+  --foreground: var(--color-gray-900);
+
+  --success: var(--color-green-700);
+  --warning: var(--color-yellow-600);
+  --destructive: var(--color-red-500);
+  --destructive-subtle: var(--color-red-200);
+  --info: var(--color-blue-600);
+  --link: var(--color-blue-600);
+  --shadow-color: color-mix(in oklab, var(--color-black) 6%, transparent);
+
+  --focus-ring: color-mix(in oklab, var(--color-black) 50%, transparent);
+  --tertiary: color-mix(in oklab, var(--color-black) 8%, transparent);
+
+  --surface: var(--color-gray-50);
+  --surface-hover: var(--color-gray-100);
+  --surface-inset: var(--color-gray-100);
+  --surface-inset-hover: var(--color-gray-200);
+  --container: var(--color-white);
+  --container-hover: var(--color-gray-50);
+  --container-inset: var(--color-gray-50);
+  --container-inset-hover: var(--color-gray-100);
+  --nav-indicator: var(--color-black);
+  --toggle-track: var(--color-gray-300);
+
+  --budget-unused-fill: var(--color-gray-200);
+  --budget-unallocated-fill: var(--color-gray-50);
+
+  --bg-inverse: var(--color-gray-800);
+  --bg-inverse-hover: var(--color-gray-700);
+  --bg-overlay: color-mix(in oklab, var(--color-gray-100) 50%, transparent);
+
+  --text-primary: var(--color-gray-900);
+  --text-inverse: var(--color-white);
+  --text-secondary: var(--color-gray-500);
+  --text-subdued: var(--color-gray-400);
+
+  --border-primary: color-mix(in oklab, var(--color-black) 15%, transparent);
+  --border-secondary: color-mix(in oklab, var(--color-black) 10%, transparent);
+  --border-subdued: color-mix(in oklab, var(--color-black) 5%, transparent);
+  --border-solid: var(--color-black);
+  --border-destructive: var(--color-red-500);
+  --border-inverse: color-mix(in oklab, var(--color-white) 10%, transparent);
+  --shadow-border-color: color-mix(in oklab, var(--color-black) 5%, transparent);
+
+  --button-bg-primary: var(--color-gray-900);
+  --button-bg-primary-hover: var(--color-gray-800);
+  --button-bg-secondary: var(--color-gray-50);
+  --button-bg-secondary-hover: var(--color-gray-100);
+  --button-bg-secondary-strong: var(--color-gray-200);
+  --button-bg-secondary-strong-hover: var(--color-gray-300);
+  --button-bg-disabled: var(--color-gray-50);
+  --button-bg-destructive: var(--color-red-600);
+  --button-bg-destructive-hover: var(--color-red-700);
+  --button-bg-ghost-hover: var(--color-gray-50);
+  --button-bg-outline-hover: var(--color-gray-100);
+
+  --tab-item-active: var(--color-white);
+  --tab-item-hover: var(--color-gray-200);
+  --tab-bg-group: var(--color-gray-50);
+
+  --shadow-xs-value: 0px 1px 2px 0px var(--shadow-color);
+  --shadow-sm-value: 0px 1px 6px 0px var(--shadow-color);
+  --shadow-md-value: 0px 4px 8px -2px var(--shadow-color);
+  --shadow-lg-value: 0px 12px 16px -4px var(--shadow-color);
+  --shadow-xl-value: 0px 20px 24px -4px var(--shadow-color);
+}
+
+.dark {
+  --background: var(--color-black);
+  --foreground: var(--color-white);
+
+  --success: var(--color-green-400);
+  --warning: var(--color-yellow-400);
+  --destructive: var(--color-red-400);
+  --destructive-subtle: var(--color-red-800);
+  --info: var(--color-blue-500);
+  --link: var(--color-blue-500);
+  --shadow-color: color-mix(in oklab, var(--color-white) 8%, transparent);
+
+  --focus-ring: color-mix(in oklab, var(--color-white) 50%, transparent);
+  --tertiary: color-mix(in oklab, var(--color-white) 10%, transparent);
+
+  --surface: var(--color-black);
+  --surface-hover: var(--color-gray-800);
+  --surface-inset: var(--color-gray-800);
+  --surface-inset-hover: var(--color-gray-800);
+  --container: var(--color-gray-900);
+  --container-hover: var(--color-gray-800);
+  --container-inset: var(--color-gray-800);
+  --container-inset-hover: var(--color-gray-700);
+  --nav-indicator: var(--color-white);
+  --toggle-track: var(--color-gray-700);
+
+  --budget-unused-fill: var(--color-gray-500);
+  --budget-unallocated-fill: var(--color-gray-700);
+
+  --bg-inverse: var(--color-white);
+  --bg-inverse-hover: var(--color-gray-100);
+  --bg-overlay: color-mix(in oklab, var(--color-black) 85%, transparent);
+
+  --text-primary: var(--color-white);
+  --text-inverse: var(--color-gray-900);
+  --text-secondary: var(--color-gray-300);
+  --text-subdued: var(--color-gray-400);
+
+  --border-primary: color-mix(in oklab, var(--color-white) 30%, transparent);
+  --border-secondary: color-mix(in oklab, var(--color-white) 20%, transparent);
+  --border-subdued: color-mix(in oklab, var(--color-white) 10%, transparent);
+  --border-solid: var(--color-white);
+  --border-destructive: var(--color-red-400);
+  --border-inverse: color-mix(in oklab, var(--color-black) 15%, transparent);
+  --shadow-border-color: color-mix(in oklab, var(--color-white) 5%, transparent);
+
+  --button-bg-primary: var(--color-white);
+  --button-bg-primary-hover: var(--color-gray-50);
+  --button-bg-secondary: var(--color-gray-700);
+  --button-bg-secondary-hover: var(--color-gray-600);
+  --button-bg-secondary-strong: var(--color-gray-700);
+  --button-bg-secondary-strong-hover: var(--color-gray-600);
+  --button-bg-disabled: var(--color-gray-700);
+  --button-bg-destructive: var(--color-red-400);
+  --button-bg-destructive-hover: var(--color-red-500);
+  --button-bg-ghost-hover: var(--color-gray-800);
+  --button-bg-outline-hover: var(--color-gray-700);
+
+  --tab-item-active: var(--color-gray-700);
+  --tab-item-hover: var(--color-gray-800);
+  --tab-bg-group: color-mix(in oklab, var(--color-black) 50%, transparent);
+}
+
+/* utility classes for tokens that map to a single CSS property rather than
+   a full Tailwind color slot (bg-/text-/border- pairs intentionally differ) */
+@utility bg-inverse { background-color: var(--bg-inverse); }
+@utility bg-inverse-hover { background-color: var(--bg-inverse-hover); }
+@utility bg-overlay { background-color: var(--bg-overlay); }
+@utility bg-loader { @apply bg-surface-inset animate-pulse; }
+
+@utility text-primary { color: var(--text-primary); }
+@utility text-inverse { color: var(--text-inverse); }
+@utility text-secondary { color: var(--text-secondary); }
+@utility text-subdued { color: var(--text-subdued); }
+
+@utility border-primary { border-color: var(--border-primary); }
+@utility border-secondary { border-color: var(--border-secondary); }
+@utility border-divider { border-color: var(--tertiary); }
+@utility border-subdued { border-color: var(--border-subdued); }
+@utility border-solid { border-color: var(--border-solid); }
+@utility border-destructive { border-color: var(--border-destructive); }
+@utility border-inverse { border-color: var(--border-inverse); }
+@utility ring-focus { box-shadow: 0 0 0 2px var(--focus-ring); }
+
+@utility shadow-border-xs { box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--shadow-border-color); }
+@utility shadow-border-sm { box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--shadow-border-color); }
+@utility shadow-border-md { box-shadow: var(--shadow-md), 0px 0px 0px 1px var(--shadow-border-color); }
+@utility shadow-border-lg { box-shadow: var(--shadow-lg), 0px 0px 0px 1px var(--shadow-border-color); }
+@utility shadow-border-xl { box-shadow: var(--shadow-xl), 0px 0px 0px 1px var(--shadow-border-color); }
+
+@utility bg-button-primary { background-color: var(--button-bg-primary); }
+@utility bg-button-primary-hover { background-color: var(--button-bg-primary-hover); }
+@utility bg-button-secondary { background-color: var(--button-bg-secondary); }
+@utility bg-button-secondary-hover { background-color: var(--button-bg-secondary-hover); }
+@utility bg-button-secondary-strong { background-color: var(--button-bg-secondary-strong); }
+@utility bg-button-secondary-strong-hover { background-color: var(--button-bg-secondary-strong-hover); }
+@utility bg-button-disabled { background-color: var(--button-bg-disabled); }
+@utility bg-button-destructive { background-color: var(--button-bg-destructive); }
+@utility bg-button-destructive-hover { background-color: var(--button-bg-destructive-hover); }
+@utility bg-button-ghost-hover { background-color: var(--button-bg-ghost-hover); }
+@utility bg-button-outline-hover { background-color: var(--button-bg-outline-hover); }
+
+@utility bg-tab-item-active { background-color: var(--tab-item-active); }
+@utility bg-tab-item-hover { background-color: var(--tab-item-hover); }
+@utility bg-tab-group { background-color: var(--tab-bg-group); }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Enter/exit animation primitives — minimal port of tailwindcss-animate,
+   matching shadcn/ui's class names (animate-in/out, fade-*, zoom-*, slide-*)
+   so panels driven by [data-state] read the same as the Radix originals.
+   Paired with app/javascript/utils/transition.js, which flips [data-state]
+   and unhides/hides the element around the animation.
+   ───────────────────────────────────────────────────────────────────────── */
+@utility animate-in { animation: enter var(--tw-duration, 150ms) var(--tw-ease, ease-out); }
+@utility animate-out { animation: exit var(--tw-duration, 150ms) var(--tw-ease, ease-in); }
+
+@utility fade-in-0 { --tw-enter-opacity: 0; }
+@utility fade-out-0 { --tw-exit-opacity: 0; }
+@utility zoom-in-90 { --tw-enter-scale: .9; }
+@utility zoom-in-95 { --tw-enter-scale: .95; }
+@utility zoom-out-95 { --tw-exit-scale: .95; }
+
+@utility slide-in-from-top-2 { --tw-enter-translate-y: -0.5rem; }
+@utility slide-in-from-bottom-2 { --tw-enter-translate-y: 0.5rem; }
+@utility slide-in-from-left-2 { --tw-enter-translate-x: -0.5rem; }
+@utility slide-in-from-right-2 { --tw-enter-translate-x: 0.5rem; }
+
+@utility slide-in-from-top { --tw-enter-translate-y: -100%; }
+@utility slide-in-from-bottom { --tw-enter-translate-y: 100%; }
+@utility slide-in-from-left { --tw-enter-translate-x: -100%; }
+@utility slide-in-from-right { --tw-enter-translate-x: 100%; }
+@utility slide-out-to-top { --tw-exit-translate-y: -100%; }
+@utility slide-out-to-bottom { --tw-exit-translate-y: 100%; }
+@utility slide-out-to-left { --tw-exit-translate-x: -100%; }
+@utility slide-out-to-right { --tw-exit-translate-x: 100%; }
+
+@utility duration-200 { --tw-duration: 200ms; }
+@utility duration-300 { --tw-duration: 300ms; }
+@utility duration-500 { --tw-duration: 500ms; }
+
+@keyframes enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0)
+      scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), 1);
   }
+}
+
+@keyframes exit {
+  to {
+    opacity: var(--tw-exit-opacity, 1);
+    transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0)
+      scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), 1);
+  }
+}
+
+/* Accordion/collapsible height animation — mirrors Radix's
+   --radix-accordion-content-height var, set by the Stimulus controller
+   as --content-height after measuring scrollHeight. */
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--content-height); }
+  to { height: 0; }
+}
+
+@utility animate-accordion-down { animation: accordion-down 200ms ease-out; }
+@utility animate-accordion-up { animation: accordion-up 200ms ease-out; }
+
+/* Native <dialog> backdrop fade, toggled by the dialog controller's
+   [data-state] in lockstep with the content's animate-in/out classes. */
+dialog::backdrop {
+  background: var(--bg-overlay);
+  opacity: 0;
+  transition: opacity var(--tw-duration, 200ms) ease;
+}
+
+dialog[data-state="open"]::backdrop { opacity: 1; }
+dialog[data-state="closed"]::backdrop { opacity: 0; }

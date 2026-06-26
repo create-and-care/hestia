@@ -1,0 +1,11 @@
+<span data-controller="hover-card" class="relative inline-flex">
+  <span data-hover-card-target="trigger" data-action="mouseenter->hover-card#show mouseleave->hover-card#hide" class="inline-flex">
+    <%= trigger %>
+  </span>
+  <div data-hover-card-target="panel" hidden data-state="closed" data-action="mouseenter->hover-card#show mouseleave->hover-card#hide"
+    class="z-50 w-72 rounded-lg border border-primary bg-container p-4 text-sm shadow-lg
+           data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-top-2
+           data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
+    <%= content %>
+  </div>
+</span>

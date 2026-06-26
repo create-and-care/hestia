@@ -1,0 +1,9 @@
+<div data-controller="collapsible">
+  <div data-collapsible-target="trigger" data-action="click->collapsible#toggle" aria-expanded="false" role="button" tabindex="0">
+    <%= trigger %>
+  </div>
+  <div data-collapsible-target="panel" hidden data-state="closed"
+    class="overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
+    <div class="pt-2"><%= content %></div>
+  </div>
+</div>

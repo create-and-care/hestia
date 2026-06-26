@@ -1,0 +1,17 @@
+<nav aria-label="Pagination" class="flex items-center gap-1">
+  <%= link_to page_href(@current - 1), rel: "prev",
+    class: cn("inline-flex h-9 items-center rounded-md px-3 text-sm text-primary hover:bg-surface-hover", "pointer-events-none opacity-50" => @current <= 1) do %>
+    &larr; <span class="sr-only">Previous</span>
+  <% end %>
+
+  <% (1..@total).each do |page| %>
+    <%= link_to page, page_href(page), "aria-current": (page == @current ? "page" : nil),
+      class: cn("inline-flex h-9 min-w-9 items-center justify-center rounded-md px-2 text-sm",
+        page == @current ? "bg-button-primary text-inverse" : "text-primary hover:bg-surface-hover") %>
+  <% end %>
+
+  <%= link_to page_href(@current + 1), rel: "next",
+    class: cn("inline-flex h-9 items-center rounded-md px-3 text-sm text-primary hover:bg-surface-hover", "pointer-events-none opacity-50" => @current >= @total) do %>
+    <span class="sr-only">Next</span> &rarr;
+  <% end %>
+</nav>

@@ -1,0 +1,13 @@
+<div data-controller="calendar" data-calendar-selected-value="<%= @selected %>" class="w-64 rounded-lg border border-primary bg-container p-3">
+  <% if @name %><input type="hidden" name="<%= @name %>" data-calendar-target="input" value="<%= @selected %>"><% end %>
+  <div class="flex items-center justify-between pb-2">
+    <button type="button" data-action="click->calendar#previous" class="rounded-md p-1 text-secondary hover:bg-surface-hover" aria-label="Previous month">
+      <svg class="size-4" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <p data-calendar-target="label" class="text-sm font-medium text-primary"></p>
+    <button type="button" data-action="click->calendar#next" class="rounded-md p-1 text-secondary hover:bg-surface-hover" aria-label="Next month">
+      <svg class="size-4" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <div data-calendar-target="grid"></div>
+</div>

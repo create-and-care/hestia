@@ -1,0 +1,9 @@
+<div data-controller="resizable" class="flex h-64 w-full overflow-hidden rounded-lg border border-primary">
+  <div data-resizable-target="first" class="flex-1 overflow-auto p-4 text-sm text-primary" style="width: 50%">
+    <%= first %>
+  </div>
+  <div data-action="pointerdown->resizable#startDrag" class="w-1 shrink-0 cursor-col-resize bg-tertiary hover:bg-border-primary"></div>
+  <div class="flex-1 overflow-auto p-4 text-sm text-primary">
+    <%= second %>
+  </div>
+</div>

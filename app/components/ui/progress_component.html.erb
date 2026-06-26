@@ -1,0 +1,4 @@
+<div role="progressbar" aria-valuenow="<%= @value %>" aria-valuemin="0" aria-valuemax="<%= @max %>"
+  class="h-2 w-full overflow-hidden rounded-full bg-surface-inset">
+  <div class="h-full rounded-full bg-button-primary transition-[width]" style="width: <%= (@value.to_f / @max * 100).round(2) %>%"></div>
+</div>

@@ -1,0 +1,19 @@
+<div data-controller="context-menu" data-action="contextmenu->context-menu#open">
+  <%= content %>
+  <div data-context-menu-target="panel" role="menu" hidden data-state="closed"
+    class="z-50 min-w-40 rounded-md border border-primary bg-container p-1 shadow-lg
+           data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95
+           data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
+    <% @items.each do |item| %>
+      <% if item == :separator %>
+        <div class="my-1 h-px bg-tertiary"></div>
+      <% else %>
+        <% label, value = item %>
+        <button type="button" role="menuitem" data-action="click->context-menu#select" data-value="<%= value %>"
+          class="flex w-full items-center rounded-sm px-2 py-1.5 text-sm text-primary hover:bg-surface-hover">
+          <%= label %>
+        </button>
+      <% end %>
+    <% end %>
+  </div>
+</div>

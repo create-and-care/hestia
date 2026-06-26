@@ -1,0 +1,10 @@
+<div data-controller="toggle-group" data-toggle-group-multiple-value="<%= @multiple %>" role="group" class="inline-flex gap-1 rounded-md bg-surface-inset p-1">
+  <% @items.each do |label, value, pressed| %>
+    <button type="button" data-toggle-group-target="item" data-value="<%= value %>" data-action="click->toggle-group#toggle"
+      aria-pressed="<%= !!pressed %>"
+      class="h-8 px-3 rounded-md text-sm font-medium text-secondary aria-pressed:bg-container aria-pressed:text-primary aria-pressed:shadow-xs">
+      <%= label %>
+    </button>
+  <% end %>
+  <% if @name %><input type="hidden" name="<%= @name %>" data-toggle-group-target="input" value="<%= @items.select { |_, _, p| p }.map(&:second).join(",") %>"><% end %>
+</div>

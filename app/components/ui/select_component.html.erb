@@ -1,0 +1,22 @@
+<div data-controller="select" class="inline-flex w-56">
+  <input type="hidden" name="<%= @name %>" value="<%= @selected %>" data-select-target="input">
+
+  <button type="button" data-select-target="trigger" data-action="click->select#toggle"
+    class="flex h-9 w-full items-center justify-between rounded-md border border-primary bg-container px-3 text-sm text-primary">
+    <span data-select-target="label"><%= selected_label %></span>
+    <svg class="size-4 text-secondary" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <div data-select-target="panel" role="listbox" hidden data-state="closed"
+    class="z-50 w-56 rounded-md border border-primary bg-container p-1 shadow-lg
+           data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-top-2
+           data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
+    <% @options.each do |label, value| %>
+      <button type="button" role="option" data-select-target="item" data-value="<%= value %>" data-label="<%= label %>"
+        data-action="click->select#select" aria-selected="<%= value == @selected %>"
+        class="flex w-full items-center rounded-sm px-2 py-1.5 text-sm text-primary hover:bg-surface-hover aria-selected:bg-surface-inset">
+        <%= label %>
+      </button>
+    <% end %>
+  </div>
+</div>

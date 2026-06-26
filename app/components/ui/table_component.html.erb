@@ -1,0 +1,22 @@
+<div class="w-full overflow-auto rounded-md border border-primary">
+  <table class="w-full text-sm">
+    <% if @headers.any? %>
+      <thead class="border-b border-primary bg-surface">
+        <tr>
+          <% @headers.each do |header| %>
+            <th class="h-10 px-4 text-left font-medium text-secondary"><%= header %></th>
+          <% end %>
+        </tr>
+      </thead>
+    <% end %>
+    <tbody class="[&_tr:not(:last-child)]:border-b [&_tr]:border-primary">
+      <% @rows.each do |row| %>
+        <tr class="hover:bg-surface-hover">
+          <% row.each do |cell| %>
+            <td class="h-12 px-4 text-primary"><%= cell %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
