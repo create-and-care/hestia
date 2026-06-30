@@ -10,26 +10,51 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_25_151930) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_30_120003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
+  create_table "households", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "invite_code", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invite_code"], name: "index_households_on_invite_code", unique: true
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "role", default: "member", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["household_id"], name: "index_memberships_on_household_id"
+    t.index ["user_id", "household_id"], name: "index_memberships_on_user_id_and_household_id", unique: true
+    t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
+    t.bigint "active_household_id"
     t.datetime "created_at", null: false
     t.string "ip_address"
     t.datetime "updated_at", null: false
     t.string "user_agent"
     t.bigint "user_id", null: false
+    t.index ["active_household_id"], name: "index_sessions_on_active_household_id"
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
+    t.string "name"
     t.string "password_digest", null: false
     t.datetime "updated_at", null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "memberships", "households"
+  add_foreign_key "memberships", "users"
+  add_foreign_key "sessions", "households", column: "active_household_id"
   add_foreign_key "sessions", "users"
 end

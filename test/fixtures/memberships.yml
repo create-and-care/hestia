@@ -1,0 +1,9 @@
+one_alpha:
+  user: one
+  household: alpha
+  role: admin
+
+two_beta:
+  user: two
+  household: beta
+  role: admin

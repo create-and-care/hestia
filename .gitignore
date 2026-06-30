@@ -39,6 +39,5 @@
 
 /node_modules
 
-/bin/*
-.kamal
+/.kamal/
 .claude

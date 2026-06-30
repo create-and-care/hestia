@@ -1,7 +1,15 @@
 Rails.application.routes.draw do
   resource :session
+  resource :registration, only: %i[new create]
   resources :passwords, param: :token
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  # Onboarding : choix créer / rejoindre un foyer.
+  resource :onboarding, only: :show, controller: "onboarding"
+  resources :households, only: %i[new create show] do
+    member { patch :activate }
+  end
+  # Rejoindre un foyer via code d'invitation.
+  resource :membership, only: %i[new create]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
@@ -11,9 +19,8 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
-  # root "posts#index"
-
   get "design-system", to: "design_system#index"
 
+  # Tableau de bord du foyer (CDC §7).
+  root "dashboard#show"
 end

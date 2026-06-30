@@ -1,0 +1,56 @@
+<% content_for :title, "Tableau de bord" %>
+
+<div class="mx-auto mt-10 max-w-3xl px-4">
+  <header class="mb-8 flex items-center justify-between">
+    <div>
+      <p class="text-sm text-gray-500">Foyer actif</p>
+      <h1 class="text-2xl font-semibold"><%= @household.name %></h1>
+    </div>
+    <%= button_to "Se déconnecter", session_path, method: :delete,
+          class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-8 rounded-lg border border-gray-200 p-5">
+    <h2 class="mb-1 font-medium">Inviter un membre</h2>
+    <p class="mb-3 text-sm text-gray-600">Partagez ce code pour rejoindre le foyer :</p>
+    <code class="rounded-md bg-gray-100 px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-3 font-medium">Membres (<%= @memberships.size %>)</h2>
+    <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @memberships.each do |membership| %>
+        <li class="flex items-center justify-between px-4 py-3">
+          <div>
+            <p class="font-medium"><%= membership.user.name.presence || membership.user.email_address %></p>
+            <p class="text-sm text-gray-500"><%= membership.user.email_address %></p>
+          </div>
+          <span class="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
+            <%= membership.admin? ? "Administrateur" : "Membre" %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <% if @other_households.any? %>
+    <section class="mb-8">
+      <h2 class="mb-3 font-medium">Changer de foyer</h2>
+      <ul class="space-y-2">
+        <% @other_households.each do |household| %>
+          <li>
+            <%= button_to "Basculer vers « #{household.name} »", activate_household_path(household), method: :patch,
+                  class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <section class="flex gap-4 text-sm">
+    <%= link_to "Créer un autre foyer", new_household_path, class: "underline" %>
+    <%= link_to "Rejoindre un autre foyer", new_membership_path, class: "underline" %>
+  </section>
+</div>
