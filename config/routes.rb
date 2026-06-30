@@ -11,6 +11,14 @@ Rails.application.routes.draw do
   # Rejoindre un foyer via code d'invitation.
   resource :membership, only: %i[new create]
 
+  # Module Courses (Phase 2.a).
+  resources :shopping_lists, only: %i[index show new create destroy] do
+    resources :items, only: %i[create update destroy], controller: "shopping_list_items" do
+      member { patch :toggle }
+    end
+  end
+  resources :products, only: :index
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

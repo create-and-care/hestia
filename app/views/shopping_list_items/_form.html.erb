@@ -1,0 +1,28 @@
+<%= tag.div id: "new_shopping_list_item" do %>
+  <%= form_with model: item, url: shopping_list_items_path(shopping_list) do |form| %>
+    <div class="flex flex-wrap items-end gap-2 rounded-lg border border-gray-200 p-3">
+      <div class="min-w-40 flex-1">
+        <%= form.label :name, "Article", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.text_field :name, required: true, autofocus: true, autocomplete: "off",
+              placeholder: "Lait, pommes…",
+              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div class="w-20">
+        <%= form.label :quantity, "Qté", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.number_field :quantity, step: :any, min: 0,
+              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div class="w-24">
+        <%= form.label :unit, "Unité", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.text_field :unit, placeholder: "kg, L…",
+              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div class="w-40">
+        <%= form.label :rayon, "Rayon", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.select :rayon, rayon_select_options, { include_blank: "Auto" },
+              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    </div>
+  <% end %>
+<% end %>

@@ -6,6 +6,10 @@ class Household < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
 
+  # Modules (Phase 2)
+  has_many :shopping_lists, dependent: :destroy
+  has_many :products, dependent: :destroy
+
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true
 

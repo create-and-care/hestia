@@ -1,0 +1,26 @@
+<% content_for :title, @shopping_list.name %>
+<%= turbo_stream_from @shopping_list %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <header class="mb-6 flex items-center justify-between">
+    <h1 class="flex items-center gap-2 text-2xl font-semibold">
+      <span><%= @shopping_list.icon.presence || "🛒" %></span>
+      <span><%= @shopping_list.name %></span>
+    </h1>
+    <%= button_to "Supprimer la liste", shopping_list_path(@shopping_list), method: :delete,
+          form: { data: { turbo_confirm: "Supprimer cette liste et tous ses articles ?" } },
+          class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" %>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <%= render "shopping_list_items/form", shopping_list: @shopping_list, item: @item %>
+
+  <div id="shopping_list_items" class="mt-6 space-y-2">
+    <%= render @shopping_list.items %>
+  </div>
+
+  <p class="mt-6 text-sm">
+    <%= link_to "← Toutes les listes", shopping_lists_path, class: "underline" %>
+  </p>
+</div>

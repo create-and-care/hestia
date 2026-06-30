@@ -1,0 +1,8 @@
+alpha_groceries:
+  household: alpha
+  name: Courses Alpha
+  icon: 🛒
+
+beta_groceries:
+  household: beta
+  name: Courses Beta

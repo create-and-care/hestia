@@ -1,0 +1,4 @@
+<%# L'article est inséré via le flux temps réel ; ici on réinitialise seulement le formulaire. %>
+<%= turbo_stream.replace "new_shopping_list_item" do %>
+  <%= render "shopping_list_items/form", shopping_list: @shopping_list, item: ShoppingListItem.new %>
+<% end %>

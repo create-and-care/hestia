@@ -1,0 +1,31 @@
+<%= tag.div id: dom_id(shopping_list_item),
+      class: "flex items-center gap-3 rounded-lg border border-gray-200 px-3 py-2 #{'opacity-50' if shopping_list_item.checked}" do %>
+  <%= button_to toggle_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
+        method: :patch, class: "shrink-0 cursor-pointer",
+        aria: { label: shopping_list_item.checked ? "Décocher" : "Cocher" } do %>
+    <span class="flex size-5 items-center justify-center rounded border <%= shopping_list_item.checked ? "border-gray-900 bg-gray-900 text-white" : "border-gray-300" %>">
+      <%= "✓" if shopping_list_item.checked %>
+    </span>
+  <% end %>
+
+  <div class="min-w-0 flex-1">
+    <p class="truncate <%= "line-through text-gray-400" if shopping_list_item.checked %>">
+      <%= shopping_list_item.name %>
+      <% if shopping_list_item.quantity.present? %>
+        <span class="text-sm text-gray-500">
+          — <%= shopping_list_item.quantity.to_s.sub(/\.0+\z/, "") %> <%= shopping_list_item.unit %>
+        </span>
+      <% end %>
+    </p>
+  </div>
+
+  <span class="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
+    <%= rayon_label(shopping_list_item.rayon) %>
+  </span>
+
+  <%= button_to shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
+        method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600",
+        aria: { label: "Supprimer" } do %>
+    ✕
+  <% end %>
+<% end %>

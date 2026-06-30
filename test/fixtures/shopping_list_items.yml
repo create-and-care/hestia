@@ -1,0 +1,13 @@
+alpha_apples:
+  shopping_list: alpha_groceries
+  name: Pommes
+  rayon: fruits_legumes
+  position: 0
+  checked: false
+
+alpha_bread:
+  shopping_list: alpha_groceries
+  name: Pain
+  rayon: epicerie
+  position: 1
+  checked: true
