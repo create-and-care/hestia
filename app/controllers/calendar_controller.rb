@@ -7,19 +7,31 @@ class CalendarController < ApplicationController
     @members = Current.household.users.order(:name)
     @events = filtered_events
 
-    if @view == "list"
-      range = Time.current.beginning_of_day..(Time.current + 60.days).end_of_day
-      @occurrences = occurrences_in(range)
-    else
-      @month = parse_month
-      @grid_start = @month.beginning_of_week
-      @grid_end = @month.end_of_month.end_of_week
-      range = @grid_start.beginning_of_day..@grid_end.end_of_day
-      @by_day = occurrences_in(range).group_by { |time, _event| time.to_date }
+    respond_to do |format|
+      format.html { load_html_view }
+      format.pdf do
+        month = parse_month
+        range = month.beginning_of_month.beginning_of_day..month.end_of_month.end_of_day
+        send_data Pdf::CalendarMonthDocument.new(month, occurrences_in(range)).render,
+          filename: "calendrier-#{month.strftime('%Y-%m')}.pdf", type: "application/pdf", disposition: "inline"
+      end
     end
   end
 
   private
+    def load_html_view
+      if @view == "list"
+        range = Time.current.beginning_of_day..(Time.current + 60.days).end_of_day
+        @occurrences = occurrences_in(range)
+      else
+        @month = parse_month
+        @grid_start = @month.beginning_of_week
+        @grid_end = @month.end_of_month.end_of_week
+        range = @grid_start.beginning_of_day..@grid_end.end_of_day
+        @by_day = occurrences_in(range).group_by { |time, _event| time.to_date }
+      end
+    end
+
     def filtered_events
       scope = Current.household.calendar_events
       if @member_id

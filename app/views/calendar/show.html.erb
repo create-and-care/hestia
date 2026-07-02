@@ -18,6 +18,8 @@
               { include_blank: "Tous les membres" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
         <%= form.submit "Filtrer", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
       <% end %>
+      <%= link_to "Export PDF", calendar_path(format: :pdf, month: (@month || Date.current).strftime("%Y-%m"), member_id: @member_id), target: "_blank",
+            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
       <%= link_to "Nouvel événement", new_calendar_event_path,
             class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
     </div>

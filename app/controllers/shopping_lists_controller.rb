@@ -7,6 +7,13 @@ class ShoppingListsController < ApplicationController
 
   def show
     @item = ShoppingListItem.new
+    respond_to do |format|
+      format.html
+      format.pdf do
+        send_data Pdf::ShoppingListDocument.new(@shopping_list).render,
+          filename: "#{@shopping_list.name.parameterize}.pdf", type: "application/pdf", disposition: "inline"
+      end
+    end
   end
 
   def new
