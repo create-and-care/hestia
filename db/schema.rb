@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_190003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -140,6 +140,52 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_180000) do
     t.index ["author_id"], name: "index_notes_on_author_id"
     t.index ["household_id", "archived"], name: "index_notes_on_household_id_and_archived"
     t.index ["household_id"], name: "index_notes_on_household_id"
+  end
+
+  create_table "pet_supplies", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.date "next_order_on"
+    t.string "order_url"
+    t.bigint "pet_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pet_id"], name: "index_pet_supplies_on_pet_id"
+  end
+
+  create_table "pet_treatments", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "frequency"
+    t.date "last_done_on"
+    t.string "name", null: false
+    t.bigint "pet_id", null: false
+    t.decimal "price", precision: 8, scale: 2
+    t.string "quantity"
+    t.datetime "updated_at", null: false
+    t.index ["pet_id"], name: "index_pet_treatments_on_pet_id"
+  end
+
+  create_table "pet_vaccinations", force: :cascade do |t|
+    t.date "booster_on"
+    t.datetime "created_at", null: false
+    t.date "injected_on"
+    t.string "name", null: false
+    t.bigint "pet_id", null: false
+    t.decimal "price", precision: 8, scale: 2
+    t.datetime "updated_at", null: false
+    t.index ["pet_id"], name: "index_pet_vaccinations_on_pet_id"
+  end
+
+  create_table "pets", force: :cascade do |t|
+    t.date "born_on"
+    t.string "breed"
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "identifier"
+    t.string "name", null: false
+    t.string "species"
+    t.datetime "updated_at", null: false
+    t.decimal "weight", precision: 6, scale: 2
+    t.index ["household_id"], name: "index_pets_on_household_id"
   end
 
   create_table "prepared_dishes", force: :cascade do |t|
@@ -307,6 +353,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_180000) do
   add_foreign_key "memberships", "users"
   add_foreign_key "notes", "households"
   add_foreign_key "notes", "users", column: "author_id"
+  add_foreign_key "pet_supplies", "pets"
+  add_foreign_key "pet_treatments", "pets"
+  add_foreign_key "pet_vaccinations", "pets"
+  add_foreign_key "pets", "households"
   add_foreign_key "prepared_dishes", "households"
   add_foreign_key "products", "households"
   add_foreign_key "recipe_ingredients", "recipes"

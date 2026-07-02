@@ -1,0 +1,51 @@
+class PetsController < ApplicationController
+  before_action :set_pet, only: %i[show edit update destroy]
+
+  def index
+    @pets = Current.household.pets.ordered
+  end
+
+  def show
+    @vaccination = @pet.pet_vaccinations.new
+    @treatment = @pet.pet_treatments.new
+    @supply = @pet.pet_supplies.new
+  end
+
+  def new
+    @pet = Current.household.pets.new
+  end
+
+  def create
+    @pet = Current.household.pets.new(pet_params)
+    if @pet.save
+      redirect_to @pet, notice: "Animal ajouté."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @pet.update(pet_params)
+      redirect_to @pet, notice: "Animal mis à jour."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @pet.destroy
+    redirect_to pets_path, notice: "Animal supprimé."
+  end
+
+  private
+    def set_pet
+      @pet = Current.household.pets.find(params[:id])
+    end
+
+    def pet_params
+      params.require(:pet).permit(:name, :species, :breed, :weight, :identifier, :born_on)
+    end
+end

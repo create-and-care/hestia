@@ -1,0 +1,11 @@
+alpha_dog:
+  household: alpha
+  name: Rex
+  species: Chien
+  breed: Labrador
+  born_on: <%= 4.years.ago.to_date %>
+
+beta_cat:
+  household: beta
+  name: Minou
+  species: Chat

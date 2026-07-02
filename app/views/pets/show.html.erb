@@ -1,0 +1,92 @@
+<% content_for :title, @pet.name %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <header class="mb-2 flex items-start justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold">🐾 <%= @pet.name %></h1>
+      <p class="text-sm text-gray-500">
+        <%= [ @pet.species, @pet.breed ].reject(&:blank?).join(" · ") %>
+        <% if @pet.weight %> · <%= @pet.weight %> kg<% end %>
+        <% if @pet.age %> · <%= @pet.age %> ans<% end %>
+        <% if @pet.identifier.present? %> · puce <%= @pet.identifier %><% end %>
+      </p>
+    </div>
+    <div class="flex gap-2 text-sm">
+      <%= link_to "Modifier", edit_pet_path(@pet), class: "underline" %>
+      <%= button_to "Supprimer", pet_path(@pet), method: :delete,
+            form: { data: { turbo_confirm: "Supprimer cet animal ?" } }, class: "cursor-pointer text-red-600 underline" %>
+    </div>
+  </header>
+
+  <p class="mb-6 text-xs text-gray-400">Aide à l'organisation — ne remplace pas le carnet de santé vétérinaire officiel.</p>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">💉 Vaccins</h2>
+    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @pet.pet_vaccinations.ordered.each do |vaccination| %>
+        <li class="flex items-center justify-between px-3 py-2 text-sm">
+          <span>
+            <%= vaccination.name %>
+            <% if vaccination.injected_on %><span class="text-gray-400">· fait le <%= vaccination.injected_on.strftime("%d/%m/%Y") %></span><% end %>
+            <% if vaccination.booster_on %>
+              <span class="<%= vaccination.booster_overdue? ? "font-medium text-red-600" : "text-gray-400" %>">· rappel <%= vaccination.booster_on.strftime("%d/%m/%Y") %></span>
+            <% end %>
+          </span>
+          <%= button_to "✕", pet_vaccination_path(@pet, vaccination), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @vaccination, url: pet_vaccinations_path(@pet), class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Vaccin", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.date_field :injected_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.date_field :booster_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">💊 Traitements</h2>
+    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @pet.pet_treatments.ordered.each do |treatment| %>
+        <li class="flex items-center justify-between px-3 py-2 text-sm">
+          <span><%= treatment.name %>
+            <% if treatment.frequency.present? %><span class="text-gray-400">· <%= treatment.frequency %></span><% end %>
+            <% if treatment.last_done_on %><span class="text-gray-400">· dernier <%= treatment.last_done_on.strftime("%d/%m/%Y") %></span><% end %>
+          </span>
+          <%= button_to "✕", pet_treatment_path(@pet, treatment), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @treatment, url: pet_treatments_path(@pet), class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Traitement", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :frequency, placeholder: "Fréquence", class: "w-28 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.date_field :last_done_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">🛒 Produits récurrents</h2>
+    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @pet.pet_supplies.ordered.each do |supply| %>
+        <li class="flex items-center justify-between px-3 py-2 text-sm">
+          <span>
+            <% if supply.order_url.present? %><%= link_to supply.name, supply.order_url, target: "_blank", rel: "noopener", class: "underline" %><% else %><%= supply.name %><% end %>
+            <% if supply.next_order_on %><span class="text-gray-400">· à commander le <%= supply.next_order_on.strftime("%d/%m/%Y") %></span><% end %>
+          </span>
+          <%= button_to "✕", pet_supply_path(@pet, supply), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @supply, url: pet_supplies_path(@pet), class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Croquettes, litière…", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.url_field :order_url, placeholder: "Lien de commande", class: "w-40 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.date_field :next_order_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <p class="text-sm"><%= link_to "← Tous les animaux", pets_path, class: "underline" %></p>
+</div>

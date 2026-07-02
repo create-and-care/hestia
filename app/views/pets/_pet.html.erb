@@ -1,0 +1,8 @@
+<%= link_to pet_path(pet), id: dom_id(pet),
+      class: "block rounded-lg border border-gray-200 p-4 hover:border-gray-400" do %>
+  <h2 class="font-medium">🐾 <%= pet.name %></h2>
+  <p class="text-sm text-gray-500">
+    <%= [ pet.species, pet.breed ].reject(&:blank?).join(" · ") %>
+    <% if pet.age %> · <%= pet.age %> ans<% end %>
+  </p>
+<% end %>
