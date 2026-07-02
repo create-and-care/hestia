@@ -1,0 +1,7 @@
+<%= tag.div id: dom_id(message), class: "rounded-lg border border-gray-200 px-3 py-2" do %>
+  <div class="flex items-baseline justify-between gap-2">
+    <span class="text-sm font-medium"><%= message.author.name.presence || message.author.email_address %></span>
+    <span class="text-xs text-gray-400"><%= message.created_at.strftime("%d/%m %H:%M") %></span>
+  </div>
+  <p class="whitespace-pre-line text-gray-800"><%= message.content %></p>
+<% end %>

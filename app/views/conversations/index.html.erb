@@ -1,0 +1,28 @@
+<% content_for :title, "Messages" %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <header class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold">💬 Messages</h1>
+    <%= link_to "Nouvelle conversation", new_conversation_path,
+          class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <% if @conversations.any? %>
+    <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @conversations.each do |conversation| %>
+        <li>
+          <%= link_to conversation_path(conversation), class: "block px-4 py-3 hover:bg-gray-50" do %>
+            <p class="font-medium"><%= conversation.name %></p>
+            <p class="text-sm text-gray-500"><%= conversation.participants.map { |u| u.name.presence || u.email_address }.join(", ") %></p>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucune conversation.</p>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>

@@ -1,0 +1,7 @@
+<% content_for :title, "Nouvelle conversation" %>
+
+<div class="mx-auto mt-10 max-w-md px-4">
+  <h1 class="mb-6 text-2xl font-semibold">Nouvelle conversation</h1>
+  <%= render "form", conversation: @conversation, url: conversations_path %>
+  <p class="mt-6 text-sm"><%= link_to "← Messages", conversations_path, class: "underline" %></p>
+</div>

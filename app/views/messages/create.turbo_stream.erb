@@ -1,0 +1,10 @@
+<%# Le message est ajouté au fil via le flux temps réel ; on réinitialise le champ. %>
+<%= turbo_stream.replace "new_message" do %>
+  <%= tag.div id: "new_message" do %>
+    <%= form_with model: [ @conversation, @conversation.messages.new ], url: conversation_messages_path(@conversation), class: "flex gap-2" do |form| %>
+      <%= form.text_field :content, required: true, autocomplete: "off", autofocus: true, placeholder: "Votre message…",
+            class: "flex-1 rounded-md border border-gray-300 px-3 py-2" %>
+      <%= form.submit "Envoyer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <% end %>
+  <% end %>
+<% end %>

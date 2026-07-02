@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_230003) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_240002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -108,6 +108,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_230003) do
     t.index ["household_id"], name: "index_contacts_on_household_id"
   end
 
+  create_table "conversation_participants", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["conversation_id", "user_id"], name: "index_conversation_participants_on_conversation_id_and_user_id", unique: true
+    t.index ["conversation_id"], name: "index_conversation_participants_on_conversation_id"
+    t.index ["user_id"], name: "index_conversation_participants_on_user_id"
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_conversations_on_household_id"
+  end
+
   create_table "event_participants", force: :cascade do |t|
     t.bigint "calendar_event_id", null: false
     t.datetime "created_at", null: false
@@ -179,6 +197,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_230003) do
     t.index ["household_id"], name: "index_memberships_on_household_id"
     t.index ["user_id", "household_id"], name: "index_memberships_on_user_id_and_household_id", unique: true
     t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "author_id", null: false
+    t.text "content", null: false
+    t.bigint "conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_messages_on_author_id"
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -459,6 +487,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_230003) do
   add_foreign_key "contact_taggings", "contacts"
   add_foreign_key "contact_tags", "households"
   add_foreign_key "contacts", "households"
+  add_foreign_key "conversation_participants", "conversations"
+  add_foreign_key "conversation_participants", "users"
+  add_foreign_key "conversations", "households"
   add_foreign_key "event_participants", "calendar_events"
   add_foreign_key "event_participants", "users"
   add_foreign_key "feeding_sessions", "baby_profiles"
@@ -468,6 +499,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_230003) do
   add_foreign_key "loyalty_cards", "households"
   add_foreign_key "memberships", "households"
   add_foreign_key "memberships", "users"
+  add_foreign_key "messages", "conversations"
+  add_foreign_key "messages", "users", column: "author_id"
   add_foreign_key "notes", "households"
   add_foreign_key "notes", "users", column: "author_id"
   add_foreign_key "pet_supplies", "pets"

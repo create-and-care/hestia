@@ -1,0 +1,7 @@
+alpha_chat:
+  household: alpha
+  name: Organisation
+
+beta_chat:
+  household: beta
+  name: Chat Beta

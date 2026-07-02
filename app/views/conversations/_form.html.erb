@@ -1,0 +1,33 @@
+<%= form_with model: conversation, url: url do |form| %>
+  <% if conversation.errors.any? %>
+    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <ul class="list-inside list-disc">
+        <% conversation.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div>
+      <%= form.label :name, "Nom de la conversation", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+
+    <div>
+      <span class="mb-1 block text-sm font-medium">Participants</span>
+      <div class="flex flex-wrap gap-3">
+        <% Current.household.users.order(:name).each do |user| %>
+          <label class="flex items-center gap-2 text-sm">
+            <%= check_box_tag "participant_ids[]", user.id,
+                  conversation.participant_ids.include?(user.id) || user == Current.user,
+                  id: "conversation_participant_#{user.id}",
+                  disabled: (user == Current.user) %>
+            <%= user.name.presence || user.email_address %><%= " (vous)" if user == Current.user %>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+  </div>
+<% end %>

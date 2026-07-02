@@ -1,0 +1,28 @@
+<% content_for :title, @conversation.name %>
+<%= turbo_stream_from @conversation %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <header class="mb-4 flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold"><%= @conversation.name %></h1>
+      <p class="text-sm text-gray-500"><%= @conversation.participants.map { |u| u.name.presence || u.email_address }.join(", ") %></p>
+    </div>
+    <%= link_to "Réglages", edit_conversation_path(@conversation), class: "text-sm underline" %>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <div id="messages" class="mb-4 space-y-2">
+    <%= render @conversation.messages.chronological %>
+  </div>
+
+  <%= tag.div id: "new_message" do %>
+    <%= form_with model: [ @conversation, @message ], url: conversation_messages_path(@conversation), class: "flex gap-2" do |form| %>
+      <%= form.text_field :content, required: true, autocomplete: "off", placeholder: "Votre message…",
+            class: "flex-1 rounded-md border border-gray-300 px-3 py-2" %>
+      <%= form.submit "Envoyer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <% end %>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to "← Conversations", conversations_path, class: "underline" %></p>
+</div>

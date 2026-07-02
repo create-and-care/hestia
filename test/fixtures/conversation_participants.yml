@@ -1,0 +1,7 @@
+alpha_chat_one:
+  conversation: alpha_chat
+  user: one
+
+beta_chat_two:
+  conversation: beta_chat
+  user: two
