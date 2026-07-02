@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_240002) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -186,6 +186,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_240002) do
     t.integer "position", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_loyalty_cards_on_household_id"
+  end
+
+  create_table "meal_plan_entries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "free_name"
+    t.bigint "household_id", null: false
+    t.string "meal_type", default: "dinner", null: false
+    t.date "on_date", null: false
+    t.integer "position", default: 0, null: false
+    t.bigint "recipe_id"
+    t.datetime "updated_at", null: false
+    t.index ["household_id", "on_date"], name: "index_meal_plan_entries_on_household_id_and_on_date"
+    t.index ["household_id"], name: "index_meal_plan_entries_on_household_id"
+    t.index ["recipe_id"], name: "index_meal_plan_entries_on_recipe_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -497,6 +511,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_240002) do
   add_foreign_key "fridge_items", "households"
   add_foreign_key "fridge_items", "products"
   add_foreign_key "loyalty_cards", "households"
+  add_foreign_key "meal_plan_entries", "households"
+  add_foreign_key "meal_plan_entries", "recipes"
   add_foreign_key "memberships", "households"
   add_foreign_key "memberships", "users"
   add_foreign_key "messages", "conversations"

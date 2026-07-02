@@ -33,6 +33,9 @@ class Household < ApplicationRecord
   has_many :baby_profiles, dependent: :destroy
   has_many :conversations, dependent: :destroy
 
+  # Modules à logique métier riche (Phase 2.c)
+  has_many :meal_plan_entries, dependent: :destroy
+
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true
 

@@ -1,0 +1,12 @@
+alpha_dinner:
+  household: alpha
+  recipe: alpha_pancakes
+  on_date: <%= Date.current.beginning_of_week + 1.day %>
+  meal_type: dinner
+  position: 0
+
+beta_lunch:
+  household: beta
+  on_date: <%= Date.current.beginning_of_week %>
+  meal_type: lunch
+  free_name: Salade
