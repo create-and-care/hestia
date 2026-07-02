@@ -1,0 +1,7 @@
+alpha_admin:
+  household: alpha
+  name: Administratif
+
+beta_folder:
+  household: beta
+  name: Dossier Beta

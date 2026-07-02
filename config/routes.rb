@@ -109,6 +109,8 @@ Rails.application.routes.draw do
     resources :shared_project_participants, only: %i[create destroy]
     resources :shared_expenses, only: %i[create destroy]
   end
+  resources :documents, only: %i[index show create destroy]
+  resources :document_folders, only: %i[create destroy]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

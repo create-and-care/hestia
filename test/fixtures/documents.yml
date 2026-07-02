@@ -1,0 +1,8 @@
+alpha_doc:
+  household: alpha
+  document_folder: alpha_admin
+  name: Facture EDF
+
+beta_doc:
+  household: beta
+  name: Document Beta

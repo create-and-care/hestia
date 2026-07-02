@@ -41,6 +41,8 @@ class Household < ApplicationRecord
   has_many :budget_categories, dependent: :destroy
   has_many :savings_envelopes, dependent: :destroy
   has_many :shared_projects, dependent: :destroy
+  has_many :document_folders, dependent: :destroy
+  has_many :documents, dependent: :destroy
 
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true

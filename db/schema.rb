@@ -10,9 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_130005) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_140001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "addresses", force: :cascade do |t|
     t.string "address_type", default: "autre", null: false
@@ -145,6 +173,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_130005) do
     t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_conversations_on_household_id"
+  end
+
+  create_table "document_folders", force: :cascade do |t|
+    t.string "color"
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_document_folders_on_household_id"
+  end
+
+  create_table "documents", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "document_folder_id"
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["document_folder_id"], name: "index_documents_on_document_folder_id"
+    t.index ["household_id"], name: "index_documents_on_household_id"
   end
 
   create_table "event_participants", force: :cascade do |t|
@@ -614,6 +661,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_130005) do
     t.index ["household_id"], name: "index_wine_cellars_on_household_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "households"
   add_foreign_key "allergen_tests", "baby_profiles"
   add_foreign_key "baby_profiles", "households"
@@ -629,6 +678,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_130005) do
   add_foreign_key "conversation_participants", "conversations"
   add_foreign_key "conversation_participants", "users"
   add_foreign_key "conversations", "households"
+  add_foreign_key "document_folders", "households"
+  add_foreign_key "documents", "document_folders"
+  add_foreign_key "documents", "households"
   add_foreign_key "event_participants", "calendar_events"
   add_foreign_key "event_participants", "users"
   add_foreign_key "feeding_sessions", "baby_profiles"

@@ -1,0 +1,59 @@
+<% content_for :title, "Documents" %>
+<% content_for :head do %>
+  <meta name="turbo-refresh-method" content="morph">
+<% end %>
+<%= turbo_stream_from Current.household, "documents" %>
+
+<div class="mx-auto mt-10 max-w-3xl px-4">
+  <header class="mb-4 flex flex-wrap items-center justify-between gap-2">
+    <h1 class="text-2xl font-semibold">📄 Documents</h1>
+    <%= form_with url: documents_path, method: :get do |form| %>
+      <%= form.search_field :q, value: @query, placeholder: "Rechercher…", class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+    <% end %>
+  </header>
+
+  <p class="mb-4 text-xs text-gray-400">Pour vos papiers courants — pas un coffre-fort certifié ni un dossier médical.</p>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-4 flex flex-wrap items-center gap-2">
+    <%= link_to "Tous", documents_path, class: "rounded-full px-3 py-0.5 text-xs #{@folder ? 'bg-gray-100' : 'bg-gray-900 text-white'}" %>
+    <% @folders.each do |folder| %>
+      <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
+        <%= link_to folder.name, documents_path(folder_id: folder.id) %>
+        <%= button_to "×", document_folder_path(folder), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
+      </span>
+    <% end %>
+    <%= form_with url: document_folders_path, method: :post, scope: :document_folder, class: "inline-flex gap-1" do |form| %>
+      <%= form.text_field :name, placeholder: "Nouveau dossier", class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <section class="mb-6 rounded-lg border border-gray-200 p-3">
+    <h2 class="mb-2 font-medium">Ajouter un document</h2>
+    <%= form_with model: @document, url: documents_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Nom", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.collection_select :document_folder_id, @folders, :id, :name, { include_blank: "Dossier" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.file_field :file, required: true, accept: "application/pdf,image/*", class: "text-sm" %>
+      <%= form.submit "Téléverser", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    <% end %>
+  </section>
+
+  <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <% @documents.each do |document| %>
+      <li class="flex items-center justify-between px-4 py-2 text-sm">
+        <span>
+          <%= link_to document.name, document_path(document), class: "font-medium hover:underline", target: "_blank" %>
+          <% if document.document_folder %><span class="ml-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs"><%= document.document_folder.name %></span><% end %>
+        </span>
+        <%= button_to "✕", document_path(document), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+      </li>
+    <% end %>
+  </ul>
+  <% if @documents.empty? %>
+    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucun document.</p>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>
