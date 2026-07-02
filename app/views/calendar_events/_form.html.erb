@@ -1,0 +1,76 @@
+<%= form_with model: event, url: url do |form| %>
+  <% if event.errors.any? %>
+    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <ul class="list-inside list-disc">
+        <% event.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div>
+      <%= form.label :title, "Titre", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :title, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+
+    <label class="flex items-center gap-2 text-sm">
+      <%= form.check_box :all_day %> Journée entière
+    </label>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :starts_at, "Début", class: "mb-1 block text-sm font-medium" %>
+        <%= form.datetime_field :starts_at, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :ends_at, "Fin", class: "mb-1 block text-sm font-medium" %>
+        <%= form.datetime_field :ends_at, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :location, "Lieu", class: "mb-1 block text-sm font-medium" %>
+        <%= form.text_field :location, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :color, "Couleur", class: "mb-1 block text-sm font-medium" %>
+        <%= form.select :color, color_options, {}, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+    </div>
+
+    <fieldset class="rounded-md border border-gray-200 p-3">
+      <legend class="px-1 text-sm font-medium">Récurrence</legend>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div>
+          <%= form.label :frequency, "Fréquence", class: "mb-1 block text-xs text-gray-500" %>
+          <%= form.select :frequency, frequency_options, {}, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        </div>
+        <div>
+          <%= form.label :recurrence_interval, "Tous les", class: "mb-1 block text-xs text-gray-500" %>
+          <%= form.number_field :recurrence_interval, min: 1, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        </div>
+        <div>
+          <%= form.label :recurrence_until, "Jusqu'au", class: "mb-1 block text-xs text-gray-500" %>
+          <%= form.date_field :recurrence_until, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        </div>
+      </div>
+    </fieldset>
+
+    <div>
+      <span class="mb-1 block text-sm font-medium">Participants</span>
+      <div class="flex flex-wrap gap-3">
+        <% Current.household.users.order(:name).each do |user| %>
+          <label class="flex items-center gap-2 text-sm">
+            <%= check_box_tag "participant_ids[]", user.id, event.participant_ids.include?(user.id), id: "participant_#{user.id}" %>
+            <%= user.name.presence || user.email_address %>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+  </div>
+<% end %>

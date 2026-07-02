@@ -1,0 +1,69 @@
+<% content_for :title, "Calendrier" %>
+<% content_for :head do %>
+  <meta name="turbo-refresh-method" content="morph">
+<% end %>
+<%= turbo_stream_from Current.household, "calendar" %>
+
+<div class="mx-auto mt-10 max-w-4xl px-4">
+  <header class="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <h1 class="text-2xl font-semibold">📅 <%= @view == "list" ? "Agenda" : month_label(@month) %></h1>
+    <div class="flex flex-wrap items-center gap-2">
+      <%= link_to "Mois", calendar_path(view: :month, member_id: @member_id),
+            class: "rounded-md border px-3 py-1.5 text-sm #{@view == 'month' ? 'border-gray-900 font-medium' : 'border-gray-300 hover:bg-gray-50'}" %>
+      <%= link_to "Liste", calendar_path(view: :list, member_id: @member_id),
+            class: "rounded-md border px-3 py-1.5 text-sm #{@view == 'list' ? 'border-gray-900 font-medium' : 'border-gray-300 hover:bg-gray-50'}" %>
+      <%= form_with url: calendar_path, method: :get, class: "flex items-center gap-1" do |form| %>
+        <%= form.hidden_field :view, value: @view %>
+        <%= form.select :member_id, options_for_select(@members.map { |m| [ m.name.presence || m.email_address, m.id ] }, @member_id),
+              { include_blank: "Tous les membres" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+        <%= form.submit "Filtrer", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <% end %>
+      <%= link_to "Nouvel événement", new_calendar_event_path,
+            class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    </div>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <% if @view == "month" %>
+    <div class="mb-3 flex items-center justify-between text-sm">
+      <%= link_to "← Mois précédent", calendar_path(month: (@month - 1.month).strftime("%Y-%m"), member_id: @member_id), class: "underline" %>
+      <%= link_to "Aujourd'hui", calendar_path(member_id: @member_id), class: "underline" %>
+      <%= link_to "Mois suivant →", calendar_path(month: (@month + 1.month).strftime("%Y-%m"), member_id: @member_id), class: "underline" %>
+    </div>
+
+    <div class="grid grid-cols-7 gap-px overflow-hidden rounded-lg border border-gray-200 bg-gray-200 text-sm">
+      <% CalendarHelper::WEEKDAYS.each do |day| %>
+        <div class="bg-gray-50 p-2 text-center text-xs font-medium text-gray-500"><%= day %></div>
+      <% end %>
+      <% (@grid_start.to_date..@grid_end.to_date).each do |date| %>
+        <div class="min-h-24 bg-white p-1 <%= "bg-gray-50 text-gray-400" unless date.month == @month.month %>">
+          <div class="mb-1 text-right text-xs <%= "font-bold text-gray-900" if date == Date.current %>"><%= date.day %></div>
+          <% Array(@by_day[date]).each do |time, event| %>
+            <%= link_to edit_calendar_event_path(event),
+                  class: "mb-0.5 block truncate rounded px-1 py-0.5 text-xs #{event_color_class(event.color)}" do %>
+              <% unless event.all_day %><span class="font-medium"><%= time.strftime("%H:%M") %></span> <% end %><%= event.title %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <% if @occurrences.any? %>
+      <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+        <% @occurrences.each do |time, event| %>
+          <li class="flex flex-wrap items-center gap-3 px-4 py-2">
+            <span class="size-2 shrink-0 rounded-full <%= event_color_class(event.color) %>"></span>
+            <span class="w-44 text-sm text-gray-500"><%= time.strftime("%a %d/%m — %H:%M") %></span>
+            <%= link_to event.title, edit_calendar_event_path(event), class: "font-medium hover:underline" %>
+            <% if event.location.present? %><span class="text-sm text-gray-400"><%= event.location %></span><% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucun événement à venir.</p>
+    <% end %>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>

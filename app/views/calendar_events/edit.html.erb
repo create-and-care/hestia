@@ -1,0 +1,12 @@
+<% content_for :title, "Modifier l'événement" %>
+
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold">Modifier l'événement</h1>
+    <%= button_to "Supprimer", calendar_event_path(@event), method: :delete,
+          form: { data: { turbo_confirm: "Supprimer cet événement ?" } },
+          class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" %>
+  </div>
+  <%= render "form", event: @event, url: calendar_event_path(@event) %>
+  <p class="mt-6 text-sm"><%= link_to "← Calendrier", calendar_path, class: "underline" %></p>
+</div>

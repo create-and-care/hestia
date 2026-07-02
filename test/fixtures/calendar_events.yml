@@ -1,0 +1,14 @@
+alpha_meeting:
+  household: alpha
+  title: Réunion
+  starts_at: <%= 2.days.from_now.change(hour: 10, min: 0).to_fs(:db) %>
+  ends_at: <%= 2.days.from_now.change(hour: 11, min: 0).to_fs(:db) %>
+  frequency: none
+  color: blue
+
+beta_event:
+  household: beta
+  title: Événement Beta
+  starts_at: <%= 2.days.from_now.change(hour: 9, min: 0).to_fs(:db) %>
+  frequency: none
+  color: green

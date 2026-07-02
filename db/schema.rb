@@ -10,9 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_120001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_130001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "calendar_events", force: :cascade do |t|
+    t.boolean "all_day", default: false, null: false
+    t.string "color", default: "blue", null: false
+    t.datetime "created_at", null: false
+    t.datetime "ends_at"
+    t.string "frequency", default: "none", null: false
+    t.bigint "household_id", null: false
+    t.string "location"
+    t.integer "recurrence_interval", default: 1, null: false
+    t.date "recurrence_until"
+    t.datetime "starts_at", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id", "starts_at"], name: "index_calendar_events_on_household_id_and_starts_at"
+    t.index ["household_id"], name: "index_calendar_events_on_household_id"
+  end
+
+  create_table "event_participants", force: :cascade do |t|
+    t.bigint "calendar_event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["calendar_event_id", "user_id"], name: "index_event_participants_on_calendar_event_id_and_user_id", unique: true
+    t.index ["calendar_event_id"], name: "index_event_participants_on_calendar_event_id"
+    t.index ["user_id"], name: "index_event_participants_on_user_id"
+  end
 
   create_table "fridge_items", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -173,6 +200,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_120001) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "calendar_events", "households"
+  add_foreign_key "event_participants", "calendar_events"
+  add_foreign_key "event_participants", "users"
   add_foreign_key "fridge_items", "households"
   add_foreign_key "fridge_items", "products"
   add_foreign_key "memberships", "households"
