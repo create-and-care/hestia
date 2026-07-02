@@ -1,0 +1,9 @@
+alpha_pool:
+  household: alpha
+  name: Piscine principale
+  treatment_type: sel
+
+beta_pool:
+  household: beta
+  name: Piscine Beta
+  treatment_type: chlore

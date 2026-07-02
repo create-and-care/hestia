@@ -36,6 +36,8 @@ class Household < ApplicationRecord
   # Modules à logique métier riche (Phase 2.c)
   has_many :meal_plan_entries, dependent: :destroy
   has_many :routines, dependent: :destroy
+  has_many :plants, dependent: :destroy
+  has_many :pools, dependent: :destroy
 
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true

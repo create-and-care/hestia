@@ -1,0 +1,8 @@
+alpha_rose:
+  household: alpha
+  name: Rosier
+  location: Terrasse
+
+beta_plant:
+  household: beta
+  name: Cactus

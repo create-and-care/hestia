@@ -95,6 +95,12 @@ Rails.application.routes.draw do
   resources :routines, only: %i[index create edit update destroy] do
     member { post :complete }
   end
+  resource :exterior, only: :show, controller: "exterior"
+  resources :plants, only: %i[create destroy]
+  resources :pools, only: %i[create destroy] do
+    resources :pool_readings, only: %i[create destroy]
+    resources :pool_actions, only: %i[create destroy]
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

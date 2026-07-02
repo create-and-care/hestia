@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_110001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_120003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -283,6 +283,45 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_110001) do
     t.index ["household_id"], name: "index_pets_on_household_id"
   end
 
+  create_table "plants", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "location"
+    t.string "name", null: false
+    t.text "notes"
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_plants_on_household_id"
+  end
+
+  create_table "pool_actions", force: :cascade do |t|
+    t.string "action_type", null: false
+    t.datetime "created_at", null: false
+    t.date "done_on", null: false
+    t.text "note"
+    t.bigint "pool_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pool_id"], name: "index_pool_actions_on_pool_id"
+  end
+
+  create_table "pool_readings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "measure_type", null: false
+    t.date "measured_on", null: false
+    t.bigint "pool_id", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "value", precision: 8, scale: 2
+    t.index ["pool_id"], name: "index_pool_readings_on_pool_id"
+  end
+
+  create_table "pools", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.string "treatment_type", default: "chlore", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_pools_on_household_id"
+  end
+
   create_table "prepared_dishes", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "expires_on"
@@ -549,6 +588,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_110001) do
   add_foreign_key "pet_treatments", "pets"
   add_foreign_key "pet_vaccinations", "pets"
   add_foreign_key "pets", "households"
+  add_foreign_key "plants", "households"
+  add_foreign_key "pool_actions", "pools"
+  add_foreign_key "pool_readings", "pools"
+  add_foreign_key "pools", "households"
   add_foreign_key "prepared_dishes", "households"
   add_foreign_key "products", "households"
   add_foreign_key "recipe_ingredients", "recipes"

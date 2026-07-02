@@ -1,0 +1,84 @@
+<% content_for :title, "Extérieur" %>
+<% content_for :head do %>
+  <meta name="turbo-refresh-method" content="morph">
+<% end %>
+<%= turbo_stream_from Current.household, "exterior" %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <h1 class="mb-6 text-2xl font-semibold">🌳 Extérieur</h1>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-10">
+    <h2 class="mb-3 font-medium">🌱 Jardin</h2>
+    <ul class="mb-3 space-y-2">
+      <% @plants.each do |plant| %>
+        <li class="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2 text-sm">
+          <span>
+            <span class="font-medium"><%= plant.name %></span>
+            <% if plant.location.present? %><span class="text-gray-400">· <%= plant.location %></span><% end %>
+            <% if plant.notes.present? %><span class="block text-gray-500"><%= plant.notes %></span><% end %>
+          </span>
+          <%= button_to "✕", plant_path(plant), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @plant, url: plants_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Plante", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :location, placeholder: "Emplacement", class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :notes, placeholder: "Besoins / notes", class: "w-40 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-3 font-medium">🏊 Piscine</h2>
+    <% @pools.each do |pool| %>
+      <div class="mb-4 rounded-lg border border-gray-200 p-3">
+        <div class="mb-2 flex items-center justify-between">
+          <h3 class="font-medium"><%= pool.name %> <span class="text-xs text-gray-400">(<%= treatment_label(pool.treatment_type) %>)</span></h3>
+          <%= button_to "Supprimer", pool_path(pool), method: :delete, class: "cursor-pointer text-xs text-red-600 hover:underline" %>
+        </div>
+
+        <p class="text-xs font-medium text-gray-500">Relevés</p>
+        <ul class="mb-2 text-sm">
+          <% pool.pool_readings.recent.first(5).each do |reading| %>
+            <li class="flex items-center justify-between">
+              <span><%= reading.measured_on.strftime("%d/%m") %> · <%= reading.measure_type %> : <%= reading.value %></span>
+              <%= button_to "×", pool_pool_reading_path(pool, reading), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+            </li>
+          <% end %>
+        </ul>
+        <%= form_with model: [ pool, PoolReading.new ], url: pool_pool_readings_path(pool), class: "mb-3 flex flex-wrap items-end gap-2" do |form| %>
+          <%= form.text_field :measure_type, placeholder: "pH, temp…", class: "w-24 rounded-md border border-gray-300 px-2 py-1 text-sm" %>
+          <%= form.number_field :value, step: :any, placeholder: "valeur", class: "w-24 rounded-md border border-gray-300 px-2 py-1 text-sm" %>
+          <%= form.date_field :measured_on, value: Date.current, class: "rounded-md border border-gray-300 px-2 py-1 text-sm" %>
+          <%= form.submit "Relevé", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-sm hover:bg-gray-50" %>
+        <% end %>
+
+        <p class="text-xs font-medium text-gray-500">Actions d'entretien</p>
+        <ul class="mb-2 text-sm">
+          <% pool.pool_actions.recent.first(5).each do |action| %>
+            <li class="flex items-center justify-between">
+              <span><%= action.done_on.strftime("%d/%m") %> · <%= pool_action_label(action.action_type) %></span>
+              <%= button_to "×", pool_pool_action_path(pool, action), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+            </li>
+          <% end %>
+        </ul>
+        <%= form_with model: [ pool, PoolAction.new ], url: pool_pool_actions_path(pool), class: "flex flex-wrap items-end gap-2" do |form| %>
+          <%= form.select :action_type, pool_action_options, {}, class: "rounded-md border border-gray-300 px-2 py-1 text-sm" %>
+          <%= form.date_field :done_on, value: Date.current, class: "rounded-md border border-gray-300 px-2 py-1 text-sm" %>
+          <%= form.submit "Action", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-sm hover:bg-gray-50" %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= form_with model: @pool, url: pools_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Nouvelle piscine", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.select :treatment_type, treatment_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    <% end %>
+  </section>
+
+  <p class="text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>
