@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_120003) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_130005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -60,6 +60,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_120003) do
     t.string "wine_type"
     t.index ["household_id"], name: "index_bottles_on_household_id"
     t.index ["wine_cellar_id"], name: "index_bottles_on_wine_cellar_id"
+  end
+
+  create_table "budget_categories", force: :cascade do |t|
+    t.string "color"
+    t.datetime "created_at", null: false
+    t.string "emoji"
+    t.bigint "household_id", null: false
+    t.string "kind", default: "expense", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_budget_categories_on_household_id"
+  end
+
+  create_table "budget_entries", force: :cascade do |t|
+    t.decimal "amount", precision: 12, scale: 2, null: false
+    t.bigint "budget_category_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.string "periodicity", default: "monthly", null: false
+    t.datetime "updated_at", null: false
+    t.index ["budget_category_id"], name: "index_budget_entries_on_budget_category_id"
   end
 
   create_table "calendar_events", force: :cascade do |t|
@@ -406,6 +427,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_120003) do
     t.index ["household_id"], name: "index_routines_on_household_id"
   end
 
+  create_table "savings_envelopes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.decimal "recurring_deposit", precision: 12, scale: 2, default: "0.0", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_savings_envelopes_on_household_id"
+  end
+
   create_table "service_provider_types", force: :cascade do |t|
     t.string "color"
     t.datetime "created_at", null: false
@@ -438,6 +468,34 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_120003) do
     t.bigint "user_id", null: false
     t.index ["active_household_id"], name: "index_sessions_on_active_household_id"
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "shared_expenses", force: :cascade do |t|
+    t.decimal "amount", precision: 12, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.string "description"
+    t.bigint "shared_project_id", null: false
+    t.bigint "shared_project_participant_id"
+    t.date "spent_on"
+    t.datetime "updated_at", null: false
+    t.index ["shared_project_id"], name: "index_shared_expenses_on_shared_project_id"
+    t.index ["shared_project_participant_id"], name: "index_shared_expenses_on_shared_project_participant_id"
+  end
+
+  create_table "shared_project_participants", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "shared_project_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shared_project_id"], name: "index_shared_project_participants_on_shared_project_id"
+  end
+
+  create_table "shared_projects", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_shared_projects_on_household_id"
   end
 
   create_table "shopping_list_items", force: :cascade do |t|
@@ -561,6 +619,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_120003) do
   add_foreign_key "baby_profiles", "households"
   add_foreign_key "bottles", "households"
   add_foreign_key "bottles", "wine_cellars"
+  add_foreign_key "budget_categories", "households"
+  add_foreign_key "budget_entries", "budget_categories"
   add_foreign_key "calendar_events", "households"
   add_foreign_key "contact_taggings", "contact_tags"
   add_foreign_key "contact_taggings", "contacts"
@@ -601,11 +661,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_120003) do
   add_foreign_key "routine_completions", "users", column: "author_id"
   add_foreign_key "routines", "households"
   add_foreign_key "routines", "users", column: "assignee_id"
+  add_foreign_key "savings_envelopes", "households"
   add_foreign_key "service_provider_types", "households"
   add_foreign_key "service_providers", "households"
   add_foreign_key "service_providers", "service_provider_types"
   add_foreign_key "sessions", "households", column: "active_household_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "shared_expenses", "shared_project_participants"
+  add_foreign_key "shared_expenses", "shared_projects"
+  add_foreign_key "shared_project_participants", "shared_projects"
+  add_foreign_key "shared_projects", "households"
   add_foreign_key "shopping_list_items", "products"
   add_foreign_key "shopping_list_items", "shopping_lists"
   add_foreign_key "shopping_lists", "households"

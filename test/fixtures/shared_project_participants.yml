@@ -1,0 +1,7 @@
+trip_alice:
+  shared_project: alpha_trip
+  name: Alice
+
+trip_bob:
+  shared_project: alpha_trip
+  name: Bob

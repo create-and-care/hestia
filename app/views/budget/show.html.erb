@@ -1,0 +1,83 @@
+<% content_for :title, "Budget" %>
+<% content_for :head do %>
+  <meta name="turbo-refresh-method" content="morph">
+<% end %>
+<%= turbo_stream_from Current.household, "budget" %>
+
+<div class="mx-auto mt-10 max-w-3xl px-4">
+  <header class="mb-4 flex flex-wrap items-center justify-between gap-2">
+    <h1 class="text-2xl font-semibold">💶 Budget</h1>
+    <div class="flex gap-2 text-sm">
+      <%= link_to "Mensuel", budget_path(period: :monthly), class: "rounded-md border px-3 py-1 #{@period == :monthly ? 'border-gray-900 font-medium' : 'border-gray-300'}" %>
+      <%= link_to "Annuel", budget_path(period: :annual), class: "rounded-md border px-3 py-1 #{@period == :annual ? 'border-gray-900 font-medium' : 'border-gray-300'}" %>
+      <%= link_to "Projets partagés", shared_projects_path, class: "rounded-md border border-gray-300 px-3 py-1 hover:bg-gray-50" %>
+    </div>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div class="rounded-lg border border-gray-200 p-3"><p class="text-xs text-gray-500">Revenus</p><p class="text-lg font-semibold"><%= money(@summary[:income]) %></p></div>
+    <div class="rounded-lg border border-gray-200 p-3"><p class="text-xs text-gray-500">Charges</p><p class="text-lg font-semibold"><%= money(@summary[:expense]) %></p></div>
+    <div class="rounded-lg border border-gray-200 p-3"><p class="text-xs text-gray-500">Épargne</p><p class="text-lg font-semibold"><%= money(@summary[:savings]) %></p></div>
+    <div class="rounded-lg border p-3 <%= health_class(@summary) %>"><p class="text-xs">Reste à vivre</p><p class="text-lg font-semibold"><%= money(@summary[:remaining]) %></p><p class="text-xs">Taux d'épargne : <%= @summary[:savings_rate] %>%</p></div>
+  </section>
+
+  <% @categories.group_by(&:kind).each do |kind, categories| %>
+    <section class="mb-6">
+      <h2 class="mb-2 font-medium"><%= budget_kind_label(kind) %></h2>
+      <% categories.each do |category| %>
+        <div class="mb-3 rounded-lg border border-gray-200 p-3">
+          <div class="mb-2 flex items-center justify-between">
+            <span class="font-medium"><%= "#{category.emoji} " if category.emoji.present? %><%= category.name %></span>
+            <%= button_to "Supprimer", budget_category_path(category), method: :delete, class: "cursor-pointer text-xs text-red-600 hover:underline" %>
+          </div>
+          <ul class="mb-2 text-sm">
+            <% category.budget_entries.each do |entry| %>
+              <li class="flex items-center justify-between">
+                <span><%= entry.name.presence || "(sans nom)" %> — <%= money(entry.amount) %> <span class="text-gray-400">/ <%= entry.periodicity == "yearly" ? "an" : "mois" %></span></span>
+                <%= button_to "×", budget_entry_path(entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+              </li>
+            <% end %>
+          </ul>
+          <%= form_with url: budget_entries_path, scope: :budget_entry, class: "flex flex-wrap items-end gap-2" do |form| %>
+            <%= form.hidden_field :budget_category_id, value: category.id %>
+            <%= form.text_field :name, placeholder: "Libellé", class: "flex-1 rounded-md border border-gray-300 px-2 py-1 text-sm" %>
+            <%= form.number_field :amount, step: :any, placeholder: "€", class: "w-24 rounded-md border border-gray-300 px-2 py-1 text-sm" %>
+            <%= form.select :periodicity, [ [ "/ mois", "monthly" ], [ "/ an", "yearly" ] ], {}, class: "rounded-md border border-gray-300 px-2 py-1 text-sm" %>
+            <%= form.submit "+", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-sm hover:bg-gray-50" %>
+          <% end %>
+        </div>
+      <% end %>
+    </section>
+  <% end %>
+
+  <section class="mb-6 rounded-lg border border-gray-200 p-3">
+    <h2 class="mb-2 font-medium">Nouvelle catégorie</h2>
+    <%= form_with model: @category, url: budget_categories_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.select :kind, budget_kind_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :emoji, placeholder: "💰", maxlength: 4, class: "w-14 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :name, required: true, placeholder: "Nom", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    <% end %>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">Enveloppes d'épargne</h2>
+    <ul class="mb-2 text-sm">
+      <% @envelopes.each do |envelope| %>
+        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
+          <span><%= envelope.name %> — <%= money(envelope.recurring_deposit) %> / mois</span>
+          <%= button_to "×", savings_envelope_path(envelope), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @envelope, url: savings_envelopes_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Nom (vacances…)", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.number_field :recurring_deposit, step: :any, placeholder: "€ / mois", class: "w-28 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <p class="text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>

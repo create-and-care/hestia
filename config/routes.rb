@@ -101,6 +101,14 @@ Rails.application.routes.draw do
     resources :pool_readings, only: %i[create destroy]
     resources :pool_actions, only: %i[create destroy]
   end
+  resource :budget, only: :show, controller: "budget"
+  resources :budget_categories, only: %i[create destroy]
+  resources :budget_entries, only: %i[create destroy]
+  resources :savings_envelopes, only: %i[create destroy]
+  resources :shared_projects, only: %i[index show create destroy] do
+    resources :shared_project_participants, only: %i[create destroy]
+    resources :shared_expenses, only: %i[create destroy]
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

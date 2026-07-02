@@ -1,0 +1,14 @@
+alpha_salary:
+  household: alpha
+  kind: income
+  name: Salaire
+
+alpha_rent:
+  household: alpha
+  kind: expense
+  name: Loyer
+
+beta_cat:
+  household: beta
+  kind: expense
+  name: Charge Beta

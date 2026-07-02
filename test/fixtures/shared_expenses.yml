@@ -1,0 +1,11 @@
+exp_one:
+  shared_project: alpha_trip
+  shared_project_participant: trip_alice
+  amount: 100
+  description: Hôtel
+
+exp_two:
+  shared_project: alpha_trip
+  shared_project_participant: trip_bob
+  amount: 50
+  description: Essence

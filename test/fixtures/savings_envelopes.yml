@@ -1,0 +1,9 @@
+alpha_vacation:
+  household: alpha
+  name: Vacances
+  recurring_deposit: 200
+
+beta_env:
+  household: beta
+  name: Enveloppe Beta
+  recurring_deposit: 50

@@ -1,0 +1,11 @@
+salary_entry:
+  budget_category: alpha_salary
+  name: Salaire net
+  amount: 2000
+  periodicity: monthly
+
+rent_entry:
+  budget_category: alpha_rent
+  name: Loyer
+  amount: 800
+  periodicity: monthly

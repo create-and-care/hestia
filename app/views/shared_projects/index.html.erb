@@ -1,0 +1,28 @@
+<% content_for :title, "Projets partagés" %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <header class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold">🤝 Projets partagés</h1>
+    <%= form_with model: SharedProject.new, url: shared_projects_path, class: "flex gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Vacances, coloc…", class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+      <%= form.submit "Créer", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    <% end %>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <% if @projects.any? %>
+    <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @projects.each do |project| %>
+        <li class="flex items-center justify-between px-4 py-3">
+          <%= link_to project.name, shared_project_path(project), class: "font-medium hover:underline" %>
+          <span class="text-sm text-gray-500"><%= number_to_currency(project.total_spent, unit: "€", format: "%n %u") %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucun projet partagé.</p>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to "← Budget", budget_path, class: "underline" %></p>
+</div>
