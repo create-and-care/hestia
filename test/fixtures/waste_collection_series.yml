@@ -1,0 +1,15 @@
+alpha_trash:
+  household: alpha
+  waste_type: ordures
+  weekday: 1
+  interval_weeks: 1
+  starts_on: <%= Date.current %>
+  ends_on: <%= 2.months.from_now.to_date %>
+
+beta_series:
+  household: beta
+  waste_type: verre
+  weekday: 3
+  interval_weeks: 2
+  starts_on: <%= Date.current %>
+  ends_on: <%= 1.month.from_now.to_date %>

@@ -1,0 +1,10 @@
+alpha_event:
+  household: alpha
+  waste_collection_series: alpha_trash
+  waste_type: ordures
+  collected_on: <%= 2.days.from_now.to_date %>
+
+beta_event:
+  household: beta
+  waste_type: verre
+  collected_on: <%= 2.days.from_now.to_date %>

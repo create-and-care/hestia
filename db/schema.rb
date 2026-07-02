@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_210001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_220001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -378,6 +378,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_210001) do
     t.index ["household_id"], name: "index_vehicles_on_household_id"
   end
 
+  create_table "waste_collection_events", force: :cascade do |t|
+    t.date "collected_on", null: false
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "waste_collection_series_id"
+    t.string "waste_type", null: false
+    t.index ["household_id", "collected_on"], name: "index_waste_collection_events_on_household_id_and_collected_on"
+    t.index ["household_id"], name: "index_waste_collection_events_on_household_id"
+    t.index ["waste_collection_series_id"], name: "index_waste_collection_events_on_waste_collection_series_id"
+  end
+
+  create_table "waste_collection_series", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "ends_on", null: false
+    t.bigint "household_id", null: false
+    t.integer "interval_weeks", default: 1, null: false
+    t.date "starts_on", null: false
+    t.datetime "updated_at", null: false
+    t.string "waste_type", null: false
+    t.integer "weekday", null: false
+    t.index ["household_id"], name: "index_waste_collection_series_on_household_id"
+  end
+
   create_table "wine_cellars", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
@@ -426,5 +450,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_210001) do
   add_foreign_key "tasks", "users", column: "assignee_id"
   add_foreign_key "vehicle_maintenance_entries", "vehicles"
   add_foreign_key "vehicles", "households"
+  add_foreign_key "waste_collection_events", "households"
+  add_foreign_key "waste_collection_events", "waste_collection_series"
+  add_foreign_key "waste_collection_series", "households"
   add_foreign_key "wine_cellars", "households"
 end
