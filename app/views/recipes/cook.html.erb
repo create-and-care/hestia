@@ -1,0 +1,25 @@
+<% content_for :title, "#{@recipe.title} — cuisine" %>
+
+<div class="mx-auto max-w-2xl px-6 py-10">
+  <h1 class="mb-6 text-3xl font-bold"><%= @recipe.title %></h1>
+
+  <section class="mb-8">
+    <h2 class="mb-3 text-xl font-semibold">Ingrédients</h2>
+    <ul class="list-inside list-disc space-y-2 text-lg">
+      <% @recipe.recipe_ingredients.each do |ingredient| %>
+        <li><%= ingredient.name %></li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="mb-3 text-xl font-semibold">Étapes</h2>
+    <ol class="list-inside list-decimal space-y-4 text-lg leading-relaxed">
+      <% @recipe.recipe_steps.each do |step| %>
+        <li><%= step.content %></li>
+      <% end %>
+    </ol>
+  </section>
+
+  <p class="mt-10 text-sm"><%= link_to "← Retour à la recette", recipe_path(@recipe), class: "underline" %></p>
+</div>

@@ -1,0 +1,11 @@
+alpha_pancakes:
+  household: alpha
+  title: Pancakes
+  category: Petit-déjeuner
+  servings: 4
+  prep_time_minutes: 10
+  cook_time_minutes: 15
+
+beta_soup:
+  household: beta
+  title: Soupe

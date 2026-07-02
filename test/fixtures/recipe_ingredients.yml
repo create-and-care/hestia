@@ -1,0 +1,9 @@
+pancakes_flour:
+  recipe: alpha_pancakes
+  name: 200 g de farine
+  position: 0
+
+pancakes_milk:
+  recipe: alpha_pancakes
+  name: 30 cl de lait
+  position: 1

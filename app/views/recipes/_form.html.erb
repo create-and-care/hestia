@@ -1,0 +1,62 @@
+<%= form_with model: recipe, url: url do |form| %>
+  <% if recipe.errors.any? %>
+    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <ul class="list-inside list-disc">
+        <% recipe.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div>
+      <%= form.label :title, "Titre", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :title, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div>
+        <%= form.label :category, "Catégorie", class: "mb-1 block text-sm font-medium" %>
+        <%= form.text_field :category, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :prep_time_minutes, "Prépa (min)", class: "mb-1 block text-sm font-medium" %>
+        <%= form.number_field :prep_time_minutes, min: 0, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :cook_time_minutes, "Cuisson (min)", class: "mb-1 block text-sm font-medium" %>
+        <%= form.number_field :cook_time_minutes, min: 0, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :servings, "Portions", class: "mb-1 block text-sm font-medium" %>
+        <%= form.number_field :servings, min: 1, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :tags_text, "Tags (séparés par des virgules)", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :tags_text, value: recipe.tags_text, name: "recipe[tags_text]",
+            placeholder: "végétarien, rapide", class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+
+    <div>
+      <%= form.label :ingredients_text, "Ingrédients (un par ligne)", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_area :ingredients_text, value: recipe.ingredients_text, name: "recipe[ingredients_text]",
+            rows: 6, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+
+    <div>
+      <%= form.label :steps_text, "Étapes (une par ligne)", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_area :steps_text, value: recipe.steps_text, name: "recipe[steps_text]",
+            rows: 6, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+
+    <div>
+      <%= form.label :source_url, "Source (URL)", class: "mb-1 block text-sm font-medium" %>
+      <%= form.url_field :source_url, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+
+    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+  </div>
+<% end %>

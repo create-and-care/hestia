@@ -1,0 +1,15 @@
+<%= link_to recipe_path(recipe), id: dom_id(recipe),
+      class: "block rounded-lg border border-gray-200 p-4 hover:border-gray-400" do %>
+  <h2 class="font-medium"><%= recipe.title %></h2>
+  <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500">
+    <% if recipe.category.present? %>
+      <span class="rounded-full bg-gray-100 px-2 py-0.5"><%= recipe.category %></span>
+    <% end %>
+    <% if recipe.total_time_minutes %>
+      <span>⏱ <%= recipe.total_time_minutes %> min</span>
+    <% end %>
+    <% if recipe.servings %>
+      <span>🍽 <%= recipe.servings %></span>
+    <% end %>
+  </div>
+<% end %>

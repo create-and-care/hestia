@@ -1,0 +1,52 @@
+<% content_for :title, @recipe.title %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <header class="mb-4">
+    <h1 class="text-2xl font-semibold"><%= @recipe.title %></h1>
+    <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-500">
+      <% if @recipe.category.present? %><span class="rounded-full bg-gray-100 px-2 py-0.5"><%= @recipe.category %></span><% end %>
+      <% @recipe.tags.each do |tag| %><span class="rounded-full bg-gray-100 px-2 py-0.5">#<%= tag %></span><% end %>
+      <% if @recipe.prep_time_minutes %><span>Préparation : <%= @recipe.prep_time_minutes %> min</span><% end %>
+      <% if @recipe.cook_time_minutes %><span>Cuisson : <%= @recipe.cook_time_minutes %> min</span><% end %>
+      <% if @recipe.servings %><span><%= @recipe.servings %> portions</span><% end %>
+    </div>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <div class="mb-6 flex flex-wrap gap-2">
+    <%= link_to "👩‍🍳 Mode cuisine", cook_recipe_path(@recipe),
+          class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+    <%= button_to "🛒 Ajouter aux courses", add_to_shopping_list_recipe_path(@recipe), method: :post,
+          class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+    <%= link_to "Modifier", edit_recipe_path(@recipe),
+          class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+    <%= button_to "Supprimer", recipe_path(@recipe), method: :delete,
+          form: { data: { turbo_confirm: "Supprimer cette recette ?" } },
+          class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" %>
+  </div>
+
+  <section class="mb-6">
+    <h2 class="mb-2 font-medium">Ingrédients</h2>
+    <ul class="list-inside list-disc space-y-1 text-gray-800">
+      <% @recipe.recipe_ingredients.each do |ingredient| %>
+        <li><%= ingredient.name %></li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section class="mb-6">
+    <h2 class="mb-2 font-medium">Étapes</h2>
+    <ol class="list-inside list-decimal space-y-2 text-gray-800">
+      <% @recipe.recipe_steps.each do |step| %>
+        <li><%= step.content %></li>
+      <% end %>
+    </ol>
+  </section>
+
+  <% if @recipe.source_url.present? %>
+    <p class="mb-4 text-sm text-gray-500">Source : <%= link_to @recipe.source_url, @recipe.source_url, class: "underline", target: "_blank", rel: "noopener" %></p>
+  <% end %>
+
+  <p class="text-sm"><%= link_to "← Toutes les recettes", recipes_path, class: "underline" %></p>
+</div>

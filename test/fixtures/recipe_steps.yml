@@ -1,0 +1,9 @@
+pancakes_step_1:
+  recipe: alpha_pancakes
+  position: 0
+  content: Mélanger la farine et le lait.
+
+pancakes_step_2:
+  recipe: alpha_pancakes
+  position: 1
+  content: Cuire à la poêle.

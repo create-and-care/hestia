@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_100001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_110002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -70,6 +70,40 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_100001) do
     t.index ["household_id"], name: "index_products_on_household_id"
   end
 
+  create_table "recipe_ingredients", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.decimal "quantity", precision: 10, scale: 2
+    t.bigint "recipe_id", null: false
+    t.string "unit"
+    t.datetime "updated_at", null: false
+    t.index ["recipe_id"], name: "index_recipe_ingredients_on_recipe_id"
+  end
+
+  create_table "recipe_steps", force: :cascade do |t|
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.integer "position", default: 0, null: false
+    t.bigint "recipe_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recipe_id"], name: "index_recipe_steps_on_recipe_id"
+  end
+
+  create_table "recipes", force: :cascade do |t|
+    t.string "category"
+    t.integer "cook_time_minutes"
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.integer "prep_time_minutes"
+    t.integer "servings"
+    t.string "source_url"
+    t.string "tags", default: [], null: false, array: true
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_recipes_on_household_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "active_household_id"
     t.datetime "created_at", null: false
@@ -120,6 +154,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_100001) do
   add_foreign_key "memberships", "users"
   add_foreign_key "prepared_dishes", "households"
   add_foreign_key "products", "households"
+  add_foreign_key "recipe_ingredients", "recipes"
+  add_foreign_key "recipe_steps", "recipes"
+  add_foreign_key "recipes", "households"
   add_foreign_key "sessions", "households", column: "active_household_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "shopping_list_items", "products"

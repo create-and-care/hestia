@@ -1,0 +1,18 @@
+<% content_for :title, "Importer une recette" %>
+
+<div class="mx-auto mt-16 max-w-md px-4">
+  <h1 class="mb-2 text-2xl font-semibold">Importer une recette</h1>
+  <p class="mb-6 text-sm text-gray-500">Collez l'URL d'une recette (sites compatibles schema.org/Recipe).</p>
+
+  <%= render "shared/flash" %>
+
+  <%= form_with url: import_recipes_path, method: :post do |form| %>
+    <div class="flex gap-2">
+      <%= form.url_field :url, required: true, placeholder: "https://…",
+            class: "flex-1 rounded-md border border-gray-300 px-3 py-2" %>
+      <%= form.submit "Importer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to "← Recettes", recipes_path, class: "underline" %></p>
+</div>
