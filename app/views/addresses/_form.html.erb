@@ -1,0 +1,45 @@
+<%= form_with model: address, url: url do |form| %>
+  <% if address.errors.any? %>
+    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <ul class="list-inside list-disc">
+        <% address.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :name, "Nom", class: "mb-1 block text-sm font-medium" %>
+        <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :address_type, "Type", class: "mb-1 block text-sm font-medium" %>
+        <%= form.select :address_type, address_type_options, {}, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+    </div>
+    <div>
+      <%= form.label :full_address, "Adresse", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_area :full_address, rows: 2, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div>
+        <%= form.label :phone, "Téléphone", class: "mb-1 block text-sm font-medium" %>
+        <%= form.telephone_field :phone, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :rating, "Note (1-5)", class: "mb-1 block text-sm font-medium" %>
+        <%= form.number_field :rating, in: 1..5, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :latitude, "Latitude", class: "mb-1 block text-sm font-medium" %>
+        <%= form.number_field :latitude, step: :any, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :longitude, "Longitude", class: "mb-1 block text-sm font-medium" %>
+        <%= form.number_field :longitude, step: :any, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+    </div>
+    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+  </div>
+<% end %>

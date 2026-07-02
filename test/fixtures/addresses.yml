@@ -1,0 +1,17 @@
+alpha_resto:
+  household: alpha
+  address_type: restaurant
+  name: Chez Léon
+  full_address: 12 rue de la Paix, Paris
+  phone: "0102030405"
+  rating: 4
+
+alpha_park:
+  household: alpha
+  address_type: parc
+  name: Parc de la Tête d'Or
+
+beta_place:
+  household: beta
+  address_type: bar
+  name: Bar Beta

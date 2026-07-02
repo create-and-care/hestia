@@ -10,9 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_150002) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "address_type", default: "autre", null: false
+    t.datetime "created_at", null: false
+    t.text "full_address"
+    t.bigint "household_id", null: false
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.string "name", null: false
+    t.string "phone"
+    t.integer "rating"
+    t.datetime "updated_at", null: false
+    t.index ["household_id", "address_type"], name: "index_addresses_on_household_id_and_address_type"
+    t.index ["household_id"], name: "index_addresses_on_household_id"
+  end
 
   create_table "calendar_events", force: :cascade do |t|
     t.boolean "all_day", default: false, null: false
@@ -243,6 +258,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_150002) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "addresses", "households"
   add_foreign_key "calendar_events", "households"
   add_foreign_key "contact_taggings", "contact_tags"
   add_foreign_key "contact_taggings", "contacts"

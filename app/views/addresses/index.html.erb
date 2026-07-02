@@ -1,0 +1,30 @@
+<% content_for :title, "Adresses" %>
+<%= turbo_stream_from Current.household %>
+
+<div class="mx-auto mt-10 max-w-3xl px-4">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <h1 class="text-2xl font-semibold">📍 Adresses</h1>
+    <div class="flex flex-wrap items-center gap-2">
+      <%= form_with url: addresses_path, method: :get, class: "flex items-center gap-1" do |form| %>
+        <%= form.select :address_type, address_type_options, { include_blank: "Tous les types", selected: @type },
+              class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+        <%= form.search_field :q, value: @query, placeholder: "Rechercher…",
+              class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+        <%= form.submit "OK", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <% end %>
+      <%= link_to "Nouvelle", new_address_path,
+            class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    </div>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <div id="addresses" class="space-y-2">
+    <%= render @addresses %>
+  </div>
+  <% if @addresses.empty? %>
+    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucune adresse.</p>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>
