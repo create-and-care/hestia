@@ -4,7 +4,7 @@ class NotesController < ApplicationController
   def index
     @query = params[:q].to_s.strip
     @archived = params[:archived].present?
-    notes = Current.household.notes.ordered
+    notes = Current.household.notes.general.ordered
     notes = @archived ? notes.archived : notes.active
     notes = notes.where("title ILIKE :q OR content ILIKE :q", q: "%#{@query}%") if @query.present?
     @notes = notes

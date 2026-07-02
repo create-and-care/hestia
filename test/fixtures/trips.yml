@@ -1,0 +1,8 @@
+alpha_trip:
+  household: alpha
+  name: Week-end à la mer
+  starts_on: <%= 10.days.from_now.to_date %>
+
+beta_trip:
+  household: beta
+  name: Voyage Beta

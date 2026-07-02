@@ -46,6 +46,7 @@ class Household < ApplicationRecord
 
   # Modules à écart d'architecture (Phase 2.d)
   has_many :gift_lists, dependent: :destroy
+  has_many :trips, dependent: :destroy
 
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true

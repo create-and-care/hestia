@@ -1,0 +1,84 @@
+<% content_for :title, @trip.name %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <header class="mb-6 flex items-start justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold">🧳 <%= @trip.name %></h1>
+      <% if @trip.starts_on %><p class="text-sm text-gray-500"><%= @trip.starts_on.strftime("%d/%m/%Y") %><%= " → #{@trip.ends_on.strftime('%d/%m/%Y')}" if @trip.ends_on %></p><% end %>
+    </div>
+    <%= button_to "Supprimer le voyage", trip_path(@trip), method: :delete,
+          form: { data: { turbo_confirm: "Supprimer ce voyage et toutes ses données ? Action irréversible." } },
+          class: "cursor-pointer text-sm text-red-600 underline" %>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-6">
+    <h2 class="mb-2 font-medium">🛒 Courses du voyage</h2>
+    <ul class="mb-2 text-sm">
+      <% @trip.shopping_lists.order(:name).each do |list| %>
+        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
+          <%= link_to "#{list.icon.presence || '🛒'} #{list.name}", shopping_list_path(list), class: "hover:underline" %>
+          <%= button_to "×", trip_shopping_list_path(@trip, list), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @shopping_list, url: trip_shopping_lists_path(@trip), class: "flex gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Liste (ex. « chalet »)", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <section class="mb-6">
+    <h2 class="mb-2 font-medium">📝 Notes</h2>
+    <ul class="mb-2 text-sm">
+      <% @trip.notes.order(created_at: :desc).each do |note| %>
+        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
+          <span><span class="font-medium"><%= note.title %></span> <span class="text-gray-400"><%= truncate(note.content, length: 60) %></span></span>
+          <%= button_to "×", trip_note_path(@trip, note), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @note, url: trip_notes_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
+      <%= form.text_field :title, required: true, placeholder: "Titre", class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :content, placeholder: "Contenu", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <section class="mb-6">
+    <h2 class="mb-2 font-medium">✅ Préparatifs</h2>
+    <ul class="mb-2 text-sm">
+      <% @trip.tasks.order(:due_on).each do |task| %>
+        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
+          <span><%= "#{task.emoji} " if task.emoji.present? %><%= task.title %></span>
+          <%= button_to "×", trip_task_path(@trip, task), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @task, url: trip_tasks_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
+      <%= form.text_field :title, required: true, placeholder: "Préparatif", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.date_field :due_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <section class="mb-6">
+    <h2 class="mb-2 font-medium">📍 Carnet d'adresses</h2>
+    <ul class="mb-2 text-sm">
+      <% @trip.addresses.order(:name).each do |address| %>
+        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
+          <span><span class="font-medium"><%= address.name %></span> <span class="text-gray-400"><%= address.full_address %></span></span>
+          <%= button_to "×", trip_address_path(@trip, address), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @address, url: trip_addresses_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Lieu", class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :full_address, placeholder: "Adresse", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <p class="text-sm"><%= link_to "← Voyages", trips_path, class: "underline" %></p>
+</div>

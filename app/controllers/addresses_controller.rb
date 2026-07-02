@@ -4,7 +4,7 @@ class AddressesController < ApplicationController
   def index
     @query = params[:q].to_s.strip
     @type = params[:address_type].presence
-    addresses = Current.household.addresses.ordered
+    addresses = Current.household.addresses.general.ordered
     addresses = addresses.where(address_type: @type) if @type
     addresses = addresses.where("name ILIKE :q OR full_address ILIKE :q", q: "%#{@query}%") if @query.present?
     @addresses = addresses

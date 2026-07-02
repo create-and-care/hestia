@@ -5,7 +5,7 @@ class TasksController < ApplicationController
     @query = params[:q].to_s.strip
     @categories = Current.household.task_categories.order(:name)
 
-    tasks = Current.household.tasks.ordered.includes(:assignee, :task_category)
+    tasks = Current.household.tasks.general.ordered.includes(:assignee, :task_category)
     tasks = tasks.where("title ILIKE ?", "%#{@query}%") if @query.present?
     @tasks = tasks.to_a
 

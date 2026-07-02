@@ -2,7 +2,7 @@ class ShoppingListsController < ApplicationController
   before_action :set_shopping_list, only: %i[show destroy]
 
   def index
-    @shopping_lists = Current.household.shopping_lists.order(:name)
+    @shopping_lists = Current.household.shopping_lists.general.order(:name)
   end
 
   def show

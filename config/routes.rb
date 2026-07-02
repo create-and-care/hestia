@@ -130,6 +130,14 @@ Rails.application.routes.draw do
   post   "circle_posts/:id/react", to: "circle_post_reactions#create",  as: :react_circle_post
   delete "circle_posts/:id/react", to: "circle_post_reactions#destroy", as: :unreact_circle_post
 
+  # Voyage : contexte transverse (CDC §5, point 3 / §12.3).
+  resources :trips, only: %i[index show create destroy] do
+    resources :notes, only: %i[create destroy], module: :trips
+    resources :tasks, only: %i[create destroy], module: :trips
+    resources :addresses, only: %i[create destroy], module: :trips
+    resources :shopping_lists, only: %i[create destroy], module: :trips
+  end
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

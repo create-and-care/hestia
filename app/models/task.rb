@@ -3,8 +3,11 @@ class Task < ApplicationRecord
 
   belongs_to :task_category, optional: true
   belongs_to :assignee, class_name: "User", optional: true
+  belongs_to :trip, optional: true
 
   validates :title, presence: true
+
+  scope :general, -> { where(trip_id: nil) }
 
   # Non faites d'abord, puis par échéance, puis ordre manuel.
   scope :ordered, -> { order(:done, :due_on, :position, :id) }

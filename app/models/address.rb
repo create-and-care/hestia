@@ -6,10 +6,13 @@ class Address < ApplicationRecord
   TYPES = %w[restaurant cafe bar hotel boutique parc musee cinema theatre
              bien_etre lieu_phare tourisme prive autre].freeze
 
+  belongs_to :trip, optional: true
+
   validates :name, presence: true
   validates :address_type, inclusion: { in: TYPES }
   validates :rating, inclusion: { in: 1..5 }, allow_nil: true
 
+  scope :general, -> { where(trip_id: nil) }
   scope :ordered, -> { order(:name) }
 
   broadcasts_to ->(address) { address.household }

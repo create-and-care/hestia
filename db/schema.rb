@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_160003) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_170001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,9 +52,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_160003) do
     t.string "name", null: false
     t.string "phone"
     t.integer "rating"
+    t.bigint "trip_id"
     t.datetime "updated_at", null: false
     t.index ["household_id", "address_type"], name: "index_addresses_on_household_id_and_address_type"
     t.index ["household_id"], name: "index_addresses_on_household_id"
+    t.index ["trip_id"], name: "index_addresses_on_trip_id"
   end
 
   create_table "allergen_tests", force: :cascade do |t|
@@ -380,10 +382,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_160003) do
     t.boolean "favorite", default: false, null: false
     t.bigint "household_id", null: false
     t.string "title", null: false
+    t.bigint "trip_id"
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_notes_on_author_id"
     t.index ["household_id", "archived"], name: "index_notes_on_household_id_and_archived"
     t.index ["household_id"], name: "index_notes_on_household_id"
+    t.index ["trip_id"], name: "index_notes_on_trip_id"
   end
 
   create_table "pet_supplies", force: :cascade do |t|
@@ -646,8 +650,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_160003) do
     t.bigint "household_id", null: false
     t.string "icon"
     t.string "name", null: false
+    t.bigint "trip_id"
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_shopping_lists_on_household_id"
+    t.index ["trip_id"], name: "index_shopping_lists_on_trip_id"
   end
 
   create_table "task_categories", force: :cascade do |t|
@@ -669,10 +675,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_160003) do
     t.integer "position", default: 0, null: false
     t.bigint "task_category_id"
     t.string "title", null: false
+    t.bigint "trip_id"
     t.datetime "updated_at", null: false
     t.index ["assignee_id"], name: "index_tasks_on_assignee_id"
     t.index ["household_id"], name: "index_tasks_on_household_id"
     t.index ["task_category_id"], name: "index_tasks_on_task_category_id"
+    t.index ["trip_id"], name: "index_tasks_on_trip_id"
+  end
+
+  create_table "trips", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "ends_on"
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.date "starts_on"
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_trips_on_household_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -745,6 +763,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_160003) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "households"
+  add_foreign_key "addresses", "trips"
   add_foreign_key "allergen_tests", "baby_profiles"
   add_foreign_key "baby_profiles", "households"
   add_foreign_key "bottles", "households"
@@ -787,6 +806,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_160003) do
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users", column: "author_id"
   add_foreign_key "notes", "households"
+  add_foreign_key "notes", "trips"
   add_foreign_key "notes", "users", column: "author_id"
   add_foreign_key "pet_supplies", "pets"
   add_foreign_key "pet_treatments", "pets"
@@ -818,10 +838,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_160003) do
   add_foreign_key "shopping_list_items", "products"
   add_foreign_key "shopping_list_items", "shopping_lists"
   add_foreign_key "shopping_lists", "households"
+  add_foreign_key "shopping_lists", "trips"
   add_foreign_key "task_categories", "households"
   add_foreign_key "tasks", "households"
   add_foreign_key "tasks", "task_categories"
+  add_foreign_key "tasks", "trips"
   add_foreign_key "tasks", "users", column: "assignee_id"
+  add_foreign_key "trips", "households"
   add_foreign_key "vehicle_maintenance_entries", "vehicles"
   add_foreign_key "vehicles", "households"
   add_foreign_key "waste_collection_events", "households"
