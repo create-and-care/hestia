@@ -1,0 +1,61 @@
+<% content_for :title, "Bien-être" %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <h1 class="mb-1 text-2xl font-semibold">🧘 Bien-être</h1>
+  <p class="mb-6 text-xs text-gray-400">Données strictement privées — visibles par vous seul(e), jamais par les autres membres du foyer. L'IMC est affiché à titre informatif.</p>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-8 rounded-lg border border-gray-200 p-4">
+    <h2 class="mb-3 font-medium">Mon profil</h2>
+    <%= form_with model: @profile, url: wellbeing_profile_path, method: :patch, class: "grid grid-cols-2 gap-3 sm:grid-cols-3" do |form| %>
+      <label class="text-sm">Taille (cm)<%= form.number_field :height, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
+      <label class="text-sm">Âge<%= form.number_field :age, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
+      <label class="text-sm">Sexe<%= form.select :sex, sex_options, { include_blank: "—" }, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
+      <label class="text-sm">Activité<%= form.select :activity_level, activity_options, { include_blank: "—" }, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
+      <label class="text-sm">Poids de départ<%= form.number_field :start_weight, step: :any, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
+      <label class="text-sm">Objectif<%= form.number_field :goal_weight, step: :any, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
+      <div class="col-span-2 sm:col-span-3"><%= form.submit "Enregistrer le profil", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %></div>
+    <% end %>
+    <% if @latest_weight && @profile.bmi(@latest_weight) %>
+      <p class="mt-3 text-sm">IMC actuel : <span class="font-semibold"><%= @profile.bmi(@latest_weight) %></span> (poids <%= @latest_weight %> kg)</p>
+    <% end %>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">⚖️ Poids</h2>
+    <ul class="mb-2 text-sm">
+      <% @weight_entries.reverse.first(15).each do |entry| %>
+        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
+          <span><%= entry.recorded_on.strftime("%d/%m/%Y") %> — <span class="font-medium"><%= entry.weight %> kg</span></span>
+          <%= button_to "×", weight_entry_path(entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @weight_entry, url: weight_entries_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.number_field :weight, step: :any, required: true, placeholder: "kg", class: "w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.date_field :recorded_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">🏋️ Séances de sport</h2>
+    <ul class="mb-2 text-sm">
+      <% @workout_entries.first(15).each do |entry| %>
+        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
+          <span><%= entry.done_on.strftime("%d/%m") %> — <%= entry.exercise %><% if entry.duration_minutes %> (<%= entry.duration_minutes %> min)<% end %></span>
+          <%= button_to "×", workout_entry_path(entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @workout_entry, url: workout_entries_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :exercise, required: true, placeholder: "Exercice", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.number_field :duration_minutes, placeholder: "min", class: "w-20 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.date_field :done_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <p class="text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>

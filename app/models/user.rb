@@ -8,6 +8,11 @@ class User < ApplicationRecord
   has_many :circle_memberships, dependent: :destroy
   has_many :circles, through: :circle_memberships
 
+  # Module Bien-être : données strictement privées à l'utilisateur (jamais le foyer).
+  has_one :wellbeing_profile, dependent: :destroy
+  has_many :weight_entries, dependent: :destroy
+  has_many :workout_entries, dependent: :destroy
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   validates :name, presence: true

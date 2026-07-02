@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_170001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_180002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -752,12 +752,44 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_170001) do
     t.index ["household_id"], name: "index_waste_collection_series_on_household_id"
   end
 
+  create_table "weight_entries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "recorded_on", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.decimal "weight", precision: 6, scale: 2, null: false
+    t.index ["user_id"], name: "index_weight_entries_on_user_id"
+  end
+
+  create_table "wellbeing_profiles", force: :cascade do |t|
+    t.string "activity_level"
+    t.integer "age"
+    t.datetime "created_at", null: false
+    t.decimal "goal_weight", precision: 6, scale: 2
+    t.integer "height"
+    t.string "sex"
+    t.decimal "start_weight", precision: 6, scale: 2
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_wellbeing_profiles_on_user_id", unique: true
+  end
+
   create_table "wine_cellars", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_wine_cellars_on_household_id"
+  end
+
+  create_table "workout_entries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "done_on", null: false
+    t.integer "duration_minutes"
+    t.string "exercise", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_workout_entries_on_user_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -850,5 +882,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_170001) do
   add_foreign_key "waste_collection_events", "households"
   add_foreign_key "waste_collection_events", "waste_collection_series"
   add_foreign_key "waste_collection_series", "households"
+  add_foreign_key "weight_entries", "users"
+  add_foreign_key "wellbeing_profiles", "users"
   add_foreign_key "wine_cellars", "households"
+  add_foreign_key "workout_entries", "users"
 end
