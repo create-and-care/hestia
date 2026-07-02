@@ -1,0 +1,12 @@
+alpha_supermarket:
+  household: alpha
+  name: Supermarché
+  number: "9876543210123"
+  code_format: barcode
+  position: 0
+
+beta_card:
+  household: beta
+  name: Carte Beta
+  number: "111"
+  code_format: qrcode

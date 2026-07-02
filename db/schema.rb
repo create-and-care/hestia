@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_170001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_180000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -104,6 +104,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_170001) do
     t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["invite_code"], name: "index_households_on_invite_code", unique: true
+  end
+
+  create_table "loyalty_cards", force: :cascade do |t|
+    t.string "code_format", default: "barcode", null: false
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.string "number", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_loyalty_cards_on_household_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -291,6 +302,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_170001) do
   add_foreign_key "event_participants", "users"
   add_foreign_key "fridge_items", "households"
   add_foreign_key "fridge_items", "products"
+  add_foreign_key "loyalty_cards", "households"
   add_foreign_key "memberships", "households"
   add_foreign_key "memberships", "users"
   add_foreign_key "notes", "households"

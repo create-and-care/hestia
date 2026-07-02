@@ -1,0 +1,27 @@
+<%= form_with model: card, url: url do |form| %>
+  <% if card.errors.any? %>
+    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <ul class="list-inside list-disc">
+        <% card.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div>
+      <%= form.label :name, "Enseigne", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :name, required: true, placeholder: "Carrefour, Fnac…",
+            class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :number, "Numéro de carte", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :number, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2 font-mono" %>
+    </div>
+    <div>
+      <%= form.label :code_format, "Format", class: "mb-1 block text-sm font-medium" %>
+      <%= form.select :code_format, [ [ "Code-barres", "barcode" ], [ "QR code", "qrcode" ] ], {},
+            class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+  </div>
+<% end %>

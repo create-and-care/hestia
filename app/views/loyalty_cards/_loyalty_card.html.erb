@@ -1,0 +1,11 @@
+<%= tag.div id: dom_id(loyalty_card), class: "flex items-center justify-between rounded-lg border border-gray-200 p-4" do %>
+  <%= link_to loyalty_card_path(loyalty_card), class: "min-w-0 flex-1" do %>
+    <p class="font-medium"><%= loyalty_card.name %></p>
+    <p class="truncate font-mono text-sm text-gray-500"><%= loyalty_card.number %></p>
+  <% end %>
+  <div class="flex shrink-0 items-center gap-2 text-sm">
+    <%= link_to "🔎", loyalty_card_path(loyalty_card), class: "hover:opacity-70", title: "Afficher en grand" %>
+    <%= link_to "✎", edit_loyalty_card_path(loyalty_card), class: "text-gray-400 hover:text-gray-900" %>
+    <%= button_to "✕", loyalty_card_path(loyalty_card), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+  </div>
+<% end %>
