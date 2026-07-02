@@ -1,0 +1,16 @@
+alpha_idea:
+  household: alpha
+  author: one
+  title: Idée cadeau
+  content: Un livre de cuisine
+  favorite: true
+  archived: false
+
+alpha_old:
+  household: alpha
+  title: Vieille note
+  archived: true
+
+beta_note:
+  household: beta
+  title: Note Beta

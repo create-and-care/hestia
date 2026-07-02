@@ -1,0 +1,34 @@
+<% content_for :title, "Notes" %>
+<%= turbo_stream_from Current.household %>
+
+<div class="mx-auto mt-10 max-w-3xl px-4">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <h1 class="text-2xl font-semibold">📝 Notes</h1>
+    <div class="flex items-center gap-2">
+      <%= form_with url: notes_path, method: :get do |form| %>
+        <%= form.hidden_field :archived, value: ("1" if @archived) %>
+        <%= form.search_field :q, value: @query, placeholder: "Rechercher…",
+              class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+      <% end %>
+      <%= link_to (@archived ? "Actives" : "Archivées"), notes_path(archived: (@archived ? nil : 1)),
+            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+    </div>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <% unless @archived %>
+    <%= render "form", note: @note %>
+  <% end %>
+
+  <div id="notes" class="mt-4 grid gap-3 sm:grid-cols-2">
+    <%= render @notes %>
+  </div>
+  <% if @notes.empty? %>
+    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
+      Aucune note<%= " archivée" if @archived %><%= " pour cette recherche" if @query.present? %>.
+    </p>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>

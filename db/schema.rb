@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_130001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_140000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -71,6 +71,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_130001) do
     t.index ["household_id"], name: "index_memberships_on_household_id"
     t.index ["user_id", "household_id"], name: "index_memberships_on_user_id_and_household_id", unique: true
     t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "notes", force: :cascade do |t|
+    t.boolean "archived", default: false, null: false
+    t.bigint "author_id"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.boolean "favorite", default: false, null: false
+    t.bigint "household_id", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_notes_on_author_id"
+    t.index ["household_id", "archived"], name: "index_notes_on_household_id_and_archived"
+    t.index ["household_id"], name: "index_notes_on_household_id"
   end
 
   create_table "prepared_dishes", force: :cascade do |t|
@@ -207,6 +221,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_130001) do
   add_foreign_key "fridge_items", "products"
   add_foreign_key "memberships", "households"
   add_foreign_key "memberships", "users"
+  add_foreign_key "notes", "households"
+  add_foreign_key "notes", "users", column: "author_id"
   add_foreign_key "prepared_dishes", "households"
   add_foreign_key "products", "households"
   add_foreign_key "recipe_ingredients", "recipes"

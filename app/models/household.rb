@@ -16,6 +16,9 @@ class Household < ApplicationRecord
   has_many :tasks, dependent: :destroy
   has_many :calendar_events, dependent: :destroy
 
+  # Modules satellites (Phase 2.b)
+  has_many :notes, dependent: :destroy
+
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true
 

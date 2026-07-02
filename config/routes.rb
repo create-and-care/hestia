@@ -51,6 +51,15 @@ Rails.application.routes.draw do
   resource :calendar, only: :show, controller: "calendar"
   resources :calendar_events, only: %i[new create edit update destroy]
 
+  # Modules satellites (Phase 2.b).
+  resources :notes, only: %i[index create edit update destroy] do
+    member do
+      patch :toggle_favorite
+      patch :toggle_archive
+      post :promote_to_task
+    end
+  end
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

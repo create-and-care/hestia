@@ -1,0 +1,11 @@
+<%= tag.div id: "new_note" do %>
+  <%= form_with model: note, url: notes_path do |form| %>
+    <div class="space-y-2 rounded-lg border border-gray-200 p-3">
+      <%= form.text_field :title, required: true, placeholder: "Titre de la note",
+            class: "w-full rounded-md border border-gray-300 px-3 py-2 font-medium" %>
+      <%= form.text_area :content, rows: 2, placeholder: "Contenu…",
+            class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
+    </div>
+  <% end %>
+<% end %>
