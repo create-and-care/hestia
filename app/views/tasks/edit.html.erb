@@ -1,0 +1,53 @@
+<% content_for :title, "Modifier la tâche" %>
+
+<div class="mx-auto mt-10 max-w-md px-4">
+  <h1 class="mb-6 text-2xl font-semibold">Modifier la tâche</h1>
+
+  <%= form_with model: @task, url: task_path(@task) do |form| %>
+    <% if @task.errors.any? %>
+      <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <ul class="list-inside list-disc">
+          <% @task.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="space-y-4">
+      <div>
+        <%= form.label :title, "Titre", class: "mb-1 block text-sm font-medium" %>
+        <%= form.text_field :title, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :description, "Description", class: "mb-1 block text-sm font-medium" %>
+        <%= form.text_area :description, rows: 3, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= form.label :emoji, "Emoji", class: "mb-1 block text-sm font-medium" %>
+          <%= form.text_field :emoji, maxlength: 4, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        </div>
+        <div>
+          <%= form.label :due_on, "Échéance", class: "mb-1 block text-sm font-medium" %>
+          <%= form.date_field :due_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= form.label :assignee_id, "Responsable", class: "mb-1 block text-sm font-medium" %>
+          <%= form.select :assignee_id, task_assignee_options, { include_blank: "—" },
+                class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        </div>
+        <div>
+          <%= form.label :task_category_id, "Catégorie", class: "mb-1 block text-sm font-medium" %>
+          <%= form.select :task_category_id, task_category_options, { include_blank: "—" },
+                class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        </div>
+      </div>
+      <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tâches", tasks_path, class: "underline" %></p>
+</div>

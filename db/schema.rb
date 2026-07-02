@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_110002) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_120001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -139,6 +139,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_110002) do
     t.index ["household_id"], name: "index_shopping_lists_on_household_id"
   end
 
+  create_table "task_categories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_task_categories_on_household_id"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.bigint "assignee_id"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.boolean "done", default: false, null: false
+    t.date "due_on"
+    t.string "emoji"
+    t.bigint "household_id", null: false
+    t.integer "position", default: 0, null: false
+    t.bigint "task_category_id"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assignee_id"], name: "index_tasks_on_assignee_id"
+    t.index ["household_id"], name: "index_tasks_on_household_id"
+    t.index ["task_category_id"], name: "index_tasks_on_task_category_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
@@ -162,4 +187,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_110002) do
   add_foreign_key "shopping_list_items", "products"
   add_foreign_key "shopping_list_items", "shopping_lists"
   add_foreign_key "shopping_lists", "households"
+  add_foreign_key "task_categories", "households"
+  add_foreign_key "tasks", "households"
+  add_foreign_key "tasks", "task_categories"
+  add_foreign_key "tasks", "users", column: "assignee_id"
 end

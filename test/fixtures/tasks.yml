@@ -1,0 +1,19 @@
+alpha_dishes:
+  household: alpha
+  title: Faire la vaisselle
+  task_category: alpha_home
+  assignee: one
+  due_on: <%= 3.days.from_now.to_date %>
+  position: 0
+  done: false
+
+alpha_call:
+  household: alpha
+  title: Appeler le médecin
+  position: 1
+  done: true
+
+beta_report:
+  household: beta
+  title: Rapport
+  position: 0

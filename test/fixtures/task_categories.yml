@@ -1,0 +1,7 @@
+alpha_home:
+  household: alpha
+  name: Maison
+
+beta_work:
+  household: beta
+  name: Travail

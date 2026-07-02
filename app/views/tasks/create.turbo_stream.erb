@@ -1,0 +1,4 @@
+<%# La tâche est insérée dans sa colonne via le flux temps réel ; on réinitialise le formulaire. %>
+<%= turbo_stream.replace "new_task" do %>
+  <%= render "tasks/form", task: Task.new %>
+<% end %>

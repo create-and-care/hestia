@@ -1,0 +1,45 @@
+<% content_for :title, "Tâches" %>
+<%= turbo_stream_from Current.household %>
+
+<div class="mx-auto mt-10 max-w-5xl px-4">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <h1 class="text-2xl font-semibold">✅ Tâches</h1>
+    <%= form_with url: tasks_path, method: :get do |form| %>
+      <%= form.search_field :q, value: @query, placeholder: "Rechercher…",
+            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+    <% end %>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <%= render "form", task: @task %>
+
+  <section class="my-6 flex flex-wrap items-center gap-2">
+    <span class="text-sm text-gray-500">Catégories :</span>
+    <% @categories.each do |category| %>
+      <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
+        <%= category.name %>
+        <%= button_to "×", task_category_path(category), method: :delete,
+              class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
+      </span>
+    <% end %>
+    <%= form_with url: task_categories_path, method: :post, class: "inline-flex gap-1" do %>
+      <%= text_field_tag "task_category[name]", nil, placeholder: "Nouvelle catégorie",
+            class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
+      <%= submit_tag "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <div class="flex gap-4 overflow-x-auto pb-4">
+    <% @columns.each do |(category, tasks)| %>
+      <div class="w-72 shrink-0">
+        <h2 class="mb-2 text-sm font-semibold text-gray-600"><%= category&.name || "Sans catégorie" %></h2>
+        <div id="<%= category ? "tasks_category_#{category.id}" : "tasks_uncategorized" %>" class="space-y-2">
+          <%= render tasks %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>
