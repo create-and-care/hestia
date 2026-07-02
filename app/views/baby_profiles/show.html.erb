@@ -1,0 +1,85 @@
+<% content_for :title, @baby.name %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <header class="mb-2 flex items-start justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold">👶 <%= @baby.name %></h1>
+      <% if @baby.born_on %><p class="text-sm text-gray-500">Né(e) le <%= @baby.born_on.strftime("%d/%m/%Y") %></p><% end %>
+    </div>
+    <div class="flex gap-2 text-sm">
+      <%= link_to "Modifier", edit_baby_profile_path(@baby), class: "underline" %>
+      <%= button_to "Supprimer", baby_profile_path(@baby), method: :delete,
+            form: { data: { turbo_confirm: "Supprimer ce profil ?" } }, class: "cursor-pointer text-red-600 underline" %>
+    </div>
+  </header>
+
+  <p class="mb-6 text-xs text-gray-400">Aide à l'organisation — ne remplace pas le suivi médical pédiatrique.</p>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">🍼 Tétées</h2>
+    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @baby.feeding_sessions.recent.limit(20).each do |session| %>
+        <li class="flex items-center justify-between px-3 py-2 text-sm">
+          <span>
+            <%= feeding_kind_label(session.kind) %>
+            <% if session.started_at %><span class="text-gray-400">· <%= session.started_at.strftime("%d/%m %H:%M") %></span><% end %>
+            <% if session.duration_minutes %><span class="text-gray-400">· <%= session.duration_minutes %> min</span><% end %>
+          </span>
+          <%= button_to "✕", baby_profile_feeding_session_path(@baby, session), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @feeding_session, url: baby_profile_feeding_sessions_path(@baby), class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.select :kind, feeding_kind_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.datetime_field :started_at, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.datetime_field :ended_at, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">🥕 Diversification</h2>
+    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @baby.food_introductions.recent.each do |introduction| %>
+        <li class="flex items-center justify-between px-3 py-2 text-sm">
+          <span><%= introduction.food %>
+            <% if introduction.introduced_on %><span class="text-gray-400">· <%= introduction.introduced_on.strftime("%d/%m/%Y") %></span><% end %>
+            <% if introduction.acceptance.present? %><span class="text-gray-400">· <%= introduction.acceptance %></span><% end %>
+          </span>
+          <%= button_to "✕", baby_profile_food_introduction_path(@baby, introduction), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @food_introduction, url: baby_profile_food_introductions_path(@baby), class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :food, required: true, placeholder: "Aliment", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.date_field :introduced_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.select :acceptance, [ "Aimé", "Neutre", "Refusé" ], { include_blank: "Réaction" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">⚠️ Allergènes testés</h2>
+    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @baby.allergen_tests.recent.each do |test| %>
+        <li class="flex items-center justify-between px-3 py-2 text-sm">
+          <span><%= test.allergen %>
+            <% if test.tested_on %><span class="text-gray-400">· <%= test.tested_on.strftime("%d/%m/%Y") %></span><% end %>
+            <% if test.severity.present? %><span class="text-gray-400">· <%= test.severity %></span><% end %>
+          </span>
+          <%= button_to "✕", baby_profile_allergen_test_path(@baby, test), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: @allergen_test, url: baby_profile_allergen_tests_path(@baby), class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :allergen, required: true, placeholder: "Allergène", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.date_field :tested_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.select :severity, [ "Aucune", "Légère", "Sévère" ], { include_blank: "Sévérité" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <p class="text-sm"><%= link_to "← Tous les profils", baby_profiles_path, class: "underline" %></p>
+</div>

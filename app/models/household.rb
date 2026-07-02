@@ -30,6 +30,7 @@ class Household < ApplicationRecord
   has_many :bottles, dependent: :destroy
   has_many :waste_collection_series, dependent: :destroy
   has_many :waste_collection_events, dependent: :destroy
+  has_many :baby_profiles, dependent: :destroy
 
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true

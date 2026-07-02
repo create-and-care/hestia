@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_220001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_230003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_220001) do
     t.datetime "updated_at", null: false
     t.index ["household_id", "address_type"], name: "index_addresses_on_household_id_and_address_type"
     t.index ["household_id"], name: "index_addresses_on_household_id"
+  end
+
+  create_table "allergen_tests", force: :cascade do |t|
+    t.string "allergen", null: false
+    t.bigint "baby_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.string "severity"
+    t.date "tested_on"
+    t.datetime "updated_at", null: false
+    t.index ["baby_profile_id"], name: "index_allergen_tests_on_baby_profile_id"
+  end
+
+  create_table "baby_profiles", force: :cascade do |t|
+    t.date "born_on"
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_baby_profiles_on_household_id"
   end
 
   create_table "bottles", force: :cascade do |t|
@@ -97,6 +116,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_220001) do
     t.index ["calendar_event_id", "user_id"], name: "index_event_participants_on_calendar_event_id_and_user_id", unique: true
     t.index ["calendar_event_id"], name: "index_event_participants_on_calendar_event_id"
     t.index ["user_id"], name: "index_event_participants_on_user_id"
+  end
+
+  create_table "feeding_sessions", force: :cascade do |t|
+    t.bigint "baby_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "ended_at"
+    t.string "kind", default: "bottle", null: false
+    t.datetime "started_at"
+    t.datetime "updated_at", null: false
+    t.index ["baby_profile_id"], name: "index_feeding_sessions_on_baby_profile_id"
+  end
+
+  create_table "food_introductions", force: :cascade do |t|
+    t.string "acceptance"
+    t.bigint "baby_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.string "food", null: false
+    t.date "introduced_on"
+    t.datetime "updated_at", null: false
+    t.index ["baby_profile_id"], name: "index_food_introductions_on_baby_profile_id"
   end
 
   create_table "fridge_items", force: :cascade do |t|
@@ -411,6 +450,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_220001) do
   end
 
   add_foreign_key "addresses", "households"
+  add_foreign_key "allergen_tests", "baby_profiles"
+  add_foreign_key "baby_profiles", "households"
   add_foreign_key "bottles", "households"
   add_foreign_key "bottles", "wine_cellars"
   add_foreign_key "calendar_events", "households"
@@ -420,6 +461,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_220001) do
   add_foreign_key "contacts", "households"
   add_foreign_key "event_participants", "calendar_events"
   add_foreign_key "event_participants", "users"
+  add_foreign_key "feeding_sessions", "baby_profiles"
+  add_foreign_key "food_introductions", "baby_profiles"
   add_foreign_key "fridge_items", "households"
   add_foreign_key "fridge_items", "products"
   add_foreign_key "loyalty_cards", "households"

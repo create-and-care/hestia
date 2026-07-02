@@ -80,6 +80,11 @@ Rails.application.routes.draw do
   resource :waste, only: :show, controller: "waste"
   resources :waste_collection_series, only: %i[create destroy]
   resources :waste_collection_events, only: %i[create destroy]
+  resources :baby_profiles do
+    resources :feeding_sessions, only: %i[create destroy]
+    resources :food_introductions, only: %i[create destroy]
+    resources :allergen_tests, only: %i[create destroy]
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

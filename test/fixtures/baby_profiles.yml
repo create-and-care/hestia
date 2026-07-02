@@ -1,0 +1,8 @@
+alpha_baby:
+  household: alpha
+  name: Lou
+  born_on: <%= 5.months.ago.to_date %>
+
+beta_baby:
+  household: beta
+  name: Bébé Beta

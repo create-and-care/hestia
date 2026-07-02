@@ -1,0 +1,7 @@
+<% content_for :title, "Nouveau profil bébé" %>
+
+<div class="mx-auto mt-10 max-w-md px-4">
+  <h1 class="mb-6 text-2xl font-semibold">Nouveau profil bébé</h1>
+  <%= render "form", baby: @baby, url: baby_profiles_path %>
+  <p class="mt-6 text-sm"><%= link_to "← Bébé", baby_profiles_path, class: "underline" %></p>
+</div>

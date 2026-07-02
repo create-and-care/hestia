@@ -1,0 +1,21 @@
+<%= form_with model: baby, url: url do |form| %>
+  <% if baby.errors.any? %>
+    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <ul class="list-inside list-disc">
+        <% baby.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div>
+      <%= form.label :name, "Prénom", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :born_on, "Date de naissance", class: "mb-1 block text-sm font-medium" %>
+      <%= form.date_field :born_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+  </div>
+<% end %>
