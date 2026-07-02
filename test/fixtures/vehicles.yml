@@ -1,0 +1,14 @@
+alpha_car:
+  household: alpha
+  name: La Clio
+  vehicle_type: car
+  manufacturer: Renault
+  plate: AB-123-CD
+  year: 2018
+  energy: Essence
+  inspection_expires_on: <%= 45.days.from_now.to_date %>
+
+beta_car:
+  household: beta
+  name: Voiture Beta
+  vehicle_type: car

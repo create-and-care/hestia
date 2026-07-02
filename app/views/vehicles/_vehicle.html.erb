@@ -1,0 +1,20 @@
+<%= tag.div id: dom_id(vehicle), class: "flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 px-3 py-2" do %>
+  <%= link_to vehicle_path(vehicle), class: "min-w-0 flex-1" do %>
+    <div class="flex items-center gap-2">
+      <span class="font-medium"><%= vehicle.name %></span>
+      <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600"><%= vehicle_type_label(vehicle.vehicle_type) %></span>
+    </div>
+    <p class="text-sm text-gray-500">
+      <%= [ vehicle.manufacturer, vehicle.plate, vehicle.year ].reject(&:blank?).join(" · ") %>
+    </p>
+  <% end %>
+
+  <span class="shrink-0 rounded-full px-2 py-0.5 text-xs font-medium <%= inspection_badge_class(vehicle.inspection_status) %>">
+    CT : <%= inspection_label(vehicle.inspection_status) %>
+  </span>
+
+  <div class="flex shrink-0 items-center gap-2 text-sm">
+    <%= link_to "✎", edit_vehicle_path(vehicle), class: "text-gray-400 hover:text-gray-900" %>
+    <%= button_to "✕", vehicle_path(vehicle), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+  </div>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_190003) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_200001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -338,6 +338,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_190003) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  create_table "vehicle_maintenance_entries", force: :cascade do |t|
+    t.decimal "cost", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.date "done_on"
+    t.string "entry_type"
+    t.string "provider"
+    t.datetime "updated_at", null: false
+    t.bigint "vehicle_id", null: false
+    t.index ["vehicle_id"], name: "index_vehicle_maintenance_entries_on_vehicle_id"
+  end
+
+  create_table "vehicles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "energy"
+    t.bigint "household_id", null: false
+    t.date "inspection_expires_on"
+    t.string "manufacturer"
+    t.string "name", null: false
+    t.string "plate"
+    t.datetime "updated_at", null: false
+    t.string "vehicle_type", default: "car", null: false
+    t.integer "year"
+    t.index ["household_id"], name: "index_vehicles_on_household_id"
+  end
+
   add_foreign_key "addresses", "households"
   add_foreign_key "calendar_events", "households"
   add_foreign_key "contact_taggings", "contact_tags"
@@ -374,4 +400,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_190003) do
   add_foreign_key "tasks", "households"
   add_foreign_key "tasks", "task_categories"
   add_foreign_key "tasks", "users", column: "assignee_id"
+  add_foreign_key "vehicle_maintenance_entries", "vehicles"
+  add_foreign_key "vehicles", "households"
 end

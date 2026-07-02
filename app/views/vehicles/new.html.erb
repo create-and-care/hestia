@@ -1,0 +1,7 @@
+<% content_for :title, "Nouveau véhicule" %>
+
+<div class="mx-auto mt-10 max-w-xl px-4">
+  <h1 class="mb-6 text-2xl font-semibold">Nouveau véhicule</h1>
+  <%= render "form", vehicle: @vehicle, url: vehicles_path %>
+  <p class="mt-6 text-sm"><%= link_to "← Véhicules", vehicles_path, class: "underline" %></p>
+</div>

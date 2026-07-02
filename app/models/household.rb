@@ -25,6 +25,7 @@ class Household < ApplicationRecord
   has_many :service_providers, dependent: :destroy
   has_many :loyalty_cards, dependent: :destroy
   has_many :pets, dependent: :destroy
+  has_many :vehicles, dependent: :destroy
 
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true

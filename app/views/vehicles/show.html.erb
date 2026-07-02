@@ -1,0 +1,53 @@
+<% content_for :title, @vehicle.name %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <header class="mb-4 flex items-start justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold">🚗 <%= @vehicle.name %></h1>
+      <p class="text-sm text-gray-500">
+        <%= [ vehicle_type_label(@vehicle.vehicle_type), @vehicle.manufacturer, @vehicle.plate, @vehicle.year, @vehicle.energy ].reject(&:blank?).join(" · ") %>
+      </p>
+      <p class="mt-2">
+        <span class="rounded-full px-2 py-0.5 text-xs font-medium <%= inspection_badge_class(@vehicle.inspection_status) %>">
+          Contrôle technique : <%= inspection_label(@vehicle.inspection_status) %>
+          <% if @vehicle.inspection_expires_on %> (<%= @vehicle.inspection_expires_on.strftime("%d/%m/%Y") %>)<% end %>
+        </span>
+      </p>
+    </div>
+    <div class="flex gap-2 text-sm">
+      <%= link_to "Modifier", edit_vehicle_path(@vehicle), class: "underline" %>
+      <%= button_to "Supprimer", vehicle_path(@vehicle), method: :delete,
+            form: { data: { turbo_confirm: "Supprimer ce véhicule ?" } }, class: "cursor-pointer text-red-600 underline" %>
+    </div>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <section class="mt-6">
+    <h2 class="mb-2 font-medium">Historique d'entretien</h2>
+    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @vehicle.vehicle_maintenance_entries.chronological.each do |entry| %>
+        <li class="flex items-center justify-between px-3 py-2 text-sm">
+          <span>
+            <span class="font-medium"><%= entry.entry_type %></span>
+            <% if entry.done_on %><span class="text-gray-400">· <%= entry.done_on.strftime("%d/%m/%Y") %></span><% end %>
+            <% if entry.cost %><span class="text-gray-400">· <%= entry.cost %> €</span><% end %>
+            <% if entry.provider.present? %><span class="text-gray-400">· <%= entry.provider %></span><% end %>
+            <% if entry.description.present? %><span class="block text-gray-500"><%= entry.description %></span><% end %>
+          </span>
+          <%= button_to "✕", vehicle_maintenance_entry_path(@vehicle, entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+
+    <%= form_with model: @entry, url: vehicle_maintenance_entries_path(@vehicle), class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :entry_type, required: true, placeholder: "Vidange, pneus…", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.date_field :done_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.number_field :cost, step: :any, placeholder: "€", class: "w-20 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :provider, placeholder: "Garage", class: "w-28 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tous les véhicules", vehicles_path, class: "underline" %></p>
+</div>
