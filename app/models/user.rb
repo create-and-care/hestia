@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_many :households, through: :memberships
   has_many :conversation_participants, dependent: :destroy
   has_many :conversations, through: :conversation_participants
+  has_many :circle_memberships, dependent: :destroy
+  has_many :circles, through: :circle_memberships
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 

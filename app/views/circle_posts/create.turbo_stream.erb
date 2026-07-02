@@ -1,0 +1,9 @@
+<%# Le post est ajouté au fil via le flux temps réel ; on réinitialise le champ. %>
+<%= turbo_stream.replace "new_circle_post" do %>
+  <%= tag.div id: "new_circle_post" do %>
+    <%= form_with model: [ @circle, @circle.circle_posts.new ], url: circle_posts_path(@circle), class: "mb-6 flex gap-2" do |form| %>
+      <%= form.text_area :body, required: true, rows: 2, autofocus: true, placeholder: "Partagez un moment…", class: "flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm" %>
+      <%= form.submit "Publier", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
+    <% end %>
+  <% end %>
+<% end %>

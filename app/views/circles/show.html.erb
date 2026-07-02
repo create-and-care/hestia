@@ -1,0 +1,32 @@
+<% content_for :title, @circle.name %>
+<%= turbo_stream_from @circle %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <header class="mb-4">
+    <h1 class="text-2xl font-semibold">👥 <%= @circle.name %></h1>
+    <p class="text-sm text-gray-500">
+      <% if @circle.theme.present? %><%= @circle.theme %> · <% end %>
+      <%= @circle.members.map { |m| m.name.presence || m.email_address }.join(", ") %>
+    </p>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-6 rounded-lg border border-gray-200 p-3">
+    <p class="text-sm text-gray-600">Code d'invitation (au-delà du foyer) :</p>
+    <code class="rounded bg-gray-100 px-3 py-1 font-semibold tracking-widest"><%= @circle.invite_code %></code>
+  </section>
+
+  <%= tag.div id: "new_circle_post" do %>
+    <%= form_with model: [ @circle, @post ], url: circle_posts_path(@circle), class: "mb-6 flex gap-2" do |form| %>
+      <%= form.text_area :body, required: true, rows: 2, placeholder: "Partagez un moment…", class: "flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm" %>
+      <%= form.submit "Publier", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
+    <% end %>
+  <% end %>
+
+  <div id="circle_posts" class="space-y-3">
+    <%= render @posts %>
+  </div>
+
+  <p class="mt-6 text-sm"><%= link_to "← Cercles", circles_path, class: "underline" %></p>
+</div>

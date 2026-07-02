@@ -1,0 +1,21 @@
+<%= tag.div id: dom_id(circle_post), class: "rounded-lg border border-gray-200 p-3" do %>
+  <div class="flex items-baseline justify-between">
+    <span class="text-sm font-medium"><%= circle_post.author.name.presence || circle_post.author.email_address %></span>
+    <span class="text-xs text-gray-400"><%= circle_post.created_at.strftime("%d/%m %H:%M") %></span>
+  </div>
+  <p class="mt-1 whitespace-pre-line text-gray-800"><%= circle_post.body %></p>
+
+  <div class="mt-2 flex flex-wrap items-center gap-2">
+    <% circle_post.circle_post_reactions.group_by(&:emoji).each do |emoji, reactions| %>
+      <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs"><%= emoji %> <%= reactions.size %></span>
+    <% end %>
+    <% %w[👍 ❤️ 😂 🎉 😮].each do |emoji| %>
+      <%= button_to emoji, react_circle_post_path(circle_post, emoji: emoji), method: :post,
+            class: "cursor-pointer rounded-full px-1 text-sm hover:bg-gray-100", form: { class: "inline" } %>
+    <% end %>
+    <% if circle_post.deletable_by?(Current.user) %>
+      <%= button_to "Supprimer", circle_post_path(circle_post.circle, circle_post), method: :delete,
+            class: "cursor-pointer text-xs text-gray-400 hover:text-red-600" %>
+    <% end %>
+  </div>
+<% end %>

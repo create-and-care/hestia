@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_150003) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_160003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -126,6 +126,47 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_150003) do
     t.datetime "updated_at", null: false
     t.index ["household_id", "starts_at"], name: "index_calendar_events_on_household_id_and_starts_at"
     t.index ["household_id"], name: "index_calendar_events_on_household_id"
+  end
+
+  create_table "circle_memberships", force: :cascade do |t|
+    t.bigint "circle_id", null: false
+    t.datetime "created_at", null: false
+    t.string "role", default: "member", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["circle_id", "user_id"], name: "index_circle_memberships_on_circle_id_and_user_id", unique: true
+    t.index ["circle_id"], name: "index_circle_memberships_on_circle_id"
+    t.index ["user_id"], name: "index_circle_memberships_on_user_id"
+  end
+
+  create_table "circle_post_reactions", force: :cascade do |t|
+    t.bigint "circle_post_id", null: false
+    t.datetime "created_at", null: false
+    t.string "emoji", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["circle_post_id", "user_id"], name: "index_circle_post_reactions_on_circle_post_id_and_user_id", unique: true
+    t.index ["circle_post_id"], name: "index_circle_post_reactions_on_circle_post_id"
+    t.index ["user_id"], name: "index_circle_post_reactions_on_user_id"
+  end
+
+  create_table "circle_posts", force: :cascade do |t|
+    t.bigint "author_id", null: false
+    t.text "body", null: false
+    t.bigint "circle_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_circle_posts_on_author_id"
+    t.index ["circle_id"], name: "index_circle_posts_on_circle_id"
+  end
+
+  create_table "circles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "invite_code", null: false
+    t.string "name", null: false
+    t.string "theme"
+    t.datetime "updated_at", null: false
+    t.index ["invite_code"], name: "index_circles_on_invite_code", unique: true
   end
 
   create_table "contact_taggings", force: :cascade do |t|
@@ -711,6 +752,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_150003) do
   add_foreign_key "budget_categories", "households"
   add_foreign_key "budget_entries", "budget_categories"
   add_foreign_key "calendar_events", "households"
+  add_foreign_key "circle_memberships", "circles"
+  add_foreign_key "circle_memberships", "users"
+  add_foreign_key "circle_post_reactions", "circle_posts"
+  add_foreign_key "circle_post_reactions", "users"
+  add_foreign_key "circle_posts", "circles"
+  add_foreign_key "circle_posts", "users", column: "author_id"
   add_foreign_key "contact_taggings", "contact_tags"
   add_foreign_key "contact_taggings", "contacts"
   add_foreign_key "contact_tags", "households"

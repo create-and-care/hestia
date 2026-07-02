@@ -1,0 +1,14 @@
+family_one:
+  circle: family
+  user: one
+  role: admin
+
+family_two:
+  circle: family
+  user: two
+  role: member
+
+other_two:
+  circle: other
+  user: two
+  role: admin

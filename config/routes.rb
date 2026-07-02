@@ -122,6 +122,14 @@ Rails.application.routes.draw do
   post   "g/:token/reserve/:idea_id", to: "public_gift_lists#reserve",   as: :reserve_public_gift
   delete "g/:token/reserve/:idea_id", to: "public_gift_lists#unreserve", as: :unreserve_public_gift
 
+  # Cercles (indépendants du foyer, CDC §5, point 1).
+  resources :circles, only: %i[index show create] do
+    resources :posts, only: %i[create destroy], controller: "circle_posts"
+  end
+  resource :circle_membership, only: %i[new create]
+  post   "circle_posts/:id/react", to: "circle_post_reactions#create",  as: :react_circle_post
+  delete "circle_posts/:id/react", to: "circle_post_reactions#destroy", as: :unreact_circle_post
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
