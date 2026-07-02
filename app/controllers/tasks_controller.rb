@@ -71,6 +71,11 @@ class TasksController < ApplicationController
     end
   end
 
+  def reorder
+    Reordering.apply(Current.household.tasks, params[:ids])
+    head :no_content
+  end
+
   private
     def set_task
       @task = Current.household.tasks.find(params[:id])

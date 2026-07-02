@@ -4,38 +4,68 @@
 
 import { application } from "./application"
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
+import AccordionController from "./accordion_controller"
+application.register("accordion", AccordionController)
 
-import DialogController from "./dialog_controller"
-application.register("dialog", DialogController)
+import CalendarController from "./calendar_controller"
+application.register("calendar", CalendarController)
 
-import PopoverController from "./popover_controller"
-application.register("popover", PopoverController)
-
-import TooltipController from "./tooltip_controller"
-application.register("tooltip", TooltipController)
-
-import HoverCardController from "./hover_card_controller"
-application.register("hover-card", HoverCardController)
-
-import DropdownMenuController from "./dropdown_menu_controller"
-application.register("dropdown-menu", DropdownMenuController)
-
-import ContextMenuController from "./context_menu_controller"
-application.register("context-menu", ContextMenuController)
-
-import NavigationMenuController from "./navigation_menu_controller"
-application.register("navigation-menu", NavigationMenuController)
-
-import TabsController from "./tabs_controller"
-application.register("tabs", TabsController)
+import CarouselController from "./carousel_controller"
+application.register("carousel", CarouselController)
 
 import CollapsibleController from "./collapsible_controller"
 application.register("collapsible", CollapsibleController)
 
-import AccordionController from "./accordion_controller"
-application.register("accordion", AccordionController)
+import ComboboxController from "./combobox_controller"
+application.register("combobox", ComboboxController)
+
+import CommandController from "./command_controller"
+application.register("command", CommandController)
+
+import ContextMenuController from "./context_menu_controller"
+application.register("context-menu", ContextMenuController)
+
+import DialogController from "./dialog_controller"
+application.register("dialog", DialogController)
+
+import DropdownMenuController from "./dropdown_menu_controller"
+application.register("dropdown-menu", DropdownMenuController)
+
+import HelloController from "./hello_controller"
+application.register("hello", HelloController)
+
+import HoverCardController from "./hover_card_controller"
+application.register("hover-card", HoverCardController)
+
+import InputOtpController from "./input_otp_controller"
+application.register("input-otp", InputOtpController)
+
+import NavigationMenuController from "./navigation_menu_controller"
+application.register("navigation-menu", NavigationMenuController)
+
+import PopoverController from "./popover_controller"
+application.register("popover", PopoverController)
+
+import ResizableController from "./resizable_controller"
+application.register("resizable", ResizableController)
+
+import SelectController from "./select_controller"
+application.register("select", SelectController)
+
+import SidebarController from "./sidebar_controller"
+application.register("sidebar", SidebarController)
+
+import SliderController from "./slider_controller"
+application.register("slider", SliderController)
+
+import SonnerController from "./sonner_controller"
+application.register("sonner", SonnerController)
+
+import SortableController from "./sortable_controller"
+application.register("sortable", SortableController)
+
+import TabsController from "./tabs_controller"
+application.register("tabs", TabsController)
 
 import ToggleController from "./toggle_controller"
 application.register("toggle", ToggleController)
@@ -43,32 +73,5 @@ application.register("toggle", ToggleController)
 import ToggleGroupController from "./toggle_group_controller"
 application.register("toggle-group", ToggleGroupController)
 
-import CarouselController from "./carousel_controller"
-application.register("carousel", CarouselController)
-
-import CalendarController from "./calendar_controller"
-application.register("calendar", CalendarController)
-
-import CommandController from "./command_controller"
-application.register("command", CommandController)
-
-import ComboboxController from "./combobox_controller"
-application.register("combobox", ComboboxController)
-
-import SelectController from "./select_controller"
-application.register("select", SelectController)
-
-import InputOtpController from "./input_otp_controller"
-application.register("input-otp", InputOtpController)
-
-import SidebarController from "./sidebar_controller"
-application.register("sidebar", SidebarController)
-
-import SonnerController from "./sonner_controller"
-application.register("sonner", SonnerController)
-
-import ResizableController from "./resizable_controller"
-application.register("resizable", ResizableController)
-
-import SliderController from "./slider_controller"
-application.register("slider", SliderController)
+import TooltipController from "./tooltip_controller"
+application.register("tooltip", TooltipController)

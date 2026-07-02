@@ -46,6 +46,12 @@ class ShoppingListItemsController < ApplicationController
     end
   end
 
+  # Réorganisation par glisser-déposer : applique l'ordre des identifiants reçus.
+  def reorder
+    Reordering.apply(@shopping_list.items, params[:ids])
+    head :no_content
+  end
+
   # Article acheté → rangé au frigo puis retiré de la liste (passerelle Courses → Frigo).
   def move_to_fridge
     Frigo::AddFromShoppingListItem.call(shopping_list_item: @item)

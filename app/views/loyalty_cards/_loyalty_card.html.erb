@@ -1,4 +1,6 @@
-<%= tag.div id: dom_id(loyalty_card), class: "flex items-center justify-between rounded-lg border border-gray-200 p-4" do %>
+<%= tag.div id: dom_id(loyalty_card), data: { sortable_id: loyalty_card.id },
+      class: "flex items-center justify-between gap-2 rounded-lg border border-gray-200 p-4" do %>
+  <span data-sortable-handle class="cursor-grab select-none text-gray-300 hover:text-gray-500" title="Déplacer">⠿</span>
   <%= link_to loyalty_card_path(loyalty_card), class: "min-w-0 flex-1" do %>
     <p class="font-medium"><%= loyalty_card.name %></p>
     <p class="truncate font-mono text-sm text-gray-500"><%= loyalty_card.number %></p>

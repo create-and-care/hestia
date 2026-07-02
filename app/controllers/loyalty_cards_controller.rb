@@ -37,6 +37,11 @@ class LoyaltyCardsController < ApplicationController
     redirect_to loyalty_cards_path, notice: "Carte supprimée."
   end
 
+  def reorder
+    Reordering.apply(Current.household.loyalty_cards, params[:ids])
+    head :no_content
+  end
+
   private
     def set_card
       @card = Current.household.loyalty_cards.find(params[:id])

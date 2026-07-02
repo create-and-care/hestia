@@ -9,8 +9,8 @@ class Task < ApplicationRecord
 
   scope :general, -> { where(trip_id: nil) }
 
-  # Non faites d'abord, puis par échéance, puis ordre manuel.
-  scope :ordered, -> { order(:done, :due_on, :position, :id) }
+  # Non faites d'abord, puis ordre manuel (glisser-déposer), puis échéance.
+  scope :ordered, -> { order(:done, :position, :id) }
 
   # Temps réel : la carte est ciblée par son dom_id (replace/remove) et insérée dans la
   # colonne de sa catégorie (append) — cf. vue kanban.

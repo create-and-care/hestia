@@ -34,7 +34,8 @@
     <% @columns.each do |(category, tasks)| %>
       <div class="w-72 shrink-0">
         <h2 class="mb-2 text-sm font-semibold text-gray-600"><%= category&.name || "Sans catégorie" %></h2>
-        <div id="<%= category ? "tasks_category_#{category.id}" : "tasks_uncategorized" %>" class="space-y-2">
+        <div id="<%= category ? "tasks_category_#{category.id}" : "tasks_uncategorized" %>" class="min-h-4 space-y-2"
+             data-controller="sortable" data-sortable-url-value="<%= reorder_tasks_path %>">
           <%= render tasks %>
         </div>
       </div>

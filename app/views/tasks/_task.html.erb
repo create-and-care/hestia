@@ -1,5 +1,7 @@
-<%= tag.div id: dom_id(task), class: "rounded-lg border border-gray-200 bg-white p-3 #{'opacity-60' if task.done}" do %>
+<%= tag.div id: dom_id(task), data: { sortable_id: task.id },
+      class: "rounded-lg border border-gray-200 bg-white p-3 #{'opacity-60' if task.done}" do %>
   <div class="flex items-start gap-2">
+    <span data-sortable-handle class="mt-0.5 shrink-0 cursor-grab select-none text-gray-300 hover:text-gray-500" title="Déplacer">⠿</span>
     <%= button_to toggle_task_path(task), method: :patch, class: "mt-0.5 shrink-0 cursor-pointer",
           aria: { label: task.done ? "Rouvrir" : "Terminer" } do %>
       <span class="flex size-5 items-center justify-center rounded border <%= task.done ? "border-gray-900 bg-gray-900 text-white" : "border-gray-300" %>">
