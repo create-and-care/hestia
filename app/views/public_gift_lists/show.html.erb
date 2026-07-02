@@ -1,0 +1,37 @@
+<% content_for :title, "#{@list.name} — liste d'envies" %>
+
+<div class="mx-auto mt-10 max-w-xl px-4">
+  <h1 class="mb-1 text-2xl font-semibold">🎁 <%= @list.name %></h1>
+  <p class="mb-6 text-sm text-gray-500">Réservez une idée pour éviter que plusieurs personnes offrent la même chose. Aucun compte nécessaire.</p>
+
+  <ul class="space-y-3">
+    <% @ideas.each do |idea| %>
+      <li class="rounded-lg border border-gray-200 p-3">
+        <div class="flex items-center justify-between">
+          <span>
+            <span class="font-medium"><%= idea.name %></span>
+            <% if idea.price %>· <%= number_to_currency(idea.price, unit: "€", format: "%n %u") %><% end %>
+            <% if idea.url.present? %>· <%= link_to "voir", idea.url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
+          </span>
+          <% if idea.reserved? %>
+            <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700">Réservé</span>
+          <% end %>
+        </div>
+        <% if idea.comment.present? %><p class="mt-1 text-sm text-gray-500"><%= idea.comment %></p><% end %>
+
+        <div class="mt-2">
+          <% if idea.reserved? %>
+            <%= button_to "Annuler la réservation", unreserve_public_gift_path(@share.token, idea), method: :delete,
+                  class: "cursor-pointer text-xs text-gray-500 underline" %>
+          <% else %>
+            <%= form_with url: reserve_public_gift_path(@share.token, idea), method: :post, class: "flex gap-2" do |form| %>
+              <%= text_field_tag :reserver_name, nil, placeholder: "Votre nom (optionnel)", class: "flex-1 rounded-md border border-gray-300 px-2 py-1 text-sm" %>
+              <%= submit_tag "Réserver", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1 text-sm font-medium text-white hover:bg-gray-700" %>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+  <% if @ideas.empty? %><p class="text-gray-500">Cette liste est vide pour l'instant.</p><% end %>
+</div>

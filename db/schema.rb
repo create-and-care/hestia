@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_140001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_150003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -235,6 +235,46 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_140001) do
     t.index ["household_id", "location"], name: "index_fridge_items_on_household_id_and_location"
     t.index ["household_id"], name: "index_fridge_items_on_household_id"
     t.index ["product_id"], name: "index_fridge_items_on_product_id"
+  end
+
+  create_table "gift_ideas", force: :cascade do |t|
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.bigint "gift_list_id", null: false
+    t.string "name", null: false
+    t.decimal "price", precision: 10, scale: 2
+    t.string "status", default: "wanted", null: false
+    t.datetime "updated_at", null: false
+    t.string "url"
+    t.index ["gift_list_id"], name: "index_gift_ideas_on_gift_list_id"
+  end
+
+  create_table "gift_list_shares", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "gift_list_id", null: false
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gift_list_id"], name: "index_gift_list_shares_on_gift_list_id"
+    t.index ["token"], name: "index_gift_list_shares_on_token", unique: true
+  end
+
+  create_table "gift_lists", force: :cascade do |t|
+    t.bigint "contact_id"
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.string "perspective", default: "receive", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contact_id"], name: "index_gift_lists_on_contact_id"
+    t.index ["household_id"], name: "index_gift_lists_on_household_id"
+  end
+
+  create_table "gift_reservations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "gift_idea_id", null: false
+    t.string "reserver_name"
+    t.datetime "updated_at", null: false
+    t.index ["gift_idea_id"], name: "index_gift_reservations_on_gift_idea_id"
   end
 
   create_table "households", force: :cascade do |t|
@@ -687,6 +727,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_140001) do
   add_foreign_key "food_introductions", "baby_profiles"
   add_foreign_key "fridge_items", "households"
   add_foreign_key "fridge_items", "products"
+  add_foreign_key "gift_ideas", "gift_lists"
+  add_foreign_key "gift_list_shares", "gift_lists"
+  add_foreign_key "gift_lists", "contacts"
+  add_foreign_key "gift_lists", "households"
+  add_foreign_key "gift_reservations", "gift_ideas"
   add_foreign_key "loyalty_cards", "households"
   add_foreign_key "meal_plan_entries", "households"
   add_foreign_key "meal_plan_entries", "recipes"

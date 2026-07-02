@@ -1,0 +1,9 @@
+alpha_wishlist:
+  household: alpha
+  name: Ma liste de Noël
+  perspective: receive
+
+beta_list:
+  household: beta
+  name: Liste Beta
+  perspective: receive

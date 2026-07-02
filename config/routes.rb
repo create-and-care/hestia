@@ -112,6 +112,16 @@ Rails.application.routes.draw do
   resources :documents, only: %i[index show create destroy]
   resources :document_folders, only: %i[create destroy]
 
+  # Modules à écart d'architecture (Phase 2.d).
+  resources :gift_lists, only: %i[index show create destroy] do
+    resource :share, only: %i[create destroy], controller: "gift_list_shares"
+    resources :gift_ideas, only: %i[create update destroy]
+  end
+  # Partage public non authentifié des listes d'envies (CDC §5).
+  get    "g/:token",              to: "public_gift_lists#show",      as: :public_gift_list
+  post   "g/:token/reserve/:idea_id", to: "public_gift_lists#reserve",   as: :reserve_public_gift
+  delete "g/:token/reserve/:idea_id", to: "public_gift_lists#unreserve", as: :unreserve_public_gift
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

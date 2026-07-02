@@ -44,6 +44,9 @@ class Household < ApplicationRecord
   has_many :document_folders, dependent: :destroy
   has_many :documents, dependent: :destroy
 
+  # Modules à écart d'architecture (Phase 2.d)
+  has_many :gift_lists, dependent: :destroy
+
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true
 

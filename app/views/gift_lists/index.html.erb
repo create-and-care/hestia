@@ -1,0 +1,45 @@
+<% content_for :title, "Cadeaux" %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <h1 class="mb-6 text-2xl font-semibold">🎁 Cadeaux</h1>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">🎀 Recevoir</h2>
+    <ul class="mb-2 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @receive_lists.each do |list| %>
+        <li class="flex items-center justify-between px-4 py-2">
+          <%= link_to list.name, gift_list_path(list), class: "font-medium hover:underline" %>
+          <span class="text-xs text-gray-400"><%= "🔗 partagée" if list.shared? %></span>
+        </li>
+      <% end %>
+    </ul>
+    <% if @receive_lists.empty? %><p class="text-sm text-gray-500">Aucune liste.</p><% end %>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 font-medium">🎁 Offrir</h2>
+    <ul class="mb-2 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @give_lists.each do |list| %>
+        <li class="flex items-center justify-between px-4 py-2">
+          <%= link_to list.name, gift_list_path(list), class: "font-medium hover:underline" %>
+          <% if list.contact %><span class="text-xs text-gray-400">pour <%= list.contact.name %></span><% end %>
+        </li>
+      <% end %>
+    </ul>
+    <% if @give_lists.empty? %><p class="text-sm text-gray-500">Aucune liste.</p><% end %>
+  </section>
+
+  <section class="rounded-lg border border-gray-200 p-4">
+    <h2 class="mb-2 font-medium">Nouvelle liste</h2>
+    <%= form_with model: @list, url: gift_lists_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :name, required: true, placeholder: "Nom (Noël, anniversaire…)", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.select :perspective, [ [ "Recevoir", "receive" ], [ "Offrir", "give" ] ], {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.select :contact_id, contact_options, { include_blank: "Destinataire (offrir)" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Créer", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    <% end %>
+  </section>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>
