@@ -18,6 +18,8 @@ class Household < ApplicationRecord
 
   # Modules satellites (Phase 2.b)
   has_many :notes, dependent: :destroy
+  has_many :contacts, dependent: :destroy
+  has_many :contact_tags, dependent: :destroy
 
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true

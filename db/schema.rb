@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_150002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -29,6 +29,35 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_140000) do
     t.datetime "updated_at", null: false
     t.index ["household_id", "starts_at"], name: "index_calendar_events_on_household_id_and_starts_at"
     t.index ["household_id"], name: "index_calendar_events_on_household_id"
+  end
+
+  create_table "contact_taggings", force: :cascade do |t|
+    t.bigint "contact_id", null: false
+    t.bigint "contact_tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contact_id", "contact_tag_id"], name: "index_contact_taggings_on_contact_id_and_contact_tag_id", unique: true
+    t.index ["contact_id"], name: "index_contact_taggings_on_contact_id"
+    t.index ["contact_tag_id"], name: "index_contact_taggings_on_contact_tag_id"
+  end
+
+  create_table "contact_tags", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "emoji"
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_contact_tags_on_household_id"
+  end
+
+  create_table "contacts", force: :cascade do |t|
+    t.date "born_on"
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "year_known", default: true, null: false
+    t.index ["household_id"], name: "index_contacts_on_household_id"
   end
 
   create_table "event_participants", force: :cascade do |t|
@@ -215,6 +244,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_140000) do
   end
 
   add_foreign_key "calendar_events", "households"
+  add_foreign_key "contact_taggings", "contact_tags"
+  add_foreign_key "contact_taggings", "contacts"
+  add_foreign_key "contact_tags", "households"
+  add_foreign_key "contacts", "households"
   add_foreign_key "event_participants", "calendar_events"
   add_foreign_key "event_participants", "users"
   add_foreign_key "fridge_items", "households"

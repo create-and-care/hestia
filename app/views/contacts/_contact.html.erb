@@ -1,0 +1,26 @@
+<%= tag.div id: dom_id(contact), class: "flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 px-3 py-2" do %>
+  <div class="min-w-0 flex-1">
+    <p class="font-medium"><%= contact.name %></p>
+    <p class="text-xs text-gray-500">
+      <% if contact.born_on %>
+        <%= contact.born_on.strftime(contact.year_known ? "%d/%m/%Y" : "%d/%m") %>
+        <% if contact.age %> · <%= contact.age %> ans<% end %>
+      <% else %>
+        Sans date
+      <% end %>
+      <% contact.contact_tags.each do |tag| %>
+        <span class="ml-1 rounded-full bg-gray-100 px-1.5"><%= "#{tag.emoji} #{tag.name}".strip %></span>
+      <% end %>
+    </p>
+  </div>
+
+  <span class="shrink-0 rounded-full px-2 py-0.5 text-xs font-medium <%= proximity_badge_class(contact.proximity_status) %>">
+    <%= proximity_label(contact.proximity_status) %>
+    <% if (days = contact.days_until_birthday) && days.positive? %> (J-<%= days %>)<% end %>
+  </span>
+
+  <div class="flex shrink-0 items-center gap-2 text-sm">
+    <%= link_to "✎", edit_contact_path(contact), class: "text-gray-400 hover:text-gray-900" %>
+    <%= button_to "✕", contact_path(contact), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+  </div>
+<% end %>

@@ -1,0 +1,39 @@
+<%= form_with model: contact, url: url do |form| %>
+  <% if contact.errors.any? %>
+    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <ul class="list-inside list-disc">
+        <% contact.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div>
+      <%= form.label :name, "Nom", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :born_on, "Date de naissance", class: "mb-1 block text-sm font-medium" %>
+      <%= form.date_field :born_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+    <label class="flex items-center gap-2 text-sm">
+      <%= form.check_box :year_known %> L'année de naissance est connue (âge calculé)
+    </label>
+
+    <% if (tags = Current.household.contact_tags.order(:name)).any? %>
+      <div>
+        <span class="mb-1 block text-sm font-medium">Étiquettes</span>
+        <div class="flex flex-wrap gap-3">
+          <% tags.each do |tag| %>
+            <label class="flex items-center gap-2 text-sm">
+              <%= check_box_tag "contact_tag_ids[]", tag.id, contact.contact_tag_ids.include?(tag.id), id: "contact_tag_#{tag.id}" %>
+              <%= "#{tag.emoji} #{tag.name}".strip %>
+            </label>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+  </div>
+<% end %>

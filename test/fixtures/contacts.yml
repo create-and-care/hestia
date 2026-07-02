@@ -1,0 +1,9 @@
+alpha_mom:
+  household: alpha
+  name: Maman
+  born_on: <%= (Date.current + 3.days).change(year: 1960) %>
+  year_known: true
+
+beta_friend:
+  household: beta
+  name: Ami Beta
