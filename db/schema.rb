@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_200001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_210001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_200001) do
     t.datetime "updated_at", null: false
     t.index ["household_id", "address_type"], name: "index_addresses_on_household_id_and_address_type"
     t.index ["household_id"], name: "index_addresses_on_household_id"
+  end
+
+  create_table "bottles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.boolean "in_stock", default: true, null: false
+    t.string "name", null: false
+    t.string "region"
+    t.datetime "updated_at", null: false
+    t.integer "vintage"
+    t.bigint "wine_cellar_id", null: false
+    t.string "wine_type"
+    t.index ["household_id"], name: "index_bottles_on_household_id"
+    t.index ["wine_cellar_id"], name: "index_bottles_on_wine_cellar_id"
   end
 
   create_table "calendar_events", force: :cascade do |t|
@@ -364,7 +378,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_200001) do
     t.index ["household_id"], name: "index_vehicles_on_household_id"
   end
 
+  create_table "wine_cellars", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_wine_cellars_on_household_id"
+  end
+
   add_foreign_key "addresses", "households"
+  add_foreign_key "bottles", "households"
+  add_foreign_key "bottles", "wine_cellars"
   add_foreign_key "calendar_events", "households"
   add_foreign_key "contact_taggings", "contact_tags"
   add_foreign_key "contact_taggings", "contacts"
@@ -402,4 +426,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_200001) do
   add_foreign_key "tasks", "users", column: "assignee_id"
   add_foreign_key "vehicle_maintenance_entries", "vehicles"
   add_foreign_key "vehicles", "households"
+  add_foreign_key "wine_cellars", "households"
 end

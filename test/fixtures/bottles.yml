@@ -1,0 +1,13 @@
+alpha_bordeaux:
+  household: alpha
+  wine_cellar: alpha_reds
+  name: Château Margaux
+  vintage: 2015
+  region: Bordeaux
+  wine_type: rouge
+  in_stock: true
+
+beta_bottle:
+  household: beta
+  wine_cellar: beta_cellar
+  name: Bouteille Beta

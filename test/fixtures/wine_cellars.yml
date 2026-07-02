@@ -1,0 +1,11 @@
+alpha_reds:
+  household: alpha
+  name: Rouges
+
+alpha_whites:
+  household: alpha
+  name: Blancs
+
+beta_cellar:
+  household: beta
+  name: Cave Beta
