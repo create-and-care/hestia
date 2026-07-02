@@ -92,6 +92,9 @@ Rails.application.routes.draw do
   # Modules à logique métier riche (Phase 2.c).
   resource :menu, only: :show, controller: "menu"
   resources :meal_plan_entries, only: %i[create update destroy]
+  resources :routines, only: %i[index create edit update destroy] do
+    member { post :complete }
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

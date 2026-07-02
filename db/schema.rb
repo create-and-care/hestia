@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_100000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_110001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -341,6 +341,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_100000) do
     t.index ["household_id"], name: "index_recipes_on_household_id"
   end
 
+  create_table "routine_completions", force: :cascade do |t|
+    t.bigint "author_id"
+    t.date "completed_on", null: false
+    t.datetime "created_at", null: false
+    t.bigint "routine_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_routine_completions_on_author_id"
+    t.index ["routine_id"], name: "index_routine_completions_on_routine_id"
+  end
+
+  create_table "routines", force: :cascade do |t|
+    t.bigint "assignee_id"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "emoji"
+    t.string "frequency", default: "weekly", null: false
+    t.bigint "household_id", null: false
+    t.integer "interval", default: 1, null: false
+    t.string "list_name"
+    t.string "name", null: false
+    t.date "next_due_on"
+    t.datetime "updated_at", null: false
+    t.index ["assignee_id"], name: "index_routines_on_assignee_id"
+    t.index ["household_id"], name: "index_routines_on_household_id"
+  end
+
   create_table "service_provider_types", force: :cascade do |t|
     t.string "color"
     t.datetime "created_at", null: false
@@ -528,6 +554,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_100000) do
   add_foreign_key "recipe_ingredients", "recipes"
   add_foreign_key "recipe_steps", "recipes"
   add_foreign_key "recipes", "households"
+  add_foreign_key "routine_completions", "routines"
+  add_foreign_key "routine_completions", "users", column: "author_id"
+  add_foreign_key "routines", "households"
+  add_foreign_key "routines", "users", column: "assignee_id"
   add_foreign_key "service_provider_types", "households"
   add_foreign_key "service_providers", "households"
   add_foreign_key "service_providers", "service_provider_types"

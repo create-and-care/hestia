@@ -42,7 +42,6 @@ class CalendarEvent < ApplicationRecord
 
   private
     def advance_from(time)
-      interval = recurrence_interval.to_i.clamp(1, 52)
-      frequency == "weekly" ? time + interval.weeks : time.advance(months: interval)
+      Recurrence.advance(time, frequency, recurrence_interval.to_i.clamp(1, 52))
     end
 end

@@ -1,0 +1,39 @@
+<% content_for :title, "Routines" %>
+<%= turbo_stream_from Current.household %>
+
+<div class="mx-auto mt-10 max-w-2xl px-4">
+  <h1 class="mb-4 text-2xl font-semibold">🔁 Routines</h1>
+
+  <%= render "shared/flash" %>
+
+  <% if @lists.any? %>
+    <nav class="mb-4 flex flex-wrap gap-2 text-sm">
+      <%= link_to "Toutes", routines_path, class: "rounded-full px-3 py-0.5 #{@list ? 'bg-gray-100' : 'bg-gray-900 text-white'}" %>
+      <% @lists.each do |list| %>
+        <%= link_to list, routines_path(list: list), class: "rounded-full px-3 py-0.5 #{@list == list ? 'bg-gray-900 text-white' : 'bg-gray-100'}" %>
+      <% end %>
+    </nav>
+  <% end %>
+
+  <div id="routines" class="space-y-2">
+    <%= render @routines %>
+  </div>
+  <% if @routines.empty? %>
+    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucune routine.</p>
+  <% end %>
+
+  <section class="mt-6 rounded-lg border border-gray-200 p-4">
+    <h2 class="mb-2 font-medium">Nouvelle routine</h2>
+    <%= form_with model: @routine, url: routines_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.text_field :emoji, placeholder: "🧹", maxlength: 4, class: "w-14 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :name, required: true, placeholder: "Nom", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.select :frequency, routine_frequency_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.number_field :interval, value: 1, min: 1, class: "w-16 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :list_name, placeholder: "Liste (ménage…)", class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.select :assignee_id, routine_member_options, { include_blank: "—" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    <% end %>
+  </section>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>
