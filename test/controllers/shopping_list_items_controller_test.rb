@@ -45,4 +45,14 @@ class ShoppingListItemsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "move_to_fridge stores the item in the fridge and removes it from the list" do
+    item = shopping_list_items(:alpha_apples)
+    assert_difference -> { households(:alpha).fridge_items.count }, 1 do
+      assert_difference -> { ShoppingListItem.count }, -1 do
+        post move_to_fridge_shopping_list_item_path(@list, item), as: :turbo_stream
+      end
+    end
+    assert_response :success
+  end
 end

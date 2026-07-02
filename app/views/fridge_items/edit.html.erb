@@ -1,0 +1,37 @@
+<% content_for :title, "Modifier un aliment" %>
+
+<div class="mx-auto mt-16 max-w-md px-4">
+  <h1 class="mb-6 text-2xl font-semibold">Modifier l'aliment</h1>
+
+  <%= form_with model: @fridge_item, url: fridge_item_path(@fridge_item), method: :patch do |form| %>
+    <% if @fridge_item.errors.any? %>
+      <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <ul class="list-inside list-disc">
+          <% @fridge_item.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="space-y-4">
+      <div>
+        <%= form.label :name, "Aliment", class: "mb-1 block text-sm font-medium" %>
+        <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :location, "Emplacement", class: "mb-1 block text-sm font-medium" %>
+        <%= form.select :location, location_select_options, {}, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :expires_on, "Date de péremption", class: "mb-1 block text-sm font-medium" %>
+        <%= form.date_field :expires_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <%= form.submit "Enregistrer", class: "w-full cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm">
+    <%= link_to "← Retour au frigo", fridge_path, class: "underline" %>
+  </p>
+</div>

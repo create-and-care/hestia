@@ -14,10 +14,20 @@ Rails.application.routes.draw do
   # Module Courses (Phase 2.a).
   resources :shopping_lists, only: %i[index show new create destroy] do
     resources :items, only: %i[create update destroy], controller: "shopping_list_items" do
-      member { patch :toggle }
+      member do
+        patch :toggle
+        post :move_to_fridge
+      end
     end
   end
   resources :products, only: :index
+
+  # Module Frigo (Phase 2.a).
+  resource :fridge, only: :show, controller: "fridge"
+  resources :fridge_items, only: %i[create edit update destroy] do
+    member { post :move_to_shopping_list }
+  end
+  resources :prepared_dishes, only: %i[create destroy]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

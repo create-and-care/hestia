@@ -23,6 +23,12 @@
     <%= rayon_label(shopping_list_item.rayon) %>
   </span>
 
+  <% if shopping_list_item.checked %>
+    <%= button_to "🧊", move_to_fridge_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
+          method: :post, class: "shrink-0 cursor-pointer text-gray-400 hover:text-gray-900",
+          form: { title: "Ranger au frigo" }, aria: { label: "Ranger au frigo" } %>
+  <% end %>
+
   <%= button_to shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
         method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600",
         aria: { label: "Supprimer" } do %>

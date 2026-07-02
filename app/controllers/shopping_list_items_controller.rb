@@ -1,6 +1,6 @@
 class ShoppingListItemsController < ApplicationController
   before_action :set_shopping_list
-  before_action :set_item, only: %i[update destroy toggle]
+  before_action :set_item, only: %i[update destroy toggle move_to_fridge]
 
   def create
     Courses::AddItem.call(
@@ -43,6 +43,16 @@ class ShoppingListItemsController < ApplicationController
     respond_to do |format|
       format.turbo_stream { render turbo_stream: turbo_stream.remove(@item) }
       format.html { redirect_to @shopping_list }
+    end
+  end
+
+  # Article acheté → rangé au frigo puis retiré de la liste (passerelle Courses → Frigo).
+  def move_to_fridge
+    Frigo::AddFromShoppingListItem.call(shopping_list_item: @item)
+
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(@item) }
+      format.html { redirect_to @shopping_list, notice: "Rangé au frigo." }
     end
   end
 

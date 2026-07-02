@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "new_prepared_dish" do %>
+  <%= render "prepared_dishes/form", prepared_dish: PreparedDish.new %>
+<% end %>

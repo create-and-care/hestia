@@ -1,0 +1,5 @@
+alpha_lasagna:
+  household: alpha
+  name: Lasagnes
+  location: refrigerateur
+  expires_on: <%= 1.day.from_now.to_date %>

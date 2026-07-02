@@ -1,0 +1,19 @@
+<%= tag.div id: dom_id(prepared_dish), class: "flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 px-3 py-2" do %>
+  <div class="min-w-0 flex-1">
+    <p class="truncate font-medium"><%= prepared_dish.name %></p>
+    <% if prepared_dish.expires_on.present? %>
+      <p class="text-xs text-gray-500">À consommer avant le <%= prepared_dish.expires_on.strftime("%d/%m/%Y") %></p>
+    <% end %>
+  </div>
+
+  <span class="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
+    <%= location_label(prepared_dish.location) %>
+  </span>
+
+  <span class="shrink-0 rounded-full px-2 py-0.5 text-xs font-medium <%= expiration_badge_class(prepared_dish.expiration_status) %>">
+    <%= expiration_label(prepared_dish.expiration_status) %>
+  </span>
+
+  <%= button_to "✕", prepared_dish_path(prepared_dish), method: :delete,
+        class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600", aria: { label: "Supprimer" } %>
+<% end %>

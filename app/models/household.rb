@@ -9,6 +9,8 @@ class Household < ApplicationRecord
   # Modules (Phase 2)
   has_many :shopping_lists, dependent: :destroy
   has_many :products, dependent: :destroy
+  has_many :fridge_items, dependent: :destroy
+  has_many :prepared_dishes, dependent: :destroy
 
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true

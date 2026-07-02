@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_30_130002) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_100001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "fridge_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "expires_on"
+    t.bigint "household_id", null: false
+    t.string "location", null: false
+    t.string "name", null: false
+    t.bigint "product_id"
+    t.datetime "updated_at", null: false
+    t.index ["household_id", "location"], name: "index_fridge_items_on_household_id_and_location"
+    t.index ["household_id"], name: "index_fridge_items_on_household_id"
+    t.index ["product_id"], name: "index_fridge_items_on_product_id"
+  end
 
   create_table "households", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -31,6 +44,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_130002) do
     t.index ["household_id"], name: "index_memberships_on_household_id"
     t.index ["user_id", "household_id"], name: "index_memberships_on_user_id_and_household_id", unique: true
     t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "prepared_dishes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "expires_on"
+    t.bigint "household_id", null: false
+    t.string "location", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id", "location"], name: "index_prepared_dishes_on_household_id_and_location"
+    t.index ["household_id"], name: "index_prepared_dishes_on_household_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -90,8 +114,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_130002) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "fridge_items", "households"
+  add_foreign_key "fridge_items", "products"
   add_foreign_key "memberships", "households"
   add_foreign_key "memberships", "users"
+  add_foreign_key "prepared_dishes", "households"
   add_foreign_key "products", "households"
   add_foreign_key "sessions", "households", column: "active_household_id"
   add_foreign_key "sessions", "users"

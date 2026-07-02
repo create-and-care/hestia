@@ -33,9 +33,7 @@ module Courses
       def catalog_product
         return if @name.blank?
 
-        products = @shopping_list.household.products
-        products.where("LOWER(name) = ?", @name.downcase).first ||
-          products.create!(name: @name, rayon: @rayon)
+        Product.catalog_for(household: @shopping_list.household, name: @name, rayon: @rayon)
       end
 
       def next_position

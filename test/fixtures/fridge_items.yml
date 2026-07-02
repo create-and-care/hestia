@@ -1,0 +1,15 @@
+alpha_yogurt:
+  household: alpha
+  name: Yaourts
+  location: refrigerateur
+  expires_on: <%= 2.days.from_now.to_date %>
+
+alpha_peas:
+  household: alpha
+  name: Petits pois
+  location: congelateur
+
+beta_milk:
+  household: beta
+  name: Lait
+  location: refrigerateur
