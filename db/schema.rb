@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_160000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_170001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -189,6 +189,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_160000) do
     t.index ["household_id"], name: "index_recipes_on_household_id"
   end
 
+  create_table "service_provider_types", force: :cascade do |t|
+    t.string "color"
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "icon"
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_service_provider_types_on_household_id"
+  end
+
+  create_table "service_providers", force: :cascade do |t|
+    t.text "address"
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.bigint "household_id", null: false
+    t.string "name", null: false
+    t.string "phone"
+    t.bigint "service_provider_type_id"
+    t.datetime "updated_at", null: false
+    t.index ["household_id"], name: "index_service_providers_on_household_id"
+    t.index ["service_provider_type_id"], name: "index_service_providers_on_service_provider_type_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "active_household_id"
     t.datetime "created_at", null: false
@@ -277,6 +300,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_160000) do
   add_foreign_key "recipe_ingredients", "recipes"
   add_foreign_key "recipe_steps", "recipes"
   add_foreign_key "recipes", "households"
+  add_foreign_key "service_provider_types", "households"
+  add_foreign_key "service_providers", "households"
+  add_foreign_key "service_providers", "service_provider_types"
   add_foreign_key "sessions", "households", column: "active_household_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "shopping_list_items", "products"

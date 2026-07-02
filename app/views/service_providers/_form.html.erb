@@ -1,0 +1,38 @@
+<%= form_with model: service_provider, url: url do |form| %>
+  <% if service_provider.errors.any? %>
+    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <ul class="list-inside list-disc">
+        <% service_provider.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :name, "Nom", class: "mb-1 block text-sm font-medium" %>
+        <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :service_provider_type_id, "Type", class: "mb-1 block text-sm font-medium" %>
+        <%= form.collection_select :service_provider_type_id, Current.household.service_provider_types.order(:name), :id, :name, { include_blank: "—" },
+              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :phone, "Téléphone", class: "mb-1 block text-sm font-medium" %>
+        <%= form.telephone_field :phone, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :email, "E-mail", class: "mb-1 block text-sm font-medium" %>
+        <%= form.email_field :email, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      </div>
+    </div>
+    <div>
+      <%= form.label :address, "Adresse", class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_area :address, rows: 2, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+    </div>
+    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+  </div>
+<% end %>

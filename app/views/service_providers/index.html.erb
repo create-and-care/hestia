@@ -1,0 +1,43 @@
+<% content_for :title, "Prestataires" %>
+<%= turbo_stream_from Current.household %>
+
+<div class="mx-auto mt-10 max-w-3xl px-4">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <h1 class="text-2xl font-semibold">🧰 Prestataires</h1>
+    <div class="flex items-center gap-2">
+      <%= form_with url: service_providers_path, method: :get do |form| %>
+        <%= form.search_field :q, value: @query, placeholder: "Rechercher…",
+              class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+      <% end %>
+      <%= link_to "Nouveau", new_service_provider_path,
+            class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    </div>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-6 flex flex-wrap items-center gap-2">
+    <%= link_to "Tous", service_providers_path,
+          class: "rounded-full px-3 py-0.5 text-xs #{@type ? 'bg-gray-100' : 'bg-gray-900 text-white'}" %>
+    <% @types.each do |type| %>
+      <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
+        <%= link_to "#{type.icon} #{type.name}".strip, service_providers_path(type_id: type.id) %>
+        <%= button_to "×", service_provider_type_path(type), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
+      </span>
+    <% end %>
+    <%= form_with url: service_provider_types_path, method: :post, class: "inline-flex gap-1" do %>
+      <%= text_field_tag "service_provider_type[icon]", nil, placeholder: "🔧", maxlength: 4, class: "w-12 rounded-md border border-gray-300 px-2 py-1 text-xs" %>
+      <%= text_field_tag "service_provider_type[name]", nil, placeholder: "Type", class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
+      <%= submit_tag "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
+  <div id="service_providers" class="space-y-2">
+    <%= render @providers %>
+  </div>
+  <% if @providers.empty? %>
+    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucun prestataire.</p>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>

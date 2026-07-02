@@ -1,0 +1,11 @@
+alpha_plombier:
+  household: alpha
+  service_provider_type: alpha_plumber
+  name: Plomberie Martin
+  phone: "0102030405"
+  email: contact@plomberie-martin.fr
+  address: 5 rue du Bois
+
+beta_provider:
+  household: beta
+  name: Prestataire Beta

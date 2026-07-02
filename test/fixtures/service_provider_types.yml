@@ -1,0 +1,8 @@
+alpha_plumber:
+  household: alpha
+  name: Plombier
+  icon: 🔧
+
+beta_type:
+  household: beta
+  name: Type Beta

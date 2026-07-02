@@ -21,6 +21,8 @@ class Household < ApplicationRecord
   has_many :contacts, dependent: :destroy
   has_many :contact_tags, dependent: :destroy
   has_many :addresses, dependent: :destroy
+  has_many :service_provider_types, dependent: :destroy
+  has_many :service_providers, dependent: :destroy
 
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true
