@@ -31,7 +31,7 @@
           <span>
             <span class="font-medium"><%= idea.name %></span>
             <% if idea.price %>· <%= number_to_currency(idea.price, unit: "€", format: "%n %u") %><% end %>
-            <% if idea.url.present? %>· <%= link_to "lien", idea.url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
+            <% if (idea_url = safe_url(idea.url)) %>· <%= link_to "lien", idea_url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
             <span class="ml-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs"><%= gift_status_label(idea.status) %></span>
           </span>
           <%= button_to "×", gift_list_gift_idea_path(@list, idea), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>

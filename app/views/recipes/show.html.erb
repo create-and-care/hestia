@@ -44,8 +44,8 @@
     </ol>
   </section>
 
-  <% if @recipe.source_url.present? %>
-    <p class="mb-4 text-sm text-gray-500">Source : <%= link_to @recipe.source_url, @recipe.source_url, class: "underline", target: "_blank", rel: "noopener" %></p>
+  <% if (source = safe_url(@recipe.source_url)) %>
+    <p class="mb-4 text-sm text-gray-500">Source : <%= link_to source, source, class: "underline", target: "_blank", rel: "noopener" %></p>
   <% end %>
 
   <p class="text-sm"><%= link_to "← Toutes les recettes", recipes_path, class: "underline" %></p>

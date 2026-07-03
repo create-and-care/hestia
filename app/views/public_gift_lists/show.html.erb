@@ -11,7 +11,7 @@
           <span>
             <span class="font-medium"><%= idea.name %></span>
             <% if idea.price %>· <%= number_to_currency(idea.price, unit: "€", format: "%n %u") %><% end %>
-            <% if idea.url.present? %>· <%= link_to "voir", idea.url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
+            <% if (idea_url = safe_url(idea.url)) %>· <%= link_to "voir", idea_url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
           </span>
           <% if idea.reserved? %>
             <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700">Réservé</span>
