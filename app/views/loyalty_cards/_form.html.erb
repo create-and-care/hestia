@@ -1,4 +1,4 @@
-<%= form_with model: card, url: url do |form| %>
+<%= form_with model: card, url: url, data: { controller: "loyalty-brand" } do |form| %>
   <% if card.errors.any? %>
     <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
       <ul class="list-inside list-disc">
@@ -9,9 +9,17 @@
 
   <div class="space-y-4">
     <div>
-      <%= form.label :name, "Enseigne", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :loyalty_brand_id, "Enseigne du catalogue", class: "mb-1 block text-sm font-medium" %>
+      <% brand_options = LoyaltyBrand.ordered.map { |b| [ "#{b.logo_emoji} #{b.name}".strip, b.id, { data: { name: b.name, format: b.code_format } } ] } %>
+      <%= form.select :loyalty_brand_id, options_for_select(brand_options, card.loyalty_brand_id),
+            { include_blank: "Hors catalogue" },
+            class: "w-full rounded-md border border-gray-300 px-3 py-2",
+            data: { loyalty_brand_target: "select", action: "change->loyalty-brand#apply" } %>
+    </div>
+    <div>
+      <%= form.label :name, "Nom affiché", class: "mb-1 block text-sm font-medium" %>
       <%= form.text_field :name, required: true, placeholder: "Carrefour, Fnac…",
-            class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+            data: { loyalty_brand_target: "name" }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div>
       <%= form.label :number, "Numéro de carte", class: "mb-1 block text-sm font-medium" %>
@@ -20,7 +28,7 @@
     <div>
       <%= form.label :code_format, "Format", class: "mb-1 block text-sm font-medium" %>
       <%= form.select :code_format, [ [ "Code-barres", "barcode" ], [ "QR code", "qrcode" ] ], {},
-            class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+            data: { loyalty_brand_target: "format" }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
   </div>

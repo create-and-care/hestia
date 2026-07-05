@@ -340,15 +340,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_05_200559) do
     t.index ["invite_code"], name: "index_households_on_invite_code", unique: true
   end
 
+  create_table "loyalty_brands", force: :cascade do |t|
+    t.string "code_format", default: "barcode", null: false
+    t.datetime "created_at", null: false
+    t.string "logo_emoji"
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_loyalty_brands_on_name", unique: true
+  end
+
   create_table "loyalty_cards", force: :cascade do |t|
     t.string "code_format", default: "barcode", null: false
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
+    t.bigint "loyalty_brand_id"
     t.string "name", null: false
     t.string "number", null: false
     t.integer "position", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_loyalty_cards_on_household_id"
+    t.index ["loyalty_brand_id"], name: "index_loyalty_cards_on_loyalty_brand_id"
   end
 
   create_table "meal_plan_entries", force: :cascade do |t|
@@ -883,6 +894,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_05_200559) do
   add_foreign_key "gift_lists", "households"
   add_foreign_key "gift_reservations", "gift_ideas"
   add_foreign_key "loyalty_cards", "households"
+  add_foreign_key "loyalty_cards", "loyalty_brands"
   add_foreign_key "meal_plan_entries", "households"
   add_foreign_key "meal_plan_entries", "recipes"
   add_foreign_key "memberships", "households"

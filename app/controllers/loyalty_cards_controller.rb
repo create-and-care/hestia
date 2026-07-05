@@ -48,6 +48,6 @@ class LoyaltyCardsController < ApplicationController
     end
 
     def card_params
-      params.require(:loyalty_card).permit(:name, :number, :code_format, :position)
+      params.require(:loyalty_card).permit(:name, :number, :code_format, :position, :loyalty_brand_id)
     end
 end
