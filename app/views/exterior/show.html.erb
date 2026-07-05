@@ -13,19 +13,29 @@
     <h2 class="mb-3 font-medium">🌱 Jardin</h2>
     <ul class="mb-3 space-y-2">
       <% @plants.each do |plant| %>
-        <li class="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2 text-sm">
-          <span>
-            <span class="font-medium"><%= plant.name %></span>
-            <% if plant.location.present? %><span class="text-gray-400">· <%= plant.location %></span><% end %>
-            <% if plant.notes.present? %><span class="block text-gray-500"><%= plant.notes %></span><% end %>
-          </span>
-          <%= button_to "✕", plant_path(plant), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        <li class="rounded-lg border border-gray-200 px-3 py-2 text-sm">
+          <div class="flex items-center justify-between">
+            <span>
+              <span class="font-medium"><%= plant.name %></span>
+              <% if plant.location.present? %><span class="text-gray-400">· <%= plant.location %></span><% end %>
+              <% if plant.plant_reference %><span class="text-gray-400">· <%= plant.plant_reference.common_name %></span><% end %>
+              <% if plant.notes.present? %><span class="block text-gray-500"><%= plant.notes %></span><% end %>
+            </span>
+            <%= button_to "✕", plant_path(plant), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          </div>
+          <% if plant.plant_reference %>
+            <p class="mt-1 text-xs text-gray-400">
+              💧 <%= plant.plant_reference.water_needs %> · ☀️ <%= plant.plant_reference.sunlight %>
+            </p>
+          <% end %>
         </li>
       <% end %>
     </ul>
     <%= form_with model: @plant, url: plants_path, class: "flex flex-wrap items-end gap-2" do |form| %>
       <%= form.text_field :name, required: true, placeholder: "Plante", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
       <%= form.text_field :location, placeholder: "Emplacement", class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.select :plant_reference_id, PlantReference.ordered.map { |r| [ r.common_name, r.id ] }, { include_blank: "Fiche d'entretien (facultatif)" },
+            class: "w-48 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
       <%= form.text_field :notes, placeholder: "Besoins / notes", class: "w-40 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
       <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>

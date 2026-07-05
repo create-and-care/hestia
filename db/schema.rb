@@ -486,14 +486,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_05_200559) do
     t.index ["household_id"], name: "index_pets_on_household_id"
   end
 
+  create_table "plant_references", force: :cascade do |t|
+    t.text "common_diseases"
+    t.string "common_name", null: false
+    t.datetime "created_at", null: false
+    t.text "pruning"
+    t.string "scientific_name"
+    t.string "sunlight"
+    t.datetime "updated_at", null: false
+    t.string "water_needs"
+    t.index ["common_name"], name: "index_plant_references_on_common_name", unique: true
+  end
+
   create_table "plants", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.string "location"
     t.string "name", null: false
     t.text "notes"
+    t.bigint "plant_reference_id"
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_plants_on_household_id"
+    t.index ["plant_reference_id"], name: "index_plants_on_plant_reference_id"
   end
 
   create_table "pool_actions", force: :cascade do |t|
@@ -912,6 +926,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_05_200559) do
   add_foreign_key "pet_vaccinations", "pets"
   add_foreign_key "pets", "households"
   add_foreign_key "plants", "households"
+  add_foreign_key "plants", "plant_references"
   add_foreign_key "pool_actions", "pools"
   add_foreign_key "pool_readings", "pools"
   add_foreign_key "pools", "households"
