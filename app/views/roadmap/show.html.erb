@@ -1,0 +1,78 @@
+<% content_for :title, "Roadmap" %>
+
+<div class="mx-auto mt-10 max-w-3xl px-4">
+  <header class="mb-8">
+    <p class="text-sm text-gray-500">Hestia</p>
+    <h1 class="text-2xl font-semibold">🗺️ Roadmap</h1>
+    <p class="mt-2 text-sm text-gray-600">
+      État d'avancement du projet et évolutions envisagées. Détail complet dans le
+      <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">Cahier des charges</code> et le
+      <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">Plan d'implémentation</code>
+      versionnés avec le code ; historique précis des versions dans
+      <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">CHANGELOG.md</code>.
+    </p>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-10">
+    <h2 class="mb-3 font-medium">Avancement par chantier</h2>
+    <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @phases.each do |phase| %>
+        <li class="flex items-start justify-between gap-4 px-4 py-3">
+          <div>
+            <p class="font-medium"><%= phase[:name] %></p>
+            <p class="text-sm text-gray-500"><%= phase[:detail] %></p>
+          </div>
+          <span class="mt-0.5 shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium <%=
+            case phase[:status]
+            when :done then "bg-green-100 text-green-800"
+            when :partial then "bg-amber-100 text-amber-800"
+            else "bg-gray-100 text-gray-700"
+            end
+          %>">
+            <%= case phase[:status]
+                when :done then "Fait"
+                when :partial then "Partiel"
+                else "À faire"
+                end %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section class="mb-10">
+    <h2 class="mb-1 font-medium">Évolutions envisagées</h2>
+    <p class="mb-3 text-sm text-gray-600">
+      Liste issue d'une analyse du code existant (tests, sécurité, cohérence d'interface,
+      couverture fonctionnelle) — pas seulement des manques déjà connus du Plan d'implémentation.
+    </p>
+
+    <div class="space-y-3">
+      <% @improvements.each do |group| %>
+        <details class="group rounded-lg border border-gray-200 open:pb-2" <%= "open" if group == @improvements.first %>>
+          <summary class="flex cursor-pointer list-none items-center justify-between px-4 py-3">
+            <span class="font-medium">
+              <span class="mr-1"><%= group[:emoji] %></span><%= group[:category] %>
+            </span>
+            <span class="flex items-center gap-2 text-sm text-gray-500">
+              <%= pluralize(group[:items].size, "piste") %>
+              <span class="transition-transform group-open:rotate-180">▾</span>
+            </span>
+          </summary>
+          <ul class="space-y-2 px-4 pb-3 text-sm text-gray-700">
+            <% group[:items].each do |item| %>
+              <li class="flex gap-2">
+                <span class="text-gray-400">—</span>
+                <span><%= item %></span>
+              </li>
+            <% end %>
+          </ul>
+        </details>
+      <% end %>
+    </div>
+  </section>
+
+  <p class="text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+</div>

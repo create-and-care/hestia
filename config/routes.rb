@@ -204,6 +204,9 @@ Rails.application.routes.draw do
 
   get "design-system", to: "design_system#index"
 
+  # Avancement du projet et évolutions envisagées (CDC §18, Plan d'implémentation §8).
+  resource :roadmap, only: :show, controller: "roadmap"
+
   # Tableau de bord du foyer (CDC §7).
   root "dashboard#show"
 end

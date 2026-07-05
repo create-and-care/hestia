@@ -39,26 +39,32 @@ Ce document constitue la première version du cahier des charges fonctionnel et 
 
 ---
 
-## 0.1 État d'avancement (au 5 juillet 2026, v1.0.0-beta35)
+## 0.1 État d'avancement (au 5 juillet 2026)
 
-Contrairement à l'hypothèse initiale de ce document (« aucune ligne n'est encore écrite »), le dépôt contient déjà une implémentation quasi complète du périmètre fonctionnel de ce CDC. Cette section en fait le point ; le détail module par module vit dans *Plan d'implémentation — Hestia.md*.
+Contrairement à l'hypothèse initiale de ce document (« aucune ligne n'est encore écrite »), le dépôt contient une implémentation complète du périmètre fonctionnel de ce CDC, y compris l'essentiel des chantiers transversaux identifiés lors de la précédente revue. Cette section en fait le point ; le détail module par module et le détail version par version vivent respectivement dans *Plan d'implémentation — Hestia.md* et *CHANGELOG.md*.
 
 **Déjà réalisé :**
 
 - **Socle technique** (section 4) : Rails 8.1, PostgreSQL, Solid Queue / Solid Cable / Solid Cache, Hotwire (Turbo + Stimulus), ViewComponent, Tailwind v4, Docker / Kamal, intégration continue (`.github/workflows/ci.yml` : tests + RuboCop + Brakeman + bundler-audit).
 - **Phase 1 — Socle applicatif, complète** : `User`, `Session`, `Household`, `Membership` (rôle `member`/`admin`, code d'invitation généré et unique), scoping multi-foyer (`Current.household`, concern `HouseholdScoped`), inscription, onboarding (créer/rejoindre un foyer via code), bascule de foyer actif, tableau de bord (`root`).
-- **Phase 2 — les 25 modules, vagues 2.a à 2.d incluses.** Chaque module dispose de son ou ses modèle(s), de son contrôleur, de ses vues (composants `Ui::*` + Tailwind) et de l'essentiel du temps réel (Turbo Streams / Solid Cable via `broadcasts_to` / `broadcasts_refreshes_to`). Les 4 écarts d'architecture de la section 5 sont implémentés conformément à ce qui y est décrit : scope par `user_id` pour Bien-être, `Circle` indépendant du foyer, partage public par token pour Cadeaux, `trip_id` transverse pour Voyage. Une couche de services métier par domaine existe déjà pour une partie des modules (`Courses::AddItem`, `Frigo::AddItem`, `Tasks::CreateTask`, `Recipes::ImportFromUrl`, `Calendar::CreateEvent`, `Budget::SettleProject`, `Waste::GenerateSeries`, `Recurrence`…), conformément à l'anticipation de Hest.IA (section 5, point 5) — à généraliser aux modules qui n'en ont pas encore. L'export PDF (Courses, Calendrier) et l'import de recette depuis une URL (schema.org/Recipe) sont implémentés. 83 fichiers de tests (modèles, contrôleurs, services) couvrent ce périmètre.
+- **Phase 2 — les 25 modules, vagues 2.a à 2.d incluses.** Chaque module dispose de son ou ses modèle(s), de son contrôleur, de ses vues (composants `Ui::*` + Tailwind) et de l'essentiel du temps réel (Turbo Streams / Solid Cable via `broadcasts_to` / `broadcasts_refreshes_to`). Les 4 écarts d'architecture de la section 5 sont implémentés conformément à ce qui y est décrit : scope par `user_id` pour Bien-être, `Circle` indépendant du foyer, partage public par token pour Cadeaux, `trip_id` transverse pour Voyage. Une couche de services métier par domaine existe déjà pour une partie des modules (`Courses::AddItem`, `Frigo::AddItem`, `Tasks::CreateTask`, `Recipes::ImportFromUrl`, `Calendar::CreateEvent`, `Budget::SettleProject`, `Waste::GenerateSeries`, `Recurrence`…), conformément à l'anticipation de Hest.IA (section 5, point 5) — à généraliser aux modules qui n'en ont pas encore. L'export PDF (Courses, Calendrier) et l'import de recette depuis une URL (schema.org/Recipe) sont implémentés. 83+ fichiers de tests (modèles, contrôleurs, services) couvrent ce périmètre.
 - **Bibliothèque de composants UI** : une cinquantaine de composants réutilisables (boutons, dialogues, calendrier, graphiques, combobox…) exposés sur la route `/design-system`. Cet atout, non prévu dans la v1.0 de ce document, a accéléré toutes les interfaces des modules livrés.
+- **Rappels et notifications** : `Notification`, `NotificationPreference` (préférences par utilisateur), `TaskReminder`, `EventReminder`, jobs Solid Queue `Reminders::DeliverDue` (échéances) et `Reminders::DailyDigest` (récapitulatif quotidien, `config/recurring.yml`), badge de notifications non lues dans le layout. Couvre Tâches, Calendrier, Frigo (péremption) ; la notification jour J des Anniversaires reste à câbler sur cette même infrastructure (cf. Plan d'implémentation).
+- **Dépendances externes — intégrations techniques** (section 16) : Open Food Facts pour le scan de code-barres (`OpenFoodFacts::LookupProduct`, Courses/Frigo), géocodage Nominatim pour la recherche d'adresses (`Geocoding::SearchAddress`, pré-remplissage nom/adresse/GPS). Restent non intégrées : la synchronisation calendrier externe (scaffold posé, flux OAuth/CalDAV réel non implémenté — voir ci-dessous) et le LLM de Hest.IA.
+- **Contenus de référence** (section 16) : `LoyaltyBrand` (catalogue d'enseignes de fidélité, une dizaine de départ en seed), `PlantReference` (fiches d'entretien pour l'Extérieur, six de départ en seed), `HolidayReference` (jours fériés France/Belgique/Suisse, pays configurable par foyer). Les trois enrichissent respectivement Fidélité, Extérieur et Calendrier sans bloquer l'usage du module en leur absence.
+- **API `api/v1`** : `ApiToken` (jeton opaque par utilisateur, empreinte HMAC-SHA256, jamais le jeton en clair en base), `Api::V1::BaseController` (auth par jeton, scoping foyer toujours côté serveur, pagination standardisée), endpoints REST/JSON pour les 5 modules de la vague 2.a (Courses, Frigo, Recettes, Tâches, Calendrier). Gestion des jetons depuis `/api_tokens`. Le patron est posé ; reste à l'étendre aux 20 autres modules.
+- **Squelette du client mobile Flutter** (`mobile/`) : `ApiClient` (HTTP vers `api/v1`, jeton Bearer), écran de connexion par jeton API, écran Courses en lecture seule. Ce n'est pas une application fonctionnelle — non testée (Flutter SDK absent de l'environnement de développement), sans parité fonctionnelle sur les 24 autres modules, sans caméra/dictée/push/hors-ligne/temps réel. Sert de point de départ, cf. `mobile/README.md`.
+- **Site vitrine, documentation, gouvernance** (section 8) : `LICENSE` (AGPLv3), `README.md` réel, `CONTRIBUTING.md`, `CHANGELOG.md` sont désormais en place à la racine du dépôt.
 
 **Reste à construire :**
 
-- **Rappels et notifications**, absents pour tous les modules qui les prévoient : rappels de Tâches et d'événements de Calendrier, notifications de péremption du Frigo, notification du jour J pour les Anniversaires. Aucun mailer/job de notification au-delà du « mot de passe oublié ».
-- **Contenus de référence non constitués** : catalogue d'enseignes de fidélité, fiches de référence de plantes pour l'Extérieur, référentiel des jours fériés pour le Calendrier — les modules fonctionnent, mais sans cette valeur ajoutée (cohérent avec les réserves déjà actées section 16).
-- **Dépendances externes validées (section 16) encore non intégrées** : scan de code-barres via Open Food Facts (le champ `barcode` existe en base mais aucun appel réseau n'est fait), géocodage/recherche de lieux pour les Adresses (seul un lien OpenStreetMap statique est généré, pas de pré-remplissage), synchronisation calendrier externe Google/MSAL/CalDAV (aucune intégration). Le SMTP du parcours « mot de passe oublié » est en place.
-- **API `api/v1`** : aucune route ni contrôleur API à ce stade — uniquement des contrôleurs Hotwire/HTML. C'est un préalable bloquant pour le client mobile.
-- **Application mobile Flutter** : aucun répertoire `mobile/` — la structure monorepo `server/`+`mobile/` décrite section 4 n'existe pas encore sous cette forme (le code Rails vit à la racine du dépôt).
+- **Synchronisation calendrier externe — flux réel.** `ExternalCalendarConnection` et l'écran de connexion par fournisseur (Google/Microsoft/CalDAV) existent, mais le flux OAuth/CalDAV effectif n'est pas implémenté : `connect` informe l'utilisateur que des identifiants d'application (à fournir par l'hébergeur via `bin/rails credentials:edit`) sont requis, plutôt que de simuler une connexion.
+- **Notification jour J des Anniversaires** : l'infrastructure de notifications (`Notification`, jobs `Reminders::*`) existe pour Tâches/Calendrier/Frigo ; il reste à y brancher un déclencheur quotidien pour les anniversaires du jour.
+- **API `api/v1` — 20 modules restants** : seule la vague 2.a (Courses, Frigo, Recettes, Tâches, Calendrier) est exposée en API ; les modules 2.b/2.c/2.d n'ont pas encore d'endpoints REST, ce qui limite d'autant la parité fonctionnelle du mobile.
+- **Application mobile — parité fonctionnelle** : seul un squelette (connexion + Courses en lecture seule) existe. Restent à construire : les écrans des 24 autres modules, la caméra native (scan, capture de documents), la dictée vocale, les notifications push, l'import de contacts, le mode hors-ligne, et la connexion temps réel (WebSocket vers Solid Cable — le client ne fait pour l'instant que du HTTP ponctuel).
 - **Hest.IA (Phase 3)** : non démarrée, conformément au séquencement prévu (section 2).
-- **Site vitrine, documentation utilisateur, gouvernance** (section 8) : `README.md` est encore le gabarit par défaut de Rails, pas de `LICENSE`, pas de `CONTRIBUTING.md`, pas de changelog, pas de site vitrine ni de documentation utilisateur.
+- **Site vitrine et documentation utilisateur** : au-delà des fichiers de gouvernance (`LICENSE`/`README`/`CONTRIBUTING`/`CHANGELOG`), il n'existe pas encore de site vitrine public ni de centre de documentation utilisateur par module (section 8).
+- **Page Roadmap** dans l'application elle-même, présentant publiquement l'avancement et les évolutions envisagées — cf. section 18.
 
 **Réconciliations actées** entre ce document et le code réel (le schéma de la section 17.1 est illustratif) :
 
@@ -177,11 +183,11 @@ Pour chaque module, ce document présente : son objectif, son périmètre foncti
 
 Cette section couvre les éléments qui accompagnent l'application sans en faire partie :
 
-- **Site vitrine** (optionnel, peut être livré après les premières vagues de modules) : page d'accueil présentant le projet, une page par module (sur le modèle de ce cahier des charges), une page de présentation de Hest.IA, et la mise en avant du caractère gratuit / open-source / auto-hébergeable du projet — à l'opposé d'une page de tarifs.
-- **Centre de ressources / documentation utilisateur** : guides d'usage par module, probablement sous forme de site de documentation statique généré depuis des fichiers Markdown versionnés avec le code.
-- **Journal des nouveautés (changelog)** : suivi des évolutions, utile dès les premières mises en production.
-- **Mentions légales, CGU, politique de confidentialité, cookies** : à adapter au contexte auto-hébergé. Une instance self-hosted n'a pas les mêmes obligations qu'un service SaaS commercial, mais une politique de confidentialité reste recommandée dès qu'un foyer héberge des données d'autres membres (et a fortiori des données de tiers via le lien public Cadeaux ou les Cercles).
-- **Dépôt et licence** : présentation du projet sur le dépôt Git public, avec `LICENSE.md` (AGPLv3), `README.md` (installation, présentation), et `CONTRIBUTING.md` (règles de contribution externe).
+- **Dépôt et licence — fait.** `LICENSE` (AGPLv3, texte officiel non modifié), `README.md` (présentation, socle technique, démarrage Docker et local, tests, structure du dépôt), `CONTRIBUTING.md` (environnement de dev, conventions de code, tests attendus, processus de pull request), `CHANGELOG.md` (format Keep a Changelog, un historique complet depuis `v1.0.0-beta1`) sont en place à la racine du dépôt.
+- **Page Roadmap — fait.** Une page accessible depuis l'application (route dédiée, cf. Plan d'implémentation) présente publiquement l'avancement par phase/module et la liste des évolutions envisagées (issue de l'analyse applicative, cf. section 19), en s'appuyant sur la bibliothèque `Ui::*` existante plutôt que sur une charte graphique séparée.
+- **Site vitrine** (optionnel, peut être livré après les premières vagues de modules) : page d'accueil présentant le projet, une page par module (sur le modèle de ce cahier des charges), une page de présentation de Hest.IA, et la mise en avant du caractère gratuit / open-source / auto-hébergeable du projet — à l'opposé d'une page de tarifs. **Non démarré** : la page Roadmap ci-dessus en couvre une partie limitée (l'avancement), pas la présentation marketing du projet.
+- **Centre de ressources / documentation utilisateur** : guides d'usage par module, probablement sous forme de site de documentation statique généré depuis des fichiers Markdown versionnés avec le code. **Non démarré.**
+- **Mentions légales, CGU, politique de confidentialité, cookies** : à adapter au contexte auto-hébergé. Une instance self-hosted n'a pas les mêmes obligations qu'un service SaaS commercial, mais une politique de confidentialité reste recommandée dès qu'un foyer héberge des données d'autres membres (et a fortiori des données de tiers via le lien public Cadeaux ou les Cercles). **Non démarré.**
 
 ---
 
@@ -727,6 +733,8 @@ Cette section couvre les éléments qui accompagnent l'application sans en faire
 
 ## 14. Application mobile
 
+**Statut.** Un squelette Flutter/Dart vit désormais dans `mobile/` : `ApiClient` (HTTP vers `api/v1`, jeton en en-tête `Authorization: Bearer`), écran de connexion par jeton API (généré depuis `/api_tokens`), écran Courses en lecture seule. Ce n'est pas une application fonctionnelle — non testée (Flutter SDK non disponible dans l'environnement de développement où le squelette a été créé), sans parité fonctionnelle, sans temps réel. Voir `mobile/README.md` pour le détail de ce qui reste à construire, et section 0.1 pour la synthèse.
+
 Le client mobile est un client léger Flutter/Dart consommant l'API Rails (cf. section 15), conformément à la décision d'architecture actée. Il ne porte pas de logique métier propre : toute règle de gestion vit côté serveur, pour garantir un comportement identique entre web et mobile.
 
 **Périmètre fonctionnel.** Parité fonctionnelle avec le client web sur l'ensemble des modules listés en sections 9 à 12, avec les compléments propres au mobile :
@@ -745,6 +753,8 @@ Le client mobile est un client léger Flutter/Dart consommant l'API Rails (cf. s
 
 ## 15. Interfaçage API
 
+**Statut.** L'API `api/v1` existe : `ApiToken` (jeton opaque par utilisateur, empreinte HMAC-SHA256 indexée, jamais le jeton en clair en base, gérable depuis `/api_tokens`), `Api::V1::BaseController` (authentification par jeton, résolution du foyer toujours côté serveur, pagination `?page`/`?per_page`, gestion uniforme des 401/404/422), endpoints REST/JSON pour Courses, Frigo, Recettes, Tâches, Calendrier (vague 2.a). Les principes directeurs ci-dessous sont respectés par cette première tranche ; reste à étendre le patron aux 20 autres modules (cf. Plan d'implémentation §6).
+
 L'API Rails sert à la fois le client web (consommée en interne par les contrôleurs Hotwire/Turbo) et le client mobile Flutter (consommée en HTTP/JSON externe), ainsi que l'éventuelle couche d'action de Hest.IA (Phase 3).
 
 **Principes directeurs.**
@@ -760,19 +770,19 @@ L'API Rails sert à la fois le client web (consommée en interne par les contrô
 
 ## 16. Dépendances externes — choix validés
 
-Plusieurs capacités décrites dans ce document reposent sur des données ou services tiers. Les 9 choix ci-dessous ont été validés : ce ne sont plus des points ouverts à trancher, mais des décisions arrêtées à implémenter au moment du développement du module concerné (ces intégrations restent toutes à coder — cf. l'état d'avancement en section 0.1).
+Plusieurs capacités décrites dans ce document reposent sur des données ou services tiers. Les 9 choix ci-dessous ont été validés : ce ne sont plus des points ouverts à trancher, mais des décisions arrêtées, dont la plupart sont désormais implémentées (cf. état d'avancement détaillé en section 0.1).
 
 |Capacité|Module(s)|Dépendance retenue (validée)|Statut|
 |---|---|---|---|
-|Base de données produits / scan code-barres|Courses, Frigo|Base ouverte type Open Food Facts|Validé — à intégrer dès la vague 2.a|
-|Géocodage / recherche de lieux|Adresses|Service ouvert type OpenStreetMap/Nominatim, ou API commerciale|Validé — à intégrer en vague 2.b|
-|Catalogue de plantes (fiches d'entretien)|Extérieur|Base ouverte ou contenu à constituer|Validé — contenu à enrichir progressivement, sans bloquer la mise en ligne du module|
-|Catalogue d'enseignes de fidélité|Fidélité|Contenu à constituer progressivement (communauté)|Validé — la carte « hors catalogue » couvre les enseignes manquantes en attendant|
-|Synchronisation calendrier externe|Calendrier|OAuth Google, MSAL Microsoft, CalDAV Apple|Validé — support des trois fournisseurs dès la vague 2.a|
-|Import de recette depuis une URL|Recettes|Parseur de microdonnées (schema.org/Recipe) en version basique, capacité enrichie par Hest.IA en Phase 3|Validé|
-|Envoi d'e-mails|Authentification (Phase 1)|SMTP self-hosted ou service tiers, configurable à l'installation|Validé|
-|LLM pour Hest.IA|Hest.IA (Phase 3)|Ollama self-hosted ou API externe, configurable à l'installation (déjà acté en section 4)|Validé|
-|Stockage de fichiers|Documents|Volume Docker local ou stockage objet compatible S3|Validé|
+|Base de données produits / scan code-barres|Courses, Frigo|Base ouverte type Open Food Facts|**Fait** — `OpenFoodFacts::LookupProduct`|
+|Géocodage / recherche de lieux|Adresses|Service ouvert type OpenStreetMap/Nominatim, ou API commerciale|**Fait** — `Geocoding::SearchAddress` (Nominatim)|
+|Catalogue de plantes (fiches d'entretien)|Extérieur|Base ouverte ou contenu à constituer|**Fait** — `PlantReference`, 6 fiches de départ en seed, à enrichir progressivement|
+|Catalogue d'enseignes de fidélité|Fidélité|Contenu à constituer progressivement (communauté)|**Fait** — `LoyaltyBrand`, une dizaine d'enseignes de départ en seed ; la carte « hors catalogue » reste possible|
+|Synchronisation calendrier externe|Calendrier|OAuth Google, MSAL Microsoft, CalDAV Apple|**Scaffold posé** — `ExternalCalendarConnection` et écran de connexion existent ; le flux OAuth/CalDAV réel nécessite des identifiants d'application côté hébergeur, non encore implémenté|
+|Import de recette depuis une URL|Recettes|Parseur de microdonnées (schema.org/Recipe) en version basique, capacité enrichie par Hest.IA en Phase 3|**Fait**|
+|Envoi d'e-mails|Authentification (Phase 1)|SMTP self-hosted ou service tiers, configurable à l'installation|**Fait**|
+|LLM pour Hest.IA|Hest.IA (Phase 3)|Ollama self-hosted ou API externe, configurable à l'installation (déjà acté en section 4)|Non démarré (Phase 3)|
+|Stockage de fichiers|Documents|Volume Docker local ou stockage objet compatible S3|**Fait** — Active Storage|
 
 ---
 
@@ -874,23 +884,27 @@ flowchart LR
 
 ## 18. Roadmap proposée et prochaines étapes
 
+Cette roadmap est également publiée dans l'application elle-même (page **Roadmap**, cf. Plan d'implémentation §8), à destination des membres et contributeurs, avec le détail des évolutions envisagées (section 19 et au-delà, liste étendue tenue dans l'application plutôt que dupliquée ici).
+
 |Phase|Contenu|Statut|
 |---|---|---|
 |1|Socle : `User`, `Session`, `Household`, `Membership`|Terminé (cf. §0.1)|
-|2.a|Courses, Calendrier, Tâches, Frigo, Recettes|Implémenté — manquent rappels/notifications et intégrations externes (Open Food Facts, sync calendrier), cf. §0.1|
-|2.b|Notes, Anniversaires, Adresses, Prestataires, Fidélité, Animaux, Véhicules, Cave à vin, Déchets, Bébé, Messages|Implémenté — manquent géocodage (Adresses), catalogue d'enseignes (Fidélité), notification jour J (Anniversaires), cf. §0.1|
-|2.c|Menu, Routines, Extérieur, Budget, Documents|Implémenté — manque le catalogue de plantes de référence (Extérieur), cf. §0.1|
+|2.a|Courses, Calendrier, Tâches, Frigo, Recettes|Implémenté, y compris rappels/notifications et Open Food Facts ; sync calendrier externe en scaffold (flux OAuth/CalDAV réel manquant), cf. §0.1|
+|2.b|Notes, Anniversaires, Adresses, Prestataires, Fidélité, Animaux, Véhicules, Cave à vin, Déchets, Bébé, Messages|Implémenté, y compris géocodage Nominatim (Adresses) et catalogue d'enseignes (Fidélité) ; manque la notification jour J (Anniversaires), cf. §0.1|
+|2.c|Menu, Routines, Extérieur, Budget, Documents|Implémenté, y compris le catalogue de plantes de référence (Extérieur), cf. §0.1|
 |2.d|Cadeaux, Cercles, Voyage, Bien-être|Implémenté conformément aux écarts d'architecture de la section 5|
+|—|API `api/v1` (vague 2.a) + squelette mobile Flutter|Implémenté pour 5 modules / squelette non fonctionnel — cf. §0.1, §14, §15|
+|—|Gouvernance : `LICENSE`, `README`, `CONTRIBUTING`, `CHANGELOG`, page Roadmap|Fait — cf. section 8|
 |3|Hest.IA (couche « tools »)|Non démarrée, vision documentée dans ce CDC|
 
 **Prochaines étapes suggérées.**
 
-1. Construire la couche transversale de rappels/notifications (Tâches, Calendrier, Frigo, Anniversaires) : elle est prévue dans plusieurs fiches module mais absente du code à ce stade (cf. section 0.1).
-2. Intégrer les dépendances externes validées (section 16) encore manquantes : Open Food Facts (scan code-barres Courses/Frigo), géocodage type Nominatim (Adresses), synchronisation calendrier OAuth/CalDAV (Calendrier).
-3. Constituer les contenus de référence manquants : catalogue d'enseignes (Fidélité), fiches de plantes (Extérieur), jours fériés (Calendrier).
-4. Démarrer l'API `api/v1` (section 15), préalable bloquant au client mobile Flutter (section 14).
-5. Poser les bases du site vitrine, de la documentation utilisateur et de la gouvernance (section 8) : `README.md` réel, `LICENSE`, `CONTRIBUTING.md`, changelog.
-6. Une fois une masse critique de modules affinée (rappels, intégrations), démarrer Hest.IA (Phase 3).
+1. Brancher la notification jour J des Anniversaires sur l'infrastructure de rappels/notifications déjà posée (Tâches/Calendrier/Frigo).
+2. Implémenter le flux OAuth/CalDAV réel de la synchronisation calendrier externe (le scaffold `ExternalCalendarConnection` et l'écran de connexion existent déjà).
+3. Étendre l'API `api/v1` aux 20 modules restants (vagues 2.b/2.c/2.d), pour permettre la parité fonctionnelle du client mobile.
+4. Construire la parité fonctionnelle du client mobile Flutter au-delà du squelette actuel : écrans des 24 modules restants, caméra native, dictée, push, hors-ligne, temps réel (cf. section 14).
+5. Poser les bases d'un site vitrine public et d'un centre de documentation utilisateur (section 8) — au-delà des fichiers de gouvernance déjà en place.
+6. Une fois une masse critique de modules affinée, démarrer Hest.IA (Phase 3).
 7. Itérer sur ce document au fur et à mesure des retours d'implémentation : c'est un cahier des charges vivant, pas un contrat figé.
 
 ---
