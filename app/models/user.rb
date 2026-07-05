@@ -19,6 +19,9 @@ class User < ApplicationRecord
   has_many :event_reminders, dependent: :destroy
   has_one :notification_preference, dependent: :destroy
 
+  # Synchronisation calendrier externe (CDC §9.2, §16).
+  has_many :external_calendar_connections, dependent: :destroy
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   validates :name, presence: true

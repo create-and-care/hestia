@@ -258,6 +258,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_05_200559) do
     t.index ["user_id"], name: "index_event_reminders_on_user_id"
   end
 
+  create_table "external_calendar_connections", force: :cascade do |t|
+    t.text "access_token"
+    t.boolean "active", default: true, null: false
+    t.string "caldav_url"
+    t.datetime "created_at", null: false
+    t.datetime "expires_at"
+    t.string "external_calendar_id"
+    t.string "provider", null: false
+    t.text "refresh_token"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_external_calendar_connections_on_user_id"
+  end
+
   create_table "feeding_sessions", force: :cascade do |t|
     t.bigint "baby_profile_id", null: false
     t.datetime "created_at", null: false
@@ -898,6 +912,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_05_200559) do
   add_foreign_key "event_participants", "users"
   add_foreign_key "event_reminders", "calendar_events"
   add_foreign_key "event_reminders", "users"
+  add_foreign_key "external_calendar_connections", "users"
   add_foreign_key "feeding_sessions", "baby_profiles"
   add_foreign_key "food_introductions", "baby_profiles"
   add_foreign_key "fridge_items", "households"

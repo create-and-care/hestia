@@ -18,6 +18,14 @@ Rails.application.routes.draw do
   end
   resource :notification_preference, only: %i[show update]
 
+  # Connexions calendrier externe (CDC §9.2, §16) — scaffold, cf. ExternalCalendarConnection.
+  resources :external_calendar_connections, only: %i[index destroy] do
+    collection do
+      get ":provider/connect", to: "external_calendar_connections#connect", as: :connect
+      get ":provider/callback", to: "external_calendar_connections#callback", as: :callback
+    end
+  end
+
   # Module Courses (Phase 2.a).
   resources :shopping_lists, only: %i[index show new create destroy] do
     resources :items, only: %i[create update destroy], controller: "shopping_list_items" do

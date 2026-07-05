@@ -1,0 +1,34 @@
+<% content_for :title, "Synchronisation calendrier" %>
+
+<div class="mx-auto mt-10 max-w-xl px-4">
+  <h1 class="mb-2 text-2xl font-semibold">🔄 Synchronisation calendrier externe</h1>
+  <p class="mb-6 text-sm text-gray-500">
+    Connectez votre calendrier Google, Microsoft ou Apple (CalDAV) pour faire apparaître vos événements externes
+    dans Hestia (CDC §9.2). Nécessite que l'hébergeur de cette instance ait configuré les identifiants d'application
+    correspondants — sinon un message vous l'indique.
+  </p>
+
+  <%= render "shared/flash" %>
+
+  <ul class="mb-6 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <% if @connections.none? %>
+      <li class="px-4 py-6 text-center text-sm text-gray-400">Aucune connexion pour l'instant.</li>
+    <% end %>
+    <% @connections.each do |connection| %>
+      <li class="flex items-center justify-between px-4 py-3 text-sm">
+        <span><%= connection.provider.capitalize %> <span class="text-gray-400">· <%= connection.active? ? "actif" : "inactif" %></span></span>
+        <%= button_to "Déconnecter", external_calendar_connection_path(connection), method: :delete,
+              class: "cursor-pointer text-red-600 underline" %>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="flex flex-wrap gap-2">
+    <% ExternalCalendarConnection::PROVIDERS.each do |provider| %>
+      <%= link_to "Connecter #{provider.capitalize}", connect_external_calendar_connections_path(provider: provider),
+            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </div>
+
+  <p class="mt-6 text-sm"><%= link_to "← Calendrier", calendar_path, class: "underline" %></p>
+</div>
