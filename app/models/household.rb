@@ -3,6 +3,9 @@ class Household < ApplicationRecord
   INVITE_CODE_ALPHABET = (("A".."Z").to_a - %w[I O]) + ("2".."9").to_a
   INVITE_CODE_LENGTH = 8
 
+  # Jours fériés affichables dans le Calendrier, activable au choix (CDC §9.2).
+  HOLIDAY_COUNTRIES = %w[FR BE CH].freeze
+
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
 
@@ -50,6 +53,7 @@ class Household < ApplicationRecord
 
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true
+  validates :holiday_country, inclusion: { in: HOLIDAY_COUNTRIES }, allow_blank: true
 
   before_validation :ensure_invite_code, on: :create
 

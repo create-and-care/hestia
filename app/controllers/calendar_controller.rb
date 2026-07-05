@@ -29,7 +29,17 @@ class CalendarController < ApplicationController
         @grid_end = @month.end_of_month.end_of_week
         range = @grid_start.beginning_of_day..@grid_end.end_of_day
         @by_day = occurrences_in(range).group_by { |time, _event| time.to_date }
+        @holidays = holidays_by_date(@grid_start.to_date, @grid_end.to_date)
       end
+    end
+
+    # Jours fériés France/Belgique/Suisse (CDC §9.2, §16), activables au choix par
+    # foyer (Household#holiday_country) — indexés par date pour un lookup direct en vue.
+    def holidays_by_date(from, to)
+      return {} if Current.household.holiday_country.blank?
+
+      (from.year..to.year).flat_map { |year| HolidayReference.for(Current.household.holiday_country, year) }
+        .index_by { |holiday| holiday[:date] }
     end
 
     def filtered_events

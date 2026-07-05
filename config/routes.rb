@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   # Onboarding : choix créer / rejoindre un foyer.
   resource :onboarding, only: :show, controller: "onboarding"
-  resources :households, only: %i[new create show] do
+  resources :households, only: %i[new create show update] do
     member { patch :activate }
   end
   # Rejoindre un foyer via code d'invitation.
