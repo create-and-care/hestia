@@ -1,4 +1,25 @@
 Rails.application.routes.draw do
+  # API REST/JSON versionnée (CDC §15), consommée par le client mobile Flutter et,
+  # à terme, par Hest.IA (Phase 3). Authentification par jeton (ApiToken), scoping
+  # foyer toujours côté serveur. Couvre pour l'instant les modules de la vague 2.a
+  # (Courses, Frigo, Recettes, Tâches, Calendrier) — patron à étendre aux modules
+  # suivants au fil de l'eau (cf. Plan d'implémentation §6).
+  namespace :api do
+    namespace :v1 do
+      resources :shopping_lists, only: %i[index show] do
+        resources :items, only: %i[create destroy], controller: "shopping_list_items" do
+          member { patch :toggle }
+        end
+      end
+      resources :fridge_items, only: %i[index create]
+      resources :recipes, only: %i[index show]
+      resources :tasks, only: %i[index create] do
+        member { patch :toggle }
+      end
+      resources :calendar_events, only: :index
+    end
+  end
+
   resource :session
   resource :registration, only: %i[new create]
   resources :passwords, param: :token
@@ -17,6 +38,9 @@ Rails.application.routes.draw do
     member { patch :mark_read }
   end
   resource :notification_preference, only: %i[show update]
+
+  # Jetons API pour le client mobile (CDC §15).
+  resources :api_tokens, only: %i[index create destroy]
 
   # Connexions calendrier externe (CDC §9.2, §16) — scaffold, cf. ExternalCalendarConnection.
   resources :external_calendar_connections, only: %i[index destroy] do

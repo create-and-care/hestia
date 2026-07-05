@@ -22,6 +22,9 @@ class User < ApplicationRecord
   # Synchronisation calendrier externe (CDC §9.2, §16).
   has_many :external_calendar_connections, dependent: :destroy
 
+  # API mobile (CDC §15).
+  has_many :api_tokens, dependent: :destroy
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   validates :name, presence: true

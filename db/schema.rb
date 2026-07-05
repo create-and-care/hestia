@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_05_200559) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_05_200560) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,6 +67,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_05_200559) do
     t.date "tested_on"
     t.datetime "updated_at", null: false
     t.index ["baby_profile_id"], name: "index_allergen_tests_on_baby_profile_id"
+  end
+
+  create_table "api_tokens", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "last_used_at"
+    t.string "name", null: false
+    t.string "token_digest", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["token_digest"], name: "index_api_tokens_on_token_digest", unique: true
+    t.index ["user_id"], name: "index_api_tokens_on_user_id"
   end
 
   create_table "baby_profiles", force: :cascade do |t|
@@ -886,6 +897,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_05_200559) do
   add_foreign_key "addresses", "households"
   add_foreign_key "addresses", "trips"
   add_foreign_key "allergen_tests", "baby_profiles"
+  add_foreign_key "api_tokens", "users"
   add_foreign_key "baby_profiles", "households"
   add_foreign_key "bottles", "households"
   add_foreign_key "bottles", "wine_cellars"
