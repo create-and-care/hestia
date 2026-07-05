@@ -67,6 +67,8 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  # Stub HTTP calls to external services (Open Food Facts, Nominatim) in tests.
+  gem "webmock"
 end
 
 gem "prawn", "~> 2.4"

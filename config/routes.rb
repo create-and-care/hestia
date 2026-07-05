@@ -28,7 +28,9 @@ Rails.application.routes.draw do
       collection { patch :reorder }
     end
   end
-  resources :products, only: :index
+  resources :products, only: :index do
+    collection { get :lookup }
+  end
 
   # Module Frigo (Phase 2.a).
   resource :fridge, only: :show, controller: "fridge"

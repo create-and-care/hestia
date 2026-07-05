@@ -7,6 +7,9 @@ import { application } from "./application"
 import AccordionController from "./accordion_controller"
 application.register("accordion", AccordionController)
 
+import BarcodeLookupController from "./barcode_lookup_controller"
+application.register("barcode-lookup", BarcodeLookupController)
+
 import CalendarController from "./calendar_controller"
 application.register("calendar", CalendarController)
 

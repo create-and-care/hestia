@@ -1,10 +1,20 @@
 <%= tag.div id: "new_shopping_list_item" do %>
-  <%= form_with model: item, url: shopping_list_items_path(shopping_list) do |form| %>
+  <%= form_with model: item, url: shopping_list_items_path(shopping_list),
+        data: { controller: "barcode-lookup", barcode_lookup_url_value: lookup_products_path } do |form| %>
     <div class="flex flex-wrap items-end gap-2 rounded-lg border border-gray-200 p-3">
+      <div class="w-36">
+        <%= label_tag nil, "Code-barres", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <div class="flex gap-1">
+          <%= text_field_tag nil, nil, autocomplete: "off", placeholder: "Scan…",
+                data: { barcode_lookup_target: "barcode" }, class: "w-full rounded-md border border-gray-300 px-2 py-2 text-sm" %>
+          <button type="button" data-action="click->barcode-lookup#lookup"
+                  class="cursor-pointer rounded-md border border-gray-300 px-2 text-sm hover:bg-gray-50">🔍</button>
+        </div>
+      </div>
       <div class="min-w-40 flex-1">
         <%= form.label :name, "Article", class: "mb-1 block text-xs font-medium text-gray-500" %>
         <%= form.text_field :name, required: true, autofocus: true, autocomplete: "off",
-              placeholder: "Lait, pommes…",
+              placeholder: "Lait, pommes…", data: { barcode_lookup_target: "name" },
               class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="w-20">
@@ -20,9 +30,10 @@
       <div class="w-40">
         <%= form.label :rayon, "Rayon", class: "mb-1 block text-xs font-medium text-gray-500" %>
         <%= form.select :rayon, rayon_select_options, { include_blank: "Auto" },
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+              data: { barcode_lookup_target: "rayon" }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <%= form.submit "Ajouter", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <p class="w-full text-xs text-gray-400" data-barcode-lookup-target="status"></p>
     </div>
   <% end %>
 <% end %>
