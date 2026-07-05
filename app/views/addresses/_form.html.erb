@@ -1,4 +1,5 @@
-<%= form_with model: address, url: url do |form| %>
+<%= form_with model: address, url: url,
+      data: { controller: "geocode-lookup", geocode_lookup_url_value: search_addresses_path } do |form| %>
   <% if address.errors.any? %>
     <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
       <ul class="list-inside list-disc">
@@ -7,11 +8,24 @@
     </div>
   <% end %>
 
+  <div class="mb-4 rounded-md border border-gray-200 bg-gray-50 p-3">
+    <label class="mb-1 block text-xs font-medium text-gray-500">Recherche en ligne (facultatif)</label>
+    <div class="flex gap-1">
+      <input type="text" placeholder="Nom du lieu…" autocomplete="off"
+             data-geocode-lookup-target="query" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
+      <button type="button" data-action="click->geocode-lookup#search"
+              class="cursor-pointer rounded-md border border-gray-300 px-3 text-sm hover:bg-white">🔍</button>
+    </div>
+    <div data-geocode-lookup-target="results" class="mt-1"></div>
+    <p class="mt-1 text-xs text-gray-400">Laissez vide pour une adresse confidentielle en saisie manuelle (CDC §10.3).</p>
+  </div>
+
   <div class="space-y-4">
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
         <%= form.label :name, "Nom", class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= form.text_field :name, required: true, data: { geocode_lookup_target: "name" },
+              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div>
         <%= form.label :address_type, "Type", class: "mb-1 block text-sm font-medium" %>
@@ -20,7 +34,8 @@
     </div>
     <div>
       <%= form.label :full_address, "Adresse", class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_area :full_address, rows: 2, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      <%= form.text_area :full_address, rows: 2, data: { geocode_lookup_target: "fullAddress" },
+            class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
       <div>
@@ -33,11 +48,13 @@
       </div>
       <div>
         <%= form.label :latitude, "Latitude", class: "mb-1 block text-sm font-medium" %>
-        <%= form.number_field :latitude, step: :any, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= form.number_field :latitude, step: :any, data: { geocode_lookup_target: "latitude" },
+              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div>
         <%= form.label :longitude, "Longitude", class: "mb-1 block text-sm font-medium" %>
-        <%= form.number_field :longitude, step: :any, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= form.number_field :longitude, step: :any, data: { geocode_lookup_target: "longitude" },
+              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
     </div>
     <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>

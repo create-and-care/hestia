@@ -34,6 +34,9 @@ application.register("dialog", DialogController)
 import DropdownMenuController from "./dropdown_menu_controller"
 application.register("dropdown-menu", DropdownMenuController)
 
+import GeocodeLookupController from "./geocode_lookup_controller"
+application.register("geocode-lookup", GeocodeLookupController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 

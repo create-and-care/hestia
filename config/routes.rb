@@ -75,7 +75,9 @@ Rails.application.routes.draw do
   end
   resources :contacts, only: %i[index new create edit update destroy]
   resources :contact_tags, only: %i[create destroy]
-  resources :addresses, only: %i[index new create edit update destroy]
+  resources :addresses, only: %i[index new create edit update destroy] do
+    collection { get :search }
+  end
   resources :service_providers, only: %i[index new create edit update destroy]
   resources :service_provider_types, only: %i[create destroy]
   resources :loyalty_cards, only: %i[index show new create edit update destroy] do

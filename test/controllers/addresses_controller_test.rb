@@ -47,4 +47,14 @@ class AddressesControllerTest < ActionDispatch::IntegrationTest
     get edit_address_path(addresses(:beta_place))
     assert_response :not_found
   end
+
+  test "online search geocodes a query via Nominatim" do
+    stub_request(:get, %r{nominatim\.openstreetmap\.org/search})
+      .to_return(status: 200, body: [ { "display_name" => "Tour Eiffel, Paris", "lat" => "48.8", "lon" => "2.29" } ].to_json)
+
+    get search_addresses_path(q: "Tour Eiffel")
+
+    assert_response :success
+    assert_equal "Tour Eiffel", JSON.parse(@response.body).first["name"]
+  end
 end

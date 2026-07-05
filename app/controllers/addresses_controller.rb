@@ -14,6 +14,12 @@ class AddressesController < ApplicationController
     @address = Current.household.addresses.new
   end
 
+  # Recherche en ligne pour pré-remplir la fiche (CDC §10.3, §16) — la saisie
+  # manuelle reste toujours possible pour les adresses volontairement confidentielles.
+  def search
+    render json: Geocoding::SearchAddress.call(query: params[:q])
+  end
+
   def create
     @address = Current.household.addresses.new(address_params)
     if @address.save
