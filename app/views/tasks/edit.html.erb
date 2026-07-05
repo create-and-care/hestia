@@ -49,5 +49,33 @@
     </div>
   <% end %>
 
+  <section class="mt-8 border-t border-gray-100 pt-6">
+    <h2 class="mb-2 font-medium">🔔 Rappels</h2>
+    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @task.task_reminders.order(:remind_at).each do |reminder| %>
+        <li class="flex items-center justify-between px-3 py-2 text-sm">
+          <span>
+            <%= reminder.remind_at.strftime("%d/%m/%Y %H:%M") %>
+            <span class="text-gray-400">· <%= reminder.user.name.presence || reminder.user.email_address %></span>
+            <% if reminder.delivered_at %><span class="text-gray-400">· envoyé</span><% end %>
+          </span>
+          <%= button_to "✕", task_task_reminder_path(@task, reminder), method: :delete,
+                class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: TaskReminder.new, url: task_task_reminders_path(@task), class: "flex flex-wrap items-end gap-2" do |form| %>
+      <div>
+        <%= form.label :remind_at, "Quand", class: "mb-1 block text-xs text-gray-500" %>
+        <%= form.datetime_field :remind_at, required: true, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      </div>
+      <div>
+        <%= form.label :user_id, "Destinataire", class: "mb-1 block text-xs text-gray-500" %>
+        <%= form.select :user_id, task_assignee_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      </div>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
   <p class="mt-6 text-sm"><%= link_to "← Tâches", tasks_path, class: "underline" %></p>
 </div>

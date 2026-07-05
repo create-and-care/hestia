@@ -8,5 +8,34 @@
           class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" %>
   </div>
   <%= render "form", event: @event, url: calendar_event_path(@event) %>
+
+  <section class="mt-8 border-t border-gray-100 pt-6">
+    <h2 class="mb-2 font-medium">🔔 Rappels</h2>
+    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @event.event_reminders.each do |reminder| %>
+        <li class="flex items-center justify-between px-3 py-2 text-sm">
+          <span>
+            <%= EventReminder::MINUTES_BEFORE_OPTIONS.find { |_, v| v == reminder.minutes_before }&.first || "#{reminder.minutes_before} min avant" %>
+            <span class="text-gray-400">· <%= reminder.user.name.presence || reminder.user.email_address %></span>
+          </span>
+          <%= button_to "✕", calendar_event_event_reminder_path(@event, reminder), method: :delete,
+                class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+        </li>
+      <% end %>
+    </ul>
+    <%= form_with model: EventReminder.new, url: calendar_event_event_reminders_path(@event), class: "flex flex-wrap items-end gap-2" do |form| %>
+      <div>
+        <%= form.label :minutes_before, "Délai", class: "mb-1 block text-xs text-gray-500" %>
+        <%= form.select :minutes_before, EventReminder::MINUTES_BEFORE_OPTIONS, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      </div>
+      <div>
+        <%= form.label :user_id, "Destinataire", class: "mb-1 block text-xs text-gray-500" %>
+        <%= form.select :user_id, Current.household.users.order(:name).map { |u| [ u.name.presence || u.email_address, u.id ] }, {},
+              class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      </div>
+      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
   <p class="mt-6 text-sm"><%= link_to "← Calendrier", calendar_path, class: "underline" %></p>
 </div>

@@ -11,6 +11,13 @@ Rails.application.routes.draw do
   # Rejoindre un foyer via code d'invitation.
   resource :membership, only: %i[new create]
 
+  # Rappels & notifications (CDC §9.2, §9.3, §9.4, §10.2).
+  resources :notifications, only: :index do
+    collection { patch :mark_all_read }
+    member { patch :mark_read }
+  end
+  resource :notification_preference, only: %i[show update]
+
   # Module Courses (Phase 2.a).
   resources :shopping_lists, only: %i[index show new create destroy] do
     resources :items, only: %i[create update destroy], controller: "shopping_list_items" do
@@ -46,12 +53,15 @@ Rails.application.routes.draw do
   resources :tasks, only: %i[index create edit update destroy] do
     member { patch :toggle }
     collection { patch :reorder }
+    resources :task_reminders, only: %i[create destroy]
   end
   resources :task_categories, only: %i[create destroy]
 
   # Module Calendrier (Phase 2.a).
   resource :calendar, only: :show, controller: "calendar"
-  resources :calendar_events, only: %i[new create edit update destroy]
+  resources :calendar_events, only: %i[new create edit update destroy] do
+    resources :event_reminders, only: %i[create destroy]
+  end
 
   # Modules satellites (Phase 2.b).
   resources :notes, only: %i[index create edit update destroy] do

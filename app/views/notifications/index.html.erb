@@ -1,0 +1,24 @@
+<% content_for :title, "Notifications" %>
+
+<div class="mx-auto mt-10 max-w-xl px-4">
+  <header class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold">🔔 Notifications</h1>
+    <div class="flex gap-3 text-sm">
+      <%= link_to "Préférences", notification_preference_path, class: "underline" %>
+      <%= button_to "Tout marquer lu", mark_all_read_notifications_path, method: :patch, class: "cursor-pointer underline" %>
+    </div>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <% if @notifications.none? %>
+      <li class="px-4 py-6 text-center text-sm text-gray-400">Aucune notification pour l'instant.</li>
+    <% end %>
+    <% @notifications.each do |notification| %>
+      <li class="px-3 py-1">
+        <%= render "notifications/notification", notification: notification %>
+      </li>
+    <% end %>
+  </ul>
+</div>

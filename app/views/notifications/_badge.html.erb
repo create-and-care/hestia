@@ -1,0 +1,7 @@
+<% if count.to_i.positive? %>
+  <span id="notifications_badge" class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-semibold text-white">
+    <%= count > 9 ? "9+" : count %>
+  </span>
+<% else %>
+  <span id="notifications_badge"></span>
+<% end %>

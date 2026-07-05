@@ -24,6 +24,11 @@
   </head>
 
   <body>
+    <% if Current.user %>
+      <div class="fixed top-3 right-3 z-40">
+        <%= render "shared/notifications" %>
+      </div>
+    <% end %>
     <%= yield %>
     <%= render(Ui::SonnerComponent.new) %>
   </body>

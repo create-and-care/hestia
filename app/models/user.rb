@@ -13,6 +13,12 @@ class User < ApplicationRecord
   has_many :weight_entries, dependent: :destroy
   has_many :workout_entries, dependent: :destroy
 
+  # Rappels & notifications (CDC §9.2, §9.3, §9.4, §10.2).
+  has_many :notifications, dependent: :destroy
+  has_many :task_reminders, dependent: :destroy
+  has_many :event_reminders, dependent: :destroy
+  has_one :notification_preference, dependent: :destroy
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   validates :name, presence: true

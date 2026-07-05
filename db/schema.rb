@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_03_180002) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_05_200436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -247,6 +247,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_180002) do
     t.index ["user_id"], name: "index_event_participants_on_user_id"
   end
 
+  create_table "event_reminders", force: :cascade do |t|
+    t.bigint "calendar_event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "last_notified_occurrence_at"
+    t.integer "minutes_before", default: 30, null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["calendar_event_id"], name: "index_event_reminders_on_calendar_event_id"
+    t.index ["user_id"], name: "index_event_reminders_on_user_id"
+  end
+
   create_table "feeding_sessions", force: :cascade do |t|
     t.bigint "baby_profile_id", null: false
     t.datetime "created_at", null: false
@@ -388,6 +399,33 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_180002) do
     t.index ["household_id", "archived"], name: "index_notes_on_household_id_and_archived"
     t.index ["household_id"], name: "index_notes_on_household_id"
     t.index ["trip_id"], name: "index_notes_on_trip_id"
+  end
+
+  create_table "notification_preferences", force: :cascade do |t|
+    t.boolean "birthday_notifications_enabled", default: true, null: false
+    t.datetime "created_at", null: false
+    t.boolean "fridge_expiry_enabled", default: true, null: false
+    t.integer "fridge_expiry_threshold_days", default: 2, null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_notification_preferences_on_user_id", unique: true
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.bigint "household_id", null: false
+    t.string "kind", null: false
+    t.bigint "notifiable_id"
+    t.string "notifiable_type"
+    t.datetime "read_at"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["household_id"], name: "index_notifications_on_household_id"
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable"
+    t.index ["user_id", "read_at"], name: "index_notifications_on_user_id_and_read_at"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "pet_supplies", force: :cascade do |t|
@@ -664,6 +702,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_180002) do
     t.index ["household_id"], name: "index_task_categories_on_household_id"
   end
 
+  create_table "task_reminders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "delivered_at"
+    t.datetime "remind_at", null: false
+    t.bigint "task_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["task_id"], name: "index_task_reminders_on_task_id"
+    t.index ["user_id"], name: "index_task_reminders_on_user_id"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.bigint "assignee_id"
     t.datetime "created_at", null: false
@@ -821,6 +870,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_180002) do
   add_foreign_key "documents", "households"
   add_foreign_key "event_participants", "calendar_events"
   add_foreign_key "event_participants", "users"
+  add_foreign_key "event_reminders", "calendar_events"
+  add_foreign_key "event_reminders", "users"
   add_foreign_key "feeding_sessions", "baby_profiles"
   add_foreign_key "food_introductions", "baby_profiles"
   add_foreign_key "fridge_items", "households"
@@ -840,6 +891,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_180002) do
   add_foreign_key "notes", "households"
   add_foreign_key "notes", "trips"
   add_foreign_key "notes", "users", column: "author_id"
+  add_foreign_key "notification_preferences", "users"
+  add_foreign_key "notifications", "households"
+  add_foreign_key "notifications", "users"
   add_foreign_key "pet_supplies", "pets"
   add_foreign_key "pet_treatments", "pets"
   add_foreign_key "pet_vaccinations", "pets"
@@ -872,6 +926,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_03_180002) do
   add_foreign_key "shopping_lists", "households"
   add_foreign_key "shopping_lists", "trips"
   add_foreign_key "task_categories", "households"
+  add_foreign_key "task_reminders", "tasks"
+  add_foreign_key "task_reminders", "users"
   add_foreign_key "tasks", "households"
   add_foreign_key "tasks", "task_categories"
   add_foreign_key "tasks", "trips"
