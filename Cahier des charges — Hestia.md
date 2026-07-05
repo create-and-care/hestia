@@ -35,21 +35,30 @@ Hestia est une application web et mobile de gestion collaborative du foyer, pens
 
 À la différence des applications commerciales équivalentes, Hestia ne plafonne aucune fonctionnalité derrière un abonnement : le projet est distribué sous licence AGPLv3, le code est public, et chacun peut héberger sa propre instance sans dépendre d'un service tiers ni payer quoi que ce soit.
 
-Ce document constitue la première version du cahier des charges fonctionnel et technique d'Hestia. Il couvre l'ensemble des 25 modules cibles avec un niveau de détail suffisant pour entamer la conception détaillée puis le développement, module par module. À l'origine, il partait du principe qu'aucune ligne n'était encore écrite ; ce n'est plus tout à fait exact (le socle technique, l'authentification et une bibliothèque de composants UI sont en place — voir la section 0.1). Les choix d'architecture (section 4) restent des décisions de conception arrêtées ; leur mise en œuvre complète — notamment `Household`, `Membership` et le scoping multi-foyer — reste à finaliser. La traduction de ce CDC en backlog ordonné vit dans le document compagnon *Plan d'implémentation — Hestia.md*.
+Ce document constitue la première version du cahier des charges fonctionnel et technique d'Hestia. Il couvre l'ensemble des 25 modules cibles avec un niveau de détail suffisant pour entamer la conception détaillée puis le développement, module par module. À l'origine, il partait du principe qu'aucune ligne n'était encore écrite ; ce n'est plus du tout le cas : le socle (Phase 1) et l'intégralité des 25 modules (Phase 2, vagues 2.a à 2.d) sont déjà scaffoldés dans le code — voir la section 0.1 pour le détail de ce qui est fait et de ce qui reste à compléter. Les choix d'architecture (section 4) restent des décisions de conception arrêtées ; ils sont globalement respectés par l'implémentation actuelle. La traduction de ce CDC en backlog ordonné vit dans le document compagnon *Plan d'implémentation — Hestia.md*.
 
 ---
 
-## 0.1 État d'avancement (au 30 juin 2026)
+## 0.1 État d'avancement (au 5 juillet 2026, v1.0.0-beta35)
 
-Contrairement à l'hypothèse initiale de ce document, une partie du socle est déjà en place dans le dépôt. Cette section en fait le point ; le détail des tâches restantes vit dans *Plan d'implémentation — Hestia.md*.
+Contrairement à l'hypothèse initiale de ce document (« aucune ligne n'est encore écrite »), le dépôt contient déjà une implémentation quasi complète du périmètre fonctionnel de ce CDC. Cette section en fait le point ; le détail module par module vit dans *Plan d'implémentation — Hestia.md*.
 
 **Déjà réalisé :**
 
-- **Socle technique** (section 4) : Rails 8.1, PostgreSQL, Solid Queue / Solid Cable / Solid Cache, Hotwire (Turbo + Stimulus), ViewComponent, Tailwind v4, Docker / Kamal, intégration continue (tests + RuboCop + Brakeman + bundler-audit).
-- **Authentification** : modèles `User` (champ `email_address`) et `Session`, connexion par session signée multi-appareil, parcours « mot de passe oublié » par e-mail. *(Manquent encore : inscription, `Household`, `Membership`, codes d'invitation, scoping multi-foyer — voir Phase 1.)*
-- **Bibliothèque de composants UI** : une cinquantaine de composants réutilisables (boutons, dialogues, calendrier, graphiques, combobox…) exposés sur la route `/design-system`. Cet atout, non prévu dans la v1.0 de ce document, accélérera toutes les interfaces des modules à venir.
+- **Socle technique** (section 4) : Rails 8.1, PostgreSQL, Solid Queue / Solid Cable / Solid Cache, Hotwire (Turbo + Stimulus), ViewComponent, Tailwind v4, Docker / Kamal, intégration continue (`.github/workflows/ci.yml` : tests + RuboCop + Brakeman + bundler-audit).
+- **Phase 1 — Socle applicatif, complète** : `User`, `Session`, `Household`, `Membership` (rôle `member`/`admin`, code d'invitation généré et unique), scoping multi-foyer (`Current.household`, concern `HouseholdScoped`), inscription, onboarding (créer/rejoindre un foyer via code), bascule de foyer actif, tableau de bord (`root`).
+- **Phase 2 — les 25 modules, vagues 2.a à 2.d incluses.** Chaque module dispose de son ou ses modèle(s), de son contrôleur, de ses vues (composants `Ui::*` + Tailwind) et de l'essentiel du temps réel (Turbo Streams / Solid Cable via `broadcasts_to` / `broadcasts_refreshes_to`). Les 4 écarts d'architecture de la section 5 sont implémentés conformément à ce qui y est décrit : scope par `user_id` pour Bien-être, `Circle` indépendant du foyer, partage public par token pour Cadeaux, `trip_id` transverse pour Voyage. Une couche de services métier par domaine existe déjà pour une partie des modules (`Courses::AddItem`, `Frigo::AddItem`, `Tasks::CreateTask`, `Recipes::ImportFromUrl`, `Calendar::CreateEvent`, `Budget::SettleProject`, `Waste::GenerateSeries`, `Recurrence`…), conformément à l'anticipation de Hest.IA (section 5, point 5) — à généraliser aux modules qui n'en ont pas encore. L'export PDF (Courses, Calendrier) et l'import de recette depuis une URL (schema.org/Recipe) sont implémentés. 83 fichiers de tests (modèles, contrôleurs, services) couvrent ce périmètre.
+- **Bibliothèque de composants UI** : une cinquantaine de composants réutilisables (boutons, dialogues, calendrier, graphiques, combobox…) exposés sur la route `/design-system`. Cet atout, non prévu dans la v1.0 de ce document, a accéléré toutes les interfaces des modules livrés.
 
-**Reste à construire :** la fin de la Phase 1 (Household / Membership / invitations / scoping / inscription / onboarding / tableau de bord), puis l'intégralité des 25 modules (Phase 2) et Hest.IA (Phase 3).
+**Reste à construire :**
+
+- **Rappels et notifications**, absents pour tous les modules qui les prévoient : rappels de Tâches et d'événements de Calendrier, notifications de péremption du Frigo, notification du jour J pour les Anniversaires. Aucun mailer/job de notification au-delà du « mot de passe oublié ».
+- **Contenus de référence non constitués** : catalogue d'enseignes de fidélité, fiches de référence de plantes pour l'Extérieur, référentiel des jours fériés pour le Calendrier — les modules fonctionnent, mais sans cette valeur ajoutée (cohérent avec les réserves déjà actées section 16).
+- **Dépendances externes validées (section 16) encore non intégrées** : scan de code-barres via Open Food Facts (le champ `barcode` existe en base mais aucun appel réseau n'est fait), géocodage/recherche de lieux pour les Adresses (seul un lien OpenStreetMap statique est généré, pas de pré-remplissage), synchronisation calendrier externe Google/MSAL/CalDAV (aucune intégration). Le SMTP du parcours « mot de passe oublié » est en place.
+- **API `api/v1`** : aucune route ni contrôleur API à ce stade — uniquement des contrôleurs Hotwire/HTML. C'est un préalable bloquant pour le client mobile.
+- **Application mobile Flutter** : aucun répertoire `mobile/` — la structure monorepo `server/`+`mobile/` décrite section 4 n'existe pas encore sous cette forme (le code Rails vit à la racine du dépôt).
+- **Hest.IA (Phase 3)** : non démarrée, conformément au séquencement prévu (section 2).
+- **Site vitrine, documentation utilisateur, gouvernance** (section 8) : `README.md` est encore le gabarit par défaut de Rails, pas de `LICENSE`, pas de `CONTRIBUTING.md`, pas de changelog, pas de site vitrine ni de documentation utilisateur.
 
 **Réconciliations actées** entre ce document et le code réel (le schéma de la section 17.1 est illustratif) :
 
@@ -73,9 +82,9 @@ Contrairement à l'hypothèse initiale de ce document, une partie du socle est d
 
 ## 2. Périmètre et phasage
 
-**Phase 1 — Socle.** Modèles `User`, `Session`, `Household`, `Membership` (avec codes d'invitation), authentification, scoping multi-foyer. C'est le préalable technique incontournable : aucun module de la Phase 2 ne peut démarrer avant que ce socle ne soit posé et validé. *(`User`, `Session` et l'authentification sont déjà réalisés ; reste `Household`, `Membership`, invitations, scoping et inscription/onboarding — cf. section 0.1.)*
+**Phase 1 — Socle.** Modèles `User`, `Session`, `Household`, `Membership` (avec codes d'invitation), authentification, scoping multi-foyer. C'est le préalable technique incontournable : aucun module de la Phase 2 ne peut démarrer avant que ce socle ne soit posé et validé. *(Complète — cf. section 0.1.)*
 
-**Phase 2 — Modules fonctionnels.** Découpée en quatre vagues, du socle quotidien vers les usages plus périphériques ou architecturalement plus délicats :
+**Phase 2 — Modules fonctionnels.** *(Statut : les 25 modules des quatre vagues ci-dessous sont implémentés dans le code — modèles, contrôleurs, vues, temps réel ; le détail des manques par module vit dans* Plan d'implémentation — Hestia.md *, la synthèse en section 0.1.)* Découpée en quatre vagues, du socle quotidien vers les usages plus périphériques ou architecturalement plus délicats :
 
 - **2.a — Modules prioritaires (5)** : Courses, Calendrier, Tâches, Frigo, Recettes. Plus forte fréquence d'usage et plus fortes interconnexions (Recettes ↔ Courses ↔ Frigo ↔ Menu) ; les développer en premier valide le patron « scoping foyer + temps réel » sur des cas représentatifs.
 - **2.b — Modules satellites simples (11)** : Notes, Anniversaires, Adresses, Prestataires, Fidélité, Animaux, Véhicules, Cave à vin, Déchets, Bébé, Messages. Onze modules qui réutilisent un même patron (liste + fiche + recherche/filtre + scope foyer), avec quelques spécificités ponctuelles (codes-barres, code couleur de dates, import de contacts).
@@ -121,7 +130,7 @@ Synthèse des décisions déjà actées :
 |Environnement Windows|WSL2 (Ubuntu) plutôt que Ruby natif Windows|Évite les problèmes de compilation des gems natives, cohérent avec l'environnement Linux de prod|
 |Composants d'interface|Bibliothèque ViewComponent (style shadcn) + Tailwind v4, déjà en place|Cohérence visuelle et vélocité sur toutes les vues des modules ; mutualise le design entre écrans (cf. section 0.1)|
 
-**Préalable.** Les modèles `User`, `Session`, `Household`, `Membership` (avec codes d'invitation) constituent la Phase 1 (section 2). `User` et `Session` sont déjà en place (authentification fonctionnelle) ; `Household`, `Membership`, les codes d'invitation, le scoping multi-foyer et le parcours d'inscription/onboarding restent à finaliser avant que le développement des modules de la Phase 2 ne démarre. Voir l'état d'avancement détaillé en section 0.1.
+**Préalable.** Les modèles `User`, `Session`, `Household`, `Membership` (avec codes d'invitation) constituent la Phase 1 (section 2) ; elle est complète, tout comme les 25 modules de la Phase 2 au niveau fonctionnel (modèles, contrôleurs, vues, temps réel). Voir l'état d'avancement détaillé en section 0.1 pour les manques restants (rappels/notifications, contenus de référence, intégrations externes, API, mobile, Hest.IA, site vitrine/gouvernance).
 
 ---
 
@@ -867,20 +876,22 @@ flowchart LR
 
 |Phase|Contenu|Statut|
 |---|---|---|
-|1|Socle : `User`, `Session`, `Household`, `Membership`|En cours — `User`/`Session`/auth faits ; `Household`/`Membership`/invitations/scoping/inscription en finalisation (cf. §0.1)|
-|2.a|Courses, Calendrier, Tâches, Frigo, Recettes|À démarrer|
-|2.b|Notes, Anniversaires, Adresses, Prestataires, Fidélité, Animaux, Véhicules, Cave à vin, Déchets, Bébé, Messages|Planifié|
-|2.c|Menu, Routines, Extérieur, Budget, Documents|Planifié|
-|2.d|Cadeaux, Cercles, Voyage, Bien-être|Planifié|
-|3|Hest.IA (couche « tools »)|Planifié, vision documentée dans ce CDC|
+|1|Socle : `User`, `Session`, `Household`, `Membership`|Terminé (cf. §0.1)|
+|2.a|Courses, Calendrier, Tâches, Frigo, Recettes|Implémenté — manquent rappels/notifications et intégrations externes (Open Food Facts, sync calendrier), cf. §0.1|
+|2.b|Notes, Anniversaires, Adresses, Prestataires, Fidélité, Animaux, Véhicules, Cave à vin, Déchets, Bébé, Messages|Implémenté — manquent géocodage (Adresses), catalogue d'enseignes (Fidélité), notification jour J (Anniversaires), cf. §0.1|
+|2.c|Menu, Routines, Extérieur, Budget, Documents|Implémenté — manque le catalogue de plantes de référence (Extérieur), cf. §0.1|
+|2.d|Cadeaux, Cercles, Voyage, Bien-être|Implémenté conformément aux écarts d'architecture de la section 5|
+|3|Hest.IA (couche « tools »)|Non démarrée, vision documentée dans ce CDC|
 
 **Prochaines étapes suggérées.**
 
-1. Finaliser le socle (Phase 1) : `User`/`Session`/authentification sont déjà en place ; reste à coder `Household`, `Membership`, les codes d'invitation, le scoping multi-foyer et le parcours inscription/onboarding/tableau de bord (cf. section 0.1 et *Plan d'implémentation — Hestia.md*).
-2. Valider ou amender les 5 points d'architecture transversaux (section 5) — ils conditionnent des choix de modélisation qui seraient coûteux à revoir une fois plusieurs modules développés.
-3. Implémenter les dépendances externes validées pour la vague 2.a (section 16), au premier rang desquelles Open Food Facts pour le scan code-barres (Courses/Frigo).
-4. Démarrer la conception détaillée du module Courses (premier de la vague 2.a), en produisant cette fois les diagrammes d'état-transition et de cas d'utilisation qui manquent à cette V1.
-5. Itérer sur ce document au fur et à mesure des retours d'implémentation : c'est un cahier des charges vivant, pas un contrat figé.
+1. Construire la couche transversale de rappels/notifications (Tâches, Calendrier, Frigo, Anniversaires) : elle est prévue dans plusieurs fiches module mais absente du code à ce stade (cf. section 0.1).
+2. Intégrer les dépendances externes validées (section 16) encore manquantes : Open Food Facts (scan code-barres Courses/Frigo), géocodage type Nominatim (Adresses), synchronisation calendrier OAuth/CalDAV (Calendrier).
+3. Constituer les contenus de référence manquants : catalogue d'enseignes (Fidélité), fiches de plantes (Extérieur), jours fériés (Calendrier).
+4. Démarrer l'API `api/v1` (section 15), préalable bloquant au client mobile Flutter (section 14).
+5. Poser les bases du site vitrine, de la documentation utilisateur et de la gouvernance (section 8) : `README.md` réel, `LICENSE`, `CONTRIBUTING.md`, changelog.
+6. Une fois une masse critique de modules affinée (rappels, intégrations), démarrer Hest.IA (Phase 3).
+7. Itérer sur ce document au fur et à mesure des retours d'implémentation : c'est un cahier des charges vivant, pas un contrat figé.
 
 ---
 
