@@ -1,0 +1,24 @@
+name: hestia
+description: >
+  Client mobile léger d'Hestia (Flutter/Dart) — consomme l'API Rails `api/v1`,
+  sans logique métier propre (CDC §14). Squelette minimal : structure de projet
+  et un premier écran de connexion, pas encore de parité fonctionnelle.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.0
+  flutter_secure_storage: ^9.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
