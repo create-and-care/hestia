@@ -11,8 +11,8 @@ class RoadmapController < ApplicationController
     { name: "2.c — Richer business logic", detail: "Menu, Routines, Outdoor, Budget, Documents", status: :done },
     { name: "2.d — Architecture deviations", detail: "Gifts, Circles, Trip, Wellbeing", status: :done },
     { name: "Reminders & notifications", detail: "Tasks, Calendar, Fridge, and the Birthdays same-day notification are all wired to Reminders::DailyDigest / DeliverDue", status: :done },
-    { name: "External integrations", detail: "Open Food Facts, Nominatim, public holidays, Loyalty/Outdoor catalogs done — calendar sync as a scaffold", status: :partial },
-    { name: "API api/v1", detail: "5 modules exposed (wave 2.a) out of 25", status: :partial },
+    { name: "External integrations", detail: "Open Food Facts, Nominatim, public holidays, Loyalty/Outdoor catalogs, and a real Google/Microsoft OAuth + CalDAV calendar sync", status: :done },
+    { name: "API api/v1", detail: "All 25 modules exposed", status: :done },
     { name: "Mobile application", detail: "Flutter skeleton — login + read-only Shopping", status: :partial },
     { name: "Governance & documentation", detail: "LICENSE, README, CONTRIBUTING, CHANGELOG, Roadmap page", status: :done },
     { name: "Marketing site & user docs", detail: "Not started", status: :todo },
@@ -40,22 +40,15 @@ class RoadmapController < ApplicationController
         "Add user account deletion and a personal-data export, for portability even when self-hosted (see the privacy-policy recommendation, Spec §8).",
         "Add expiration/rotation for API tokens: ApiToken has no expires_at, a token stays valid indefinitely until manually deleted from /api_tokens.",
         "Strengthen the password policy: User relies solely on has_secure_password, with no minimum length or complexity rule.",
-        "Add rate limiting to the public, unauthenticated gift-reservation route (g/:token/reserve/:idea_id), which has none unlike login and forgot-password.",
-        "Write the dedicated authorization tests for the Wellbeing module recommended as a priority by Spec §5.4: neither WellbeingController, WeightEntriesController, WorkoutEntriesController, nor their models have a test today — yet it's the module whose isolation is most sensitive.",
-        "Extend test coverage to the least-covered architecture-deviation modules: Circles (circle_memberships_controller, circle_posts_controller, circle_post_reactions_controller) and Gifts (gift_ideas_controller, gift_list_shares_controller) deviate from standard household scoping with no dedicated controller test."
+        "Add rate limiting to the public, unauthenticated gift-reservation route (g/:token/reserve/:idea_id), which has none unlike login and forgot-password."
       ]
     },
     {
       category: "Reliability, quality & observability",
       emoji: "🧪",
       items: [
-        "Write real system tests (Capybara): test/system only contains a .keep file, even though the CI system-test job exists and so passes trivially without checking anything.",
-        "Close the overall coverage gap: 42 out of 93 controllers and 48 out of 80 models have no dedicated test file.",
-        "Add a coverage measurement tool (SimpleCov) to CI to keep these gaps continuously visible rather than discovering them via one-off audits.",
-        "Add an N+1 query detection tool (Bullet): the risk grows with 25 modules and their nested associations.",
-        "Add a production error-tracking tool (Sentry/Honeybadger/self-hostable GlitchTip): a silently failing Solid Queue job (e.g. Reminders::DeliverDue) wouldn't surface anywhere today.",
-        "Add a Solid Queue admin interface (mission_control-jobs) to inspect failed or pending jobs, especially now that reminders/notifications are critical.",
-        "Explicitly configure the application's time zone (config.time_zone is commented out, defaulting to UTC): several \"today\" calculations (Fridge expiration, Task due dates, the daily digest) are sensitive to the household's actual time zone.",
+        "Extend system test (Capybara) coverage beyond sign-in/out and the two read-only checks written so far (Shopping, Tasks): multi-step Turbo-navigation flows proved flaky in this environment for reasons not fully root-caused (suspected Puma/ActionCable interaction under Capybara's test server) — worth a dedicated investigation before writing more of them.",
+        "Close the last few dedicated-test gaps: Bottle, EventParticipant, and TaskCategory have no test file (missed when the other 77 were written); Current and the abstract ApplicationController/ApplicationRecord don't need one.",
         "Add https://github.com/SigNoz/signoz to bring metrics and logs to the project."
       ]
     },
@@ -63,7 +56,6 @@ class RoadmapController < ApplicationController
       category: "Functional modules — identified gaps",
       emoji: "🧩",
       items: [
-        "Implement the real OAuth/CalDAV flow for external calendar sync: the ExternalCalendarConnection scaffold exists, not the actual connection.",
         "Expand the plant reference catalog beyond the 6 starter sheets (PlantReference).",
         "Expand the loyalty brand catalog beyond the starter dozen (LoyaltyBrand).",
         "Import contacts from the phone's address book (Birthdays, Service Providers) once mobile is far enough along.",
@@ -75,7 +67,6 @@ class RoadmapController < ApplicationController
       category: "API & Mobile",
       emoji: "📡",
       items: [
-        "Extend the api/v1 API to the 20 remaining modules: only Shopping, Fridge, Recipes, Tasks, Calendar are exposed today.",
         "Open a real-time channel for external clients (WebSocket to Solid Cable): mobile currently only does one-off HTTP, no live updates.",
         "Build the mobile client's functional parity across the 24 remaining modules: only a read-only Shopping screen exists.",
         "Add native camera access on mobile (Shopping/Fridge barcode scanning, document capture).",
@@ -108,7 +99,7 @@ class RoadmapController < ApplicationController
       category: "Hest.AI (Phase 3)",
       emoji: "🤖",
       items: [
-        "Start Hest.AI only once the work above is consolidated (Birthdays notification, real OAuth/CalDAV flow, API extension, Wellbeing tests): otherwise the assistant would inherit the same gaps (Spec §13, Plan §7).",
+        "Start Hest.AI only once the remaining reliability gaps above are closed: otherwise the assistant would inherit the same gaps (Spec §13, Plan §7).",
         "Generalize the per-domain service-object layer to the modules that don't have one yet, a condition set out in Spec section 5 so Hest.AI can invoke them as tools."
       ]
     }
