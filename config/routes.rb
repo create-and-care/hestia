@@ -20,6 +20,43 @@ Rails.application.routes.draw do
         member { patch :toggle }
       end
       resources :calendar_events, only: :index
+
+      resources :notes, only: %i[index create]
+      resources :contacts, only: %i[index show]
+      resources :addresses, only: %i[index]
+      resources :service_providers, only: %i[index]
+      resources :loyalty_cards, only: %i[index]
+      resources :pets, only: %i[index show]
+      resources :vehicles, only: %i[index show]
+
+      resources :bottles, only: %i[index]
+      resources :wine_cellars, only: [] do
+        resources :bottles, only: %i[create]
+      end
+      resources :waste_collection_events, only: %i[index create]
+      resources :baby_profiles, only: [] do
+        resources :feeding_sessions, only: %i[index create]
+      end
+      resources :conversations, only: %i[index] do
+        resources :messages, only: %i[create]
+      end
+      resources :meal_plan_entries, only: %i[index create]
+      resources :routines, only: %i[index] do
+        member { post :complete }
+      end
+      resources :plants, only: %i[index]
+
+      resources :budget_entries, only: %i[index create]
+      resources :documents, only: :index
+      resources :gift_lists, only: :index do
+        resources :gift_ideas, only: :create
+      end
+      resources :circles, only: [] do
+        resources :posts, only: %i[index create], controller: "circle_posts"
+      end
+      resources :trips, only: %i[index show]
+      resources :weight_entries, only: %i[index create]
+      resources :workout_entries, only: %i[index create]
     end
   end
 
