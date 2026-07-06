@@ -10,7 +10,7 @@ class RoadmapController < ApplicationController
     { name: "2.b — Satellite modules", detail: "Notes, Birthdays, Addresses, Service Providers, Loyalty, Pets, Vehicles, Wine Cellar, Waste, Baby, Messages", status: :done },
     { name: "2.c — Richer business logic", detail: "Menu, Routines, Outdoor, Budget, Documents", status: :done },
     { name: "2.d — Architecture deviations", detail: "Gifts, Circles, Trip, Wellbeing", status: :done },
-    { name: "Reminders & notifications", detail: "Tasks, Calendar, Fridge — the Birthdays same-day notification remains", status: :partial },
+    { name: "Reminders & notifications", detail: "Tasks, Calendar, Fridge, and the Birthdays same-day notification are all wired to Reminders::DailyDigest / DeliverDue", status: :done },
     { name: "External integrations", detail: "Open Food Facts, Nominatim, public holidays, Loyalty/Outdoor catalogs done — calendar sync as a scaffold", status: :partial },
     { name: "API api/v1", detail: "5 modules exposed (wave 2.a) out of 25", status: :partial },
     { name: "Mobile application", detail: "Flutter skeleton — login + read-only Shopping", status: :partial },
@@ -63,7 +63,6 @@ class RoadmapController < ApplicationController
       category: "Functional modules — identified gaps",
       emoji: "🧩",
       items: [
-        "Wire the Birthdays same-day notification onto the reminders infrastructure now in place (Spec §10.2).",
         "Implement the real OAuth/CalDAV flow for external calendar sync: the ExternalCalendarConnection scaffold exists, not the actual connection.",
         "Expand the plant reference catalog beyond the 6 starter sheets (PlantReference).",
         "Expand the loyalty brand catalog beyond the starter dozen (LoyaltyBrand).",
