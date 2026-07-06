@@ -11,7 +11,7 @@ class TaskRemindersController < ApplicationController
 
   def destroy
     @task.task_reminders.find(params[:id]).destroy
-    redirect_to edit_task_path(@task), notice: "Rappel supprimé."
+    redirect_to edit_task_path(@task), notice: t(".notice")
   end
 
   private

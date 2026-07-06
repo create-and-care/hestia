@@ -29,7 +29,7 @@ class ConversationsController < ApplicationController
   def update
     if @conversation.update(conversation_params)
       @conversation.participant_ids = participant_ids_including_current
-      redirect_to @conversation, notice: "Conversation mise à jour."
+      redirect_to @conversation, notice: t(".updated")
     else
       render :edit, status: :unprocessable_entity
     end

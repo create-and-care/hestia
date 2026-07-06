@@ -9,34 +9,34 @@
 
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
     <div>
-      <%= form.label :name, "Nom", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :name, t(".name_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div>
-      <%= form.label :vehicle_type, "Type", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :vehicle_type, t(".type_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.select :vehicle_type, vehicle_type_options, {}, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div>
-      <%= form.label :manufacturer, "Constructeur", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :manufacturer, t(".manufacturer_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.text_field :manufacturer, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div>
-      <%= form.label :plate, "Immatriculation", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :plate, t(".plate_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.text_field :plate, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div>
-      <%= form.label :year, "Année", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :year, t(".year_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.number_field :year, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div>
-      <%= form.label :energy, "Énergie", class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_field :energy, placeholder: "Essence, diesel, électrique…", class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      <%= form.label :energy, t(".energy_label"), class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :energy, placeholder: t(".energy_placeholder"), class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div class="sm:col-span-2">
-      <%= form.label :inspection_expires_on, "Fin de validité du contrôle technique", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :inspection_expires_on, t(".inspection_expires_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.date_field :inspection_expires_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
   </div>
 
-  <%= form.submit "Enregistrer", class: "mt-4 cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+  <%= form.submit t(".submit"), class: "mt-4 cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
 <% end %>

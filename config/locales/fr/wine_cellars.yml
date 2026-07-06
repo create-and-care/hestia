@@ -1,0 +1,33 @@
+fr:
+  wine_cellars:
+    wine_types:
+      rouge: "Rouge"
+      blanc: "Blanc"
+      rose: "Rosé"
+      petillant: "Pétillant"
+      autre: "Autre"
+    index:
+      title: "Cave à vin"
+      search_placeholder: "Rechercher une bouteille…"
+      new_cellar_placeholder: "Nouvelle cave (région, type…)"
+      create_cellar: "Créer la cave"
+      results_for: "Résultats pour « %{query} »"
+      no_bottles_found: "Aucune bouteille trouvée."
+      empty: "Créez une première cave pour commencer."
+      in_stock_count: "%{count} en stock"
+      delete_cellar: "Supprimer la cave"
+      delete_cellar_confirm: "Supprimer cette cave et ses bouteilles ?"
+      bottle_name_placeholder: "Nom"
+      vintage_placeholder: "Millésime"
+      region_placeholder: "Région"
+      type_blank: "Type"
+      add: "Ajouter"
+    destroy:
+      deleted: "Cave supprimée."
+  bottles:
+    bottle:
+      take_out: "Sortir"
+      put_back: "Remettre"
+      move: "Déplacer"
+    destroy:
+      deleted: "Bouteille supprimée."

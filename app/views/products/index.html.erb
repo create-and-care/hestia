@@ -1,8 +1,8 @@
-<% content_for :title, "Catalogue de produits" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
-  <h1 class="mb-2 text-2xl font-semibold">Catalogue de produits</h1>
-  <p class="mb-6 text-sm text-gray-500">Référentiel du foyer, alimenté automatiquement au fil des courses.</p>
+  <h1 class="mb-2 text-2xl font-semibold"><%= t(".heading") %></h1>
+  <p class="mb-6 text-sm text-gray-500"><%= t(".description") %></p>
 
   <%= render "shared/flash" %>
 
@@ -24,11 +24,11 @@
     </ul>
   <% else %>
     <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
-      Le catalogue se remplira au fur et à mesure que vous ajoutez des articles.
+      <%= t(".empty") %>
     </p>
   <% end %>
 
   <p class="mt-6 text-sm">
-    <%= link_to "← Listes de courses", shopping_lists_path, class: "underline" %>
+    <%= link_to t(".back_link"), shopping_lists_path, class: "underline" %>
   </p>
 </div>

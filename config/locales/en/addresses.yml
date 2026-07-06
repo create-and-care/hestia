@@ -1,0 +1,52 @@
+en:
+  addresses:
+    back_to_addresses: "← Addresses"
+    types:
+      restaurant: "Restaurant"
+      cafe: "Café"
+      bar: "Bar"
+      hotel: "Hotel"
+      boutique: "Shop"
+      parc: "Park"
+      musee: "Museum"
+      cinema: "Cinema"
+      theatre: "Theater"
+      bien_etre: "Wellness"
+      lieu_phare: "Landmark"
+      tourisme: "Tourism"
+      prive: "Private address"
+      autre: "Other"
+    index:
+      title: "Addresses"
+      all_types: "All types"
+      search_placeholder: "Search…"
+      search_submit: "OK"
+      new_address: "New"
+      none: "No address."
+    new:
+      title: "New address"
+    edit:
+      title: "Edit address"
+    address:
+      directions: "Directions"
+    form:
+      online_search_label: "Online search (optional)"
+      place_name_placeholder: "Place name…"
+      manual_entry_hint: "Leave blank for a confidential address entered manually (Spec §10.3)."
+      searching: "Searching…"
+      no_results: "No results — enter manually."
+      unavailable: "Search unavailable — enter manually."
+      name_label: "Name"
+      type_label: "Type"
+      full_address_label: "Address"
+      phone_label: "Phone"
+      rating_label: "Rating (1-5)"
+      latitude_label: "Latitude"
+      longitude_label: "Longitude"
+      save: "Save"
+    create:
+      created: "Address added."
+    update:
+      updated: "Address updated."
+    destroy:
+      deleted: "Address deleted."

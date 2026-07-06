@@ -6,7 +6,7 @@ class ContactTagsController < ApplicationController
 
   def destroy
     Current.household.contact_tags.find(params[:id]).destroy
-    redirect_to contacts_path, notice: "Étiquette supprimée."
+    redirect_to contacts_path, notice: t(".deleted")
   end
 
   private

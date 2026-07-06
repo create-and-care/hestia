@@ -1,15 +1,15 @@
-<% content_for :title, "Prestataires" %>
+<% content_for :title, t(".title") %>
 <%= turbo_stream_from Current.household %>
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
-    <h1 class="text-2xl font-semibold">🧰 Prestataires</h1>
+    <h1 class="text-2xl font-semibold">🧰 <%= t(".title") %></h1>
     <div class="flex items-center gap-2">
       <%= form_with url: service_providers_path, method: :get do |form| %>
-        <%= form.search_field :q, value: @query, placeholder: "Rechercher…",
+        <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
               class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
       <% end %>
-      <%= link_to "Nouveau", new_service_provider_path,
+      <%= link_to t(".new_provider"), new_service_provider_path,
             class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
     </div>
   </header>
@@ -17,7 +17,7 @@
   <%= render "shared/flash" %>
 
   <section class="mb-6 flex flex-wrap items-center gap-2">
-    <%= link_to "Tous", service_providers_path,
+    <%= link_to t(".all_types"), service_providers_path,
           class: "rounded-full px-3 py-0.5 text-xs #{@type ? 'bg-gray-100' : 'bg-gray-900 text-white'}" %>
     <% @types.each do |type| %>
       <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
@@ -27,8 +27,8 @@
     <% end %>
     <%= form_with url: service_provider_types_path, method: :post, class: "inline-flex gap-1" do %>
       <%= text_field_tag "service_provider_type[icon]", nil, placeholder: "🔧", maxlength: 4, class: "w-12 rounded-md border border-gray-300 px-2 py-1 text-xs" %>
-      <%= text_field_tag "service_provider_type[name]", nil, placeholder: "Type", class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
-      <%= submit_tag "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+      <%= text_field_tag "service_provider_type[name]", nil, placeholder: t(".type_name_placeholder"), class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
+      <%= submit_tag t(".add_type"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
     <% end %>
   </section>
 
@@ -36,8 +36,8 @@
     <%= render @providers %>
   </div>
   <% if @providers.empty? %>
-    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucun prestataire.</p>
+    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".none") %></p>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

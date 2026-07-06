@@ -18,7 +18,7 @@ class NotesController < ApplicationController
       format.html { redirect_to notes_path }
     end
   rescue ActiveRecord::RecordInvalid
-    redirect_to notes_path, alert: "Impossible de créer la note."
+    redirect_to notes_path, alert: t(".cannot_create")
   end
 
   def edit
@@ -26,7 +26,7 @@ class NotesController < ApplicationController
 
   def update
     if @note.update(note_params)
-      redirect_to notes_path, notice: "Note mise à jour."
+      redirect_to notes_path, notice: t(".updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -52,7 +52,7 @@ class NotesController < ApplicationController
 
   def promote_to_task
     Notes::PromoteToTask.call(note: @note)
-    redirect_to notes_path, notice: "Note promue en tâche."
+    redirect_to notes_path, notice: t(".promoted")
   end
 
   private

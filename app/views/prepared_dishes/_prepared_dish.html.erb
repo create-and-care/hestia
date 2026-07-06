@@ -2,7 +2,7 @@
   <div class="min-w-0 flex-1">
     <p class="truncate font-medium"><%= prepared_dish.name %></p>
     <% if prepared_dish.expires_on.present? %>
-      <p class="text-xs text-gray-500">À consommer avant le <%= prepared_dish.expires_on.strftime("%d/%m/%Y") %></p>
+      <p class="text-xs text-gray-500"><%= t(".best_before", date: prepared_dish.expires_on.strftime("%d/%m/%Y")) %></p>
     <% end %>
   </div>
 
@@ -15,5 +15,5 @@
   </span>
 
   <%= button_to "✕", prepared_dish_path(prepared_dish), method: :delete,
-        class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600", aria: { label: "Supprimer" } %>
+        class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600", aria: { label: t(".delete_aria") } %>
 <% end %>

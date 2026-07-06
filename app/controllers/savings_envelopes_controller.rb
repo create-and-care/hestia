@@ -6,7 +6,7 @@ class SavingsEnvelopesController < ApplicationController
 
   def destroy
     Current.household.savings_envelopes.find(params[:id]).destroy
-    redirect_to budget_path, notice: "Enveloppe supprimée."
+    redirect_to budget_path, notice: t(".deleted")
   end
 
   private

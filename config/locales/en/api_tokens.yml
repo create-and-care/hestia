@@ -1,0 +1,16 @@
+en:
+  api_tokens:
+    index:
+      title: "API tokens"
+      description: "Used by the mobile client (Spec §15) to authenticate with the API without sharing your password. The token is shown only once, right after it is created — write it down immediately."
+      empty: "No tokens yet."
+      created_on: "created on"
+      last_used_on: "used on"
+      revoke: "Revoke"
+      revoke_confirm: "Revoke this token?"
+      name_label: "Token name (e.g. « Alice's iPhone »)"
+      create: "Create"
+    create:
+      created: "Token %{name} created: %{token} (copy it now, it will not be shown again)."
+    destroy:
+      revoked: "Token revoked."

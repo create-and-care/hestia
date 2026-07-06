@@ -1,0 +1,33 @@
+en:
+  wine_cellars:
+    wine_types:
+      rouge: "Red"
+      blanc: "White"
+      rose: "Rosé"
+      petillant: "Sparkling"
+      autre: "Other"
+    index:
+      title: "Wine Cellar"
+      search_placeholder: "Search for a bottle…"
+      new_cellar_placeholder: "New cellar (region, type…)"
+      create_cellar: "Create cellar"
+      results_for: "Results for “%{query}”"
+      no_bottles_found: "No bottles found."
+      empty: "Create your first cellar to get started."
+      in_stock_count: "%{count} in stock"
+      delete_cellar: "Delete cellar"
+      delete_cellar_confirm: "Delete this cellar and its bottles?"
+      bottle_name_placeholder: "Name"
+      vintage_placeholder: "Vintage"
+      region_placeholder: "Region"
+      type_blank: "Type"
+      add: "Add"
+    destroy:
+      deleted: "Cellar deleted."
+  bottles:
+    bottle:
+      take_out: "Take out"
+      put_back: "Put back"
+      move: "Move"
+    destroy:
+      deleted: "Bottle deleted."

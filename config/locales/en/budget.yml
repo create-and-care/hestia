@@ -1,0 +1,56 @@
+en:
+  budget:
+    kinds:
+      income: "Income"
+      expense: "Expenses"
+      savings: "Savings"
+    show:
+      title: "Budget"
+      monthly: "Monthly"
+      annual: "Annual"
+      shared_projects_link: "Shared projects"
+      remaining_label: "Disposable income"
+      savings_rate_label: "Savings rate: %{rate}%"
+      new_category_heading: "New category"
+      name_placeholder: "Name"
+      add: "Add"
+      delete: "Delete"
+      unnamed_entry: "(unnamed)"
+      per_month: "month"
+      per_year: "year"
+      entry_name_placeholder: "Label"
+      per_month_option: "/ month"
+      per_year_option: "/ year"
+      envelopes_heading: "Savings envelopes"
+      envelope_name_placeholder: "Name (holidays…)"
+      envelope_amount_placeholder: "€ / month"
+  budget_categories:
+    destroy:
+      deleted: "Category deleted."
+  savings_envelopes:
+    destroy:
+      deleted: "Envelope deleted."
+  shared_projects:
+    index:
+      title: "Shared projects"
+      name_placeholder: "Holidays, roommates…"
+      create: "Create"
+      empty: "No shared projects."
+      back_to_budget: "← Budget"
+    show:
+      delete: "Delete"
+      confirm_delete: "Delete this project?"
+      participants_heading: "Participants"
+      participant_name_placeholder: "Name (can be outside the household)"
+      add: "Add"
+      expenses_heading: "Expenses"
+      description_placeholder: "Description"
+      payer_blank: "Payer"
+      paid_by: "paid by"
+      settlement_heading: "Breakdown (total: %{total})"
+      is_owed_prefix: "is owed"
+      owes_prefix: "owes"
+      settled: "up to date"
+      back_to_projects: "← Shared projects"
+    destroy:
+      deleted: "Project deleted."

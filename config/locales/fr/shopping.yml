@@ -1,0 +1,70 @@
+fr:
+  shopping_lists:
+    index:
+      title: "Courses"
+      heading: "Listes de courses"
+      new_list: "Nouvelle liste"
+      items_count:
+        one: "%{count} article"
+        other: "%{count} articles"
+      empty: "Aucune liste pour l'instant. Créez-en une pour commencer."
+      catalog_link: "Catalogue de produits"
+    new:
+      title: "Nouvelle liste"
+      heading: "Nouvelle liste de courses"
+      name_label: "Nom"
+      name_placeholder: "Drive du samedi"
+      icon_label: "Icône (emoji, optionnel)"
+      submit: "Créer la liste"
+      back_link: "← Retour aux listes"
+    show:
+      export_pdf: "Export PDF"
+      delete: "Supprimer la liste"
+      delete_confirm: "Supprimer cette liste et tous ses articles ?"
+      back_link: "← Toutes les listes"
+    create:
+      created: "Liste créée."
+    destroy:
+      deleted: "Liste supprimée."
+  shopping_list_items:
+    rayons:
+      fruits_legumes: "Fruits & légumes"
+      frais: "Frais"
+      surgeles: "Surgelés"
+      epicerie: "Épicerie"
+      boissons: "Boissons"
+      hygiene: "Hygiène"
+      maison: "Maison"
+      autre: "Autre"
+    form:
+      barcode_searching: "Recherche…"
+      barcode_not_found: "Produit non trouvé — saisie manuelle."
+      barcode_unavailable: "Recherche indisponible — saisie manuelle."
+      barcode_found_prefix: "Trouvé :"
+      barcode_label: "Code-barres"
+      barcode_placeholder: "Scan…"
+      name_label: "Article"
+      name_placeholder: "Lait, pommes…"
+      quantity_label: "Qté"
+      unit_label: "Unité"
+      unit_placeholder: "kg, L…"
+      rayon_label: "Rayon"
+      rayon_blank: "Auto"
+      submit: "Ajouter"
+    shopping_list_item:
+      move_title: "Déplacer"
+      uncheck_aria: "Décocher"
+      check_aria: "Cocher"
+      move_to_fridge_title: "Ranger au frigo"
+      delete_aria: "Supprimer"
+    create:
+      alert: "Impossible d'ajouter l'article."
+    move_to_fridge:
+      notice: "Rangé au frigo."
+  products:
+    index:
+      title: "Catalogue de produits"
+      heading: "Catalogue de produits"
+      description: "Référentiel du foyer, alimenté automatiquement au fil des courses."
+      empty: "Le catalogue se remplira au fur et à mesure que vous ajoutez des articles."
+      back_link: "← Listes de courses"

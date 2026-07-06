@@ -1,11 +1,11 @@
-<% content_for :title, "Frigo" %>
+<% content_for :title, t(".title") %>
 <%= turbo_stream_from Current.household %>
 
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <header class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold">🧊 Frigo</h1>
+    <h1 class="text-2xl font-semibold">🧊 <%= t(".title") %></h1>
     <%= form_with url: fridge_path, method: :get do |form| %>
-      <%= form.search_field :q, value: @query, placeholder: "Rechercher…",
+      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
     <% end %>
   </header>
@@ -13,30 +13,30 @@
   <%= render "shared/flash" %>
 
   <section class="mb-10">
-    <h2 class="mb-3 font-medium">Aliments</h2>
+    <h2 class="mb-3 font-medium"><%= t(".foods_heading") %></h2>
     <%= render "fridge_items/form", fridge_item: @fridge_item %>
 
     <div id="fridge_items" class="mt-4 space-y-2">
       <%= render @fridge_items %>
     </div>
     <% if @fridge_items.empty? %>
-      <p class="mt-4 text-sm text-gray-500">Aucun aliment<%= " pour cette recherche" if @query.present? %>.</p>
+      <p class="mt-4 text-sm text-gray-500"><%= @query.present? ? t(".no_items_for_search") : t(".no_items") %></p>
     <% end %>
   </section>
 
   <section class="mb-8">
-    <h2 class="mb-3 font-medium">Plats préparés</h2>
+    <h2 class="mb-3 font-medium"><%= t(".dishes_heading") %></h2>
     <%= render "prepared_dishes/form", prepared_dish: @prepared_dish %>
 
     <div id="prepared_dishes" class="mt-4 space-y-2">
       <%= render @prepared_dishes %>
     </div>
     <% if @prepared_dishes.empty? %>
-      <p class="mt-4 text-sm text-gray-500">Aucun plat préparé.</p>
+      <p class="mt-4 text-sm text-gray-500"><%= t(".no_dishes") %></p>
     <% end %>
   </section>
 
   <p class="text-sm">
-    <%= link_to "← Tableau de bord", root_path, class: "underline" %>
+    <%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %>
   </p>
 </div>

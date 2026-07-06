@@ -1,0 +1,36 @@
+en:
+  exterior:
+    treatments:
+      chlore: "Chlorine"
+      sel: "Salt"
+      brome: "Bromine"
+      oxygene_actif: "Active oxygen"
+      uv: "UV"
+    action_types:
+      nettoyage_filtre: "Filter cleaning"
+      hivernage: "Winterizing"
+      mise_en_route: "Startup"
+      autre: "Other"
+    show:
+      title: "Outdoor"
+      garden_heading: "Garden"
+      plant_placeholder: "Plant"
+      location_placeholder: "Location"
+      reference_blank: "Care sheet (optional)"
+      notes_placeholder: "Needs / notes"
+      add: "Add"
+      pool_heading: "Pool"
+      delete: "Delete"
+      readings_heading: "Readings"
+      measure_type_placeholder: "pH, temp…"
+      value_placeholder: "value"
+      reading_submit: "Reading"
+      actions_heading: "Maintenance actions"
+      action_submit: "Action"
+      new_pool_placeholder: "New pool"
+  plants:
+    destroy:
+      deleted: "Plant deleted."
+  pools:
+    destroy:
+      deleted: "Pool deleted."

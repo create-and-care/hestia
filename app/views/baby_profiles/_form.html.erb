@@ -9,13 +9,13 @@
 
   <div class="space-y-4">
     <div>
-      <%= form.label :name, "Prénom", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :name, t(".name_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div>
-      <%= form.label :born_on, "Date de naissance", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :born_on, t(".born_on_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.date_field :born_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
-    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
   </div>
 <% end %>

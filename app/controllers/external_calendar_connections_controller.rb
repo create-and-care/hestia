@@ -9,25 +9,24 @@ class ExternalCalendarConnectionsController < ApplicationController
 
   def connect
     provider = params[:provider]
-    return redirect_with(alert: "Fournisseur inconnu.") unless ExternalCalendarConnection::PROVIDERS.include?(provider)
+    return redirect_with(alert: t(".unknown_provider")) unless ExternalCalendarConnection::PROVIDERS.include?(provider)
 
     if Rails.application.credentials.dig(provider.to_sym, :client_id).present?
       # TODO (future work): redirect to the provider's OAuth consent screen
       # (or CalDAV discovery), then create the connection in #callback.
-      redirect_with(alert: "Flux de connexion #{provider.capitalize} à implémenter.")
+      redirect_with(alert: t(".not_implemented", provider: provider.capitalize))
     else
-      redirect_with(alert: "Synchronisation #{provider.capitalize} non configurée sur cette instance " \
-        "(identifiants d'application manquants — voir README).")
+      redirect_with(alert: t(".not_configured", provider: provider.capitalize))
     end
   end
 
   def callback
-    redirect_with(alert: "Flux de connexion non implémenté.")
+    redirect_with(alert: t(".not_implemented"))
   end
 
   def destroy
     Current.user.external_calendar_connections.find(params[:id]).destroy
-    redirect_with(notice: "Connexion supprimée.")
+    redirect_with(notice: t(".deleted"))
   end
 
   private

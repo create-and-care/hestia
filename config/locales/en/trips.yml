@@ -1,0 +1,26 @@
+en:
+  trips:
+    index:
+      title: "Trips"
+      empty: "No trips."
+      new_trip: "New trip"
+      name_placeholder: "Name"
+      create: "Create"
+      hint: "A trip isolates its groceries, notes, tasks, and addresses from the household's general lists."
+    show:
+      delete_trip: "Delete the trip"
+      delete_trip_confirm: "Delete this trip and all its data? This action cannot be undone."
+      shopping_lists: "Trip groceries"
+      shopping_list_placeholder: "List (e.g. « cabin »)"
+      add: "Add"
+      notes: "Notes"
+      note_title_placeholder: "Title"
+      note_content_placeholder: "Content"
+      tasks: "To-do"
+      task_placeholder: "To-do item"
+      addresses: "Address book"
+      address_name_placeholder: "Place"
+      address_full_placeholder: "Address"
+      back_to_trips: "← Trips"
+    destroy:
+      deleted: "Trip deleted (and all its data)."

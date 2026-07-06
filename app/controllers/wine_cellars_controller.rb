@@ -16,7 +16,7 @@ class WineCellarsController < ApplicationController
 
   def destroy
     Current.household.wine_cellars.find(params[:id]).destroy
-    redirect_to wine_cellars_path, notice: "Cave supprimée."
+    redirect_to wine_cellars_path, notice: t(".deleted")
   end
 
   private

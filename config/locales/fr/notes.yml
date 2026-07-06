@@ -1,0 +1,33 @@
+fr:
+  notes:
+    index:
+      title: "Notes"
+      search_placeholder: "Rechercher…"
+      active_filter: "Actives"
+      archived_filter: "Archivées"
+      none: "Aucune note"
+      none_archived_suffix: " archivée"
+      none_search_suffix: " pour cette recherche"
+    form:
+      title_placeholder: "Titre de la note"
+      content_placeholder: "Contenu…"
+      submit: "Ajouter"
+    note:
+      favorite: "Favori"
+      unfavorite: "Retirer favori"
+      archive: "Archiver"
+      unarchive: "Désarchiver"
+      promote_to_task: "→ Tâche"
+      delete: "Supprimer"
+    edit:
+      title: "Modifier la note"
+      title_label: "Titre"
+      content_label: "Contenu"
+      save: "Enregistrer"
+      back_to_notes: "← Notes"
+    create:
+      cannot_create: "Impossible de créer la note."
+    update:
+      updated: "Note mise à jour."
+    promote_to_task:
+      promoted: "Note promue en tâche."

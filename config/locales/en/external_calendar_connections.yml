@@ -1,0 +1,20 @@
+en:
+  external_calendar_connections:
+    index:
+      title: "Calendar sync"
+      heading: "External calendar sync"
+      description: "Connect your Google, Microsoft, or Apple (CalDAV) calendar to show your external events in Hestia (Spec §9.2). Requires that this instance's host has configured the corresponding application credentials — otherwise a message will let you know."
+      empty: "No connections yet."
+      active: "active"
+      inactive: "inactive"
+      disconnect: "Disconnect"
+      connect_provider: "Connect %{provider}"
+      back_to_calendar: "← Calendar"
+    connect:
+      unknown_provider: "Unknown provider."
+      not_implemented: "%{provider} connection flow to be implemented."
+      not_configured: "%{provider} synchronization is not configured on this instance (missing application credentials — see README)."
+    callback:
+      not_implemented: "Connection flow not implemented."
+    destroy:
+      deleted: "Connection deleted."

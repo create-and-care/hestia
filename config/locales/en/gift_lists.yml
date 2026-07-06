@@ -1,0 +1,49 @@
+en:
+  gift_lists:
+    index:
+      title: "Gifts"
+      receive: "Receive"
+      give: "Give"
+      shared_badge: "shared"
+      no_list: "No list."
+      for_contact: "for"
+      new_list: "New list"
+      name_placeholder: "Name (Christmas, birthday…)"
+      recipient_placeholder: "Recipient (give)"
+      create: "Create"
+    show:
+      delete: "Delete"
+      delete_confirm: "Delete this list?"
+      public_sharing: "Public sharing"
+      share_link_description: "Link to share (viewable and reservable without an account):"
+      disable_link: "Disable the link"
+      enable_link: "Enable a sharing link"
+      ideas: "Ideas"
+      link_label: "link"
+      link_placeholder: "Link"
+      idea_placeholder: "Idea"
+      add: "Add"
+      back_to_gifts: "← Gifts"
+    destroy:
+      deleted: "List deleted."
+    perspectives:
+      receive: "Receive"
+      give: "Give"
+    statuses:
+      wanted: "Wanted"
+      bought: "Bought"
+  gift_list_shares:
+    create:
+      enabled: "Sharing link enabled."
+    destroy:
+      disabled: "Sharing link disabled."
+  public_gift_lists:
+    show:
+      title: "%{name} — wishlist"
+      description: "Reserve an idea to avoid several people giving the same thing. No account needed."
+      reserved: "Reserved"
+      cancel_reservation: "Cancel the reservation"
+      reserver_name_placeholder: "Your name (optional)"
+      reserve: "Reserve"
+      view_link: "view"
+      empty: "This list is empty for now."

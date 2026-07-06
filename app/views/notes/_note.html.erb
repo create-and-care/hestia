@@ -7,13 +7,13 @@
     <p class="mb-3 line-clamp-4 whitespace-pre-line text-sm text-gray-600"><%= note.content %></p>
   <% end %>
   <div class="mt-auto flex flex-wrap gap-2 text-xs">
-    <%= button_to (note.favorite ? "Retirer favori" : "Favori"), toggle_favorite_note_path(note), method: :patch,
+    <%= button_to (note.favorite ? t(".unfavorite") : t(".favorite")), toggle_favorite_note_path(note), method: :patch,
           class: "cursor-pointer rounded border border-gray-300 px-2 py-1 hover:bg-gray-50" %>
-    <%= button_to (note.archived ? "Désarchiver" : "Archiver"), toggle_archive_note_path(note), method: :patch,
+    <%= button_to (note.archived ? t(".unarchive") : t(".archive")), toggle_archive_note_path(note), method: :patch,
           class: "cursor-pointer rounded border border-gray-300 px-2 py-1 hover:bg-gray-50" %>
-    <%= button_to "→ Tâche", promote_to_task_note_path(note), method: :post,
+    <%= button_to t(".promote_to_task"), promote_to_task_note_path(note), method: :post,
           class: "cursor-pointer rounded border border-gray-300 px-2 py-1 hover:bg-gray-50" %>
-    <%= button_to "Supprimer", note_path(note), method: :delete,
+    <%= button_to t(".delete"), note_path(note), method: :delete,
           class: "cursor-pointer rounded border border-gray-300 px-2 py-1 text-red-600 hover:bg-red-50" %>
   </div>
 <% end %>

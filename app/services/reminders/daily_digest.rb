@@ -26,7 +26,7 @@ module Reminders
 
         Notification.create!(
           user: user, household: household, kind: "fridge_expiry",
-          title: "#{items.count} produit#{'s' if items.count > 1} bientôt périmé#{'s' if items.count > 1}",
+          title: I18n.t("reminders.daily_digest.fridge_expiry", count: items.count),
           body: items.order(:expires_on).map(&:name).join(", ")
         )
       end
@@ -39,7 +39,7 @@ module Reminders
 
         Notification.create!(
           user: user, household: household, kind: "birthday",
-          title: contacts.one? ? "Anniversaire aujourd'hui 🎂" : "Anniversaires aujourd'hui 🎂",
+          title: I18n.t("reminders.daily_digest.birthday", count: contacts.size),
           body: contacts.map(&:name).join(", ")
         )
       end

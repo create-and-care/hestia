@@ -1,31 +1,35 @@
 <%= tag.div id: "new_fridge_item" do %>
   <%= form_with model: fridge_item, url: fridge_items_path,
-        data: { controller: "barcode-lookup", barcode_lookup_url_value: lookup_products_path } do |form| %>
+        data: { controller: "barcode-lookup", barcode_lookup_url_value: lookup_products_path,
+                barcode_lookup_searching_text_value: t(".barcode_searching"),
+                barcode_lookup_not_found_text_value: t(".barcode_not_found"),
+                barcode_lookup_unavailable_text_value: t(".barcode_unavailable"),
+                barcode_lookup_found_text_value: t(".barcode_found_prefix") } do |form| %>
     <div class="flex flex-wrap items-end gap-2 rounded-lg border border-gray-200 p-3">
       <div class="w-36">
-        <%= label_tag nil, "Code-barres", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= label_tag nil, t(".barcode_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
         <div class="flex gap-1">
-          <%= text_field_tag nil, nil, autocomplete: "off", placeholder: "Scan…",
+          <%= text_field_tag nil, nil, autocomplete: "off", placeholder: t(".barcode_placeholder"),
                 data: { barcode_lookup_target: "barcode" }, class: "w-full rounded-md border border-gray-300 px-2 py-2 text-sm" %>
           <button type="button" data-action="click->barcode-lookup#lookup"
                   class="cursor-pointer rounded-md border border-gray-300 px-2 text-sm hover:bg-gray-50">🔍</button>
         </div>
       </div>
       <div class="min-w-40 flex-1">
-        <%= form.label :name, "Aliment", class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <%= form.text_field :name, required: true, autocomplete: "off", placeholder: "Beurre, poulet…",
+        <%= form.label :name, t(".name_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.text_field :name, required: true, autocomplete: "off", placeholder: t(".name_placeholder"),
               data: { barcode_lookup_target: "name" }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="w-44">
-        <%= form.label :location, "Emplacement", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.label :location, t(".location_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
         <%= form.select :location, location_select_options, {},
               class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="w-40">
-        <%= form.label :expires_on, "Péremption", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.label :expires_on, t(".expires_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
         <%= form.date_field :expires_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
       <p class="w-full text-xs text-gray-400" data-barcode-lookup-target="status"></p>
     </div>
   <% end %>

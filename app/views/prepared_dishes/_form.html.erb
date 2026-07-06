@@ -2,20 +2,20 @@
   <%= form_with model: prepared_dish, url: prepared_dishes_path do |form| %>
     <div class="flex flex-wrap items-end gap-2 rounded-lg border border-gray-200 p-3">
       <div class="min-w-40 flex-1">
-        <%= form.label :name, "Plat préparé", class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <%= form.text_field :name, required: true, autocomplete: "off", placeholder: "Lasagnes, sauce tomate…",
+        <%= form.label :name, t(".name_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.text_field :name, required: true, autocomplete: "off", placeholder: t(".name_placeholder"),
               class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="w-44">
-        <%= form.label :location, "Emplacement", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.label :location, t(".location_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
         <%= form.select :location, location_select_options, {},
               class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="w-40">
-        <%= form.label :expires_on, "À consommer avant", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.label :expires_on, t(".expires_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
         <%= form.date_field :expires_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
     </div>
   <% end %>
 <% end %>

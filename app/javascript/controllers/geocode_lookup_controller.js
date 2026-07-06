@@ -4,13 +4,18 @@ import { Controller } from "@hotwired/stimulus"
 // an address. Manual entry is always still possible (confidential addresses).
 export default class extends Controller {
   static targets = ["query", "results", "name", "fullAddress", "latitude", "longitude"]
-  static values = { url: String }
+  static values = {
+    url: String,
+    searchingText: String,
+    noResultsText: String,
+    unavailableText: String
+  }
 
   async search() {
     const query = this.queryTarget.value.trim()
     if (!query) return
 
-    this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-gray-400">Recherche…</p>`
+    this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-gray-400">${this.searchingTextValue}</p>`
 
     try {
       const response = await fetch(`${this.urlValue}?q=${encodeURIComponent(query)}`, {
@@ -19,7 +24,7 @@ export default class extends Controller {
       const results = response.ok ? await response.json() : []
 
       if (results.length === 0) {
-        this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-gray-400">Aucun résultat — saisie manuelle.</p>`
+        this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-gray-400">${this.noResultsTextValue}</p>`
         return
       }
 
@@ -36,7 +41,7 @@ export default class extends Controller {
       })
       this.results = results
     } catch (error) {
-      this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-gray-400">Recherche indisponible — saisie manuelle.</p>`
+      this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-gray-400">${this.unavailableTextValue}</p>`
     }
   }
 

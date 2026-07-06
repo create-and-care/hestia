@@ -1,0 +1,32 @@
+fr:
+  waste:
+    types:
+      ordures: "Ordures ménagères"
+      recyclage: "Recyclage"
+      verre: "Verre"
+      compost: "Compost"
+      encombrants: "Encombrants"
+    weekdays:
+      sunday: "Dimanche"
+      monday: "Lundi"
+      tuesday: "Mardi"
+      wednesday: "Mercredi"
+      thursday: "Jeudi"
+      friday: "Vendredi"
+      saturday: "Samedi"
+    show:
+      title: "Déchets"
+      upcoming_title: "Prochaines collectes"
+      no_events: "Aucune collecte planifiée."
+      add_one_time_title: "Ajouter une collecte ponctuelle"
+      add: "Ajouter"
+      series_title: "Séries récurrentes"
+      every_n_weeks: "toutes les %{count} semaine(s)"
+      delete_series: "Supprimer la série"
+      generate_series: "Générer la série"
+  waste_collection_series:
+    create:
+      created: "Série de collectes générée."
+      invalid: "Série invalide."
+    destroy:
+      deleted: "Série supprimée."

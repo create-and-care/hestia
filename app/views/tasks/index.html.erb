@@ -1,11 +1,11 @@
-<% content_for :title, "Tâches" %>
+<% content_for :title, t(".title") %>
 <%= turbo_stream_from Current.household %>
 
 <div class="mx-auto mt-10 max-w-5xl px-4">
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
-    <h1 class="text-2xl font-semibold">✅ Tâches</h1>
+    <h1 class="text-2xl font-semibold">✅ <%= t(".title") %></h1>
     <%= form_with url: tasks_path, method: :get do |form| %>
-      <%= form.search_field :q, value: @query, placeholder: "Rechercher…",
+      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
     <% end %>
   </header>
@@ -15,7 +15,7 @@
   <%= render "form", task: @task %>
 
   <section class="my-6 flex flex-wrap items-center gap-2">
-    <span class="text-sm text-gray-500">Catégories :</span>
+    <span class="text-sm text-gray-500"><%= t(".categories_label") %></span>
     <% @categories.each do |category| %>
       <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
         <%= category.name %>
@@ -24,16 +24,16 @@
       </span>
     <% end %>
     <%= form_with url: task_categories_path, method: :post, class: "inline-flex gap-1" do %>
-      <%= text_field_tag "task_category[name]", nil, placeholder: "Nouvelle catégorie",
+      <%= text_field_tag "task_category[name]", nil, placeholder: t(".new_category_placeholder"),
             class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
-      <%= submit_tag "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+      <%= submit_tag t(".add_category_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
     <% end %>
   </section>
 
   <div class="flex gap-4 overflow-x-auto pb-4">
     <% @columns.each do |(category, tasks)| %>
       <div class="w-72 shrink-0">
-        <h2 class="mb-2 text-sm font-semibold text-gray-600"><%= category&.name || "Sans catégorie" %></h2>
+        <h2 class="mb-2 text-sm font-semibold text-gray-600"><%= category&.name || t(".uncategorized") %></h2>
         <div id="<%= category ? "tasks_category_#{category.id}" : "tasks_uncategorized" %>" class="min-h-4 space-y-2"
              data-controller="sortable" data-sortable-url-value="<%= reorder_tasks_path %>">
           <%= render tasks %>
@@ -42,5 +42,5 @@
     <% end %>
   </div>
 
-  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

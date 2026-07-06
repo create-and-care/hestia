@@ -16,7 +16,7 @@ class ShoppingListItemsController < ApplicationController
       format.html { redirect_to @shopping_list }
     end
   rescue ActiveRecord::RecordInvalid
-    redirect_to @shopping_list, alert: "Impossible d'ajouter l'article."
+    redirect_to @shopping_list, alert: t(".alert")
   end
 
   def update
@@ -58,7 +58,7 @@ class ShoppingListItemsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream { render turbo_stream: turbo_stream.remove(@item) }
-      format.html { redirect_to @shopping_list, notice: "Rangé au frigo." }
+      format.html { redirect_to @shopping_list, notice: t(".notice") }
     end
   end
 

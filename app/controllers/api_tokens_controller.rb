@@ -11,7 +11,7 @@ class ApiTokensController < ApplicationController
     @token = Current.user.api_tokens.create(token_params)
 
     if @token.persisted?
-      redirect_to api_tokens_path, notice: "Jeton « #{@token.name} » créé : #{@token.plaintext_token} (copiez-le, il ne sera plus affiché)."
+      redirect_to api_tokens_path, notice: t(".created", name: @token.name, token: @token.plaintext_token)
     else
       @tokens = Current.user.api_tokens.order(created_at: :desc)
       render :index, status: :unprocessable_entity
@@ -20,7 +20,7 @@ class ApiTokensController < ApplicationController
 
   def destroy
     Current.user.api_tokens.find(params[:id]).destroy
-    redirect_to api_tokens_path, notice: "Jeton révoqué."
+    redirect_to api_tokens_path, notice: t(".revoked")
   end
 
   private

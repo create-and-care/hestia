@@ -8,10 +8,10 @@
       <span><%= @shopping_list.name %></span>
     </h1>
     <div class="flex gap-2">
-      <%= link_to "Export PDF", shopping_list_path(@shopping_list, format: :pdf), target: "_blank",
+      <%= link_to t(".export_pdf"), shopping_list_path(@shopping_list, format: :pdf), target: "_blank",
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-      <%= button_to "Supprimer la liste", shopping_list_path(@shopping_list), method: :delete,
-            form: { data: { turbo_confirm: "Supprimer cette liste et tous ses articles ?" } },
+      <%= button_to t(".delete"), shopping_list_path(@shopping_list), method: :delete,
+            form: { data: { turbo_confirm: t(".delete_confirm") } },
             class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" %>
     </div>
   </header>
@@ -26,6 +26,6 @@
   </div>
 
   <p class="mt-6 text-sm">
-    <%= link_to "← Toutes les listes", shopping_lists_path, class: "underline" %>
+    <%= link_to t(".back_link"), shopping_lists_path, class: "underline" %>
   </p>
 </div>

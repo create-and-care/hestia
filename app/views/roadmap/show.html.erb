@@ -5,10 +5,10 @@
     <p class="text-sm text-gray-500">Hestia</p>
     <h1 class="text-2xl font-semibold">🗺️ Roadmap</h1>
     <p class="mt-2 text-sm text-gray-600">
-      État d'avancement du projet et évolutions envisagées. Détail complet dans le
-      <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">Cahier des charges</code> et le
-      <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">Plan d'implémentation</code>
-      versionnés avec le code ; historique précis des versions dans
+      Project progress and planned improvements. Full detail in the
+      <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">Specification</code> and the
+      <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">Implementation Plan</code>
+      versioned with the code; precise version history in
       <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">CHANGELOG.md</code>.
     </p>
   </header>
@@ -16,7 +16,7 @@
   <%= render "shared/flash" %>
 
   <section class="mb-10">
-    <h2 class="mb-3 font-medium">Avancement par chantier</h2>
+    <h2 class="mb-3 font-medium">Progress by area</h2>
     <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @phases.each do |phase| %>
         <li class="flex items-start justify-between gap-4 px-4 py-3">
@@ -32,9 +32,9 @@
             end
           %>">
             <%= case phase[:status]
-                when :done then "Fait"
-                when :partial then "Partiel"
-                else "À faire"
+                when :done then "Done"
+                when :partial then "Partial"
+                else "To do"
                 end %>
           </span>
         </li>
@@ -43,10 +43,10 @@
   </section>
 
   <section class="mb-10">
-    <h2 class="mb-1 font-medium">Évolutions envisagées</h2>
+    <h2 class="mb-1 font-medium">Planned improvements</h2>
     <p class="mb-3 text-sm text-gray-600">
-      Liste issue d'une analyse du code existant (tests, sécurité, cohérence d'interface,
-      couverture fonctionnelle) — pas seulement des manques déjà connus du Plan d'implémentation.
+      A list drawn from analyzing the existing code (tests, security, UI consistency,
+      functional coverage) — not just the gaps already known from the Implementation Plan.
     </p>
 
     <div class="space-y-3">
@@ -57,7 +57,7 @@
               <span class="mr-1"><%= group[:emoji] %></span><%= group[:category] %>
             </span>
             <span class="flex items-center gap-2 text-sm text-gray-500">
-              <%= pluralize(group[:items].size, "piste") %>
+              <%= pluralize(group[:items].size, "item") %>
               <span class="transition-transform group-open:rotate-180">▾</span>
             </span>
           </summary>
@@ -74,5 +74,5 @@
     </div>
   </section>
 
-  <p class="text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+  <p class="text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

@@ -15,7 +15,7 @@ class ApiTokensControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to api_tokens_path
     follow_redirect!
-    assert_match(/Jeton « iPhone »/, @response.body)
+    assert_match(/Token iPhone created/, @response.body)
   end
 
   test "destroy cannot reach another user's token" do

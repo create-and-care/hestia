@@ -8,15 +8,12 @@ module CalendarHelper
     "gray" => "bg-gray-100 text-gray-800"
   }.freeze
 
-  FREQUENCY_LABELS = { "none" => "Aucune", "weekly" => "Hebdomadaire", "monthly" => "Mensuelle" }.freeze
-  MONTH_NAMES = %w[Janvier Février Mars Avril Mai Juin Juillet Août Septembre Octobre Novembre Décembre].freeze
-  WEEKDAYS = %w[Lun Mar Mer Jeu Ven Sam Dim].freeze
-
   def event_color_class(color) = COLOR_CLASSES.fetch(color, COLOR_CLASSES.fetch("blue"))
-  def frequency_label(frequency) = FREQUENCY_LABELS.fetch(frequency, frequency)
+  def frequency_label(frequency) = t("calendar.frequencies.#{frequency}", default: frequency)
   def frequency_options = CalendarEvent::FREQUENCIES.map { |frequency| [ frequency_label(frequency), frequency ] }
   def color_options = CalendarEvent::COLORS.map { |color| [ color.capitalize, color ] }
-  def month_label(date) = "#{MONTH_NAMES.fetch(date.month - 1)} #{date.year}"
+  def month_label(date) = "#{t("calendar.months")[date.month - 1]} #{date.year}"
+  def weekday_labels = t("calendar.weekdays")
 
   def calendar_participant_options
     Current.household.users.order(:name).map { |user| [ user.name.presence || user.email_address, user.id ] }

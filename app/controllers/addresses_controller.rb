@@ -23,7 +23,7 @@ class AddressesController < ApplicationController
   def create
     @address = Current.household.addresses.new(address_params)
     if @address.save
-      redirect_to addresses_path, notice: "Adresse ajoutée."
+      redirect_to addresses_path, notice: t(".created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class AddressesController < ApplicationController
 
   def update
     if @address.update(address_params)
-      redirect_to addresses_path, notice: "Adresse mise à jour."
+      redirect_to addresses_path, notice: t(".updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -42,7 +42,7 @@ class AddressesController < ApplicationController
 
   def destroy
     @address.destroy
-    redirect_to addresses_path, notice: "Adresse supprimée."
+    redirect_to addresses_path, notice: t(".deleted")
   end
 
   private

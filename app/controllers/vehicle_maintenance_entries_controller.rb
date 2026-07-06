@@ -8,7 +8,7 @@ class VehicleMaintenanceEntriesController < ApplicationController
 
   def destroy
     @vehicle.vehicle_maintenance_entries.find(params[:id]).destroy
-    redirect_to @vehicle, notice: "Entrée supprimée."
+    redirect_to @vehicle, notice: t(".deleted")
   end
 
   private

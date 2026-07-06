@@ -1,17 +1,17 @@
-<% content_for :title, "Rejoindre un cercle" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-16 max-w-md px-4">
-  <h1 class="mb-6 text-2xl font-semibold">Rejoindre un cercle</h1>
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
 
   <%= render "shared/flash" %>
 
   <%= form_with url: circle_membership_path, method: :post do |form| %>
     <div class="flex gap-2">
-      <%= form.text_field :invite_code, required: true, autofocus: true, placeholder: "Code d'invitation",
+      <%= form.text_field :invite_code, required: true, autofocus: true, placeholder: t(".invite_code_placeholder"),
             class: "flex-1 rounded-md border border-gray-300 px-3 py-2 uppercase tracking-widest" %>
-      <%= form.submit "Rejoindre", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= form.submit t(".join"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
     </div>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to "← Cercles", circles_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("circles.back_to_circles"), circles_path, class: "underline" %></p>
 </div>

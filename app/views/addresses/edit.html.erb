@@ -1,7 +1,7 @@
-<% content_for :title, "Modifier l'adresse" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-xl px-4">
-  <h1 class="mb-6 text-2xl font-semibold">Modifier l'adresse</h1>
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
   <%= render "form", address: @address, url: address_path(@address) %>
-  <p class="mt-6 text-sm"><%= link_to "← Adresses", addresses_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("addresses.back_to_addresses"), addresses_path, class: "underline" %></p>
 </div>

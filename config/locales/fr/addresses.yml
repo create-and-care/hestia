@@ -1,0 +1,52 @@
+fr:
+  addresses:
+    back_to_addresses: "← Adresses"
+    types:
+      restaurant: "Restaurant"
+      cafe: "Café"
+      bar: "Bar"
+      hotel: "Hôtel"
+      boutique: "Boutique"
+      parc: "Parc"
+      musee: "Musée"
+      cinema: "Cinéma"
+      theatre: "Théâtre"
+      bien_etre: "Bien-être"
+      lieu_phare: "Lieu phare"
+      tourisme: "Tourisme"
+      prive: "Adresse privée"
+      autre: "Autre"
+    index:
+      title: "Adresses"
+      all_types: "Tous les types"
+      search_placeholder: "Rechercher…"
+      search_submit: "OK"
+      new_address: "Nouvelle"
+      none: "Aucune adresse."
+    new:
+      title: "Nouvelle adresse"
+    edit:
+      title: "Modifier l'adresse"
+    address:
+      directions: "Itinéraire"
+    form:
+      online_search_label: "Recherche en ligne (facultatif)"
+      place_name_placeholder: "Nom du lieu…"
+      manual_entry_hint: "Laissez vide pour une adresse confidentielle en saisie manuelle (CDC §10.3)."
+      searching: "Recherche…"
+      no_results: "Aucun résultat — saisie manuelle."
+      unavailable: "Recherche indisponible — saisie manuelle."
+      name_label: "Nom"
+      type_label: "Type"
+      full_address_label: "Adresse"
+      phone_label: "Téléphone"
+      rating_label: "Note (1-5)"
+      latitude_label: "Latitude"
+      longitude_label: "Longitude"
+      save: "Enregistrer"
+    create:
+      created: "Adresse ajoutée."
+    update:
+      updated: "Adresse mise à jour."
+    destroy:
+      deleted: "Adresse supprimée."

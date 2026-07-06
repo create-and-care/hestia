@@ -1,0 +1,54 @@
+fr:
+  tasks:
+    index:
+      title: "Tâches"
+      search_placeholder: "Rechercher…"
+      categories_label: "Catégories :"
+      new_category_placeholder: "Nouvelle catégorie"
+      add_category_submit: "Ajouter"
+      uncategorized: "Sans catégorie"
+    form:
+      title_label: "Tâche"
+      title_placeholder: "Sortir les poubelles…"
+      emoji_label: "Emoji"
+      due_label: "Échéance"
+      assignee_label: "Responsable"
+      category_label: "Catégorie"
+      submit: "Ajouter"
+    task:
+      move_title: "Déplacer"
+      reopen_aria: "Rouvrir"
+      complete_aria: "Terminer"
+      edit_aria: "Modifier"
+      delete_aria: "Supprimer"
+    edit:
+      title: "Modifier la tâche"
+      heading: "Modifier la tâche"
+      title_label: "Titre"
+      description_label: "Description"
+      emoji_label: "Emoji"
+      due_label: "Échéance"
+      assignee_label: "Responsable"
+      category_label: "Catégorie"
+      submit: "Enregistrer"
+      reminders_heading: "Rappels"
+      sent: "envoyé"
+      remind_at_label: "Quand"
+      recipient_label: "Destinataire"
+      add_reminder_submit: "Ajouter"
+      back_link: "← Tâches"
+    create:
+      alert: "Impossible de créer la tâche."
+    update:
+      notice: "Tâche mise à jour."
+    due:
+      overdue: "En retard"
+      urgent: "Aujourd'hui / demain"
+      soon: "Cette semaine"
+      later: "Plus tard"
+  task_categories:
+    destroy:
+      notice: "Catégorie supprimée."
+  task_reminders:
+    destroy:
+      notice: "Rappel supprimé."

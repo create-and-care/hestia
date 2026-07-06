@@ -1,0 +1,21 @@
+fr:
+  documents:
+    index:
+      title: "Documents"
+      search_placeholder: "Rechercher…"
+      disclaimer: "Pour vos papiers courants — pas un coffre-fort certifié ni un dossier médical."
+      all: "Tous"
+      new_folder_placeholder: "Nouveau dossier"
+      add: "Ajouter"
+      add_document_heading: "Ajouter un document"
+      name_placeholder: "Nom"
+      folder_blank: "Dossier"
+      upload: "Téléverser"
+      empty: "Aucun document."
+    create:
+      created: "Document ajouté."
+    destroy:
+      deleted: "Document supprimé."
+  document_folders:
+    destroy:
+      deleted: "Dossier supprimé."

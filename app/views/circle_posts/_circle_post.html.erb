@@ -14,7 +14,7 @@
             class: "cursor-pointer rounded-full px-1 text-sm hover:bg-gray-100", form: { class: "inline" } %>
     <% end %>
     <% if circle_post.deletable_by?(Current.user) %>
-      <%= button_to "Supprimer", circle_post_path(circle_post.circle, circle_post), method: :delete,
+      <%= button_to t(".delete"), circle_post_path(circle_post.circle, circle_post), method: :delete,
             class: "cursor-pointer text-xs text-gray-400 hover:text-red-600" %>
     <% end %>
   </div>

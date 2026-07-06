@@ -12,7 +12,7 @@ class CalendarEventsController < ApplicationController
       attributes: event_params,
       participant_ids: participant_ids
     )
-    redirect_to calendar_path, notice: "Événement créé."
+    redirect_to calendar_path, notice: t(".notice")
   rescue ActiveRecord::RecordInvalid => e
     @event = e.record
     render :new, status: :unprocessable_entity
@@ -26,7 +26,7 @@ class CalendarEventsController < ApplicationController
 
     if @event.save
       @event.participants = Current.household.users.where(id: participant_ids)
-      redirect_to calendar_path, notice: "Événement mis à jour."
+      redirect_to calendar_path, notice: t(".notice")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class CalendarEventsController < ApplicationController
 
   def destroy
     @event.destroy
-    redirect_to calendar_path, notice: "Événement supprimé."
+    redirect_to calendar_path, notice: t(".notice")
   end
 
   private

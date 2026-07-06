@@ -1,4 +1,4 @@
-<% content_for :title, "Documents" %>
+<% content_for :title, t(".title") %>
 <% content_for :head do %>
   <meta name="turbo-refresh-method" content="morph">
 <% end %>
@@ -6,18 +6,18 @@
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
   <header class="mb-4 flex flex-wrap items-center justify-between gap-2">
-    <h1 class="text-2xl font-semibold">📄 Documents</h1>
+    <h1 class="text-2xl font-semibold">📄 <%= t(".title") %></h1>
     <%= form_with url: documents_path, method: :get do |form| %>
-      <%= form.search_field :q, value: @query, placeholder: "Rechercher…", class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"), class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
     <% end %>
   </header>
 
-  <p class="mb-4 text-xs text-gray-400">Pour vos papiers courants — pas un coffre-fort certifié ni un dossier médical.</p>
+  <p class="mb-4 text-xs text-gray-400"><%= t(".disclaimer") %></p>
 
   <%= render "shared/flash" %>
 
   <section class="mb-4 flex flex-wrap items-center gap-2">
-    <%= link_to "Tous", documents_path, class: "rounded-full px-3 py-0.5 text-xs #{@folder ? 'bg-gray-100' : 'bg-gray-900 text-white'}" %>
+    <%= link_to t(".all"), documents_path, class: "rounded-full px-3 py-0.5 text-xs #{@folder ? 'bg-gray-100' : 'bg-gray-900 text-white'}" %>
     <% @folders.each do |folder| %>
       <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
         <%= link_to folder.name, documents_path(folder_id: folder.id) %>
@@ -25,18 +25,18 @@
       </span>
     <% end %>
     <%= form_with url: document_folders_path, method: :post, scope: :document_folder, class: "inline-flex gap-1" do |form| %>
-      <%= form.text_field :name, placeholder: "Nouveau dossier", class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+      <%= form.text_field :name, placeholder: t(".new_folder_placeholder"), class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
+      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
     <% end %>
   </section>
 
   <section class="mb-6 rounded-lg border border-gray-200 p-3">
-    <h2 class="mb-2 font-medium">Ajouter un document</h2>
+    <h2 class="mb-2 font-medium"><%= t(".add_document_heading") %></h2>
     <%= form_with model: @document, url: documents_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: "Nom", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.collection_select :document_folder_id, @folders, :id, :name, { include_blank: "Dossier" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :name, required: true, placeholder: t(".name_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.collection_select :document_folder_id, @folders, :id, :name, { include_blank: t(".folder_blank") }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
       <%= form.file_field :file, required: true, accept: "application/pdf,image/*", class: "text-sm" %>
-      <%= form.submit "Téléverser", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+      <%= form.submit t(".upload"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
     <% end %>
   </section>
 
@@ -52,8 +52,8 @@
     <% end %>
   </ul>
   <% if @documents.empty? %>
-    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucun document.</p>
+    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".empty") %></p>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

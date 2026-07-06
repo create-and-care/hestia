@@ -21,7 +21,7 @@
       <%= link_to "✉️", "mailto:#{service_provider.email}", class: "hover:opacity-70", title: service_provider.email %>
     <% end %>
     <% if service_provider.maps_url %>
-      <%= link_to "🗺", service_provider.maps_url, target: "_blank", rel: "noopener", class: "hover:opacity-70", title: "Itinéraire" %>
+      <%= link_to "🗺", service_provider.maps_url, target: "_blank", rel: "noopener", class: "hover:opacity-70", title: t(".directions") %>
     <% end %>
     <%= link_to "✎", edit_service_provider_path(service_provider), class: "text-gray-400 hover:text-gray-900" %>
     <%= button_to "✕", service_provider_path(service_provider), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>

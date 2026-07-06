@@ -1,0 +1,38 @@
+en:
+  loyalty_cards:
+    back_to_loyalty: "← Loyalty"
+    index:
+      title: "Loyalty"
+      heading: "Loyalty cards"
+      new_card: "New card"
+      none: "No card."
+    new:
+      title: "New card"
+      heading: "New loyalty card"
+    edit:
+      title: "Edit card"
+    loyalty_card:
+      move: "Move"
+      view_large: "View large"
+    show:
+      qrcode_label: "QR code"
+      barcode_label: "Barcode"
+      present_at_checkout: "to show at checkout"
+      edit: "Edit"
+      back_to_all: "← All cards"
+    form:
+      brand_label: "Brand from the catalog"
+      no_brand: "Not in catalog"
+      name_label: "Displayed name"
+      name_placeholder: "Carrefour, Fnac…"
+      number_label: "Card number"
+      format_label: "Format"
+      barcode_option: "Barcode"
+      qrcode_option: "QR code"
+      save: "Save"
+    create:
+      created: "Card added."
+    update:
+      updated: "Card updated."
+    destroy:
+      deleted: "Card deleted."

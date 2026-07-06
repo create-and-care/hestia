@@ -1,0 +1,66 @@
+fr:
+  recipes:
+    index:
+      title: "Recettes"
+      search_placeholder: "Rechercher…"
+      import_link: "Importer"
+      new_link: "Nouvelle"
+      empty: "Aucune recette."
+      empty_search: "Aucune recette pour cette recherche."
+    recipe:
+      total_time: "%{minutes} min"
+    cook:
+      title: "%{title} — cuisine"
+      ingredients_heading: "Ingrédients"
+      steps_heading: "Étapes"
+      back_link: "← Retour à la recette"
+    edit:
+      title: "Modifier la recette"
+      heading: "Modifier la recette"
+      back_link: "← Recette"
+    new:
+      title: "Nouvelle recette"
+      heading: "Nouvelle recette"
+      back_link: "← Recettes"
+    new_import:
+      title: "Importer une recette"
+      heading: "Importer une recette"
+      description: "Collez l'URL d'une recette (sites compatibles schema.org/Recipe)."
+      submit: "Importer"
+      back_link: "← Recettes"
+    show:
+      prep_time: "Préparation : %{minutes} min"
+      cook_time: "Cuisson : %{minutes} min"
+      servings: "%{count} portions"
+      cook_mode_link: "Mode cuisine"
+      add_to_shopping_list_link: "Ajouter aux courses"
+      edit_link: "Modifier"
+      delete_link: "Supprimer"
+      delete_confirm: "Supprimer cette recette ?"
+      ingredients_heading: "Ingrédients"
+      steps_heading: "Étapes"
+      source_label: "Source :"
+      back_link: "← Toutes les recettes"
+    form:
+      title_label: "Titre"
+      category_label: "Catégorie"
+      prep_time_label: "Prépa (min)"
+      cook_time_label: "Cuisson (min)"
+      servings_label: "Portions"
+      tags_label: "Tags (séparés par des virgules)"
+      tags_placeholder: "végétarien, rapide"
+      ingredients_label: "Ingrédients (un par ligne)"
+      steps_label: "Étapes (une par ligne)"
+      source_label: "Source (URL)"
+      submit: "Enregistrer"
+    create:
+      created: "Recette créée."
+    update:
+      updated: "Recette mise à jour."
+    destroy:
+      deleted: "Recette supprimée."
+    add_to_shopping_list:
+      notice: "Ingrédients ajoutés à la liste de courses."
+    import:
+      notice: "Recette importée."
+      alert: "Impossible d'importer cette recette (page injoignable ou sans microdonnées)."

@@ -1,0 +1,53 @@
+en:
+  vehicles:
+    inspection_statuses:
+      expired: "Inspection overdue"
+      urgent: "Less than 30 days"
+      soon: "Less than 90 days"
+      ok: "Up to date"
+      none: "Not set"
+    types:
+      car: "Car"
+      motorcycle: "Motorcycle"
+    index:
+      title: "Vehicles"
+      search_placeholder: "Search…"
+      new_vehicle: "New"
+      empty: "No vehicles."
+    vehicle:
+      inspection_prefix: "Inspection:"
+    form:
+      name_label: "Name"
+      type_label: "Type"
+      manufacturer_label: "Manufacturer"
+      plate_label: "License plate"
+      year_label: "Year"
+      energy_label: "Energy"
+      energy_placeholder: "Gasoline, diesel, electric…"
+      inspection_expires_label: "Inspection expiry date"
+      submit: "Save"
+    edit:
+      title: "Edit vehicle"
+      back_to_vehicle: "← Vehicle"
+    new:
+      title: "New vehicle"
+      back_to_vehicles: "← Vehicles"
+    show:
+      inspection_prefix: "Vehicle inspection:"
+      edit: "Edit"
+      delete: "Delete"
+      delete_confirm: "Delete this vehicle?"
+      maintenance_history: "Maintenance history"
+      entry_type_placeholder: "Oil change, tires…"
+      provider_placeholder: "Garage"
+      add: "Add"
+      back_to_vehicles: "← All vehicles"
+    create:
+      created: "Vehicle added."
+    update:
+      updated: "Vehicle updated."
+    destroy:
+      deleted: "Vehicle deleted."
+  vehicle_maintenance_entries:
+    destroy:
+      deleted: "Entry deleted."

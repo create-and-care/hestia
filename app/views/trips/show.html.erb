@@ -6,15 +6,15 @@
       <h1 class="text-2xl font-semibold">🧳 <%= @trip.name %></h1>
       <% if @trip.starts_on %><p class="text-sm text-gray-500"><%= @trip.starts_on.strftime("%d/%m/%Y") %><%= " → #{@trip.ends_on.strftime('%d/%m/%Y')}" if @trip.ends_on %></p><% end %>
     </div>
-    <%= button_to "Supprimer le voyage", trip_path(@trip), method: :delete,
-          form: { data: { turbo_confirm: "Supprimer ce voyage et toutes ses données ? Action irréversible." } },
+    <%= button_to t(".delete_trip"), trip_path(@trip), method: :delete,
+          form: { data: { turbo_confirm: t(".delete_trip_confirm") } },
           class: "cursor-pointer text-sm text-red-600 underline" %>
   </header>
 
   <%= render "shared/flash" %>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">🛒 Courses du voyage</h2>
+    <h2 class="mb-2 font-medium">🛒 <%= t(".shopping_lists") %></h2>
     <ul class="mb-2 text-sm">
       <% @trip.shopping_lists.order(:name).each do |list| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
@@ -24,13 +24,13 @@
       <% end %>
     </ul>
     <%= form_with model: @shopping_list, url: trip_shopping_lists_path(@trip), class: "flex gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: "Liste (ex. « chalet »)", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= form.text_field :name, required: true, placeholder: t(".shopping_list_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">📝 Notes</h2>
+    <h2 class="mb-2 font-medium">📝 <%= t(".notes") %></h2>
     <ul class="mb-2 text-sm">
       <% @trip.notes.order(created_at: :desc).each do |note| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
@@ -40,14 +40,14 @@
       <% end %>
     </ul>
     <%= form_with model: @note, url: trip_notes_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
-      <%= form.text_field :title, required: true, placeholder: "Titre", class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :content, placeholder: "Contenu", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= form.text_field :title, required: true, placeholder: t(".note_title_placeholder"), class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :content, placeholder: t(".note_content_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">✅ Préparatifs</h2>
+    <h2 class="mb-2 font-medium">✅ <%= t(".tasks") %></h2>
     <ul class="mb-2 text-sm">
       <% @trip.tasks.order(:due_on).each do |task| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
@@ -57,14 +57,14 @@
       <% end %>
     </ul>
     <%= form_with model: @task, url: trip_tasks_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
-      <%= form.text_field :title, required: true, placeholder: "Préparatif", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :title, required: true, placeholder: t(".task_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
       <%= form.date_field :due_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">📍 Carnet d'adresses</h2>
+    <h2 class="mb-2 font-medium">📍 <%= t(".addresses") %></h2>
     <ul class="mb-2 text-sm">
       <% @trip.addresses.order(:name).each do |address| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
@@ -74,11 +74,11 @@
       <% end %>
     </ul>
     <%= form_with model: @address, url: trip_addresses_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: "Lieu", class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :full_address, placeholder: "Adresse", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= form.text_field :name, required: true, placeholder: t(".address_name_placeholder"), class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :full_address, placeholder: t(".address_full_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 
-  <p class="text-sm"><%= link_to "← Voyages", trips_path, class: "underline" %></p>
+  <p class="text-sm"><%= link_to t(".back_to_trips"), trips_path, class: "underline" %></p>
 </div>

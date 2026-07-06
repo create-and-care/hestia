@@ -1,10 +1,10 @@
-<% content_for :title, "Animaux" %>
+<% content_for :title, t(".title") %>
 <%= turbo_stream_from Current.household %>
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
   <header class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold">🐾 Animaux</h1>
-    <%= link_to "Nouvel animal", new_pet_path,
+    <h1 class="text-2xl font-semibold">🐾 <%= t(".title") %></h1>
+    <%= link_to t(".new_pet"), new_pet_path,
           class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
   </header>
 
@@ -14,8 +14,8 @@
     <%= render @pets %>
   </div>
   <% if @pets.empty? %>
-    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucun animal.</p>
+    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".empty") %></p>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

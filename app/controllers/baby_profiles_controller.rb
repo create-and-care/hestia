@@ -18,7 +18,7 @@ class BabyProfilesController < ApplicationController
   def create
     @baby = Current.household.baby_profiles.new(baby_params)
     if @baby.save
-      redirect_to @baby, notice: "Profil créé."
+      redirect_to @baby, notice: t(".created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class BabyProfilesController < ApplicationController
 
   def update
     if @baby.update(baby_params)
-      redirect_to @baby, notice: "Profil mis à jour."
+      redirect_to @baby, notice: t(".updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class BabyProfilesController < ApplicationController
 
   def destroy
     @baby.destroy
-    redirect_to baby_profiles_path, notice: "Profil supprimé."
+    redirect_to baby_profiles_path, notice: t(".deleted")
   end
 
   private

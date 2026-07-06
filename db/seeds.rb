@@ -22,24 +22,24 @@ end
 # Plant care-sheet catalog (Spec §11.3, §16) — built up progressively; a
 # Plant with no reference attached stays fully functional.
 [
-  { common_name: "Basilic", scientific_name: "Ocimum basilicum", water_needs: "Fréquent (sol toujours humide)",
-    sunlight: "Plein soleil", pruning: "Pincer les fleurs pour prolonger la récolte",
-    common_diseases: "Fonte des semis, pucerons" },
-  { common_name: "Tomate", scientific_name: "Solanum lycopersicum", water_needs: "Régulier, éviter le feuillage",
-    sunlight: "Plein soleil", pruning: "Supprimer les gourmands",
-    common_diseases: "Mildiou, oïdium" },
-  { common_name: "Lavande", scientific_name: "Lavandula", water_needs: "Faible, sol drainant",
-    sunlight: "Plein soleil", pruning: "Tailler après floraison",
-    common_diseases: "Pourriture racinaire si excès d'eau" },
-  { common_name: "Monstera", scientific_name: "Monstera deliciosa", water_needs: "Modéré, laisser sécher entre deux arrosages",
-    sunlight: "Lumière indirecte", pruning: "Retirer les feuilles jaunies",
-    common_diseases: "Cochenilles, araignées rouges" },
-  { common_name: "Rosier", scientific_name: "Rosa", water_needs: "Régulier au pied",
-    sunlight: "Plein soleil à mi-ombre", pruning: "Taille en fin d'hiver",
-    common_diseases: "Oïdium, taches noires, pucerons" },
-  { common_name: "Orchidée", scientific_name: "Phalaenopsis", water_needs: "Faible, par trempage hebdomadaire",
-    sunlight: "Lumière indirecte vive", pruning: "Couper la hampe florale fanée",
-    common_diseases: "Pourriture des racines si excès d'eau" }
+  { common_name: "Basil", scientific_name: "Ocimum basilicum", water_needs: "Frequent (soil always moist)",
+    sunlight: "Full sun", pruning: "Pinch off flowers to prolong the harvest",
+    common_diseases: "Damping-off, aphids" },
+  { common_name: "Tomato", scientific_name: "Solanum lycopersicum", water_needs: "Regular, avoid wetting the foliage",
+    sunlight: "Full sun", pruning: "Remove suckers",
+    common_diseases: "Blight, powdery mildew" },
+  { common_name: "Lavender", scientific_name: "Lavandula", water_needs: "Low, well-drained soil",
+    sunlight: "Full sun", pruning: "Prune after flowering",
+    common_diseases: "Root rot if overwatered" },
+  { common_name: "Monstera", scientific_name: "Monstera deliciosa", water_needs: "Moderate, let dry between waterings",
+    sunlight: "Indirect light", pruning: "Remove yellowed leaves",
+    common_diseases: "Mealybugs, spider mites" },
+  { common_name: "Rose bush", scientific_name: "Rosa", water_needs: "Regular, at the base",
+    sunlight: "Full sun to partial shade", pruning: "Prune in late winter",
+    common_diseases: "Powdery mildew, black spot, aphids" },
+  { common_name: "Orchid", scientific_name: "Phalaenopsis", water_needs: "Low, weekly soaking",
+    sunlight: "Bright indirect light", pruning: "Cut the faded flower spike",
+    common_diseases: "Root rot if overwatered" }
 ].each do |attributes|
   PlantReference.find_or_create_by!(common_name: attributes[:common_name]) { |reference| reference.assign_attributes(attributes) }
 end

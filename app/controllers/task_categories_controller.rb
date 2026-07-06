@@ -6,6 +6,6 @@ class TaskCategoriesController < ApplicationController
 
   def destroy
     Current.household.task_categories.find(params[:id]).destroy
-    redirect_to tasks_path, notice: "Catégorie supprimée."
+    redirect_to tasks_path, notice: t(".notice")
   end
 end

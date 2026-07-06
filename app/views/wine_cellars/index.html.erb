@@ -1,4 +1,4 @@
-<% content_for :title, "Cave à vin" %>
+<% content_for :title, t(".title") %>
 <% content_for :head do %>
   <meta name="turbo-refresh-method" content="morph">
 <% end %>
@@ -6,9 +6,9 @@
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
-    <h1 class="text-2xl font-semibold">🍷 Cave à vin</h1>
+    <h1 class="text-2xl font-semibold">🍷 <%= t(".title") %></h1>
     <%= form_with url: wine_cellars_path, method: :get do |form| %>
-      <%= form.search_field :q, value: @query, placeholder: "Rechercher une bouteille…",
+      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
     <% end %>
   </header>
@@ -16,25 +16,25 @@
   <%= render "shared/flash" %>
 
   <%= form_with model: @cellar, url: wine_cellars_path, class: "mb-6 flex gap-2" do |form| %>
-    <%= form.text_field :name, required: true, placeholder: "Nouvelle cave (région, type…)",
+    <%= form.text_field :name, required: true, placeholder: t(".new_cellar_placeholder"),
           class: "flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm" %>
-    <%= form.submit "Créer la cave", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
+    <%= form.submit t(".create_cellar"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
   <% end %>
 
   <% if @query.present? %>
-    <h2 class="mb-2 font-medium">Résultats pour « <%= @query %> »</h2>
+    <h2 class="mb-2 font-medium"><%= t(".results_for", query: @query) %></h2>
     <div class="space-y-2"><%= render @results %></div>
-    <% if @results.empty? %><p class="text-sm text-gray-500">Aucune bouteille trouvée.</p><% end %>
+    <% if @results.empty? %><p class="text-sm text-gray-500"><%= t(".no_bottles_found") %></p><% end %>
   <% else %>
     <% if @cellars.empty? %>
-      <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Créez une première cave pour commencer.</p>
+      <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".empty") %></p>
     <% end %>
     <% @cellars.each do |cellar| %>
       <section class="mb-6 rounded-lg border border-gray-200 p-4">
         <div class="mb-3 flex items-center justify-between">
-          <h2 class="font-medium"><%= cellar.name %> <span class="text-sm text-gray-400">(<%= cellar.bottles.in_stock.size %> en stock)</span></h2>
-          <%= button_to "Supprimer la cave", wine_cellar_path(cellar), method: :delete,
-                form: { data: { turbo_confirm: "Supprimer cette cave et ses bouteilles ?" } },
+          <h2 class="font-medium"><%= cellar.name %> <span class="text-sm text-gray-400">(<%= t(".in_stock_count", count: cellar.bottles.in_stock.size) %>)</span></h2>
+          <%= button_to t(".delete_cellar"), wine_cellar_path(cellar), method: :delete,
+                form: { data: { turbo_confirm: t(".delete_cellar_confirm") } },
                 class: "cursor-pointer text-xs text-red-600 hover:underline" %>
         </div>
 
@@ -42,15 +42,15 @@
 
         <%= form_with model: @bottle, url: bottles_path, class: "flex flex-wrap items-end gap-2" do |form| %>
           <%= form.hidden_field :wine_cellar_id, value: cellar.id %>
-          <%= form.text_field :name, required: true, placeholder: "Nom", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-          <%= form.number_field :vintage, placeholder: "Millésime", class: "w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-          <%= form.text_field :region, placeholder: "Région", class: "w-28 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-          <%= form.select :wine_type, wine_type_options, { include_blank: "Type" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-          <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+          <%= form.text_field :name, required: true, placeholder: t(".bottle_name_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+          <%= form.number_field :vintage, placeholder: t(".vintage_placeholder"), class: "w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+          <%= form.text_field :region, placeholder: t(".region_placeholder"), class: "w-28 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+          <%= form.select :wine_type, wine_type_options, { include_blank: t(".type_blank") }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+          <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
         <% end %>
       </section>
     <% end %>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

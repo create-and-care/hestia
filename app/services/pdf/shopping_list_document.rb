@@ -31,7 +31,7 @@ module Pdf
       end
 
       def rayon_label(rayon)
-        ShoppingListItemsHelper::RAYON_LABELS.fetch(rayon, "Autre")
+        I18n.t("shopping_list_items.rayons.#{rayon}", default: I18n.t("shopping_list_items.rayons.autre"))
       end
 
       def format_quantity(item)

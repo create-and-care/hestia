@@ -1,0 +1,33 @@
+en:
+  service_providers:
+    back_to_providers: "← Providers"
+    index:
+      title: "Providers"
+      search_placeholder: "Search…"
+      new_provider: "New"
+      all_types: "All"
+      type_name_placeholder: "Type"
+      add_type: "Add"
+      none: "No provider."
+    new:
+      title: "New provider"
+    edit:
+      title: "Edit provider"
+    service_provider:
+      directions: "Directions"
+    form:
+      name_label: "Name"
+      type_label: "Type"
+      phone_label: "Phone"
+      email_label: "Email"
+      address_label: "Address"
+      save: "Save"
+    create:
+      created: "Provider added."
+    update:
+      updated: "Provider updated."
+    destroy:
+      deleted: "Provider deleted."
+  service_provider_types:
+    destroy:
+      deleted: "Type deleted."

@@ -1,0 +1,34 @@
+fr:
+  wellbeing:
+    show:
+      title: "Bien-être"
+      privacy_note: "Données strictement privées — visibles par vous seul(e), jamais par les autres membres du foyer. L'IMC est affiché à titre informatif."
+      my_profile: "Mon profil"
+      height_label: "Taille (cm)"
+      age_label: "Âge"
+      sex_label: "Sexe"
+      activity_label: "Activité"
+      start_weight_label: "Poids de départ"
+      goal_weight_label: "Objectif"
+      save_profile: "Enregistrer le profil"
+      bmi_prefix: "IMC actuel :"
+      bmi_suffix: "(poids %{weight} kg)"
+      weight: "Poids"
+      weight_placeholder: "kg"
+      add: "Ajouter"
+      workouts: "Séances de sport"
+      exercise_placeholder: "Exercice"
+      duration_placeholder: "min"
+    sexes:
+      female: "Femme"
+      male: "Homme"
+      other: "Autre"
+    activity_levels:
+      sedentary: "Sédentaire"
+      light: "Légère"
+      moderate: "Modérée"
+      active: "Active"
+      very_active: "Très active"
+  wellbeing_profiles:
+    update:
+      updated: "Profil mis à jour."

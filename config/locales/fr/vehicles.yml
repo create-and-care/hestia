@@ -1,0 +1,53 @@
+fr:
+  vehicles:
+    inspection_statuses:
+      expired: "Contrôle dépassé"
+      urgent: "Moins de 30 jours"
+      soon: "Moins de 90 jours"
+      ok: "À jour"
+      none: "Non renseigné"
+    types:
+      car: "Voiture"
+      motorcycle: "Moto"
+    index:
+      title: "Véhicules"
+      search_placeholder: "Rechercher…"
+      new_vehicle: "Nouveau"
+      empty: "Aucun véhicule."
+    vehicle:
+      inspection_prefix: "CT :"
+    form:
+      name_label: "Nom"
+      type_label: "Type"
+      manufacturer_label: "Constructeur"
+      plate_label: "Immatriculation"
+      year_label: "Année"
+      energy_label: "Énergie"
+      energy_placeholder: "Essence, diesel, électrique…"
+      inspection_expires_label: "Fin de validité du contrôle technique"
+      submit: "Enregistrer"
+    edit:
+      title: "Modifier le véhicule"
+      back_to_vehicle: "← Fiche"
+    new:
+      title: "Nouveau véhicule"
+      back_to_vehicles: "← Véhicules"
+    show:
+      inspection_prefix: "Contrôle technique :"
+      edit: "Modifier"
+      delete: "Supprimer"
+      delete_confirm: "Supprimer ce véhicule ?"
+      maintenance_history: "Historique d'entretien"
+      entry_type_placeholder: "Vidange, pneus…"
+      provider_placeholder: "Garage"
+      add: "Ajouter"
+      back_to_vehicles: "← Tous les véhicules"
+    create:
+      created: "Véhicule ajouté."
+    update:
+      updated: "Véhicule mis à jour."
+    destroy:
+      deleted: "Véhicule supprimé."
+  vehicle_maintenance_entries:
+    destroy:
+      deleted: "Entrée supprimée."

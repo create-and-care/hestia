@@ -1,47 +1,47 @@
-<% content_for :title, "Modifier la routine" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-md px-4">
-  <h1 class="mb-6 text-2xl font-semibold">Modifier la routine</h1>
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
 
   <%= form_with model: @routine, url: routine_path(@routine) do |form| %>
     <div class="space-y-4">
       <div>
-        <%= form.label :name, "Nom", class: "mb-1 block text-sm font-medium" %>
+        <%= form.label :name, t(".name_label"), class: "mb-1 block text-sm font-medium" %>
         <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div>
-        <%= form.label :description, "Description", class: "mb-1 block text-sm font-medium" %>
+        <%= form.label :description, t(".description_label"), class: "mb-1 block text-sm font-medium" %>
         <%= form.text_area :description, rows: 2, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <%= form.label :emoji, "Emoji", class: "mb-1 block text-sm font-medium" %>
+          <%= form.label :emoji, t(".emoji_label"), class: "mb-1 block text-sm font-medium" %>
           <%= form.text_field :emoji, maxlength: 4, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
         </div>
         <div>
-          <%= form.label :list_name, "Liste", class: "mb-1 block text-sm font-medium" %>
+          <%= form.label :list_name, t(".list_label"), class: "mb-1 block text-sm font-medium" %>
           <%= form.text_field :list_name, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
         </div>
         <div>
-          <%= form.label :frequency, "Fréquence", class: "mb-1 block text-sm font-medium" %>
+          <%= form.label :frequency, t(".frequency_label"), class: "mb-1 block text-sm font-medium" %>
           <%= form.select :frequency, routine_frequency_options, {}, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
         </div>
         <div>
-          <%= form.label :interval, "Tous les", class: "mb-1 block text-sm font-medium" %>
+          <%= form.label :interval, t(".interval_label"), class: "mb-1 block text-sm font-medium" %>
           <%= form.number_field :interval, min: 1, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
         </div>
         <div>
-          <%= form.label :next_due_on, "Prochaine échéance", class: "mb-1 block text-sm font-medium" %>
+          <%= form.label :next_due_on, t(".next_due_label"), class: "mb-1 block text-sm font-medium" %>
           <%= form.date_field :next_due_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
         </div>
         <div>
-          <%= form.label :assignee_id, "Responsable", class: "mb-1 block text-sm font-medium" %>
+          <%= form.label :assignee_id, t(".assignee_label"), class: "mb-1 block text-sm font-medium" %>
           <%= form.select :assignee_id, routine_member_options, { include_blank: "—" }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
         </div>
       </div>
-      <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= form.submit t(".save"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
     </div>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to "← Routines", routines_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_routines"), routines_path, class: "underline" %></p>
 </div>

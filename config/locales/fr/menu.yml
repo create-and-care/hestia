@@ -1,0 +1,27 @@
+fr:
+  menu:
+    meal_types:
+      breakfast: "Petit-déjeuner"
+      lunch: "Déjeuner"
+      dinner: "Dîner"
+      snack: "Collation"
+      free: "Libre"
+    days:
+      monday: "Lundi"
+      tuesday: "Mardi"
+      wednesday: "Mercredi"
+      thursday: "Jeudi"
+      friday: "Vendredi"
+      saturday: "Samedi"
+      sunday: "Dimanche"
+    show:
+      title: "Menu"
+      heading: "Menu de la semaine"
+      previous_week: "← Sem. préc."
+      this_week: "Cette semaine"
+      next_week: "Sem. suiv. →"
+      week_range: "Semaine du %{start} au %{end}"
+      add_meal: "Ajouter un repas"
+      recipe_blank: "— recette —"
+      free_name_placeholder: "ou nom libre"
+      add: "Ajouter"

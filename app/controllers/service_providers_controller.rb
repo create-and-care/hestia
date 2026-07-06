@@ -19,7 +19,7 @@ class ServiceProvidersController < ApplicationController
   def create
     @provider = Current.household.service_providers.new(provider_params)
     if @provider.save
-      redirect_to service_providers_path, notice: "Prestataire ajouté."
+      redirect_to service_providers_path, notice: t(".created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class ServiceProvidersController < ApplicationController
 
   def update
     if @provider.update(provider_params)
-      redirect_to service_providers_path, notice: "Prestataire mis à jour."
+      redirect_to service_providers_path, notice: t(".updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -38,7 +38,7 @@ class ServiceProvidersController < ApplicationController
 
   def destroy
     @provider.destroy
-    redirect_to service_providers_path, notice: "Prestataire supprimé."
+    redirect_to service_providers_path, notice: t(".deleted")
   end
 
   private

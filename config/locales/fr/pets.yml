@@ -1,0 +1,57 @@
+fr:
+  pets:
+    age_years: "%{count} ans"
+    index:
+      title: "Animaux"
+      new_pet: "Nouvel animal"
+      empty: "Aucun animal."
+    form:
+      name_label: "Nom"
+      species_label: "Type"
+      species_placeholder: "Chien, chat…"
+      breed_label: "Race"
+      weight_label: "Poids (kg)"
+      identifier_label: "Identification (puce)"
+      born_on_label: "Date de naissance"
+      submit: "Enregistrer"
+    edit:
+      title: "Modifier l'animal"
+      back_to_pet: "← Fiche"
+    new:
+      title: "Nouvel animal"
+      back_to_pets: "← Animaux"
+    show:
+      chip_prefix: "puce"
+      edit: "Modifier"
+      delete: "Supprimer"
+      delete_confirm: "Supprimer cet animal ?"
+      disclaimer: "Aide à l'organisation — ne remplace pas le carnet de santé vétérinaire officiel."
+      vaccinations_title: "Vaccins"
+      vaccination_done_on: "fait le %{date}"
+      vaccination_booster_on: "rappel %{date}"
+      vaccination_placeholder: "Vaccin"
+      add: "Ajouter"
+      treatments_title: "Traitements"
+      treatment_placeholder: "Traitement"
+      frequency_placeholder: "Fréquence"
+      treatment_last_done: "dernier %{date}"
+      supplies_title: "Produits récurrents"
+      supply_placeholder: "Croquettes, litière…"
+      order_link_placeholder: "Lien de commande"
+      next_order_on: "à commander le %{date}"
+      back_to_pets: "← Tous les animaux"
+    create:
+      created: "Animal ajouté."
+    update:
+      updated: "Animal mis à jour."
+    destroy:
+      deleted: "Animal supprimé."
+  pet_vaccinations:
+    destroy:
+      deleted: "Vaccin supprimé."
+  pet_treatments:
+    destroy:
+      deleted: "Traitement supprimé."
+  pet_supplies:
+    destroy:
+      deleted: "Produit supprimé."

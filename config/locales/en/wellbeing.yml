@@ -1,0 +1,34 @@
+en:
+  wellbeing:
+    show:
+      title: "Wellbeing"
+      privacy_note: "Strictly private data — visible to you only, never to other household members. BMI is shown for informational purposes only."
+      my_profile: "My profile"
+      height_label: "Height (cm)"
+      age_label: "Age"
+      sex_label: "Sex"
+      activity_label: "Activity"
+      start_weight_label: "Starting weight"
+      goal_weight_label: "Goal"
+      save_profile: "Save profile"
+      bmi_prefix: "Current BMI:"
+      bmi_suffix: "(weight %{weight} kg)"
+      weight: "Weight"
+      weight_placeholder: "kg"
+      add: "Add"
+      workouts: "Workouts"
+      exercise_placeholder: "Exercise"
+      duration_placeholder: "min"
+    sexes:
+      female: "Female"
+      male: "Male"
+      other: "Other"
+    activity_levels:
+      sedentary: "Sedentary"
+      light: "Light"
+      moderate: "Moderate"
+      active: "Active"
+      very_active: "Very active"
+  wellbeing_profiles:
+    update:
+      updated: "Profile updated."

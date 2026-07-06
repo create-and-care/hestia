@@ -1,7 +1,7 @@
-<% content_for :title, "Nouveau véhicule" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-xl px-4">
-  <h1 class="mb-6 text-2xl font-semibold">Nouveau véhicule</h1>
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
   <%= render "form", vehicle: @vehicle, url: vehicles_path %>
-  <p class="mt-6 text-sm"><%= link_to "← Véhicules", vehicles_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_vehicles"), vehicles_path, class: "underline" %></p>
 </div>

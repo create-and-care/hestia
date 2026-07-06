@@ -1,0 +1,49 @@
+en:
+  baby_profiles:
+    born_on: "Born on %{date}"
+    feeding_kinds:
+      bottle: "Bottle"
+      breast: "Breastfeeding"
+    index:
+      title: "Baby"
+      new_profile: "New profile"
+      empty: "No profiles."
+    form:
+      name_label: "First name"
+      born_on_label: "Date of birth"
+      submit: "Save"
+    edit:
+      title: "Edit profile"
+      back_to_profile: "← Profile"
+    new:
+      title: "New baby profile"
+      back_to_babies: "← Baby"
+    show:
+      edit: "Edit"
+      delete: "Delete"
+      delete_confirm: "Delete this profile?"
+      disclaimer: "Organizational aid only — does not replace pediatric medical follow-up."
+      feedings_title: "Feedings"
+      duration_minutes: "%{count} min"
+      add: "Add"
+      food_introductions_title: "Food introduction"
+      food_placeholder: "Food"
+      acceptance_options:
+        - "Liked"
+        - "Neutral"
+        - "Refused"
+      acceptance_blank: "Reaction"
+      allergen_tests_title: "Allergens tested"
+      allergen_placeholder: "Allergen"
+      severity_options:
+        - "None"
+        - "Mild"
+        - "Severe"
+      severity_blank: "Severity"
+      back_to_profiles: "← All profiles"
+    create:
+      created: "Profile created."
+    update:
+      updated: "Profile updated."
+    destroy:
+      deleted: "Profile deleted."

@@ -1,17 +1,17 @@
-<% content_for :title, "Recettes" %>
+<% content_for :title, t(".title") %>
 <%= turbo_stream_from Current.household %>
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
-    <h1 class="text-2xl font-semibold">📖 Recettes</h1>
+    <h1 class="text-2xl font-semibold">📖 <%= t(".title") %></h1>
     <div class="flex items-center gap-2">
       <%= form_with url: recipes_path, method: :get do |form| %>
-        <%= form.search_field :q, value: @query, placeholder: "Rechercher…",
+        <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
               class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
       <% end %>
-      <%= link_to "Importer", new_import_recipes_path,
+      <%= link_to t(".import_link"), new_import_recipes_path,
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-      <%= link_to "Nouvelle", new_recipe_path,
+      <%= link_to t(".new_link"), new_recipe_path,
             class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
     </div>
   </header>
@@ -23,11 +23,11 @@
   </div>
   <% if @recipes.empty? %>
     <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
-      Aucune recette<%= " pour cette recherche" if @query.present? %>.
+      <%= @query.present? ? t(".empty_search") : t(".empty") %>
     </p>
   <% end %>
 
   <p class="mt-6 text-sm">
-    <%= link_to "← Tableau de bord", root_path, class: "underline" %>
+    <%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %>
   </p>
 </div>

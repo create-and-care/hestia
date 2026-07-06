@@ -3,6 +3,6 @@
   <h2 class="font-medium">🐾 <%= pet.name %></h2>
   <p class="text-sm text-gray-500">
     <%= [ pet.species, pet.breed ].reject(&:blank?).join(" · ") %>
-    <% if pet.age %> · <%= pet.age %> ans<% end %>
+    <% if pet.age %> · <%= t("pets.age_years", count: pet.age) %><% end %>
   </p>
 <% end %>

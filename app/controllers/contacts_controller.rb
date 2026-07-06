@@ -19,7 +19,7 @@ class ContactsController < ApplicationController
     @contact.contact_tag_ids = scoped_tag_ids
 
     if @contact.save
-      redirect_to contacts_path, notice: "Contact ajouté."
+      redirect_to contacts_path, notice: t(".created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,7 +33,7 @@ class ContactsController < ApplicationController
     @contact.contact_tag_ids = scoped_tag_ids
 
     if @contact.save
-      redirect_to contacts_path, notice: "Contact mis à jour."
+      redirect_to contacts_path, notice: t(".updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -41,7 +41,7 @@ class ContactsController < ApplicationController
 
   def destroy
     @contact.destroy
-    redirect_to contacts_path, notice: "Contact supprimé."
+    redirect_to contacts_path, notice: t(".deleted")
   end
 
   private

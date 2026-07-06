@@ -1,0 +1,30 @@
+en:
+  circles:
+    post_placeholder: "Share a moment…"
+    publish: "Post"
+    back_to_circles: "← Circles"
+    index:
+      title: "Circles"
+      join_circle: "Join a circle"
+      members:
+        one: "%{count} member"
+        other: "%{count} members"
+      empty: "You are not a member of any circle."
+      new_circle: "Create a circle"
+      name_placeholder: "Name (extended family, friends…)"
+      theme_placeholder: "Theme"
+      create: "Create"
+    show:
+      invite_code_label: "Invite code (beyond the household):"
+  circle_memberships:
+    new:
+      title: "Join a circle"
+      invite_code_placeholder: "Invite code"
+      join: "Join"
+    create:
+      invalid_code: "Invalid invite code."
+      already_member: "You are already a member of this circle."
+      joined: "You joined \"%{name}\"."
+  circle_posts:
+    circle_post:
+      delete: "Delete"

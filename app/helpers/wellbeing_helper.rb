@@ -1,10 +1,4 @@
 module WellbeingHelper
-  SEX_LABELS = { "female" => "Femme", "male" => "Homme", "other" => "Autre" }.freeze
-  ACTIVITY_LABELS = {
-    "sedentary" => "Sédentaire", "light" => "Légère", "moderate" => "Modérée",
-    "active" => "Active", "very_active" => "Très active"
-  }.freeze
-
-  def sex_options = WellbeingProfile::SEXES.map { |sex| [ SEX_LABELS.fetch(sex, sex), sex ] }
-  def activity_options = WellbeingProfile::ACTIVITY_LEVELS.map { |level| [ ACTIVITY_LABELS.fetch(level, level), level ] }
+  def sex_options = WellbeingProfile::SEXES.map { |sex| [ t("wellbeing.sexes.#{sex}", default: sex.to_s.humanize), sex ] }
+  def activity_options = WellbeingProfile::ACTIVITY_LEVELS.map { |level| [ t("wellbeing.activity_levels.#{level}", default: level.to_s.humanize), level ] }
 end

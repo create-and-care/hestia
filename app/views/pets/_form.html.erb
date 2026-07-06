@@ -10,30 +10,30 @@
   <div class="space-y-4">
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
-        <%= form.label :name, "Nom", class: "mb-1 block text-sm font-medium" %>
+        <%= form.label :name, t(".name_label"), class: "mb-1 block text-sm font-medium" %>
         <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div>
-        <%= form.label :species, "Type", class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_field :species, placeholder: "Chien, chat…", class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= form.label :species, t(".species_label"), class: "mb-1 block text-sm font-medium" %>
+        <%= form.text_field :species, placeholder: t(".species_placeholder"), class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div>
-        <%= form.label :breed, "Race", class: "mb-1 block text-sm font-medium" %>
+        <%= form.label :breed, t(".breed_label"), class: "mb-1 block text-sm font-medium" %>
         <%= form.text_field :breed, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div>
-        <%= form.label :weight, "Poids (kg)", class: "mb-1 block text-sm font-medium" %>
+        <%= form.label :weight, t(".weight_label"), class: "mb-1 block text-sm font-medium" %>
         <%= form.number_field :weight, step: :any, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div>
-        <%= form.label :identifier, "Identification (puce)", class: "mb-1 block text-sm font-medium" %>
+        <%= form.label :identifier, t(".identifier_label"), class: "mb-1 block text-sm font-medium" %>
         <%= form.text_field :identifier, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div>
-        <%= form.label :born_on, "Date de naissance", class: "mb-1 block text-sm font-medium" %>
+        <%= form.label :born_on, t(".born_on_label"), class: "mb-1 block text-sm font-medium" %>
         <%= form.date_field :born_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
     </div>
-    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
   </div>
 <% end %>

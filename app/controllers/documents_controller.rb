@@ -20,7 +20,7 @@ class DocumentsController < ApplicationController
   def create
     @document = Current.household.documents.new(document_params)
     if @document.save
-      redirect_to documents_path, notice: "Document ajouté."
+      redirect_to documents_path, notice: t(".created")
     else
       redirect_to documents_path, alert: @document.errors.full_messages.to_sentence
     end
@@ -28,7 +28,7 @@ class DocumentsController < ApplicationController
 
   def destroy
     @document.destroy
-    redirect_to documents_path, notice: "Document supprimé."
+    redirect_to documents_path, notice: t(".deleted")
   end
 
   private

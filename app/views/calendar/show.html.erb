@@ -1,4 +1,4 @@
-<% content_for :title, "Calendrier" %>
+<% content_for :title, t(".title") %>
 <% content_for :head do %>
   <meta name="turbo-refresh-method" content="morph">
 <% end %>
@@ -6,28 +6,28 @@
 
 <div class="mx-auto mt-10 max-w-4xl px-4">
   <header class="mb-4 flex flex-wrap items-center justify-between gap-3">
-    <h1 class="text-2xl font-semibold">📅 <%= @view == "list" ? "Agenda" : month_label(@month) %></h1>
+    <h1 class="text-2xl font-semibold">📅 <%= @view == "list" ? t(".agenda_heading") : month_label(@month) %></h1>
     <div class="flex flex-wrap items-center gap-2">
-      <%= link_to "Mois", calendar_path(view: :month, member_id: @member_id),
+      <%= link_to t(".month_view"), calendar_path(view: :month, member_id: @member_id),
             class: "rounded-md border px-3 py-1.5 text-sm #{@view == 'month' ? 'border-gray-900 font-medium' : 'border-gray-300 hover:bg-gray-50'}" %>
-      <%= link_to "Liste", calendar_path(view: :list, member_id: @member_id),
+      <%= link_to t(".list_view"), calendar_path(view: :list, member_id: @member_id),
             class: "rounded-md border px-3 py-1.5 text-sm #{@view == 'list' ? 'border-gray-900 font-medium' : 'border-gray-300 hover:bg-gray-50'}" %>
       <%= form_with url: calendar_path, method: :get, class: "flex items-center gap-1" do |form| %>
         <%= form.hidden_field :view, value: @view %>
         <%= form.select :member_id, options_for_select(@members.map { |m| [ m.name.presence || m.email_address, m.id ] }, @member_id),
-              { include_blank: "Tous les membres" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-        <%= form.submit "Filtrer", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+              { include_blank: t(".all_members") }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+        <%= form.submit t(".filter_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
       <% end %>
       <%= form_with model: Current.household, url: household_path(Current.household), method: :patch, class: "flex items-center gap-1" do |form| %>
         <%= form.select :holiday_country,
-              options_for_select([ [ "Jours fériés : aucun", "" ] ] + Household::HOLIDAY_COUNTRIES.map { |c| [ "Jours fériés : #{c}", c ] }, Current.household.holiday_country),
+              options_for_select([ [ t(".holidays_none"), "" ] ] + Household::HOLIDAY_COUNTRIES.map { |c| [ t(".holidays_country", country: c), c ] }, Current.household.holiday_country),
               {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm", onchange: "this.form.requestSubmit()" %>
       <% end %>
-      <%= link_to "Export PDF", calendar_path(format: :pdf, month: (@month || Date.current).strftime("%Y-%m"), member_id: @member_id), target: "_blank",
+      <%= link_to t(".export_pdf"), calendar_path(format: :pdf, month: (@month || Date.current).strftime("%Y-%m"), member_id: @member_id), target: "_blank",
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-      <%= link_to "🔄 Sync externe", external_calendar_connections_path,
+      <%= link_to "🔄 #{t('.sync_external')}", external_calendar_connections_path,
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-      <%= link_to "Nouvel événement", new_calendar_event_path,
+      <%= link_to t(".new_event"), new_calendar_event_path,
             class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
     </div>
   </header>
@@ -36,13 +36,13 @@
 
   <% if @view == "month" %>
     <div class="mb-3 flex items-center justify-between text-sm">
-      <%= link_to "← Mois précédent", calendar_path(month: (@month - 1.month).strftime("%Y-%m"), member_id: @member_id), class: "underline" %>
-      <%= link_to "Aujourd'hui", calendar_path(member_id: @member_id), class: "underline" %>
-      <%= link_to "Mois suivant →", calendar_path(month: (@month + 1.month).strftime("%Y-%m"), member_id: @member_id), class: "underline" %>
+      <%= link_to t(".prev_month"), calendar_path(month: (@month - 1.month).strftime("%Y-%m"), member_id: @member_id), class: "underline" %>
+      <%= link_to t(".today"), calendar_path(member_id: @member_id), class: "underline" %>
+      <%= link_to t(".next_month"), calendar_path(month: (@month + 1.month).strftime("%Y-%m"), member_id: @member_id), class: "underline" %>
     </div>
 
     <div class="grid grid-cols-7 gap-px overflow-hidden rounded-lg border border-gray-200 bg-gray-200 text-sm">
-      <% CalendarHelper::WEEKDAYS.each do |day| %>
+      <% weekday_labels.each do |day| %>
         <div class="bg-gray-50 p-2 text-center text-xs font-medium text-gray-500"><%= day %></div>
       <% end %>
       <% (@grid_start.to_date..@grid_end.to_date).each do |date| %>
@@ -75,9 +75,9 @@
         <% end %>
       </ul>
     <% else %>
-      <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">Aucun événement à venir.</p>
+      <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".no_events") %></p>
     <% end %>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

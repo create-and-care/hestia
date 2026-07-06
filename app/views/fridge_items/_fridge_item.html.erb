@@ -2,7 +2,7 @@
   <div class="min-w-0 flex-1">
     <p class="truncate font-medium"><%= fridge_item.name %></p>
     <% if fridge_item.expires_on.present? %>
-      <p class="text-xs text-gray-500">Jusqu'au <%= fridge_item.expires_on.strftime("%d/%m/%Y") %></p>
+      <p class="text-xs text-gray-500"><%= t(".until_date", date: fridge_item.expires_on.strftime("%d/%m/%Y")) %></p>
     <% end %>
   </div>
 
@@ -15,11 +15,11 @@
   </span>
 
   <div class="flex shrink-0 items-center gap-2">
-    <%= link_to "Modifier", edit_fridge_item_path(fridge_item), class: "text-sm text-gray-500 hover:underline" %>
+    <%= link_to t(".edit"), edit_fridge_item_path(fridge_item), class: "text-sm text-gray-500 hover:underline" %>
     <%= button_to "🛒", move_to_shopping_list_fridge_item_path(fridge_item), method: :post,
           class: "cursor-pointer text-gray-400 hover:text-gray-900",
-          form: { title: "Ajouter à la liste de courses" }, aria: { label: "Racheter" } %>
+          form: { title: t(".add_to_list_title") }, aria: { label: t(".rebuy_aria") } %>
     <%= button_to "✕", fridge_item_path(fridge_item), method: :delete,
-          class: "cursor-pointer text-gray-400 hover:text-red-600", aria: { label: "Supprimer" } %>
+          class: "cursor-pointer text-gray-400 hover:text-red-600", aria: { label: t(".delete_aria") } %>
   </div>
 <% end %>

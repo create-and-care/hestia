@@ -1,0 +1,33 @@
+fr:
+  service_providers:
+    back_to_providers: "← Prestataires"
+    index:
+      title: "Prestataires"
+      search_placeholder: "Rechercher…"
+      new_provider: "Nouveau"
+      all_types: "Tous"
+      type_name_placeholder: "Type"
+      add_type: "Ajouter"
+      none: "Aucun prestataire."
+    new:
+      title: "Nouveau prestataire"
+    edit:
+      title: "Modifier le prestataire"
+    service_provider:
+      directions: "Itinéraire"
+    form:
+      name_label: "Nom"
+      type_label: "Type"
+      phone_label: "Téléphone"
+      email_label: "E-mail"
+      address_label: "Adresse"
+      save: "Enregistrer"
+    create:
+      created: "Prestataire ajouté."
+    update:
+      updated: "Prestataire mis à jour."
+    destroy:
+      deleted: "Prestataire supprimé."
+  service_provider_types:
+    destroy:
+      deleted: "Type supprimé."

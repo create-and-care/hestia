@@ -9,12 +9,12 @@
     </p>
   </div>
 
-  <%= button_to (bottle.in_stock ? "Sortir" : "Remettre"), toggle_stock_bottle_path(bottle), method: :patch,
+  <%= button_to (bottle.in_stock ? t(".take_out") : t(".put_back")), toggle_stock_bottle_path(bottle), method: :patch,
         class: "shrink-0 cursor-pointer rounded border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
 
   <%= form_with model: bottle, url: bottle_path(bottle), method: :patch, class: "flex shrink-0 items-center gap-1" do |form| %>
     <%= form.select :wine_cellar_id, cellar_options, {}, class: "rounded-md border border-gray-300 px-1 py-1 text-xs" %>
-    <%= form.submit "Déplacer", class: "cursor-pointer rounded border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+    <%= form.submit t(".move"), class: "cursor-pointer rounded border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
   <% end %>
 
   <%= button_to "✕", bottle_path(bottle), method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600" %>

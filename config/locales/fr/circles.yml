@@ -1,0 +1,30 @@
+fr:
+  circles:
+    post_placeholder: "Partagez un moment…"
+    publish: "Publier"
+    back_to_circles: "← Cercles"
+    index:
+      title: "Cercles"
+      join_circle: "Rejoindre un cercle"
+      members:
+        one: "%{count} membre"
+        other: "%{count} membres"
+      empty: "Vous n'êtes membre d'aucun cercle."
+      new_circle: "Créer un cercle"
+      name_placeholder: "Nom (famille élargie, amis…)"
+      theme_placeholder: "Thème"
+      create: "Créer"
+    show:
+      invite_code_label: "Code d'invitation (au-delà du foyer) :"
+  circle_memberships:
+    new:
+      title: "Rejoindre un cercle"
+      invite_code_placeholder: "Code d'invitation"
+      join: "Rejoindre"
+    create:
+      invalid_code: "Code d'invitation invalide."
+      already_member: "Vous faites déjà partie de ce cercle."
+      joined: "Vous avez rejoint « %{name} »."
+  circle_posts:
+    circle_post:
+      delete: "Supprimer"

@@ -15,7 +15,7 @@ class LoyaltyCardsController < ApplicationController
   def create
     @card = Current.household.loyalty_cards.new(card_params)
     if @card.save
-      redirect_to loyalty_cards_path, notice: "Carte ajoutée."
+      redirect_to loyalty_cards_path, notice: t(".created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -26,7 +26,7 @@ class LoyaltyCardsController < ApplicationController
 
   def update
     if @card.update(card_params)
-      redirect_to loyalty_cards_path, notice: "Carte mise à jour."
+      redirect_to loyalty_cards_path, notice: t(".updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class LoyaltyCardsController < ApplicationController
 
   def destroy
     @card.destroy
-    redirect_to loyalty_cards_path, notice: "Carte supprimée."
+    redirect_to loyalty_cards_path, notice: t(".deleted")
   end
 
   def reorder

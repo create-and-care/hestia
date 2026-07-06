@@ -1,7 +1,7 @@
-<% content_for :title, "Modifier le contact" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-md px-4">
-  <h1 class="mb-6 text-2xl font-semibold">Modifier le contact</h1>
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
   <%= render "form", contact: @contact, url: contact_path(@contact) %>
-  <p class="mt-6 text-sm"><%= link_to "← Anniversaires", contacts_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("contacts.back_to_contacts"), contacts_path, class: "underline" %></p>
 </div>

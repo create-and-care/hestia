@@ -24,7 +24,7 @@ class TripsController < ApplicationController
 
   def destroy
     @trip.destroy
-    redirect_to trips_path, notice: "Voyage supprimé (et toutes ses données)."
+    redirect_to trips_path, notice: t(".deleted")
   end
 
   private

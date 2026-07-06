@@ -1,0 +1,27 @@
+en:
+  menu:
+    meal_types:
+      breakfast: "Breakfast"
+      lunch: "Lunch"
+      dinner: "Dinner"
+      snack: "Snack"
+      free: "Free"
+    days:
+      monday: "Monday"
+      tuesday: "Tuesday"
+      wednesday: "Wednesday"
+      thursday: "Thursday"
+      friday: "Friday"
+      saturday: "Saturday"
+      sunday: "Sunday"
+    show:
+      title: "Menu"
+      heading: "Weekly menu"
+      previous_week: "← Last wk"
+      this_week: "This week"
+      next_week: "Next wk →"
+      week_range: "Week of %{start} to %{end}"
+      add_meal: "Add a meal"
+      recipe_blank: "— recipe —"
+      free_name_placeholder: "or custom name"
+      add: "Add"

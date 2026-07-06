@@ -1,0 +1,13 @@
+fr:
+  reminders:
+    task_reminder:
+      title: "Rappel : %{title}"
+    event_reminder:
+      title: "Rappel : %{title}"
+    daily_digest:
+      fridge_expiry:
+        one: "%{count} produit bientôt périmé"
+        other: "%{count} produits bientôt périmés"
+      birthday:
+        one: "Anniversaire aujourd'hui 🎂"
+        other: "Anniversaires aujourd'hui 🎂"

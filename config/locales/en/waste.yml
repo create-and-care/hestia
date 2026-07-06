@@ -1,0 +1,32 @@
+en:
+  waste:
+    types:
+      ordures: "Household waste"
+      recyclage: "Recycling"
+      verre: "Glass"
+      compost: "Compost"
+      encombrants: "Bulky waste"
+    weekdays:
+      sunday: "Sunday"
+      monday: "Monday"
+      tuesday: "Tuesday"
+      wednesday: "Wednesday"
+      thursday: "Thursday"
+      friday: "Friday"
+      saturday: "Saturday"
+    show:
+      title: "Waste"
+      upcoming_title: "Upcoming collections"
+      no_events: "No collections scheduled."
+      add_one_time_title: "Add a one-time collection"
+      add: "Add"
+      series_title: "Recurring series"
+      every_n_weeks: "every %{count} week(s)"
+      delete_series: "Delete series"
+      generate_series: "Generate series"
+  waste_collection_series:
+    create:
+      created: "Collection series generated."
+      invalid: "Invalid series."
+    destroy:
+      deleted: "Series deleted."

@@ -24,7 +24,7 @@ class ShoppingListsController < ApplicationController
     @shopping_list = Current.household.shopping_lists.build(shopping_list_params)
 
     if @shopping_list.save
-      redirect_to @shopping_list, notice: "Liste créée."
+      redirect_to @shopping_list, notice: t(".created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -32,7 +32,7 @@ class ShoppingListsController < ApplicationController
 
   def destroy
     @shopping_list.destroy
-    redirect_to shopping_lists_path, notice: "Liste supprimée."
+    redirect_to shopping_lists_path, notice: t(".deleted")
   end
 
   private

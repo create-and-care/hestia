@@ -1,0 +1,65 @@
+fr:
+  fridge:
+    show:
+      title: "Frigo"
+      search_placeholder: "Rechercher…"
+      foods_heading: "Aliments"
+      no_items: "Aucun aliment."
+      no_items_for_search: "Aucun aliment pour cette recherche."
+      dishes_heading: "Plats préparés"
+      no_dishes: "Aucun plat préparé."
+    locations:
+      refrigerateur: "Réfrigérateur"
+      congelateur: "Congélateur"
+      garde_manger: "Garde-manger"
+    expiration:
+      expired: "Périmé"
+      urgent: "Aujourd'hui / demain"
+      soon: "2 à 3 jours"
+      ok: "Bon"
+      none: "Sans date"
+  fridge_items:
+    form:
+      barcode_searching: "Recherche…"
+      barcode_not_found: "Produit non trouvé — saisie manuelle."
+      barcode_unavailable: "Recherche indisponible — saisie manuelle."
+      barcode_found_prefix: "Trouvé :"
+      barcode_label: "Code-barres"
+      barcode_placeholder: "Scan…"
+      name_label: "Aliment"
+      name_placeholder: "Beurre, poulet…"
+      location_label: "Emplacement"
+      expires_label: "Péremption"
+      submit: "Ajouter"
+    fridge_item:
+      until_date: "Jusqu'au %{date}"
+      edit: "Modifier"
+      add_to_list_title: "Ajouter à la liste de courses"
+      rebuy_aria: "Racheter"
+      delete_aria: "Supprimer"
+    edit:
+      title: "Modifier un aliment"
+      heading: "Modifier l'aliment"
+      name_label: "Aliment"
+      location_label: "Emplacement"
+      expires_label: "Date de péremption"
+      submit: "Enregistrer"
+      back_link: "← Retour au frigo"
+    create:
+      alert: "Impossible d'ajouter ce produit."
+    update:
+      notice: "Produit mis à jour."
+    move_to_shopping_list:
+      notice: "« %{name} » ajouté à la liste de courses."
+  prepared_dishes:
+    form:
+      name_label: "Plat préparé"
+      name_placeholder: "Lasagnes, sauce tomate…"
+      location_label: "Emplacement"
+      expires_label: "À consommer avant"
+      submit: "Ajouter"
+    prepared_dish:
+      best_before: "À consommer avant le %{date}"
+      delete_aria: "Supprimer"
+    create:
+      alert: "Impossible d'ajouter ce plat."

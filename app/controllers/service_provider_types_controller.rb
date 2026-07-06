@@ -6,7 +6,7 @@ class ServiceProviderTypesController < ApplicationController
 
   def destroy
     Current.household.service_provider_types.find(params[:id]).destroy
-    redirect_to service_providers_path, notice: "Type supprimé."
+    redirect_to service_providers_path, notice: t(".deleted")
   end
 
   private

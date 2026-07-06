@@ -7,7 +7,7 @@ class PreparedDishesController < ApplicationController
       format.html { redirect_to fridge_path }
     end
   rescue ActiveRecord::RecordInvalid
-    redirect_to fridge_path, alert: "Impossible d'ajouter ce plat."
+    redirect_to fridge_path, alert: t(".alert")
   end
 
   def destroy

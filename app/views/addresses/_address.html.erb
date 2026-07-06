@@ -15,7 +15,7 @@
       <%= link_to "📞", "tel:#{address.phone}", class: "hover:opacity-70", title: address.phone %>
     <% end %>
     <% if address.maps_url %>
-      <%= link_to "🗺", address.maps_url, target: "_blank", rel: "noopener", class: "hover:opacity-70", title: "Itinéraire" %>
+      <%= link_to "🗺", address.maps_url, target: "_blank", rel: "noopener", class: "hover:opacity-70", title: t(".directions") %>
     <% end %>
     <%= link_to "✎", edit_address_path(address), class: "text-gray-400 hover:text-gray-900" %>
     <%= button_to "✕", address_path(address), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>

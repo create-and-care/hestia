@@ -6,7 +6,7 @@ class PoolsController < ApplicationController
 
   def destroy
     Current.household.pools.find(params[:id]).destroy
-    redirect_to exterior_path, notice: "Piscine supprimée."
+    redirect_to exterior_path, notice: t(".deleted")
   end
 
   private

@@ -2,7 +2,7 @@ class WellbeingProfilesController < ApplicationController
   def update
     profile = Current.user.wellbeing_profile || Current.user.build_wellbeing_profile
     profile.update(profile_params)
-    redirect_to wellbeing_path, notice: "Profil mis à jour."
+    redirect_to wellbeing_path, notice: t(".updated")
   end
 
   private

@@ -6,7 +6,7 @@ class BudgetCategoriesController < ApplicationController
 
   def destroy
     Current.household.budget_categories.find(params[:id]).destroy
-    redirect_to budget_path, notice: "Catégorie supprimée."
+    redirect_to budget_path, notice: t(".deleted")
   end
 
   private

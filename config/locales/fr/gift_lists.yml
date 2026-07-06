@@ -1,0 +1,49 @@
+fr:
+  gift_lists:
+    index:
+      title: "Cadeaux"
+      receive: "Recevoir"
+      give: "Offrir"
+      shared_badge: "partagée"
+      no_list: "Aucune liste."
+      for_contact: "pour"
+      new_list: "Nouvelle liste"
+      name_placeholder: "Nom (Noël, anniversaire…)"
+      recipient_placeholder: "Destinataire (offrir)"
+      create: "Créer"
+    show:
+      delete: "Supprimer"
+      delete_confirm: "Supprimer cette liste ?"
+      public_sharing: "Partage public"
+      share_link_description: "Lien à partager (consultable et réservable sans compte) :"
+      disable_link: "Désactiver le lien"
+      enable_link: "Activer un lien de partage"
+      ideas: "Idées"
+      link_label: "lien"
+      link_placeholder: "Lien"
+      idea_placeholder: "Idée"
+      add: "Ajouter"
+      back_to_gifts: "← Cadeaux"
+    destroy:
+      deleted: "Liste supprimée."
+    perspectives:
+      receive: "Recevoir"
+      give: "Offrir"
+    statuses:
+      wanted: "Souhaité"
+      bought: "Offert"
+  gift_list_shares:
+    create:
+      enabled: "Lien de partage activé."
+    destroy:
+      disabled: "Lien de partage désactivé."
+  public_gift_lists:
+    show:
+      title: "%{name} — liste d'envies"
+      description: "Réservez une idée pour éviter que plusieurs personnes offrent la même chose. Aucun compte nécessaire."
+      reserved: "Réservé"
+      cancel_reservation: "Annuler la réservation"
+      reserver_name_placeholder: "Votre nom (optionnel)"
+      reserve: "Réserver"
+      view_link: "voir"
+      empty: "Cette liste est vide pour l'instant."

@@ -1,0 +1,16 @@
+fr:
+  api_tokens:
+    index:
+      title: "Jetons API"
+      description: "Utilisés par le client mobile (CDC §15) pour s'authentifier auprès de l'API sans partager votre mot de passe. Le jeton n'est affiché qu'une seule fois, juste après sa création — notez-le immédiatement."
+      empty: "Aucun jeton pour l'instant."
+      created_on: "créé le"
+      last_used_on: "utilisé le"
+      revoke: "Révoquer"
+      revoke_confirm: "Révoquer ce jeton ?"
+      name_label: "Nom du jeton (ex. « iPhone d'Alice »)"
+      create: "Créer"
+    create:
+      created: "Jeton « %{name} » créé : %{token} (copiez-le, il ne sera plus affiché)."
+    destroy:
+      revoked: "Jeton révoqué."

@@ -1,7 +1,7 @@
-<% content_for :title, "Nouveau prestataire" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-xl px-4">
-  <h1 class="mb-6 text-2xl font-semibold">Nouveau prestataire</h1>
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
   <%= render "form", service_provider: @provider, url: service_providers_path %>
-  <p class="mt-6 text-sm"><%= link_to "← Prestataires", service_providers_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("service_providers.back_to_providers"), service_providers_path, class: "underline" %></p>
 </div>

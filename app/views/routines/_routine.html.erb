@@ -3,14 +3,14 @@
     <p class="font-medium"><%= "#{routine.emoji} " if routine.emoji.present? %><%= routine.name %></p>
     <p class="text-xs text-gray-500">
       <%= routine_frequency_label(routine.frequency) %><%= " ×#{routine.interval}" if routine.interval.to_i > 1 %>
-      <% if routine.next_due_on %>· prochaine : <%= routine.next_due_on.strftime("%d/%m/%Y") %><% end %>
-      <% if routine.overdue? %><span class="font-medium text-red-600">· en retard</span><% end %>
+      <% if routine.next_due_on %>· <%= t(".next_due") %> : <%= routine.next_due_on.strftime("%d/%m/%Y") %><% end %>
+      <% if routine.overdue? %><span class="font-medium text-red-600">· <%= t(".overdue") %></span><% end %>
       <% if routine.assignee %>· <%= routine.assignee.name.presence || routine.assignee.email_address %><% end %>
       <% if routine.list_name.present? %>· <%= routine.list_name %><% end %>
     </p>
   </div>
 
-  <%= button_to "✓ Fait", complete_routine_path(routine), method: :post,
+  <%= button_to "✓ #{t('.done')}", complete_routine_path(routine), method: :post,
         class: "shrink-0 cursor-pointer rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50" %>
   <%= link_to "✎", edit_routine_path(routine), class: "shrink-0 text-gray-400 hover:text-gray-900" %>
   <%= button_to "✕", routine_path(routine), method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600" %>

@@ -2,6 +2,6 @@
       class: "block rounded-lg border border-gray-200 p-4 hover:border-gray-400" do %>
   <h2 class="font-medium">👶 <%= baby_profile.name %></h2>
   <% if baby_profile.born_on %>
-    <p class="text-sm text-gray-500">Né(e) le <%= baby_profile.born_on.strftime("%d/%m/%Y") %></p>
+    <p class="text-sm text-gray-500"><%= t("baby_profiles.born_on", date: baby_profile.born_on.strftime("%d/%m/%Y")) %></p>
   <% end %>
 <% end %>

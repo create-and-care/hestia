@@ -6,7 +6,7 @@ class DocumentFoldersController < ApplicationController
 
   def destroy
     Current.household.document_folders.find(params[:id]).destroy
-    redirect_to documents_path, notice: "Dossier supprimé."
+    redirect_to documents_path, notice: t(".deleted")
   end
 
   private

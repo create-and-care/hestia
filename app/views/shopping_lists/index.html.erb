@@ -1,9 +1,9 @@
-<% content_for :title, "Courses" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
   <header class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold">Listes de courses</h1>
-    <%= link_to "Nouvelle liste", new_shopping_list_path,
+    <h1 class="text-2xl font-semibold"><%= t(".heading") %></h1>
+    <%= link_to t(".new_list"), new_shopping_list_path,
           class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
   </header>
 
@@ -17,18 +17,18 @@
             <span><%= list.icon.presence || "🛒" %></span>
             <span><%= list.name %></span>
           <% end %>
-          <span class="text-sm text-gray-500"><%= pluralize(list.items.where(checked: false).count, "article") %></span>
+          <span class="text-sm text-gray-500"><%= t(".items_count", count: list.items.where(checked: false).count) %></span>
         </li>
       <% end %>
     </ul>
   <% else %>
     <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
-      Aucune liste pour l'instant. Créez-en une pour commencer.
+      <%= t(".empty") %>
     </p>
   <% end %>
 
   <div class="mt-6 flex gap-4 text-sm">
-    <%= link_to "← Tableau de bord", root_path, class: "underline" %>
-    <%= link_to "Catalogue de produits", products_path, class: "underline" %>
+    <%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %>
+    <%= link_to t(".catalog_link"), products_path, class: "underline" %>
   </div>
 </div>

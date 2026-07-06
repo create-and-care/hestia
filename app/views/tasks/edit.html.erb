@@ -1,7 +1,7 @@
-<% content_for :title, "Modifier la tâche" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-md px-4">
-  <h1 class="mb-6 text-2xl font-semibold">Modifier la tâche</h1>
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".heading") %></h1>
 
   <%= form_with model: @task, url: task_path(@task) do |form| %>
     <% if @task.errors.any? %>
@@ -16,48 +16,48 @@
 
     <div class="space-y-4">
       <div>
-        <%= form.label :title, "Titre", class: "mb-1 block text-sm font-medium" %>
+        <%= form.label :title, t(".title_label"), class: "mb-1 block text-sm font-medium" %>
         <%= form.text_field :title, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div>
-        <%= form.label :description, "Description", class: "mb-1 block text-sm font-medium" %>
+        <%= form.label :description, t(".description_label"), class: "mb-1 block text-sm font-medium" %>
         <%= form.text_area :description, rows: 3, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <%= form.label :emoji, "Emoji", class: "mb-1 block text-sm font-medium" %>
+          <%= form.label :emoji, t(".emoji_label"), class: "mb-1 block text-sm font-medium" %>
           <%= form.text_field :emoji, maxlength: 4, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
         </div>
         <div>
-          <%= form.label :due_on, "Échéance", class: "mb-1 block text-sm font-medium" %>
+          <%= form.label :due_on, t(".due_label"), class: "mb-1 block text-sm font-medium" %>
           <%= form.date_field :due_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <%= form.label :assignee_id, "Responsable", class: "mb-1 block text-sm font-medium" %>
+          <%= form.label :assignee_id, t(".assignee_label"), class: "mb-1 block text-sm font-medium" %>
           <%= form.select :assignee_id, task_assignee_options, { include_blank: "—" },
                 class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
         </div>
         <div>
-          <%= form.label :task_category_id, "Catégorie", class: "mb-1 block text-sm font-medium" %>
+          <%= form.label :task_category_id, t(".category_label"), class: "mb-1 block text-sm font-medium" %>
           <%= form.select :task_category_id, task_category_options, { include_blank: "—" },
                 class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
         </div>
       </div>
-      <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
     </div>
   <% end %>
 
   <section class="mt-8 border-t border-gray-100 pt-6">
-    <h2 class="mb-2 font-medium">🔔 Rappels</h2>
+    <h2 class="mb-2 font-medium">🔔 <%= t(".reminders_heading") %></h2>
     <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @task.task_reminders.order(:remind_at).each do |reminder| %>
         <li class="flex items-center justify-between px-3 py-2 text-sm">
           <span>
             <%= reminder.remind_at.strftime("%d/%m/%Y %H:%M") %>
             <span class="text-gray-400">· <%= reminder.user.name.presence || reminder.user.email_address %></span>
-            <% if reminder.delivered_at %><span class="text-gray-400">· envoyé</span><% end %>
+            <% if reminder.delivered_at %><span class="text-gray-400">· <%= t(".sent") %></span><% end %>
           </span>
           <%= button_to "✕", task_task_reminder_path(@task, reminder), method: :delete,
                 class: "cursor-pointer text-gray-400 hover:text-red-600" %>
@@ -66,16 +66,16 @@
     </ul>
     <%= form_with model: TaskReminder.new, url: task_task_reminders_path(@task), class: "flex flex-wrap items-end gap-2" do |form| %>
       <div>
-        <%= form.label :remind_at, "Quand", class: "mb-1 block text-xs text-gray-500" %>
+        <%= form.label :remind_at, t(".remind_at_label"), class: "mb-1 block text-xs text-gray-500" %>
         <%= form.datetime_field :remind_at, required: true, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
       </div>
       <div>
-        <%= form.label :user_id, "Destinataire", class: "mb-1 block text-xs text-gray-500" %>
+        <%= form.label :user_id, t(".recipient_label"), class: "mb-1 block text-xs text-gray-500" %>
         <%= form.select :user_id, task_assignee_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
       </div>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= form.submit t(".add_reminder_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 
-  <p class="mt-6 text-sm"><%= link_to "← Tâches", tasks_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t(".back_link"), tasks_path, class: "underline" %></p>
 </div>

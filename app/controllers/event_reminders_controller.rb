@@ -11,7 +11,7 @@ class EventRemindersController < ApplicationController
 
   def destroy
     @event.event_reminders.find(params[:id]).destroy
-    redirect_to edit_calendar_event_path(@event), notice: "Rappel supprimé."
+    redirect_to edit_calendar_event_path(@event), notice: t(".notice")
   end
 
   private

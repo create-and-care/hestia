@@ -1,12 +1,12 @@
 module ContactsHelper
-  PROXIMITY = {
-    today: [ "Aujourd'hui !", "bg-red-100 text-red-700" ],
-    week:  [ "Cette semaine", "bg-orange-100 text-orange-700" ],
-    month: [ "Ce mois-ci", "bg-yellow-100 text-yellow-800" ],
-    later: [ "Plus tard", "bg-gray-100 text-gray-600" ],
-    none:  [ "Sans date", "bg-gray-100 text-gray-400" ]
+  PROXIMITY_CLASSES = {
+    today: "bg-red-100 text-red-700",
+    week:  "bg-orange-100 text-orange-700",
+    month: "bg-yellow-100 text-yellow-800",
+    later: "bg-gray-100 text-gray-600",
+    none:  "bg-gray-100 text-gray-400"
   }.freeze
 
-  def proximity_label(status) = PROXIMITY.fetch(status).first
-  def proximity_badge_class(status) = PROXIMITY.fetch(status).last
+  def proximity_label(status) = t("contacts.proximity.#{status}")
+  def proximity_badge_class(status) = PROXIMITY_CLASSES.fetch(status)
 end

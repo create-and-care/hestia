@@ -1,0 +1,24 @@
+fr:
+  conversations:
+    message_placeholder: "Votre message…"
+    send: "Envoyer"
+    index:
+      title: "Messages"
+      new_conversation: "Nouvelle conversation"
+      empty: "Aucune conversation."
+    form:
+      name_label: "Nom de la conversation"
+      participants_label: "Participants"
+      you_suffix: " (vous)"
+      submit: "Enregistrer"
+    edit:
+      title: "Réglages de la conversation"
+      back_to_conversation: "← Conversation"
+    new:
+      title: "Nouvelle conversation"
+      back_to_messages: "← Messages"
+    show:
+      settings: "Réglages"
+      back_to_conversations: "← Conversations"
+    update:
+      updated: "Conversation mise à jour."

@@ -1,0 +1,56 @@
+fr:
+  budget:
+    kinds:
+      income: "Revenus"
+      expense: "Charges"
+      savings: "Épargne"
+    show:
+      title: "Budget"
+      monthly: "Mensuel"
+      annual: "Annuel"
+      shared_projects_link: "Projets partagés"
+      remaining_label: "Reste à vivre"
+      savings_rate_label: "Taux d'épargne : %{rate}%"
+      new_category_heading: "Nouvelle catégorie"
+      name_placeholder: "Nom"
+      add: "Ajouter"
+      delete: "Supprimer"
+      unnamed_entry: "(sans nom)"
+      per_month: "mois"
+      per_year: "an"
+      entry_name_placeholder: "Libellé"
+      per_month_option: "/ mois"
+      per_year_option: "/ an"
+      envelopes_heading: "Enveloppes d'épargne"
+      envelope_name_placeholder: "Nom (vacances…)"
+      envelope_amount_placeholder: "€ / mois"
+  budget_categories:
+    destroy:
+      deleted: "Catégorie supprimée."
+  savings_envelopes:
+    destroy:
+      deleted: "Enveloppe supprimée."
+  shared_projects:
+    index:
+      title: "Projets partagés"
+      name_placeholder: "Vacances, coloc…"
+      create: "Créer"
+      empty: "Aucun projet partagé."
+      back_to_budget: "← Budget"
+    show:
+      delete: "Supprimer"
+      confirm_delete: "Supprimer ce projet ?"
+      participants_heading: "Participants"
+      participant_name_placeholder: "Nom (peut être hors foyer)"
+      add: "Ajouter"
+      expenses_heading: "Dépenses"
+      description_placeholder: "Description"
+      payer_blank: "Payeur"
+      paid_by: "payé par"
+      settlement_heading: "Répartition (total : %{total})"
+      is_owed_prefix: "doit recevoir"
+      owes_prefix: "doit"
+      settled: "à jour"
+      back_to_projects: "← Projets partagés"
+    destroy:
+      deleted: "Projet supprimé."

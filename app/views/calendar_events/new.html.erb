@@ -1,7 +1,7 @@
-<% content_for :title, "Nouvel événement" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-lg px-4">
-  <h1 class="mb-6 text-2xl font-semibold">Nouvel événement</h1>
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".heading") %></h1>
   <%= render "form", event: @event, url: calendar_events_path %>
-  <p class="mt-6 text-sm"><%= link_to "← Calendrier", calendar_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t(".back_link"), calendar_path, class: "underline" %></p>
 </div>

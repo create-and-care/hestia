@@ -1,0 +1,26 @@
+fr:
+  trips:
+    index:
+      title: "Voyages"
+      empty: "Aucun voyage."
+      new_trip: "Nouveau voyage"
+      name_placeholder: "Nom"
+      create: "Créer"
+      hint: "Un voyage isole ses courses, notes, tâches et adresses des listes générales du foyer."
+    show:
+      delete_trip: "Supprimer le voyage"
+      delete_trip_confirm: "Supprimer ce voyage et toutes ses données ? Action irréversible."
+      shopping_lists: "Courses du voyage"
+      shopping_list_placeholder: "Liste (ex. « chalet »)"
+      add: "Ajouter"
+      notes: "Notes"
+      note_title_placeholder: "Titre"
+      note_content_placeholder: "Contenu"
+      tasks: "Préparatifs"
+      task_placeholder: "Préparatif"
+      addresses: "Carnet d'adresses"
+      address_name_placeholder: "Lieu"
+      address_full_placeholder: "Adresse"
+      back_to_trips: "← Voyages"
+    destroy:
+      deleted: "Voyage supprimé (et toutes ses données)."

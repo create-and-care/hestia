@@ -1,0 +1,35 @@
+fr:
+  routines:
+    frequencies:
+      daily: "Quotidien"
+      weekly: "Hebdomadaire"
+      monthly: "Mensuel"
+      yearly: "Annuel"
+    index:
+      title: "Routines"
+      all: "Toutes"
+      empty: "Aucune routine."
+      new_routine: "Nouvelle routine"
+      name_placeholder: "Nom"
+      list_placeholder: "Liste (ménage…)"
+      add: "Ajouter"
+    routine:
+      next_due: "prochaine"
+      overdue: "en retard"
+      done: "Fait"
+    edit:
+      title: "Modifier la routine"
+      name_label: "Nom"
+      description_label: "Description"
+      emoji_label: "Emoji"
+      list_label: "Liste"
+      frequency_label: "Fréquence"
+      interval_label: "Tous les"
+      next_due_label: "Prochaine échéance"
+      assignee_label: "Responsable"
+      save: "Enregistrer"
+      back_to_routines: "← Routines"
+    update:
+      updated: "Routine mise à jour."
+    destroy:
+      deleted: "Routine supprimée."

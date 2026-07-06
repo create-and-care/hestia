@@ -1,0 +1,49 @@
+fr:
+  baby_profiles:
+    born_on: "Né(e) le %{date}"
+    feeding_kinds:
+      bottle: "Biberon"
+      breast: "Allaitement"
+    index:
+      title: "Bébé"
+      new_profile: "Nouveau profil"
+      empty: "Aucun profil."
+    form:
+      name_label: "Prénom"
+      born_on_label: "Date de naissance"
+      submit: "Enregistrer"
+    edit:
+      title: "Modifier le profil"
+      back_to_profile: "← Fiche"
+    new:
+      title: "Nouveau profil bébé"
+      back_to_babies: "← Bébé"
+    show:
+      edit: "Modifier"
+      delete: "Supprimer"
+      delete_confirm: "Supprimer ce profil ?"
+      disclaimer: "Aide à l'organisation — ne remplace pas le suivi médical pédiatrique."
+      feedings_title: "Tétées"
+      duration_minutes: "%{count} min"
+      add: "Ajouter"
+      food_introductions_title: "Diversification"
+      food_placeholder: "Aliment"
+      acceptance_options:
+        - "Aimé"
+        - "Neutre"
+        - "Refusé"
+      acceptance_blank: "Réaction"
+      allergen_tests_title: "Allergènes testés"
+      allergen_placeholder: "Allergène"
+      severity_options:
+        - "Aucune"
+        - "Légère"
+        - "Sévère"
+      severity_blank: "Sévérité"
+      back_to_profiles: "← Tous les profils"
+    create:
+      created: "Profil créé."
+    update:
+      updated: "Profil mis à jour."
+    destroy:
+      deleted: "Profil supprimé."

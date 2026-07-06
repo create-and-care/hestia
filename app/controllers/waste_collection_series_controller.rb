@@ -1,14 +1,14 @@
 class WasteCollectionSeriesController < ApplicationController
   def create
     Waste::GenerateSeries.call(household: Current.household, **series_params.to_h.symbolize_keys)
-    redirect_to waste_path, notice: "Série de collectes générée."
+    redirect_to waste_path, notice: t(".created")
   rescue ActiveRecord::RecordInvalid
-    redirect_to waste_path, alert: "Série invalide."
+    redirect_to waste_path, alert: t(".invalid")
   end
 
   def destroy
     Current.household.waste_collection_series.find(params[:id]).destroy
-    redirect_to waste_path, notice: "Série supprimée."
+    redirect_to waste_path, notice: t(".deleted")
   end
 
   private

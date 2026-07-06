@@ -1,0 +1,20 @@
+fr:
+  external_calendar_connections:
+    index:
+      title: "Synchronisation calendrier"
+      heading: "Synchronisation calendrier externe"
+      description: "Connectez votre calendrier Google, Microsoft ou Apple (CalDAV) pour faire apparaître vos événements externes dans Hestia (CDC §9.2). Nécessite que l'hébergeur de cette instance ait configuré les identifiants d'application correspondants — sinon un message vous l'indique."
+      empty: "Aucune connexion pour l'instant."
+      active: "actif"
+      inactive: "inactif"
+      disconnect: "Déconnecter"
+      connect_provider: "Connecter %{provider}"
+      back_to_calendar: "← Calendrier"
+    connect:
+      unknown_provider: "Fournisseur inconnu."
+      not_implemented: "Flux de connexion %{provider} à implémenter."
+      not_configured: "Synchronisation %{provider} non configurée sur cette instance (identifiants d'application manquants — voir README)."
+    callback:
+      not_implemented: "Flux de connexion non implémenté."
+    destroy:
+      deleted: "Connexion supprimée."

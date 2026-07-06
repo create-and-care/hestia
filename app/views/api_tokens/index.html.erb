@@ -1,38 +1,37 @@
-<% content_for :title, "Jetons API" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-xl px-4">
-  <h1 class="mb-2 text-2xl font-semibold">📱 Jetons API</h1>
+  <h1 class="mb-2 text-2xl font-semibold">📱 <%= t(".title") %></h1>
   <p class="mb-6 text-sm text-gray-500">
-    Utilisés par le client mobile (CDC §15) pour s'authentifier auprès de l'API sans partager votre mot de passe.
-    Le jeton n'est affiché qu'une seule fois, juste après sa création — notez-le immédiatement.
+    <%= t(".description") %>
   </p>
 
   <%= render "shared/flash" %>
 
   <ul class="mb-6 divide-y divide-gray-100 rounded-lg border border-gray-200">
     <% if @tokens.none? %>
-      <li class="px-4 py-6 text-center text-sm text-gray-400">Aucun jeton pour l'instant.</li>
+      <li class="px-4 py-6 text-center text-sm text-gray-400"><%= t(".empty") %></li>
     <% end %>
     <% @tokens.each do |token| %>
       <li class="flex items-center justify-between px-4 py-3 text-sm">
         <span>
           <%= token.name %>
-          <span class="text-gray-400">· créé le <%= token.created_at.strftime("%d/%m/%Y") %></span>
-          <% if token.last_used_at %><span class="text-gray-400">· utilisé le <%= token.last_used_at.strftime("%d/%m/%Y") %></span><% end %>
+          <span class="text-gray-400">· <%= t(".created_on") %> <%= token.created_at.strftime("%d/%m/%Y") %></span>
+          <% if token.last_used_at %><span class="text-gray-400">· <%= t(".last_used_on") %> <%= token.last_used_at.strftime("%d/%m/%Y") %></span><% end %>
         </span>
-        <%= button_to "Révoquer", api_token_path(token), method: :delete,
-              form: { data: { turbo_confirm: "Révoquer ce jeton ?" } }, class: "cursor-pointer text-red-600 underline" %>
+        <%= button_to t(".revoke"), api_token_path(token), method: :delete,
+              form: { data: { turbo_confirm: t(".revoke_confirm") } }, class: "cursor-pointer text-red-600 underline" %>
       </li>
     <% end %>
   </ul>
 
   <%= form_with model: @token, url: api_tokens_path, class: "flex flex-wrap items-end gap-2" do |form| %>
     <div class="flex-1">
-      <%= form.label :name, "Nom du jeton (ex. « iPhone d'Alice »)", class: "mb-1 block text-xs font-medium text-gray-500" %>
+      <%= form.label :name, t(".name_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
       <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
-    <%= form.submit "Créer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <%= form.submit t(".create"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

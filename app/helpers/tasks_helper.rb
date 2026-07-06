@@ -1,15 +1,15 @@
 module TasksHelper
-  # Due-date status → [label, badge Tailwind classes].
-  DUE = {
-    overdue: [ "En retard", "bg-red-100 text-red-700" ],
-    urgent:  [ "Aujourd'hui / demain", "bg-orange-100 text-orange-700" ],
-    soon:    [ "Cette semaine", "bg-yellow-100 text-yellow-800" ],
-    later:   [ "Plus tard", "bg-gray-100 text-gray-600" ],
-    none:    [ nil, nil ]
+  # Due-date status → badge Tailwind classes (label comes from the tasks.due locale scope).
+  DUE_BADGE_CLASSES = {
+    overdue: "bg-red-100 text-red-700",
+    urgent:  "bg-orange-100 text-orange-700",
+    soon:    "bg-yellow-100 text-yellow-800",
+    later:   "bg-gray-100 text-gray-600",
+    none:    nil
   }.freeze
 
-  def due_label(status) = DUE.fetch(status).first
-  def due_badge_class(status) = DUE.fetch(status).last
+  def due_label(status) = status == :none ? nil : t("tasks.due.#{status}")
+  def due_badge_class(status) = DUE_BADGE_CLASSES.fetch(status)
 
   def task_assignee_options
     Current.household.users.order(:name).map { |user| [ user.name.presence || user.email_address, user.id ] }

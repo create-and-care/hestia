@@ -9,20 +9,20 @@
 
   <div class="space-y-4">
     <div>
-      <%= form.label :name, "Nom", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :name, t(".name_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div>
-      <%= form.label :born_on, "Date de naissance", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :born_on, t(".born_on_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.date_field :born_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <label class="flex items-center gap-2 text-sm">
-      <%= form.check_box :year_known %> L'année de naissance est connue (âge calculé)
+      <%= form.check_box :year_known %> <%= t(".year_known_label") %>
     </label>
 
     <% if (tags = Current.household.contact_tags.order(:name)).any? %>
       <div>
-        <span class="mb-1 block text-sm font-medium">Étiquettes</span>
+        <span class="mb-1 block text-sm font-medium"><%= t(".tags_label") %></span>
         <div class="flex flex-wrap gap-3">
           <% tags.each do |tag| %>
             <label class="flex items-center gap-2 text-sm">
@@ -34,6 +34,6 @@
       </div>
     <% end %>
 
-    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <%= form.submit t(".save"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
   </div>
 <% end %>

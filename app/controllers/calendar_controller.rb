@@ -13,7 +13,7 @@ class CalendarController < ApplicationController
         month = parse_month
         range = month.beginning_of_month.beginning_of_day..month.end_of_month.end_of_day
         send_data Pdf::CalendarMonthDocument.new(month, occurrences_in(range)).render,
-          filename: "calendrier-#{month.strftime('%Y-%m')}.pdf", type: "application/pdf", disposition: "inline"
+          filename: "#{t('.pdf_filename_prefix')}-#{month.strftime('%Y-%m')}.pdf", type: "application/pdf", disposition: "inline"
       end
     end
   end

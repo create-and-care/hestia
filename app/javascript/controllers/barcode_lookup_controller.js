@@ -5,13 +5,19 @@ import { Controller } from "@hotwired/stimulus"
 // always still possible if nothing is found.
 export default class extends Controller {
   static targets = ["barcode", "name", "rayon", "status"]
-  static values = { url: String }
+  static values = {
+    url: String,
+    searchingText: String,
+    notFoundText: String,
+    unavailableText: String,
+    foundText: String
+  }
 
   async lookup() {
     const barcode = this.barcodeTarget.value.trim()
     if (!barcode) return
 
-    this.setStatus("Recherche…")
+    this.setStatus(this.searchingTextValue)
 
     try {
       const response = await fetch(`${this.urlValue}?barcode=${encodeURIComponent(barcode)}`, {
@@ -19,16 +25,16 @@ export default class extends Controller {
       })
 
       if (!response.ok) {
-        this.setStatus("Produit non trouvé — saisie manuelle.")
+        this.setStatus(this.notFoundTextValue)
         return
       }
 
       const product = await response.json()
       if (this.hasNameTarget && product.name) this.nameTarget.value = product.name
       if (this.hasRayonTarget && product.rayon) this.rayonTarget.value = product.rayon
-      this.setStatus(`Trouvé : ${product.name}`)
+      this.setStatus(`${this.foundTextValue} ${product.name}`)
     } catch (error) {
-      this.setStatus("Recherche indisponible — saisie manuelle.")
+      this.setStatus(this.unavailableTextValue)
     }
   }
 

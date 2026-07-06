@@ -30,7 +30,7 @@ class TasksController < ApplicationController
       format.html { redirect_to tasks_path }
     end
   rescue ActiveRecord::RecordInvalid
-    redirect_to tasks_path, alert: "Impossible de créer la tâche."
+    redirect_to tasks_path, alert: t(".alert")
   end
 
   def edit
@@ -47,7 +47,7 @@ class TasksController < ApplicationController
     @task.task_category = find_category(task_params[:task_category_id])
 
     if @task.save
-      redirect_to tasks_path, notice: "Tâche mise à jour."
+      redirect_to tasks_path, notice: t(".notice")
     else
       render :edit, status: :unprocessable_entity
     end

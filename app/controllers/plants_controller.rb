@@ -6,7 +6,7 @@ class PlantsController < ApplicationController
 
   def destroy
     Current.household.plants.find(params[:id]).destroy
-    redirect_to exterior_path, notice: "Plante supprimée."
+    redirect_to exterior_path, notice: t(".deleted")
   end
 
   private

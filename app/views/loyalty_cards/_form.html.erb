@@ -9,27 +9,27 @@
 
   <div class="space-y-4">
     <div>
-      <%= form.label :loyalty_brand_id, "Enseigne du catalogue", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :loyalty_brand_id, t(".brand_label"), class: "mb-1 block text-sm font-medium" %>
       <% brand_options = LoyaltyBrand.ordered.map { |b| [ "#{b.logo_emoji} #{b.name}".strip, b.id, { data: { name: b.name, format: b.code_format } } ] } %>
       <%= form.select :loyalty_brand_id, options_for_select(brand_options, card.loyalty_brand_id),
-            { include_blank: "Hors catalogue" },
+            { include_blank: t(".no_brand") },
             class: "w-full rounded-md border border-gray-300 px-3 py-2",
             data: { loyalty_brand_target: "select", action: "change->loyalty-brand#apply" } %>
     </div>
     <div>
-      <%= form.label :name, "Nom affiché", class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_field :name, required: true, placeholder: "Carrefour, Fnac…",
+      <%= form.label :name, t(".name_label"), class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :name, required: true, placeholder: t(".name_placeholder"),
             data: { loyalty_brand_target: "name" }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
     <div>
-      <%= form.label :number, "Numéro de carte", class: "mb-1 block text-sm font-medium" %>
+      <%= form.label :number, t(".number_label"), class: "mb-1 block text-sm font-medium" %>
       <%= form.text_field :number, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2 font-mono" %>
     </div>
     <div>
-      <%= form.label :code_format, "Format", class: "mb-1 block text-sm font-medium" %>
-      <%= form.select :code_format, [ [ "Code-barres", "barcode" ], [ "QR code", "qrcode" ] ], {},
+      <%= form.label :code_format, t(".format_label"), class: "mb-1 block text-sm font-medium" %>
+      <%= form.select :code_format, [ [ t(".barcode_option"), "barcode" ], [ t(".qrcode_option"), "qrcode" ] ], {},
             data: { loyalty_brand_target: "format" }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
     </div>
-    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <%= form.submit t(".save"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
   </div>
 <% end %>

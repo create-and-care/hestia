@@ -1,7 +1,7 @@
-<% content_for :title, "Modifier la recette" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-2xl px-4">
-  <h1 class="mb-6 text-2xl font-semibold">Modifier la recette</h1>
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".heading") %></h1>
   <%= render "form", recipe: @recipe, url: recipe_path(@recipe) %>
-  <p class="mt-6 text-sm"><%= link_to "← Recette", recipe_path(@recipe), class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t(".back_link"), recipe_path(@recipe), class: "underline" %></p>
 </div>

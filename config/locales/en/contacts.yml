@@ -1,0 +1,39 @@
+en:
+  contacts:
+    back_to_contacts: "← Birthdays"
+    proximity:
+      today: "Today!"
+      week: "This week"
+      month: "This month"
+      later: "Later"
+      none: "No date"
+    index:
+      title: "Birthdays"
+      new_contact: "New contact"
+      all_filter: "All"
+      tag_name_placeholder: "Tag"
+      add_tag: "Add"
+      none: "No contact."
+    new:
+      title: "New contact"
+    edit:
+      title: "Edit contact"
+    contact:
+      no_date: "No date"
+      years: "years"
+      days_until_prefix: "D-"
+    form:
+      name_label: "Name"
+      born_on_label: "Date of birth"
+      year_known_label: "Year of birth is known (age calculated)"
+      tags_label: "Tags"
+      save: "Save"
+    create:
+      created: "Contact added."
+    update:
+      updated: "Contact updated."
+    destroy:
+      deleted: "Contact deleted."
+  contact_tags:
+    destroy:
+      deleted: "Tag deleted."

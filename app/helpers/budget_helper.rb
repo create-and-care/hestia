@@ -1,7 +1,5 @@
 module BudgetHelper
-  KIND_LABELS = { "income" => "Revenus", "expense" => "Charges", "savings" => "Épargne" }.freeze
-
-  def budget_kind_label(kind) = KIND_LABELS.fetch(kind, kind)
+  def budget_kind_label(kind) = t("budget.kinds.#{kind}", default: kind)
   def budget_kind_options = BudgetCategory::KINDS.map { |kind| [ budget_kind_label(kind), kind ] }
 
   def money(amount)

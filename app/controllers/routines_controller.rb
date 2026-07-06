@@ -27,7 +27,7 @@ class RoutinesController < ApplicationController
     @routine.assign_attributes(routine_params)
     @routine.assignee = scoped_member
     if @routine.save
-      redirect_to routines_path, notice: "Routine mise à jour."
+      redirect_to routines_path, notice: t(".updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class RoutinesController < ApplicationController
 
   def destroy
     @routine.destroy
-    redirect_to routines_path, notice: "Routine supprimée."
+    redirect_to routines_path, notice: t(".deleted")
   end
 
   def complete

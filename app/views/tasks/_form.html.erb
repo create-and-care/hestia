@@ -2,29 +2,29 @@
   <%= form_with model: task, url: tasks_path do |form| %>
     <div class="flex flex-wrap items-end gap-2 rounded-lg border border-gray-200 p-3">
       <div class="min-w-40 flex-1">
-        <%= form.label :title, "Tâche", class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <%= form.text_field :title, required: true, autocomplete: "off", placeholder: "Sortir les poubelles…",
+        <%= form.label :title, t(".title_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.text_field :title, required: true, autocomplete: "off", placeholder: t(".title_placeholder"),
               class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="w-16">
-        <%= form.label :emoji, "Emoji", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.label :emoji, t(".emoji_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
         <%= form.text_field :emoji, maxlength: 4, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="w-36">
-        <%= form.label :due_on, "Échéance", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.label :due_on, t(".due_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
         <%= form.date_field :due_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="w-36">
-        <%= form.label :assignee_id, "Responsable", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.label :assignee_id, t(".assignee_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
         <%= form.select :assignee_id, task_assignee_options, { include_blank: "—" },
               class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
       <div class="w-36">
-        <%= form.label :task_category_id, "Catégorie", class: "mb-1 block text-xs font-medium text-gray-500" %>
+        <%= form.label :task_category_id, t(".category_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
         <%= form.select :task_category_id, task_category_options, { include_blank: "—" },
               class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
       </div>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
     </div>
   <% end %>
 <% end %>

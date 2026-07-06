@@ -3,14 +3,14 @@
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <header class="mb-4 flex items-center justify-between">
     <h1 class="text-2xl font-semibold">🤝 <%= @project.name %></h1>
-    <%= button_to "Supprimer", shared_project_path(@project), method: :delete,
-          form: { data: { turbo_confirm: "Supprimer ce projet ?" } }, class: "cursor-pointer text-sm text-red-600 underline" %>
+    <%= button_to t(".delete"), shared_project_path(@project), method: :delete,
+          form: { data: { turbo_confirm: t(".confirm_delete") } }, class: "cursor-pointer text-sm text-red-600 underline" %>
   </header>
 
   <%= render "shared/flash" %>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">Participants</h2>
+    <h2 class="mb-2 font-medium"><%= t(".participants_heading") %></h2>
     <div class="mb-2 flex flex-wrap gap-2">
       <% @project.shared_project_participants.each do |participant| %>
         <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-sm">
@@ -20,20 +20,20 @@
       <% end %>
     </div>
     <%= form_with model: [ @project, @participant ], url: shared_project_shared_project_participants_path(@project), class: "flex gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: "Nom (peut être hors foyer)", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= form.text_field :name, required: true, placeholder: t(".participant_name_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">Dépenses</h2>
+    <h2 class="mb-2 font-medium"><%= t(".expenses_heading") %></h2>
     <ul class="mb-2 text-sm">
       <% @project.shared_expenses.recent.each do |expense| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
           <span>
             <%= number_to_currency(expense.amount, unit: "€", format: "%n %u") %>
             <% if expense.description.present? %>· <%= expense.description %><% end %>
-            <% if expense.shared_project_participant %><span class="text-gray-400">· payé par <%= expense.shared_project_participant.name %></span><% end %>
+            <% if expense.shared_project_participant %><span class="text-gray-400">· <%= t(".paid_by") %> <%= expense.shared_project_participant.name %></span><% end %>
           </span>
           <%= button_to "×", shared_project_shared_expense_path(@project, expense), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
         </li>
@@ -41,29 +41,29 @@
     </ul>
     <%= form_with model: [ @project, @expense ], url: shared_project_shared_expenses_path(@project), class: "flex flex-wrap items-end gap-2" do |form| %>
       <%= form.number_field :amount, step: :any, required: true, placeholder: "€", class: "w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :description, placeholder: "Description", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.collection_select :shared_project_participant_id, @project.shared_project_participants, :id, :name, { include_blank: "Payeur" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= form.text_field :description, placeholder: t(".description_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.collection_select :shared_project_participant_id, @project.shared_project_participants, :id, :name, { include_blank: t(".payer_blank") }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">Répartition (total : <%= number_to_currency(@project.total_spent, unit: "€", format: "%n %u") %>)</h2>
+    <h2 class="mb-2 font-medium"><%= t(".settlement_heading", total: number_to_currency(@project.total_spent, unit: "€", format: "%n %u")) %></h2>
     <ul class="text-sm">
       <% @balances.each do |balance| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
           <span><%= balance.participant.name %></span>
           <% if balance.amount.positive? %>
-            <span class="text-green-600">doit recevoir <%= number_to_currency(balance.amount, unit: "€", format: "%n %u") %></span>
+            <span class="text-green-600"><%= t(".is_owed_prefix") %> <%= number_to_currency(balance.amount, unit: "€", format: "%n %u") %></span>
           <% elsif balance.amount.negative? %>
-            <span class="text-red-600">doit <%= number_to_currency(-balance.amount, unit: "€", format: "%n %u") %></span>
+            <span class="text-red-600"><%= t(".owes_prefix") %> <%= number_to_currency(-balance.amount, unit: "€", format: "%n %u") %></span>
           <% else %>
-            <span class="text-gray-400">à jour</span>
+            <span class="text-gray-400"><%= t(".settled") %></span>
           <% end %>
         </li>
       <% end %>
     </ul>
   </section>
 
-  <p class="text-sm"><%= link_to "← Projets partagés", shared_projects_path, class: "underline" %></p>
+  <p class="text-sm"><%= link_to t(".back_to_projects"), shared_projects_path, class: "underline" %></p>
 </div>

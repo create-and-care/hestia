@@ -24,7 +24,7 @@ class BottlesController < ApplicationController
 
   def destroy
     @bottle.destroy
-    redirect_to wine_cellars_path, notice: "Bouteille supprimée."
+    redirect_to wine_cellars_path, notice: t(".deleted")
   end
 
   private

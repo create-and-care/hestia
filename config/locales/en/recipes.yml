@@ -1,0 +1,66 @@
+en:
+  recipes:
+    index:
+      title: "Recipes"
+      search_placeholder: "Search…"
+      import_link: "Import"
+      new_link: "New"
+      empty: "No recipes."
+      empty_search: "No recipes for this search."
+    recipe:
+      total_time: "%{minutes} min"
+    cook:
+      title: "%{title} — cooking"
+      ingredients_heading: "Ingredients"
+      steps_heading: "Steps"
+      back_link: "← Back to the recipe"
+    edit:
+      title: "Edit recipe"
+      heading: "Edit recipe"
+      back_link: "← Recipe"
+    new:
+      title: "New recipe"
+      heading: "New recipe"
+      back_link: "← Recipes"
+    new_import:
+      title: "Import a recipe"
+      heading: "Import a recipe"
+      description: "Paste the URL of a recipe (schema.org/Recipe-compatible sites)."
+      submit: "Import"
+      back_link: "← Recipes"
+    show:
+      prep_time: "Prep: %{minutes} min"
+      cook_time: "Cook: %{minutes} min"
+      servings: "%{count} servings"
+      cook_mode_link: "Cook mode"
+      add_to_shopping_list_link: "Add to shopping list"
+      edit_link: "Edit"
+      delete_link: "Delete"
+      delete_confirm: "Delete this recipe?"
+      ingredients_heading: "Ingredients"
+      steps_heading: "Steps"
+      source_label: "Source:"
+      back_link: "← All recipes"
+    form:
+      title_label: "Title"
+      category_label: "Category"
+      prep_time_label: "Prep (min)"
+      cook_time_label: "Cook (min)"
+      servings_label: "Servings"
+      tags_label: "Tags (comma-separated)"
+      tags_placeholder: "vegetarian, quick"
+      ingredients_label: "Ingredients (one per line)"
+      steps_label: "Steps (one per line)"
+      source_label: "Source (URL)"
+      submit: "Save"
+    create:
+      created: "Recipe created."
+    update:
+      updated: "Recipe updated."
+    destroy:
+      deleted: "Recipe deleted."
+    add_to_shopping_list:
+      notice: "Ingredients added to the shopping list."
+    import:
+      notice: "Recipe imported."
+      alert: "Couldn't import this recipe (page unreachable or no microdata)."

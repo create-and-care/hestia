@@ -8,7 +8,7 @@ class PetTreatmentsController < ApplicationController
 
   def destroy
     @pet.pet_treatments.find(params[:id]).destroy
-    redirect_to @pet, notice: "Traitement supprimé."
+    redirect_to @pet, notice: t(".deleted")
   end
 
   private

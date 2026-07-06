@@ -1,0 +1,57 @@
+en:
+  pets:
+    age_years: "%{count} years old"
+    index:
+      title: "Pets"
+      new_pet: "New pet"
+      empty: "No pets."
+    form:
+      name_label: "Name"
+      species_label: "Type"
+      species_placeholder: "Dog, cat…"
+      breed_label: "Breed"
+      weight_label: "Weight (kg)"
+      identifier_label: "ID (chip)"
+      born_on_label: "Date of birth"
+      submit: "Save"
+    edit:
+      title: "Edit pet"
+      back_to_pet: "← Pet"
+    new:
+      title: "New pet"
+      back_to_pets: "← Pets"
+    show:
+      chip_prefix: "chip"
+      edit: "Edit"
+      delete: "Delete"
+      delete_confirm: "Delete this pet?"
+      disclaimer: "Organizational aid only — does not replace the official veterinary health record."
+      vaccinations_title: "Vaccinations"
+      vaccination_done_on: "done on %{date}"
+      vaccination_booster_on: "booster %{date}"
+      vaccination_placeholder: "Vaccine"
+      add: "Add"
+      treatments_title: "Treatments"
+      treatment_placeholder: "Treatment"
+      frequency_placeholder: "Frequency"
+      treatment_last_done: "last done %{date}"
+      supplies_title: "Recurring supplies"
+      supply_placeholder: "Food, litter…"
+      order_link_placeholder: "Order link"
+      next_order_on: "order by %{date}"
+      back_to_pets: "← All pets"
+    create:
+      created: "Pet added."
+    update:
+      updated: "Pet updated."
+    destroy:
+      deleted: "Pet deleted."
+  pet_vaccinations:
+    destroy:
+      deleted: "Vaccination deleted."
+  pet_treatments:
+    destroy:
+      deleted: "Treatment deleted."
+  pet_supplies:
+    destroy:
+      deleted: "Supply deleted."

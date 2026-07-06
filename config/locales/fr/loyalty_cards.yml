@@ -1,0 +1,38 @@
+fr:
+  loyalty_cards:
+    back_to_loyalty: "← Fidélité"
+    index:
+      title: "Fidélité"
+      heading: "Cartes de fidélité"
+      new_card: "Nouvelle carte"
+      none: "Aucune carte."
+    new:
+      title: "Nouvelle carte"
+      heading: "Nouvelle carte de fidélité"
+    edit:
+      title: "Modifier la carte"
+    loyalty_card:
+      move: "Déplacer"
+      view_large: "Afficher en grand"
+    show:
+      qrcode_label: "QR code"
+      barcode_label: "Code-barres"
+      present_at_checkout: "à présenter en caisse"
+      edit: "Modifier"
+      back_to_all: "← Toutes les cartes"
+    form:
+      brand_label: "Enseigne du catalogue"
+      no_brand: "Hors catalogue"
+      name_label: "Nom affiché"
+      name_placeholder: "Carrefour, Fnac…"
+      number_label: "Numéro de carte"
+      format_label: "Format"
+      barcode_option: "Code-barres"
+      qrcode_option: "QR code"
+      save: "Enregistrer"
+    create:
+      created: "Carte ajoutée."
+    update:
+      updated: "Carte mise à jour."
+    destroy:
+      deleted: "Carte supprimée."

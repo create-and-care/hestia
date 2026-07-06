@@ -21,7 +21,7 @@ class VehiclesController < ApplicationController
   def create
     @vehicle = Current.household.vehicles.new(vehicle_params)
     if @vehicle.save
-      redirect_to @vehicle, notice: "Véhicule ajouté."
+      redirect_to @vehicle, notice: t(".created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -32,7 +32,7 @@ class VehiclesController < ApplicationController
 
   def update
     if @vehicle.update(vehicle_params)
-      redirect_to @vehicle, notice: "Véhicule mis à jour."
+      redirect_to @vehicle, notice: t(".updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -40,7 +40,7 @@ class VehiclesController < ApplicationController
 
   def destroy
     @vehicle.destroy
-    redirect_to vehicles_path, notice: "Véhicule supprimé."
+    redirect_to vehicles_path, notice: t(".deleted")
   end
 
   private

@@ -14,7 +14,7 @@ class FridgeItemsController < ApplicationController
       format.html { redirect_to fridge_path }
     end
   rescue ActiveRecord::RecordInvalid
-    redirect_to fridge_path, alert: "Impossible d'ajouter ce produit."
+    redirect_to fridge_path, alert: t(".alert")
   end
 
   def edit
@@ -22,7 +22,7 @@ class FridgeItemsController < ApplicationController
 
   def update
     if @fridge_item.update(fridge_item_params)
-      redirect_to fridge_path, notice: "Produit mis à jour."
+      redirect_to fridge_path, notice: t(".notice")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -40,7 +40,7 @@ class FridgeItemsController < ApplicationController
   # Fridge item → added to the shopping list (Fridge → Shopping bridge).
   def move_to_shopping_list
     Frigo::MoveToShoppingList.call(fridge_item: @fridge_item, shopping_list: target_shopping_list)
-    redirect_to fridge_path, notice: "« #{@fridge_item.name} » ajouté à la liste de courses."
+    redirect_to fridge_path, notice: t(".notice", name: @fridge_item.name)
   end
 
   private

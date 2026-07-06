@@ -1,0 +1,21 @@
+en:
+  documents:
+    index:
+      title: "Documents"
+      search_placeholder: "Search…"
+      disclaimer: "For your everyday paperwork — not a certified vault or a medical record."
+      all: "All"
+      new_folder_placeholder: "New folder"
+      add: "Add"
+      add_document_heading: "Add a document"
+      name_placeholder: "Name"
+      folder_blank: "Folder"
+      upload: "Upload"
+      empty: "No documents."
+    create:
+      created: "Document added."
+    destroy:
+      deleted: "Document deleted."
+  document_folders:
+    destroy:
+      deleted: "Folder deleted."

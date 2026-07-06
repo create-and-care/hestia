@@ -1,4 +1,4 @@
-<% content_for :title, "Menu" %>
+<% content_for :title, t(".title") %>
 <% content_for :head do %>
   <meta name="turbo-refresh-method" content="morph">
 <% end %>
@@ -6,14 +6,14 @@
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
   <header class="mb-4 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold">🍽 Menu de la semaine</h1>
+    <h1 class="text-2xl font-semibold">🍽 <%= t(".heading") %></h1>
     <div class="flex items-center gap-2 text-sm">
-      <%= link_to "← Sem. préc.", menu_path(week: @week_start - 1.week), class: "underline" %>
-      <%= link_to "Cette semaine", menu_path, class: "underline" %>
-      <%= link_to "Sem. suiv. →", menu_path(week: @week_start + 1.week), class: "underline" %>
+      <%= link_to t(".previous_week"), menu_path(week: @week_start - 1.week), class: "underline" %>
+      <%= link_to t(".this_week"), menu_path, class: "underline" %>
+      <%= link_to t(".next_week"), menu_path(week: @week_start + 1.week), class: "underline" %>
     </div>
   </header>
-  <p class="mb-4 text-sm text-gray-500">Semaine du <%= @week_start.strftime("%d/%m") %> au <%= (@week_start + 6.days).strftime("%d/%m/%Y") %></p>
+  <p class="mb-4 text-sm text-gray-500"><%= t(".week_range", start: @week_start.strftime("%d/%m"), end: (@week_start + 6.days).strftime("%d/%m/%Y")) %></p>
 
   <%= render "shared/flash" %>
 
@@ -34,15 +34,15 @@
   </div>
 
   <section class="mt-6 rounded-lg border border-gray-200 p-4">
-    <h2 class="mb-2 font-medium">Ajouter un repas</h2>
+    <h2 class="mb-2 font-medium"><%= t(".add_meal") %></h2>
     <%= form_with model: @entry, url: meal_plan_entries_path, class: "flex flex-wrap items-end gap-2" do |form| %>
       <%= form.date_field :on_date, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
       <%= form.select :meal_type, meal_type_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.select :recipe_id, recipe_options, { include_blank: "— recette —" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :free_name, placeholder: "ou nom libre", class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+      <%= form.select :recipe_id, recipe_options, { include_blank: t(".recipe_blank") }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :free_name, placeholder: t(".free_name_placeholder"), class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit t(".add"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
     <% end %>
   </section>
 
-  <p class="mt-6 text-sm"><%= link_to "← Tableau de bord", root_path, class: "underline" %></p>
+  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

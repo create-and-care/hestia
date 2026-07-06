@@ -1,0 +1,35 @@
+en:
+  routines:
+    frequencies:
+      daily: "Daily"
+      weekly: "Weekly"
+      monthly: "Monthly"
+      yearly: "Yearly"
+    index:
+      title: "Routines"
+      all: "All"
+      empty: "No routines."
+      new_routine: "New routine"
+      name_placeholder: "Name"
+      list_placeholder: "List (housekeeping…)"
+      add: "Add"
+    routine:
+      next_due: "next due"
+      overdue: "overdue"
+      done: "Done"
+    edit:
+      title: "Edit routine"
+      name_label: "Name"
+      description_label: "Description"
+      emoji_label: "Emoji"
+      list_label: "List"
+      frequency_label: "Frequency"
+      interval_label: "Every"
+      next_due_label: "Next due date"
+      assignee_label: "Assignee"
+      save: "Save"
+      back_to_routines: "← Routines"
+    update:
+      updated: "Routine updated."
+    destroy:
+      deleted: "Routine deleted."

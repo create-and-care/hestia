@@ -19,7 +19,7 @@ class SharedProjectsController < ApplicationController
 
   def destroy
     @project.destroy
-    redirect_to shared_projects_path, notice: "Projet supprimé."
+    redirect_to shared_projects_path, notice: t(".deleted")
   end
 
   private

@@ -23,7 +23,7 @@ class GiftListsController < ApplicationController
 
   def destroy
     @list.destroy
-    redirect_to gift_lists_path, notice: "Liste supprimée."
+    redirect_to gift_lists_path, notice: t(".deleted")
   end
 
   private

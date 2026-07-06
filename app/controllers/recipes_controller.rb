@@ -20,7 +20,7 @@ class RecipesController < ApplicationController
     apply_text_fields(@recipe)
 
     if @recipe.save
-      redirect_to @recipe, notice: "Recette créée."
+      redirect_to @recipe, notice: t(".created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class RecipesController < ApplicationController
     apply_text_fields(@recipe)
 
     if @recipe.save
-      redirect_to @recipe, notice: "Recette mise à jour."
+      redirect_to @recipe, notice: t(".updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -42,7 +42,7 @@ class RecipesController < ApplicationController
 
   def destroy
     @recipe.destroy
-    redirect_to recipes_path, notice: "Recette supprimée."
+    redirect_to recipes_path, notice: t(".deleted")
   end
 
   # Full-screen reading mode for cooking.
@@ -52,7 +52,7 @@ class RecipesController < ApplicationController
   # Export ingredients to the shopping list (Recipes → Shopping interconnection).
   def add_to_shopping_list
     Recipes::AddIngredientsToShoppingList.call(recipe: @recipe, shopping_list: target_shopping_list)
-    redirect_to @recipe, notice: "Ingrédients ajoutés à la liste de courses."
+    redirect_to @recipe, notice: t(".notice")
   end
 
   # Import form from a URL.
@@ -63,9 +63,9 @@ class RecipesController < ApplicationController
     recipe = Recipes::ImportFromUrl.call(household: Current.household, url: params[:url])
 
     if recipe
-      redirect_to recipe, notice: "Recette importée."
+      redirect_to recipe, notice: t(".notice")
     else
-      flash.now[:alert] = "Impossible d'importer cette recette (page injoignable ou sans microdonnées)."
+      flash.now[:alert] = t(".alert")
       render :new_import, status: :unprocessable_entity
     end
   end

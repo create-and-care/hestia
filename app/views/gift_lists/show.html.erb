@@ -3,35 +3,35 @@
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <header class="mb-4 flex items-center justify-between">
     <h1 class="text-2xl font-semibold">🎁 <%= @list.name %> <span class="text-sm text-gray-400">(<%= perspective_label(@list.perspective) %>)</span></h1>
-    <%= button_to "Supprimer", gift_list_path(@list), method: :delete,
-          form: { data: { turbo_confirm: "Supprimer cette liste ?" } }, class: "cursor-pointer text-sm text-red-600 underline" %>
+    <%= button_to t(".delete"), gift_list_path(@list), method: :delete,
+          form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-sm text-red-600 underline" %>
   </header>
 
   <%= render "shared/flash" %>
 
   <% if @list.perspective == "receive" %>
     <section class="mb-6 rounded-lg border border-gray-200 p-3">
-      <h2 class="mb-2 font-medium">Partage public</h2>
+      <h2 class="mb-2 font-medium"><%= t(".public_sharing") %></h2>
       <% if @list.shared? %>
-        <p class="mb-2 text-sm text-gray-600">Lien à partager (consultable et réservable sans compte) :</p>
+        <p class="mb-2 text-sm text-gray-600"><%= t(".share_link_description") %></p>
         <code class="block rounded bg-gray-100 px-3 py-2 text-sm break-all"><%= public_gift_list_url(@list.gift_list_share.token) %></code>
-        <%= button_to "Désactiver le lien", gift_list_share_path(@list), method: :delete, class: "mt-2 cursor-pointer text-sm text-red-600 underline" %>
+        <%= button_to t(".disable_link"), gift_list_share_path(@list), method: :delete, class: "mt-2 cursor-pointer text-sm text-red-600 underline" %>
       <% else %>
-        <%= button_to "Activer un lien de partage", gift_list_share_path(@list), method: :post,
+        <%= button_to t(".enable_link"), gift_list_share_path(@list), method: :post,
               class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
       <% end %>
     </section>
   <% end %>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">Idées</h2>
+    <h2 class="mb-2 font-medium"><%= t(".ideas") %></h2>
     <ul class="mb-3 space-y-2">
       <% @list.gift_ideas.ordered.each do |idea| %>
         <li class="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2 text-sm">
           <span>
             <span class="font-medium"><%= idea.name %></span>
             <% if idea.price %>· <%= number_to_currency(idea.price, unit: "€", format: "%n %u") %><% end %>
-            <% if (idea_url = safe_url(idea.url)) %>· <%= link_to "lien", idea_url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
+            <% if (idea_url = safe_url(idea.url)) %>· <%= link_to t(".link_label"), idea_url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
             <span class="ml-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs"><%= gift_status_label(idea.status) %></span>
           </span>
           <%= button_to "×", gift_list_gift_idea_path(@list, idea), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
@@ -39,12 +39,12 @@
       <% end %>
     </ul>
     <%= form_with model: [ @list, @idea ], url: gift_list_gift_ideas_path(@list), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: "Idée", class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.text_field :name, required: true, placeholder: t(".idea_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
       <%= form.number_field :price, step: :any, placeholder: "€", class: "w-20 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.url_field :url, placeholder: "Lien", class: "w-40 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit "Ajouter", class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= form.url_field :url, placeholder: t(".link_placeholder"), class: "w-40 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 
-  <p class="text-sm"><%= link_to "← Cadeaux", gift_lists_path, class: "underline" %></p>
+  <p class="text-sm"><%= link_to t(".back_to_gifts"), gift_lists_path, class: "underline" %></p>
 </div>

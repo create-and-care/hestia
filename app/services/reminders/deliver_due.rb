@@ -20,7 +20,7 @@ module Reminders
             user: reminder.user,
             household: task.household,
             kind: "task_reminder",
-            title: "Rappel : #{task.title}",
+            title: I18n.t("reminders.task_reminder.title", title: task.title),
             body: task.description,
             notifiable: task
           )
@@ -38,7 +38,7 @@ module Reminders
             user: reminder.user,
             household: event.household,
             kind: "event_reminder",
-            title: "Rappel : #{event.title}",
+            title: I18n.t("reminders.event_reminder.title", title: event.title),
             body: I18n.l(occurrence, format: :long),
             notifiable: event
           )

@@ -1,0 +1,39 @@
+fr:
+  contacts:
+    back_to_contacts: "← Anniversaires"
+    proximity:
+      today: "Aujourd'hui !"
+      week: "Cette semaine"
+      month: "Ce mois-ci"
+      later: "Plus tard"
+      none: "Sans date"
+    index:
+      title: "Anniversaires"
+      new_contact: "Nouveau contact"
+      all_filter: "Tous"
+      tag_name_placeholder: "Étiquette"
+      add_tag: "Ajouter"
+      none: "Aucun contact."
+    new:
+      title: "Nouveau contact"
+    edit:
+      title: "Modifier le contact"
+    contact:
+      no_date: "Sans date"
+      years: "ans"
+      days_until_prefix: "J-"
+    form:
+      name_label: "Nom"
+      born_on_label: "Date de naissance"
+      year_known_label: "L'année de naissance est connue (âge calculé)"
+      tags_label: "Étiquettes"
+      save: "Enregistrer"
+    create:
+      created: "Contact ajouté."
+    update:
+      updated: "Contact mis à jour."
+    destroy:
+      deleted: "Contact supprimé."
+  contact_tags:
+    destroy:
+      deleted: "Étiquette supprimée."

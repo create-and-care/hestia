@@ -25,7 +25,7 @@ class ExternalCalendarConnectionsControllerTest < ActionDispatch::IntegrationTes
     get connect_external_calendar_connections_path(provider: "google")
     assert_redirected_to external_calendar_connections_path
     follow_redirect!
-    assert_match(/non configurée/, @response.body)
+    assert_match(/not configured/, @response.body)
   end
 
   test "destroy cannot reach another user's connection" do
