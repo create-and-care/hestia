@@ -2,18 +2,18 @@
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
   <header class="mb-8">
-    <p class="text-sm text-gray-500">Foyer</p>
+    <p class="text-sm text-gray-500"><%= t(".household") %></p>
     <h1 class="text-2xl font-semibold"><%= @household.name %></h1>
   </header>
 
   <%= render "shared/flash" %>
 
   <section class="mb-8 rounded-lg border border-gray-200 p-5">
-    <h2 class="mb-1 font-medium">Code d'invitation</h2>
+    <h2 class="mb-1 font-medium"><%= t(".invite_code") %></h2>
     <code class="rounded-md bg-gray-100 px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
   </section>
 
   <p class="text-sm">
-    <%= link_to "← Tableau de bord", root_path, class: "underline" %>
+    <%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %>
   </p>
 </div>

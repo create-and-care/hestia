@@ -1,0 +1,11 @@
+en:
+  onboarding:
+    show:
+      title: "Welcome"
+      heading: "Let's set up your household"
+      description: "Create a new household, or join one with an invite code."
+      create_household: "Create a household"
+      create_household_description: "You'll be the admin and can invite other members."
+      join_household: "Join a household"
+      join_household_description: "Enter the invite code shared by a member."
+      sign_out: "Sign out"

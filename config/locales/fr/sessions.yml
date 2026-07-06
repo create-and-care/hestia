@@ -1,0 +1,11 @@
+fr:
+  sessions:
+    new:
+      email_placeholder: "Entrez votre adresse e-mail"
+      password_placeholder: "Entrez votre mot de passe"
+      submit: "Se connecter"
+      forgot_password: "Mot de passe oublié ?"
+      create_account: "Créer un compte"
+    create:
+      rate_limited: "Réessayez plus tard."
+      invalid_credentials: "Essayez une autre adresse e-mail ou un autre mot de passe."

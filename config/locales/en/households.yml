@@ -1,0 +1,20 @@
+en:
+  households:
+    new:
+      title: "Create a household"
+      heading: "Create a household"
+      name_label: "Household name"
+      name_placeholder: "The Smith Family"
+      submit: "Create household"
+      back: "← Back"
+    show:
+      household: "Household"
+      invite_code: "Invite code"
+    create:
+      created: "Household “%{name}” created."
+    update:
+      updated: "Household preferences updated."
+      failed: "Update failed."
+    activate:
+      switched: "Active household: “%{name}”."
+      not_found: "Household not found."

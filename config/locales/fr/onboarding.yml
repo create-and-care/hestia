@@ -1,0 +1,11 @@
+fr:
+  onboarding:
+    show:
+      title: "Bienvenue"
+      heading: "Configurons votre foyer"
+      description: "Créez un nouveau foyer, ou rejoignez-en un avec un code d'invitation."
+      create_household: "Créer un foyer"
+      create_household_description: "Vous serez l'administrateur et pourrez inviter d'autres membres."
+      join_household: "Rejoindre un foyer"
+      join_household_description: "Saisissez le code d'invitation partagé par un membre."
+      sign_out: "Se déconnecter"

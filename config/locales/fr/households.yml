@@ -1,0 +1,20 @@
+fr:
+  households:
+    new:
+      title: "Créer un foyer"
+      heading: "Créer un foyer"
+      name_label: "Nom du foyer"
+      name_placeholder: "Famille Dupont"
+      submit: "Créer le foyer"
+      back: "← Retour"
+    show:
+      household: "Foyer"
+      invite_code: "Code d'invitation"
+    create:
+      created: "Foyer « %{name} » créé."
+    update:
+      updated: "Préférences du foyer mises à jour."
+      failed: "Mise à jour impossible."
+    activate:
+      switched: "Foyer actif : « %{name} »."
+      not_found: "Foyer introuvable."

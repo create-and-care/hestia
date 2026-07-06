@@ -1,0 +1,13 @@
+fr:
+  memberships:
+    new:
+      title: "Rejoindre un foyer"
+      heading: "Rejoindre un foyer"
+      invite_code_label: "Code d'invitation"
+      invite_code_placeholder: "Ex. ABCD2345"
+      submit: "Rejoindre"
+      back: "← Retour"
+    create:
+      invalid_code: "Code d'invitation invalide."
+      already_member: "Vous faites déjà partie de ce foyer."
+      joined: "Vous avez rejoint « %{name} »."

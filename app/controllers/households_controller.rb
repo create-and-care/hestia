@@ -14,7 +14,7 @@ class HouseholdsController < ApplicationController
         @household.memberships.create!(user: Current.user, role: :admin)
       end
       switch_household(@household)
-      redirect_to root_path, notice: "Foyer « #{@household.name} » créé."
+      redirect_to root_path, notice: t(".created", name: @household.name)
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,9 +27,9 @@ class HouseholdsController < ApplicationController
   # Used in particular to enable/change the public holiday reference (Spec §9.2).
   def update
     if Current.household.update(household_update_params)
-      redirect_back fallback_location: household_path(Current.household), notice: "Préférences du foyer mises à jour."
+      redirect_back fallback_location: household_path(Current.household), notice: t(".updated")
     else
-      redirect_back fallback_location: household_path(Current.household), alert: "Mise à jour impossible."
+      redirect_back fallback_location: household_path(Current.household), alert: t(".failed")
     end
   end
 
@@ -39,9 +39,9 @@ class HouseholdsController < ApplicationController
 
     if membership
       switch_household(membership.household)
-      redirect_to root_path, notice: "Foyer actif : « #{membership.household.name} »."
+      redirect_to root_path, notice: t(".switched", name: membership.household.name)
     else
-      redirect_to root_path, alert: "Foyer introuvable."
+      redirect_to root_path, alert: t(".not_found")
     end
   end
 

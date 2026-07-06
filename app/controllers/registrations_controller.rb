@@ -11,7 +11,7 @@ class RegistrationsController < ApplicationController
 
     if @user.save
       start_new_session_for @user
-      redirect_to onboarding_path, notice: "Bienvenue sur Hestia !"
+      redirect_to onboarding_path, notice: t(".welcome")
     else
       render :new, status: :unprocessable_entity
     end

@@ -1,0 +1,14 @@
+en:
+  registrations:
+    new:
+      title: "Sign up"
+      heading: "Create your Hestia account"
+      name: "Name"
+      email: "Email address"
+      password: "Password"
+      password_confirmation: "Confirm password"
+      submit: "Sign up"
+      already_have_account: "Already have an account?"
+      sign_in: "Sign in"
+    create:
+      welcome: "Welcome to Hestia!"

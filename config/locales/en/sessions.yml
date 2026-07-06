@@ -1,0 +1,11 @@
+en:
+  sessions:
+    new:
+      email_placeholder: "Enter your email address"
+      password_placeholder: "Enter your password"
+      submit: "Sign in"
+      forgot_password: "Forgot password?"
+      create_account: "Create an account"
+    create:
+      rate_limited: "Try again later."
+      invalid_credentials: "Try another email address or password."

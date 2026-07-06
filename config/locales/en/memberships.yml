@@ -1,0 +1,13 @@
+en:
+  memberships:
+    new:
+      title: "Join a household"
+      heading: "Join a household"
+      invite_code_label: "Invite code"
+      invite_code_placeholder: "e.g. ABCD2345"
+      submit: "Join"
+      back: "← Back"
+    create:
+      invalid_code: "Invalid invite code."
+      already_member: "You're already part of this household."
+      joined: "You joined “%{name}”."
