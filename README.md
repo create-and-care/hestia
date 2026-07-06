@@ -71,6 +71,33 @@ bin/dev     # run the Rails server + esbuild/Tailwind watchers (Procfile.dev)
 
 The UI component library can be browsed at `/design-system`.
 
+## Optional integrations
+
+None of these are required to run the app — each is closed/inert until configured.
+
+**External calendar sync** (Google, Microsoft, CalDAV): encrypts OAuth tokens
+at rest, so generate the instance's encryption keys once and add them to
+credentials:
+
+```sh
+bin/rails db:encryption:init   # prints 3 keys
+bin/rails credentials:edit     # paste them under `active_record_encryption:`
+```
+
+Google/Microsoft additionally need an OAuth application registered with the
+provider (redirect URI `https://<host>/external_calendar_connections/<provider>/callback`),
+configured via either environment variables (`GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`,
+`MICROSOFT_CLIENT_ID`/`MICROSOFT_CLIENT_SECRET` — convenient for a Docker
+deployment) or `bin/rails credentials:edit` (`google:`/`microsoft:` `client_id`/`client_secret`).
+CalDAV needs no such registration — a user connects directly with their
+server URL, username, and password from `/external_calendar_connections`.
+
+**Error tracking**: set `SENTRY_DSN` (or `bin/rails credentials:edit` ->
+`sentry: dsn:`) to a Sentry or self-hosted GlitchTip project's DSN.
+
+**Solid Queue admin UI** (`/jobs`): closed by default. Enable with
+`bin/rails credentials:edit` -> `mission_control: http_basic_auth_user:`/`http_basic_auth_password:`.
+
 ## Tests and quality
 
 ```sh

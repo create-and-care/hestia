@@ -14,7 +14,13 @@
     <% end %>
     <% @connections.each do |connection| %>
       <li class="flex items-center justify-between px-4 py-3 text-sm">
-        <span><%= connection.provider.capitalize %> <span class="text-gray-400">· <%= connection.active? ? t(".active") : t(".inactive") %></span></span>
+        <span>
+          <%= connection.provider.capitalize %>
+          <span class="text-gray-400">· <%= connection.active? ? t(".active") : t(".inactive") %></span>
+          <% if connection.last_synced_at %>
+            <span class="text-gray-400">· <%= t(".last_synced_at", time: l(connection.last_synced_at, format: :long)) %></span>
+          <% end %>
+        </span>
         <%= button_to t(".disconnect"), external_calendar_connection_path(connection), method: :delete,
               class: "cursor-pointer text-red-600 underline" %>
       </li>

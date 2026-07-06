@@ -4,6 +4,8 @@ en:
       title: "Reminder: %{title}"
     event_reminder:
       title: "Reminder: %{title}"
+    external_calendar_sync_failed:
+      title: "%{provider} calendar sync failed"
     daily_digest:
       fridge_expiry:
         one: "%{count} product soon to expire"

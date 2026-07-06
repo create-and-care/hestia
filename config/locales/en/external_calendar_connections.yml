@@ -7,14 +7,28 @@ en:
       empty: "No connections yet."
       active: "active"
       inactive: "inactive"
+      last_synced_at: "last synced %{time}"
       disconnect: "Disconnect"
       connect_provider: "Connect %{provider}"
       back_to_calendar: "← Calendar"
     connect:
       unknown_provider: "Unknown provider."
-      not_implemented: "%{provider} connection flow to be implemented."
       not_configured: "%{provider} synchronization is not configured on this instance (missing application credentials — see README)."
+    connect_caldav:
+      title: "Connect CalDAV"
+      heading: "Connect a CalDAV calendar"
+      url_label: "Calendar URL"
+      url_placeholder: "https://caldav.example.com/calendars/me/home/"
+      username_label: "Username"
+      password_label: "Password (an app-specific password, if your provider supports one)"
+      submit: "Connect"
+      back_link: "← Back"
     callback:
-      not_implemented: "Connection flow not implemented."
+      unknown_provider: "Unknown provider."
+      state_mismatch: "Connection request expired or invalid — please try again."
+      connected: "%{provider} connected."
+      exchange_failed: "Could not complete the %{provider} connection — please try again."
+    create:
+      connected: "%{provider} connected."
     destroy:
       deleted: "Connection deleted."

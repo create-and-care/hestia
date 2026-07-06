@@ -7,14 +7,28 @@ fr:
       empty: "Aucune connexion pour l'instant."
       active: "actif"
       inactive: "inactif"
+      last_synced_at: "dernière synchro %{time}"
       disconnect: "Déconnecter"
       connect_provider: "Connecter %{provider}"
       back_to_calendar: "← Calendrier"
     connect:
       unknown_provider: "Fournisseur inconnu."
-      not_implemented: "Flux de connexion %{provider} à implémenter."
       not_configured: "Synchronisation %{provider} non configurée sur cette instance (identifiants d'application manquants — voir README)."
+    connect_caldav:
+      title: "Connecter CalDAV"
+      heading: "Connecter un calendrier CalDAV"
+      url_label: "URL du calendrier"
+      url_placeholder: "https://caldav.exemple.com/calendars/moi/home/"
+      username_label: "Nom d'utilisateur"
+      password_label: "Mot de passe (un mot de passe d'application, si votre fournisseur le propose)"
+      submit: "Connecter"
+      back_link: "← Retour"
     callback:
-      not_implemented: "Flux de connexion non implémenté."
+      unknown_provider: "Fournisseur inconnu."
+      state_mismatch: "Demande de connexion expirée ou invalide — merci de réessayer."
+      connected: "%{provider} connecté."
+      exchange_failed: "Impossible de finaliser la connexion %{provider} — merci de réessayer."
+    create:
+      connected: "%{provider} connecté."
     destroy:
       deleted: "Connexion supprimée."

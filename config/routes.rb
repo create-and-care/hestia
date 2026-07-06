@@ -87,8 +87,8 @@ Rails.application.routes.draw do
   # API tokens for the mobile client (Spec §15).
   resources :api_tokens, only: %i[index create destroy]
 
-  # External calendar connections (Spec §9.2, §16) — scaffold, see ExternalCalendarConnection.
-  resources :external_calendar_connections, only: %i[index destroy] do
+  # External calendar sync: real Google/Microsoft OAuth + CalDAV (Spec §9.2, §16).
+  resources :external_calendar_connections, only: %i[index create destroy] do
     collection do
       get ":provider/connect", to: "external_calendar_connections#connect", as: :connect
       get ":provider/callback", to: "external_calendar_connections#callback", as: :callback

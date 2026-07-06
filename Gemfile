@@ -55,6 +55,13 @@ gem "sentry-rails"
 # credentials the host configures (see README) — none set by default.
 gem "mission_control-jobs"
 
+# Generic OAuth2 authorization-code client, used for the real Google/Microsoft
+# external calendar sync flow (Spec §9.2, §16) — one gem for both providers
+# rather than two heavy provider-specific SDKs.
+gem "oauth2"
+# Parses the VEVENT feed returned by a CalDAV server (Spec §9.2, §16).
+gem "icalendar"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

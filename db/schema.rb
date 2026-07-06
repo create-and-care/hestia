@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_06_190000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_06_194000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -129,6 +129,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_190000) do
     t.string "color", default: "blue", null: false
     t.datetime "created_at", null: false
     t.datetime "ends_at"
+    t.bigint "external_calendar_connection_id"
+    t.string "external_uid"
     t.string "frequency", default: "none", null: false
     t.bigint "household_id", null: false
     t.string "location"
@@ -137,6 +139,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_190000) do
     t.datetime "starts_at", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
+    t.index ["external_calendar_connection_id", "external_uid"], name: "index_calendar_events_on_connection_and_external_uid", unique: true
+    t.index ["external_calendar_connection_id"], name: "index_calendar_events_on_external_calendar_connection_id"
     t.index ["household_id", "starts_at"], name: "index_calendar_events_on_household_id_and_starts_at"
     t.index ["household_id"], name: "index_calendar_events_on_household_id"
   end
@@ -276,10 +280,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_190000) do
     t.datetime "created_at", null: false
     t.datetime "expires_at"
     t.string "external_calendar_id"
+    t.datetime "last_synced_at"
     t.string "provider", null: false
     t.text "refresh_token"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.string "username"
     t.index ["user_id"], name: "index_external_calendar_connections_on_user_id"
   end
 
@@ -905,6 +911,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_190000) do
   add_foreign_key "bottles", "wine_cellars"
   add_foreign_key "budget_categories", "households"
   add_foreign_key "budget_entries", "budget_categories"
+  add_foreign_key "calendar_events", "external_calendar_connections"
   add_foreign_key "calendar_events", "households"
   add_foreign_key "circle_memberships", "circles"
   add_foreign_key "circle_memberships", "users"
