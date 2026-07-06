@@ -8,10 +8,12 @@ module Reminders
 
     def call
       Household.find_each do |household|
-        household.users.find_each do |user|
-          preference = user.notification_preference || NotificationPreference.new
-          notify_fridge_expiry(household, user, preference) if preference.fridge_expiry_enabled
-          notify_birthdays(household, user) if preference.birthday_notifications_enabled
+        household.in_time_zone do
+          household.users.find_each do |user|
+            preference = user.notification_preference || NotificationPreference.new
+            notify_fridge_expiry(household, user, preference) if preference.fridge_expiry_enabled
+            notify_birthdays(household, user) if preference.birthday_notifications_enabled
+          end
         end
       end
     end

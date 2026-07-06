@@ -13,6 +13,20 @@
     <code class="rounded-md bg-gray-100 px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
   </section>
 
+  <section class="mb-8 rounded-lg border border-gray-200 p-5">
+    <h2 class="mb-3 font-medium"><%= t(".time_zone_heading") %></h2>
+    <%= form_with model: @household, url: household_path(@household), method: :patch do |form| %>
+      <div class="flex items-end gap-3">
+        <div class="flex-1">
+          <%= form.label :time_zone, t(".time_zone_label"), class: "mb-1 block text-sm font-medium" %>
+          <%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.all,
+                { default: @household.time_zone }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        </div>
+        <%= form.submit t(".time_zone_submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      </div>
+    <% end %>
+  </section>
+
   <p class="text-sm">
     <%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %>
   </p>

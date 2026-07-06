@@ -10,6 +10,9 @@ fr:
     show:
       household: "Foyer"
       invite_code: "Code d'invitation"
+      time_zone_heading: "Fuseau horaire"
+      time_zone_label: "Utilisé pour les calculs sensibles au jour (péremption Frigo, échéances Tâches, digest quotidien)"
+      time_zone_submit: "Enregistrer"
     create:
       created: "Foyer « %{name} » créé."
     update:

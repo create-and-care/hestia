@@ -9,3 +9,9 @@ rent_entry:
   name: Loyer
   amount: 800
   periodicity: monthly
+
+beta_entry:
+  budget_category: beta_cat
+  name: Charge Beta
+  amount: 50
+  periodicity: monthly

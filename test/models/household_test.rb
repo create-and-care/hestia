@@ -29,4 +29,25 @@ class HouseholdTest < ActiveSupport::TestCase
     household.regenerate_invite_code!
     assert_not_equal old_code, household.invite_code
   end
+
+  test "defaults to UTC" do
+    household = Household.create!(name: "Test")
+    assert_equal "UTC", household.time_zone
+  end
+
+  test "rejects an unknown time zone" do
+    household = Household.new(name: "Test", time_zone: "Not/AZone")
+    assert_not household.valid?
+    assert_includes household.errors[:time_zone], "is not included in the list"
+  end
+
+  test "in_time_zone switches Time.zone for the duration of the block, then reverts" do
+    household = Household.create!(name: "Test", time_zone: "Paris")
+
+    observed = nil
+    household.in_time_zone { observed = Time.zone.name }
+
+    assert_equal "Paris", observed
+    assert_equal "UTC", Time.zone.name
+  end
 end

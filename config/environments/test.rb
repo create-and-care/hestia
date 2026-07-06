@@ -50,4 +50,22 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Active Record Encryption (ExternalCalendarConnection#access_token/refresh_token,
+  # Spec §9.2, §16) needs 3 keys. Throwaway, committed values are fine here since
+  # the test database is disposable — production reads real keys from credentials
+  # (`bin/rails db:encryption:init` then `bin/rails credentials:edit`, see README),
+  # never from this file.
+  config.active_record.encryption.primary_key = "test" * 8
+  config.active_record.encryption.deterministic_key = "test" * 8
+  config.active_record.encryption.key_derivation_salt = "test" * 8
+
+  # Detects N+1 queries and unused eager loading (Spec §18 — reliability).
+  # Logs only for now (not `Bullet.raise = true`): flipping that on would fail
+  # the existing suite wherever an N+1 already lurks, which is a larger,
+  # separate cleanup rather than something to silently force through here.
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+  end
 end

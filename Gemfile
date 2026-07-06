@@ -46,6 +46,15 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 2.0"
 
+# Production error tracking (Spec §18 — reliability). Wire-compatible with both
+# hosted Sentry and self-hostable GlitchTip; no-ops if no DSN is configured.
+gem "sentry-ruby"
+gem "sentry-rails"
+
+# Web UI to inspect Solid Queue jobs (pending/failed), gated by HTTP Basic Auth
+# credentials the host configures (see README) — none set by default.
+gem "mission_control-jobs"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -65,12 +74,19 @@ group :development do
   gem "web-console"
 end
 
+group :development, :test do
+  # Detects N+1 queries and unused eager loading [https://github.com/flyerhzm/bullet]
+  gem "bullet"
+end
+
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
   # Stub HTTP calls to external services (Open Food Facts, Nominatim) in tests.
   gem "webmock"
+  # Test coverage measurement, to keep the untested-file gap visible over time.
+  gem "simplecov", require: false
 end
 
 gem "prawn", "~> 2.4"

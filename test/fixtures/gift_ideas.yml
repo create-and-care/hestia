@@ -3,3 +3,9 @@ alpha_book:
   name: Livre de cuisine
   price: 25
   status: wanted
+
+beta_gift:
+  gift_list: beta_list
+  name: Idée Beta
+  price: 10
+  status: wanted

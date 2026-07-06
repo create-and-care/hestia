@@ -54,11 +54,21 @@ class Household < ApplicationRecord
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true
   validates :holiday_country, inclusion: { in: HOLIDAY_COUNTRIES }, allow_blank: true
+  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
 
   before_validation :ensure_invite_code, on: :create
 
   def regenerate_invite_code!
     update!(invite_code: self.class.generate_invite_code)
+  end
+
+  # "Today"-sensitive calculations (Fridge expiry, Task due dates, birthdays)
+  # must resolve against the household's own time zone rather than the
+  # server's, since members can be anywhere. See ApplicationController#switch_time_zone
+  # for the per-request equivalent; used directly by background jobs
+  # (Reminders::DailyDigest), which run outside a request.
+  def in_time_zone(&block)
+    Time.use_zone(time_zone, &block)
   end
 
   def self.generate_invite_code

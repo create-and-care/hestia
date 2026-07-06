@@ -41,3 +41,6 @@
 
 /.kamal/
 .claude
+
+# SimpleCov output (Spec §18 — reliability).
+/coverage/

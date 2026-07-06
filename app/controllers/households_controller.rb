@@ -24,7 +24,8 @@ class HouseholdsController < ApplicationController
     @household = Current.household
   end
 
-  # Used in particular to enable/change the public holiday reference (Spec §9.2).
+  # Used in particular to enable/change the public holiday reference (Spec §9.2)
+  # and the household's time zone (Spec §9.2, §9.3 — day-boundary calculations).
   def update
     if Current.household.update(household_update_params)
       redirect_back fallback_location: household_path(Current.household), notice: t(".updated")
@@ -51,6 +52,6 @@ class HouseholdsController < ApplicationController
     end
 
     def household_update_params
-      params.require(:household).permit(:holiday_country)
+      params.require(:household).permit(:holiday_country, :time_zone)
     end
 end

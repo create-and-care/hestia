@@ -50,4 +50,32 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert_nil users(:one).sessions.last.reload.active_household_id
   end
+
+  test "update sets the household's time zone" do
+    sign_in_as(users(:one))
+
+    patch household_path(households(:alpha)), params: { household: { time_zone: "Paris" } }
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_equal "Paris", households(:alpha).reload.time_zone
+  end
+
+  test "update rejects an unknown time zone" do
+    sign_in_as(users(:one))
+
+    patch household_path(households(:alpha)), params: { household: { time_zone: "Not/AZone" } }
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_equal "UTC", households(:alpha).reload.time_zone
+  end
+
+  test "switch_time_zone does not leak Time.zone into the next request" do
+    households(:alpha).update!(time_zone: "Paris")
+    sign_in_as(users(:one))
+
+    get household_path(households(:alpha))
+
+    assert_response :success
+    assert_equal "UTC", Time.zone.name
+  end
 end

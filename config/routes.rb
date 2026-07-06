@@ -1,12 +1,17 @@
 Rails.application.routes.draw do
+  # Solid Queue admin UI (Spec §18 — reliability): closed by default behind HTTP
+  # Basic Auth until the host configures `mission_control.http_basic_auth_user`/
+  # `http_basic_auth_password` via `bin/rails credentials:edit` (see README) —
+  # not app-role-gated since it's a whole-instance operator tool, not a
+  # per-household feature.
+  mount MissionControl::Jobs::Engine, at: "/jobs"
+
   # UI language preference (English default, French available — Spec §8).
   patch "locale", to: "locales#update", as: :locale
 
   # Versioned REST/JSON API (Spec §15), consumed by the Flutter mobile client and,
   # eventually, by Hest.AI (Phase 3). Token authentication (ApiToken), household
-  # scoping always server-side. Covers the wave 2.a modules for now
-  # (Shopping, Fridge, Recipes, Tasks, Calendar) — the pattern is to be extended
-  # to the following modules over time (see Implementation Plan §6).
+  # scoping always server-side. Now covers all 25 modules (see Implementation Plan §6).
   namespace :api do
     namespace :v1 do
       resources :shopping_lists, only: %i[index show] do

@@ -10,6 +10,9 @@ en:
     show:
       household: "Household"
       invite_code: "Invite code"
+      time_zone_heading: "Time zone"
+      time_zone_label: "Used for day-boundary calculations (Fridge expiry, Task due dates, daily digest)"
+      time_zone_submit: "Save"
     create:
       created: "Household “%{name}” created."
     update:
