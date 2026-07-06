@@ -49,10 +49,16 @@ module Reminders
       # Next occurrence of the event whose reminder time (occurrence -
       # configured delay) has been reached, and that has not already been notified.
       def next_occurrence_to_notify(event, reminder)
+        window_start = Time.current - reminder.minutes_before.minutes
         window_end = Time.current + LOOKAHEAD + reminder.minutes_before.minutes
-        event.occurrences_between(Time.current, window_end).find do |occurrence|
-          not_yet_notified = reminder.last_notified_occurrence_at.nil? || occurrence > reminder.last_notified_occurrence_at
+
+        event.occurrences_between(window_start, window_end).find do |occurrence|
+          not_yet_notified =
+            reminder.last_notified_occurrence_at.nil? ||
+            occurrence > reminder.last_notified_occurrence_at
+
           due = occurrence - reminder.minutes_before.minutes <= Time.current
+
           not_yet_notified && due
         end
       end
