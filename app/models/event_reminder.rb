@@ -1,6 +1,6 @@
-# Rappel personnalisé sur un événement de calendrier (CDC §9.2) : délai avant
-# l'occurrence + destinataire. `last_notified_occurrence_at` mémorise la dernière
-# occurrence notifiée pour ne pas re-notifier deux fois la même sur une série récurrente.
+# Custom reminder on a calendar event (Spec §9.2): delay before
+# the occurrence + recipient. `last_notified_occurrence_at` stores the last
+# notified occurrence so the same one isn't notified twice on a recurring series.
 class EventReminder < ApplicationRecord
   MINUTES_BEFORE_OPTIONS = [
     [ "10 minutes avant", 10 ],

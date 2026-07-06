@@ -10,7 +10,7 @@ class FridgeItemsController < ApplicationController
     )
 
     respond_to do |format|
-      format.turbo_stream # réinitialise le formulaire ; le produit apparaît via le flux temps réel
+      format.turbo_stream # resets the form; the item appears via the real-time stream
       format.html { redirect_to fridge_path }
     end
   rescue ActiveRecord::RecordInvalid
@@ -37,7 +37,7 @@ class FridgeItemsController < ApplicationController
     end
   end
 
-  # Produit du frigo → ajouté à la liste de courses (passerelle Frigo → Courses).
+  # Fridge item → added to the shopping list (Fridge → Shopping bridge).
   def move_to_shopping_list
     Frigo::MoveToShoppingList.call(fridge_item: @fridge_item, shopping_list: target_shopping_list)
     redirect_to fridge_path, notice: "« #{@fridge_item.name} » ajouté à la liste de courses."

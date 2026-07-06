@@ -4,10 +4,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../services/api_client.dart';
 import 'shopping_lists_screen.dart';
 
-/// Écran de connexion : l'utilisateur colle l'URL de son instance Hestia et un
-/// jeton API généré depuis le web (Tableau de bord → Jetons API, CDC §15).
-/// Pas de flux e-mail/mot de passe ici — l'authentification par jeton API évite
-/// de faire transiter le mot de passe du compte par le client mobile.
+/// Login screen: the user pastes their Hestia instance's URL and an API
+/// token generated from the web (Dashboard → API Tokens, Spec §15).
+/// No email/password flow here — API-token authentication avoids ever
+/// sending the account password through the mobile client.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 

@@ -19,8 +19,8 @@ class EventRemindersController < ApplicationController
       @event = Current.household.calendar_events.find(params[:calendar_event_id])
     end
 
-    # Le destinataire doit toujours être un membre du foyer courant (jamais un
-    # identifiant fourni tel quel par le client) — cf. CDC §15.
+    # The recipient must always be a member of the current household (never an
+    # id supplied as-is by the client) — see Spec §15.
     def recipient
       Current.household.users.find_by(id: reminder_params[:user_id]) || Current.user
     end

@@ -7,7 +7,7 @@ class WineCellar < ApplicationRecord
 
   scope :ordered, -> { order(:name) }
 
-  # Temps réel : la vue est groupée par cave ; on diffuse un rafraîchissement de page
-  # (morphing Turbo) sur un flux dédié au module.
+  # Real-time: the view is grouped by cellar; we broadcast a page refresh
+  # (Turbo morphing) on a stream dedicated to the module.
   broadcasts_refreshes_to ->(cellar) { [ cellar.household, "cave" ] }
 end

@@ -1,6 +1,6 @@
 module Calendar
-  # Crée un événement de calendrier et rattache ses participants (membres du foyer).
-  # Service applicatif invocable par le web, l'API et Hest.IA.
+  # Creates a calendar event and attaches its participants (household members).
+  # Application service invocable by the web, the API and Hest.AI.
   class CreateEvent
     def self.call(household:, attributes:, participant_ids: [])
       event = household.calendar_events.create!(attributes)

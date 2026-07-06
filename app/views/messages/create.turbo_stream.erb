@@ -1,4 +1,4 @@
-<%# Le message est ajouté au fil via le flux temps réel ; on réinitialise le champ. %>
+<%# The message is added to the thread via the real-time stream; we just reset the field. %>
 <%= turbo_stream.replace "new_message" do %>
   <%= tag.div id: "new_message" do %>
     <%= form_with model: [ @conversation, @conversation.messages.new ], url: conversation_messages_path(@conversation), class: "flex gap-2" do |form| %>

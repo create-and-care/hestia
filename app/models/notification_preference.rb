@@ -1,6 +1,6 @@
-# Préférences de notifications récurrentes d'un utilisateur (péremption Frigo,
-# anniversaires) — CDC §9.4 et §10.2. Distinct des rappels ponctuels
-# (TaskReminder/EventReminder) qui sont créés au cas par cas sur un enregistrement précis.
+# A user's recurring notification preferences (Fridge expiration,
+# birthdays) — Spec §9.4 and §10.2. Distinct from one-off reminders
+# (TaskReminder/EventReminder) which are created case by case on a specific record.
 class NotificationPreference < ApplicationRecord
   belongs_to :user
 

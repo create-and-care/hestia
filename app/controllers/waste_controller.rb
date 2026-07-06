@@ -1,5 +1,5 @@
 class WasteController < ApplicationController
-  # Vue des prochaines collectes (8 semaines) + gestion des séries récurrentes.
+  # View of upcoming collections (8 weeks) + management of recurring series.
   def show
     @events = Current.household.waste_collection_events
       .where(collected_on: Date.current..(Date.current + 8.weeks))

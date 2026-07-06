@@ -1,6 +1,6 @@
-# Catalogue d'enseignes de fidélité pré-configurées (CDC §10.5), constitué
-# progressivement (cf. seed dans db/seeds.rb). Une carte hors catalogue reste
-# possible : LoyaltyCard#loyalty_brand est optionnel.
+# Catalog of pre-configured loyalty brands (Spec §10.5), built up
+# progressively (cf. seed in db/seeds.rb). A card outside the catalog remains
+# possible: LoyaltyCard#loyalty_brand is optional.
 class LoyaltyBrand < ApplicationRecord
   FORMATS = %w[barcode qrcode].freeze
 

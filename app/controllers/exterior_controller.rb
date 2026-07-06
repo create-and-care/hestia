@@ -1,5 +1,5 @@
 class ExteriorController < ApplicationController
-  # Jardin (plantes) et piscine(s) du foyer (CDC §11.3).
+  # Household garden (plants) and pool(s) (Spec §11.3).
   def show
     @plants = Current.household.plants.ordered
     @pools = Current.household.pools.ordered.includes(:pool_readings, :pool_actions)

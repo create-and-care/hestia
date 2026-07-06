@@ -20,7 +20,7 @@ class CalendarEventTest < ActiveSupport::TestCase
     start = Time.zone.local(2026, 7, 1, 9)
     event = CalendarEvent.new(title: "X", starts_at: start, frequency: "weekly", recurrence_interval: 1)
     occurrences = event.occurrences_between(Time.zone.local(2026, 7, 1), Time.zone.local(2026, 7, 31, 23, 59))
-    assert_equal 5, occurrences.size # 1, 8, 15, 22, 29 juillet
+    assert_equal 5, occurrences.size # Jul 1, 8, 15, 22, 29
     assert_equal start, occurrences.first
   end
 
@@ -28,14 +28,14 @@ class CalendarEventTest < ActiveSupport::TestCase
     start = Time.zone.local(2026, 7, 1, 9)
     event = CalendarEvent.new(title: "X", starts_at: start, frequency: "weekly", recurrence_interval: 2)
     occurrences = event.occurrences_between(Time.zone.local(2026, 7, 1), Time.zone.local(2026, 7, 31, 23, 59))
-    assert_equal 3, occurrences.size # 1, 15, 29 juillet
+    assert_equal 3, occurrences.size # Jul 1, 15, 29
   end
 
   test "monthly recurrence expands within the range" do
     start = Time.zone.local(2026, 1, 10, 9)
     event = CalendarEvent.new(title: "X", starts_at: start, frequency: "monthly", recurrence_interval: 1)
     occurrences = event.occurrences_between(Time.zone.local(2026, 1, 1), Time.zone.local(2026, 3, 31, 23, 59))
-    assert_equal 3, occurrences.size # 10 jan, fév, mars
+    assert_equal 3, occurrences.size # Jan 10, Feb 10, Mar 10
   end
 
   test "recurrence stops at recurrence_until" do
@@ -43,7 +43,7 @@ class CalendarEventTest < ActiveSupport::TestCase
     event = CalendarEvent.new(title: "X", starts_at: start, frequency: "weekly",
       recurrence_interval: 1, recurrence_until: Date.new(2026, 7, 15))
     occurrences = event.occurrences_between(Time.zone.local(2026, 7, 1), Time.zone.local(2026, 7, 31, 23, 59))
-    assert_equal 3, occurrences.size # 1, 8, 15 juillet
+    assert_equal 3, occurrences.size # Jul 1, 8, 15
   end
 
   test "is scoped to its household" do

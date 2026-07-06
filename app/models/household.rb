@@ -1,9 +1,9 @@
 class Household < ApplicationRecord
-  # Lisible à l'oral et sans caractères ambigus (pas de 0/O/1/I).
+  # Readable aloud and without ambiguous characters (no 0/O/1/I).
   INVITE_CODE_ALPHABET = (("A".."Z").to_a - %w[I O]) + ("2".."9").to_a
   INVITE_CODE_LENGTH = 8
 
-  # Jours fériés affichables dans le Calendrier, activable au choix (CDC §9.2).
+  # Public holidays displayable in the Calendar, optionally enabled (Spec §9.2).
   HOLIDAY_COUNTRIES = %w[FR BE CH].freeze
 
   has_many :memberships, dependent: :destroy
@@ -19,7 +19,7 @@ class Household < ApplicationRecord
   has_many :tasks, dependent: :destroy
   has_many :calendar_events, dependent: :destroy
 
-  # Modules satellites (Phase 2.b)
+  # Satellite modules (Phase 2.b)
   has_many :notes, dependent: :destroy
   has_many :contacts, dependent: :destroy
   has_many :contact_tags, dependent: :destroy
@@ -36,7 +36,7 @@ class Household < ApplicationRecord
   has_many :baby_profiles, dependent: :destroy
   has_many :conversations, dependent: :destroy
 
-  # Modules à logique métier riche (Phase 2.c)
+  # Modules with rich business logic (Phase 2.c)
   has_many :meal_plan_entries, dependent: :destroy
   has_many :routines, dependent: :destroy
   has_many :plants, dependent: :destroy
@@ -47,7 +47,7 @@ class Household < ApplicationRecord
   has_many :document_folders, dependent: :destroy
   has_many :documents, dependent: :destroy
 
-  # Modules à écart d'architecture (Phase 2.d)
+  # Modules with architectural deviation (Phase 2.d)
   has_many :gift_lists, dependent: :destroy
   has_many :trips, dependent: :destroy
 

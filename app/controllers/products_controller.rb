@@ -1,11 +1,11 @@
 class ProductsController < ApplicationController
-  # Catalogue de produits du foyer, alimenté automatiquement au fil des ajouts (CDC §9.1).
+  # Household product catalog, automatically populated as items are added (Spec §9.1).
   def index
     @products = Current.household.products.order(:rayon, :name)
   end
 
-  # Recherche par code-barres (Courses/Frigo, CDC §9.1, §9.4, §16) : d'abord dans le
-  # catalogue du foyer (scan déjà connu), puis auprès d'Open Food Facts.
+  # Barcode lookup (Shopping/Fridge, Spec §9.1, §9.4, §16): first in the
+  # household catalog (already-known scan), then via Open Food Facts.
   def lookup
     barcode = params[:barcode].to_s
     return head(:not_found) if barcode.blank?

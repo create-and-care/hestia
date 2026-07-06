@@ -1,8 +1,8 @@
 class Current < ActiveSupport::CurrentAttributes
   attribute :session
   attribute :household
-  # Authentification API par jeton (CDC §15) : pas de session cookie, l'utilisateur
-  # vient du jeton plutôt que de la session web.
+  # Token-based API authentication (Spec §15): no session cookie, the user
+  # comes from the token rather than the web session.
   attribute :api_token
 
   def user

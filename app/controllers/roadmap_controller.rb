@@ -1,9 +1,9 @@
 class RoadmapController < ApplicationController
   allow_without_household
 
-  # Avancement par phase (CDC §18) et liste des évolutions envisagées, issue de
-  # l'analyse applicative. Données statiques versionnées avec le code, à
-  # l'image du CDC et du Plan d'implémentation qu'elles résument.
+  # Progress by phase (Spec §18) and list of planned improvements, derived from
+  # the application analysis. Static data versioned with the code, similar to
+  # the Spec and Implementation Plan that they summarize.
   PHASES = [
     { name: "Phase 1 — Socle", detail: "User, Session, Household, Membership, scoping multi-foyer", status: :done },
     { name: "2.a — Modules prioritaires", detail: "Courses, Calendrier, Tâches, Frigo, Recettes", status: :done },

@@ -1,7 +1,7 @@
-# Scaffold de synchronisation calendrier externe (CDC §9.2, §16). Le flux OAuth
-# Google/Microsoft (ou CalDAV Apple) réel nécessite des identifiants d'application
-# fournis par l'hébergeur via `bin/rails credentials:edit` (cf. README) : sans eux,
-# on informe l'utilisateur plutôt que d'échouer silencieusement.
+# Scaffold for external calendar synchronization (Spec §9.2, §16). The actual OAuth
+# Google/Microsoft (or Apple CalDAV) flow requires application credentials
+# provided by the host via `bin/rails credentials:edit` (see README): without them,
+# we inform the user rather than failing silently.
 class ExternalCalendarConnectionsController < ApplicationController
   def index
     @connections = Current.user.external_calendar_connections
@@ -12,8 +12,8 @@ class ExternalCalendarConnectionsController < ApplicationController
     return redirect_with(alert: "Fournisseur inconnu.") unless ExternalCalendarConnection::PROVIDERS.include?(provider)
 
     if Rails.application.credentials.dig(provider.to_sym, :client_id).present?
-      # TODO (chantier ultérieur) : rediriger vers l'écran de consentement OAuth du
-      # fournisseur (ou la découverte CalDAV), puis créer la connexion dans #callback.
+      # TODO (future work): redirect to the provider's OAuth consent screen
+      # (or CalDAV discovery), then create the connection in #callback.
       redirect_with(alert: "Flux de connexion #{provider.capitalize} à implémenter.")
     else
       redirect_with(alert: "Synchronisation #{provider.capitalize} non configurée sur cette instance " \

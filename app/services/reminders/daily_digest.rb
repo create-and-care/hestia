@@ -1,7 +1,7 @@
-# Notifications récurrentes quotidiennes (CDC §9.4, §10.2) : produits du Frigo
-# bientôt périmés, anniversaires du jour. Une seule Notification par utilisateur et
-# par jour et par type, pour éviter le bruit en cas de ré-exécution. Appelé une fois
-# par jour par Reminders::DailyDigestJob (cf. config/recurring.yml).
+# Recurring daily notifications (Spec §9.4, §10.2): Fridge products soon to
+# expire, today's birthdays. A single Notification per user and per day and
+# per type, to avoid noise in case of re-execution. Called once a day by
+# Reminders::DailyDigestJob (see config/recurring.yml).
 module Reminders
   class DailyDigest
     def self.call = new.call

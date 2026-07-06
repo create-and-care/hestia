@@ -1,6 +1,6 @@
-# Catalogue de fiches d'entretien de plantes (CDC §11.3), constitué progressivement
-# (cf. seed dans db/seeds.rb). Une Plant sans référence associée reste fonctionnelle,
-# simplement sans la valeur d'aide à l'entretien.
+# Catalog of plant care sheets (Spec §11.3), built up progressively
+# (cf. seed in db/seeds.rb). A Plant without an associated reference remains
+# functional, simply without the care-help value.
 class PlantReference < ApplicationRecord
   has_many :plants, dependent: :nullify
 

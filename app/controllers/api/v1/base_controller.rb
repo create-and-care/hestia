@@ -1,6 +1,6 @@
-# Socle de l'API `api/v1` (CDC §15), consommée par le client mobile Flutter.
-# Authentification par jeton opaque (ApiToken) plutôt que par session cookie ;
-# le scoping foyer se fait toujours côté serveur, jamais via un paramètre client.
+# Foundation of the `api/v1` API (Spec §15), consumed by the Flutter mobile client.
+# Authentication via opaque token (ApiToken) rather than cookie session;
+# household scoping always happens server-side, never via a client parameter.
 module Api
   module V1
     class BaseController < ActionController::API
@@ -14,7 +14,7 @@ module Api
         render json: { error: exception.record.errors.full_messages.to_sentence }, status: :unprocessable_entity
       end
 
-      # Pagination standardisée (CDC §15) : `?page=` et `?per_page=` (max 100, défaut 25).
+      # Standardized pagination (Spec §15): `?page=` and `?per_page=` (max 100, default 25).
       def paginate(scope)
         page = (params[:page].presence || 1).to_i
         page = 1 if page < 1
@@ -41,7 +41,7 @@ module Api
         end
 
         def set_current_household
-          return if performed? # déjà répondu (401) par authenticate_with_token!
+          return if performed? # already responded (401) by authenticate_with_token!
 
           Current.household = Current.user.households.first
           render json: { error: "no_household" }, status: :unprocessable_entity if Current.household.nil?

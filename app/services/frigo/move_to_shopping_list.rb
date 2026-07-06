@@ -1,5 +1,5 @@
 module Frigo
-  # Produit du frigo à racheter → article ajouté à une liste de courses (CDC §9.4).
+  # Fridge product to repurchase → item added to a shopping list (Spec §9.4).
   class MoveToShoppingList
     def self.call(fridge_item:, shopping_list:)
       Courses::AddItem.call(

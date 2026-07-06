@@ -22,7 +22,7 @@ class CirclesController < ApplicationController
   end
 
   private
-    # Accès par appartenance au cercle — jamais par le foyer (écart d'architecture).
+    # Access by circle membership — never by household (architecture deviation).
     def set_circle
       @circle = Current.user.circles.find(params[:id])
     end

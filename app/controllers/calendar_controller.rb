@@ -1,6 +1,6 @@
 class CalendarController < ApplicationController
-  # Vue mois (par défaut) ou liste, avec filtre par membre. Les occurrences des
-  # événements récurrents sont développées côté serveur sur la plage affichée.
+  # Month view (default) or list view, with filter by member. Recurring event
+  # occurrences are expanded server-side over the displayed range.
   def show
     @view = params[:view] == "list" ? "list" : "month"
     @member_id = params[:member_id].presence
@@ -33,8 +33,8 @@ class CalendarController < ApplicationController
       end
     end
 
-    # Jours fériés France/Belgique/Suisse (CDC §9.2, §16), activables au choix par
-    # foyer (Household#holiday_country) — indexés par date pour un lookup direct en vue.
+    # France/Belgium/Switzerland public holidays (Spec §9.2, §16), optionally enabled per
+    # household (Household#holiday_country) — indexed by date for a direct lookup in the view.
     def holidays_by_date(from, to)
       return {} if Current.household.holiday_country.blank?
 

@@ -1,5 +1,5 @@
 module Tasks
-  # Crée une tâche dans le foyer. Service applicatif invocable par le web, l'API et Hest.IA.
+  # Creates a task within the household. Application service invocable by the web, the API and Hest.AI.
   class CreateTask
     def self.call(household:, title:, description: nil, emoji: nil, due_on: nil, assignee: nil, task_category: nil)
       household.tasks.create!(

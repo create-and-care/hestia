@@ -2,7 +2,7 @@ class CircleMembershipsController < ApplicationController
   def new
   end
 
-  # Rejoindre un cercle via son code d'invitation (au-delà du foyer).
+  # Join a circle via its invite code (beyond the household).
   def create
     circle = Circle.find_by(invite_code: params[:invite_code].to_s.strip.upcase)
 

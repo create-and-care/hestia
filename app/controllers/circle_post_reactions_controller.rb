@@ -13,7 +13,7 @@ class CirclePostReactionsController < ApplicationController
   end
 
   private
-    # Le post doit appartenir à un cercle dont l'utilisateur est membre.
+    # The post must belong to a circle the user is a member of.
     def set_post
       @post = CirclePost.joins(circle: :circle_memberships)
         .where(circle_memberships: { user_id: Current.user.id })

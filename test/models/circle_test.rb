@@ -8,8 +8,8 @@ class CircleTest < ActiveSupport::TestCase
 
   test "groups users from different households (breaks household scoping)" do
     circle = circles(:family)
-    assert_includes circle.members, users(:one) # foyer alpha
-    assert_includes circle.members, users(:two) # foyer beta
+    assert_includes circle.members, users(:one) # household alpha
+    assert_includes circle.members, users(:two) # household beta
     assert_not_equal users(:one).households.to_a, users(:two).households.to_a
   end
 
@@ -20,7 +20,7 @@ class CircleTest < ActiveSupport::TestCase
 
   test "a post is deletable by its author or a circle admin" do
     post = circle_posts(:family_post)
-    assert post.deletable_by?(users(:one)) # auteur + admin
-    assert_not post.deletable_by?(users(:two)) # ni auteur ni admin
+    assert post.deletable_by?(users(:one)) # author + admin
+    assert_not post.deletable_by?(users(:two)) # neither author nor admin
   end
 end

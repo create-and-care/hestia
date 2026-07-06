@@ -29,10 +29,10 @@ class TripsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to trip
 
     get notes_path
-    assert_not_includes @response.body, "Passeport" # exclu de la vue générale
+    assert_not_includes @response.body, "Passeport" # excluded from the general view
 
     get trip_path(trip)
-    assert_includes @response.body, "Passeport" # présent dans le voyage
+    assert_includes @response.body, "Passeport" # present in the trip
   end
 
   test "add a shopping list, a task and an address to the trip" do

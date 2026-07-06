@@ -1,5 +1,5 @@
 module Tasks
-  # Bascule l'état fait / à faire d'une tâche.
+  # Toggles a task's done / to-do state.
   class ToggleTask
     def self.call(task:)
       task.update!(done: !task.done)

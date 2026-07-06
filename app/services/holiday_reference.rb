@@ -1,7 +1,7 @@
-# Référentiel de jours fériés France / Belgique / Suisse pour le Calendrier
-# (CDC §9.2, §16). Calculé (algorithme du computus pour Pâques), sans dépendance
-# externe ni contenu à maintenir. La Suisse est simplifiée au socle fédéral commun :
-# plusieurs jours fériés varient par canton et ne sont pas couverts ici.
+# Reference table of public holidays for France / Belgium / Switzerland for the Calendar
+# (Spec §9.2, §16). Computed (computus algorithm for Easter), with no external
+# dependency or content to maintain. Switzerland is simplified to the common
+# federal base: several public holidays vary by canton and are not covered here.
 class HolidayReference
   COUNTRIES = %w[FR BE CH].freeze
 
@@ -11,7 +11,7 @@ class HolidayReference
     new(country.to_s, year.to_i).holidays
   end
 
-  # Algorithme anonyme grégorien (Meeus/Jones/Butcher) de calcul de Pâques.
+  # Anonymous Gregorian algorithm (Meeus/Jones/Butcher) for calculating Easter.
   def self.easter_sunday(year)
     a = year % 19
     b = year / 100

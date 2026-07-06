@@ -10,11 +10,11 @@ class Task < ApplicationRecord
 
   scope :general, -> { where(trip_id: nil) }
 
-  # Non faites d'abord, puis ordre manuel (glisser-déposer), puis échéance.
+  # Not-done first, then manual order (drag-and-drop), then due date.
   scope :ordered, -> { order(:done, :position, :id) }
 
-  # Temps réel : la carte est ciblée par son dom_id (replace/remove) et insérée dans la
-  # colonne de sa catégorie (append) — cf. vue kanban.
+  # Real-time: the card is targeted by its dom_id (replace/remove) and inserted into
+  # its category's column (append) — cf. kanban view.
   after_create_commit  -> { broadcast_append_later_to household, target: board_column_id, partial: "tasks/task", locals: { task: self } }
   after_update_commit  -> { broadcast_replace_later_to household }
   after_destroy_commit -> { broadcast_remove_to household }
@@ -23,7 +23,7 @@ class Task < ApplicationRecord
     task_category_id ? "tasks_category_#{task_category_id}" : "tasks_uncategorized"
   end
 
-  # Code couleur évolutif à l'approche de l'échéance (CDC §9.3), calculé côté serveur.
+  # Color code that evolves as the due date approaches (Spec §9.3), computed server-side.
   def due_status
     return :none if due_on.blank?
 

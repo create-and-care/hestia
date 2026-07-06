@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Recherche de lieux via Nominatim/OpenStreetMap (CDC §10.3, §16) pour pré-remplir
-// une adresse. La saisie manuelle reste toujours possible (adresses confidentielles).
+// Place search via Nominatim/OpenStreetMap (Spec §10.3, §16) to pre-fill
+// an address. Manual entry is always still possible (confidential addresses).
 export default class extends Controller {
   static targets = ["query", "results", "name", "fullAddress", "latitude", "longitude"]
   static values = { url: String }

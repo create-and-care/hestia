@@ -1,6 +1,6 @@
-# Gestion des jetons d'authentification de l'API `api/v1` (CDC §15), destinés au
-# client mobile. Le jeton en clair n'est affiché qu'une seule fois, juste après sa
-# création (cf. ApiToken).
+# Management of the `api/v1` API authentication tokens (Spec §15), intended for the
+# mobile client. The plaintext token is shown only once, right after it is
+# created (see ApiToken).
 class ApiTokensController < ApplicationController
   def index
     @tokens = Current.user.api_tokens.order(created_at: :desc)

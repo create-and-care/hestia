@@ -1,12 +1,12 @@
-# Connexion à un calendrier externe (CDC §9.2, §16) : Google (OAuth), Microsoft
-# (MSAL/OAuth) ou Apple (CalDAV). Scaffold de données uniquement à ce stade — le
-# flux OAuth/CalDAV réel (Calendar::ExternalSync::*) nécessite des identifiants
-# d'application (client_id/client_secret) fournis par l'hébergeur via
-# `bin/rails credentials:edit`, non inclus dans ce dépôt.
+# Connection to an external calendar (Spec §9.2, §16): Google (OAuth), Microsoft
+# (MSAL/OAuth), or Apple (CalDAV). Data scaffold only at this stage — the
+# actual OAuth/CalDAV flow (Calendar::ExternalSync::*) requires application
+# credentials (client_id/client_secret) provided by the host via
+# `bin/rails credentials:edit`, not included in this repository.
 #
-# En production, `access_token`/`refresh_token` devraient être chiffrés au repos via
-# Active Record Encryption (`encrypts`), une fois les clés de chiffrement générées
-# pour l'instance (cf. README).
+# In production, `access_token`/`refresh_token` should be encrypted at rest via
+# Active Record Encryption (`encrypts`), once the encryption keys have been generated
+# for the instance (cf. README).
 class ExternalCalendarConnection < ApplicationRecord
   PROVIDERS = %w[google microsoft caldav].freeze
 

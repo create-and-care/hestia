@@ -1,8 +1,8 @@
 module Api
   module V1
     class CalendarEventsController < BaseController
-      # Développe les occurrences (y compris récurrentes) sur une plage [from, to]
-      # (par défaut : les 30 prochains jours), cohérent avec la vue Calendrier web.
+      # Expands occurrences (including recurring ones) over a [from, to] range
+      # (default: the next 30 days), consistent with the web Calendar view.
       def index
         from = parse_time(params[:from]) || Time.current
         to = parse_time(params[:to]) || (from + 30.days)

@@ -1,5 +1,5 @@
 class ApplicationComponent < ViewComponent::Base
-  # Flattens strings/arrays/hashes (à la clsx) into a single class string.
+  # Flattens strings/arrays/hashes (clsx-style) into a single class string.
   # Hash entries are included only when their value is truthy:
   #   cn("base", { "is-active" => active? }, ["extra", nil])
   def cn(*tokens)

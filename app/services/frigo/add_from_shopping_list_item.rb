@@ -1,6 +1,6 @@
 module Frigo
-  # Article acheté → produit rangé au frigo puis retiré de la liste de courses
-  # (passerelle bidirectionnelle Courses ↔ Frigo, CDC §9.1 / §9.4).
+  # Purchased item → product stored in the fridge then removed from the shopping list
+  # (bidirectional bridge Shopping ↔ Fridge, Spec §9.1 / §9.4).
   class AddFromShoppingListItem
     def self.call(shopping_list_item:, location: "refrigerateur", expires_on: nil)
       fridge_item = Frigo::AddItem.call(

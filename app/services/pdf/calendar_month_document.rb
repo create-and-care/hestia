@@ -1,12 +1,12 @@
 module Pdf
-  # Génère le PDF du mois affiché du calendrier (CDC §9.2).
+  # Generates the PDF for the calendar's displayed month (Spec §9.2).
   class CalendarMonthDocument
     DAY_NAMES = %w[Dimanche Lundi Mardi Mercredi Jeudi Vendredi Samedi].freeze
     MONTH_NAMES = %w[Janvier Février Mars Avril Mai Juin Juillet Août Septembre Octobre Novembre Décembre].freeze
 
     def initialize(month, occurrences)
       @month = month
-      @occurrences = occurrences # tableau trié de [heure, événement]
+      @occurrences = occurrences # sorted array of [time, event]
     end
 
     def render

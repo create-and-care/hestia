@@ -1,5 +1,5 @@
 class WasteCollectionEventsController < ApplicationController
-  # Ajout / suppression d'une occurrence isolée sans affecter la série.
+  # Adding / removing a single occurrence without affecting the series.
   def create
     Current.household.waste_collection_events.create(event_params)
     redirect_to waste_path

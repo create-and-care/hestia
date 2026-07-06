@@ -1,6 +1,6 @@
-# Jeton d'authentification pour l'API `api/v1` (CDC §15), destiné au client mobile.
-# Le jeton en clair n'est jamais stocké : seul son empreinte HMAC-SHA256 (indexée,
-# recherche en O(1)) est conservée, à la manière d'un jeton d'accès personnel GitHub.
+# Authentication token for the `api/v1` API (Spec §15), intended for the mobile client.
+# The plaintext token is never stored: only its HMAC-SHA256 fingerprint (indexed,
+# O(1) lookup) is kept, in the manner of a GitHub personal access token.
 class ApiToken < ApplicationRecord
   belongs_to :user
 

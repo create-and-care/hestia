@@ -1,8 +1,8 @@
 module Courses
-  # Ajoute un article à une liste de courses, en alimentant au passage le
-  # catalogue de produits du foyer et en déduisant le rayon. Exposé comme service
-  # applicatif (et non logique de contrôleur) pour être invocable par Hest.IA en
-  # Phase 3 (CDC §5, point 5).
+  # Adds an item to a shopping list, feeding the household's product catalog
+  # along the way and inferring the aisle. Exposed as an application service
+  # (rather than controller logic) so it can be invoked by Hest.AI in
+  # Phase 3 (Spec §5, point 5).
   class AddItem
     def self.call(...) = new(...).call
 

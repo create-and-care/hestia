@@ -1,7 +1,7 @@
 module Budget
-  # Calcule, pour un projet de dépenses partagées, le solde de chaque participant
-  # (positif = doit être remboursé, négatif = doit de l'argent), en répartissant le
-  # total à parts égales (CDC §11.4).
+  # Computes, for a shared expenses project, each participant's balance
+  # (positive = should be reimbursed, negative = owes money), by splitting the
+  # total equally (Spec §11.4).
   class SettleProject
     Balance = Struct.new(:participant, :amount)
 

@@ -1,302 +1,300 @@
 # Changelog
 
-Toutes les évolutions notables d'Hestia sont documentées dans ce fichier.
+All notable changes to Hestia are documented in this file.
 
-Le format s'inspire de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
-Le projet n'a pas encore atteint une v1.0.0 stable : les versions `1.0.0-betaN`
-correspondent aux étapes successives de scaffolding du périmètre fonctionnel
-décrit dans le [Cahier des charges](<Cahier des charges — Hestia.md>).
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+The project hasn't reached a stable v1.0.0 yet: the `1.0.0-betaN` versions
+correspond to the successive scaffolding milestones of the functional scope
+described in the [Specification](<Specification — Hestia.md>).
 
-## [Non publié] — 2026-07-05
+## [Unreleased] — 2026-07-05
 
-Neuf chantiers transversaux identifiés dans le
-[Plan d'implémentation](<Plan d'implémentation — Hestia.md>) §6 comme
-manquants sont livrés dans cette session :
+Nine cross-cutting efforts identified in the
+[Implementation Plan](<Implementation Plan — Hestia.md>) §6 as missing are
+shipped in this session:
 
-### Ajouté
+### Added
 
-- **Rappels et notifications** : `Notification`, `NotificationPreference`,
-  `TaskReminder`, `EventReminder`, jobs `Reminders::DeliverDue` et
-  `Reminders::DailyDigest` (Solid Queue, `config/recurring.yml`), badge de
-  notifications non lues dans le layout, page de préférences par utilisateur.
-  Couvre Tâches, Calendrier, Frigo (péremption) et pose la structure pour
-  les autres modules à venir.
-- **Open Food Facts** (Courses, Frigo) : `OpenFoodFacts::LookupProduct`,
-  pré-remplissage du formulaire d'article/produit au scan de code-barres via
-  Stimulus (`barcode_lookup_controller.js`).
-- **Géocodage Nominatim** (Adresses) : `Geocoding::SearchAddress`, recherche
-  de lieu avec pré-remplissage nom/adresse/coordonnées GPS dans le formulaire
-  (`geocode_lookup_controller.js`), en complément du lien OpenStreetMap
-  statique déjà existant.
-- **Référentiel des jours fériés** (Calendrier) : `HolidayReference`
-  (France/Belgique/Suisse), pays configurable par foyer
-  (`Household#holiday_country`), affichage en surbrillance dans le calendrier.
-- **Catalogue d'enseignes de fidélité** (Fidélité) : `LoyaltyBrand`, une
-  dizaine d'enseignes de départ en seed, sélecteur pré-remplissant
-  nom/format de code dans le formulaire de carte ; la carte hors catalogue
-  reste possible.
-- **Catalogue de fiches d'entretien de plantes** (Extérieur) :
-  `PlantReference`, six fiches de départ en seed (basilic, tomate, lavande,
-  monstera, rosier, orchidée), sélecteur optionnel à l'ajout d'une plante.
-- **Synchronisation calendrier externe — scaffold** (Calendrier) :
-  `ExternalCalendarConnection` (Google/Microsoft/CalDAV), écran de connexion
-  par fournisseur. Le flux OAuth/CalDAV réel reste à implémenter par
-  l'hébergeur (identifiants d'application requis) — cf. avertissement en
-  page de connexion.
-- **API `api/v1`** : `ApiToken` (jeton opaque, empreinte HMAC-SHA256),
-  `Api::V1::BaseController` (auth par jeton, scoping foyer serveur,
-  pagination standardisée), endpoints REST/JSON pour Courses, Frigo,
-  Recettes, Tâches, Calendrier — préalable bloquant levé pour le mobile.
-  Gestion des jetons depuis `/api_tokens`.
-- **Squelette du client mobile Flutter** (`mobile/`) : `ApiClient` (HTTP vers
-  `api/v1`, jeton en en-tête Bearer), écran de connexion par jeton API, écran
-  Courses en lecture seule. Non fonctionnel en l'état (Flutter SDK non
-  disponible dans cet environnement, pas de parité fonctionnelle, pas de
-  temps réel) — point de départ pour un chantier dédié.
+- **Reminders and notifications**: `Notification`, `NotificationPreference`,
+  `TaskReminder`, `EventReminder`, `Reminders::DeliverDue` and
+  `Reminders::DailyDigest` jobs (Solid Queue, `config/recurring.yml`), an
+  unread-notifications badge in the layout, a per-user preferences page.
+  Covers Tasks, Calendar, Fridge (expiration) and lays the groundwork for
+  the remaining modules.
+- **Open Food Facts** (Shopping, Fridge): `OpenFoodFacts::LookupProduct`,
+  pre-filling the item/product form on barcode scan via Stimulus
+  (`barcode_lookup_controller.js`).
+- **Nominatim geocoding** (Addresses): `Geocoding::SearchAddress`, place
+  search with name/address/GPS-coordinate pre-fill in the form
+  (`geocode_lookup_controller.js`), alongside the already-existing static
+  OpenStreetMap link.
+- **Public holiday reference data** (Calendar): `HolidayReference`
+  (France/Belgium/Switzerland), a country configurable per household
+  (`Household#holiday_country`), highlighted display on the calendar.
+- **Loyalty brand catalog** (Loyalty): `LoyaltyBrand`, about ten brands
+  seeded to start, a picker that pre-fills the name/code format in the card
+  form; the out-of-catalog card is still available.
+- **Plant care-sheet catalog** (Outdoor): `PlantReference`, six sheets
+  seeded to start (basil, tomato, lavender, monstera, rose, orchid), an
+  optional picker when adding a plant.
+- **External calendar sync — scaffold** (Calendar):
+  `ExternalCalendarConnection` (Google/Microsoft/CalDAV), a per-provider
+  connection screen. The real OAuth/CalDAV flow is still to be implemented
+  by the host (application credentials required) — see the warning on the
+  connection screen.
+- **API `api/v1`**: `ApiToken` (opaque token, HMAC-SHA256 fingerprint),
+  `Api::V1::BaseController` (token auth, server-side household scoping,
+  standardized pagination), REST/JSON endpoints for Shopping, Fridge,
+  Recipes, Tasks, Calendar — the blocking prerequisite for mobile is
+  lifted. Token management from `/api_tokens`.
+- **Flutter mobile client skeleton** (`mobile/`): `ApiClient` (HTTP to
+  `api/v1`, a Bearer token header), an API-token login screen, a read-only
+  Shopping screen. Not functional as-is (no Flutter SDK available in this
+  environment, no functional parity, no real-time) — a starting point for
+  a dedicated effort.
 
 ### Documentation
 
-- LICENSE (AGPLv3), README.md réel, CONTRIBUTING.md.
-- Mise à jour du Cahier des charges et du Plan d'implémentation pour refléter
-  les livraisons ci-dessus.
+- LICENSE (AGPLv3), a real README.md, CONTRIBUTING.md.
+- Updated the Specification and the Implementation Plan to reflect the
+  above.
 
 ## [1.0.0-beta35] — 2026-07-03
 
-### Corrigé
+### Fixed
 
-- Alignement des dépendances (`Gemfile`/`Gemfile.lock`) et de la CI GitHub
-  Actions.
+- Aligned dependencies (`Gemfile`/`Gemfile.lock`) and the GitHub Actions CI.
 
 ## [1.0.0-beta34] — 2026-07-03
 
-### Corrigé
+### Fixed
 
-- Corrections d'affichage sur les listes d'envies (Cadeaux) et la fiche
-  recette ; ajout du dossier `test/system`.
+- Display fixes on gift lists (Gifts) and the recipe page; added the
+  `test/system` directory.
 
 ## [1.0.0-beta33] — 2026-07-02
 
-### Ajouté
+### Added
 
-- Réorganisation par glisser-déposer (`Reordering`, `sortable_controller.js`)
-  sur les articles de courses, les tâches et les cartes de fidélité.
+- Drag-and-drop reordering (`Reordering`, `sortable_controller.js`) on
+  shopping items, tasks, and loyalty cards.
 
 ## [1.0.0-beta32] — 2026-07-02
 
-### Ajouté
+### Added
 
-- Export PDF de la liste de courses et du mois affiché du calendrier
+- PDF export of the shopping list and the displayed calendar month
   (`Pdf::ShoppingListDocument`, `Pdf::CalendarMonthDocument`, Prawn).
 
 ## [1.0.0-beta31] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Bien-être** (écart d'architecture §5.4) : `WellbeingProfile`,
-  `WeightEntry`, `WorkoutEntry`, scopés par utilisateur (pas par foyer).
+- **Wellbeing module** (architecture deviation §5.4): `WellbeingProfile`,
+  `WeightEntry`, `WorkoutEntry`, scoped per user (not per household).
 
 ## [1.0.0-beta30] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Voyage** (écart d'architecture §5.3) : `Trip`, colonne `trip_id`
-  sur Adresses/Notes/Tâches/Courses, namespace `Trips::` pour les
-  sous-ressources dédiées au voyage.
+- **Trip module** (architecture deviation §5.3): `Trip`, a `trip_id`
+  column on Addresses/Notes/Tasks/Shopping, a `Trips::` namespace for
+  trip-dedicated sub-resources.
 
 ## [1.0.0-beta29] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Cercles** (écart d'architecture §5.1) : `Circle` indépendant du
-  foyer, `CircleMembership`, `CirclePost`, `CirclePostReaction`.
+- **Circles module** (architecture deviation §5.1): `Circle` independent
+  of the household, `CircleMembership`, `CirclePost`, `CirclePostReaction`.
 
 ## [1.0.0-beta28] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Cadeaux** (écart d'architecture §5.2) : `GiftList`, `GiftIdea`,
-  `GiftListShare` (partage public par token), `GiftReservation`, route
-  publique non authentifiée `public_gift_lists`.
+- **Gifts module** (architecture deviation §5.2): `GiftList`, `GiftIdea`,
+  `GiftListShare` (public token-based sharing), `GiftReservation`, an
+  unauthenticated public `public_gift_lists` route.
 
 ## [1.0.0-beta27] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Documents** : `Document`, `DocumentFolder`, stockage de fichiers
-  via Active Storage.
+- **Documents module**: `Document`, `DocumentFolder`, file storage via
+  Active Storage.
 
 ## [1.0.0-beta26] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Budget** : `BudgetCategory`, `BudgetEntry`, `SavingsEnvelope`,
-  `SharedProject`, `SharedExpense`, services `Budget::Summary` et
-  `Budget::SettleProject` (calcul de répartition).
+- **Budget module**: `BudgetCategory`, `BudgetEntry`, `SavingsEnvelope`,
+  `SharedProject`, `SharedExpense`, `Budget::Summary` and
+  `Budget::SettleProject` services (split calculation).
 
 ## [1.0.0-beta25] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Extérieur** : `Plant`, `Pool`, `PoolReading`, `PoolAction`
-  (jardin + piscines).
+- **Outdoor module**: `Plant`, `Pool`, `PoolReading`, `PoolAction` (garden +
+  pools).
 
 ## [1.0.0-beta24] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Routines** : `Routine`, `RoutineCompletion`, moteur `Recurrence`
-  partagé avec le Calendrier.
+- **Routines module**: `Routine`, `RoutineCompletion`, a `Recurrence`
+  engine shared with Calendar.
 
 ## [1.0.0-beta23] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Menu** : `MealPlanEntry`, planification hebdomadaire des repas
-  liée aux Recettes.
+- **Menu module**: `MealPlanEntry`, weekly meal planning linked to Recipes.
 
 ## [1.0.0-beta22] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Messages** : `Conversation`, `ConversationParticipant`, `Message`.
+- **Messages module**: `Conversation`, `ConversationParticipant`,
+  `Message`.
 
 ## [1.0.0-beta21] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Bébé** : `BabyProfile`, `FeedingSession`, `FoodIntroduction`,
+- **Baby module**: `BabyProfile`, `FeedingSession`, `FoodIntroduction`,
   `AllergenTest`.
 
 ## [1.0.0-beta20] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Déchets** : `WasteCollectionSeries`, `WasteCollectionEvent`,
-  service `Waste::GenerateSeries`.
+- **Waste module**: `WasteCollectionSeries`, `WasteCollectionEvent`, the
+  `Waste::GenerateSeries` service.
 
 ## [1.0.0-beta19] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Cave à vin** : `WineCellar`, `Bottle`.
+- **Wine Cellar module**: `WineCellar`, `Bottle`.
 
 ## [1.0.0-beta18] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Véhicules** : `Vehicle`, `VehicleMaintenanceEntry`.
+- **Vehicles module**: `Vehicle`, `VehicleMaintenanceEntry`.
 
 ## [1.0.0-beta17] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Animaux** : `Pet`, `PetVaccination`, `PetTreatment`, `PetSupply`.
+- **Pets module**: `Pet`, `PetVaccination`, `PetTreatment`, `PetSupply`.
 
 ## [1.0.0-beta16] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Fidélité** : `LoyaltyCard` (carte libre, hors catalogue).
+- **Loyalty module**: `LoyaltyCard` (a free-form card, out of catalog).
 
 ## [1.0.0-beta15] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Prestataires** : `ServiceProvider`, `ServiceProviderType`.
+- **Service Providers module**: `ServiceProvider`, `ServiceProviderType`.
 
 ## [1.0.0-beta14] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Adresses** : `Address` (quatorze types), lien d'itinéraire
-  OpenStreetMap.
+- **Addresses module**: `Address` (fourteen types), an OpenStreetMap
+  directions link.
 
 ## [1.0.0-beta13] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Anniversaires** : `Contact`, `ContactTag`, `ContactTagging`.
+- **Birthdays module**: `Contact`, `ContactTag`, `ContactTagging`.
 
 ## [1.0.0-beta12] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Notes** : `Note`, service `Notes::PromoteToTask`.
+- **Notes module**: `Note`, the `Notes::PromoteToTask` service.
 
 ## [1.0.0-beta11] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Calendrier** : `CalendarEvent`, `EventParticipant`, service
-  `Calendar::CreateEvent`.
+- **Calendar module**: `CalendarEvent`, `EventParticipant`, the
+  `Calendar::CreateEvent` service.
 
 ## [1.0.0-beta10] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Tâches** : `Task`, `TaskCategory`, services `Tasks::CreateTask`
-  et `Tasks::ToggleTask`.
+- **Tasks module**: `Task`, `TaskCategory`, the `Tasks::CreateTask` and
+  `Tasks::ToggleTask` services.
 
 ## [1.0.0-beta9] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Recettes** : `Recipe`, `RecipeIngredient`, `RecipeStep`, import
-  depuis une URL (schema.org/Recipe) via `Recipes::ImportFromUrl`.
+- **Recipes module**: `Recipe`, `RecipeIngredient`, `RecipeStep`, importing
+  from a URL (schema.org/Recipe) via `Recipes::ImportFromUrl`.
 
 ## [1.0.0-beta8] — 2026-07-02
 
-### Ajouté
+### Added
 
-- **Module Frigo** : `FridgeItem`, `PreparedDish`, concern `Perishable`,
-  passerelle bidirectionnelle avec Courses.
+- **Fridge module**: `FridgeItem`, `PreparedDish`, the `Perishable`
+  concern, a two-way bridge with Shopping.
 
 ## [1.0.0-beta7] — 2026-06-30
 
-### Ajouté
+### Added
 
-- **Module Courses** : `ShoppingList`, `ShoppingListItem`, `Product`
-  (catalogue foyer), services `Courses::AddItem` et `Courses::ToggleItem`.
+- **Shopping module**: `ShoppingList`, `ShoppingListItem`, `Product`
+  (household catalog), the `Courses::AddItem` and `Courses::ToggleItem`
+  services.
 
 ## [1.0.0-beta6] — 2026-06-30
 
-### Ajouté
+### Added
 
-- **Phase 1 — Socle applicatif** : `Household`, `Membership` (rôles,
-  codes d'invitation), scoping multi-foyer (`HouseholdScoped`,
-  `Current.household`), inscription, onboarding, tableau de bord.
-- Premières versions du Cahier des charges et du Plan d'implémentation.
+- **Phase 1 — Application foundation**: `Household`, `Membership` (roles,
+  invite codes), multi-household scoping (`HouseholdScoped`,
+  `Current.household`), sign-up, onboarding, dashboard.
+- First versions of the Specification and the Implementation Plan.
 
 ## [1.0.0-beta5] — 2026-06-26
 
-### Corrigé
+### Fixed
 
-- Ajustements du schéma de base et du `.gitignore`.
+- Adjustments to the DB schema and `.gitignore`.
 
 ## [1.0.0-beta4] — 2026-06-26
 
-### Ajouté
+### Added
 
-- Bibliothèque de composants UI `Ui::*` (style shadcn, ~50 composants
-  ViewComponent) et contrôleurs Stimulus associés, exposée sur
-  `/design-system`.
+- The `Ui::*` UI component library (shadcn-style, ~50 ViewComponents) and
+  its associated Stimulus controllers, exposed on `/design-system`.
 
 ## [1.0.0-beta3] — 2026-06-26
 
-### Ajouté
+### Added
 
-- Route `/design-system` (page de démonstration des composants).
+- The `/design-system` route (a component showcase page).
 
 ## [1.0.0-beta2] — 2026-06-25
 
-### Ajouté
+### Added
 
-- Authentification générée par Rails 8 : `User`, `Session`, connexion,
-  mot de passe oublié (`PasswordsMailer`).
+- Rails 8-generated authentication: `User`, `Session`, login, forgot
+  password (`PasswordsMailer`).
 
 ## [1.0.0-beta1] — 2026-06-25
 
-### Ajouté
+### Added
 
-- Squelette initial de l'application Rails 8.1 (PostgreSQL, Solid
-  Queue/Cable/Cache, Hotwire, Tailwind v4, Docker/Kamal, CI GitHub Actions).
+- Initial Rails 8.1 app skeleton (PostgreSQL, Solid Queue/Cable/Cache,
+  Hotwire, Tailwind v4, Docker/Kamal, GitHub Actions CI).

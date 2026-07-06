@@ -1,5 +1,5 @@
 module TasksHelper
-  # Statut d'échéance → [libellé, classes Tailwind du badge].
+  # Due-date status → [label, badge Tailwind classes].
   DUE = {
     overdue: [ "En retard", "bg-red-100 text-red-700" ],
     urgent:  [ "Aujourd'hui / demain", "bg-orange-100 text-orange-700" ],

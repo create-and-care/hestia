@@ -5,7 +5,7 @@ module Budget
     test "splits the total equally and computes each balance" do
       balances = Budget::SettleProject.call(project: shared_projects(:alpha_trip))
       by_name = balances.index_by { |balance| balance.participant.name }
-      # total 150, part 75 ; Alice a payé 100 (+25), Bob a payé 50 (-25)
+      # total 150, share 75; Alice paid 100 (+25), Bob paid 50 (-25)
       assert_equal 25, by_name["Alice"].amount
       assert_equal(-25, by_name["Bob"].amount)
     end

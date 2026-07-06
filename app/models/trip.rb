@@ -1,7 +1,7 @@
 class Trip < ApplicationRecord
   include HouseholdScoped
 
-  # Suppression du voyage = suppression de toutes les données rattachées (CDC §12.3).
+  # Deleting the trip = deleting all attached data (Spec §12.3).
   has_many :notes, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :shopping_lists, dependent: :destroy

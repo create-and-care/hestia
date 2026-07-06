@@ -2,8 +2,8 @@ require "json"
 require "nokogiri"
 
 module Recipes
-  # Extrait une recette depuis les microdonnées JSON-LD schema.org/Recipe d'une page
-  # (import basique — CDC §9.5). Pur (aucun accès réseau) : testable sur du HTML brut.
+  # Extracts a recipe from a page's JSON-LD schema.org/Recipe microdata
+  # (basic import — Spec §9.5). Pure (no network access): testable on raw HTML.
   class RecipeParser
     Result = Struct.new(:title, :ingredients, :steps, :servings,
       :prep_time_minutes, :cook_time_minutes, keyword_init: true)

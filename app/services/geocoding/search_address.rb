@@ -1,13 +1,13 @@
 require "net/http"
 require "json"
 
-# Recherche de lieux via Nominatim/OpenStreetMap (CDC §10.3, §16), pour pré-remplir
-# une Address (nom, adresse, coordonnées GPS) à la création. Échoue silencieusement
-# (retourne []) en cas de panne réseau : la saisie manuelle reste toujours possible,
-# notamment pour les adresses volontairement confidentielles (CDC §10.3).
+# Looks up places via Nominatim/OpenStreetMap (Spec §10.3, §16), to pre-fill
+# an Address (name, address, GPS coordinates) on creation. Fails silently
+# (returns []) in case of network failure: manual entry always remains possible,
+# notably for addresses deliberately kept confidential (Spec §10.3).
 #
-# Respecte la politique d'usage de Nominatim : User-Agent identifiant l'application,
-# pas plus d'une requête à la fois (usage interactif, pas de traitement en masse).
+# Complies with Nominatim's usage policy: User-Agent identifying the application,
+# no more than one request at a time (interactive usage, no bulk processing).
 module Geocoding
   class SearchAddress
     ENDPOINT = "https://nominatim.openstreetmap.org/search"

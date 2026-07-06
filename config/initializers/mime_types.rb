@@ -1,2 +1,2 @@
-# Enregistre le type MIME PDF pour les exports (listes de courses, mois du calendrier).
+# Register the PDF MIME type for exports (shopping lists, calendar months).
 Mime::Type.register "application/pdf", :pdf unless Mime::Type.lookup_by_extension(:pdf)

@@ -1,11 +1,11 @@
 require "net/http"
 require "json"
 
-# Recherche d'un produit par code-barres auprès d'Open Food Facts (CDC §16),
-# base ouverte choisie plutôt qu'un référentiel propriétaire pour le scan
-# Courses/Frigo (CDC §9.1, §9.4). Échoue silencieusement (retourne nil) en cas de
-# panne réseau ou de produit inconnu : le scan reste une aide, jamais un blocage —
-# la saisie manuelle demeure toujours possible.
+# Looks up a product by barcode from Open Food Facts (Spec §16), an open
+# database chosen over a proprietary reference for the Shopping/Fridge
+# scan (Spec §9.1, §9.4). Fails silently (returns nil) in case of
+# network failure or unknown product: scanning remains a convenience, never a blocker —
+# manual entry always remains possible.
 module OpenFoodFacts
   class LookupProduct
     ENDPOINT = "https://world.openfoodfacts.org/api/v2/product/%<barcode>s.json?fields=product_name,brands"

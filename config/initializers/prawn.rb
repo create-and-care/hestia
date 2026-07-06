@@ -1,3 +1,3 @@
-# Les documents PDF utilisent la police AFM intégrée (WinAnsi) : les accents français
-# passent ; les chaînes sont nettoyées des caractères non représentables (emoji…).
+# PDF documents use the built-in AFM font (WinAnsi): accented characters render fine;
+# strings are stripped of non-representable characters (emoji…).
 Prawn::Fonts::AFM.hide_m17n_warning = true if defined?(Prawn::Fonts::AFM)

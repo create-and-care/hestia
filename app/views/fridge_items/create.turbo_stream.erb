@@ -1,4 +1,4 @@
-<%# Le produit est inséré via le flux temps réel ; ici on réinitialise le formulaire. %>
+<%# The item is inserted via the real-time stream; here we just reset the form. %>
 <%= turbo_stream.replace "new_fridge_item" do %>
   <%= render "fridge_items/form", fridge_item: FridgeItem.new %>
 <% end %>

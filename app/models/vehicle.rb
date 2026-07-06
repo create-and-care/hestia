@@ -11,7 +11,7 @@ class Vehicle < ApplicationRecord
 
   broadcasts_to ->(vehicle) { vehicle.household }
 
-  # Code couleur du contrôle technique — seuils fixes (CDC §10.7), calculé côté serveur.
+  # Technical inspection color code — fixed thresholds (Spec §10.7), computed server-side.
   def inspection_status
     return :none if inspection_expires_on.blank?
 

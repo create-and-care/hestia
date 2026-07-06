@@ -40,7 +40,7 @@ class ConversationsController < ApplicationController
       @conversation = accessible_conversations.find(params[:id])
     end
 
-    # Seules les conversations dont l'utilisateur est participant sont accessibles.
+    # Only conversations the user is a participant in are accessible.
     def accessible_conversations
       Current.household.conversations
         .joins(:conversation_participants)

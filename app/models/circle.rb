@@ -1,6 +1,6 @@
 class Circle < ApplicationRecord
-  # Écart d'architecture : un Cercle n'est PAS rattaché à un foyer ; il regroupe des
-  # utilisateurs (potentiellement de foyers différents) via CircleMembership (CDC §5, point 1).
+  # Architectural deviation: a Circle is NOT tied to a household; it groups
+  # users (potentially from different households) via CircleMembership (Spec §5, point 1).
   INVITE_CODE_ALPHABET = (("A".."Z").to_a - %w[I O]) + ("2".."9").to_a
   INVITE_CODE_LENGTH = 8
 

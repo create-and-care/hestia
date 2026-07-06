@@ -14,8 +14,8 @@ class AddressesController < ApplicationController
     @address = Current.household.addresses.new
   end
 
-  # Recherche en ligne pour pré-remplir la fiche (CDC §10.3, §16) — la saisie
-  # manuelle reste toujours possible pour les adresses volontairement confidentielles.
+  # Online search to pre-fill the form (Spec §10.3, §16) — manual entry
+  # always remains possible for addresses that are intentionally kept confidential.
   def search
     render json: Geocoding::SearchAddress.call(query: params[:q])
   end

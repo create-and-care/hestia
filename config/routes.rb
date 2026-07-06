@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  # API REST/JSON versionnée (CDC §15), consommée par le client mobile Flutter et,
-  # à terme, par Hest.IA (Phase 3). Authentification par jeton (ApiToken), scoping
-  # foyer toujours côté serveur. Couvre pour l'instant les modules de la vague 2.a
-  # (Courses, Frigo, Recettes, Tâches, Calendrier) — patron à étendre aux modules
-  # suivants au fil de l'eau (cf. Plan d'implémentation §6).
+  # Versioned REST/JSON API (Spec §15), consumed by the Flutter mobile client and,
+  # eventually, by Hest.AI (Phase 3). Token authentication (ApiToken), household
+  # scoping always server-side. Covers the wave 2.a modules for now
+  # (Shopping, Fridge, Recipes, Tasks, Calendar) — the pattern is to be extended
+  # to the following modules over time (see Implementation Plan §6).
   namespace :api do
     namespace :v1 do
       resources :shopping_lists, only: %i[index show] do
@@ -24,25 +24,25 @@ Rails.application.routes.draw do
   resource :registration, only: %i[new create]
   resources :passwords, param: :token
 
-  # Onboarding : choix créer / rejoindre un foyer.
+  # Onboarding: choosing to create / join a household.
   resource :onboarding, only: :show, controller: "onboarding"
   resources :households, only: %i[new create show update] do
     member { patch :activate }
   end
-  # Rejoindre un foyer via code d'invitation.
+  # Joining a household via an invite code.
   resource :membership, only: %i[new create]
 
-  # Rappels & notifications (CDC §9.2, §9.3, §9.4, §10.2).
+  # Reminders & notifications (Spec §9.2, §9.3, §9.4, §10.2).
   resources :notifications, only: :index do
     collection { patch :mark_all_read }
     member { patch :mark_read }
   end
   resource :notification_preference, only: %i[show update]
 
-  # Jetons API pour le client mobile (CDC §15).
+  # API tokens for the mobile client (Spec §15).
   resources :api_tokens, only: %i[index create destroy]
 
-  # Connexions calendrier externe (CDC §9.2, §16) — scaffold, cf. ExternalCalendarConnection.
+  # External calendar connections (Spec §9.2, §16) — scaffold, see ExternalCalendarConnection.
   resources :external_calendar_connections, only: %i[index destroy] do
     collection do
       get ":provider/connect", to: "external_calendar_connections#connect", as: :connect
@@ -50,7 +50,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # Module Courses (Phase 2.a).
+  # Shopping module (Phase 2.a).
   resources :shopping_lists, only: %i[index show new create destroy] do
     resources :items, only: %i[create update destroy], controller: "shopping_list_items" do
       member do
@@ -64,14 +64,14 @@ Rails.application.routes.draw do
     collection { get :lookup }
   end
 
-  # Module Frigo (Phase 2.a).
+  # Fridge module (Phase 2.a).
   resource :fridge, only: :show, controller: "fridge"
   resources :fridge_items, only: %i[create edit update destroy] do
     member { post :move_to_shopping_list }
   end
   resources :prepared_dishes, only: %i[create destroy]
 
-  # Module Recettes (Phase 2.a).
+  # Recipes module (Phase 2.a).
   resources :recipes do
     member do
       get :cook
@@ -83,7 +83,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # Module Tâches (Phase 2.a).
+  # Tasks module (Phase 2.a).
   resources :tasks, only: %i[index create edit update destroy] do
     member { patch :toggle }
     collection { patch :reorder }
@@ -91,13 +91,13 @@ Rails.application.routes.draw do
   end
   resources :task_categories, only: %i[create destroy]
 
-  # Module Calendrier (Phase 2.a).
+  # Calendar module (Phase 2.a).
   resource :calendar, only: :show, controller: "calendar"
   resources :calendar_events, only: %i[new create edit update destroy] do
     resources :event_reminders, only: %i[create destroy]
   end
 
-  # Modules satellites (Phase 2.b).
+  # Satellite modules (Phase 2.b).
   resources :notes, only: %i[index create edit update destroy] do
     member do
       patch :toggle_favorite
@@ -139,7 +139,7 @@ Rails.application.routes.draw do
     resources :messages, only: :create
   end
 
-  # Modules à logique métier riche (Phase 2.c).
+  # Modules with richer business logic (Phase 2.c).
   resource :menu, only: :show, controller: "menu"
   resources :meal_plan_entries, only: %i[create update destroy]
   resources :routines, only: %i[index create edit update destroy] do
@@ -162,17 +162,17 @@ Rails.application.routes.draw do
   resources :documents, only: %i[index show create destroy]
   resources :document_folders, only: %i[create destroy]
 
-  # Modules à écart d'architecture (Phase 2.d).
+  # Modules with an architecture deviation (Phase 2.d).
   resources :gift_lists, only: %i[index show create destroy] do
     resource :share, only: %i[create destroy], controller: "gift_list_shares"
     resources :gift_ideas, only: %i[create update destroy]
   end
-  # Partage public non authentifié des listes d'envies (CDC §5).
+  # Unauthenticated public sharing of wish lists (Spec §5).
   get    "g/:token",              to: "public_gift_lists#show",      as: :public_gift_list
   post   "g/:token/reserve/:idea_id", to: "public_gift_lists#reserve",   as: :reserve_public_gift
   delete "g/:token/reserve/:idea_id", to: "public_gift_lists#unreserve", as: :unreserve_public_gift
 
-  # Cercles (indépendants du foyer, CDC §5, point 1).
+  # Circles (independent of the household, Spec §5, point 1).
   resources :circles, only: %i[index show create] do
     resources :posts, only: %i[create destroy], controller: "circle_posts"
   end
@@ -180,7 +180,7 @@ Rails.application.routes.draw do
   post   "circle_posts/:id/react", to: "circle_post_reactions#create",  as: :react_circle_post
   delete "circle_posts/:id/react", to: "circle_post_reactions#destroy", as: :unreact_circle_post
 
-  # Voyage : contexte transverse (CDC §5, point 3 / §12.3).
+  # Trip: cross-cutting context (Spec §5, point 3 / §12.3).
   resources :trips, only: %i[index show create destroy] do
     resources :notes, only: %i[create destroy], module: :trips
     resources :tasks, only: %i[create destroy], module: :trips
@@ -188,7 +188,7 @@ Rails.application.routes.draw do
     resources :shopping_lists, only: %i[create destroy], module: :trips
   end
 
-  # Bien-être : données strictement privées à l'utilisateur (CDC §5, point 4).
+  # Wellbeing: data strictly private to the user (Spec §5, point 4).
   resource :wellbeing, only: :show, controller: "wellbeing"
   resource :wellbeing_profile, only: :update
   resources :weight_entries, only: %i[create destroy]
@@ -204,9 +204,9 @@ Rails.application.routes.draw do
 
   get "design-system", to: "design_system#index"
 
-  # Avancement du projet et évolutions envisagées (CDC §18, Plan d'implémentation §8).
+  # Project progress and planned improvements (Spec §18, Implementation Plan §8).
   resource :roadmap, only: :show, controller: "roadmap"
 
-  # Tableau de bord du foyer (CDC §7).
+  # Household dashboard (Spec §7).
   root "dashboard#show"
 end

@@ -1,7 +1,7 @@
 class Contact < ApplicationRecord
   include HouseholdScoped
 
-  # Entité partagée avec le module Cadeaux (Phase 2.d).
+  # Entity shared with the Gifts module (Phase 2.d).
   has_many :contact_taggings, dependent: :destroy
   has_many :contact_tags, through: :contact_taggings
 
@@ -29,7 +29,7 @@ class Contact < ApplicationRecord
     years
   end
 
-  # today / week / month / later / none — recalculé chaque jour (CDC §10.2).
+  # today / week / month / later / none — recalculated every day (Spec §10.2).
   def proximity_status(from = Date.current)
     days = days_until_birthday(from)
     return :none if days.nil?
@@ -49,6 +49,6 @@ class Contact < ApplicationRecord
     def birthday_in(year)
       Date.new(year, born_on.month, born_on.day)
     rescue Date::Error
-      Date.new(year, born_on.month, -1) # 29 février → dernier jour du mois
+      Date.new(year, born_on.month, -1) # Feb 29 → last day of the month
     end
 end

@@ -8,7 +8,7 @@ module BudgetHelper
     number_to_currency(amount, unit: "€", format: "%n %u", precision: 0, delimiter: " ")
   end
 
-  # Couleur de la jauge de santé budgétaire selon le taux d'épargne / reste à vivre.
+  # Budget-health gauge color based on the savings rate / disposable income.
   def health_class(summary)
     if summary[:remaining].negative? then "bg-red-100 text-red-700"
     elsif summary[:savings_rate] >= 10 then "bg-green-100 text-green-700"

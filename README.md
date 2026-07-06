@@ -1,115 +1,113 @@
 # Hestia
 
-Application collaborative et libre de gestion du foyer — une alternative
-complète, gratuite et auto-hébergeable aux applications de gestion du
-quotidien freemium existantes.
+A free, collaborative household management app — a complete, free, and
+self-hostable alternative to existing freemium everyday-life management
+apps.
 
-Un foyer regroupe plusieurs membres (couple, famille, colocation) qui
-partagent en temps réel les mêmes modules : courses, calendrier, recettes,
-frigo, tâches, et une vingtaine d'autres domaines du quotidien (notes,
-anniversaires, adresses, fidélité, animaux, véhicules, cave à vin, déchets,
-bébé, messages, menu, routines, extérieur, budget, documents, cadeaux,
-cercles, voyage, bien-être...).
+A household groups several members (a couple, a family, roommates) who
+share the same modules in real time: shopping, calendar, recipes, fridge,
+tasks, and about twenty other everyday domains (notes, birthdays,
+addresses, loyalty, pets, vehicles, wine cellar, waste, baby, messages,
+menu, routines, outdoor, budget, documents, gifts, circles, trip,
+wellbeing...).
 
-Contrairement aux applications commerciales équivalentes, Hestia ne plafonne
-aucune fonctionnalité derrière un abonnement : le code est public sous
-licence [AGPLv3](LICENSE), et chacun peut héberger sa propre instance sans
-dépendre d'un service tiers ni payer quoi que ce soit.
+Unlike equivalent commercial apps, Hestia caps no feature behind a
+subscription: the code is public under the [AGPLv3](LICENSE) license, and
+anyone can host their own instance without depending on a third-party
+service or paying anything.
 
-Pour le détail fonctionnel de chaque module, voir le
-[Cahier des charges](<Cahier des charges — Hestia.md>) ; pour l'état
-d'avancement du développement, voir le
-[Plan d'implémentation](<Plan d'implémentation — Hestia.md>).
+For the functional detail of each module, see the
+[Specification](<Specification — Hestia.md>); for development progress,
+see the [Implementation Plan](<Implementation Plan — Hestia.md>).
 
-## Sommaire
+## Contents
 
-- [Socle technique](#socle-technique)
-- [Démarrage rapide (Docker)](#démarrage-rapide-docker)
-- [Développement local](#développement-local)
-- [Tests et qualité](#tests-et-qualité)
-- [Client mobile](#client-mobile)
-- [Structure du dépôt](#structure-du-dépôt)
-- [Contribuer](#contribuer)
-- [Licence](#licence)
+- [Tech stack](#tech-stack)
+- [Quick start (Docker)](#quick-start-docker)
+- [Local development](#local-development)
+- [Tests and quality](#tests-and-quality)
+- [Mobile client](#mobile-client)
+- [Repo structure](#repo-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Socle technique
+## Tech stack
 
-| Domaine | Choix |
+| Area | Choice |
 |---|---|
 | Backend / Web | Ruby on Rails 8.1 |
-| Base de données | PostgreSQL |
-| Temps réel | Hotwire (Turbo + Stimulus) + Solid Cable |
-| Jobs asynchrones | Solid Queue |
+| Database | PostgreSQL |
+| Real-time | Hotwire (Turbo + Stimulus) + Solid Cable |
+| Async jobs | Solid Queue |
 | Cache | Solid Cache |
-| Interface | ViewComponent (bibliothèque style shadcn, ~50 composants) + Tailwind v4 |
-| Mobile | Flutter/Dart (squelette, consomme l'API `api/v1`) |
-| Déploiement | Docker / Kamal |
+| UI | ViewComponent (shadcn-style library, ~50 components) + Tailwind v4 |
+| Mobile | Flutter/Dart (skeleton, consumes the `api/v1` API) |
+| Deployment | Docker / Kamal |
 
-Aucune dépendance à Redis/Sidekiq : Solid Queue/Cable/Cache tournent sur la
-base PostgreSQL existante, ce qui simplifie l'auto-hébergement à un seul
-processus applicatif.
+No dependency on Redis/Sidekiq: Solid Queue/Cable/Cache run on the existing
+PostgreSQL database, which keeps self-hosting down to a single app process.
 
-## Démarrage rapide (Docker)
+## Quick start (Docker)
 
 ```sh
-docker compose up -d          # démarre PostgreSQL
-bin/setup                     # installe les dépendances, prépare la base, lance le serveur
+docker compose up -d          # start PostgreSQL
+bin/setup                     # install dependencies, prepare the DB, start the server
 ```
 
-L'application est ensuite accessible sur `http://localhost:3000`.
+The app is then available at `http://localhost:3000`.
 
-Pour un déploiement de production auto-hébergé, voir `config/deploy.yml`
-(Kamal) et le `Dockerfile` à la racine.
+For a self-hosted production deployment, see `config/deploy.yml` (Kamal)
+and the `Dockerfile` at the repo root.
 
-## Développement local
+## Local development
 
-Prérequis : Ruby `3.4.9` (voir `.ruby-version`), Node `20.11.1` (voir
+Prerequisites: Ruby `3.4.9` (see `.ruby-version`), Node `20.11.1` (see
 `.node-version`), PostgreSQL.
 
 ```sh
-bin/setup        # installe les gems/paquets JS, prépare la base
-bin/dev           # lance serveur Rails + watchers esbuild/Tailwind (Procfile.dev)
+bin/setup   # install gems/JS packages, prepare the DB
+bin/dev     # run the Rails server + esbuild/Tailwind watchers (Procfile.dev)
 ```
 
-La bibliothèque de composants UI est consultable sur `/design-system`.
+The UI component library can be browsed at `/design-system`.
 
-## Tests et qualité
+## Tests and quality
 
 ```sh
-bin/rails test           # suite Minitest (modèles, contrôleurs, services)
-bin/rails test:system    # tests système (Capybara)
+bin/rails test           # Minitest suite (models, controllers, services)
+bin/rails test:system    # system tests (Capybara)
 bin/rubocop               # style (Rails Omakase)
-bin/brakeman               # analyse de sécurité statique
-bin/bundler-audit           # vulnérabilités connues des gems
+bin/brakeman               # static security analysis
+bin/bundler-audit           # known gem vulnerabilities
 ```
 
-Ces quatre commandes sont exécutées en intégration continue sur chaque pull
-request (`.github/workflows/ci.yml`).
+These four commands run in CI on every pull request
+(`.github/workflows/ci.yml`).
 
-## Client mobile
+## Mobile client
 
-Un squelette Flutter/Dart consommant l'API `api/v1` vit dans [`mobile/`](mobile/README.md).
-Ce n'est pas encore une application fonctionnelle — voir ce README pour le
-détail de ce qui reste à construire.
+A Flutter/Dart skeleton consuming the `api/v1` API lives in
+[`mobile/`](mobile/README.md). It isn't a functional app yet — see that
+README for what's left to build.
 
-## Structure du dépôt
+## Repo structure
 
 ```
-app/            application Rails (contrôleurs, modèles, vues, composants Ui::*, services)
-config/         routes, environnements, initializers
-db/             schéma et migrations
-mobile/         client Flutter/Dart (squelette)
-test/           suite Minitest
+app/            Rails application (controllers, models, views, Ui:: components, services)
+config/         routes, environments, initializers
+db/             schema and migrations
+mobile/         Flutter/Dart client (skeleton)
+test/           Minitest suite
 ```
 
-## Contribuer
+## Contributing
 
-Les contributions externes sont bienvenues — voir [CONTRIBUTING.md](CONTRIBUTING.md)
-pour l'environnement de développement, les conventions de code et le
-processus de pull request.
+External contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md)
+for the development environment, code conventions, and pull request
+process.
 
-## Licence
+## License
 
-Hestia est distribué sous licence [GNU AGPLv3](LICENSE). Toute instance
-modifiée mise à disposition d'utilisateurs sur un réseau doit reverser ses
-modifications sous la même licence.
+Hestia is distributed under the [GNU AGPLv3](LICENSE) license. Any modified
+instance made available to users over a network must release its
+modifications under the same license.

@@ -15,14 +15,14 @@ class CalendarEvent < ApplicationRecord
 
   scope :chronological, -> { order(:starts_at) }
 
-  # Temps réel : les vues (mois/liste) sont calculées côté serveur ; on diffuse un
-  # rafraîchissement de page (morphing Turbo) sur un flux dédié au calendrier du foyer.
+  # Real-time: the views (month/list) are computed server-side; we broadcast a
+  # page refresh (Turbo morphing) on a stream dedicated to the household's calendar.
   broadcasts_refreshes_to ->(event) { [ event.household, "calendar" ] }
 
   def recurring? = frequency.in?(%w[weekly monthly])
 
-  # Occurrences (heures de début) comprises dans [from, to]. Développe les séries
-  # récurrentes hebdomadaires/mensuelles jusqu'à la fin de récurrence éventuelle.
+  # Occurrences (start times) within [from, to]. Expands weekly/monthly recurring
+  # series up to the optional recurrence end.
   def occurrences_between(from, to)
     return [] if starts_at.blank?
     return (from..to).cover?(starts_at) ? [ starts_at ] : [] unless recurring?

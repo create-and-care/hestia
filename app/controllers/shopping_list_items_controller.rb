@@ -12,7 +12,7 @@ class ShoppingListItemsController < ApplicationController
     )
 
     respond_to do |format|
-      format.turbo_stream # réinitialise le formulaire ; l'article apparaît via le flux temps réel
+      format.turbo_stream # resets the form; the item appears via the real-time stream
       format.html { redirect_to @shopping_list }
     end
   rescue ActiveRecord::RecordInvalid
@@ -46,13 +46,13 @@ class ShoppingListItemsController < ApplicationController
     end
   end
 
-  # Réorganisation par glisser-déposer : applique l'ordre des identifiants reçus.
+  # Drag-and-drop reordering: applies the order of the received ids.
   def reorder
     Reordering.apply(@shopping_list.items, params[:ids])
     head :no_content
   end
 
-  # Article acheté → rangé au frigo puis retiré de la liste (passerelle Courses → Frigo).
+  # Purchased item → stored in the fridge then removed from the list (Shopping → Fridge bridge).
   def move_to_fridge
     Frigo::AddFromShoppingListItem.call(shopping_list_item: @item)
 

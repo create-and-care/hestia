@@ -1,6 +1,6 @@
-# Centre de notifications in-app (temps réel, CDC §6). Sert de support commun aux
-# rappels Tâches/Calendrier et aux notifications récurrentes (péremption Frigo,
-# anniversaire du jour) — plutôt que quatre mécanismes de notification distincts.
+# In-app notification center (real-time, Spec §6). Serves as common support for
+# Tasks/Calendar reminders and recurring notifications (Fridge expiration,
+# birthday of the day) — rather than four separate notification mechanisms.
 class Notification < ApplicationRecord
   KINDS = %w[task_reminder event_reminder fridge_expiry birthday].freeze
 

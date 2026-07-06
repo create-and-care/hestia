@@ -1,6 +1,6 @@
 module Budget
-  # Agrège revenus / charges / épargne du foyer et calcule le reste à vivre et le
-  # taux d'épargne, en vue mensuelle ou annuelle (CDC §11.4).
+  # Aggregates the household's income / expenses / savings and computes the
+  # disposable income and the savings rate, in monthly or annual view (Spec §11.4).
   class Summary
     def self.call(household:, period: :monthly)
       new(household, period).call

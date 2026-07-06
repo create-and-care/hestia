@@ -1,4 +1,4 @@
-# Rappel personnalisé sur une tâche (CDC §9.3) : date/heure + destinataire.
+# Custom reminder on a task (Spec §9.3): date/time + recipient.
 class TaskReminder < ApplicationRecord
   belongs_to :task
   belongs_to :user

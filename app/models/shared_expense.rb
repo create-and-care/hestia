@@ -1,6 +1,6 @@
 class SharedExpense < ApplicationRecord
   belongs_to :shared_project
-  belongs_to :shared_project_participant, optional: true # le payeur
+  belongs_to :shared_project_participant, optional: true # the payer
 
   validates :amount, presence: true
 

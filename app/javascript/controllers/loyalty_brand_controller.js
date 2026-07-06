@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Sélectionner une enseigne du catalogue (CDC §10.5) pré-remplit le nom et le
-// format de code ; l'utilisateur reste libre de les modifier ensuite.
+// Selecting a brand from the catalog (Spec §10.5) pre-fills the name and
+// code format; the user is still free to edit them afterward.
 export default class extends Controller {
   static targets = ["select", "name", "format"]
 

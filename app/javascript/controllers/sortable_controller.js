@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 
-// Réorganisation par glisser-déposer. Persiste le nouvel ordre en PATCH sur l'URL
-// fournie, en envoyant la liste ordonnée des identifiants.
+// Drag-and-drop reordering. Persists the new order via a PATCH to the given
+// URL, sending the ordered list of ids.
 export default class extends Controller {
   static values = { url: String }
 

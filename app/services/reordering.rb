@@ -1,6 +1,6 @@
 module Reordering
-  # Applique un ordre (liste d'identifiants) à un ensemble d'enregistrements portant
-  # une colonne `position`. Mutualisé par Courses, Tâches et Fidélité.
+  # Applies an order (list of ids) to a set of records that have a
+  # `position` column. Shared by Shopping, Tasks and Loyalty.
   def self.apply(scope, ids)
     ids = Array(ids).map(&:to_s)
     scope.where(id: ids).find_each do |record|

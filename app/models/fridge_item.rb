@@ -11,6 +11,6 @@ class FridgeItem < ApplicationRecord
 
   scope :ordered, -> { order(:location, :expires_on, :name) }
 
-  # Temps réel : diffusé aux membres du foyer connectés (Solid Cable) — CDC §6.
+  # Real-time: broadcast to connected household members (Solid Cable) — Spec §6.
   broadcasts_to ->(item) { item.household }
 end

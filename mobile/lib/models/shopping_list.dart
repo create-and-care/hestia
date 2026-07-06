@@ -1,5 +1,5 @@
-/// Modèle de données côté client — reflète uniquement la forme JSON exposée par
-/// `api/v1` (aucune règle de gestion ici, cf. CDC §14).
+/// Client-side data model — only mirrors the JSON shape exposed by
+/// `api/v1` (no business rules here, see Spec §14).
 class ShoppingListItem {
   ShoppingListItem({
     required this.id,

@@ -24,7 +24,7 @@ class HouseholdsController < ApplicationController
     @household = Current.household
   end
 
-  # Utilisé notamment pour activer/changer le référentiel de jours fériés (CDC §9.2).
+  # Used in particular to enable/change the public holiday reference (Spec §9.2).
   def update
     if Current.household.update(household_update_params)
       redirect_back fallback_location: household_path(Current.household), notice: "Préférences du foyer mises à jour."
@@ -33,7 +33,7 @@ class HouseholdsController < ApplicationController
     end
   end
 
-  # Bascule du foyer actif (multi-foyer).
+  # Switches the active household (multi-household).
   def activate
     membership = Current.user.memberships.find_by(household_id: params[:id])
 

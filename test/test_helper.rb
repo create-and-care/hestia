@@ -4,8 +4,8 @@ require "rails/test_help"
 require "webmock/minitest"
 require_relative "test_helpers/session_test_helper"
 
-# Aucun appel réseau réel dans les tests (Open Food Facts, Nominatim...) : chaque
-# test doit stuber explicitement les requêtes qu'il exerce.
+# No real network calls in tests (Open Food Facts, Nominatim...): every test must
+# explicitly stub the requests it exercises.
 WebMock.disable_net_connect!(allow_localhost: true)
 
 module ActiveSupport

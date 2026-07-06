@@ -2,8 +2,8 @@ require "net/http"
 require "uri"
 
 module Recipes
-  # Importe une recette depuis une URL externe (schema.org/Recipe). Retourne la recette
-  # créée, ou nil si la page est injoignable ou dépourvue de microdonnées exploitables.
+  # Imports a recipe from an external URL (schema.org/Recipe). Returns the
+  # created recipe, or nil if the page is unreachable or lacks usable microdata.
   class ImportFromUrl
     def self.call(household:, url:, html: nil) = new(household: household, url: url, html: html).call
 

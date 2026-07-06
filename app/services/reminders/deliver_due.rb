@@ -1,6 +1,6 @@
-# Livre les rappels ponctuels arrivés à échéance (CDC §9.2, §9.3) sous forme de
-# Notification in-app temps réel. Appelé périodiquement par Reminders::DeliverDueJob
-# (cf. config/recurring.yml).
+# Delivers one-off reminders that have come due (Spec §9.2, §9.3) as
+# real-time in-app Notifications. Called periodically by Reminders::DeliverDueJob
+# (see config/recurring.yml).
 module Reminders
   class DeliverDue
     LOOKAHEAD = 1.day
@@ -46,8 +46,8 @@ module Reminders
         end
       end
 
-      # Prochaine occurrence de l'événement dont l'heure de rappel (occurrence -
-      # délai configuré) est atteinte, et qui n'a pas déjà été notifiée.
+      # Next occurrence of the event whose reminder time (occurrence -
+      # configured delay) has been reached, and that has not already been notified.
       def next_occurrence_to_notify(event, reminder)
         window_end = Time.current + LOOKAHEAD + reminder.minutes_before.minutes
         event.occurrences_between(Time.current, window_end).find do |occurrence|

@@ -1,6 +1,6 @@
 module Courses
-  # Bascule l'état « pris en magasin » d'un article. Service applicatif réutilisable
-  # par le web, l'API et Hest.IA.
+  # Toggles an item's "picked up in store" state. Application service reusable
+  # by the web, the API and Hest.AI.
   class ToggleItem
     def self.call(item:)
       item.update!(checked: !item.checked)

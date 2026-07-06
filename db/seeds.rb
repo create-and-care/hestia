@@ -2,8 +2,8 @@
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
-# Catalogue d'enseignes de fidélité (CDC §10.5, §16) — constitué progressivement ;
-# une carte "hors catalogue" reste toujours possible pour les enseignes manquantes.
+# Loyalty brand catalog (Spec §10.5, §16) — built up progressively; an
+# "out of catalog" card is always available for brands not yet listed.
 [
   { name: "Carrefour", logo_emoji: "🛒", code_format: "barcode" },
   { name: "Leclerc", logo_emoji: "🛒", code_format: "barcode" },
@@ -19,8 +19,8 @@
   LoyaltyBrand.find_or_create_by!(name: attributes[:name]) { |brand| brand.assign_attributes(attributes) }
 end
 
-# Catalogue de fiches d'entretien de plantes (CDC §11.3, §16) — constitué
-# progressivement ; une Plante sans fiche associée reste pleinement fonctionnelle.
+# Plant care-sheet catalog (Spec §11.3, §16) — built up progressively; a
+# Plant with no reference attached stays fully functional.
 [
   { common_name: "Basilic", scientific_name: "Ocimum basilicum", water_needs: "Fréquent (sol toujours humide)",
     sunlight: "Plein soleil", pruning: "Pincer les fleurs pour prolonger la récolte",

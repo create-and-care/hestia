@@ -1,5 +1,5 @@
 class MenuController < ApplicationController
-  # Planning des repas de la semaine (CDC §11.1).
+  # Weekly meal plan (Spec §11.1).
   def show
     @week_start = parse_monday
     @days = (@week_start..(@week_start + 6.days)).to_a

@@ -1,6 +1,6 @@
-# Statut de péremption d'un enregistrement portant une colonne `expires_on`.
-# Calculé côté serveur à partir de la date courante (jamais figé à la création),
-# pour rester correct sans action de l'utilisateur — CDC §9.4.
+# Expiration status of a record with an `expires_on` column.
+# Computed server-side from the current date (never fixed at creation time),
+# to stay correct without any action from the user — Spec §9.4.
 module Perishable
   extend ActiveSupport::Concern
 
@@ -11,11 +11,11 @@ module Perishable
     if days_left.negative?
       :expired
     elsif days_left <= 1
-      :urgent   # dépassé aujourd'hui / demain
+      :urgent   # overdue today / tomorrow
     elsif days_left <= 3
-      :soon     # 2 à 3 jours
+      :soon     # 2 to 3 days
     else
-      :ok       # au-delà
+      :ok       # beyond that
     end
   end
 end

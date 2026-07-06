@@ -1,4 +1,4 @@
-<%# Le post est ajouté au fil via le flux temps réel ; on réinitialise le champ. %>
+<%# The post is added to the feed via the real-time stream; we just reset the field. %>
 <%= turbo_stream.replace "new_circle_post" do %>
   <%= tag.div id: "new_circle_post" do %>
     <%= form_with model: [ @circle, @circle.circle_posts.new ], url: circle_posts_path(@circle), class: "mb-6 flex gap-2" do |form| %>

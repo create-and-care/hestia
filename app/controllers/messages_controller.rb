@@ -5,7 +5,7 @@ class MessagesController < ApplicationController
     @conversation.touch
 
     respond_to do |format|
-      format.turbo_stream # réinitialise le champ ; le message apparaît via le flux temps réel
+      format.turbo_stream # resets the field; the message appears via the real-time stream
       format.html { redirect_to @conversation }
     end
   rescue ActiveRecord::RecordInvalid

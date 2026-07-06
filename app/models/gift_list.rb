@@ -3,7 +3,7 @@ class GiftList < ApplicationRecord
 
   PERSPECTIVES = %w[receive give].freeze
 
-  belongs_to :contact, optional: true # destinataire pour les listes « offrir »
+  belongs_to :contact, optional: true # recipient for the "give" lists
   has_one :gift_list_share, dependent: :destroy
   has_many :gift_ideas, dependent: :destroy
 

@@ -19,7 +19,7 @@ class Routine < ApplicationRecord
     next_due_on.present? && next_due_on < Date.current
   end
 
-  # Complète la routine : historise (qui, quand) et recalcule la prochaine échéance.
+  # Completes the routine: logs history (who, when) and recalculates the next due date.
   def complete!(author:, on: Date.current)
     transaction do
       routine_completions.create!(author: author, completed_on: on)

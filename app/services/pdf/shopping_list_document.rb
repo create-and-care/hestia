@@ -1,5 +1,5 @@
 module Pdf
-  # Génère le PDF d'une liste de courses, groupée par rayon (CDC §9.1).
+  # Generates the PDF for a shopping list, grouped by aisle (Spec §9.1).
   class ShoppingListDocument
     def initialize(shopping_list)
       @shopping_list = shopping_list
@@ -38,8 +38,8 @@ module Pdf
         [ item.quantity.to_s.sub(/\.0+\z/, ""), item.unit ].reject(&:blank?).join(" ")
       end
 
-      # Retire les caractères non représentables par la police AFM (emoji…), en
-      # conservant les accents français.
+      # Strips characters not representable by the AFM font (emoji…), while
+      # keeping French accented characters.
       def clean(text)
         text.to_s.encode("Windows-1252", invalid: :replace, undef: :replace, replace: "").encode("UTF-8")
       end

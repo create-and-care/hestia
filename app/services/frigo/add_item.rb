@@ -1,6 +1,6 @@
 module Frigo
-  # Ajoute un produit au frigo (emplacement + date de péremption), en alimentant le
-  # catalogue du foyer. Service applicatif invocable par le web, l'API et Hest.IA.
+  # Adds a product to the fridge (location + expiration date), feeding the
+  # household's catalog. Application service invocable by the web, the API and Hest.AI.
   class AddItem
     def self.call(...) = new(...).call
 

@@ -5,7 +5,7 @@ module FridgeHelper
     "garde_manger" => "Garde-manger"
   }.freeze
 
-  # Statut de péremption → [libellé, classes Tailwind du badge].
+  # Expiration status → [label, badge Tailwind classes].
   EXPIRATION = {
     expired: [ "Périmé", "bg-red-100 text-red-700" ],
     urgent:  [ "Aujourd'hui / demain", "bg-orange-100 text-orange-700" ],

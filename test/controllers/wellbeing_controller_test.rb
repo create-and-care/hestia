@@ -33,7 +33,7 @@ class WellbeingControllerTest < ActionDispatch::IntegrationTest
     assert_equal 175, users(:one).reload.wellbeing_profile.height
   end
 
-  # --- Confidentialité stricte (CDC §5, point 4) ---
+  # --- Strict privacy (Spec §5, point 4) ---
 
   test "a user cannot delete another user's weight entry" do
     entry = users(:one).weight_entries.create!(recorded_on: Date.current, weight: 70)

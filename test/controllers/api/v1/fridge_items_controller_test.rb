@@ -21,7 +21,7 @@ module Api
       end
 
       test "index defaults to 25 per page and honors a custom per_page" do
-        # 2 déjà en fixtures (alpha_yogurt, alpha_peas).
+        # 2 already in fixtures (alpha_yogurt, alpha_peas).
         get api_v1_fridge_items_path, headers: auth_headers
         assert_equal 2, JSON.parse(@response.body).size
 

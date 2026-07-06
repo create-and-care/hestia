@@ -7,7 +7,7 @@ class BottlesController < ApplicationController
     redirect_to wine_cellars_path
   end
 
-  # Déplacement d'une bouteille d'une cave à l'autre.
+  # Moving a bottle from one cellar to another.
   def update
     if params.dig(:bottle, :wine_cellar_id).present?
       cellar = Current.household.wine_cellars.find(params[:bottle][:wine_cellar_id])
@@ -16,7 +16,7 @@ class BottlesController < ApplicationController
     redirect_to wine_cellars_path
   end
 
-  # Entrée / sortie (consommation) du stock.
+  # Stock entry / exit (consumption).
   def toggle_stock
     @bottle.update!(in_stock: !@bottle.in_stock)
     redirect_to wine_cellars_path

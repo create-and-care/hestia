@@ -1,32 +1,32 @@
-# Hestia — client mobile (squelette)
+# Hestia — mobile client (skeleton)
 
-Client mobile Flutter/Dart d'Hestia (CDC §14) : client léger consommant l'API Rails
-`api/v1`, sans logique métier propre — toute règle de gestion vit côté serveur, pour
-un comportement identique au client web.
+Hestia's Flutter/Dart mobile client (Spec §14): a thin client consuming the
+Rails `api/v1` API, with no business logic of its own — every business rule
+lives server-side, for identical behavior with the web client.
 
-## Statut
+## Status
 
-**Squelette minimal**, pas une application fonctionnelle : structure de projet,
-client HTTP (`ApiClient`), écran de connexion par jeton API, et un premier écran
-« Courses » en lecture seule. Sert de point de départ, pas de livrable.
+**A minimal skeleton**, not a functional app: project structure, an HTTP
+client (`ApiClient`), an API-token login screen, and a first read-only
+"Shopping" screen. A starting point, not a deliverable.
 
-**Reste à construire**, avant toute parité fonctionnelle réelle :
+**Still to build**, before any real functional parity:
 
-- Écrans pour les 24 autres modules (CDC §9 à §12).
-- Accès caméra natif (scan code-barres, capture de documents).
-- Dictée vocale, notifications push, import de contacts.
-- Mode hors-ligne (lecture des données déjà synchronisées).
-- Connexion temps réel (WebSocket vers Solid Cable), pour l'instant uniquement
-  du HTTP ponctuel côté client.
-- Gestion du renouvellement de jeton / re-authentification transparente.
+- Screens for the other 24 modules (Spec §9 to §12).
+- Native camera access (barcode scanning, document capture).
+- Voice dictation, push notifications, contact import.
+- Offline mode (reading already-synced data).
+- A real-time connection (WebSocket to Solid Cable) — currently only
+  one-off HTTP on the client side.
+- Transparent token renewal / re-authentication.
 
-## Prérequis
+## Prerequisites
 
-Flutter SDK (stable) — non installé dans cet environnement de développement au
-moment de la création de ce squelette ; le code n'a donc pas été exécuté/testé
-avec `flutter run` ou `flutter analyze`.
+The Flutter SDK (stable) — not installed in the development environment
+where this skeleton was created; the code has therefore not been run or
+tested with `flutter run` or `flutter analyze`.
 
-## Démarrer
+## Getting started
 
 ```sh
 cd mobile
@@ -34,6 +34,6 @@ flutter pub get
 flutter run
 ```
 
-À la connexion, l'écran demande l'URL de l'instance Hestia (ex.
-`https://mon-foyer.example.com`) et un jeton API, généré depuis le web sur
-`/api_tokens` (Tableau de bord → Jetons API).
+On login, the screen asks for the Hestia instance's URL (e.g.
+`https://my-household.example.com`) and an API token, generated from the
+web app at `/api_tokens` (Dashboard → API Tokens).

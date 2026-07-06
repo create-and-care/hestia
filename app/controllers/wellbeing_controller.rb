@@ -1,5 +1,5 @@
 class WellbeingController < ApplicationController
-  # Toutes les requêtes passent par Current.user — jamais Current.household (CDC §5.4).
+  # All requests go through Current.user — never Current.household (Spec §5.4).
   def show
     @profile = Current.user.wellbeing_profile || Current.user.build_wellbeing_profile
     @weight_entries = Current.user.weight_entries.chronological

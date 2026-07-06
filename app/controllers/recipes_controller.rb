@@ -45,17 +45,17 @@ class RecipesController < ApplicationController
     redirect_to recipes_path, notice: "Recette supprimée."
   end
 
-  # Mode lecture plein écran pour cuisiner.
+  # Full-screen reading mode for cooking.
   def cook
   end
 
-  # Export des ingrédients vers la liste de courses (interconnexion Recettes → Courses).
+  # Export ingredients to the shopping list (Recipes → Shopping interconnection).
   def add_to_shopping_list
     Recipes::AddIngredientsToShoppingList.call(recipe: @recipe, shopping_list: target_shopping_list)
     redirect_to @recipe, notice: "Ingrédients ajoutés à la liste de courses."
   end
 
-  # Formulaire d'import depuis une URL.
+  # Import form from a URL.
   def new_import
   end
 

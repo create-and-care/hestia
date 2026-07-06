@@ -1,6 +1,6 @@
 class DashboardController < ApplicationController
-  # Tableau de bord du foyer (CDC §7). En Phase 1, il présente le foyer actif,
-  # ses membres et le code d'invitation ; il s'enrichira des modules au fil des vagues.
+  # Household dashboard (Spec §7). In Phase 1, it presents the active household,
+  # its members, and the invite code; it will be enriched with modules over successive waves.
   def show
     @household = Current.household
     @memberships = @household.memberships.includes(:user)

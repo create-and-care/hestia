@@ -4,7 +4,7 @@ class MembershipsController < ApplicationController
   def new
   end
 
-  # Rejoindre un foyer existant via son code d'invitation.
+  # Join an existing household via its invite code.
   def create
     household = Household.find_by(invite_code: normalized_invite_code)
 

@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Recherche un produit par code-barres (catalogue du foyer, puis Open Food Facts)
-// et pré-remplit les champs du formulaire (CDC §9.1, §9.4, §16). La saisie
-// manuelle reste toujours possible si rien n'est trouvé.
+// Looks up a product by barcode (household catalog, then Open Food Facts)
+// and pre-fills the form fields (Spec §9.1, §9.4, §16). Manual entry is
+// always still possible if nothing is found.
 export default class extends Controller {
   static targets = ["barcode", "name", "rayon", "status"]
   static values = { url: String }
