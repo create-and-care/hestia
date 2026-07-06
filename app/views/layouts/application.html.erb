@@ -25,7 +25,8 @@
 
   <body>
     <% if Current.user %>
-      <div class="fixed top-3 right-3 z-40">
+      <div class="fixed top-3 right-3 z-40 flex items-center gap-1">
+        <%= render "shared/locale_switcher" %>
         <%= render "shared/notifications" %>
       </div>
     <% end %>

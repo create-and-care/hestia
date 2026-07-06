@@ -8,7 +8,7 @@ class NotificationPreferencesController < ApplicationController
     preference.assign_attributes(preference_params)
 
     if preference.save
-      redirect_to notification_preference_path, notice: "Préférences mises à jour."
+      redirect_to notification_preference_path, notice: t(".updated")
     else
       @preference = preference
       render :show, status: :unprocessable_entity

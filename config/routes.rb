@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # UI language preference (English default, French available — Spec §8).
+  patch "locale", to: "locales#update", as: :locale
+
   # Versioned REST/JSON API (Spec §15), consumed by the Flutter mobile client and,
   # eventually, by Hest.AI (Phase 3). Token authentication (ApiToken), household
   # scoping always server-side. Covers the wave 2.a modules for now

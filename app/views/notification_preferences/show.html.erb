@@ -1,9 +1,9 @@
-<% content_for :title, "Préférences de notification" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-xl px-4">
   <header class="mb-6">
-    <h1 class="text-2xl font-semibold">🔔 Préférences de notification</h1>
-    <p class="text-sm text-gray-500">Notifications récurrentes du Frigo et des Anniversaires (CDC §9.4, §10.2).</p>
+    <h1 class="text-2xl font-semibold">🔔 <%= t(".title") %></h1>
+    <p class="text-sm text-gray-500"><%= t(".description") %></p>
   </header>
 
   <%= render "shared/flash" %>
@@ -11,20 +11,20 @@
   <%= form_with model: @preference, url: notification_preference_path, method: :patch, class: "space-y-5" do |form| %>
     <label class="flex items-center gap-2">
       <%= form.check_box :fridge_expiry_enabled, class: "size-4" %>
-      <span>Me notifier des produits du Frigo bientôt périmés</span>
+      <span><%= t(".fridge_expiry_enabled") %></span>
     </label>
 
     <div>
-      <%= form.label :fridge_expiry_threshold_days, "Délai d'anticipation (jours)", class: "mb-1 block text-sm font-medium text-gray-700" %>
+      <%= form.label :fridge_expiry_threshold_days, t(".fridge_expiry_threshold_days"), class: "mb-1 block text-sm font-medium text-gray-700" %>
       <%= form.number_field :fridge_expiry_threshold_days, min: 0, max: 14,
             class: "w-24 rounded-md border border-gray-300 px-3 py-2" %>
     </div>
 
     <label class="flex items-center gap-2">
       <%= form.check_box :birthday_notifications_enabled, class: "size-4" %>
-      <span>Me notifier des anniversaires le jour J</span>
+      <span><%= t(".birthday_notifications_enabled") %></span>
     </label>
 
-    <%= form.submit "Enregistrer", class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <%= form.submit t(".save"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
   <% end %>
 </div>

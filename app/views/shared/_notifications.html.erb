@@ -2,25 +2,25 @@
 
 <%= render Ui::PopoverComponent.new do |popover| %>
   <% popover.with_trigger do %>
-    <button type="button" class="relative cursor-pointer rounded-full p-2 hover:bg-gray-100" aria-label="Notifications">
+    <button type="button" class="relative cursor-pointer rounded-full p-2 hover:bg-gray-100" aria-label="<%= t(".title") %>">
       <span aria-hidden="true">🔔</span>
       <%= render "notifications/badge", count: Current.user.notifications.unread.count %>
     </button>
   <% end %>
 
   <div class="flex items-center justify-between border-b border-gray-100 pb-2">
-    <h2 class="text-sm font-medium">Notifications</h2>
-    <%= button_to "Tout marquer lu", mark_all_read_notifications_path, method: :patch,
+    <h2 class="text-sm font-medium"><%= t(".title") %></h2>
+    <%= button_to t(".mark_all_read"), mark_all_read_notifications_path, method: :patch,
           class: "cursor-pointer text-xs text-gray-500 underline" %>
   </div>
   <div id="notifications_list" class="max-h-80 divide-y divide-gray-50 overflow-y-auto">
     <% notifications = Current.user.notifications.recent.limit(10) %>
     <% if notifications.none? %>
-      <p class="py-4 text-center text-xs text-gray-400">Aucune notification.</p>
+      <p class="py-4 text-center text-xs text-gray-400"><%= t(".none") %></p>
     <% end %>
     <% notifications.each do |notification| %>
       <%= render "notifications/notification", notification: notification %>
     <% end %>
   </div>
-  <%= link_to "Voir tout", notifications_path, class: "mt-2 block text-center text-xs underline" %>
+  <%= link_to t(".see_all"), notifications_path, class: "mt-2 block text-center text-xs underline" %>
 <% end %>

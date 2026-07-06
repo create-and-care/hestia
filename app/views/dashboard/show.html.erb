@@ -1,19 +1,19 @@
-<% content_for :title, "Tableau de bord" %>
+<% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
   <header class="mb-8 flex items-center justify-between">
     <div>
-      <p class="text-sm text-gray-500">Foyer actif</p>
+      <p class="text-sm text-gray-500"><%= t(".active_household") %></p>
       <h1 class="text-2xl font-semibold"><%= @household.name %></h1>
     </div>
     <div class="flex items-center gap-2">
-      <%= link_to "🗺️ Roadmap", roadmap_path,
+      <%= link_to "🗺️ #{t('.roadmap')}", roadmap_path,
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-      <%= link_to "🔔 Préférences", notification_preference_path,
+      <%= link_to "🔔 #{t('.preferences')}", notification_preference_path,
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-      <%= link_to "📱 Jetons API", api_tokens_path,
+      <%= link_to "📱 #{t('.api_tokens')}", api_tokens_path,
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-      <%= button_to "Se déconnecter", session_path, method: :delete,
+      <%= button_to t(".sign_out"), session_path, method: :delete,
             class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
     </div>
   </header>
@@ -21,69 +21,69 @@
   <%= render "shared/flash" %>
 
   <nav class="mb-8 flex flex-wrap gap-2">
-    <%= link_to "🛒 Courses", shopping_lists_path,
+    <%= link_to "🛒 #{t('.nav.shopping')}", shopping_lists_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm font-medium hover:bg-gray-50" %>
-    <%= link_to "🧊 Frigo", fridge_path,
+    <%= link_to "🧊 #{t('.nav.fridge')}", fridge_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm font-medium hover:bg-gray-50" %>
-    <%= link_to "📖 Recettes", recipes_path,
+    <%= link_to "📖 #{t('.nav.recipes')}", recipes_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm font-medium hover:bg-gray-50" %>
-    <%= link_to "✅ Tâches", tasks_path,
+    <%= link_to "✅ #{t('.nav.tasks')}", tasks_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm font-medium hover:bg-gray-50" %>
-    <%= link_to "📅 Calendrier", calendar_path,
+    <%= link_to "📅 #{t('.nav.calendar')}", calendar_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm font-medium hover:bg-gray-50" %>
   </nav>
 
   <nav class="mb-8 flex flex-wrap gap-2">
-    <%= link_to "📝 Notes", notes_path,
+    <%= link_to "📝 #{t('.nav.notes')}", notes_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🎂 Anniversaires", contacts_path,
+    <%= link_to "🎂 #{t('.nav.birthdays')}", contacts_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "📍 Adresses", addresses_path,
+    <%= link_to "📍 #{t('.nav.addresses')}", addresses_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🧰 Prestataires", service_providers_path,
+    <%= link_to "🧰 #{t('.nav.service_providers')}", service_providers_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "💳 Fidélité", loyalty_cards_path,
+    <%= link_to "💳 #{t('.nav.loyalty')}", loyalty_cards_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🐾 Animaux", pets_path,
+    <%= link_to "🐾 #{t('.nav.pets')}", pets_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🚗 Véhicules", vehicles_path,
+    <%= link_to "🚗 #{t('.nav.vehicles')}", vehicles_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🍷 Cave à vin", wine_cellars_path,
+    <%= link_to "🍷 #{t('.nav.wine_cellar')}", wine_cellars_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🗑 Déchets", waste_path,
+    <%= link_to "🗑 #{t('.nav.waste')}", waste_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "👶 Bébé", baby_profiles_path,
+    <%= link_to "👶 #{t('.nav.baby')}", baby_profiles_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "💬 Messages", conversations_path,
+    <%= link_to "💬 #{t('.nav.messages')}", conversations_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🍽 Menu", menu_path,
+    <%= link_to "🍽 #{t('.nav.menu')}", menu_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🔁 Routines", routines_path,
+    <%= link_to "🔁 #{t('.nav.routines')}", routines_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🌳 Extérieur", exterior_path,
+    <%= link_to "🌳 #{t('.nav.outdoor')}", exterior_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "💶 Budget", budget_path,
+    <%= link_to "💶 #{t('.nav.budget')}", budget_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "📄 Documents", documents_path,
+    <%= link_to "📄 #{t('.nav.documents')}", documents_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🎁 Cadeaux", gift_lists_path,
+    <%= link_to "🎁 #{t('.nav.gifts')}", gift_lists_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "👥 Cercles", circles_path,
+    <%= link_to "👥 #{t('.nav.circles')}", circles_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🧳 Voyages", trips_path,
+    <%= link_to "🧳 #{t('.nav.trips')}", trips_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-    <%= link_to "🧘 Bien-être", wellbeing_path,
+    <%= link_to "🧘 #{t('.nav.wellbeing')}", wellbeing_path,
           class: "rounded-md border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50" %>
   </nav>
 
   <section class="mb-8 rounded-lg border border-gray-200 p-5">
-    <h2 class="mb-1 font-medium">Inviter un membre</h2>
-    <p class="mb-3 text-sm text-gray-600">Partagez ce code pour rejoindre le foyer :</p>
+    <h2 class="mb-1 font-medium"><%= t(".invite_member") %></h2>
+    <p class="mb-3 text-sm text-gray-600"><%= t(".invite_description") %></p>
     <code class="rounded-md bg-gray-100 px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
   </section>
 
   <section class="mb-8">
-    <h2 class="mb-3 font-medium">Membres (<%= @memberships.size %>)</h2>
+    <h2 class="mb-3 font-medium"><%= t(".members", count: @memberships.size) %></h2>
     <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @memberships.each do |membership| %>
         <li class="flex items-center justify-between px-4 py-3">
@@ -92,7 +92,7 @@
             <p class="text-sm text-gray-500"><%= membership.user.email_address %></p>
           </div>
           <span class="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
-            <%= membership.admin? ? "Administrateur" : "Membre" %>
+            <%= membership.admin? ? t(".admin") : t(".member") %>
           </span>
         </li>
       <% end %>
@@ -101,11 +101,11 @@
 
   <% if @other_households.any? %>
     <section class="mb-8">
-      <h2 class="mb-3 font-medium">Changer de foyer</h2>
+      <h2 class="mb-3 font-medium"><%= t(".switch_household") %></h2>
       <ul class="space-y-2">
         <% @other_households.each do |household| %>
           <li>
-            <%= button_to "Basculer vers « #{household.name} »", activate_household_path(household), method: :patch,
+            <%= button_to t(".switch_to", name: household.name), activate_household_path(household), method: :patch,
                   class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
           </li>
         <% end %>
@@ -114,7 +114,7 @@
   <% end %>
 
   <section class="flex gap-4 text-sm">
-    <%= link_to "Créer un autre foyer", new_household_path, class: "underline" %>
-    <%= link_to "Rejoindre un autre foyer", new_membership_path, class: "underline" %>
+    <%= link_to t(".create_household"), new_household_path, class: "underline" %>
+    <%= link_to t(".join_household"), new_membership_path, class: "underline" %>
   </section>
 </div>

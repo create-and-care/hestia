@@ -1,0 +1,25 @@
+en:
+  shared:
+    notifications:
+      title: "Notifications"
+      mark_all_read: "Mark all read"
+      none: "No notifications."
+      see_all: "See all"
+  notifications:
+    notification:
+      mark_read: "Mark as read"
+    index:
+      title: "Notifications"
+      preferences: "Preferences"
+      mark_all_read: "Mark all read"
+      none: "No notifications yet."
+  notification_preferences:
+    show:
+      title: "Notification preferences"
+      description: "Recurring notifications for Fridge and Birthdays (Spec §9.4, §10.2)."
+      fridge_expiry_enabled: "Notify me about Fridge items expiring soon"
+      fridge_expiry_threshold_days: "Lead time (days)"
+      birthday_notifications_enabled: "Notify me about birthdays on the day"
+      save: "Save"
+    update:
+      updated: "Preferences updated."

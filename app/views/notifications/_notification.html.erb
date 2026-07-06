@@ -9,6 +9,6 @@
   </div>
   <% unless notification.read? %>
     <%= button_to "✓", mark_read_notification_path(notification), method: :patch,
-          class: "cursor-pointer shrink-0 text-gray-400 hover:text-gray-900", aria: { label: "Marquer comme lu" } %>
+          class: "cursor-pointer shrink-0 text-gray-400 hover:text-gray-900", aria: { label: t(".mark_read") } %>
   <% end %>
 <% end %>
