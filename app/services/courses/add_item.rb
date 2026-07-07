@@ -18,7 +18,7 @@ module Courses
 
     def call
       @product ||= catalog_product
-      rayon = @rayon || @product&.rayon || "autre"
+      rayon = @rayon || @product&.rayon || Courses::GuessRayon.call(@name)
 
       @shopping_list.items.create!(
         name: @name,

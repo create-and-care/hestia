@@ -26,9 +26,14 @@ module Courses
       end
     end
 
-    test "defaults the rayon to autre" do
+    test "defaults the rayon to autre when nothing can be guessed" do
       item = Courses::AddItem.call(shopping_list: @list, name: "Objet divers")
       assert_equal "autre", item.rayon
+    end
+
+    test "guesses the rayon from the item name when not given one" do
+      item = Courses::AddItem.call(shopping_list: @list, name: "2 tomates")
+      assert_equal "fruits_legumes", item.rayon
     end
   end
 end
