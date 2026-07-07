@@ -13,6 +13,9 @@ fr:
       time_zone_heading: "Fuseau horaire"
       time_zone_label: "Utilisé pour les calculs sensibles au jour (péremption Frigo, échéances Tâches, digest quotidien)"
       time_zone_submit: "Enregistrer"
+      required_meal_types_heading: "Repas obligatoires"
+      required_meal_types_description: "Le Menu de la semaine signale les jours où un de ces repas n'a pas encore été planifié."
+      required_meal_types_submit: "Enregistrer les repas obligatoires"
       tabs:
         general: "Général"
         notifications: "Notifications"

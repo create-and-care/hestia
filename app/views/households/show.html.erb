@@ -29,6 +29,24 @@
             </div>
           <% end %>
         </section>
+
+        <section class="rounded-lg border border-gray-200 p-5">
+          <h2 class="mb-1 font-medium"><%= t(".required_meal_types_heading") %></h2>
+          <p class="mb-4 text-sm text-gray-500"><%= t(".required_meal_types_description") %></p>
+          <%= form_with model: @household, url: household_path(@household), method: :patch, class: "space-y-4" do |form| %>
+            <div class="flex flex-wrap gap-4">
+              <% MealPlanEntry::MEAL_TYPES.without("free").each do |type| %>
+                <label class="flex items-center gap-2 text-sm">
+                  <%= check_box_tag "household[required_meal_types][]", type, @household.required_meal_types.include?(type),
+                        id: "required_meal_type_#{type}", class: "size-4" %>
+                  <%= meal_type_label(type) %>
+                </label>
+              <% end %>
+              <%= hidden_field_tag "household[required_meal_types][]", "" %>
+            </div>
+            <%= form.submit t(".required_meal_types_submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+          <% end %>
+        </section>
       </div>
     <% end %>
 

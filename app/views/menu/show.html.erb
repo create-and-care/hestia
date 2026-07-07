@@ -29,6 +29,9 @@
             </li>
           <% end %>
         </ul>
+        <% if (missing = missing_meal_types(day)).any? %>
+          <p class="mt-2 text-xs text-amber-600">⚠️ <%= t(".missing_meals", meals: missing.map { |type| meal_type_label(type) }.join(", ")) %></p>
+        <% end %>
       </section>
     <% end %>
   </div>

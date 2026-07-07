@@ -93,6 +93,15 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [ "shopping" ], households(:alpha).reload.disabled_modules
   end
 
+  test "update sets the household's required meal types" do
+    sign_in_as(users(:one))
+
+    patch household_path(households(:alpha)), params: { household: { required_meal_types: [ "lunch", "dinner" ] } }
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_equal %w[lunch dinner], households(:alpha).reload.required_meal_types
+  end
+
   test "update_modules refuses a non-admin member" do
     sign_in_as(users(:two)) # admin of :beta, not a member of :alpha
     households(:alpha).memberships.create!(user: users(:two), role: :member)

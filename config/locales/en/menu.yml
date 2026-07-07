@@ -25,3 +25,4 @@ en:
       recipe_blank: "— recipe —"
       free_name_placeholder: "or custom name"
       add: "Add"
+      missing_meals: "Missing meal: %{meals}"

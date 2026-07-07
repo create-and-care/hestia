@@ -68,4 +68,15 @@ class HouseholdTest < ActiveSupport::TestCase
     assert_not household.valid?
     assert_includes household.errors[:disabled_modules].join, "not_a_module"
   end
+
+  test "has no required meal types by default" do
+    household = Household.create!(name: "Test")
+    assert_empty household.required_meal_types
+  end
+
+  test "rejects unknown required meal types" do
+    household = Household.new(name: "Test", required_meal_types: [ "brunch" ])
+    assert_not household.valid?
+    assert_includes household.errors[:required_meal_types].join, "brunch"
+  end
 end

@@ -25,3 +25,4 @@ fr:
       recipe_blank: "— recette —"
       free_name_placeholder: "ou nom libre"
       add: "Ajouter"
+      missing_meals: "Repas manquant : %{meals}"

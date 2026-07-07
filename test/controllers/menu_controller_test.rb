@@ -14,6 +14,30 @@ class MenuControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "show flags a day missing a required meal type" do
+    households(:alpha).update!(required_meal_types: %w[lunch dinner])
+
+    get menu_path
+
+    assert_response :success
+    assert_includes @response.body, "Missing meal"
+  end
+
+  test "show does not flag a day once all required meals are planned" do
+    households(:alpha).update!(required_meal_types: %w[dinner])
+    monday = Date.current.beginning_of_week
+    # alpha_dinner fixture already covers Tuesday; fill in the other six days.
+    (monday..monday + 6.days).each do |day|
+      next if day == meal_plan_entries(:alpha_dinner).on_date
+      households(:alpha).meal_plan_entries.create!(on_date: day, meal_type: "dinner", free_name: "Pâtes")
+    end
+
+    get menu_path(week: monday)
+
+    assert_response :success
+    assert_not_includes @response.body, "Missing meal"
+  end
+
   test "create a meal from a recipe" do
     assert_difference -> { households(:alpha).meal_plan_entries.count }, 1 do
       post meal_plan_entries_path, params: { meal_plan_entry: { on_date: Date.current, meal_type: "lunch", recipe_id: recipes(:alpha_pancakes).id } }

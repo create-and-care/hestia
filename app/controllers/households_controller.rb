@@ -177,6 +177,6 @@ class HouseholdsController < ApplicationController
     end
 
     def household_update_params
-      params.require(:household).permit(:holiday_country, :time_zone)
+      params.require(:household).permit(:holiday_country, :time_zone, required_meal_types: [])
     end
 end

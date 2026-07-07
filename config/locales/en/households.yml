@@ -13,6 +13,9 @@ en:
       time_zone_heading: "Time zone"
       time_zone_label: "Used for day-boundary calculations (Fridge expiry, Task due dates, daily digest)"
       time_zone_submit: "Save"
+      required_meal_types_heading: "Required meals"
+      required_meal_types_description: "The weekly Menu flags days where one of these meals hasn't been planned yet."
+      required_meal_types_submit: "Save required meals"
       tabs:
         general: "General"
         notifications: "Notifications"

@@ -8,4 +8,10 @@ module MenuHelper
   def recipe_options
     Current.household.recipes.order(:title).map { |recipe| [ recipe.title, recipe.id ] }
   end
+
+  # Which of the household's required meal types (Spec §11.1) have no entry
+  # yet for this day, so the weekly Menu view can flag a gap.
+  def missing_meal_types(day)
+    Current.household.required_meal_types - Array(@entries[day]).map(&:meal_type)
+  end
 end

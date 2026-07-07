@@ -60,6 +60,7 @@ class Household < ApplicationRecord
   validates :holiday_country, inclusion: { in: HOLIDAY_COUNTRIES }, allow_blank: true
   validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
   validate :disabled_modules_are_known_keys
+  validate :required_meal_types_are_known_types
 
   before_validation :ensure_invite_code, on: :create
 
@@ -95,5 +96,10 @@ class Household < ApplicationRecord
     def disabled_modules_are_known_keys
       unknown = disabled_modules.to_a - MODULE_KEYS
       errors.add(:disabled_modules, "contains unknown module keys: #{unknown.join(', ')}") if unknown.any?
+    end
+
+    def required_meal_types_are_known_types
+      unknown = required_meal_types.to_a - MealPlanEntry::MEAL_TYPES
+      errors.add(:required_meal_types, "contains unknown meal types: #{unknown.join(', ')}") if unknown.any?
     end
 end
