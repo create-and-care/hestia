@@ -89,6 +89,18 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to recipe
   end
 
+  test "add_to_shopping_list is idempotent and notices when already added" do
+    recipe = recipes(:alpha_pancakes)
+    post add_to_shopping_list_recipe_path(recipe)
+
+    assert_no_difference -> { ShoppingListItem.count } do
+      post add_to_shopping_list_recipe_path(recipe)
+    end
+    assert_redirected_to recipe
+    follow_redirect!
+    assert_includes @response.body, "already on the shopping list"
+  end
+
   test "import with a blank url re-renders the form" do
     post import_recipes_path, params: { url: "" }
     assert_response :unprocessable_entity

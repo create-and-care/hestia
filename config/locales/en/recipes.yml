@@ -65,6 +65,7 @@ en:
       deleted: "Recipe deleted."
     add_to_shopping_list:
       notice: "Ingredients added to the shopping list."
+      already_notice: "This recipe's ingredients are already on the shopping list."
     import:
       notice: "Recipe imported."
       alert: "Couldn't import this recipe (page unreachable or no microdata)."

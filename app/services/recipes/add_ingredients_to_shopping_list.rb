@@ -8,7 +8,8 @@ module Recipes
           shopping_list: shopping_list,
           name: ingredient.name,
           quantity: ingredient.quantity,
-          unit: ingredient.unit
+          unit: ingredient.unit,
+          recipe: recipe
         )
       end
     end

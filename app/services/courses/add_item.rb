@@ -6,13 +6,14 @@ module Courses
   class AddItem
     def self.call(...) = new(...).call
 
-    def initialize(shopping_list:, name:, quantity: nil, unit: nil, rayon: nil, product: nil)
+    def initialize(shopping_list:, name:, quantity: nil, unit: nil, rayon: nil, product: nil, recipe: nil)
       @shopping_list = shopping_list
       @name = name.to_s.strip
       @quantity = quantity
       @unit = unit.presence
       @rayon = rayon.presence
       @product = product
+      @recipe = recipe
     end
 
     def call
@@ -25,6 +26,7 @@ module Courses
         unit: @unit,
         rayon: rayon,
         product: @product,
+        recipe: @recipe,
         position: next_position
       )
     end

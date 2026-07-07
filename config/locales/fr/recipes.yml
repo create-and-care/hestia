@@ -65,6 +65,7 @@ fr:
       deleted: "Recette supprimée."
     add_to_shopping_list:
       notice: "Ingrédients ajoutés à la liste de courses."
+      already_notice: "Les ingrédients de cette recette sont déjà dans la liste de courses."
     import:
       notice: "Recette importée."
       alert: "Impossible d'importer cette recette (page injoignable ou sans microdonnées)."

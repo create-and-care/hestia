@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_220849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -750,10 +750,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
     t.bigint "product_id"
     t.decimal "quantity", precision: 10, scale: 2
     t.string "rayon"
+    t.bigint "recipe_id"
     t.bigint "shopping_list_id", null: false
     t.string "unit"
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_shopping_list_items_on_product_id"
+    t.index ["recipe_id"], name: "index_shopping_list_items_on_recipe_id"
     t.index ["shopping_list_id"], name: "index_shopping_list_items_on_shopping_list_id"
   end
 
@@ -1002,6 +1004,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
   add_foreign_key "shared_project_participants", "shared_projects"
   add_foreign_key "shared_projects", "households"
   add_foreign_key "shopping_list_items", "products"
+  add_foreign_key "shopping_list_items", "recipes"
   add_foreign_key "shopping_list_items", "shopping_lists"
   add_foreign_key "shopping_lists", "households"
   add_foreign_key "shopping_lists", "trips"

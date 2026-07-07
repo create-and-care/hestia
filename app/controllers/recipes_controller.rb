@@ -50,9 +50,17 @@ class RecipesController < ApplicationController
   end
 
   # Export ingredients to the shopping list (Recipes → Shopping interconnection).
+  # A recipe's ingredients are only exported once per list: a repeat click
+  # reports that they're already there instead of piling up duplicate items.
   def add_to_shopping_list
-    Recipes::AddIngredientsToShoppingList.call(recipe: @recipe, shopping_list: target_shopping_list)
-    redirect_to @recipe, notice: t(".notice")
+    list = target_shopping_list
+
+    if list.items.exists?(recipe_id: @recipe.id)
+      redirect_to @recipe, notice: t(".already_notice")
+    else
+      Recipes::AddIngredientsToShoppingList.call(recipe: @recipe, shopping_list: list)
+      redirect_to @recipe, notice: t(".notice")
+    end
   end
 
   # Import form from a URL.

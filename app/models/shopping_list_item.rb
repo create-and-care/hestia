@@ -3,6 +3,7 @@ class ShoppingListItem < ApplicationRecord
 
   belongs_to :shopping_list
   belongs_to :product, optional: true
+  belongs_to :recipe, optional: true
 
   validates :name, presence: true
   validates :rayon, inclusion: { in: RAYONS }, allow_nil: true
