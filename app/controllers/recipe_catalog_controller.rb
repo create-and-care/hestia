@@ -5,8 +5,12 @@ class RecipeCatalogController < ApplicationController
   # catalog and clone entries into the household's own book (Spec §9.5).
   def index
     @query = params[:q].to_s.strip
+    @tag = params[:tag].to_s.strip
+    @tags = RecipeCatalogEntry.all_tags
+
     entries = RecipeCatalogEntry.ordered
     entries = entries.search(@query) if @query.present?
+    entries = entries.tagged(@tag) if @tag.present?
 
     @page = [ params[:page].to_i, 1 ].max
     @per_page = PER_PAGE

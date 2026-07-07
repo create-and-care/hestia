@@ -2,7 +2,7 @@
   <h2 class="font-medium"><%= entry.title %></h2>
   <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500">
     <% entry.tags.each do |tag| %>
-      <span class="rounded-full bg-gray-100 px-2 py-0.5">#<%= tag %></span>
+      <span class="rounded-full bg-gray-100 px-2 py-0.5">#<%= t("recipe_catalog.tags.#{tag}", default: tag.humanize) %></span>
     <% end %>
     <% if entry.total_time_minutes %>
       <span>⏱ <%= t("recipes.recipe.total_time", minutes: entry.total_time_minutes) %></span>

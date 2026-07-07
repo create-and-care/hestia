@@ -3,12 +3,23 @@ en:
     index:
       title: "Discover recipes"
       search_placeholder: "Search…"
+      tag_blank: "All categories"
+      filter_submit: "Filter"
       mine_tab: "My recipes"
       discover_tab: "Discover"
       empty: "No recipes in the catalog yet."
       empty_search: "No recipes for this search."
       previous_page: "← Previous"
       next_page: "Next →"
+    tags:
+      poulet: "Chicken"
+      boeuf: "Beef"
+      porc: "Pork"
+      veau: "Veal"
+      poisson: "Fish"
+      fruits_de_mer: "Seafood"
+      vegetarien: "Vegetarian"
+      boisson: "Drink"
     entry:
       add_link: "Add to my book"
     add_to_household:

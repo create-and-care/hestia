@@ -3,9 +3,12 @@
 <div class="mx-auto mt-10 max-w-3xl px-4">
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="text-2xl font-semibold">🔎 <%= t(".title") %></h1>
-    <%= form_with url: recipe_catalog_path, method: :get do |form| %>
+    <%= form_with url: recipe_catalog_path, method: :get, class: "flex flex-wrap items-center gap-2" do |form| %>
       <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+      <%= form.select :tag, options_for_select(@tags.map { |tag| [ t("recipe_catalog.tags.#{tag}", default: tag.humanize), tag ] }, @tag),
+            { include_blank: t(".tag_blank") }, class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+      <%= form.submit t(".filter_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </header>
 
@@ -26,8 +29,8 @@
   <% end %>
 
   <div class="mt-6 flex justify-between text-sm">
-    <%= link_to t(".previous_page"), recipe_catalog_path(q: @query, page: @page - 1), class: "underline" if @page > 1 %>
-    <%= link_to t(".next_page"), recipe_catalog_path(q: @query, page: @page + 1), class: "underline" if @page * @per_page < @total %>
+    <%= link_to t(".previous_page"), recipe_catalog_path(q: @query, tag: @tag, page: @page - 1), class: "underline" if @page > 1 %>
+    <%= link_to t(".next_page"), recipe_catalog_path(q: @query, tag: @tag, page: @page + 1), class: "underline" if @page * @per_page < @total %>
   </div>
 
   <p class="mt-6 text-sm">

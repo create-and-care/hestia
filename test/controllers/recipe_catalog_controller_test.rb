@@ -21,6 +21,13 @@ class RecipeCatalogControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Pâtes carbonara"
   end
 
+  test "tag filter narrows the catalog to matching entries" do
+    get recipe_catalog_path(tag: "vegetarien")
+    assert_response :success
+    assert_includes @response.body, "Salade de quinoa"
+    assert_not_includes @response.body, "Pâtes carbonara"
+  end
+
   test "add_to_household clones the entry into the current household" do
     entry = recipe_catalog_entries(:carbonara)
 

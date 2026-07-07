@@ -1,9 +1,19 @@
 carbonara:
   source_url: https://example.com/carbonara
   title: Pâtes carbonara
-  tags: []
+  tags: ["porc"]
   servings: 2
   prep_time_minutes: 10
   cook_time_minutes: 15
   ingredients: ["200 g de pâtes", "100 g de lardons", "2 oeufs"]
   steps: ["Faire cuire les pâtes.", "Faire revenir les lardons.", "Mélanger avec les oeufs hors du feu."]
+
+quinoa_salad:
+  source_url: https://example.com/quinoa-salad
+  title: Salade de quinoa aux légumes
+  tags: ["vegetarien"]
+  servings: 2
+  prep_time_minutes: 15
+  cook_time_minutes: 10
+  ingredients: ["150 g de quinoa", "1 poivron", "1 courgette"]
+  steps: ["Cuire le quinoa.", "Faire revenir les légumes.", "Mélanger le tout."]

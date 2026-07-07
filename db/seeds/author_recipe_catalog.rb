@@ -9,7 +9,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/market/menu-enfant-nuggets-and-frites-de-patate-douce-6a1daf4656363d596eb66076",
     "title" => "Nuggets de poulet croustillants et frites de patate douce",
-    "tags" => [],
+    "tags" => [ "poulet" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -30,7 +30,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/market/tartinable-maison-baba-ganoush-daubergine-6a1d4ceb56363d596eb651f6",
     "title" => "Baba ganoush d'aubergine maison",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -51,7 +51,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/poke-bowl-thon-sriracha-and-avocat-6a15a164632bb8a09b2dde37",
     "title" => "Poké bowl thon, sriracha et avocat",
-    "tags" => [],
+    "tags" => [ "poisson" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -72,7 +72,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/bowl-californien-quinoa-and-avocat-6a15a018632bb8a09b2dde10",
     "title" => "Bowl California au quinoa, cranberries et avocat",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -93,7 +93,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/spicy-bowl-crevettes-dorees-citron-and-mangue-6a15a0cdaa184ea195d71b60",
     "title" => "Bowl épicé de crevettes dorées, citron et mangue",
-    "tags" => [],
+    "tags" => [ "fruits_de_mer" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -115,7 +115,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/matar-paneer-curry-depinards-and-petits-pois-69d902206bb16e39e1b7ec48",
     "title" => "Matar paneer, curry d'épinards et petits pois",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -138,7 +138,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/saumon-sauce-avoine-estragon-and-broccolini-poche-6a15a19aaa184ea195d71b72",
     "title" => "Saumon, sauce avoine-estragon et broccolini poché",
-    "tags" => [],
+    "tags" => [ "poisson" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -160,7 +160,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/burrito-bowl-tofu-avocat-and-sauce-yaourt-6a15a366632bb8a09b2ddecb",
     "title" => "Burrito bowl tofu, avocat et sauce au yaourt",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -181,7 +181,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/burrito-bowl-tofu-avocat-and-sauce-yaourt-6a15a366aa184ea195d71b8d",
     "title" => "Burrito bowl tofu, haricots noirs et poivrons grillés",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -202,7 +202,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/bowl-californien-boulgour-et-quinoa-precuits-and-avocat-6a15a018b2ced2367200b236",
     "title" => "Bowl California au boulgour et quinoa, cranberries et avocat",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -223,7 +223,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/cabillaud-au-four-and-sauce-vierge-a-lorange-69de49b04af8f3547a643690",
     "title" => "Cabillaud au four, sauce vierge à l'orange et fenouil",
-    "tags" => [],
+    "tags" => [ "poisson" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -244,7 +244,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/spaghetti-au-haddock-fume-and-creme-de-courgette-69e9ee6efe534c766c45bcd0",
     "title" => "Spaghetti au haddock fumé et crème de courgette",
-    "tags" => [],
+    "tags" => [ "poisson" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -266,7 +266,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/market/tartinable-maison-haricots-blancs-and-paprika-6a0d7532099c5b8fd89cb5bc",
     "title" => "Tartinade de haricots blancs, paprika fumé et poivrons confits",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -285,7 +285,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/quinoa-truite-and-fenouil-braises-du-comptoir-69d9023168ee73d4d3ffe141",
     "title" => "Quinoa, truite et fenouil braisés, vinaigrette orange-miel",
-    "tags" => [],
+    "tags" => [ "poisson" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -307,7 +307,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/curry-udon-au-poulet-and-coco-6a0ab8b110e255982cf3f9f7",
     "title" => "Curry udon au poulet et lait de coco",
-    "tags" => [],
+    "tags" => [ "poulet" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -328,7 +328,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/bowl-italienne-polpettes-a-la-sauce-tomate-69d9022868ee73d4d3ffe10f",
     "title" => "Bowl italien, polpettes et frites de courgette, sauce tomate au basilic",
-    "tags" => [],
+    "tags" => [ "boeuf" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -350,7 +350,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/ravioli-nduja-and-sauce-facon-ratatouille-69d9024868ee73d4d3ffe1a8",
     "title" => "Ravioli au nduja, sauce façon ratatouille et chèvre frais",
-    "tags" => [],
+    "tags" => [ "porc" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -371,7 +371,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/croque-champis-and-bechamel-a-la-fourme-dambert-69d901f06bb16e39e1b7eb32",
     "title" => "Croque aux champignons, béchamel à la fourme d'Ambert et salade pommes-noix",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -394,7 +394,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/burger-de-boeuf-sauce-bbq-moutarde-comme-aux-usa-69e9ee3db2918f341e7b1d16",
     "title" => "Burger de bœuf, sauce BBQ-moutarde, cheddar et frites maison",
-    "tags" => [],
+    "tags" => [ "boeuf" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -416,7 +416,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/jerk-chicken-label-rouge-and-riz-aux-haricots-69e9ee47a777d4c0e74a79b1",
     "title" => "Jerk chicken Label Rouge et riz aux haricots rouges",
-    "tags" => [],
+    "tags" => [ "poulet" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -438,7 +438,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/porc-sauce-a-lorange-facon-chenpi-chinois-69dd48ea6bb16e39e1b844ad",
     "title" => "Porc sauce à l'orange façon chenpi et brocoli au sésame",
-    "tags" => [],
+    "tags" => [ "porc" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -461,7 +461,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/mijote-de-pois-chiches-and-epinards-a-litalienne-69d901f3defeabaeea86171c",
     "title" => "Mijoté de pois chiches et épinards à l'italienne, pecorino et focaccia",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -483,7 +483,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/la-dolce-vita-legumes-grilles-and-coppa-69dd09a36bb16e39e1b840ce",
     "title" => "Légumes grillés à l'italienne, coppa, grana padano et tomate côtelée",
-    "tags" => [],
+    "tags" => [ "porc" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -504,7 +504,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/market/tartinable-maison-houmous-aux-poivrons-grilles-69ef23a679a9f8cdb074dae8",
     "title" => "Houmous maison aux poivrons grillés",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -523,7 +523,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/pebronata-corse-veau-en-sauce-aux-poivrons-69fb105ca2b8b19764025737",
     "title" => "Pebronata corse, veau et lardons mijotés aux poivrons",
-    "tags" => [],
+    "tags" => [ "veau" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -545,11 +545,11 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/market/virgin-mojito-citron-vert-and-menthe-69ef23a8b2918f341e7bc873",
     "title" => "Virgin mojito citron vert et menthe",
-    "tags" => [],
+    "tags" => [ "boisson" ],
     "servings" => 4,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
-    "ingredients" => ["6 citrons", "2 sachets de menthe", "100 g de sucre de canne", "1000 ml d'eau"],
+    "ingredients" => [ "6 citrons", "2 sachets de menthe", "100 g de sucre de canne", "1000 ml d'eau" ],
     "steps" => [
       "Préparer des glaçons. Laver la menthe et réserver quatre tranches de citron pour la décoration.",
       "Couper le reste des citrons en quartiers et effeuiller la menthe, en gardant quelques feuilles pour la décoration.",
@@ -560,7 +560,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/naanwich-caviar-daubergine-and-panir-grille-69d901badefeabaeea8615f0",
     "title" => "Naanwich, caviar d'aubergine et panir grillé",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -581,7 +581,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/poulet-label-rouge-sauce-bbq-moutarde-69e9ee20a777d4c0e74a792e",
     "title" => "Poulet Label Rouge sauce BBQ-moutarde, potatoes et coleslaw au maïs",
-    "tags" => [],
+    "tags" => [ "poulet" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -603,7 +603,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/poulet-label-rouge-crispy-aioli-and-pois-chiches-69e9ee20b2918f341e7b1c54",
     "title" => "Poulet Label Rouge croustillant, pois chiches et sauce aïoli-yaourt",
-    "tags" => [],
+    "tags" => [ "poulet" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -625,7 +625,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/truite-grillee-and-sauce-bearnaise-du-comptoir-69d901c9defeabaeea86162e",
     "title" => "Truite grillée, sauce béarnaise et fenouil braisé aux pignons",
-    "tags" => [],
+    "tags" => [ "poisson" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -646,7 +646,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/poulet-sauce-bbq-moutarde-facon-caroline-du-sud-69e9ee20fe534c766c45bb99",
     "title" => "Poulet sauce BBQ-moutarde façon Caroline du Sud, potatoes et coleslaw",
-    "tags" => [],
+    "tags" => [ "poulet" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -668,7 +668,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/club-sandwich-poulet-avocat-and-mayo-basilic-69d901b2defeabaeea8615b9",
     "title" => "Club sandwich poulet, avocat et mayo basilic, salade croquante pomme-courgette",
-    "tags" => [],
+    "tags" => [ "poulet" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -688,7 +688,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/quesadillas-completes-boeuf-poivron-and-cheddar-69d9023c6bb16e39e1b7ecd4",
     "title" => "Quesadillas complètes au bœuf, poivron, cheddar et beurre de cacahuètes",
-    "tags" => [],
+    "tags" => [ "boeuf" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -708,7 +708,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/jerk-chicken-a-la-jamaicaine-and-riz-aux-haricots-69e9ee47b2918f341e7b1d4a",
     "title" => "Jerk chicken à la jamaïcaine et riz aux haricots rouges",
-    "tags" => [],
+    "tags" => [ "poulet" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -730,7 +730,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/la-solana-fenouil-tomates-and-chorizo-grille-69d901bd6bb16e39e1b7ea13",
     "title" => "Salade de fenouil, tomates et chorizo grillé, vinaigrette au labneh",
-    "tags" => [],
+    "tags" => [ "porc" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -750,7 +750,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/gnocchi-sauce-fourme-dambert-aop-and-portobellos-69e9ee36a777d4c0e74a7978",
     "title" => "Gnocchi sauce fourme d'Ambert, portobellos et noisettes",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -771,7 +771,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/bol-de-poulet-croustillant-and-pois-chiche-69e9ee20fe534c766c45bb9b",
     "title" => "Bowl de poulet croustillant, pois chiches et sauce aïoli-yaourt",
-    "tags" => [],
+    "tags" => [ "poulet" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,
@@ -792,7 +792,7 @@ RECIPES = [
   {
     "source_url" => "https://www.hellofresh.fr/recipes/bowl-de-pois-chiches-and-patate-douce-au-cumin-69dd18294af8f3547a641fac",
     "title" => "Bowl de pois chiches et patate douce au cumin, labneh et mélasse de grenade",
-    "tags" => [],
+    "tags" => [ "vegetarien" ],
     "servings" => 2,
     "prep_time_minutes" => nil,
     "cook_time_minutes" => nil,

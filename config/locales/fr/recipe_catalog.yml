@@ -3,12 +3,23 @@ fr:
     index:
       title: "Découvrir des recettes"
       search_placeholder: "Rechercher…"
+      tag_blank: "Toutes les catégories"
+      filter_submit: "Filtrer"
       mine_tab: "Mes recettes"
       discover_tab: "Découvrir"
       empty: "Aucune recette dans le catalogue pour l'instant."
       empty_search: "Aucune recette pour cette recherche."
       previous_page: "← Précédent"
       next_page: "Suivant →"
+    tags:
+      poulet: "Poulet"
+      boeuf: "Bœuf"
+      porc: "Porc"
+      veau: "Veau"
+      poisson: "Poisson"
+      fruits_de_mer: "Fruits de mer"
+      vegetarien: "Végétarien"
+      boisson: "Boisson"
     entry:
       add_link: "Ajouter à mon livre"
     add_to_household:
