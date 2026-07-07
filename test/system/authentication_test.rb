@@ -9,6 +9,8 @@ class AuthenticationTest < ApplicationSystemTestCase
     click_on "Sign in"
 
     assert_text households(:alpha).name
+
+    click_on "Daily life"
     assert_text "Shopping"
   end
 

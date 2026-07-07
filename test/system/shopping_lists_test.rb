@@ -7,6 +7,7 @@ class ShoppingListsTest < ApplicationSystemTestCase
     fill_in "password", with: "password"
     click_on "Sign in"
 
+    click_on "Daily life"
     click_on "Shopping"
 
     assert_text shopping_lists(:alpha_groceries).name

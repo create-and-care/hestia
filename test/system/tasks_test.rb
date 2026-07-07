@@ -7,6 +7,7 @@ class TasksTest < ApplicationSystemTestCase
     fill_in "password", with: "password"
     click_on "Sign in"
 
+    click_on "Daily life"
     click_on "Tasks"
 
     assert_text tasks(:alpha_dishes).title
