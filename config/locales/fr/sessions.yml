@@ -1,10 +1,15 @@
 fr:
   sessions:
     new:
+      title: "Connexion"
+      heading: "Connexion à Hestia"
+      email: "Adresse e-mail"
+      password: "Mot de passe"
       email_placeholder: "Entrez votre adresse e-mail"
       password_placeholder: "Entrez votre mot de passe"
       submit: "Se connecter"
       forgot_password: "Mot de passe oublié ?"
+      no_account: "Vous n'avez pas de compte ?"
       create_account: "Créer un compte"
     create:
       rate_limited: "Réessayez plus tard."
