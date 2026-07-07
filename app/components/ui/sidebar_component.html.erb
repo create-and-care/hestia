@@ -1,4 +1,4 @@
-<div data-controller="sidebar" data-sidebar-collapsed-class="w-16" class="flex">
+<div data-controller="sidebar" data-sidebar-collapsed-class="w-16" data-sidebar-expanded-class="w-64" class="flex">
   <aside data-sidebar-target="panel" class="<%= cn("flex w-64 flex-col gap-4 border-r border-primary bg-surface p-4 transition-[width] overflow-hidden", @class_name) %>">
     <% if header? %><div class="flex items-center justify-between gap-2"><%= header %>
       <button type="button" data-action="click->sidebar#toggle" class="rounded-md p-1.5 text-secondary hover:bg-surface-hover" aria-label="Toggle sidebar">

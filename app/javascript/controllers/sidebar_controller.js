@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [ "panel", "label", "group", "groupPanel", "groupChevron", "item", "searchInput", "empty" ]
-  static classes = [ "collapsed" ]
+  static classes = [ "collapsed", "expanded" ]
 
   connect() {
     if (localStorage.getItem("sidebar:collapsed") === "true") this.collapse()
@@ -12,7 +12,13 @@ export default class extends Controller {
     this.panelTarget.classList.contains(this.collapsedClass) ? this.expand() : this.collapse()
   }
 
+  // Width is swapped (remove one, add the other) rather than just adding the
+  // collapsed class on top of the expanded one: two width utilities of equal
+  // specificity on the same element race in the compiled stylesheet, and
+  // whichever Tailwind happens to emit last silently wins regardless of
+  // which class was added most recently in the DOM.
   collapse() {
+    this.panelTarget.classList.remove(this.expandedClass)
     this.panelTarget.classList.add(this.collapsedClass)
     this.labelTargets.forEach((el) => el.classList.add("hidden"))
     localStorage.setItem("sidebar:collapsed", "true")
@@ -20,6 +26,7 @@ export default class extends Controller {
 
   expand() {
     this.panelTarget.classList.remove(this.collapsedClass)
+    this.panelTarget.classList.add(this.expandedClass)
     this.labelTargets.forEach((el) => el.classList.remove("hidden"))
     localStorage.setItem("sidebar:collapsed", "false")
   }

@@ -30,7 +30,16 @@
         <%= render "shared/notifications" %>
       </div>
     <% end %>
-    <%= yield %>
+
+    <% if Current.household %>
+      <div class="flex min-h-screen">
+        <%= render "shared/app_sidebar" %>
+        <div class="min-w-0 flex-1"><%= yield %></div>
+      </div>
+    <% else %>
+      <%= yield %>
+    <% end %>
+
     <%= render(Ui::SonnerComponent.new) %>
   </body>
 </html>
