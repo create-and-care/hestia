@@ -16,8 +16,15 @@ WebMock.disable_net_connect!(allow_localhost: true)
 
 module ActiveSupport
   class TestCase
-    # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors)
+    # `pg` (1.6.3-arm64-darwin) segfaults as soon as a forked worker opens its
+    # own connection (PG::Connection#connect_start) — every open pg socket's
+    # underlying state is corrupted by fork on this platform, which hangs the
+    # whole run until killed. CI (Linux) forks fine, so only skip it here.
+    if RUBY_PLATFORM.match?(/arm64-darwin/)
+      parallelize(workers: 1)
+    else
+      parallelize(workers: :number_of_processors)
+    end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
