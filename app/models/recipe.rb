@@ -1,6 +1,12 @@
 class Recipe < ApplicationRecord
   include HouseholdScoped
 
+  # Set only when cloned from the catalog (Recipes::Catalog::AddToHousehold),
+  # purely so "Découvrir" can tell it's already in this household's book —
+  # never displayed, unlike source_url which stays reserved for the
+  # user-driven "import from a URL" flow.
+  belongs_to :recipe_catalog_entry, optional: true
+
   has_many :recipe_ingredients, -> { order(:position) }, inverse_of: :recipe, dependent: :destroy
   has_many :recipe_steps, -> { order(:position) }, inverse_of: :recipe, dependent: :destroy
   # A planned meal linked to a deleted recipe switches to a "free name" (Spec §11.1).

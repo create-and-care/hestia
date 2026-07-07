@@ -22,5 +22,7 @@ en:
       boisson: "Drink"
     entry:
       add_link: "Add to my book"
+      already_added: "Recipe already added"
     add_to_household:
       notice: "Recipe added to your book."
+      already_notice: "This recipe is already in your book."

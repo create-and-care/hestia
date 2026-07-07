@@ -19,7 +19,8 @@ module Recipes
           tags: @entry.tags,
           servings: @entry.servings,
           prep_time_minutes: @entry.prep_time_minutes,
-          cook_time_minutes: @entry.cook_time_minutes
+          cook_time_minutes: @entry.cook_time_minutes,
+          recipe_catalog_entry: @entry
         )
         recipe.recipe_ingredients = @entry.ingredients.each_with_index.map do |name, index|
           RecipeIngredient.new(name: name, position: index)

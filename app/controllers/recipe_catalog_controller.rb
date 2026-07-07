@@ -19,15 +19,23 @@ class RecipeCatalogController < ApplicationController
     @per_page = PER_PAGE
     @total = entries.count
     @entries = entries.offset((@page - 1) * @per_page).limit(@per_page)
+    @added_entry_ids = Current.household.recipes.where.not(recipe_catalog_entry_id: nil).pluck(:recipe_catalog_entry_id).to_set
   end
 
   # Clones a catalog entry into the current household's recipe book
   # (Recipes::Catalog::AddToHousehold), then redirects to the new recipe —
   # from there, every existing Recipes feature (shopping list export, menu
-  # planning, editing) works unmodified.
+  # planning, editing) works unmodified. A second click (or a replayed
+  # request) redirects to the already-cloned recipe instead of duplicating it.
   def add_to_household
     entry = RecipeCatalogEntry.find(params[:id])
-    recipe = Recipes::Catalog::AddToHousehold.call(entry: entry, household: Current.household)
-    redirect_to recipe, notice: t(".notice")
+    existing = Current.household.recipes.find_by(recipe_catalog_entry_id: entry.id)
+
+    if existing
+      redirect_to existing, notice: t(".already_notice")
+    else
+      recipe = Recipes::Catalog::AddToHousehold.call(entry: entry, household: Current.household)
+      redirect_to recipe, notice: t(".notice")
+    end
   end
 end

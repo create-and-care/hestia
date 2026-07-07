@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_221832) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -638,12 +638,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_221832) do
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.integer "prep_time_minutes"
+    t.bigint "recipe_catalog_entry_id"
     t.integer "servings"
     t.string "source_url"
     t.string "tags", default: [], null: false, array: true
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_recipes_on_household_id"
+    t.index ["recipe_catalog_entry_id"], name: "index_recipes_on_recipe_catalog_entry_id"
   end
 
   create_table "routine_completions", force: :cascade do |t|
@@ -990,6 +992,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_221832) do
   add_foreign_key "recipe_ingredients", "recipes"
   add_foreign_key "recipe_steps", "recipes"
   add_foreign_key "recipes", "households"
+  add_foreign_key "recipes", "recipe_catalog_entries"
   add_foreign_key "routine_completions", "routines"
   add_foreign_key "routine_completions", "users", column: "author_id"
   add_foreign_key "routines", "households"
