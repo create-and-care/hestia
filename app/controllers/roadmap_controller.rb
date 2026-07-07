@@ -48,7 +48,6 @@ class RoadmapController < ApplicationController
       emoji: "🧪",
       items: [
         "Extend system test (Capybara) coverage beyond sign-in/out and the two read-only checks written so far (Shopping, Tasks): multi-step Turbo-navigation flows proved flaky in this environment for reasons not fully root-caused (suspected Puma/ActionCable interaction under Capybara's test server) — worth a dedicated investigation before writing more of them.",
-        "Close the last few dedicated-test gaps: Bottle, EventParticipant, and TaskCategory have no test file (missed when the other 77 were written); Current and the abstract ApplicationController/ApplicationRecord don't need one.",
         "Add https://github.com/SigNoz/signoz to bring metrics and logs to the project."
       ]
     },
