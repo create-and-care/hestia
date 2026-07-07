@@ -12,5 +12,6 @@ fr:
       create: "Créer"
     create:
       created: "Jeton « %{name} » créé : %{token} (copiez-le, il ne sera plus affiché)."
+      failed: "Impossible de créer le jeton — un nom est requis."
     destroy:
       revoked: "Jeton révoqué."

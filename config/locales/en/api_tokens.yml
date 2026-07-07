@@ -12,5 +12,6 @@ en:
       create: "Create"
     create:
       created: "Token %{name} created: %{token} (copy it now, it will not be shown again)."
+      failed: "Could not create the token — a name is required."
     destroy:
       revoked: "Token revoked."

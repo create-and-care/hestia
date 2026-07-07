@@ -23,3 +23,4 @@ en:
       save: "Save"
     update:
       updated: "Preferences updated."
+      failed: "Could not update preferences."

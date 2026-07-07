@@ -11,7 +11,5 @@ en:
     footer:
       notifications: "Notifications"
       roadmap: "Roadmap"
-      preferences: "Notification preferences"
-      api_tokens: "API tokens"
       settings: "Household settings"
       sign_out: "Sign out"

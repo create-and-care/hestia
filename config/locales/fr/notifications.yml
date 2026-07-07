@@ -23,3 +23,4 @@ fr:
       save: "Enregistrer"
     update:
       updated: "Préférences mises à jour."
+      failed: "Impossible de mettre à jour les préférences."

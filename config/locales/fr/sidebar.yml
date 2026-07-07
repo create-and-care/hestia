@@ -11,7 +11,5 @@ fr:
     footer:
       notifications: "Notifications"
       roadmap: "Roadmap"
-      preferences: "Préférences de notification"
-      api_tokens: "Jetons API"
       settings: "Paramètres du foyer"
       sign_out: "Se déconnecter"

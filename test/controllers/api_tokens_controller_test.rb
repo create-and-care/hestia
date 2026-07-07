@@ -3,9 +3,9 @@ require "test_helper"
 class ApiTokensControllerTest < ActionDispatch::IntegrationTest
   setup { sign_in_as(users(:one)) }
 
-  test "index requires authentication" do
+  test "create requires authentication" do
     sign_out
-    get api_tokens_path
+    post api_tokens_path, params: { api_token: { name: "iPhone" } }
     assert_redirected_to new_session_path
   end
 
@@ -13,9 +13,16 @@ class ApiTokensControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { users(:one).api_tokens.count }, 1 do
       post api_tokens_path, params: { api_token: { name: "iPhone" } }
     end
-    assert_redirected_to api_tokens_path
+    assert_redirected_to household_path(households(:alpha))
     follow_redirect!
     assert_match(/Token iPhone created/, @response.body)
+  end
+
+  test "create rejects a blank name" do
+    assert_no_difference -> { users(:one).api_tokens.count } do
+      post api_tokens_path, params: { api_token: { name: "" } }
+    end
+    assert_redirected_to household_path(households(:alpha))
   end
 
   test "destroy cannot reach another user's token" do

@@ -1,17 +1,11 @@
 class NotificationPreferencesController < ApplicationController
-  def show
-    @preference = NotificationPreference.for_user(Current.user)
-  end
-
   def update
     preference = NotificationPreference.for_user(Current.user)
-    preference.assign_attributes(preference_params)
 
-    if preference.save
-      redirect_to notification_preference_path, notice: t(".updated")
+    if preference.update(preference_params)
+      redirect_to household_path(Current.household), notice: t(".updated")
     else
-      @preference = preference
-      render :show, status: :unprocessable_entity
+      redirect_to household_path(Current.household), alert: t(".failed")
     end
   end
 

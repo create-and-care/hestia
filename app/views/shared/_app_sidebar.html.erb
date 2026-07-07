@@ -58,16 +58,6 @@
         <% end %>
       <% end %>
 
-      <%= link_to notification_preference_path, class: "flex items-center gap-3 rounded-md p-2 text-sm text-primary hover:bg-surface-hover" do %>
-        <span class="shrink-0 text-lg leading-none" aria-hidden="true">🛎️</span>
-        <span data-sidebar-target="label" class="truncate"><%= t("sidebar.footer.preferences") %></span>
-      <% end %>
-
-      <%= link_to api_tokens_path, class: "flex items-center gap-3 rounded-md p-2 text-sm text-primary hover:bg-surface-hover" do %>
-        <span class="shrink-0 text-lg leading-none" aria-hidden="true">📱</span>
-        <span data-sidebar-target="label" class="truncate"><%= t("sidebar.footer.api_tokens") %></span>
-      <% end %>
-
       <%= link_to roadmap_path, class: "flex items-center gap-3 rounded-md p-2 text-sm text-primary hover:bg-surface-hover" do %>
         <span class="shrink-0 text-lg leading-none" aria-hidden="true">🗺️</span>
         <span data-sidebar-target="label" class="truncate"><%= t("sidebar.footer.roadmap") %></span>

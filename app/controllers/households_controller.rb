@@ -22,6 +22,9 @@ class HouseholdsController < ApplicationController
 
   def show
     @household = Current.household
+    @notification_preference = NotificationPreference.for_user(Current.user)
+    @api_tokens = Current.user.api_tokens.order(created_at: :desc)
+    @api_token = ApiToken.new
   end
 
   # Used in particular to enable/change the public holiday reference (Spec §9.2)

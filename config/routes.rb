@@ -82,10 +82,12 @@ Rails.application.routes.draw do
     collection { patch :mark_all_read }
     member { patch :mark_read }
   end
-  resource :notification_preference, only: %i[show update]
+  # Rendered as a section of household settings (households#show), not a page of its own.
+  resource :notification_preference, only: %i[update]
 
-  # API tokens for the mobile client (Spec §15).
-  resources :api_tokens, only: %i[index create destroy]
+  # API tokens for the mobile client (Spec §15). Also rendered as a section of
+  # household settings (households#show), not a page of its own.
+  resources :api_tokens, only: %i[create destroy]
 
   # External calendar sync: real Google/Microsoft OAuth + CalDAV (Spec §9.2, §16).
   resources :external_calendar_connections, only: %i[index create destroy] do
