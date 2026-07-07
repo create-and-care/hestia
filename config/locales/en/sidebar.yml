@@ -1,0 +1,17 @@
+en:
+  sidebar:
+    search_placeholder: "Search…"
+    no_results: "No matching module"
+    home: "Home"
+    groups:
+      daily: "Daily life"
+      home: "Home & assets"
+      family: "Family"
+      social: "Social"
+    footer:
+      notifications: "Notifications"
+      roadmap: "Roadmap"
+      preferences: "Notification preferences"
+      api_tokens: "API tokens"
+      settings: "Household settings"
+      sign_out: "Sign out"

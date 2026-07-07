@@ -1,0 +1,17 @@
+fr:
+  sidebar:
+    search_placeholder: "Rechercher…"
+    no_results: "Aucun module ne correspond"
+    home: "Accueil"
+    groups:
+      daily: "Quotidien"
+      home: "Maison"
+      family: "Famille"
+      social: "Social"
+    footer:
+      notifications: "Notifications"
+      roadmap: "Roadmap"
+      preferences: "Préférences de notification"
+      api_tokens: "Jetons API"
+      settings: "Paramètres du foyer"
+      sign_out: "Se déconnecter"
