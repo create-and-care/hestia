@@ -52,20 +52,6 @@
 
   <% sidebar.with_footer do %>
     <div class="flex flex-col gap-0.5 border-t border-primary pt-3">
-      <%= link_to notifications_path, class: "flex items-center gap-3 rounded-md p-2 text-sm text-primary hover:bg-surface-hover" do %>
-        <span class="relative shrink-0 text-lg leading-none" aria-hidden="true">🔔</span>
-        <span data-sidebar-target="label" class="flex-1 truncate"><%= t("sidebar.footer.notifications") %></span>
-        <% unread_count = Current.user.notifications.unread.count %>
-        <% if unread_count.positive? %>
-          <%= render(Ui::BadgeComponent.new(variant: :destructive, html_options: { data: { sidebar_target: "label" } })) { unread_count > 9 ? "9+" : unread_count } %>
-        <% end %>
-      <% end %>
-
-      <%= link_to roadmap_path, class: "flex items-center gap-3 rounded-md p-2 text-sm text-primary hover:bg-surface-hover" do %>
-        <span class="shrink-0 text-lg leading-none" aria-hidden="true">🗺️</span>
-        <span data-sidebar-target="label" class="truncate"><%= t("sidebar.footer.roadmap") %></span>
-      <% end %>
-
       <%= link_to household_path(Current.household), class: "flex items-center gap-3 rounded-md p-2 text-sm text-primary hover:bg-surface-hover" do %>
         <span class="shrink-0 text-lg leading-none" aria-hidden="true">⚙️</span>
         <span data-sidebar-target="label" class="truncate"><%= t("sidebar.footer.settings") %></span>

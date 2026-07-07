@@ -254,9 +254,6 @@ Rails.application.routes.draw do
 
   get "design-system", to: "design_system#index"
 
-  # Project progress and planned improvements (Spec §18, Implementation Plan §8).
-  resource :roadmap, only: :show, controller: "roadmap"
-
   # Household dashboard (Spec §7).
   root "dashboard#show"
 end

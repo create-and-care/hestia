@@ -18,6 +18,7 @@ en:
         notifications: "Notifications"
         api: "API"
         modules: "Modules"
+        roadmap: "Roadmap"
       modules_heading: "Modules"
       modules_description: "Choose which modules appear in the sidebar for your household."
       modules_admin_only: "Only administrators can change these settings."

@@ -18,6 +18,7 @@ fr:
         notifications: "Notifications"
         api: "API"
         modules: "Modules"
+        roadmap: "Roadmap"
       modules_heading: "Modules"
       modules_description: "Choisissez les modules qui apparaissent dans le menu latéral pour votre foyer."
       modules_admin_only: "Seuls les administrateurs peuvent modifier ces réglages."

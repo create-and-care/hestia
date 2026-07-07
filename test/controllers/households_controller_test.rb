@@ -51,7 +51,7 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_nil users(:one).sessions.last.reload.active_household_id
   end
 
-  test "show renders the household, notification preferences, and API tokens sections" do
+  test "show renders the household, notification preferences, API tokens, and roadmap sections" do
     sign_in_as(users(:one))
     ApiToken.create!(user: users(:one), name: "iPhone")
 
@@ -61,6 +61,7 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", text: households(:alpha).name
     assert_select "code", text: households(:alpha).invite_code
     assert_includes @response.body, "iPhone"
+    assert_includes @response.body, "Progress by area"
   end
 
   test "update sets the household's time zone" do
