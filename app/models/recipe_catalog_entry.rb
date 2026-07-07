@@ -1,0 +1,14 @@
+class RecipeCatalogEntry < ApplicationRecord
+  validates :title, presence: true
+  validates :source_url, presence: true, uniqueness: true
+
+  scope :ordered, -> { order(:title) }
+  scope :search, ->(query) { where("title ILIKE ?", "%#{sanitize_sql_like(query)}%") }
+
+  def ingredients_text = ingredients.join("\n")
+  def steps_text = steps.join("\n")
+
+  def total_time_minutes
+    [ prep_time_minutes, cook_time_minutes ].compact.sum if prep_time_minutes || cook_time_minutes
+  end
+end

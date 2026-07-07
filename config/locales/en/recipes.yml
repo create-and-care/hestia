@@ -7,6 +7,8 @@ en:
       new_link: "New"
       empty: "No recipes."
       empty_search: "No recipes for this search."
+      mine_tab: "My recipes"
+      discover_tab: "Discover"
     recipe:
       total_time: "%{minutes} min"
     cook:
@@ -40,6 +42,8 @@ en:
       ingredients_heading: "Ingredients"
       steps_heading: "Steps"
       source_label: "Source:"
+      plan_meal_heading: "Plan this meal"
+      plan_meal_submit: "Add to menu"
       back_link: "← All recipes"
     form:
       title_label: "Title"

@@ -1,0 +1,818 @@
+# Authoring script for db/seeds/recipe_catalog.yml — NOT loaded by the app.
+# Source recipes are crawled into tmp/recipe_catalog_draft.yml (raw, gitignored),
+# then each entry below is hand-rewritten (never copied verbatim) from that
+# draft before being written out as the committed db/seeds/recipe_catalog.yml.
+# Run: ruby db/seeds/author_recipe_catalog.rb
+require "yaml"
+
+RECIPES = [
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/market/menu-enfant-nuggets-and-frites-de-patate-douce-6a1daf4656363d596eb66076",
+    "title" => "Nuggets de poulet croustillants et frites de patate douce",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 patate douce", "1 mini concombre", "2 pommes", "1 blanc de poulet",
+      "1 sachet de chapelure panko", "1 sachet de mayonnaise", "1,5 cs d'huile d'olive",
+      "1,5 cs de farine", "1 œuf", "2 cs d'huile de tournesol", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 230°C (210°C en chaleur tournante). Laver la patate douce et la couper en frites d'environ 1 cm ; les éponger avec du papier absorbant pour qu'elles croustillent bien à la cuisson.",
+      "Étaler les frites sur une plaque recouverte de papier cuisson, arroser d'un filet d'huile d'olive, saler et poivrer. Enfourner 20 à 25 minutes jusqu'à ce qu'elles soient bien dorées.",
+      "Pendant ce temps, couper le concombre en demi-lunes et les pommes en quartiers. Retailler les morceaux de poulet si nécessaire.",
+      "Préparer trois assiettes : une avec la farine, une avec la chapelure panko salée et poivrée, une avec l'œuf battu. Enrober chaque morceau de poulet successivement de farine, d'œuf puis de panko.",
+      "Quand il reste 7 à 8 minutes de cuisson aux frites, faire chauffer un peu d'huile de tournesol dans une poêle à feu moyen-vif et y dorer les morceaux de poulet 3 à 4 minutes de chaque côté, jusqu'à ce qu'ils soient bien cuits.",
+      "Dresser le concombre et les frites dans les assiettes, ajouter les nuggets et servir les pommes en dessert."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/market/tartinable-maison-baba-ganoush-daubergine-6a1d4ceb56363d596eb651f6",
+    "title" => "Baba ganoush d'aubergine maison",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "2 aubergines", "½ citron", "½ sachet de mélange d'épices du Moyen-Orient",
+      "1 gousse d'ail", "1 sachet de sauce tahini", "2 cs d'huile d'olive", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four en mode grill à 230°C. Couper les aubergines en deux dans la longueur.",
+      "Les disposer sur une plaque recouverte de papier cuisson, arroser d'un filet d'huile d'olive, saler et poivrer.",
+      "Enfourner côté chair vers la plaque, 25 à 35 minutes, jusqu'à ce que la chair soit tendre (vérifier avec la pointe d'un couteau).",
+      "Pendant ce temps, émincer l'ail. Laver le citron, en prélever le zeste puis le couper en quartiers.",
+      "Une fois les aubergines cuites, récupérer leur chair à la cuillère et l'écraser à la fourchette dans un grand bol.",
+      "Ajouter un bon filet d'huile d'olive, la sauce tahini, l'ail (selon le goût), le zeste et le jus d'un quart de citron, les épices du Moyen-Orient, du sel et du poivre. Mélanger, puis rectifier l'assaisonnement avec du jus de citron, du sel ou du poivre.",
+      "Servir dans un bol avec un filet d'huile d'olive par-dessus."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/poke-bowl-thon-sriracha-and-avocat-6a15a164632bb8a09b2dde37",
+    "title" => "Poké bowl thon, sriracha et avocat",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "375 g de riz complet précuit", "1 avocat", "½ oignon", "80 g d'edamame", "1 carotte",
+      "1 sachet de mayonnaise", "1 sachet de sauce sriracha", "1 boîte de thon au naturel",
+      "1 sachet de cacahuètes non salées", "20 ml de sauce soja réduite en sel",
+      "2 cc de vinaigre balsamique blanc ou de riz", "sel et poivre"
+    ],
+    "steps" => [
+      "Tiédir le riz précuit (micro-ondes ou casserole avec un peu d'eau), puis le mélanger avec le vinaigre de riz dans un saladier ; réserver à couvert.",
+      "Couper l'avocat en deux, retirer le noyau, prélever la chair à la cuillère et la tailler en fines lanières.",
+      "Émincer finement l'oignon. Éplucher la carotte et la tailler en fine julienne.",
+      "Mélanger la mayonnaise et la sriracha selon le goût. Égoutter le thon et l'émietter à la fourchette, puis le mélanger avec un tiers de la sauce et l'oignon cru ; saler et poivrer.",
+      "Répartir le riz dans les assiettes, ajouter le thon, les edamame, la carotte et l'avocat. Arroser de sauce soja, parsemer de cacahuètes et napper du reste de mayo-sriracha."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/bowl-californien-quinoa-and-avocat-6a15a018632bb8a09b2dde10",
+    "title" => "Bowl California au quinoa, cranberries et avocat",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "150 g de quinoa", "½ citron", "½ sachet d'aneth et ciboulette", "1 mini concombre",
+      "1 avocat", "1 pot de yaourt à la grecque", "1 sachet d'épinards",
+      "1 sachet de cranberries séchées", "30 g de noix de pécan concassées",
+      "300 ml de bouillon de légumes", "1 cs d'huile d'olive", "2 cc de moutarde", "sel et poivre"
+    ],
+    "steps" => [
+      "Rincer le quinoa à l'eau froide jusqu'à ce qu'elle devienne claire. Porter le bouillon à ébullition, y ajouter le quinoa, couvrir et cuire 5 minutes à feu moyen-vif puis 8 minutes de plus à feu doux. Rincer à l'eau froide et bien égoutter.",
+      "Laver le citron, en prélever le zeste puis le couper en quartiers. Ciseler finement les herbes fraîches.",
+      "Couper la moitié du concombre en fines tranches et l'autre moitié en petits dés. Couper l'avocat en deux, retirer le noyau et tailler la chair en fines tranches.",
+      "Mélanger le yaourt avec les herbes, l'huile d'olive, la moutarde, un peu de zeste, le jus d'un quart de citron, du sel et du poivre. Dans un saladier, mélanger les épinards, le quinoa, les dés de concombre et la moitié de la sauce.",
+      "Répartir la salade de quinoa dans des bols, disposer harmonieusement les tranches d'avocat et de concombre, les cranberries et les noix de pécan par-dessus, puis arroser du reste de sauce."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/spicy-bowl-crevettes-dorees-citron-and-mangue-6a15a0cdaa184ea195d71b60",
+    "title" => "Bowl épicé de crevettes dorées, citron et mangue",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "½ citron", "1 gousse d'ail", "375 g de riz complet précuit", "1 mini concombre",
+      "⅔ de mangue", "½ sachet de coriandre", "1 paquet de crevettes", "½ sachet de piri-piri",
+      "1 sachet de mayonnaise", "½ sachet de graines de sésame", "1 cc de beurre",
+      "1 cc d'huile de tournesol", "sel et poivre"
+    ],
+    "steps" => [
+      "Laver le citron, en prélever le zeste puis le couper en quartiers. Râper l'ail.",
+      "Réchauffer le riz précuit, y ajouter un peu de zeste de citron, une noisette de beurre, du sel et du poivre ; réserver à couvert.",
+      "Couper le concombre en petits dés et la mangue en dés. Ciseler la coriandre. Mélanger le tout avec un peu de jus de citron, du sel et du poivre.",
+      "Faire chauffer l'huile de tournesol dans une poêle à feu vif et y colorer les crevettes 3 à 4 minutes, jusqu'à ce qu'elles soient cuites à cœur. En fin de cuisson, ajouter l'ail et le piri-piri selon le goût.",
+      "Mélanger la mayonnaise avec une pointe de piri-piri et un peu de jus de citron.",
+      "Répartir le riz dans des assiettes creuses, ajouter les crevettes et la salade mangue-concombre, la mayonnaise épicée sur le côté, et saupoudrer de graines de sésame. Servir avec les quartiers de citron restants."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/matar-paneer-curry-depinards-and-petits-pois-69d902206bb16e39e1b7ec48",
+    "title" => "Matar paneer, curry d'épinards et petits pois",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 oignon", "1 gousse d'ail", "1 cm de gingembre frais", "200 g de panir",
+      "1 sachet de garam masala", "1 paquet de chair de tomates", "120 g de petits pois",
+      "375 g de riz précuit", "1 sachet d'épinards", "1 sachet de coriandre",
+      "1 sachet de noix de cajou concassées", "1 cs d'huile de tournesol", "1 cc de sucre",
+      "2 cc de beurre", "sel et poivre"
+    ],
+    "steps" => [
+      "Émincer l'oignon en fines demi-lunes, ciseler l'ail et râper le gingembre. Éponger le panir et le couper en dés de 1 à 2 cm.",
+      "Faire chauffer l'huile dans une sauteuse à feu moyen-vif et y dorer les dés de panir 5 à 8 minutes en remuant de temps en temps. Réserver le panir hors de la sauteuse.",
+      "Dans la même sauteuse, faire revenir l'oignon, l'ail et le gingembre 3 à 4 minutes jusqu'à légère coloration, puis ajouter le garam masala et cuire 1 minute de plus.",
+      "Verser la chair de tomates et les petits pois, porter à frémissement. Déchirer grossièrement les épinards lavés au-dessus de la sauteuse, ajouter le sucre, saler et poivrer. Couvrir et laisser mijoter 6 à 8 minutes jusqu'à ce que les épinards retombent, puis incorporer une noisette de beurre.",
+      "Réchauffer le riz précuit.",
+      "Remettre le panir dans la sauteuse pour bien l'enrober de sauce. Servir le riz avec la sauce à côté, parsemer de coriandre ciselée et de noix de cajou."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/saumon-sauce-avoine-estragon-and-broccolini-poche-6a15a19aaa184ea195d71b72",
+    "title" => "Saumon, sauce avoine-estragon et broccolini poché",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "500 g de pommes de terre", "1 sachet de paprika en poudre", "1 sachet de broccolini",
+      "1 gousse d'ail", "1 échalote", "½ sachet d'estragon", "2 filets de saumon avec peau",
+      "½ paquet d'avoine cuisine", "2 cs d'huile d'olive", "1 cs de beurre",
+      "1 cs de vinaigre balsamique blanc ou de riz", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 220°C (200°C chaleur tournante). Laver les pommes de terre et les couper en dés de 2 cm. Les répartir sur une plaque avec un filet d'huile d'olive et le paprika, saler et poivrer. Enfourner 16 à 20 minutes en remuant à mi-cuisson.",
+      "Pendant ce temps, porter une casserole d'eau salée à ébullition. Émincer l'ail et l'échalote, couper le broccolini en deux dans la longueur, ciseler l'estragon.",
+      "Cuire le broccolini 3 à 5 minutes dans l'eau bouillante (il doit rester un peu ferme), l'égoutter et le rincer à l'eau froide. Le réserver avec l'ail et un filet d'huile d'olive. Éponger le saumon et l'assaisonner.",
+      "Faire fondre le beurre dans une poêle à feu moyen-vif et y dorer le saumon 1 à 2 minutes de chaque côté (il finira de cuire au four).",
+      "Une fois les pommes de terre cuites, ajouter le broccolini et le saumon sur la plaque et enfourner 4 à 8 minutes jusqu'à ce que le saumon soit cuit à cœur.",
+      "Remettre la poêle du saumon à feu moyen-vif, y faire revenir l'échalote, déglacer au vinaigre balsamique et laisser réduire. Baisser le feu, ajouter l'avoine cuisine et laisser épaissir 3 à 5 minutes ; saler, poivrer et ajouter l'estragon. Servir les pommes de terre, le broccolini et le saumon nappé de sauce."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/burrito-bowl-tofu-avocat-and-sauce-yaourt-6a15a366632bb8a09b2ddecb",
+    "title" => "Burrito bowl tofu, avocat et sauce au yaourt",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "375 g de riz complet précuit", "1 gousse d'ail", "2 poivrons", "180 g de tofu",
+      "1 sachet d'épices mexicaines", "1 paquet de haricots noirs", "1 citron", "1 avocat",
+      "1 pot de yaourt à la grecque", "1 sachet de cheddar râpé", "3 cs d'huile d'olive", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 220°C en mode grill. Ciseler l'ail, couper les poivrons en petits dés. Éponger le tofu, le presser légèrement et le couper en dés de 2 cm.",
+      "Mélanger les poivrons avec un filet d'huile d'olive, la moitié des épices mexicaines, du sel et du poivre. Étaler sur une plaque et enfourner 5 minutes.",
+      "Mélanger le tofu avec un filet d'huile d'olive et le reste des épices. L'ajouter sur la plaque à côté des poivrons et enfourner 8 à 10 minutes de plus en retournant à mi-cuisson.",
+      "Égoutter les haricots noirs, couper le citron en quartiers, tailler l'avocat en fines lanières. Faire revenir l'ail dans un filet d'huile, ajouter les épices restantes et les haricots noirs, cuire 5 minutes puis presser un peu de jus de citron ; saler et poivrer.",
+      "Réchauffer le riz précuit et le mélanger à la moitié des poivrons grillés.",
+      "Répartir le riz dans des bols, ajouter les haricots, le tofu grillé, le reste des poivrons et l'avocat. Garnir de yaourt, de cheddar et des quartiers de citron restants."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/burrito-bowl-tofu-avocat-and-sauce-yaourt-6a15a366aa184ea195d71b8d",
+    "title" => "Burrito bowl tofu, haricots noirs et poivrons grillés",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "150 g de riz", "1 gousse d'ail", "2 poivrons", "180 g de tofu", "1 sachet d'épices mexicaines",
+      "1 paquet de haricots noirs", "½ citron", "1 avocat", "1 pot de yaourt à la grecque",
+      "1 sachet de cheddar râpé", "3 cs d'huile d'olive", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 220°C en mode grill et porter une casserole d'eau salée à ébullition. Ciseler l'ail, couper les poivrons en dés, éponger et couper le tofu en dés. Cuire le riz 12 à 14 minutes puis l'égoutter et le réserver à couvert.",
+      "Mélanger les poivrons avec de l'huile et la moitié des épices, étaler sur une plaque et enfourner 5 minutes.",
+      "Mélanger le tofu avec de l'huile et le reste des épices, l'ajouter sur la plaque et enfourner 8 à 10 minutes de plus en retournant à mi-cuisson.",
+      "Égoutter les haricots noirs, couper le citron en quartiers et l'avocat en fines lanières.",
+      "Faire revenir l'ail dans un filet d'huile, ajouter les haricots noirs et un peu de jus de citron ; saler et poivrer.",
+      "Mélanger le riz avec la moitié des poivrons, répartir dans des bols avec les haricots, le tofu, le reste des poivrons et l'avocat. Garnir de yaourt, de cheddar et de citron."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/bowl-californien-boulgour-et-quinoa-precuits-and-avocat-6a15a018b2ced2367200b236",
+    "title" => "Bowl California au boulgour et quinoa, cranberries et avocat",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "375 g de boulgour et quinoa précuits", "½ citron", "½ sachet d'aneth et ciboulette",
+      "1 mini concombre", "1 avocat", "1 pot de yaourt à la grecque", "1 sachet d'épinards",
+      "1 sachet de cranberries séchées", "30 g de noix de pécan concassées",
+      "1 cs d'huile d'olive", "2 cc de moutarde", "sel et poivre"
+    ],
+    "steps" => [
+      "Réchauffer le boulgour et le quinoa précuits, les mettre dans un saladier, saler, poivrer et laisser tiédir légèrement.",
+      "Laver le citron, en prélever le zeste puis le couper en quartiers. Ciseler les herbes fraîches. Couper la moitié du concombre en tranches et l'autre en dés. Tailler l'avocat en fines tranches.",
+      "Mélanger le yaourt avec les herbes, l'huile d'olive, la moutarde, le zeste, un peu de jus de citron, du sel et du poivre.",
+      "Ajouter aux graines précuites les épinards, les dés de concombre et la moitié de la sauce ; mélanger.",
+      "Répartir la salade dans des bols, disposer les tranches d'avocat et de concombre, les cranberries et les noix de pécan par-dessus, puis arroser du reste de sauce."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/cabillaud-au-four-and-sauce-vierge-a-lorange-69de49b04af8f3547a643690",
+    "title" => "Cabillaud au four, sauce vierge à l'orange et fenouil",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "500 g de grenailles", "½ sachet de thym séché", "1 fenouil", "1 oignon", "1 gousse d'ail",
+      "des tomates cerises rouges", "½ sachet d'aneth et persil plat", "1 échalote", "1 orange",
+      "2 filets de cabillaud sans peau", "4 cs d'huile d'olive", "2 cc de beurre", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 200°C (180°C chaleur tournante). Couper les grenailles en deux si elles sont grosses. Les répartir sur une plaque avec un filet d'huile, du sel, du poivre et le thym séché.",
+      "Couper le fenouil en lanières après avoir retiré la partie dure, et l'oignon en quartiers. Dans un plat à four, mélanger le fenouil, l'oignon, la moitié de l'ail et la majorité des tomates cerises entières avec de l'huile, du thym, du sel et du poivre. Enfourner ce plat avec les grenailles pendant 20 minutes.",
+      "Pendant ce temps, couper le reste des tomates cerises en petits quartiers, émincer finement l'échalote et hacher les herbes fraîches. Prélever le zeste de l'orange, couper deux tranches fines et presser le jus du reste.",
+      "Mélanger dans un bol les herbes, les tomates, l'échalote et un peu d'ail cru avec le jus et le zeste d'orange, un filet d'huile d'olive, du sel et du poivre ; laisser mariner jusqu'au service.",
+      "Éponger le cabillaud, l'assaisonner, poser une noisette de beurre et une tranche d'orange sur chaque filet. L'ajouter dans le plat une fois les 20 premières minutes écoulées et poursuivre la cuisson 10 à 15 minutes, jusqu'à ce que le poisson soit cuit et les légumes fondants.",
+      "Servir les grenailles, les légumes et le cabillaud nappé de sauce vierge à l'orange."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/spaghetti-au-haddock-fume-and-creme-de-courgette-69e9ee6efe534c766c45bcd0",
+    "title" => "Spaghetti au haddock fumé et crème de courgette",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "180 g de spaghetti", "2 courgettes", "1 gousse d'ail", "1 oignon",
+      "½ sachet d'épices à l'italienne", "½ citron", "1 paquet de crème liquide",
+      "160 g de filet de haddock fumé avec peau", "1 cs d'huile d'olive",
+      "1 cc de vinaigre balsamique blanc ou de riz", "sel et poivre"
+    ],
+    "steps" => [
+      "Cuire les spaghetti 10 à 12 minutes dans une grande casserole d'eau bouillante salée, puis égoutter et réserver à couvert.",
+      "Pendant ce temps, couper la courgette en fines demi-lunes et émincer l'ail et l'oignon.",
+      "Faire revenir la courgette, l'ail et l'oignon dans un filet d'huile d'olive avec les épices à l'italienne, du sel et du poivre pendant 5 à 6 minutes, jusqu'à ce que la courgette soit fondante et dorée. Prélever le zeste de citron.",
+      "Mixer les trois quarts de ce mélange avec la crème, un peu de zeste et de jus de citron et le vinaigre balsamique jusqu'à obtenir une sauce lisse. La verser sur les pâtes et bien mélanger.",
+      "Couper le haddock fumé en fines lanières et l'incorporer aux pâtes, en réservant quelques lanières pour le dressage.",
+      "Servir les spaghetti à la crème de courgette avec le reste de courgettes grillées et de haddock, et un peu de jus de citron selon le goût."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/market/tartinable-maison-haricots-blancs-and-paprika-6a0d7532099c5b8fd89cb5bc",
+    "title" => "Tartinade de haricots blancs, paprika fumé et poivrons confits",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 gousse d'ail", "1 poivron", "1 sachet d'amandes entières grillées non salées", "1 citron",
+      "½ sachet de paprika fumé en poudre", "1 paquet de haricots blancs", "3 cs d'huile d'olive",
+      "1 cc de vinaigre balsamique noir", "sel et poivre"
+    ],
+    "steps" => [
+      "Émincer l'ail, couper le poivron en lanières, concasser les amandes et couper le citron en quartiers.",
+      "Faire revenir le poivron avec un peu d'eau à couvert 6 à 8 minutes, jusqu'à ce qu'il soit tendre, puis ajouter la moitié de l'ail, un peu de paprika fumé et le vinaigre balsamique noir ; poursuivre la cuisson 1 à 2 minutes.",
+      "Égoutter les haricots blancs et les mixer avec un filet d'huile d'olive, le reste d'ail, le jus d'un demi-citron et un peu de paprika fumé jusqu'à obtenir une crème lisse (ajouter un peu d'eau pour l'assouplir si besoin). Rectifier l'assaisonnement.",
+      "Étaler la crème de haricots blancs au fond d'une assiette creuse, répartir le poivron confit par-dessus et parsemer d'amandes concassées."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/quinoa-truite-and-fenouil-braises-du-comptoir-69d9023168ee73d4d3ffe141",
+    "title" => "Quinoa, truite et fenouil braisés, vinaigrette orange-miel",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 oignon", "1 gousse d'ail", "150 g de quinoa", "⅔ sachet d'origan séché", "1 fenouil",
+      "1 orange", "1 sachet de persil", "2 filets de truite avec peau", "1 sachet d'amandes effilées",
+      "300 ml de bouillon de légumes", "3 cs d'huile d'olive", "1 cs de beurre",
+      "1 cc de vinaigre de vin rouge ou de cidre", "1 cc de miel", "1 cc de moutarde", "sel et poivre"
+    ],
+    "steps" => [
+      "Émincer l'oignon et l'ail. Rincer le quinoa. Faire revenir l'oignon dans un filet d'huile 3 à 4 minutes, ajouter le quinoa, la moitié de l'ail et l'origan, puis faire sauter 1 minute de plus.",
+      "Verser le bouillon, porter à ébullition puis laisser cuire à couvert environ 13 minutes à feu doux, jusqu'à absorption complète. Réserver à couvert.",
+      "Pendant ce temps, couper le fenouil en quartiers après avoir retiré la partie dure. Le faire dorer dans une noisette de beurre avec le reste d'ail 1 à 2 minutes, puis ajouter un peu d'eau et laisser mijoter à couvert 10 à 14 minutes, jusqu'à ce qu'il soit fondant.",
+      "Prélever le zeste et les segments de l'orange. Ciseler le persil. Préparer une vinaigrette avec l'huile d'olive, le vinaigre de vin, le zeste, le miel et la moutarde.",
+      "Assaisonner la truite avec le reste d'origan et la dorer dans un filet d'huile 4 à 5 minutes côté peau puis 2 à 3 minutes de l'autre côté, jusqu'à ce qu'elle soit cuite à cœur.",
+      "Mélanger les segments d'orange, le fenouil, le quinoa et la moitié du persil dans la vinaigrette. Servir le quinoa avec la truite par-dessus, saupoudré d'amandes effilées et du reste de persil."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/curry-udon-au-poulet-and-coco-6a0ab8b110e255982cf3f9f7",
+    "title" => "Curry udon au poulet et lait de coco",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 oignon", "½ citron", "1 carotte", "1 cm de gingembre frais", "1 gousse d'ail",
+      "1 blanc de poulet", "1 sachet de curry en poudre", "400 g de nouilles udon fraîches",
+      "1 paquet de lait de coco", "½ sachet de coriandre", "1 sachet de gomasio",
+      "150 ml de bouillon de bœuf", "1 cs d'huile de tournesol", "sel et poivre"
+    ],
+    "steps" => [
+      "Émincer l'oignon, prélever le zeste de citron et le couper en quartiers. Tailler la carotte en rubans à l'éplucheur, râper le gingembre et l'ail.",
+      "Faire dorer les dés de poulet avec le curry dans un filet d'huile chaude 1 à 2 minutes, puis ajouter le gingembre, l'ail, l'oignon et la carotte et poursuivre la cuisson 5 à 6 minutes, jusqu'à ce que le poulet soit cuit à cœur.",
+      "Pendant ce temps, plonger les nouilles udon dans un saladier d'eau chaude et les délier délicatement, puis les égoutter.",
+      "Ajouter les nouilles, le bouillon, un peu de zeste de citron et le lait de coco dans le wok, et laisser réduire 3 à 4 minutes à feu moyen.",
+      "Servir dans des assiettes creuses, parsemer de coriandre effeuillée et de gomasio, et presser un peu de jus de citron par-dessus."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/bowl-italienne-polpettes-a-la-sauce-tomate-69d9022868ee73d4d3ffe10f",
+    "title" => "Bowl italien, polpettes et frites de courgette, sauce tomate au basilic",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "2 courgettes", "1 sachet d'épices à l'italienne", "150 g de riz", "1 gousse d'ail",
+      "1 oignon", "1 sachet de persil", "un peu de piment", "1 paquet de viande hachée de bœuf",
+      "1 paquet de chair de tomates", "1 pot de crème de basilic", "2 cc d'huile d'olive",
+      "1 cs de lait", "1 cc de sucre", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 210°C (190°C chaleur tournante) en mode grill. Couper la courgette en quartiers, les répartir sur une plaque avec de l'huile et les épices à l'italienne, saler et poivrer. Enfourner 20 à 25 minutes jusqu'à ce qu'ils soient fondants et dorés.",
+      "Cuire le riz 12 à 14 minutes, l'égoutter et réserver à couvert. Émincer l'ail et l'oignon, ciseler le persil, épépiner et ciseler le piment.",
+      "Mélanger la viande hachée avec la moitié de l'ail et du persil, un peu de lait, du sel et du poivre. Former des boulettes.",
+      "Faire dorer les boulettes sur toutes leurs faces dans un filet d'huile pendant 6 à 8 minutes, jusqu'à ce qu'elles soient bien cuites. Les réserver.",
+      "Dans la même poêle, faire revenir l'oignon 2 à 3 minutes, puis ajouter la chair de tomates, la crème de basilic, le reste d'ail et de piment, le sucre et un peu d'eau ; laisser réduire 3 à 4 minutes. Remettre les boulettes dans la sauce pour les réchauffer.",
+      "Servir le riz avec les boulettes et leur sauce d'un côté, les courgettes grillées de l'autre, et parsemer du reste de persil."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/ravioli-nduja-and-sauce-facon-ratatouille-69d9024868ee73d4d3ffe1a8",
+    "title" => "Ravioli au nduja, sauce façon ratatouille et chèvre frais",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 poivron", "1 aubergine", "1 oignon", "1 gousse d'ail", "1 tomate",
+      "⅔ sachet d'épices à l'italienne", "⅔ sachet de concentré de tomates", "1 pot de crème de basilic",
+      "300 g de ravioli nduja et poivrons", "1 fromage de chèvre frais", "2 cs d'huile d'olive", "sel et poivre"
+    ],
+    "steps" => [
+      "Couper le poivron en lanières et l'aubergine en quartiers fins. Émincer l'oignon, ciseler l'ail et couper la tomate en dés.",
+      "Faire revenir l'aubergine, le poivron et l'oignon dans un filet d'huile 4 à 5 minutes jusqu'à légère coloration, saler et poivrer.",
+      "Ajouter l'ail, les dés de tomate, les épices à l'italienne, le concentré de tomates, la crème de basilic et un peu d'eau. Laisser mijoter à couvert 15 à 17 minutes en remuant régulièrement, jusqu'à ce que les légumes soient fondants et la sauce onctueuse.",
+      "Pendant ce temps, cuire les raviolis 3 à 4 minutes dans une eau bouillante salée. Réserver un peu d'eau de cuisson puis égoutter. Couper le chèvre frais en petits dés.",
+      "Ajouter les raviolis égouttés dans la sauce avec un peu d'eau de cuisson et mélanger délicatement pour bien les enrober.",
+      "Servir dans des assiettes creuses avec les dés de chèvre frais et le reste de crème de basilic par-dessus."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/croque-champis-and-bechamel-a-la-fourme-dambert-69d901f06bb16e39e1b7eb32",
+    "title" => "Croque aux champignons, béchamel à la fourme d'Ambert et salade pommes-noix",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "250 g de champignons de Paris", "1 oignon", "⅔ sachet d'assaisonnement ail et herbes",
+      "80 g de fourme d'Ambert AOP", "une pincée de noix de muscade", "4 tranches de pain de campagne",
+      "1 sachet de salade", "1 pomme", "1 sachet de noix concassées", "2 cs d'huile d'olive",
+      "4 cc de vinaigre balsamique noir", "10 g de beurre", "10 g de farine", "200 ml de lait",
+      "2 cc de moutarde", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 230°C (210°C chaleur tournante). Nettoyer et émincer les champignons, ciseler l'oignon. Les faire revenir dans un filet d'huile 7 à 8 minutes avec l'assaisonnement ail et herbes, puis déglacer avec un peu de vinaigre balsamique.",
+      "Couper la fourme d'Ambert en dés. Préparer un roux avec le beurre et la farine dans une casserole, puis incorporer le lait petit à petit en fouettant jusqu'à épaississement. Ajouter la fourme et la muscade, mélanger jusqu'à ce que le fromage soit fondu, saler et poivrer.",
+      "Étaler un peu de moutarde sur les tranches de pain, garnir de champignons et de béchamel, puis refermer les croques et étaler un peu de béchamel sur le dessus.",
+      "Enfourner les croques 6 à 8 minutes en position haute, jusqu'à ce qu'ils soient bien gratinés.",
+      "Pendant ce temps, couper la pomme en fines tranches et préparer une vinaigrette avec l'huile d'olive et le vinaigre balsamique. Mélanger la salade, la pomme et les noix concassées juste avant de servir.",
+      "Couper les croques en deux et les servir avec la salade."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/burger-de-boeuf-sauce-bbq-moutarde-comme-aux-usa-69e9ee3db2918f341e7b1d16",
+    "title" => "Burger de bœuf, sauce BBQ-moutarde, cheddar et frites maison",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "500 g de pommes de terre", "1 gousse d'ail", "1 sachet de cheddar râpé",
+      "1 paquet de viande hachée de bœuf", "2 pains à burger", "1 tomate",
+      "40 g de sauce BBQ façon Carolina Gold", "1 sachet de mayonnaise", "2 cs d'huile d'olive",
+      "1 cc de beurre", "1 cc de moutarde", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 210°C (190°C chaleur tournante). Couper les pommes de terre en frites, les éponger, les mélanger avec un filet d'huile, du sel et du poivre, puis enfourner 30 à 35 minutes en remuant à mi-cuisson.",
+      "Émincer l'ail et le mélanger à la viande hachée assaisonnée. Façonner des steaks d'environ 1 cm d'épaisseur, bien aplatis.",
+      "Faire dorer les steaks dans un filet d'huile chaude 2 à 3 minutes d'un côté, les retourner, ajouter le cheddar, couvrir et cuire 2 à 3 minutes de plus jusqu'à ce qu'ils soient cuits à cœur.",
+      "Quand il reste 5 minutes de cuisson aux frites, couper les pains en deux, les beurrer légèrement et les passer au four à côté, face beurrée vers le bas.",
+      "Mélanger la mayonnaise avec un peu de moutarde. Couper la tomate en rondelles.",
+      "Étaler la sauce BBQ sur une face du pain et la mayonnaise moutardée sur l'autre. Garnir de tomate et du steak au cheddar, refermer le burger et servir avec les frites."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/jerk-chicken-label-rouge-and-riz-aux-haricots-69e9ee47a777d4c0e74a79b1",
+    "title" => "Jerk chicken Label Rouge et riz aux haricots rouges",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 poivron", "1 gousse d'ail", "1 oignon", "1 cm de gingembre frais",
+      "40 g de pâte épicée jamaïcaine", "1 sachet de sauce sriracha", "2 cuisses de poulet Label Rouge",
+      "150 g de riz au jasmin", "¾ paquet de lait de coco", "½ paquet de haricots rouges",
+      "200 ml de bouillon de volaille", "4 cs d'huile de tournesol", "2 cc de sucre", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 230°C (210°C chaleur tournante). Couper le poivron en lanières, émincer l'ail et l'oignon, râper le gingembre.",
+      "Mélanger dans un plat à four la pâte jamaïcaine, la moitié de l'ail et du gingembre, la sriracha, un peu d'huile et de sucre ; y enrober le poulet et enfourner 30 à 35 minutes jusqu'à cuisson complète.",
+      "Ajouter le poivron sur une plaque avec un filet d'huile, saler et poivrer, et l'enfourner pour les 15 dernières minutes de cuisson du poulet. Badigeonner le poulet cuit avec le reste de marinade.",
+      "Faire revenir l'oignon, le reste d'ail et de gingembre dans l'huile 3 à 4 minutes, ajouter le riz et cuire 1 à 2 minutes, puis verser le lait de coco et le bouillon. Couvrir et laisser mijoter 12 à 16 minutes à feu doux jusqu'à absorption complète.",
+      "Rincer et égoutter les haricots rouges, les incorporer au riz cuit hors du feu.",
+      "Servir le riz aux haricots avec la cuisse de poulet et les poivrons grillés à côté."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/porc-sauce-a-lorange-facon-chenpi-chinois-69dd48ea6bb16e39e1b844ad",
+    "title" => "Porc sauce à l'orange façon chenpi et brocoli au sésame",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "150 g de riz au jasmin", "1 brocoli", "1 gousse d'ail", "25 g d'oignon nouveau", "1 orange",
+      "1 cm de gingembre frais", "1 sachet de sauce soja au sésame", "1 sachet de sauce soja",
+      "1 sachet de graines de sésame", "2 tranches de carré de porc", "2 sachets d'huile de sésame",
+      "1 cc d'huile de tournesol", "1 cc de vinaigre balsamique blanc ou de riz", "1 cc de miel",
+      "2 cs de farine", "1 cc de beurre", "sel et poivre"
+    ],
+    "steps" => [
+      "Rincer le riz puis le cuire à couvert dans une casserole d'eau salée environ 12 à 15 minutes à feu doux ; laisser reposer 10 minutes hors du feu et égrener à la fourchette.",
+      "Couper le brocoli en fleurettes, émincer l'ail et l'oignon nouveau. Les faire revenir dans un filet d'huile 1 à 2 minutes, puis ajouter un peu d'eau, couvrir et laisser étuver 8 à 10 minutes à feu doux.",
+      "Prélever le zeste et le jus de l'orange, râper le gingembre. Mélanger dans un bol la sauce soja-sésame, la sauce soja, les graines de sésame, le reste d'ail et de gingembre, un peu de zeste et de jus d'orange, le vinaigre et le miel.",
+      "Couper le porc en dés, les saupoudrer de farine, saler et poivrer. Les dorer dans une noisette de beurre 2 à 3 minutes jusqu'à ce qu'ils ne soient plus rosés, puis ajouter la sauce à l'orange et laisser réduire 2 à 3 minutes.",
+      "Mélanger l'huile de sésame au brocoli et au riz.",
+      "Servir le riz avec le porc à la sauce orange d'un côté et le brocoli de l'autre, garni de vert d'oignon nouveau."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/mijote-de-pois-chiches-and-epinards-a-litalienne-69d901f3defeabaeea86171c",
+    "title" => "Mijoté de pois chiches et épinards à l'italienne, pecorino et focaccia",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 oignon", "1 gousse d'ail", "1 carotte", "70 g de céleri-branche", "1 paquet de pois chiches",
+      "1 sachet d'épices à l'italienne", "1 paquet de chair de tomates", "1 sachet d'épinards",
+      "110 g de focaccia", "1 sachet de pecorino romano AOP râpé", "½ cube de bouillon de légumes",
+      "3 cs d'huile d'olive", "2 cc de vinaigre balsamique blanc ou de riz", "sel et poivre"
+    ],
+    "steps" => [
+      "Émincer l'oignon et l'ail, couper la carotte et le céleri en petits dés, égoutter les pois chiches.",
+      "Faire revenir l'oignon, l'ail, la carotte et le céleri dans un filet d'huile 4 à 5 minutes avec du sel, puis ajouter le vinaigre balsamique et les épices à l'italienne et laisser évaporer.",
+      "Ajouter la chair de tomates, les pois chiches et le bouillon. Couvrir et laisser mijoter 15 à 20 minutes à feu moyen jusqu'à ce que les légumes soient tendres.",
+      "Déchirer les épinards lavés à la main, les incorporer au mijoté et laisser cuire 5 minutes de plus jusqu'à ce qu'ils retombent.",
+      "Pendant ce temps, couper la focaccia en deux et la toaster ou l'enfourner quelques minutes jusqu'à ce qu'elle soit dorée, puis l'arroser d'un filet d'huile.",
+      "Servir le mijoté dans des bols, parsemer de pecorino râpé et accompagner de focaccia."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/la-dolce-vita-legumes-grilles-and-coppa-69dd09a36bb16e39e1b840ce",
+    "title" => "Légumes grillés à l'italienne, coppa, grana padano et tomate côtelée",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 courgette", "1 aubergine", "1 gousse d'ail", "2 abricots", "1 sachet d'épices à l'italienne",
+      "1 sachet de pignons de pin", "1 tomate côtelée", "1 sachet de basilic", "5 tranches de coppa",
+      "1 sachet de copeaux de grana padano AOP", "1 sachet de salade", "2 cs d'huile d'olive",
+      "2 cc de miel", "5 cs de vinaigre balsamique noir", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four en mode grill à 220°C. Couper la courgette et l'aubergine en rondelles, émincer l'ail et couper les abricots en quartiers.",
+      "Répartir la courgette et l'aubergine sur une plaque avec un filet d'huile, saler et poivrer, puis enfourner 15 minutes jusqu'à légère coloration.",
+      "Ajouter les abricots, l'ail, les pignons de pin et les épices à l'italienne sur la plaque, et poursuivre la cuisson 10 minutes, jusqu'à ce que l'aubergine soit fondante.",
+      "Pendant ce temps, couper la tomate en quartiers et la faire mariner avec du sel, du poivre, de l'huile, du vinaigre balsamique et du miel. Faire réduire un peu de vinaigre balsamique à feu doux jusqu'à consistance sirupeuse.",
+      "Ciseler le basilic et couper la coppa en morceaux. Mélanger la salade, le basilic et les légumes rôtis, répartir dans des assiettes creuses, parsemer de grana padano et de coppa, puis napper de réduction de vinaigre balsamique."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/market/tartinable-maison-houmous-aux-poivrons-grilles-69ef23a679a9f8cdb074dae8",
+    "title" => "Houmous maison aux poivrons grillés",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 paquet de pois chiches", "1 paquet de poivrons grillés", "1 citron", "½ gousse d'ail",
+      "1 sachet de mélange d'épices du Moyen-Orient", "1 sachet de graines de courge",
+      "3 cs d'huile d'olive", "sel et poivre"
+    ],
+    "steps" => [
+      "Égoutter et rincer les pois chiches et les poivrons grillés. Couper un quart des poivrons en petits dés et réserver pour le dressage. Couper le citron en quartiers et hacher grossièrement la moitié de l'ail.",
+      "Mixer les pois chiches, l'ail, le jus de deux quartiers de citron et le reste des poivrons avec les épices du Moyen-Orient, l'huile d'olive, du sel et du poivre jusqu'à obtenir une texture lisse. Ajuster la consistance avec un peu d'eau si besoin.",
+      "Faire griller à sec les graines de courge dans une poêle chaude jusqu'à ce qu'elles commencent à sauter.",
+      "Déposer le houmous dans un bol, garnir des dés de poivrons grillés, des graines de courge et d'un filet d'huile d'olive. Accompagner des quartiers de citron restants."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/pebronata-corse-veau-en-sauce-aux-poivrons-69fb105ca2b8b19764025737",
+    "title" => "Pebronata corse, veau et lardons mijotés aux poivrons",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 paquet de sauté de veau", "1 oignon", "1 poivron", "1 gousse d'ail", "1 tomate",
+      "½ sachet de persil", "75 g de lardons fumés sans nitrite", "1 sachet de concentré de tomates",
+      "1 feuille de laurier", "1 sachet de thym séché", "2 pommes de terre", "280 ml de bouillon de bœuf",
+      "1 cs d'huile d'olive", "1 cs de beurre", "1 cs de farine", "1 cc de sucre", "sel et poivre"
+    ],
+    "steps" => [
+      "Couper la viande en dés égaux et l'éponger. Émincer l'oignon, épépiner et couper le poivron en lanières, émincer l'ail, couper la tomate en dés et ciseler le persil.",
+      "Faire dorer le veau et les lardons dans l'huile et le beurre 5 à 7 minutes, puis les réserver. Faire dorer le poivron et l'oignon dans la même casserole 2 à 3 minutes, ajouter l'ail et le concentré de tomates, et faire revenir 1 minute.",
+      "Remettre le veau et les lardons, saupoudrer de farine et mélanger. Verser le bouillon, ajouter la tomate, le laurier, le thym, la moitié du persil et le sucre ; gratter le fond pour décoller les sucs.",
+      "Porter à ébullition puis laisser mijoter à couvert environ 1 heure à 1h10 à feu doux, en retirant le couvercle en fin de cuisson si la sauce doit épaissir.",
+      "Pendant ce temps, cuire les pommes de terre en dés dans une casserole d'eau salée 15 à 20 minutes, puis les égoutter.",
+      "Retirer la feuille de laurier, incorporer les pommes de terre au mijoté, rectifier l'assaisonnement et servir parsemé du reste de persil."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/market/virgin-mojito-citron-vert-and-menthe-69ef23a8b2918f341e7bc873",
+    "title" => "Virgin mojito citron vert et menthe",
+    "tags" => [],
+    "servings" => 4,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => ["6 citrons", "2 sachets de menthe", "100 g de sucre de canne", "1000 ml d'eau"],
+    "steps" => [
+      "Préparer des glaçons. Laver la menthe et réserver quatre tranches de citron pour la décoration.",
+      "Couper le reste des citrons en quartiers et effeuiller la menthe, en gardant quelques feuilles pour la décoration.",
+      "Placer les quartiers de citron et la menthe dans un pichet avec le sucre, puis les écraser légèrement avec un pilon ou une fourchette pour libérer leurs arômes.",
+      "Répartir des glaçons dans les verres, compléter avec de l'eau (plate ou pétillante) et mélanger. Décorer avec les tranches de citron et les feuilles de menthe réservées."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/naanwich-caviar-daubergine-and-panir-grille-69d901badefeabaeea8615f0",
+    "title" => "Naanwich, caviar d'aubergine et panir grillé",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 aubergine", "1 mini concombre", "1 oignon", "1 gousse d'ail", "75 g de pâte épicée tikka masala",
+      "200 g de panir", "2 pains naan", "1 pot de yaourt à la grecque", "3 cs d'huile d'olive",
+      "1 cc de vinaigre balsamique noir", "1 cc de beurre", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 220°C (200°C chaleur tournante). Couper l'aubergine épluchée en dés, l'assaisonner avec de l'huile, du sel et du poivre, puis l'enfourner 30 à 35 minutes jusqu'à ce qu'elle soit tendre.",
+      "Couper le concombre en fines demi-lunes et le faire mariner dans une vinaigrette huile-vinaigre balsamique jusqu'au service.",
+      "Émincer l'oignon et l'ail, les faire revenir dans l'huile 2 à 3 minutes, ajouter la pâte tikka masala et un peu d'eau, puis laisser mijoter à couvert 5 à 6 minutes.",
+      "Ajouter l'aubergine cuite au mélange oignon-tikka, réchauffer 2 à 3 minutes en remuant, puis écraser grossièrement à la fourchette pour obtenir un caviar d'aubergine.",
+      "Couper le panir en tranches et le dorer 4 à 5 minutes. Couper les naans en deux, tartiner de caviar d'aubergine puis de yaourt, garnir de panir grillé sur une moitié et refermer.",
+      "Dorer les naanwichs garnis dans une noisette de beurre 3 à 4 minutes de chaque côté en appuyant légèrement. Servir avec la salade de concombre à côté."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/poulet-label-rouge-sauce-bbq-moutarde-69e9ee20a777d4c0e74a792e",
+    "title" => "Poulet Label Rouge sauce BBQ-moutarde, potatoes et coleslaw au maïs",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "500 g de pommes de terre", "⅔ sachet de mélange d'épices pour BBQ", "1 boîte de maïs",
+      "1 sucrine", "½ carotte", "1 pot de yaourt à la grecque", "2 filets de poulet Label Rouge",
+      "40 g de sauce BBQ façon Carolina Gold", "2 cs d'huile d'olive",
+      "1 cc de vinaigre de vin rouge ou de cidre", "1 cc de moutarde", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 210°C (190°C chaleur tournante). Couper les pommes de terre en frites épaisses, les mélanger avec de l'huile et les épices BBQ, puis enfourner 30 à 35 minutes.",
+      "Égoutter le maïs, couper la sucrine en fines lanières et râper la carotte.",
+      "Préparer une vinaigrette avec le yaourt, la moutarde, le vinaigre de vin, du sel et du poivre. Ajouter la carotte, le maïs et la sucrine juste avant de servir et mélanger.",
+      "Faire dorer le poulet dans un filet d'huile 5 à 7 minutes de chaque côté jusqu'à ce qu'il soit bien cuit.",
+      "Ajouter la sauce BBQ et un peu d'eau dans la poêle, laisser réduire 1 à 2 minutes pour bien napper le poulet.",
+      "Servir le poulet nappé de sauce avec les potatoes et le coleslaw au maïs."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/poulet-label-rouge-crispy-aioli-and-pois-chiches-69e9ee20b2918f341e7b1c54",
+    "title" => "Poulet Label Rouge croustillant, pois chiches et sauce aïoli-yaourt",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 poivron", "1 sucrine", "1 mini concombre", "1 paquet de pois chiches",
+      "1 sachet de chapelure panko", "⅔ sachet de paprika fumé en poudre", "½ sachet d'origan séché",
+      "2 filets de poulet Label Rouge", "1 pot de yaourt à la grecque", "1 sachet d'aïoli",
+      "2 cs d'huile d'olive", "2 cc de farine", "1 œuf", "50 g de beurre",
+      "1 cs de vinaigre balsamique noir", "sel et poivre"
+    ],
+    "steps" => [
+      "Épépiner le poivron et le couper en lanières avec la sucrine. Couper le concombre en fines demi-lunes et égoutter les pois chiches.",
+      "Faire revenir le poivron et les pois chiches dans un filet d'huile avec le paprika fumé et l'origan pendant 7 à 8 minutes, jusqu'à ce qu'ils soient dorés. Réserver et couper le poulet en dés de 3 cm.",
+      "Préparer trois assiettes : farine, œuf battu, et chapelure mélangée au reste d'origan, de paprika, de sel et de poivre. Enrober les dés de poulet successivement des trois. Les faire cuire dans une noisette de beurre 8 à 10 minutes, jusqu'à ce que la panure soit dorée et le poulet cuit à cœur.",
+      "Préparer une vinaigrette avec l'huile d'olive et le vinaigre balsamique, y ajouter la sucrine, le concombre, le poivron et les pois chiches, puis mélanger.",
+      "Mélanger le yaourt avec l'aïoli. Servir la salade dans des assiettes creuses, ajouter le poulet pané par-dessus et napper de sauce yaourt-aïoli."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/truite-grillee-and-sauce-bearnaise-du-comptoir-69d901c9defeabaeea86162e",
+    "title" => "Truite grillée, sauce béarnaise et fenouil braisé aux pignons",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "2 pommes de terre", "1 oignon", "½ citron", "1 gousse d'ail", "1 fenouil",
+      "1 sachet de pignons de pin", "2 filets de truite avec peau", "40 g de sauce béarnaise",
+      "3 cs d'huile d'olive", "1 cc de sucre", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 220°C (200°C chaleur tournante). Couper les pommes de terre en fines rondelles, les répartir sur une plaque sans les superposer avec un filet d'huile, du sel et du poivre. Enfourner 20 à 25 minutes jusqu'à ce qu'elles soient dorées.",
+      "Émincer l'oignon, couper le citron en quartiers, ciseler l'ail. Couper le fenouil en quartiers après avoir retiré la partie dure.",
+      "Faire colorer le fenouil, l'oignon et les pignons de pin dans un filet d'huile 2 à 3 minutes, ajouter l'ail, le sucre, le jus de citron et un peu d'eau. Couvrir et laisser mijoter 10 à 14 minutes jusqu'à ce que les légumes soient fondants.",
+      "Assaisonner la truite et la dorer dans un filet d'huile 4 à 5 minutes côté peau, puis 2 à 3 minutes de l'autre côté, jusqu'à ce qu'elle soit cuite à cœur. La réserver.",
+      "Réchauffer la sauce béarnaise à feu très doux dans la même poêle pendant 30 secondes, en remuant.",
+      "Répartir les pommes de terre et le fenouil braisé dans les assiettes, ajouter la truite à côté et napper de sauce béarnaise."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/poulet-sauce-bbq-moutarde-facon-caroline-du-sud-69e9ee20fe534c766c45bb99",
+    "title" => "Poulet sauce BBQ-moutarde façon Caroline du Sud, potatoes et coleslaw",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "500 g de pommes de terre", "⅔ sachet de mélange d'épices pour BBQ", "1 boîte de maïs",
+      "1 sucrine", "½ carotte", "1 pot de yaourt à la grecque", "2 filets de poulet",
+      "40 g de sauce BBQ façon Carolina Gold", "2 cs d'huile d'olive",
+      "1 cc de vinaigre de vin rouge ou de cidre", "1 cc de moutarde", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 210°C (190°C chaleur tournante). Couper les pommes de terre en frites épaisses, les mélanger avec de l'huile et les épices BBQ, puis enfourner 30 à 35 minutes.",
+      "Égoutter le maïs, couper la sucrine en fines lanières et râper la carotte.",
+      "Préparer une vinaigrette avec le yaourt, la moutarde, le vinaigre, du sel et du poivre. Ajouter la carotte, le maïs et la sucrine juste avant de servir.",
+      "Faire dorer le poulet dans un filet d'huile 3 à 4 minutes de chaque côté jusqu'à ce qu'il soit bien cuit.",
+      "Ajouter la sauce BBQ et un peu d'eau, laisser réduire 1 à 2 minutes pour bien napper le poulet.",
+      "Servir le poulet nappé de sauce avec les potatoes et le coleslaw au maïs."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/club-sandwich-poulet-avocat-and-mayo-basilic-69d901b2defeabaeea8615b9",
+    "title" => "Club sandwich poulet, avocat et mayo basilic, salade croquante pomme-courgette",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 courgette", "1 tomate", "1 pomme", "1 avocat", "1 sucrine", "8 tranches de pain de mie",
+      "1 sachet de mayonnaise", "1 pot de crème de basilic", "4 tranches de poulet cuit",
+      "1 cc de miel", "1 cc de vinaigre balsamique noir", "1 cc de moutarde", "2 cs d'huile d'olive",
+      "sel et poivre"
+    ],
+    "steps" => [
+      "Tailler de longs rubans de courgette à l'éplucheur. Couper la tomate en rondelles, la pomme en fines tranches et l'avocat en lanières. Réserver quelques feuilles de sucrine et émincer le reste.",
+      "Griller les tranches de pain de mie. Mélanger la mayonnaise avec la crème de basilic. Préparer une vinaigrette avec le miel, le vinaigre balsamique, la moutarde et l'huile d'olive, puis y mélanger la pomme et les rubans de courgette.",
+      "Tartiner chaque tranche de pain grillée de mayonnaise au basilic. Garnir la moitié des tranches de poulet, de feuilles de sucrine, de tomate et d'avocat, puis refermer avec les tranches restantes. Couper chaque sandwich en triangles.",
+      "Ajouter les lanières de sucrine et le reste de tomate à la salade pomme-courgette, mélanger et servir à côté des sandwichs."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/quesadillas-completes-boeuf-poivron-and-cheddar-69d9023c6bb16e39e1b7ecd4",
+    "title" => "Quesadillas complètes au bœuf, poivron, cheddar et beurre de cacahuètes",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 oignon", "2 poivrons", "1 paquet de viande hachée de bœuf", "1 pot de beurre de cacahuètes",
+      "1 sachet d'épices mexicaines", "1 sachet de ketchup", "4 tortillas au blé complet",
+      "1 sachet de cheddar râpé", "1 sucrine", "3 cs d'huile d'olive", "1 cs de vinaigre balsamique noir",
+      "sel et poivre"
+    ],
+    "steps" => [
+      "Émincer l'oignon et couper les poivrons en lanières. Les faire revenir dans un filet d'huile 3 à 5 minutes, ajouter le bœuf haché et cuire 2 à 3 minutes en l'émiettant.",
+      "Ajouter le beurre de cacahuètes, les épices mexicaines, le ketchup et un peu d'eau. Laisser mijoter à couvert 10 à 12 minutes jusqu'à ce que le poivron soit tendre, en ajoutant de l'eau si besoin.",
+      "Garnir chaque tortilla de la moitié du mélange bœuf-légumes et de cheddar, la replier en demi-lune et la faire dorer 2 à 3 minutes de chaque côté à couvert, jusqu'à ce que le fromage soit fondu. Répéter pour la seconde tortilla.",
+      "Émincer la sucrine, préparer une vinaigrette avec l'huile d'olive et le vinaigre balsamique, puis y mélanger la sucrine. Couper chaque quesadilla en deux et servir avec la salade."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/jerk-chicken-a-la-jamaicaine-and-riz-aux-haricots-69e9ee47b2918f341e7b1d4a",
+    "title" => "Jerk chicken à la jamaïcaine et riz aux haricots rouges",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 poivron", "1 gousse d'ail", "1 oignon", "1 cm de gingembre frais",
+      "40 g de pâte épicée jamaïcaine", "1 sachet de sauce sriracha", "2 cuisses de poulet",
+      "150 g de riz au jasmin", "¾ paquet de lait de coco", "½ paquet de haricots rouges",
+      "200 ml de bouillon de volaille", "4 cs d'huile de tournesol", "2 cc de sucre", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 230°C (210°C chaleur tournante). Couper le poivron en lanières, émincer l'ail et l'oignon, râper le gingembre.",
+      "Mélanger dans un plat à four la pâte jamaïcaine, la moitié de l'ail et du gingembre, la sriracha, un peu d'huile et de sucre ; y enrober le poulet et enfourner 30 à 35 minutes jusqu'à cuisson complète.",
+      "Ajouter le poivron sur une plaque avec un filet d'huile, saler et poivrer, et l'enfourner pour les 15 dernières minutes de cuisson du poulet. Badigeonner le poulet cuit avec le reste de marinade.",
+      "Faire revenir l'oignon, le reste d'ail et de gingembre dans l'huile 3 à 4 minutes, ajouter le riz et cuire 1 à 2 minutes, puis verser le lait de coco et le bouillon. Couvrir et laisser mijoter 12 à 16 minutes à feu doux jusqu'à absorption complète.",
+      "Rincer et égoutter les haricots rouges, les incorporer au riz cuit hors du feu.",
+      "Servir le riz aux haricots avec la cuisse de poulet et les poivrons grillés à côté."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/la-solana-fenouil-tomates-and-chorizo-grille-69d901bd6bb16e39e1b7ea13",
+    "title" => "Salade de fenouil, tomates et chorizo grillé, vinaigrette au labneh",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 fenouil", "½ citron", "1 sachet de persil", "1 pot de labneh", "1 sachet de dés de chorizo",
+      "des tomates cerises rouges", "1 sachet d'amandes entières grillées non salées",
+      "1 sachet de salade", "2 cs d'huile d'olive", "1 cc de miel", "sel et poivre"
+    ],
+    "steps" => [
+      "Couper le fenouil en très fines tranches après avoir retiré la partie dure. Prélever le zeste de citron et ciseler le persil.",
+      "Préparer une vinaigrette avec le labneh, le zeste et un peu de jus de citron, l'huile d'olive et le miel. Y faire mariner le fenouil.",
+      "Faire dorer les dés de chorizo à sec dans une poêle 2 à 3 minutes. Couper les tomates cerises en deux et concasser les amandes.",
+      "Ajouter les tomates et la salade au fenouil mariné, mélanger et assaisonner selon le goût.",
+      "Servir la salade parsemée des dés de chorizo grillés, des amandes concassées et de persil."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/gnocchi-sauce-fourme-dambert-aop-and-portobellos-69e9ee36a777d4c0e74a7978",
+    "title" => "Gnocchi sauce fourme d'Ambert, portobellos et noisettes",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "3 portobellos", "1 oignon", "1 gousse d'ail", "60 g de fourme d'Ambert AOP", "400 g de gnocchi",
+      "1 sachet de noisettes grillées", "⅔ paquet d'avoine cuisine", "1 sachet de salade",
+      "1,5 cs d'huile d'olive", "1 cs de vinaigre balsamique noir", "1 cc de moutarde", "sel et poivre"
+    ],
+    "steps" => [
+      "Nettoyer et émincer les portobellos. Émincer l'oignon et l'ail, couper la fourme d'Ambert en dés.",
+      "Faire revenir les gnocchi dans un filet d'huile avec un peu d'eau à couvert 2 à 3 minutes, puis 1 à 2 minutes à découvert en remuant souvent. Les réserver.",
+      "Dans la même poêle, faire revenir les portobellos, l'oignon et l'ail 7 à 8 minutes, puis déglacer au vinaigre balsamique.",
+      "Ajouter l'avoine cuisine et la fourme d'Ambert, couvrir 2 à 3 minutes pour faire fondre le fromage, puis incorporer les gnocchi et mélanger 3 à 4 minutes jusqu'à obtenir une préparation homogène.",
+      "Préparer une vinaigrette avec la moutarde, l'huile d'olive et le vinaigre balsamique, y mélanger la salade au dernier moment.",
+      "Servir les gnocchi en sauce parsemés de noisettes concassées, avec la salade à côté."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/bol-de-poulet-croustillant-and-pois-chiche-69e9ee20fe534c766c45bb9b",
+    "title" => "Bowl de poulet croustillant, pois chiches et sauce aïoli-yaourt",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 poivron", "1 sucrine", "1 mini concombre", "1 paquet de pois chiches",
+      "⅔ sachet de paprika fumé en poudre", "½ sachet d'origan séché", "1 sachet de chapelure panko",
+      "1 blanc de poulet", "1 pot de yaourt à la grecque", "1 sachet d'aïoli", "2 cs d'huile d'olive",
+      "2 cc de farine", "1 œuf", "50 g de beurre", "1 cs de vinaigre balsamique noir", "sel et poivre"
+    ],
+    "steps" => [
+      "Épépiner le poivron et le couper en lanières avec la sucrine. Couper le concombre en fines demi-lunes et égoutter les pois chiches.",
+      "Faire revenir le poivron et les pois chiches dans un filet d'huile avec le paprika fumé et l'origan pendant 7 à 8 minutes, jusqu'à ce qu'ils soient dorés. Réserver et couper le poulet en dés de 3 cm.",
+      "Préparer trois assiettes : farine, œuf battu, et chapelure mélangée au reste d'origan, de paprika, de sel et de poivre. Enrober les dés de poulet successivement des trois. Les faire cuire dans une noisette de beurre 8 à 10 minutes, jusqu'à ce que la panure soit dorée et le poulet cuit à cœur.",
+      "Préparer une vinaigrette avec l'huile d'olive et le vinaigre balsamique, y ajouter la sucrine, le concombre, le poivron et les pois chiches, puis mélanger.",
+      "Mélanger le yaourt avec l'aïoli. Servir la salade dans des assiettes creuses, ajouter le poulet pané par-dessus et napper de sauce yaourt-aïoli."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/bowl-de-pois-chiches-and-patate-douce-au-cumin-69dd18294af8f3547a641fac",
+    "title" => "Bowl de pois chiches et patate douce au cumin, labneh et mélasse de grenade",
+    "tags" => [],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 patate douce", "1 paquet de pois chiches", "1 oignon", "⅔ sachet de cumin en poudre",
+      "1 sachet de persil plat et menthe", "1 sachet d'amandes entières grillées non salées",
+      "1 pot de labneh", "15 g de mélasse de grenade", "¾ paquet de fromage à la grecque",
+      "3 cs d'huile d'olive", "sel et poivre"
+    ],
+    "steps" => [
+      "Préchauffer le four à 220°C (200°C chaleur tournante). Couper la patate douce épluchée en dés, égoutter et éponger les pois chiches, couper l'oignon en quartiers.",
+      "Répartir le tout sur une plaque avec un filet d'huile et le cumin, saler et poivrer, puis enfourner 15 à 20 minutes jusqu'à ce que les légumes soient fondants et les pois chiches croustillants.",
+      "Effeuiller et ciseler les herbes, concasser grossièrement les amandes.",
+      "Mélanger le labneh avec la moitié des herbes, un filet d'huile, du sel et du poivre.",
+      "Mélanger la mélasse de grenade avec les amandes concassées, le reste des herbes, un filet d'huile, du sel et du poivre.",
+      "Servir les légumes rôtis dans des assiettes creuses, émietter le fromage à la grecque et le labneh par-dessus, puis arroser de vinaigrette à la mélasse de grenade."
+    ]
+  }
+].freeze
+
+path = File.expand_path("recipe_catalog.yml", __dir__)
+File.write(path, RECIPES.to_yaml)
+puts "Wrote #{RECIPES.size} recipes to #{path}"

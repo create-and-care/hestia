@@ -1,0 +1,9 @@
+carbonara:
+  source_url: https://example.com/carbonara
+  title: Pâtes carbonara
+  tags: []
+  servings: 2
+  prep_time_minutes: 10
+  cook_time_minutes: 15
+  ingredients: ["200 g de pâtes", "100 g de lardons", "2 oeufs"]
+  steps: ["Faire cuire les pâtes.", "Faire revenir les lardons.", "Mélanger avec les oeufs hors du feu."]

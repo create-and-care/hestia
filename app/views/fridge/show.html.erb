@@ -12,6 +12,17 @@
 
   <%= render "shared/flash" %>
 
+  <% if @recipe_suggestions.present? %>
+    <section class="mb-10 rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-3 font-medium"><%= t(".suggestions_heading") %></h2>
+      <ul class="space-y-1 text-sm">
+        <% @recipe_suggestions.each do |recipe| %>
+          <li><%= link_to recipe.title, recipe_path(recipe), class: "underline" %></li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
   <section class="mb-10">
     <h2 class="mb-3 font-medium"><%= t(".foods_heading") %></h2>
     <%= render "fridge_items/form", fridge_item: @fridge_item %>

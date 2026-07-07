@@ -1,6 +1,3 @@
-require "net/http"
-require "uri"
-
 module Recipes
   # Imports a recipe from an external URL (schema.org/Recipe). Returns the
   # created recipe, or nil if the page is unreachable or lacks usable microdata.
@@ -16,7 +13,7 @@ module Recipes
     def call
       return if @url.blank?
 
-      html = @html || fetch
+      html = @html || PageFetcher.call(@url)
       return if html.blank?
 
       result = RecipeParser.parse(html)
@@ -26,19 +23,6 @@ module Recipes
     end
 
     private
-      def fetch
-        uri = URI.parse(@url)
-        return unless uri.is_a?(URI::HTTP)
-
-        response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https",
-          open_timeout: 5, read_timeout: 5) do |http|
-          http.get(uri.request_uri, "User-Agent" => "Hestia/1.0")
-        end
-        response.body if response.is_a?(Net::HTTPSuccess)
-      rescue StandardError
-        nil
-      end
-
       def build_recipe(result)
         recipe = @household.recipes.new(
           title: result.title,

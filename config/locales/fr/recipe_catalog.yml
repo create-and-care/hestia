@@ -1,0 +1,15 @@
+fr:
+  recipe_catalog:
+    index:
+      title: "Découvrir des recettes"
+      search_placeholder: "Rechercher…"
+      mine_tab: "Mes recettes"
+      discover_tab: "Découvrir"
+      empty: "Aucune recette dans le catalogue pour l'instant."
+      empty_search: "Aucune recette pour cette recherche."
+      previous_page: "← Précédent"
+      next_page: "Suivant →"
+    entry:
+      add_link: "Ajouter à mon livre"
+    add_to_household:
+      notice: "Recette ajoutée à ton livre."

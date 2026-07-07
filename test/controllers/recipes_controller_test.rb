@@ -28,6 +28,25 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "farine"
   end
 
+  test "show renders a quick meal-planning form" do
+    recipe = recipes(:alpha_pancakes)
+    get recipe_path(recipe)
+    assert_response :success
+    assert_select "form[action=?]", meal_plan_entries_path do
+      assert_select "input[name='meal_plan_entry[recipe_id]'][value=?]", recipe.id.to_s
+    end
+  end
+
+  test "planning a meal from the recipe show page creates a menu entry" do
+    recipe = recipes(:alpha_pancakes)
+    assert_difference -> { households(:alpha).meal_plan_entries.count }, 1 do
+      post meal_plan_entries_path, params: {
+        meal_plan_entry: { on_date: Date.current, meal_type: "dinner", recipe_id: recipe.id }
+      }
+    end
+    assert_equal recipe, MealPlanEntry.order(:id).last.recipe
+  end
+
   test "create builds ingredients, steps and tags from text areas" do
     assert_difference -> { households(:alpha).recipes.count }, 1 do
       post recipes_path, params: { recipe: {

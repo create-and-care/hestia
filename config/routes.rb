@@ -121,6 +121,13 @@ Rails.application.routes.draw do
   end
   resources :prepared_dishes, only: %i[create destroy]
 
+  # Recipe catalog ("Découvrir" tab) — read-only, cloned into the household's
+  # own book on demand (Recipes::Catalog::AddToHousehold). Declared before
+  # `resources :recipes` so "/recipes/catalog" isn't swallowed by the
+  # "/recipes/:id" show route.
+  get "recipes/catalog", to: "recipe_catalog#index", as: :recipe_catalog
+  post "recipes/catalog/:id/add_to_household", to: "recipe_catalog#add_to_household", as: :add_to_household_recipe_catalog
+
   # Recipes module (Phase 2.a).
   resources :recipes do
     member do

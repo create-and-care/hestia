@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -594,6 +594,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_120000) do
     t.index ["barcode"], name: "index_products_on_barcode"
     t.index ["household_id", "name"], name: "index_products_on_household_id_and_name", unique: true
     t.index ["household_id"], name: "index_products_on_household_id"
+  end
+
+  create_table "recipe_catalog_entries", force: :cascade do |t|
+    t.integer "cook_time_minutes"
+    t.datetime "created_at", null: false
+    t.jsonb "ingredients", default: [], null: false
+    t.datetime "last_synced_at"
+    t.integer "prep_time_minutes"
+    t.integer "servings"
+    t.string "source_url", null: false
+    t.jsonb "steps", default: [], null: false
+    t.string "tags", default: [], null: false, array: true
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["source_url"], name: "index_recipe_catalog_entries_on_source_url", unique: true
   end
 
   create_table "recipe_ingredients", force: :cascade do |t|

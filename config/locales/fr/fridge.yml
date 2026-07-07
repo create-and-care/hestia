@@ -3,6 +3,7 @@ fr:
     show:
       title: "Frigo"
       search_placeholder: "Rechercher…"
+      suggestions_heading: "Recettes réalisables avec ton frigo"
       foods_heading: "Aliments"
       no_items: "Aucun aliment."
       no_items_for_search: "Aucun aliment pour cette recherche."

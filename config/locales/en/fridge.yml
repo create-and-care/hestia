@@ -3,6 +3,7 @@ en:
     show:
       title: "Fridge"
       search_placeholder: "Search…"
+      suggestions_heading: "Recipes you can make with your fridge"
       foods_heading: "Food"
       no_items: "No food items."
       no_items_for_search: "No food items for this search."

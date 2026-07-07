@@ -26,6 +26,16 @@
           class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" %>
   </div>
 
+  <section class="mb-6 rounded-lg border border-gray-200 p-4">
+    <h2 class="mb-2 font-medium"><%= t(".plan_meal_heading") %></h2>
+    <%= form_with url: meal_plan_entries_path, scope: :meal_plan_entry, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form.hidden_field :recipe_id, value: @recipe.id %>
+      <%= form.date_field :on_date, value: Date.current, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.select :meal_type, meal_type_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+      <%= form.submit t(".plan_meal_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+    <% end %>
+  </section>
+
   <section class="mb-6">
     <h2 class="mb-2 font-medium"><%= t(".ingredients_heading") %></h2>
     <ul class="list-inside list-disc space-y-1 text-gray-800">

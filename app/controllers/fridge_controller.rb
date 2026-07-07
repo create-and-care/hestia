@@ -10,5 +10,6 @@ class FridgeController < ApplicationController
     @prepared_dishes = Current.household.prepared_dishes.ordered
     @fridge_item = FridgeItem.new
     @prepared_dish = PreparedDish.new
+    @recipe_suggestions = Frigo::SuggestRecipes.call(household: Current.household)
   end
 end

@@ -1,0 +1,36 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-3xl px-4">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <h1 class="text-2xl font-semibold">🔎 <%= t(".title") %></h1>
+    <%= form_with url: recipe_catalog_path, method: :get do |form| %>
+      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
+            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+    <% end %>
+  </header>
+
+  <div class="mb-4 flex gap-2 text-sm">
+    <%= link_to t(".mine_tab"), recipes_path, class: "rounded-md border border-gray-300 px-3 py-1.5 hover:bg-gray-50" %>
+    <span class="rounded-md bg-gray-900 px-3 py-1.5 font-medium text-white"><%= t(".discover_tab") %></span>
+  </div>
+
+  <%= render "shared/flash" %>
+
+  <div id="recipe_catalog_entries" class="grid gap-3 sm:grid-cols-2">
+    <%= render partial: "entry", collection: @entries %>
+  </div>
+  <% if @entries.empty? %>
+    <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
+      <%= @query.present? ? t(".empty_search") : t(".empty") %>
+    </p>
+  <% end %>
+
+  <div class="mt-6 flex justify-between text-sm">
+    <%= link_to t(".previous_page"), recipe_catalog_path(q: @query, page: @page - 1), class: "underline" if @page > 1 %>
+    <%= link_to t(".next_page"), recipe_catalog_path(q: @query, page: @page + 1), class: "underline" if @page * @per_page < @total %>
+  </div>
+
+  <p class="mt-6 text-sm">
+    <%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %>
+  </p>
+</div>
