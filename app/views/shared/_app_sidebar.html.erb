@@ -36,8 +36,11 @@
 
       <div data-sidebar-target="label groupPanel" class="ml-2 flex flex-col gap-0.5 border-l border-primary pl-3" <%= "hidden" unless group[:open] %>>
         <% group[:items].each do |item| %>
-          <%= link_to item[:path], class: "flex items-center gap-3 rounded-md p-2 text-sm text-primary hover:bg-surface-hover", data: { sidebar_target: "item" } do %>
-            <span class="shrink-0 text-base leading-none" aria-hidden="true"><%= item[:emoji] %></span>
+          <%= link_to item[:path], class: "flex items-center gap-3 rounded-md p-2 text-sm #{item[:active] ? "bg-surface-hover font-medium text-primary" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>
+            <span class="relative shrink-0 text-base leading-none" aria-hidden="true">
+              <%= item[:emoji] %>
+              <% if item[:active] %><span class="absolute -right-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
+            </span>
             <span class="truncate"><%= item[:label] %></span>
           <% end %>
         <% end %>
