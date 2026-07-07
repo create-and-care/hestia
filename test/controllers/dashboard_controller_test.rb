@@ -27,4 +27,15 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes households(:alpha).users, users(:two)
     assert_not_includes households(:beta).users, users(:one)
   end
+
+  test "the sidebar hides a module the household has disabled" do
+    households(:alpha).update!(disabled_modules: [ "shopping" ])
+    sign_in_as(users(:one))
+
+    get root_path
+
+    assert_response :success
+    assert_no_match %r{href="/shopping_lists"}, @response.body
+    assert_match %r{href="/fridge"}, @response.body
+  end
 end

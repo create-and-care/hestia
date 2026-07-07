@@ -37,6 +37,22 @@ class HouseholdsController < ApplicationController
     end
   end
 
+  # Enables/disables sidebar modules for the household (admins only, Household#module_enabled?).
+  def update_modules
+    unless current_membership&.admin?
+      return redirect_to household_path(Current.household), alert: t(".not_authorized")
+    end
+
+    enabled_modules = Array(params.dig(:household, :enabled_modules))
+    disabled_modules = Household::MODULE_KEYS - enabled_modules
+
+    if Current.household.update(disabled_modules: disabled_modules)
+      redirect_to household_path(Current.household), notice: t("households.update.updated")
+    else
+      redirect_to household_path(Current.household), alert: t("households.update.failed")
+    end
+  end
+
   # Switches the active household (multi-household).
   def activate
     membership = Current.user.memberships.find_by(household_id: params[:id])

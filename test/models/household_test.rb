@@ -50,4 +50,22 @@ class HouseholdTest < ActiveSupport::TestCase
     assert_equal "Paris", observed
     assert_equal "UTC", Time.zone.name
   end
+
+  test "modules are enabled by default" do
+    household = Household.create!(name: "Test")
+    assert household.module_enabled?(:shopping)
+    assert household.module_enabled?("shopping")
+  end
+
+  test "a module listed in disabled_modules is not enabled" do
+    household = Household.create!(name: "Test", disabled_modules: [ "shopping" ])
+    assert_not household.module_enabled?(:shopping)
+    assert household.module_enabled?(:fridge)
+  end
+
+  test "rejects unknown module keys" do
+    household = Household.new(name: "Test", disabled_modules: [ "not_a_module" ])
+    assert_not household.valid?
+    assert_includes household.errors[:disabled_modules].join, "not_a_module"
+  end
 end

@@ -72,7 +72,10 @@ Rails.application.routes.draw do
   # Onboarding: choosing to create / join a household.
   resource :onboarding, only: :show, controller: "onboarding"
   resources :households, only: %i[new create show update] do
-    member { patch :activate }
+    member do
+      patch :activate
+      patch :update_modules
+    end
   end
   # Joining a household via an invite code.
   resource :membership, only: %i[new create]

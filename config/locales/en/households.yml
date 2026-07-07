@@ -13,11 +13,22 @@ en:
       time_zone_heading: "Time zone"
       time_zone_label: "Used for day-boundary calculations (Fridge expiry, Task due dates, daily digest)"
       time_zone_submit: "Save"
+      tabs:
+        general: "General"
+        notifications: "Notifications"
+        api: "API"
+        modules: "Modules"
+      modules_heading: "Modules"
+      modules_description: "Choose which modules appear in the sidebar for your household."
+      modules_admin_only: "Only administrators can change these settings."
+      modules_submit: "Save modules"
     create:
       created: "Household “%{name}” created."
     update:
       updated: "Household preferences updated."
       failed: "Update failed."
+    update_modules:
+      not_authorized: "Only administrators can change modules."
     activate:
       switched: "Active household: “%{name}”."
       not_found: "Household not found."

@@ -4,7 +4,7 @@ module HouseholdScoping
   included do
     before_action :set_current_household
     before_action :require_household
-    helper_method :current_household
+    helper_method :current_household, :current_membership
   end
 
   class_methods do
@@ -16,6 +16,12 @@ module HouseholdScoping
   private
     def current_household
       Current.household
+    end
+
+    def current_membership
+      return nil unless Current.user && Current.household
+
+      @current_membership ||= Current.user.memberships.find_by(household: Current.household)
     end
 
     def set_current_household

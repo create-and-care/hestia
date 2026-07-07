@@ -81,6 +81,30 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "UTC", households(:alpha).reload.time_zone
   end
 
+  test "update_modules lets an admin disable a module" do
+    sign_in_as(users(:one)) # admin of :alpha
+
+    patch update_modules_household_path(households(:alpha)), params: {
+      household: { enabled_modules: Household::MODULE_KEYS - [ "shopping" ] }
+    }
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_equal [ "shopping" ], households(:alpha).reload.disabled_modules
+  end
+
+  test "update_modules refuses a non-admin member" do
+    sign_in_as(users(:two)) # admin of :beta, not a member of :alpha
+    households(:alpha).memberships.create!(user: users(:two), role: :member)
+    users(:two).sessions.last.update!(active_household: households(:alpha))
+
+    patch update_modules_household_path(households(:alpha)), params: {
+      household: { enabled_modules: Household::MODULE_KEYS - [ "shopping" ] }
+    }
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_empty households(:alpha).reload.disabled_modules
+  end
+
   test "switch_time_zone does not leak Time.zone into the next request" do
     households(:alpha).update!(time_zone: "Paris")
     sign_in_as(users(:one))

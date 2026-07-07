@@ -8,81 +8,127 @@
 
   <%= render "shared/flash" %>
 
-  <section class="mb-8 rounded-lg border border-gray-200 p-5">
-    <h2 class="mb-1 font-medium"><%= t(".invite_code") %></h2>
-    <code class="rounded-md bg-gray-100 px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
-  </section>
+  <%= render(Ui::TabsComponent.new(default: "general")) do |tabs| %>
+    <% tabs.with_tab(label: t(".tabs.general"), value: "general") do %>
+      <div class="space-y-8">
+        <section class="rounded-lg border border-gray-200 p-5">
+          <h2 class="mb-1 font-medium"><%= t(".invite_code") %></h2>
+          <code class="rounded-md bg-gray-100 px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
+        </section>
 
-  <section class="mb-8 rounded-lg border border-gray-200 p-5">
-    <h2 class="mb-3 font-medium"><%= t(".time_zone_heading") %></h2>
-    <%= form_with model: @household, url: household_path(@household), method: :patch do |form| %>
-      <div class="flex items-end gap-3">
-        <div class="flex-1">
-          <%= form.label :time_zone, t(".time_zone_label"), class: "mb-1 block text-sm font-medium" %>
-          <%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.all,
-                { default: @household.time_zone }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-        </div>
-        <%= form.submit t(".time_zone_submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+        <section class="rounded-lg border border-gray-200 p-5">
+          <h2 class="mb-3 font-medium"><%= t(".time_zone_heading") %></h2>
+          <%= form_with model: @household, url: household_path(@household), method: :patch do |form| %>
+            <div class="flex items-end gap-3">
+              <div class="flex-1">
+                <%= form.label :time_zone, t(".time_zone_label"), class: "mb-1 block text-sm font-medium" %>
+                <%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.all,
+                      { default: @household.time_zone }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+              </div>
+              <%= form.submit t(".time_zone_submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+            </div>
+          <% end %>
+        </section>
       </div>
     <% end %>
-  </section>
 
-  <section class="mb-8 rounded-lg border border-gray-200 p-5">
-    <h2 class="mb-1 font-medium">🔔 <%= t("notification_preferences.show.title") %></h2>
-    <p class="mb-4 text-sm text-gray-500"><%= t("notification_preferences.show.description") %></p>
+    <% tabs.with_tab(label: t(".tabs.notifications"), value: "notifications") do %>
+      <section class="rounded-lg border border-gray-200 p-5">
+        <h2 class="mb-1 font-medium">🔔 <%= t("notification_preferences.show.title") %></h2>
+        <p class="mb-4 text-sm text-gray-500"><%= t("notification_preferences.show.description") %></p>
 
-    <%= form_with model: @notification_preference, url: notification_preference_path, method: :patch, class: "space-y-5" do |form| %>
-      <label class="flex items-center gap-2">
-        <%= form.check_box :fridge_expiry_enabled, class: "size-4" %>
-        <span><%= t("notification_preferences.show.fridge_expiry_enabled") %></span>
-      </label>
+        <%= form_with model: @notification_preference, url: notification_preference_path, method: :patch, class: "space-y-5" do |form| %>
+          <label class="flex items-center gap-2">
+            <%= form.check_box :fridge_expiry_enabled, class: "size-4" %>
+            <span><%= t("notification_preferences.show.fridge_expiry_enabled") %></span>
+          </label>
 
-      <div>
-        <%= form.label :fridge_expiry_threshold_days, t("notification_preferences.show.fridge_expiry_threshold_days"), class: "mb-1 block text-sm font-medium text-gray-700" %>
-        <%= form.number_field :fridge_expiry_threshold_days, min: 0, max: 14,
-              class: "w-24 rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+          <div>
+            <%= form.label :fridge_expiry_threshold_days, t("notification_preferences.show.fridge_expiry_threshold_days"), class: "mb-1 block text-sm font-medium text-gray-700" %>
+            <%= form.number_field :fridge_expiry_threshold_days, min: 0, max: 14,
+                  class: "w-24 rounded-md border border-gray-300 px-3 py-2" %>
+          </div>
 
-      <label class="flex items-center gap-2">
-        <%= form.check_box :birthday_notifications_enabled, class: "size-4" %>
-        <span><%= t("notification_preferences.show.birthday_notifications_enabled") %></span>
-      </label>
+          <label class="flex items-center gap-2">
+            <%= form.check_box :birthday_notifications_enabled, class: "size-4" %>
+            <span><%= t("notification_preferences.show.birthday_notifications_enabled") %></span>
+          </label>
 
-      <%= form.submit t("notification_preferences.show.save"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+          <%= form.submit t("notification_preferences.show.save"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+        <% end %>
+      </section>
     <% end %>
-  </section>
 
-  <section class="mb-8 rounded-lg border border-gray-200 p-5">
-    <h2 class="mb-1 font-medium">📱 <%= t("api_tokens.index.title") %></h2>
-    <p class="mb-4 text-sm text-gray-500"><%= t("api_tokens.index.description") %></p>
+    <% tabs.with_tab(label: t(".tabs.api"), value: "api") do %>
+      <section class="rounded-lg border border-gray-200 p-5">
+        <h2 class="mb-1 font-medium">📱 <%= t("api_tokens.index.title") %></h2>
+        <p class="mb-4 text-sm text-gray-500"><%= t("api_tokens.index.description") %></p>
 
-    <ul class="mb-4 divide-y divide-gray-100 rounded-lg border border-gray-200">
-      <% if @api_tokens.none? %>
-        <li class="px-4 py-6 text-center text-sm text-gray-400"><%= t("api_tokens.index.empty") %></li>
-      <% end %>
-      <% @api_tokens.each do |token| %>
-        <li class="flex items-center justify-between px-4 py-3 text-sm">
-          <span>
-            <%= token.name %>
-            <span class="text-gray-400">· <%= t("api_tokens.index.created_on") %> <%= token.created_at.strftime("%d/%m/%Y") %></span>
-            <% if token.last_used_at %><span class="text-gray-400">· <%= t("api_tokens.index.last_used_on") %> <%= token.last_used_at.strftime("%d/%m/%Y") %></span><% end %>
-          </span>
-          <%= button_to t("api_tokens.index.revoke"), api_token_path(token), method: :delete,
-                form: { data: { turbo_confirm: t("api_tokens.index.revoke_confirm") } }, class: "cursor-pointer text-red-600 underline" %>
-        </li>
-      <% end %>
-    </ul>
+        <ul class="mb-4 divide-y divide-gray-100 rounded-lg border border-gray-200">
+          <% if @api_tokens.none? %>
+            <li class="px-4 py-6 text-center text-sm text-gray-400"><%= t("api_tokens.index.empty") %></li>
+          <% end %>
+          <% @api_tokens.each do |token| %>
+            <li class="flex items-center justify-between px-4 py-3 text-sm">
+              <span>
+                <%= token.name %>
+                <span class="text-gray-400">· <%= t("api_tokens.index.created_on") %> <%= token.created_at.strftime("%d/%m/%Y") %></span>
+                <% if token.last_used_at %><span class="text-gray-400">· <%= t("api_tokens.index.last_used_on") %> <%= token.last_used_at.strftime("%d/%m/%Y") %></span><% end %>
+              </span>
+              <%= button_to t("api_tokens.index.revoke"), api_token_path(token), method: :delete,
+                    form: { data: { turbo_confirm: t("api_tokens.index.revoke_confirm") } }, class: "cursor-pointer text-red-600 underline" %>
+            </li>
+          <% end %>
+        </ul>
 
-    <%= form_with model: @api_token, url: api_tokens_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <div class="flex-1">
-        <%= form.label :name, t("api_tokens.index.name_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
-      <%= form.submit t("api_tokens.index.create"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+        <%= form_with model: @api_token, url: api_tokens_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+          <div class="flex-1">
+            <%= form.label :name, t("api_tokens.index.name_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
+            <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+          </div>
+          <%= form.submit t("api_tokens.index.create"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+        <% end %>
+      </section>
     <% end %>
-  </section>
 
-  <p class="text-sm">
+    <% tabs.with_tab(label: t(".tabs.modules"), value: "modules") do %>
+      <section class="rounded-lg border border-gray-200 p-5">
+        <h2 class="mb-1 font-medium">🧩 <%= t(".modules_heading") %></h2>
+        <p class="mb-4 text-sm text-gray-500"><%= t(".modules_description") %></p>
+
+        <% unless current_membership&.admin? %>
+          <p class="mb-4 rounded-md border border-yellow-200 bg-yellow-50 px-3 py-2 text-sm text-yellow-800"><%= t(".modules_admin_only") %></p>
+        <% end %>
+
+        <%= form_with model: @household, url: update_modules_household_path(@household), method: :patch, class: "space-y-6" do |form| %>
+          <% SidebarHelper::SIDEBAR_GROUPS.each do |group| %>
+            <div>
+              <h3 class="mb-2 text-sm font-semibold text-gray-500"><%= group[:emoji] %> <%= t("sidebar.groups.#{group[:key]}") %></h3>
+              <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+                <% group[:items].each do |emoji, nav_key, _path| %>
+                  <li class="flex items-center justify-between px-4 py-3 text-sm">
+                    <span><%= emoji %> <%= t("dashboard.show.nav.#{nav_key}") %></span>
+                    <%= render Ui::SwitchComponent.new(
+                          name: "household[enabled_modules][]",
+                          checked: @household.module_enabled?(nav_key),
+                          disabled: !current_membership&.admin?,
+                          html_options: { value: nav_key.to_s }
+                        ) %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <% if current_membership&.admin? %>
+            <%= form.submit t(".modules_submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+          <% end %>
+        <% end %>
+      </section>
+    <% end %>
+  <% end %>
+
+  <p class="mt-8 text-sm">
     <%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %>
   </p>
 </div>

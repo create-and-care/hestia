@@ -51,15 +51,24 @@ class Household < ApplicationRecord
   has_many :gift_lists, dependent: :destroy
   has_many :trips, dependent: :destroy
 
+  # Every module key that appears in the sidebar (SidebarHelper::SIDEBAR_GROUPS
+  # is the single source of truth) can be turned off per household.
+  MODULE_KEYS = SidebarHelper::SIDEBAR_GROUPS.flat_map { |group| group[:items].map { |_emoji, key, _path| key.to_s } }.freeze
+
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true
   validates :holiday_country, inclusion: { in: HOLIDAY_COUNTRIES }, allow_blank: true
   validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
+  validate :disabled_modules_are_known_keys
 
   before_validation :ensure_invite_code, on: :create
 
   def regenerate_invite_code!
     update!(invite_code: self.class.generate_invite_code)
+  end
+
+  def module_enabled?(key)
+    disabled_modules.exclude?(key.to_s)
   end
 
   # "Today"-sensitive calculations (Fridge expiry, Task due dates, birthdays)
@@ -81,5 +90,10 @@ class Household < ApplicationRecord
   private
     def ensure_invite_code
       self.invite_code ||= self.class.generate_invite_code
+    end
+
+    def disabled_modules_are_known_keys
+      unknown = disabled_modules.to_a - MODULE_KEYS
+      errors.add(:disabled_modules, "contains unknown module keys: #{unknown.join(', ')}") if unknown.any?
     end
 end

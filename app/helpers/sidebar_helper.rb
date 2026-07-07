@@ -39,11 +39,15 @@ module SidebarHelper
   # helper stays a plain data source (module labels reuse dashboard.show.nav.*
   # so there is a single source of truth for each module's display name).
   def sidebar_groups
-    SIDEBAR_GROUPS.map do |group|
-      items = group[:items].map { |emoji, nav_key, path|
+    SIDEBAR_GROUPS.filter_map do |group|
+      items = group[:items].filter_map { |emoji, nav_key, path|
+        next unless current_household.nil? || current_household.module_enabled?(nav_key)
+
         resolved_path = instance_exec(&path)
         { emoji: emoji, label: t("dashboard.show.nav.#{nav_key}"), path: resolved_path, active: sidebar_item_active?(resolved_path) }
       }
+
+      next if items.empty?
 
       {
         key: group[:key],

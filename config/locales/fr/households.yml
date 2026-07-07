@@ -13,11 +13,22 @@ fr:
       time_zone_heading: "Fuseau horaire"
       time_zone_label: "Utilisé pour les calculs sensibles au jour (péremption Frigo, échéances Tâches, digest quotidien)"
       time_zone_submit: "Enregistrer"
+      tabs:
+        general: "Général"
+        notifications: "Notifications"
+        api: "API"
+        modules: "Modules"
+      modules_heading: "Modules"
+      modules_description: "Choisissez les modules qui apparaissent dans le menu latéral pour votre foyer."
+      modules_admin_only: "Seuls les administrateurs peuvent modifier ces réglages."
+      modules_submit: "Enregistrer les modules"
     create:
       created: "Foyer « %{name} » créé."
     update:
       updated: "Préférences du foyer mises à jour."
       failed: "Mise à jour impossible."
+    update_modules:
+      not_authorized: "Seuls les administrateurs peuvent modifier les modules."
     activate:
       switched: "Foyer actif : « %{name} »."
       not_found: "Foyer introuvable."
