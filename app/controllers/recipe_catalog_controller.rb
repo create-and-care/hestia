@@ -1,4 +1,6 @@
 class RecipeCatalogController < ApplicationController
+  include RecipeViewMode
+
   PER_PAGE = 24
 
   # "Découvrir" tab of the Recipes module: browse the read-only recipe
@@ -7,6 +9,7 @@ class RecipeCatalogController < ApplicationController
     @query = params[:q].to_s.strip
     @tag = params[:tag].to_s.strip
     @tags = RecipeCatalogEntry.all_tags
+    @view_mode = recipe_view_mode
 
     entries = RecipeCatalogEntry.ordered
     entries = entries.search(@query) if @query.present?

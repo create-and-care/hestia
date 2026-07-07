@@ -9,6 +9,7 @@ fr:
       empty_search: "Aucune recette pour cette recherche."
       mine_tab: "Mes recettes"
       discover_tab: "Découvrir"
+      view_mode_label: "Mode d'affichage"
     recipe:
       total_time: "%{minutes} min"
     cook:

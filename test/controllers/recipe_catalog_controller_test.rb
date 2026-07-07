@@ -28,6 +28,15 @@ class RecipeCatalogControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Pâtes carbonara"
   end
 
+  test "switching to list view persists across requests" do
+    get recipe_catalog_path(view: "list")
+    assert_response :success
+
+    get recipe_catalog_path
+    assert_response :success
+    assert_select "#recipe_catalog_entries.divide-y"
+  end
+
   test "add_to_household clones the entry into the current household" do
     entry = recipe_catalog_entries(:carbonara)
 

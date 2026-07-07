@@ -1,8 +1,11 @@
 class RecipesController < ApplicationController
+  include RecipeViewMode
+
   before_action :set_recipe, only: %i[show edit update destroy cook add_to_shopping_list]
 
   def index
     @query = params[:q].to_s.strip
+    @view_mode = recipe_view_mode
     recipes = Current.household.recipes.ordered
     recipes = recipes.where("title ILIKE ?", "%#{@query}%") if @query.present?
     @recipes = recipes

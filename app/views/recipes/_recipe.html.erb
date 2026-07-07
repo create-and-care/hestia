@@ -1,7 +1,8 @@
+<% list_mode = local_assigns[:view_mode] == "list" %>
 <%= link_to recipe_path(recipe), id: dom_id(recipe),
-      class: "block rounded-lg border border-gray-200 p-4 hover:border-gray-400" do %>
+      class: list_mode ? "flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50" : "block rounded-lg border border-gray-200 p-4 hover:border-gray-400" do %>
   <h2 class="font-medium"><%= recipe.title %></h2>
-  <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500">
+  <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500 <%= "mt-0 shrink-0" if list_mode %>">
     <% if recipe.category.present? %>
       <span class="rounded-full bg-gray-100 px-2 py-0.5"><%= recipe.category %></span>
     <% end %>

@@ -16,15 +16,18 @@
     </div>
   </header>
 
-  <div class="mb-4 flex gap-2 text-sm">
-    <span class="rounded-md bg-gray-900 px-3 py-1.5 font-medium text-white"><%= t(".mine_tab") %></span>
-    <%= link_to t(".discover_tab"), recipe_catalog_path, class: "rounded-md border border-gray-300 px-3 py-1.5 hover:bg-gray-50" %>
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm">
+    <div class="flex gap-2">
+      <span class="rounded-md bg-gray-900 px-3 py-1.5 font-medium text-white"><%= t(".mine_tab") %></span>
+      <%= link_to t(".discover_tab"), recipe_catalog_path, class: "rounded-md border border-gray-300 px-3 py-1.5 hover:bg-gray-50" %>
+    </div>
+    <%= render "recipes/view_mode_toggle", path_helper: ->(view) { recipes_path(q: @query, view: view) } %>
   </div>
 
   <%= render "shared/flash" %>
 
-  <div id="recipes" class="grid gap-3 sm:grid-cols-2">
-    <%= render @recipes %>
+  <div id="recipes" class="<%= @view_mode == "list" ? "divide-y divide-gray-100 rounded-lg border border-gray-200" : "grid gap-3 sm:grid-cols-2" %>">
+    <%= render partial: "recipe", collection: @recipes, locals: { view_mode: @view_mode } %>
   </div>
   <% if @recipes.empty? %>
     <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">

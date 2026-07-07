@@ -12,15 +12,18 @@
     <% end %>
   </header>
 
-  <div class="mb-4 flex gap-2 text-sm">
-    <%= link_to t(".mine_tab"), recipes_path, class: "rounded-md border border-gray-300 px-3 py-1.5 hover:bg-gray-50" %>
-    <span class="rounded-md bg-gray-900 px-3 py-1.5 font-medium text-white"><%= t(".discover_tab") %></span>
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm">
+    <div class="flex gap-2">
+      <%= link_to t(".mine_tab"), recipes_path, class: "rounded-md border border-gray-300 px-3 py-1.5 hover:bg-gray-50" %>
+      <span class="rounded-md bg-gray-900 px-3 py-1.5 font-medium text-white"><%= t(".discover_tab") %></span>
+    </div>
+    <%= render "recipes/view_mode_toggle", path_helper: ->(view) { recipe_catalog_path(q: @query, tag: @tag, view: view) } %>
   </div>
 
   <%= render "shared/flash" %>
 
-  <div id="recipe_catalog_entries" class="grid gap-3 sm:grid-cols-2">
-    <%= render partial: "entry", collection: @entries %>
+  <div id="recipe_catalog_entries" class="<%= @view_mode == "list" ? "divide-y divide-gray-100 rounded-lg border border-gray-200" : "grid gap-3 sm:grid-cols-2" %>">
+    <%= render partial: "entry", collection: @entries, locals: { view_mode: @view_mode } %>
   </div>
   <% if @entries.empty? %>
     <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
@@ -29,8 +32,8 @@
   <% end %>
 
   <div class="mt-6 flex justify-between text-sm">
-    <%= link_to t(".previous_page"), recipe_catalog_path(q: @query, tag: @tag, page: @page - 1), class: "underline" if @page > 1 %>
-    <%= link_to t(".next_page"), recipe_catalog_path(q: @query, tag: @tag, page: @page + 1), class: "underline" if @page * @per_page < @total %>
+    <%= link_to t(".previous_page"), recipe_catalog_path(q: @query, tag: @tag, view: @view_mode, page: @page - 1), class: "underline" if @page > 1 %>
+    <%= link_to t(".next_page"), recipe_catalog_path(q: @query, tag: @tag, view: @view_mode, page: @page + 1), class: "underline" if @page * @per_page < @total %>
   </div>
 
   <p class="mt-6 text-sm">

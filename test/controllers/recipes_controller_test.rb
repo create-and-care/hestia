@@ -22,6 +22,18 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Pancakes"
   end
 
+  test "index defaults to card view and remembers list view across requests" do
+    get recipes_path
+    assert_response :success
+
+    get recipes_path(view: "list")
+    assert_response :success
+
+    get recipes_path # no explicit view param this time
+    assert_response :success
+    assert_select "#recipes.divide-y"
+  end
+
   test "show renders the ingredients" do
     get recipe_path(recipes(:alpha_pancakes))
     assert_response :success
