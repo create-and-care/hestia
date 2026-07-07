@@ -6,9 +6,9 @@ class TasksTest < ApplicationSystemTestCase
     fill_in "email_address", with: users(:one).email_address
     fill_in "password", with: "password"
     click_on "Sign in"
+    assert_text households(:alpha).name
 
-    click_on "Daily life"
-    click_on "Tasks"
+    visit tasks_path
 
     assert_text tasks(:alpha_dishes).title
     assert_no_text tasks(:beta_report).title

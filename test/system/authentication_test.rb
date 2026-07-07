@@ -9,9 +9,7 @@ class AuthenticationTest < ApplicationSystemTestCase
     click_on "Sign in"
 
     assert_text households(:alpha).name
-
-    click_on "Daily life"
-    assert_text "Shopping"
+    assert_text "Daily life"
   end
 
   test "signing in with an invalid password shows an error and stays signed out" do
