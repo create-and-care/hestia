@@ -15,11 +15,13 @@
     </div>
   </div>
   <% if @added_entry_ids&.include?(entry.id) %>
-    <span class="<%= "mt-3" unless list_mode %> shrink-0 inline-block rounded-md border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-gray-400">
-      <%= t(".already_added") %>
+    <span class="<%= "mt-3" unless list_mode %> shrink-0 inline-flex size-8 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-400" title="<%= t(".already_added") %>">
+      &minus;<span class="sr-only"><%= t(".already_added") %></span>
     </span>
   <% else %>
-    <%= button_to t(".add_link"), add_to_household_recipe_catalog_path(entry), method: :post,
-          class: "#{'mt-3' unless list_mode} shrink-0 cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+    <%= button_to add_to_household_recipe_catalog_path(entry), method: :post, title: t(".add_link"),
+          class: "#{'mt-3' unless list_mode} shrink-0 cursor-pointer inline-flex size-8 items-center justify-center rounded-full border border-gray-300 font-medium hover:bg-gray-50" do %>
+      +<span class="sr-only"><%= t(".add_link") %></span>
+    <% end %>
   <% end %>
 </div>

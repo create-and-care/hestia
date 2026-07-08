@@ -69,8 +69,8 @@ class RecipeCatalogControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "##{ActionView::RecordIdentifier.dom_id(entry, :catalog)}" do
-      assert_select "button", text: I18n.t("recipe_catalog.entry.add_link"), count: 0
-      assert_select "span", text: I18n.t("recipe_catalog.entry.already_added")
+      assert_select "button", count: 0
+      assert_select "span.sr-only", text: I18n.t("recipe_catalog.entry.already_added")
     end
   end
 end
