@@ -63,6 +63,7 @@ class Household < ApplicationRecord
   validate :required_meal_types_are_known_types
 
   before_validation :ensure_invite_code, on: :create
+  before_validation :compact_required_meal_types
 
   def regenerate_invite_code!
     update!(invite_code: self.class.generate_invite_code)
@@ -101,5 +102,12 @@ class Household < ApplicationRecord
     def required_meal_types_are_known_types
       unknown = required_meal_types.to_a - MealPlanEntry::MEAL_TYPES
       errors.add(:required_meal_types, "contains unknown meal types: #{unknown.join(', ')}") if unknown.any?
+    end
+
+    # The settings form submits a hidden "" fallback alongside the checkboxes
+    # (so unchecking everything still sends an empty array instead of
+    # omitting the param entirely) — strip it out before validating.
+    def compact_required_meal_types
+      self.required_meal_types = required_meal_types.to_a.reject(&:blank?)
     end
 end

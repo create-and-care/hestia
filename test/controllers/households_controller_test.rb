@@ -96,10 +96,23 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
   test "update sets the household's required meal types" do
     sign_in_as(users(:one))
 
-    patch household_path(households(:alpha)), params: { household: { required_meal_types: [ "lunch", "dinner" ] } }
+    # The settings form always submits a trailing "" alongside the checked
+    # boxes (a hidden fallback field so unchecking everything still sends an
+    # array instead of omitting the param).
+    patch household_path(households(:alpha)), params: { household: { required_meal_types: [ "lunch", "dinner", "" ] } }
 
     assert_redirected_to household_path(households(:alpha))
     assert_equal %w[lunch dinner], households(:alpha).reload.required_meal_types
+  end
+
+  test "update clears required meal types when every box is unchecked" do
+    sign_in_as(users(:one))
+    households(:alpha).update!(required_meal_types: %w[lunch dinner])
+
+    patch household_path(households(:alpha)), params: { household: { required_meal_types: [ "" ] } }
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_empty households(:alpha).reload.required_meal_types
   end
 
   test "update_modules refuses a non-admin member" do
