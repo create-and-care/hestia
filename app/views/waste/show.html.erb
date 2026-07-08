@@ -4,7 +4,7 @@
 <% end %>
 <%= turbo_stream_from Current.household, "waste" %>
 
-<div class="mt-10 px-4">
+<div class="mt-10 max-w-5xl mx-auto px-4">
   <div class="mb-4"><%= module_breadcrumb(:waste) %></div>
 
   <h1 class="mb-6 flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("trash-2", css_class: "size-6") %> <%= t(".title") %></h1>
