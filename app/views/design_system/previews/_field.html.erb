@@ -1,0 +1,13 @@
+<div class="grid grid-cols-2 gap-6 w-full">
+  <%= render(Ui::FieldComponent.new(id: "name")) do |field| %>
+    <% field.with_label { "Name" } %>
+    <% field.with_control { render Ui::InputComponent.new(name: "name", placeholder: "Ada Lovelace", html_options: { id: "name" }) } %>
+    <% field.with_description { "Your full name." } %>
+  <% end %>
+
+  <%= render(Ui::FieldComponent.new(id: "email")) do |field| %>
+    <% field.with_label { "Email" } %>
+    <% field.with_control { render Ui::InputComponent.new(type: "email", name: "email", placeholder: "ada@example.com", invalid: true, html_options: { id: "email" }) } %>
+    <% field.with_error { "Email is invalid." } %>
+  <% end %>
+</div>

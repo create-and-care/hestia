@@ -1,0 +1,5 @@
+<%= render(Ui::DrawerComponent.new) do |drawer| %>
+  <% drawer.with_trigger { render(Ui::ButtonComponent.new(variant: :outline)) { "Open drawer" } } %>
+  <% drawer.with_title { "Quick actions" } %>
+  Drawer content slides up from the bottom.
+<% end %>

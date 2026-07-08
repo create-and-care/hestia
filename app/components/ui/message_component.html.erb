@@ -1,0 +1,7 @@
+<div class="flex w-full gap-3 <%= "flex-row-reverse" if @role == :user %>">
+  <%= render Ui::AvatarComponent.new(alt: @name, size: :sm) %>
+  <div class="flex flex-col gap-1 <%= @role == :user ? "items-end" : "items-start" %>">
+    <%= render(Ui::BubbleComponent.new(variant: @role)) { content } %>
+    <% if @timestamp %><span class="px-1 text-xs text-subdued"><%= @timestamp %></span><% end %>
+  </div>
+</div>

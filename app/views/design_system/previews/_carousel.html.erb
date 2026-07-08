@@ -1,0 +1,9 @@
+<div class="w-full">
+  <%= render(Ui::CarouselComponent.new) do |carousel| %>
+    <% [ "Slide 1", "Slide 2", "Slide 3" ].each do |label| %>
+      <% carousel.with_slide do %>
+        <div class="flex h-40 items-center justify-center rounded-lg border border-primary bg-surface text-secondary"><%= label %></div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

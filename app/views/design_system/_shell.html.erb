@@ -1,0 +1,41 @@
+<%
+  current_slug = @entry&.slug
+  nav_link = ->(path, label, active) do
+    state_classes = active ? "bg-surface-inset text-primary font-medium" : "text-secondary hover:text-primary"
+    tag.a label, href: path, class: "block truncate rounded-md px-3 py-1.5 text-sm transition-colors #{state_classes}"
+  end
+%>
+<div class="flex min-h-screen">
+  <%= render(Ui::SidebarComponent.new(class_name: "shrink-0")) do |sidebar| %>
+    <% sidebar.with_header do %>
+      <%= link_to "Hestia · Design system", design_system_path, class: "font-semibold text-primary text-sm" %>
+    <% end %>
+
+    <%= nav_link.call(design_system_path, "Vue d'ensemble", request.path == design_system_path) %>
+
+    <div class="mt-4">
+      <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-subdued">Fondations</p>
+      <%= nav_link.call(design_system_colors_path, "Couleurs", request.path == design_system_colors_path) %>
+      <%= nav_link.call(design_system_typography_path, "Typographie", request.path == design_system_typography_path) %>
+      <%= nav_link.call(design_system_icons_path, "Icônes", request.path == design_system_icons_path) %>
+    </div>
+
+    <% @categories.each do |category, entries| %>
+      <div class="mt-4">
+        <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-subdued"><%= category %></p>
+        <% entries.each do |entry| %>
+          <%= nav_link.call(design_system_component_path(entry.slug), entry.name, entry.slug == current_slug) %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="min-w-0 flex-1">
+    <div class="flex items-center justify-end border-b border-primary px-8 py-3">
+      <%= render Ui::ThemeToggleComponent.new %>
+    </div>
+    <main class="mx-auto max-w-3xl px-8 py-10">
+      <%= yield %>
+    </main>
+  </div>
+</div>

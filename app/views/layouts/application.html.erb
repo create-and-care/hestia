@@ -9,6 +9,16 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%# Applies the persisted theme (light/dark/system) before first paint to avoid a flash.
+        Kept in sync afterwards by app/javascript/controllers/theme_controller.js. %>
+    <script>
+      (function () {
+        var stored = localStorage.getItem("theme") || "system";
+        var isDark = stored === "dark" || (stored === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", isDark);
+      })();
+    </script>
+
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>

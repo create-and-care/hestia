@@ -1,0 +1,3 @@
+<%= render Ui::DropdownMenuComponent.new(items: [ [ "Profile", "profile" ], [ "Billing", "billing" ], :separator, [ "Log out", "logout" ] ]) do |menu| %>
+  <% menu.with_trigger { render(Ui::ButtonComponent.new(variant: :outline)) { "Open menu" } } %>
+<% end %>

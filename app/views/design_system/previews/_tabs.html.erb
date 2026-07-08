@@ -1,0 +1,7 @@
+<div class="w-full">
+  <%= render(Ui::TabsComponent.new(default: "overview")) do |tabs| %>
+    <% tabs.with_tab(label: "Overview", value: "overview") { "Overview content." } %>
+    <% tabs.with_tab(label: "Analytics", value: "analytics") { "Analytics content." } %>
+    <% tabs.with_tab(label: "Settings", value: "settings") { "Settings content." } %>
+  <% end %>
+</div>

@@ -1,0 +1,42 @@
+<div data-controller="data-table" data-data-table-page-size-value="<%= @page_size %>" class="w-full space-y-3">
+  <input type="search" placeholder="Filtrer…" data-data-table-target="filterInput" data-action="input->data-table#filter"
+    class="h-9 w-full max-w-xs rounded-md border border-primary bg-container px-3 text-sm text-primary placeholder:text-subdued focus-visible:ring-focus" />
+
+  <div class="w-full overflow-auto rounded-md border border-primary">
+    <table class="w-full text-sm">
+      <thead class="border-b border-primary bg-surface">
+        <tr>
+          <% @headers.each_with_index do |header, index| %>
+            <th data-data-table-target="header" data-index="<%= index %>" data-action="click->data-table#sort"
+              class="h-10 px-4 text-left font-medium text-secondary cursor-pointer select-none hover:text-primary">
+              <%= header %><span data-data-table-target="arrow" data-index="<%= index %>" class="ml-1 inline-block w-3"></span>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody data-data-table-target="body" class="[&_tr:not(:last-child)]:border-b [&_tr]:border-primary">
+        <% @rows.each do |row| %>
+          <tr data-data-table-target="row" class="hover:bg-surface-hover">
+            <% row.each do |cell| %>
+              <td class="h-12 px-4 text-primary"><%= cell %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex items-center justify-between text-sm text-secondary">
+    <span data-data-table-target="pageLabel"></span>
+    <div class="flex gap-2">
+      <button type="button" data-data-table-target="prevButton" data-action="click->data-table#previous"
+        class="inline-flex items-center rounded-md border border-primary px-3 h-8 text-sm font-medium text-primary hover:bg-button-outline-hover disabled:pointer-events-none disabled:opacity-50 transition-colors">
+        Précédent
+      </button>
+      <button type="button" data-data-table-target="nextButton" data-action="click->data-table#next"
+        class="inline-flex items-center rounded-md border border-primary px-3 h-8 text-sm font-medium text-primary hover:bg-button-outline-hover disabled:pointer-events-none disabled:opacity-50 transition-colors">
+        Suivant
+      </button>
+    </div>
+  </div>
+</div>

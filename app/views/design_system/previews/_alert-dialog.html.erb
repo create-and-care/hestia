@@ -1,0 +1,3 @@
+<%= render(Ui::AlertDialogComponent.new(title: "Are you absolutely sure?", description: "This action cannot be undone.")) do |alert_dialog| %>
+  <% alert_dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :destructive)) { "Delete account" } } %>
+<% end %>

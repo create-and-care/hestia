@@ -1,0 +1,7 @@
+<div class="w-full">
+  <%= render Ui::TableComponent.new(
+    headers: [ "Name", "Status", "Amount" ],
+    rows: [ [ "Rent", render(Ui::BadgeComponent.new(variant: :success)) { "Paid" }, "€950" ],
+            [ "Internet", render(Ui::BadgeComponent.new(variant: :warning)) { "Due" }, "€35" ] ]
+  ) %>
+</div>

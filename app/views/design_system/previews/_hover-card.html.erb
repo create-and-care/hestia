@@ -1,0 +1,10 @@
+<%= render(Ui::HoverCardComponent.new) do |hover_card| %>
+  <% hover_card.with_trigger { render(Ui::ButtonComponent.new(variant: :link)) { "@hestia" } } %>
+  <div class="flex gap-3">
+    <%= render Ui::AvatarComponent.new(alt: "Hestia") %>
+    <div>
+      <p class="font-medium text-primary">Hestia</p>
+      <p class="text-secondary">Personal finance, simplified.</p>
+    </div>
+  </div>
+<% end %>

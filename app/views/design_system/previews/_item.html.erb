@@ -1,0 +1,8 @@
+<div class="w-full max-w-sm">
+  <%= render(Ui::ItemComponent.new(href: "#")) do |item| %>
+    <% item.with_leading { render Ui::AvatarComponent.new(alt: "Grace Hopper") } %>
+    <% item.with_title { "Grace Hopper" } %>
+    <% item.with_description { "grace@hestia.app" } %>
+    <% item.with_trailing { render Ui::BadgeComponent.new(variant: :outline) { "Admin" } } %>
+  <% end %>
+</div>

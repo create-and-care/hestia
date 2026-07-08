@@ -1,0 +1,85 @@
+<% content_for :title, "#{@entry.name} — Design system — Hestia" %>
+
+<%= render(layout: "design_system/shell") do %>
+  <p class="text-xs font-medium text-subdued"><%= @entry.category %></p>
+  <h1 class="mt-1 text-2xl font-semibold text-primary"><%= @entry.name %></h1>
+  <p class="mt-2 text-sm text-secondary max-w-prose"><%= @entry.description %></p>
+
+  <% if @entry.usage.present? %>
+    <% intro, *rest = @entry.usage.split("\n") %>
+    <div class="mt-6 rounded-lg border border-primary bg-surface p-4">
+      <p class="text-sm font-medium text-primary">Quand utiliser celui-ci ?</p>
+      <p class="mt-1 text-sm text-secondary"><%= intro %></p>
+      <% if rest.any? %>
+        <ul class="mt-2 space-y-1 text-sm text-secondary list-disc list-inside">
+          <% rest.each do |line| %><li><%= line %></li><% end %>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="mt-8">
+    <%= render(Ui::CodeBlockComponent.new(code: design_system_source(@entry.slug))) do %>
+      <%= render "design_system/previews/#{@entry.slug}" %>
+    <% end %>
+  </div>
+
+  <% if @entry.props.any? %>
+    <div class="mt-10">
+      <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Props</h2>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-xs text-subdued uppercase tracking-wide">
+              <th class="pb-2 pr-4 font-medium">Nom</th>
+              <th class="pb-2 pr-4 font-medium">Obligatoire</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @entry.props.each do |prop| %>
+              <tr class="border-t border-primary">
+                <td class="py-2 pr-4 font-mono text-xs text-primary"><%= prop[:name] %></td>
+                <td class="py-2 pr-4 text-secondary"><%= prop[:required] ? "requis" : "optionnel" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <% @entry.enums.each do |const_name, values| %>
+    <div class="mt-8">
+      <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Valeurs de <code class="font-mono"><%= const_name %></code></h2>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <% values.each do |value| %>
+          <code class="rounded-md bg-surface-inset px-2 py-1 text-xs font-mono text-primary"><%= value %></code>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @entry.slots.any? %>
+    <div class="mt-8">
+      <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Slots</h2>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <% @entry.slots.each do |slot_name, kind| %>
+          <code class="rounded-md bg-surface-inset px-2 py-1 text-xs font-mono text-primary">with_<%= slot_name %></code>
+          <span class="text-xs text-subdued self-center">(<%= kind %>)</span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @entry.related.present? %>
+    <div class="mt-8">
+      <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Voir aussi</h2>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <% @entry.related.each do |slug| %>
+          <% related = DesignSystemRegistry.find(slug) %>
+          <%= link_to related.name, design_system_component_path(slug), class: "rounded-md border border-primary px-3 py-1.5 text-sm text-primary hover:bg-surface-hover" if related %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

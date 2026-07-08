@@ -1,0 +1,4 @@
+<%= render(Ui::TooltipComponent.new) do |tooltip| %>
+  <% tooltip.with_trigger { render(Ui::ButtonComponent.new(variant: :outline)) { "Hover me" } } %>
+  Add to library
+<% end %>

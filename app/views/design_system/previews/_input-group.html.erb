@@ -1,0 +1,6 @@
+<div class="w-64">
+  <%= render(Ui::InputGroupComponent.new) do |group| %>
+    <% group.with_leading { "@" } %>
+    <%= render Ui::InputComponent.new(name: "handle", placeholder: "username") %>
+  <% end %>
+</div>

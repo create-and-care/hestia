@@ -1,0 +1,4 @@
+<div class="flex items-center gap-2">
+  <%= render Ui::SwitchComponent.new(id: "notifications", checked: true) %>
+  <%= render(Ui::LabelComponent.new(for_id: "notifications")) { "Notifications" } %>
+</div>

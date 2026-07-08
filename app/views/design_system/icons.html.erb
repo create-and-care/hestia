@@ -1,0 +1,34 @@
+<% content_for :title, "Icônes — Design system — Hestia" %>
+
+<%= render(layout: "design_system/shell") do %>
+  <p class="text-xs font-medium text-subdued">Fondations</p>
+  <h1 class="mt-1 text-2xl font-semibold text-primary">Icônes</h1>
+  <p class="mt-2 text-sm text-secondary max-w-prose">
+    <%= pluralize(@icon_names.size, "icône Lucide vendorisée", "icônes Lucide vendorisées") %> dans
+    <code class="font-mono text-xs">app/assets/icons/lucide</code>, rendues via
+    <code class="font-mono text-xs">lucide_icon(name)</code> (<code class="font-mono text-xs">IconHelper</code>).
+    Clique une icône pour copier son nom.
+  </p>
+
+  <div data-controller="icon-search">
+    <div class="mt-6 max-w-xs">
+      <input type="search" placeholder="Rechercher une icône…" data-icon-search-target="input" data-action="input->icon-search#filter"
+        class="h-9 w-full rounded-md border border-primary bg-container px-3 text-sm text-primary placeholder:text-subdued focus-visible:ring-focus" />
+    </div>
+
+    <div class="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-6">
+      <% @icon_names.each do |name| %>
+        <div data-icon-search-target="item" data-name="<%= name %>"
+             data-controller="clipboard" data-clipboard-text-value="<%= name %>" data-clipboard-message-value="<%= name %> copié">
+          <button type="button" data-action="click->clipboard#copy"
+            class="flex w-full flex-col items-center gap-2 rounded-md border border-transparent p-3 text-center hover:border-primary hover:bg-surface-hover transition-colors">
+            <%= lucide_icon(name, css_class: "size-5 text-primary") %>
+            <span class="w-full truncate font-mono text-[11px] text-secondary"><%= name %></span>
+          </button>
+        </div>
+      <% end %>
+    </div>
+
+    <p data-icon-search-target="empty" hidden class="mt-6 text-sm text-secondary">Aucune icône ne correspond à cette recherche.</p>
+  </div>
+<% end %>

@@ -1,0 +1,28 @@
+<div data-controller="tabs" data-tabs-active-value="preview" class="rounded-lg border border-primary overflow-hidden">
+  <div class="flex items-center justify-between border-b border-primary bg-surface pl-1 pr-1.5 py-1.5">
+    <div role="tablist" class="inline-flex gap-1">
+      <button type="button" role="tab" data-tabs-target="tab" data-value="preview" data-action="click->tabs#select" aria-selected="true"
+        class="rounded-md px-2.5 h-7 text-xs font-medium transition-colors bg-tab-item-active text-primary">Aperçu</button>
+      <button type="button" role="tab" data-tabs-target="tab" data-value="code" data-action="click->tabs#select" aria-selected="false"
+        class="rounded-md px-2.5 h-7 text-xs font-medium transition-colors text-secondary hover:text-primary">Code</button>
+    </div>
+    <div data-controller="clipboard" data-clipboard-text-value="<%= @code %>" data-clipboard-message-value="Extrait copié">
+      <button type="button" data-action="click->clipboard#copy"
+        class="inline-flex items-center gap-1.5 rounded-md px-2 h-7 text-xs text-secondary hover:bg-surface-hover hover:text-primary transition-colors"
+        aria-label="Copier le code">
+        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+        </svg>
+        Copier
+      </button>
+    </div>
+  </div>
+
+  <div data-tabs-target="panel" data-value="preview" class="flex flex-wrap items-center gap-4 p-6 bg-container">
+    <%= content %>
+  </div>
+
+  <div data-tabs-target="panel" data-value="code" hidden class="overflow-x-auto bg-surface-inset">
+    <pre class="p-4 font-mono text-xs text-primary leading-relaxed"><code><%= @code %></code></pre>
+  </div>
+</div>

@@ -1,0 +1,4 @@
+<div class="space-y-3 w-full max-w-md">
+  <%= render(Ui::AlertComponent.new) { "Heads up — this is a default alert." } %>
+  <%= render(Ui::AlertComponent.new(variant: :destructive)) { "Something went wrong." } %>
+</div>

@@ -1,0 +1,4 @@
+<div class="flex items-center gap-2">
+  <%= render Ui::CheckboxComponent.new(id: "terms") %>
+  <%= render(Ui::LabelComponent.new(for_id: "terms")) { "Accept terms" } %>
+</div>

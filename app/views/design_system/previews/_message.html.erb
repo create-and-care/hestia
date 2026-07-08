@@ -1,0 +1,4 @@
+<div class="flex w-full flex-col gap-4">
+  <%= render(Ui::MessageComponent.new(role: :assistant, timestamp: "10:02")) { "Voici le récapitulatif de votre budget de juillet." } %>
+  <%= render(Ui::MessageComponent.new(role: :user, name: "Ada", timestamp: "10:03")) { "Merci, peux-tu détailler les courses ?" } %>
+</div>

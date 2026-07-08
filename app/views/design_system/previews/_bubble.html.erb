@@ -1,0 +1,4 @@
+<div class="flex w-full flex-col gap-2">
+  <%= render(Ui::BubbleComponent.new(variant: :assistant)) { "Voici le récapitulatif de votre budget de juillet." } %>
+  <%= render(Ui::BubbleComponent.new(variant: :user)) { "Merci, peux-tu détailler les courses ?" } %>
+</div>
