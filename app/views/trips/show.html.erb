@@ -3,7 +3,7 @@
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <header class="mb-6 flex items-start justify-between">
     <div>
-      <h1 class="text-2xl font-semibold">🧳 <%= @trip.name %></h1>
+      <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("luggage", css_class: "size-6") %> <%= @trip.name %></h1>
       <% if @trip.starts_on %><p class="text-sm text-gray-500"><%= @trip.starts_on.strftime("%d/%m/%Y") %><%= " → #{@trip.ends_on.strftime('%d/%m/%Y')}" if @trip.ends_on %></p><% end %>
     </div>
     <%= button_to t(".delete_trip"), trip_path(@trip), method: :delete,
@@ -14,12 +14,12 @@
   <%= render "shared/flash" %>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">🛒 <%= t(".shopping_lists") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("shopping-cart", css_class: "size-5") %> <%= t(".shopping_lists") %></h2>
     <ul class="mb-2 text-sm">
       <% @trip.shopping_lists.order(:name).each do |list| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
-          <%= link_to "#{list.icon.presence || '🛒'} #{list.name}", shopping_list_path(list), class: "hover:underline" %>
-          <%= button_to "×", trip_shopping_list_path(@trip, list), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= link_to shopping_list_path(list), class: "inline-flex items-center gap-1.5 hover:underline" do %><%= list.icon.presence || lucide_icon("shopping-cart", css_class: "size-4") %> <%= list.name %><% end %>
+          <%= button_to trip_shopping_list_path(@trip, list), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>
@@ -30,12 +30,12 @@
   </section>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">📝 <%= t(".notes") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("notebook-pen", css_class: "size-5") %> <%= t(".notes") %></h2>
     <ul class="mb-2 text-sm">
       <% @trip.notes.order(created_at: :desc).each do |note| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
           <span><span class="font-medium"><%= note.title %></span> <span class="text-gray-400"><%= truncate(note.content, length: 60) %></span></span>
-          <%= button_to "×", trip_note_path(@trip, note), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to trip_note_path(@trip, note), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>
@@ -47,12 +47,12 @@
   </section>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">✅ <%= t(".tasks") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("square-check", css_class: "size-5") %> <%= t(".tasks") %></h2>
     <ul class="mb-2 text-sm">
       <% @trip.tasks.order(:due_on).each do |task| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
           <span><%= "#{task.emoji} " if task.emoji.present? %><%= task.title %></span>
-          <%= button_to "×", trip_task_path(@trip, task), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to trip_task_path(@trip, task), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>
@@ -64,12 +64,12 @@
   </section>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium">📍 <%= t(".addresses") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("map-pin", css_class: "size-5") %> <%= t(".addresses") %></h2>
     <ul class="mb-2 text-sm">
       <% @trip.addresses.order(:name).each do |address| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
           <span><span class="font-medium"><%= address.name %></span> <span class="text-gray-400"><%= address.full_address %></span></span>
-          <%= button_to "×", trip_address_path(@trip, address), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to trip_address_path(@trip, address), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>

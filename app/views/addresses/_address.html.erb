@@ -12,12 +12,12 @@
 
   <div class="flex shrink-0 items-center gap-2 text-sm">
     <% if address.phone.present? %>
-      <%= link_to "📞", "tel:#{address.phone}", class: "hover:opacity-70", title: address.phone %>
+      <%= link_to "tel:#{address.phone}", class: "hover:opacity-70", title: address.phone do %><%= lucide_icon("phone", css_class: "size-4") %><% end %>
     <% end %>
     <% if address.maps_url %>
-      <%= link_to "🗺", address.maps_url, target: "_blank", rel: "noopener", class: "hover:opacity-70", title: t(".directions") %>
+      <%= link_to address.maps_url, target: "_blank", rel: "noopener", class: "hover:opacity-70", title: t(".directions") do %><%= lucide_icon("map", css_class: "size-4") %><% end %>
     <% end %>
-    <%= link_to "✎", edit_address_path(address), class: "text-gray-400 hover:text-gray-900" %>
-    <%= button_to "✕", address_path(address), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+    <%= link_to edit_address_path(address), class: "text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+    <%= button_to address_path(address), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
   </div>
 <% end %>

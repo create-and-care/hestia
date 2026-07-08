@@ -6,8 +6,8 @@
     <p class="truncate font-mono text-sm text-gray-500"><%= loyalty_card.number %></p>
   <% end %>
   <div class="flex shrink-0 items-center gap-2 text-sm">
-    <%= link_to "🔎", loyalty_card_path(loyalty_card), class: "hover:opacity-70", title: t(".view_large") %>
-    <%= link_to "✎", edit_loyalty_card_path(loyalty_card), class: "text-gray-400 hover:text-gray-900" %>
-    <%= button_to "✕", loyalty_card_path(loyalty_card), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+    <%= link_to loyalty_card_path(loyalty_card), class: "hover:opacity-70", title: t(".view_large") do %><%= lucide_icon("search", css_class: "size-4") %><% end %>
+    <%= link_to edit_loyalty_card_path(loyalty_card), class: "text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+    <%= button_to loyalty_card_path(loyalty_card), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
   </div>
 <% end %>

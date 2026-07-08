@@ -5,7 +5,7 @@
   <div class="mb-4"><%= module_breadcrumb(:notes) %></div>
 
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
-    <h1 class="text-2xl font-semibold">📝 <%= t(".title") %></h1>
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("notebook-pen", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex items-center gap-2">
       <%= form_with url: notes_path, method: :get do |form| %>
         <%= form.hidden_field :archived, value: ("1" if @archived) %>

@@ -4,7 +4,7 @@
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <div class="mb-4"><%= module_breadcrumb(:routines) %></div>
 
-  <h1 class="mb-4 text-2xl font-semibold">🔁 <%= t(".title") %></h1>
+  <h1 class="mb-4 flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("repeat", css_class: "size-6") %> <%= t(".title") %></h1>
 
   <%= render "shared/flash" %>
 

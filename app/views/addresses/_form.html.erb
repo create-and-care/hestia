@@ -17,7 +17,7 @@
       <input type="text" placeholder="<%= t(".place_name_placeholder") %>" autocomplete="off"
              data-geocode-lookup-target="query" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
       <button type="button" data-action="click->geocode-lookup#search"
-              class="cursor-pointer rounded-md border border-gray-300 px-3 text-sm hover:bg-white">🔍</button>
+              class="cursor-pointer rounded-md border border-gray-300 px-3 text-sm hover:bg-white"><%= lucide_icon("search", css_class: "size-4") %></button>
     </div>
     <div data-geocode-lookup-target="results" class="mt-1"></div>
     <p class="mt-1 text-xs text-gray-400"><%= t(".manual_entry_hint") %></p>

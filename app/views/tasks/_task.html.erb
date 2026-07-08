@@ -1,11 +1,11 @@
 <%= tag.div id: dom_id(task), data: { sortable_id: task.id },
       class: "rounded-lg border border-gray-200 bg-white p-3 #{'opacity-60' if task.done}" do %>
   <div class="flex items-start gap-2">
-    <span data-sortable-handle class="mt-0.5 shrink-0 cursor-grab select-none text-gray-300 hover:text-gray-500" title="<%= t('.move_title') %>">⠿</span>
+    <span data-sortable-handle class="mt-0.5 shrink-0 cursor-grab select-none text-gray-300 hover:text-gray-500" title="<%= t('.move_title') %>"><%= lucide_icon("grip-vertical", css_class: "size-4") %></span>
     <%= button_to toggle_task_path(task), method: :patch, class: "mt-0.5 shrink-0 cursor-pointer",
           aria: { label: task.done ? t(".reopen_aria") : t(".complete_aria") } do %>
       <span class="flex size-5 items-center justify-center rounded border <%= task.done ? "border-gray-900 bg-gray-900 text-white" : "border-gray-300" %>">
-        <%= "✓" if task.done %>
+        <%= lucide_icon("check", css_class: "size-3.5") if task.done %>
       </span>
     <% end %>
 
@@ -24,9 +24,9 @@
     </div>
 
     <div class="flex shrink-0 flex-col items-end gap-1">
-      <%= link_to "✎", edit_task_path(task), class: "text-gray-400 hover:text-gray-900", aria: { label: t(".edit_aria") } %>
-      <%= button_to "✕", task_path(task), method: :delete,
-            class: "cursor-pointer text-gray-400 hover:text-red-600", aria: { label: t(".delete_aria") } %>
+      <%= link_to edit_task_path(task), class: "text-gray-400 hover:text-gray-900", aria: { label: t(".edit_aria") } do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+      <%= button_to task_path(task), method: :delete,
+            class: "cursor-pointer text-gray-400 hover:text-red-600", aria: { label: t(".delete_aria") } do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
     </div>
   </div>
 <% end %>

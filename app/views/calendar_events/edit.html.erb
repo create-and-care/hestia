@@ -10,7 +10,7 @@
   <%= render "form", event: @event, url: calendar_event_path(@event) %>
 
   <section class="mt-8 border-t border-gray-100 pt-6">
-    <h2 class="mb-2 font-medium">🔔 <%= t(".reminders_heading") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("bell", css_class: "size-5") %> <%= t(".reminders_heading") %></h2>
     <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @event.event_reminders.each do |reminder| %>
         <li class="flex items-center justify-between px-3 py-2 text-sm">
@@ -18,8 +18,8 @@
             <%= EventReminder::MINUTES_BEFORE_OPTIONS.find { |_, v| v == reminder.minutes_before }&.first || t(".minutes_before_fallback", minutes: reminder.minutes_before) %>
             <span class="text-gray-400">· <%= reminder.user.name.presence || reminder.user.email_address %></span>
           </span>
-          <%= button_to "✕", calendar_event_event_reminder_path(@event, reminder), method: :delete,
-                class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to calendar_event_event_reminder_path(@event, reminder), method: :delete,
+                class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>

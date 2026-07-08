@@ -16,10 +16,10 @@
 
   <div class="flex shrink-0 items-center gap-2">
     <%= link_to t(".edit"), edit_fridge_item_path(fridge_item), class: "text-sm text-gray-500 hover:underline" %>
-    <%= button_to "🛒", move_to_shopping_list_fridge_item_path(fridge_item), method: :post,
+    <%= button_to move_to_shopping_list_fridge_item_path(fridge_item), method: :post,
           class: "cursor-pointer text-gray-400 hover:text-gray-900",
-          form: { title: t(".add_to_list_title") }, aria: { label: t(".rebuy_aria") } %>
-    <%= button_to "✕", fridge_item_path(fridge_item), method: :delete,
-          class: "cursor-pointer text-gray-400 hover:text-red-600", aria: { label: t(".delete_aria") } %>
+          form: { title: t(".add_to_list_title") }, aria: { label: t(".rebuy_aria") } do %><%= lucide_icon("shopping-cart", css_class: "size-4") %><% end %>
+    <%= button_to fridge_item_path(fridge_item), method: :delete,
+          class: "cursor-pointer text-gray-400 hover:text-red-600", aria: { label: t(".delete_aria") } do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
   </div>
 <% end %>

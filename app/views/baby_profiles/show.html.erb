@@ -3,7 +3,7 @@
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <header class="mb-2 flex items-start justify-between">
     <div>
-      <h1 class="text-2xl font-semibold">👶 <%= @baby.name %></h1>
+      <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("baby", css_class: "size-6") %> <%= @baby.name %></h1>
       <% if @baby.born_on %><p class="text-sm text-gray-500"><%= t("baby_profiles.born_on", date: @baby.born_on.strftime("%d/%m/%Y")) %></p><% end %>
     </div>
     <div class="flex gap-2 text-sm">
@@ -18,7 +18,7 @@
   <%= render "shared/flash" %>
 
   <section class="mb-8">
-    <h2 class="mb-2 font-medium">🍼 <%= t(".feedings_title") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("milk", css_class: "size-5") %> <%= t(".feedings_title") %></h2>
     <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @baby.feeding_sessions.recent.limit(20).each do |session| %>
         <li class="flex items-center justify-between px-3 py-2 text-sm">
@@ -27,7 +27,7 @@
             <% if session.started_at %><span class="text-gray-400">· <%= session.started_at.strftime("%d/%m %H:%M") %></span><% end %>
             <% if session.duration_minutes %><span class="text-gray-400">· <%= t(".duration_minutes", count: session.duration_minutes) %></span><% end %>
           </span>
-          <%= button_to "✕", baby_profile_feeding_session_path(@baby, session), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to baby_profile_feeding_session_path(@baby, session), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>
@@ -40,7 +40,7 @@
   </section>
 
   <section class="mb-8">
-    <h2 class="mb-2 font-medium">🥕 <%= t(".food_introductions_title") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("carrot", css_class: "size-5") %> <%= t(".food_introductions_title") %></h2>
     <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @baby.food_introductions.recent.each do |introduction| %>
         <li class="flex items-center justify-between px-3 py-2 text-sm">
@@ -48,7 +48,7 @@
             <% if introduction.introduced_on %><span class="text-gray-400">· <%= introduction.introduced_on.strftime("%d/%m/%Y") %></span><% end %>
             <% if introduction.acceptance.present? %><span class="text-gray-400">· <%= introduction.acceptance %></span><% end %>
           </span>
-          <%= button_to "✕", baby_profile_food_introduction_path(@baby, introduction), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to baby_profile_food_introduction_path(@baby, introduction), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>
@@ -61,7 +61,7 @@
   </section>
 
   <section class="mb-8">
-    <h2 class="mb-2 font-medium">⚠️ <%= t(".allergen_tests_title") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("triangle-alert", css_class: "size-5") %> <%= t(".allergen_tests_title") %></h2>
     <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @baby.allergen_tests.recent.each do |test| %>
         <li class="flex items-center justify-between px-3 py-2 text-sm">
@@ -69,7 +69,7 @@
             <% if test.tested_on %><span class="text-gray-400">· <%= test.tested_on.strftime("%d/%m/%Y") %></span><% end %>
             <% if test.severity.present? %><span class="text-gray-400">· <%= test.severity %></span><% end %>
           </span>
-          <%= button_to "✕", baby_profile_allergen_test_path(@baby, test), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to baby_profile_allergen_test_path(@baby, test), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>

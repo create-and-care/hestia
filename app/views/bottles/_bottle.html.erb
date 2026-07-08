@@ -1,7 +1,7 @@
 <%= tag.div id: dom_id(bottle), class: "flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 px-3 py-2 #{'opacity-50' unless bottle.in_stock}" do %>
   <div class="min-w-0 flex-1">
-    <p class="font-medium <%= "line-through" unless bottle.in_stock %>">
-      🍷 <%= bottle.name %>
+    <p class="flex items-center gap-1.5 font-medium <%= "line-through" unless bottle.in_stock %>">
+      <%= lucide_icon("wine", css_class: "size-4") %> <%= bottle.name %>
       <% if bottle.vintage %><span class="text-sm text-gray-500"><%= bottle.vintage %></span><% end %>
     </p>
     <p class="text-xs text-gray-500">
@@ -17,5 +17,5 @@
     <%= form.submit t(".move"), class: "cursor-pointer rounded border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
   <% end %>
 
-  <%= button_to "✕", bottle_path(bottle), method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600" %>
+  <%= button_to bottle_path(bottle), method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
 <% end %>

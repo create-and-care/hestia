@@ -14,6 +14,6 @@
     <%= expiration_label(prepared_dish.expiration_status) %>
   </span>
 
-  <%= button_to "✕", prepared_dish_path(prepared_dish), method: :delete,
-        class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600", aria: { label: t(".delete_aria") } %>
+  <%= button_to prepared_dish_path(prepared_dish), method: :delete,
+        class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600", aria: { label: t(".delete_aria") } do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
 <% end %>

@@ -1,37 +1,39 @@
 module SidebarHelper
+  # Icon names are Lucide (https://lucide.dev) icon ids, rendered via
+  # IconHelper#lucide_icon.
   SIDEBAR_GROUPS = [
-    { key: "daily", emoji: "📌", open: false, items: [
-      [ "🛒", :shopping, -> { shopping_lists_path } ],
-      [ "🧊", :fridge, -> { fridge_path } ],
-      [ "📖", :recipes, -> { recipes_path } ],
-      [ "🍽", :menu, -> { menu_path } ],
-      [ "✅", :tasks, -> { tasks_path } ],
-      [ "📅", :calendar, -> { calendar_path } ],
-      [ "🔁", :routines, -> { routines_path } ]
+    { key: "daily", icon: "list-checks", open: false, items: [
+      [ "shopping-cart", :shopping, -> { shopping_lists_path } ],
+      [ "refrigerator", :fridge, -> { fridge_path } ],
+      [ "book-open", :recipes, -> { recipes_path } ],
+      [ "utensils", :menu, -> { menu_path } ],
+      [ "square-check", :tasks, -> { tasks_path } ],
+      [ "calendar", :calendar, -> { calendar_path } ],
+      [ "repeat", :routines, -> { routines_path } ]
     ] },
-    { key: "home", emoji: "🏡", open: false, items: [
-      [ "📝", :notes, -> { notes_path } ],
-      [ "📍", :addresses, -> { addresses_path } ],
-      [ "🧰", :service_providers, -> { service_providers_path } ],
-      [ "🚗", :vehicles, -> { vehicles_path } ],
-      [ "🍷", :wine_cellar, -> { wine_cellars_path } ],
-      [ "🗑", :waste, -> { waste_path } ],
-      [ "📄", :documents, -> { documents_path } ],
-      [ "🌳", :outdoor, -> { exterior_path } ],
-      [ "💶", :budget, -> { budget_path } ]
+    { key: "home", icon: "house", open: false, items: [
+      [ "notebook-pen", :notes, -> { notes_path } ],
+      [ "map-pin", :addresses, -> { addresses_path } ],
+      [ "wrench", :service_providers, -> { service_providers_path } ],
+      [ "car", :vehicles, -> { vehicles_path } ],
+      [ "wine", :wine_cellar, -> { wine_cellars_path } ],
+      [ "trash-2", :waste, -> { waste_path } ],
+      [ "file-text", :documents, -> { documents_path } ],
+      [ "trees", :outdoor, -> { exterior_path } ],
+      [ "euro", :budget, -> { budget_path } ]
     ] },
-    { key: "family", emoji: "👨‍👩‍👧", open: false, items: [
-      [ "🎂", :birthdays, -> { contacts_path } ],
-      [ "👶", :baby, -> { baby_profiles_path } ],
-      [ "🐾", :pets, -> { pets_path } ],
-      [ "🧘", :wellbeing, -> { wellbeing_path } ]
+    { key: "family", icon: "users-round", open: false, items: [
+      [ "cake", :birthdays, -> { contacts_path } ],
+      [ "baby", :baby, -> { baby_profiles_path } ],
+      [ "paw-print", :pets, -> { pets_path } ],
+      [ "heart-pulse", :wellbeing, -> { wellbeing_path } ]
     ] },
-    { key: "social", emoji: "🤝", open: false, items: [
-      [ "💬", :messages, -> { conversations_path } ],
-      [ "💳", :loyalty, -> { loyalty_cards_path } ],
-      [ "🎁", :gifts, -> { gift_lists_path } ],
-      [ "👥", :circles, -> { circles_path } ],
-      [ "🧳", :trips, -> { trips_path } ]
+    { key: "social", icon: "handshake", open: false, items: [
+      [ "message-circle", :messages, -> { conversations_path } ],
+      [ "credit-card", :loyalty, -> { loyalty_cards_path } ],
+      [ "gift", :gifts, -> { gift_lists_path } ],
+      [ "users", :circles, -> { circles_path } ],
+      [ "luggage", :trips, -> { trips_path } ]
     ] }
   ].freeze
 
@@ -40,18 +42,18 @@ module SidebarHelper
   # so there is a single source of truth for each module's display name).
   def sidebar_groups
     SIDEBAR_GROUPS.filter_map do |group|
-      items = group[:items].filter_map { |emoji, nav_key, path|
+      items = group[:items].filter_map { |icon, nav_key, path|
         next unless current_household.nil? || current_household.module_enabled?(nav_key)
 
         resolved_path = instance_exec(&path)
-        { emoji: emoji, label: t("dashboard.show.nav.#{nav_key}"), path: resolved_path, active: sidebar_item_active?(resolved_path) }
+        { icon: icon, label: t("dashboard.show.nav.#{nav_key}"), path: resolved_path, active: sidebar_item_active?(resolved_path) }
       }
 
       next if items.empty?
 
       {
         key: group[:key],
-        emoji: group[:emoji],
+        icon: group[:icon],
         open: group[:open] || items.any? { |item| item[:active] },
         label: t("sidebar.groups.#{group[:key]}"),
         items: items

@@ -3,7 +3,7 @@
 
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <header class="mb-4">
-    <h1 class="text-2xl font-semibold">👥 <%= @circle.name %></h1>
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("users", css_class: "size-6") %> <%= @circle.name %></h1>
     <p class="text-sm text-gray-500">
       <% if @circle.theme.present? %><%= @circle.theme %> · <% end %>
       <%= @circle.members.map { |m| m.name.presence || m.email_address }.join(", ") %>

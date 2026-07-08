@@ -12,7 +12,7 @@
           <%= text_field_tag nil, nil, autocomplete: "off", placeholder: t(".barcode_placeholder"),
                 data: { barcode_lookup_target: "barcode" }, class: "w-full rounded-md border border-gray-300 px-2 py-2 text-sm" %>
           <button type="button" data-action="click->barcode-lookup#lookup"
-                  class="cursor-pointer rounded-md border border-gray-300 px-2 text-sm hover:bg-gray-50">🔍</button>
+                  class="cursor-pointer rounded-md border border-gray-300 px-2 text-sm hover:bg-gray-50"><%= lucide_icon("search", css_class: "size-4") %></button>
         </div>
       </div>
       <div class="min-w-40 flex-1">

@@ -3,7 +3,7 @@
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <header class="mb-2 flex items-start justify-between">
     <div>
-      <h1 class="text-2xl font-semibold">🐾 <%= @pet.name %></h1>
+      <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("paw-print", css_class: "size-6") %> <%= @pet.name %></h1>
       <p class="text-sm text-gray-500">
         <%= [ @pet.species, @pet.breed ].reject(&:blank?).join(" · ") %>
         <% if @pet.weight %> · <%= @pet.weight %> kg<% end %>
@@ -23,7 +23,7 @@
   <%= render "shared/flash" %>
 
   <section class="mb-8">
-    <h2 class="mb-2 font-medium">💉 <%= t(".vaccinations_title") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("syringe", css_class: "size-5") %> <%= t(".vaccinations_title") %></h2>
     <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @pet.pet_vaccinations.ordered.each do |vaccination| %>
         <li class="flex items-center justify-between px-3 py-2 text-sm">
@@ -34,7 +34,7 @@
               <span class="<%= vaccination.booster_overdue? ? "font-medium text-red-600" : "text-gray-400" %>">· <%= t(".vaccination_booster_on", date: vaccination.booster_on.strftime("%d/%m/%Y")) %></span>
             <% end %>
           </span>
-          <%= button_to "✕", pet_vaccination_path(@pet, vaccination), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to pet_vaccination_path(@pet, vaccination), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>
@@ -47,7 +47,7 @@
   </section>
 
   <section class="mb-8">
-    <h2 class="mb-2 font-medium">💊 <%= t(".treatments_title") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("pill", css_class: "size-5") %> <%= t(".treatments_title") %></h2>
     <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @pet.pet_treatments.ordered.each do |treatment| %>
         <li class="flex items-center justify-between px-3 py-2 text-sm">
@@ -55,7 +55,7 @@
             <% if treatment.frequency.present? %><span class="text-gray-400">· <%= treatment.frequency %></span><% end %>
             <% if treatment.last_done_on %><span class="text-gray-400">· <%= t(".treatment_last_done", date: treatment.last_done_on.strftime("%d/%m/%Y")) %></span><% end %>
           </span>
-          <%= button_to "✕", pet_treatment_path(@pet, treatment), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to pet_treatment_path(@pet, treatment), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>
@@ -68,7 +68,7 @@
   </section>
 
   <section class="mb-8">
-    <h2 class="mb-2 font-medium">🛒 <%= t(".supplies_title") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("shopping-cart", css_class: "size-5") %> <%= t(".supplies_title") %></h2>
     <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @pet.pet_supplies.ordered.each do |supply| %>
         <li class="flex items-center justify-between px-3 py-2 text-sm">
@@ -76,7 +76,7 @@
             <% if supply.order_url.present? %><%= link_to supply.name, supply.order_url, target: "_blank", rel: "noopener", class: "underline" %><% else %><%= supply.name %><% end %>
             <% if supply.next_order_on %><span class="text-gray-400">· <%= t(".next_order_on", date: supply.next_order_on.strftime("%d/%m/%Y")) %></span><% end %>
           </span>
-          <%= button_to "✕", pet_supply_path(@pet, supply), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to pet_supply_path(@pet, supply), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>

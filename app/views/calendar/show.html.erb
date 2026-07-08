@@ -8,7 +8,7 @@
   <div class="mb-4"><%= module_breadcrumb(:calendar) %></div>
 
   <header class="mb-4 flex flex-wrap items-center justify-between gap-3">
-    <h1 class="text-2xl font-semibold">📅 <%= @view == "list" ? t(".agenda_heading") : month_label(@month) %></h1>
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("calendar", css_class: "size-6") %> <%= @view == "list" ? t(".agenda_heading") : month_label(@month) %></h1>
     <div class="flex flex-wrap items-center gap-2">
       <%= link_to t(".month_view"), calendar_path(view: :month, member_id: @member_id),
             class: "rounded-md border px-3 py-1.5 text-sm #{@view == 'month' ? 'border-gray-900 font-medium' : 'border-gray-300 hover:bg-gray-50'}" %>
@@ -27,8 +27,8 @@
       <% end %>
       <%= link_to t(".export_pdf"), calendar_path(format: :pdf, month: (@month || Date.current).strftime("%Y-%m"), member_id: @member_id), target: "_blank",
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-      <%= link_to "🔄 #{t('.sync_external')}", external_calendar_connections_path,
-            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= link_to external_calendar_connections_path,
+            class: "inline-flex items-center gap-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" do %><%= lucide_icon("refresh-cw", css_class: "size-4") %> <%= t(".sync_external") %><% end %>
       <%= link_to t(".new_event"), new_calendar_event_path,
             class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
     </div>

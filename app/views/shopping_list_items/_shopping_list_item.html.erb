@@ -1,11 +1,11 @@
 <%= tag.div id: dom_id(shopping_list_item), data: { sortable_id: shopping_list_item.id },
       class: "flex items-center gap-3 rounded-lg border border-gray-200 px-3 py-2 #{'opacity-50' if shopping_list_item.checked}" do %>
-  <span data-sortable-handle class="cursor-grab select-none text-gray-300 hover:text-gray-500" title="<%= t('.move_title') %>">⠿</span>
+  <span data-sortable-handle class="cursor-grab select-none text-gray-300 hover:text-gray-500" title="<%= t('.move_title') %>"><%= lucide_icon("grip-vertical", css_class: "size-4") %></span>
   <%= button_to toggle_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
         method: :patch, class: "shrink-0 cursor-pointer",
         aria: { label: shopping_list_item.checked ? t(".uncheck_aria") : t(".check_aria") } do %>
     <span class="flex size-5 items-center justify-center rounded border <%= shopping_list_item.checked ? "border-gray-900 bg-gray-900 text-white" : "border-gray-300" %>">
-      <%= "✓" if shopping_list_item.checked %>
+      <%= lucide_icon("check", css_class: "size-3.5") if shopping_list_item.checked %>
     </span>
   <% end %>
 
@@ -25,14 +25,14 @@
   </span>
 
   <% if shopping_list_item.checked %>
-    <%= button_to "🧊", move_to_fridge_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
+    <%= button_to move_to_fridge_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
           method: :post, class: "shrink-0 cursor-pointer text-gray-400 hover:text-gray-900",
-          form: { title: t(".move_to_fridge_title") }, aria: { label: t(".move_to_fridge_title") } %>
+          form: { title: t(".move_to_fridge_title") }, aria: { label: t(".move_to_fridge_title") } do %><%= lucide_icon("refrigerator", css_class: "size-4") %><% end %>
   <% end %>
 
   <%= button_to shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
         method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600",
         aria: { label: t(".delete_aria") } do %>
-    ✕
+    <%= lucide_icon("x", css_class: "size-4") %>
   <% end %>
 <% end %>

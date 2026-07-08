@@ -3,7 +3,7 @@
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <div class="mb-4"><%= module_breadcrumb(:wellbeing) %></div>
 
-  <h1 class="mb-1 text-2xl font-semibold">🧘 <%= t(".title") %></h1>
+  <h1 class="mb-1 flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("heart-pulse", css_class: "size-6") %> <%= t(".title") %></h1>
   <p class="mb-6 text-xs text-gray-400"><%= t(".privacy_note") %></p>
 
   <%= render "shared/flash" %>
@@ -25,7 +25,7 @@
   </section>
 
   <section class="mb-8">
-    <h2 class="mb-2 font-medium">⚖️ <%= t(".weight") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("scale", css_class: "size-5") %> <%= t(".weight") %></h2>
     <ul class="mb-2 text-sm">
       <% @weight_entries.reverse.first(15).each do |entry| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
@@ -42,7 +42,7 @@
   </section>
 
   <section class="mb-8">
-    <h2 class="mb-2 font-medium">🏋️ <%= t(".workouts") %></h2>
+    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("dumbbell", css_class: "size-5") %> <%= t(".workouts") %></h2>
     <ul class="mb-2 text-sm">
       <% @workout_entries.first(15).each do |entry| %>
         <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">

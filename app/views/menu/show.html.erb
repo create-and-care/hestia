@@ -8,7 +8,7 @@
   <div class="mb-4"><%= module_breadcrumb(:menu) %></div>
 
   <header class="mb-4 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold">🍽 <%= t(".heading") %></h1>
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("utensils", css_class: "size-6") %> <%= t(".heading") %></h1>
     <div class="flex items-center gap-2 text-sm">
       <%= link_to t(".previous_week"), menu_path(week: @week_start - 1.week), class: "underline" %>
       <%= link_to t(".this_week"), menu_path, class: "underline" %>
@@ -27,12 +27,12 @@
           <% Array(@entries[day]).each do |entry| %>
             <li class="flex items-center justify-between text-sm">
               <span><span class="text-gray-400"><%= meal_type_label(entry.meal_type) %> :</span> <%= entry.display_name %></span>
-              <%= button_to "✕", meal_plan_entry_path(entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+              <%= button_to meal_plan_entry_path(entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
             </li>
           <% end %>
         </ul>
         <% if (missing = missing_meal_types(day)).any? %>
-          <p class="mt-2 text-xs text-amber-600">⚠️ <%= t(".missing_meals", meals: missing.map { |type| meal_type_label(type) }.join(", ")) %></p>
+          <p class="mt-2 flex items-center gap-1 text-xs text-amber-600"><%= lucide_icon("triangle-alert", css_class: "size-3.5") %> <%= t(".missing_meals", meals: missing.map { |type| meal_type_label(type) }.join(", ")) %></p>
         <% end %>
       </section>
     <% end %>

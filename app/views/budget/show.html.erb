@@ -8,7 +8,7 @@
   <div class="mb-4"><%= module_breadcrumb(:budget) %></div>
 
   <header class="mb-4 flex flex-wrap items-center justify-between gap-2">
-    <h1 class="text-2xl font-semibold">💶 <%= t(".title") %></h1>
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("euro", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex gap-2 text-sm">
       <%= link_to t(".monthly"), budget_path(period: :monthly), class: "rounded-md border px-3 py-1 #{@period == :monthly ? 'border-gray-900 font-medium' : 'border-gray-300'}" %>
       <%= link_to t(".annual"), budget_path(period: :annual), class: "rounded-md border px-3 py-1 #{@period == :annual ? 'border-gray-900 font-medium' : 'border-gray-300'}" %>

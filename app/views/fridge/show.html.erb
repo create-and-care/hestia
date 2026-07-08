@@ -5,7 +5,7 @@
   <div class="mb-4"><%= module_breadcrumb(:fridge) %></div>
 
   <header class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold">🧊 <%= t(".title") %></h1>
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("refrigerator", css_class: "size-6") %> <%= t(".title") %></h1>
     <%= form_with url: fridge_path, method: :get do |form| %>
       <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
             class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>

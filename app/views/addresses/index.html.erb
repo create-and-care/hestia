@@ -5,7 +5,7 @@
   <div class="mb-4"><%= module_breadcrumb(:addresses) %></div>
 
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
-    <h1 class="text-2xl font-semibold">📍 <%= t(".title") %></h1>
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("map-pin", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex flex-wrap items-center gap-2">
       <%= form_with url: addresses_path, method: :get, class: "flex items-center gap-1" do |form| %>
         <%= form.select :address_type, address_type_options, { include_blank: t(".all_types"), selected: @type },

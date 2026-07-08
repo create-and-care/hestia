@@ -7,10 +7,10 @@
       <span class="rounded-full bg-gray-100 px-2 py-0.5"><%= recipe.category %></span>
     <% end %>
     <% if recipe.total_time_minutes %>
-      <span>⏱ <%= t(".total_time", minutes: recipe.total_time_minutes) %></span>
+      <span class="inline-flex items-center gap-1"><%= lucide_icon("clock", css_class: "size-3.5") %> <%= t(".total_time", minutes: recipe.total_time_minutes) %></span>
     <% end %>
     <% if recipe.servings %>
-      <span>🍽 <%= recipe.servings %></span>
+      <span class="inline-flex items-center gap-1"><%= lucide_icon("utensils", css_class: "size-3.5") %> <%= recipe.servings %></span>
     <% end %>
   </div>
 <% end %>

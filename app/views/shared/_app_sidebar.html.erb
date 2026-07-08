@@ -16,8 +16,8 @@
   </div>
 
   <%= link_to root_path, class: "flex items-center gap-3 rounded-md p-2 text-sm #{current_page?(root_path) ? "bg-surface-hover font-medium text-primary" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>
-    <span class="relative shrink-0 text-lg leading-none" aria-hidden="true">
-      🏠
+    <span class="relative shrink-0" aria-hidden="true">
+      <%= lucide_icon("layout-dashboard", css_class: "size-5") %>
       <% if current_page?(root_path) %><span class="absolute -right-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
     </span>
     <span data-sidebar-target="label" class="truncate"><%= t("sidebar.home") %></span>
@@ -27,7 +27,7 @@
     <div class="flex flex-col gap-0.5" data-sidebar-target="group">
       <button type="button" data-action="click->sidebar#toggleGroup" aria-expanded="<%= group[:open] %>"
         class="flex w-full items-center gap-3 rounded-md p-2 text-sm font-medium text-secondary hover:bg-surface-hover">
-        <span class="shrink-0 text-lg leading-none" aria-hidden="true"><%= group[:emoji] %></span>
+        <span class="shrink-0" aria-hidden="true"><%= lucide_icon(group[:icon], css_class: "size-5") %></span>
         <span data-sidebar-target="label" class="flex-1 truncate text-left"><%= group[:label] %></span>
         <svg data-sidebar-target="label groupChevron" class="size-4 shrink-0 transition-transform <%= "rotate-180" if group[:open] %>" viewBox="0 0 24 24" fill="none">
           <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -37,8 +37,8 @@
       <div data-sidebar-target="label groupPanel" class="ml-2 flex flex-col gap-0.5 border-l border-primary pl-3" <%= "hidden" unless group[:open] %>>
         <% group[:items].each do |item| %>
           <%= link_to item[:path], class: "flex items-center gap-3 rounded-md p-2 text-sm #{item[:active] ? "bg-surface-hover font-medium text-primary" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>
-            <span class="relative shrink-0 text-base leading-none" aria-hidden="true">
-              <%= item[:emoji] %>
+            <span class="relative shrink-0" aria-hidden="true">
+              <%= lucide_icon(item[:icon], css_class: "size-4") %>
               <% if item[:active] %><span class="absolute -right-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
             </span>
             <span class="truncate"><%= item[:label] %></span>
@@ -53,7 +53,7 @@
   <% sidebar.with_footer do %>
     <div class="flex flex-col gap-0.5 border-t border-primary pt-3">
       <%= link_to household_path(Current.household), class: "flex items-center gap-3 rounded-md p-2 text-sm text-primary hover:bg-surface-hover" do %>
-        <span class="shrink-0 text-lg leading-none" aria-hidden="true">⚙️</span>
+        <span class="shrink-0" aria-hidden="true"><%= lucide_icon("settings", css_class: "size-5") %></span>
         <span data-sidebar-target="label" class="truncate"><%= t("sidebar.footer.settings") %></span>
       <% end %>
 

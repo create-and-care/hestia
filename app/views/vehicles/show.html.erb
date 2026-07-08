@@ -3,7 +3,7 @@
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <header class="mb-4 flex items-start justify-between">
     <div>
-      <h1 class="text-2xl font-semibold">🚗 <%= @vehicle.name %></h1>
+      <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("car", css_class: "size-6") %> <%= @vehicle.name %></h1>
       <p class="text-sm text-gray-500">
         <%= [ vehicle_type_label(@vehicle.vehicle_type), @vehicle.manufacturer, @vehicle.plate, @vehicle.year, @vehicle.energy ].reject(&:blank?).join(" · ") %>
       </p>
@@ -35,7 +35,7 @@
             <% if entry.provider.present? %><span class="text-gray-400">· <%= entry.provider %></span><% end %>
             <% if entry.description.present? %><span class="block text-gray-500"><%= entry.description %></span><% end %>
           </span>
-          <%= button_to "✕", vehicle_maintenance_entry_path(@vehicle, entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+          <%= button_to vehicle_maintenance_entry_path(@vehicle, entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
         </li>
       <% end %>
     </ul>

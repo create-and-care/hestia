@@ -1,6 +1,7 @@
 module WasteHelper
+  # Lucide (https://lucide.dev) icon names, rendered via IconHelper#lucide_icon.
   ICONS = {
-    "ordures" => "🗑", "recyclage" => "♻️", "verre" => "🍶", "compost" => "🌱", "encombrants" => "🛋"
+    "ordures" => "trash-2", "recyclage" => "recycle", "verre" => "wine", "compost" => "sprout", "encombrants" => "sofa"
   }.freeze
 
   BADGE_CLASSES = {
@@ -14,7 +15,7 @@ module WasteHelper
   WEEKDAY_KEYS = %w[sunday monday tuesday wednesday thursday friday saturday].freeze
 
   def waste_type_label(type) = t("waste.types.#{type}", default: type)
-  def waste_type_icon(type) = ICONS.fetch(type, "🗑")
+  def waste_type_icon(type) = lucide_icon(ICONS.fetch(type, "trash-2"), css_class: "size-3.5")
   def waste_type_badge_class(type) = BADGE_CLASSES.fetch(type, "bg-gray-100")
   def waste_type_options = WasteCollectionSeries::TYPES.map { |type| [ waste_type_label(type), type ] }
   def weekday_label(index) = t("waste.weekdays.#{WEEKDAY_KEYS.fetch(index, index.to_s)}", default: index.to_s)

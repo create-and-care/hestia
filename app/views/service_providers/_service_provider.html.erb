@@ -15,15 +15,15 @@
 
   <div class="flex shrink-0 items-center gap-2 text-sm">
     <% if service_provider.phone.present? %>
-      <%= link_to "📞", "tel:#{service_provider.phone}", class: "hover:opacity-70", title: service_provider.phone %>
+      <%= link_to "tel:#{service_provider.phone}", class: "hover:opacity-70", title: service_provider.phone do %><%= lucide_icon("phone", css_class: "size-4") %><% end %>
     <% end %>
     <% if service_provider.email.present? %>
-      <%= link_to "✉️", "mailto:#{service_provider.email}", class: "hover:opacity-70", title: service_provider.email %>
+      <%= link_to "mailto:#{service_provider.email}", class: "hover:opacity-70", title: service_provider.email do %><%= lucide_icon("mail", css_class: "size-4") %><% end %>
     <% end %>
     <% if service_provider.maps_url %>
-      <%= link_to "🗺", service_provider.maps_url, target: "_blank", rel: "noopener", class: "hover:opacity-70", title: t(".directions") %>
+      <%= link_to service_provider.maps_url, target: "_blank", rel: "noopener", class: "hover:opacity-70", title: t(".directions") do %><%= lucide_icon("map", css_class: "size-4") %><% end %>
     <% end %>
-    <%= link_to "✎", edit_service_provider_path(service_provider), class: "text-gray-400 hover:text-gray-900" %>
-    <%= button_to "✕", service_provider_path(service_provider), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+    <%= link_to edit_service_provider_path(service_provider), class: "text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+    <%= button_to service_provider_path(service_provider), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
   </div>
 <% end %>

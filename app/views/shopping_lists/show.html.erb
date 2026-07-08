@@ -4,7 +4,7 @@
 <div class="mx-auto mt-10 max-w-2xl px-4">
   <header class="mb-6 flex items-center justify-between">
     <h1 class="flex items-center gap-2 text-2xl font-semibold">
-      <span><%= @shopping_list.icon.presence || "🛒" %></span>
+      <span><%= @shopping_list.icon.presence || lucide_icon("shopping-cart", css_class: "size-6") %></span>
       <span><%= @shopping_list.name %></span>
     </h1>
     <div class="flex gap-2">

@@ -8,7 +8,7 @@
     <p class="text-xs text-gray-400"><%= time_ago_in_words(notification.created_at) %></p>
   </div>
   <% unless notification.read? %>
-    <%= button_to "✓", mark_read_notification_path(notification), method: :patch,
-          class: "cursor-pointer shrink-0 text-gray-400 hover:text-gray-900", aria: { label: t(".mark_read") } %>
+    <%= button_to mark_read_notification_path(notification), method: :patch,
+          class: "cursor-pointer shrink-0 text-gray-400 hover:text-gray-900", aria: { label: t(".mark_read") } do %><%= lucide_icon("check", css_class: "size-4") %><% end %>
   <% end %>
 <% end %>

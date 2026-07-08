@@ -16,7 +16,7 @@
       <% @shopping_lists.each do |list| %>
         <li class="flex items-center justify-between px-4 py-3">
           <%= link_to shopping_list_path(list), class: "flex items-center gap-2 font-medium hover:underline" do %>
-            <span><%= list.icon.presence || "🛒" %></span>
+            <span><%= list.icon.presence || lucide_icon("shopping-cart", css_class: "size-4") %></span>
             <span><%= list.name %></span>
           <% end %>
           <span class="text-sm text-gray-500"><%= t(".items_count", count: list.items.where(checked: false).count) %></span>

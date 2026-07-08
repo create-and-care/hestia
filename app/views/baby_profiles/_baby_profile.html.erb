@@ -1,6 +1,6 @@
 <%= link_to baby_profile_path(baby_profile), id: dom_id(baby_profile),
       class: "block rounded-lg border border-gray-200 p-4 hover:border-gray-400" do %>
-  <h2 class="font-medium">👶 <%= baby_profile.name %></h2>
+  <h2 class="flex items-center gap-1.5 font-medium"><%= lucide_icon("baby", css_class: "size-4") %> <%= baby_profile.name %></h2>
   <% if baby_profile.born_on %>
     <p class="text-sm text-gray-500"><%= t("baby_profiles.born_on", date: baby_profile.born_on.strftime("%d/%m/%Y")) %></p>
   <% end %>

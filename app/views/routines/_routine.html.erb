@@ -10,8 +10,8 @@
     </p>
   </div>
 
-  <%= button_to "✓ #{t('.done')}", complete_routine_path(routine), method: :post,
-        class: "shrink-0 cursor-pointer rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50" %>
-  <%= link_to "✎", edit_routine_path(routine), class: "shrink-0 text-gray-400 hover:text-gray-900" %>
-  <%= button_to "✕", routine_path(routine), method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600" %>
+  <%= button_to complete_routine_path(routine), method: :post,
+        class: "shrink-0 inline-flex cursor-pointer items-center gap-1 rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50" do %><%= lucide_icon("check", css_class: "size-4") %> <%= t(".done") %><% end %>
+  <%= link_to edit_routine_path(routine), class: "shrink-0 text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+  <%= button_to routine_path(routine), method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
 <% end %>

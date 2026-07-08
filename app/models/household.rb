@@ -53,7 +53,7 @@ class Household < ApplicationRecord
 
   # Every module key that appears in the sidebar (SidebarHelper::SIDEBAR_GROUPS
   # is the single source of truth) can be turned off per household.
-  MODULE_KEYS = SidebarHelper::SIDEBAR_GROUPS.flat_map { |group| group[:items].map { |_emoji, key, _path| key.to_s } }.freeze
+  MODULE_KEYS = SidebarHelper::SIDEBAR_GROUPS.flat_map { |group| group[:items].map { |_icon, key, _path| key.to_s } }.freeze
 
   validates :name, presence: true
   validates :invite_code, presence: true, uniqueness: true
