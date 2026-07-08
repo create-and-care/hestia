@@ -15,9 +15,10 @@ class RecipeCatalogController < ApplicationController
     entries = entries.search(@query) if @query.present?
     entries = entries.tagged(@tag) if @tag.present?
 
-    @page = [ params[:page].to_i, 1 ].max
     @per_page = PER_PAGE
     @total = entries.count
+    @total_pages = [ (@total / @per_page.to_f).ceil, 1 ].max
+    @page = [ [ params[:page].to_i, 1 ].max, @total_pages ].min
     @entries = entries.offset((@page - 1) * @per_page).limit(@per_page)
     @added_entry_ids = Current.household.recipes.where.not(recipe_catalog_entry_id: nil).pluck(:recipe_catalog_entry_id).to_set
   end

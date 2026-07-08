@@ -9,8 +9,6 @@ en:
       discover_tab: "Discover"
       empty: "No recipes in the catalog yet."
       empty_search: "No recipes for this search."
-      previous_page: "← Previous"
-      next_page: "Next →"
     tags:
       poulet: "Chicken"
       boeuf: "Beef"
