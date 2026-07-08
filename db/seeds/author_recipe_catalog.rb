@@ -1551,6 +1551,989 @@ RECIPES = [
       "Ajouter la menthe froissée et laisser infuser quelques minutes au réfrigérateur.",
       "Servir bien frais sur glaçons, éventuellement avec un trait d'eau gazeuse."
     ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/cuisse-de-poulet-sauce-chimichurri-69e9ee89a777d4c0e74a7b32",
+    "title" => "Cuisse de poulet sauce chimichurri, salsa avocat-tomates et patate douce épicée",
+    "tags" => [ "poulet" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Patate douce",
+      "2 pièce(s) Cuisse de poulet",
+      "⅔ sachet(s) Piri-piri",
+      "1 sachet(s) Persil",
+      "2 pièce(s) Gousse d'ail",
+      "½ pièce(s) Échalote",
+      "½ pièce(s) Citron",
+      "¼ pièce(s) Piment",
+      "1 pièce(s) Avocat",
+      "2 pièce(s) Tomate",
+      "5 cs Huile d'olive",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Préchauffer le four à 220°C. Couper la patate douce en dés, l'enfourner avec un filet d'huile d'olive, le piri-piri, du sel et du poivre pendant 20 à 25 minutes jusqu'à ce qu'elle soit tendre et dorée.",
+      "Assaisonner les cuisses de poulet de sel et de poivre, les cuire à la poêle avec un filet d'huile d'olive 6 à 7 minutes de chaque côté jusqu'à ce qu'elles soient bien cuites et dorées.",
+      "Émincer l'ail et l'échalote, ciseler le persil, mélanger avec le jus de citron et l'huile d'olive pour préparer la sauce chimichurri, saler et poivrer.",
+      "Couper l'avocat et les tomates en dés, émincer le piment, mélanger le tout avec un filet de jus de citron pour la salsa.",
+      "Trancher le poulet et dresser nappé de chimichurri avec la patate douce épicée et la salsa avocat-tomates."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/sheet-pan-poulet-label-rouge-poivrons-and-sauce-mojo-verde-69e9ee83b2918f341e7b1e53",
+    "title" => "Poulet Label Rouge et poivrons rôtis, sauce mojo verde, pommes de terre au thym",
+    "tags" => [ "poulet" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Oignon",
+      "1 pièce(s) Poivron",
+      "500 g Pommes de terre",
+      "1 pièce(s) Gousse d'ail",
+      "⅔ sachet(s) Cumin en poudre",
+      "½ sachet(s) Thym séché",
+      "2 pièce(s) Filet de poulet Label Rouge",
+      "2 pièce(s) Tomate",
+      "⅓ pièce(s) Piment",
+      "1 sachet(s) Coriandre",
+      "1 pot(s) Yaourt à la grecque",
+      "2 cs Huile d'olive",
+      "1 cc Sucre",
+      "3 cc Vinaigre de vin rouge ou de cidre",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Préchauffer le four à 220°C. Couper les pommes de terre en quartiers, les mélanger avec l'huile d'olive, le thym séché, du sel et du poivre, enfourner 25 à 30 minutes.",
+      "Émincer l'oignon et le poivron, les ajouter sur la plaque avec les filets de poulet assaisonnés de cumin, poursuivre la cuisson au four 12 à 15 minutes jusqu'à ce que le poulet soit bien cuit.",
+      "Mixer la coriandre, le piment, l'ail, le yaourt à la grecque, le vinaigre, le sucre, du sel et du poivre pour obtenir la sauce mojo verde.",
+      "Couper les tomates en dés.",
+      "Trancher le poulet et dresser avec les légumes rôtis, les pommes de terre, les dés de tomate et la sauce mojo verde."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/pinsa-parmigiana-69d9018368ee73d4d3ffddf7",
+    "title" => "Pinsa Parmigiana, aubergine et tomate au parmesan, salade",
+    "tags" => [ "vegetarien" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Aubergine",
+      "1 pièce(s) Gousse d'ail",
+      "1 paquet(s) Chair de tomates",
+      "1 pot(s) Crème de basilic",
+      "⅔ sachet(s) Épices à l'italienne Buon Appetito",
+      "1 pièce(s) Tomate",
+      "1 pièce(s) Parmigiano Reggiano AOP",
+      "240 g Pinsa",
+      "1 sachet(s) Fromage râpé à l'italienne",
+      "1 sachet(s) Salade",
+      "2 cs Huile d'olive",
+      "1 cc Sucre",
+      "1 cs Vinaigre balsamique noir",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Préchauffer le four selon les indications de l'emballage de la pinsa. Couper l'aubergine en fines rondelles.",
+      "Faire revenir l'ail émincé et l'aubergine dans l'huile d'olive quelques minutes jusqu'à ce qu'elle soit tendre.",
+      "Ajouter la chair de tomates, les épices à l'italienne, le sucre, du sel et du poivre, laisser mijoter 8 à 10 minutes.",
+      "Répartir la crème de basilic sur la pinsa, ajouter la compotée d'aubergine-tomate, le fromage râpé et des copeaux de parmesan, enfourner jusqu'à ce que le fromage soit fondu.",
+      "Couper la tomate fraîche en quartiers, assaisonner la salade avec l'huile d'olive et le vinaigre balsamique.",
+      "Servir la pinsa chaude avec la salade."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/salade-minute-burrata-prosciutto-and-tomate-69d901906bb16e39e1b7e944",
+    "title" => "Salade minute burrata, prosciutto et tomate, radis et croûtons à l'ail",
+    "tags" => [ "porc" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "2 pièce(s) Gousse d'ail",
+      "2 tranche(s) Pain de campagne tranché",
+      "3 pièce(s) Tomate",
+      "1 botte(s) Radis",
+      "1 pièce(s) Burrata",
+      "⅔ sachet(s) Origan séché",
+      "1 sachet(s) Salade",
+      "50 g Prosciutto crudo",
+      "3 cs Huile d'olive",
+      "2 cs Vinaigre balsamique noir",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Couper le pain de campagne en cubes, les mélanger avec l'ail émincé et un filet d'huile d'olive, les faire dorer à la poêle ou au four jusqu'à ce qu'ils soient croustillants pour former les croûtons.",
+      "Couper les tomates en quartiers, émincer les radis en fines rondelles.",
+      "Répartir la salade, les tomates et les radis dans les assiettes.",
+      "Déchirer la burrata en morceaux et la déposer par-dessus avec le prosciutto crudo.",
+      "Parsemer d'origan séché et des croûtons à l'ail.",
+      "Arroser d'huile d'olive et de vinaigre balsamique, saler et poivrer."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/burger-veggie-sauce-bbq-moutarde-comme-aux-usa-69e9ee3da777d4c0e74a7983",
+    "title" => "Burger veggie sauce BBQ-moutarde, steak végétal, cheddar et frites",
+    "tags" => [ "vegetarien" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "500 g Pommes de terre",
+      "1 pièce(s) Gousse d'ail",
+      "1 sachet(s) Cheddar râpé",
+      "180 g Steak végétal",
+      "2 pièce(s) Pain burger",
+      "1 pièce(s) Tomate",
+      "40 g Sauce BBQ façon Carolina Gold",
+      "1 sachet(s) Mayonnaise",
+      "2 cs Huile d'olive",
+      "1 cc Beurre",
+      "1 cc Moutarde",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Couper les pommes de terre en frites, les cuire au four ou à la poêle avec un peu d'huile jusqu'à ce qu'elles soient dorées et croustillantes.",
+      "Faire cuire le steak végétal à la poêle selon les indications de l'emballage.",
+      "Mélanger la sauce BBQ façon Carolina Gold avec la mayonnaise et la moutarde pour la sauce.",
+      "Faire griller légèrement les pains burger, tartiner de sauce.",
+      "Garnir de steak végétal, de cheddar râpé et de tranches de tomate.",
+      "Servir le burger avec les frites maison."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/taboule-de-boulgour-quinoa-precuits-and-dinde-69e9ee34fe534c766c45bbec",
+    "title" => "Taboulé de boulgour et quinoa à la dinde, tomates cerises et raisins secs",
+    "tags" => [ "dinde" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "250 g Boulgour et quinoa précuits",
+      "1 sachet(s) Raisins secs Sultanines",
+      "1 paquet(s) Dés de filet de dinde",
+      "2 pièce(s) Poivron",
+      "1 Tomates cerises rouges",
+      "1 pièce(s) Oignon",
+      "½ sachet(s) Persil plat et menthe",
+      "½ pièce(s) Citron",
+      "⅔ sachet(s) Mélange d'épices du Moyen-Orient",
+      "2 cc Beurre",
+      "2 cs Huile d'olive",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Assaisonner les dés de dinde avec le mélange d'épices du Moyen-Orient, les faire dorer à la poêle avec un filet d'huile d'olive et une noisette de beurre jusqu'à ce qu'ils soient bien cuits.",
+      "Émincer l'oignon et le poivron, couper les tomates cerises en deux.",
+      "Mélanger le boulgour-quinoa précuit avec l'oignon, le poivron, les tomates cerises et les raisins secs.",
+      "Ciseler le persil et la menthe, les ajouter à la salade avec un filet de jus de citron et d'huile d'olive, saler et poivrer.",
+      "Ajouter la dinde tiède sur le taboulé et servir."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/summer-bowl-oriental-ble-precuit-and-labneh-69e9ee33fe534c766c45bbe3",
+    "title" => "Summer bowl oriental au blé précuit, labneh et sauce zhoug à la coriandre",
+    "tags" => [ "vegetarien" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Gousse d'ail",
+      "1 pièce(s) Oignon",
+      "1 Tomates cerises rouges",
+      "1 pièce(s) Courgette",
+      "375 g Blé précuit",
+      "⅔ sachet(s) Mélange d'épices du Moyen-Orient",
+      "1 sachet(s) Amandes effilées",
+      "1 sachet(s) Sauce zhoug au piment & coriandre",
+      "1 pot(s) Labneh",
+      "1.5 cs Huile d'olive",
+      "1 cc Miel",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Émincer l'ail et l'oignon, couper la courgette en dés, les faire revenir dans l'huile d'olive avec le mélange d'épices du Moyen-Orient quelques minutes.",
+      "Ajouter les tomates cerises coupées en deux, poursuivre la cuisson 2 à 3 minutes.",
+      "Réchauffer le blé précuit selon les indications de l'emballage.",
+      "Mélanger le blé avec les légumes, ajouter le miel et un filet d'huile d'olive.",
+      "Dresser le bowl avec une bonne cuillère de labneh, parsemer d'amandes effilées.",
+      "Arroser de sauce zhoug au piment et à la coriandre."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/poivron-farci-au-quinoa-pesto-and-chevre-frais-69e9ee40a777d4c0e74a798e",
+    "title" => "Poivron farci au quinoa, pesto et chèvre frais, basilic et origan",
+    "tags" => [ "vegetarien" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "2 pièce(s) Poivron",
+      "1 pièce(s) Gousse d'ail",
+      "2 pièce(s) Oignon",
+      "1 sachet(s) Basilic",
+      "100 g Quinoa",
+      "⅔ sachet(s) Épices à l'italienne Buon Appetito",
+      "1 sachet(s) Pesto rosso",
+      "1 sachet(s) Salade",
+      "1 pièce(s) Fromage de chèvre frais",
+      "200 ml Bouillon de légumes",
+      "1 cs Huile d'olive",
+      "1 cc Vinaigre balsamique noir",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Préchauffer le four à 200°C. Couper les poivrons en deux dans la longueur, retirer les graines.",
+      "Émincer l'ail et l'oignon, les faire revenir dans l'huile d'olive.",
+      "Cuire le quinoa dans le bouillon de légumes selon les indications de l'emballage.",
+      "Mélanger le quinoa cuit avec l'oignon, l'ail, le pesto rosso, les épices à l'italienne et le basilic ciselé.",
+      "Garnir les demi-poivrons de cette farce, émietter le fromage de chèvre par-dessus, enfourner 20 à 25 minutes jusqu'à ce que les poivrons soient tendres.",
+      "Assaisonner la salade avec l'huile d'olive et le vinaigre balsamique, servir à côté des poivrons farcis."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/casarecce-al-pomodoro-and-burrata-cremosa-69e9ee41b2918f341e7b1d18",
+    "title" => "Casarecce al pomodoro et burrata crémeuse, tomates cerises et basilic",
+    "tags" => [ "vegetarien" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Burrata",
+      "1 pièce(s) Oignon",
+      "1 pièce(s) Gousse d'ail",
+      "1 Tomates cerises rouges",
+      "180 g Casarecce",
+      "⅔ sachet(s) Concentré de tomates",
+      "⅔ sachet(s) Épices à l'italienne Buon Appetito",
+      "1 paquet(s) Crème liquide",
+      "1 pot(s) Crème de basilic",
+      "1 cs Huile d'olive",
+      "½ pièce(s) Cube de bouillon de légumes",
+      "2 cc Sucre",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Émincer l'oignon et l'ail, les faire revenir dans l'huile d'olive.",
+      "Ajouter le concentré de tomates, les épices à l'italienne, le cube de bouillon émietté, le sucre et un peu d'eau, laisser mijoter 5 à 8 minutes pour la sauce.",
+      "Cuire les casarecce dans une grande casserole d'eau bouillante salée selon le temps indiqué sur l'emballage, égoutter.",
+      "Couper les tomates cerises en deux, les ajouter à la sauce avec la crème liquide, laisser réduire quelques minutes.",
+      "Mélanger les pâtes égouttées à la sauce.",
+      "Déchirer la burrata en morceaux sur les pâtes chaudes, napper de crème de basilic."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/poulet-label-rouge-facon-parmigiana-69e9ee1bb2918f341e7b1c24",
+    "title" => "Poulet façon parmigiana, linguine sauce tomate et basilic",
+    "tags" => [ "poulet" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "2 pièce(s) Gousse d'ail",
+      "1 pièce(s) Oignon",
+      "1 sachet(s) Basilic",
+      "1 paquet(s) Chair de tomates",
+      "⅔ sachet(s) Épices à l'italienne Buon Appetito",
+      "⅔ sachet(s) Chapelure panko",
+      "2 pièce(s) Filet de poulet Label Rouge",
+      "180 g Linguine",
+      "1 sachet(s) Fromage râpé à l'italienne",
+      "1 sachet(s) Salade",
+      "60 ml Bouillon de légumes",
+      "1 cs Huile d'olive",
+      "1 cs Vinaigre balsamique noir",
+      "1.5 cc Miel",
+      "3 cs Farine",
+      "1 pièce(s) Œuf",
+      "4 cs Huile de tournesol",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Préparer trois assiettes : une avec la farine, une avec l'œuf battu, une avec la chapelure panko mélangée aux épices à l'italienne. Enrober chaque filet de poulet successivement de farine, d'œuf puis de panko.",
+      "Faire dorer le poulet pané à la poêle dans l'huile de tournesol quelques minutes de chaque côté jusqu'à ce qu'il soit bien doré et cuit.",
+      "Émincer l'oignon et l'ail, les faire revenir dans l'huile d'olive, ajouter la chair de tomates, le bouillon de légumes, le miel et le vinaigre balsamique, laisser mijoter 8 à 10 minutes pour la sauce.",
+      "Cuire les linguine selon les indications de l'emballage, égoutter.",
+      "Déposer le poulet pané sur les linguine nappées de sauce tomate, parsemer de fromage râpé et de basilic ciselé.",
+      "Servir avec la salade."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/poulet-label-rouge-pane-a-la-provencale-69e9ee3bb2918f341e7b1d0d",
+    "title" => "Poulet pané à la provençale, haricots verts et sauce ravigote",
+    "tags" => [ "poulet" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 sachet(s) Haricots verts",
+      "1 pièce(s) Sucrine",
+      "1 pièce(s) Gousse d'ail",
+      "2 pièce(s) Filet de poulet Label Rouge",
+      "1 sachet(s) Chapelure panko",
+      "½ sachet(s) Assaisonnement ail et herbes",
+      "1 sachet(s) Sauce ravigote",
+      "½ sachet(s) Oignons frits",
+      "2 cs Huile d'olive",
+      "1 cc Moutarde",
+      "2 cc Vinaigre balsamique noir",
+      "1 cs Farine",
+      "1 pièce(s) Œuf",
+      "2 cc Beurre",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Cuire les haricots verts à l'eau bouillante salée 5 à 6 minutes jusqu'à ce qu'ils soient tendres mais encore croquants, égoutter.",
+      "Préparer trois assiettes : une avec la farine, une avec l'œuf battu, une avec la chapelure panko mélangée à l'assaisonnement ail et herbes. Enrober les filets de poulet successivement de farine, d'œuf puis de panko.",
+      "Faire dorer le poulet pané à la poêle avec l'huile d'olive et le beurre, 4 à 5 minutes de chaque côté jusqu'à ce qu'il soit bien cuit.",
+      "Émincer la sucrine, l'assaisonner avec la moutarde, le vinaigre balsamique et un filet d'huile d'olive.",
+      "Faire revenir les haricots verts avec l'ail émincé quelques minutes.",
+      "Dresser le poulet pané avec les haricots verts, la salade de sucrine, la sauce ravigote et les oignons frits."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/tarte-ensoleillee-nectarines-and-tomate-cotelee-69e9ee5aa777d4c0e74a7a07",
+    "title" => "Tarte ensoleillée aux nectarines et tomate, pâte sans gluten et romarin",
+    "tags" => [ "vegetarien" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Pâte à tarte sans gluten",
+      "2 pièce(s) Nectarine",
+      "1 pièce(s) Tomate côtelée",
+      "½ sachet(s) Romarin séché",
+      "1 sachet(s) Salade",
+      "1 pot(s) Fromage frais aux herbes",
+      "1 sachet(s) Copeaux de grana padano AOP",
+      "2 cs Huile d'olive",
+      "1 cs Vinaigre balsamique noir",
+      "1 cc Miel",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Préchauffer le four selon les indications de l'emballage de la pâte à tarte sans gluten, la déposer sur une plaque.",
+      "Couper les nectarines en quartiers et la tomate côtelée en tranches.",
+      "Tartiner la pâte de fromage frais aux herbes, disposer les nectarines et la tomate par-dessus, parsemer de romarin séché.",
+      "Enfourner selon le temps indiqué sur l'emballage, jusqu'à ce que la pâte soit dorée.",
+      "Assaisonner la salade avec l'huile d'olive, le vinaigre balsamique et le miel.",
+      "Servir la tarte tiède parsemée de copeaux de grana padano, avec la salade."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/wok-de-nouilles-au-porc-effiloche-sauce-soja-69e9ee7aa777d4c0e74a7af1",
+    "title" => "Wok de nouilles au porc effiloché, légumes d'été et cacahuètes",
+    "tags" => [ "porc" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "100 g Nouilles de blé",
+      "1 pièce(s) Gousse d'ail",
+      "1 pièce(s) Courgette",
+      "1 pièce(s) Oignon",
+      "1 pièce(s) Poivron",
+      "1 paquet(s) Effiloché de porc",
+      "1 sachet(s) Purée de gingembre",
+      "1 sachet(s) Sauce asiatique sucrée",
+      "1 sachet(s) Sauce soja",
+      "1 sachet(s) Cacahuètes non salées",
+      "1 cs Huile de tournesol",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Cuire les nouilles de blé selon les indications de l'emballage, égoutter.",
+      "Émincer l'ail, couper la courgette, l'oignon et le poivron en lamelles.",
+      "Faire revenir les légumes dans l'huile de tournesol à feu vif 4 à 5 minutes.",
+      "Ajouter le porc effiloché, la purée de gingembre, la sauce asiatique sucrée et la sauce soja, réchauffer en mélangeant bien.",
+      "Ajouter les nouilles égouttées, mélanger le tout.",
+      "Parsemer de cacahuètes concassées avant de servir."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/croque-courgette-basilic-and-fromage-frais-69e9ee63a777d4c0e74a7a45",
+    "title" => "Croque-monsieur courgette, basilic et fromage frais, salade",
+    "tags" => [ "vegetarien" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Gousse d'ail",
+      "1.5 pièce(s) Courgette",
+      "½ sachet(s) Épices à l'italienne Buon Appetito",
+      "1 paquet(s) Fromage à la grecque",
+      "1 paquet(s) Crème liquide",
+      "1 pot(s) Crème de basilic",
+      "5 tranche(s) Pain de campagne tranché",
+      "1 sachet(s) Fromage râpé à l'italienne",
+      "1 sachet(s) Salade",
+      "2 cs Huile d'olive",
+      "1 cc Moutarde",
+      "1 cs Vinaigre balsamique noir",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Couper la courgette en fines rondelles, les faire revenir dans l'huile d'olive avec l'ail émincé et les épices à l'italienne quelques minutes jusqu'à ce qu'elles soient tendres.",
+      "Mélanger le fromage à la grecque avec la crème liquide et la crème de basilic pour une sauce onctueuse.",
+      "Tartiner les tranches de pain de sauce, répartir les courgettes, refermer en sandwich, parsemer de fromage râpé.",
+      "Faire dorer les croques à la poêle avec un peu d'huile ou au four jusqu'à ce que le fromage soit fondu et le pain doré.",
+      "Assaisonner la salade avec l'huile d'olive, la moutarde et le vinaigre balsamique.",
+      "Servir les croques chauds avec la salade."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/truite-a-la-normande-and-sauce-forestiere-a-lavoine-cuisine-69e9ee8cfe534c766c45bd46",
+    "title" => "Truite à la normande, riz au curcuma et sauce forestière",
+    "tags" => [ "poisson" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Gousse d'ail",
+      "1 pièce(s) Oignon",
+      "1 pièce(s) Poireau",
+      "2 pièce(s) Portobello",
+      "150 g Riz",
+      "½ sachet(s) Curcuma en poudre",
+      "1 pièce(s) Feuille de laurier",
+      "½ paquet(s) Avoine cuisine",
+      "1 pincée(s) Noix de muscade",
+      "2 pièce(s) Filet de truite avec peau",
+      "400 ml Bouillon de légumes",
+      "4 cs Beurre",
+      "1 cs Vinaigre balsamique blanc ou de riz",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Cuire le riz avec le curcuma, la feuille de laurier et le bouillon de légumes selon les indications de l'emballage.",
+      "Émincer l'oignon, le poireau et l'ail, couper les portobellos en tranches.",
+      "Faire revenir l'oignon, le poireau et l'ail dans le beurre, ajouter les portobellos et cuire jusqu'à ce qu'ils soient dorés.",
+      "Ajouter l'avoine cuisine et un peu de bouillon, laisser mijoter pour lier la sauce, assaisonner d'une pincée de noix de muscade.",
+      "Assaisonner les filets de truite, les cuire à la poêle avec un peu de beurre 3 à 4 minutes de chaque côté selon l'épaisseur.",
+      "Dresser la truite sur le riz au curcuma, napper de sauce forestière."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/poulet-label-rouge-facon-bulgogi-and-haricots-69e9ee43b2918f341e7b1d2a",
+    "title" => "Poulet façon bulgogi, haricots verts et courgette au sésame",
+    "tags" => [ "poulet" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Gousse d'ail",
+      "2 pièce(s) Oignon",
+      "1 cm Gingembre frais",
+      "¼ pièce(s) Piment",
+      "1 sachet(s) Haricots verts",
+      "2 pièce(s) Filet de poulet Label Rouge",
+      "1 pièce(s) Courgette",
+      "2 sachet(s) Huile de sésame",
+      "1 sachet(s) Sauce soja",
+      "50 g Sauce umami à l'huître",
+      "½ sachet(s) Graines de sésame",
+      "1 cs Huile de tournesol",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Émincer l'ail et l'oignon, râper le gingembre, émincer le piment.",
+      "Couper le poulet en lanières, le faire mariner quelques minutes avec l'ail, le gingembre, la sauce soja et la sauce umami à l'huître.",
+      "Cuire les haricots verts à l'eau bouillante quelques minutes, égoutter.",
+      "Faire revenir le poulet mariné dans l'huile de tournesol et l'huile de sésame à feu vif jusqu'à ce qu'il soit bien doré.",
+      "Ajouter la courgette coupée en lamelles et l'oignon, poursuivre la cuisson quelques minutes, ajouter les haricots verts et le piment.",
+      "Parsemer de graines de sésame avant de servir."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/tacos-complets-crevettes-mangue-and-sauce-yaourt-69e9ee45b2918f341e7b1d3c",
+    "title" => "Tacos aux crevettes, mangue et sauce yaourt épicée",
+    "tags" => [ "fruits_de_mer" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Oignon",
+      "½ sachet(s) Coriandre",
+      "1 pièce(s) Poivron",
+      "1 pièce(s) Carotte",
+      "½ pièce(s) Citron",
+      "½ pièce(s) Mangue",
+      "1 paquet(s) Crevettes",
+      "1 sachet(s) Épices mexicaines",
+      "1 pot(s) Yaourt à la grecque",
+      "½ sachet(s) Paprika fumé en poudre",
+      "4 pièce(s) Tortillas au blé complet",
+      "1 cs Huile d'olive",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Émincer l'oignon et le poivron, râper la carotte, couper la mangue en petits dés, ciseler la coriandre.",
+      "Assaisonner les crevettes avec les épices mexicaines, les faire revenir à la poêle avec un filet d'huile d'olive 3 à 4 minutes jusqu'à ce qu'elles soient roses.",
+      "Faire revenir l'oignon et le poivron quelques minutes.",
+      "Mélanger le yaourt à la grecque avec le paprika fumé et un filet de jus de citron pour la sauce.",
+      "Réchauffer les tortillas au blé complet.",
+      "Garnir les tortillas de crevettes, légumes, mangue et coriandre, napper de sauce yaourt."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/pasta-salad-legumes-and-chips-de-prosciutto-69e9ee82b2918f341e7b1e48",
+    "title" => "Pasta salad aux légumes grillés, chips de prosciutto et grana padano",
+    "tags" => [ "porc" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "2 pièce(s) Poivron",
+      "1 pièce(s) Courgette",
+      "1 pièce(s) Gousse d'ail",
+      "1 sachet(s) Origan séché",
+      "180 g Farfalle tricolores",
+      "½ sachet(s) Basilic",
+      "75 g Prosciutto crudo",
+      "50 g Sarasson aux herbes",
+      "1 sachet(s) Aïoli",
+      "1 sachet(s) Copeaux de grana padano AOP",
+      "1 cs Huile d'olive",
+      "1 cc Vinaigre balsamique blanc ou de riz",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Cuire les farfalle selon les indications de l'emballage, égoutter et laisser refroidir.",
+      "Couper le poivron et la courgette en morceaux, les faire revenir dans l'huile d'olive avec l'ail émincé et l'origan séché jusqu'à ce qu'ils soient tendres et légèrement dorés.",
+      "Faire griller les tranches de prosciutto à sec à la poêle jusqu'à ce qu'elles soient croustillantes, puis les émietter en chips.",
+      "Mélanger les pâtes froides avec les légumes, le sarasson aux herbes et le basilic ciselé, assaisonner avec le vinaigre balsamique.",
+      "Ajouter l'aïoli pour lier légèrement la salade.",
+      "Parsemer de copeaux de grana padano et de chips de prosciutto avant de servir."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/udon-salade-dinde-a-la-thai-and-cacahuetes-69e9ee46a777d4c0e74a79a9",
+    "title" => "Salade udon à la dinde façon thaï et cacahuètes",
+    "tags" => [ "dinde" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Gousse d'ail",
+      "½ pièce(s) Citron",
+      "1 paquet(s) Dés de filet de dinde",
+      "1 sachet(s) Sauce asiatique sucrée",
+      "1 sachet(s) Sauce soja",
+      "½ sachet(s) Purée de gingembre",
+      "220 g Nouilles udon fraîches",
+      "1 pièce(s) Carotte",
+      "1 pièce(s) Mini concombre / Concombre",
+      "1 sachet(s) Cacahuètes non salées",
+      "⅓ pièce(s) Piment",
+      "1 cs Huile de tournesol",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Cuire les nouilles udon selon les indications de l'emballage, égoutter et rincer à l'eau froide.",
+      "Assaisonner les dés de dinde avec l'ail écrasé et la purée de gingembre, les faire revenir dans l'huile de tournesol jusqu'à ce qu'ils soient bien cuits et dorés.",
+      "Râper la carotte, couper le concombre en fines lamelles, émincer le piment.",
+      "Mélanger la sauce asiatique sucrée, la sauce soja et un filet de jus de citron pour la sauce.",
+      "Mélanger les nouilles avec les crudités, la sauce et la dinde tiède.",
+      "Parsemer de cacahuètes concassées et de piment avant de servir."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/curry-de-poulet-and-legumes-dete-69e9ee48b2918f341e7b1d4c",
+    "title" => "Curry de poulet et légumes d'été au lait de coco",
+    "tags" => [ "poulet" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "150 g Riz",
+      "1 pièce(s) Gousse d'ail",
+      "1 cm Gingembre frais",
+      "1 pièce(s) Courgette",
+      "1 sachet(s) Curry en poudre",
+      "1 paquet(s) Lait de coco",
+      "1 sachet(s) Sauce asiatique sucrée",
+      "2 pièce(s) Tomate",
+      "½ pièce(s) Citron",
+      "1 paquet(s) Blanc de poulet",
+      "1 cs Huile de tournesol",
+      "1 cs Vinaigre balsamique blanc ou de riz",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Cuire le riz selon les indications de l'emballage.",
+      "Émincer l'ail, râper le gingembre, couper la courgette en morceaux et les tomates en dés.",
+      "Couper le blanc de poulet en morceaux, le faire dorer dans l'huile de tournesol quelques minutes.",
+      "Ajouter l'ail, le gingembre et le curry en poudre, faire revenir 1 minute.",
+      "Ajouter la courgette, les tomates, le lait de coco et la sauce asiatique sucrée, laisser mijoter 10 à 12 minutes jusqu'à ce que le poulet soit bien cuit et les légumes tendres.",
+      "Ajouter un filet de jus de citron et de vinaigre, servir avec le riz."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/spaghetti-complets-porc-hache-fenouil-and-basilic-69e9ee4cb2918f341e7b1d68",
+    "title" => "Spaghetti au porc haché, fenouil et basilic, parmigiano et mascarpone",
+    "tags" => [ "porc" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "180 g Spaghetti complets",
+      "1 pièce(s) Oignon",
+      "1 pièce(s) Gousse d'ail",
+      "1 pièce(s) Fenouil",
+      "1 paquet(s) Chair à saucisse",
+      "½ sachet(s) Basilic",
+      "1 pièce(s) Parmigiano Reggiano AOP",
+      "1 pot(s) Mascarpone",
+      "1 pot(s) Crème de basilic",
+      "75 ml Bouillon de volaille",
+      "4 cs Huile d'olive",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Cuire les spaghetti dans une grande casserole d'eau bouillante salée selon le temps indiqué sur l'emballage, égoutter.",
+      "Émincer l'oignon, l'ail et le fenouil, les faire revenir dans l'huile d'olive quelques minutes.",
+      "Ajouter la chair à saucisse émiettée, faire dorer en écrasant à la fourchette.",
+      "Ajouter le bouillon de volaille et laisser mijoter quelques minutes, puis incorporer le mascarpone et la crème de basilic.",
+      "Mélanger les pâtes égouttées à la sauce, ajouter le basilic ciselé.",
+      "Parsemer de copeaux de parmigiano reggiano avant de servir."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/filet-de-barramundi-a-lorientale-and-legumes-rotis-69c640d91f98ec4533c595bc",
+    "title" => "Lieu à l'orientale, sauce yaourt et légumes, semoule à la menthe",
+    "tags" => [ "poisson" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 sachet(s) Mélange d'épices du Moyen-Orient",
+      "240 g Filet de lieu noir",
+      "1 pièce(s) Gousse d'ail",
+      "1 pièce(s) Oignon",
+      "2 pièce(s) Tomate",
+      "1 pièce(s) Courgette",
+      "1 sachet(s) Coriandre et menthe",
+      "1 pot(s) Yaourt à la grecque",
+      "150 g Semoule",
+      "½ sachet(s) Raisins secs Sultanines",
+      "2 cs Huile d'olive",
+      "200 ml Bouillon de légumes",
+      "1 cc Beurre",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Préparer la semoule avec le bouillon de légumes chaud selon les indications de l'emballage, laisser gonfler puis égrainer à la fourchette.",
+      "Émincer l'oignon et l'ail, couper la courgette en dés et les tomates en quartiers.",
+      "Faire revenir l'oignon, l'ail et la courgette dans l'huile d'olive quelques minutes, ajouter les tomates et le mélange d'épices du Moyen-Orient.",
+      "Assaisonner les filets de lieu noir, les cuire à la poêle avec une noisette de beurre 3 à 4 minutes de chaque côté.",
+      "Mélanger le yaourt à la grecque avec la coriandre et la menthe ciselées et les raisins secs pour la sauce.",
+      "Dresser le poisson sur la semoule avec les légumes, napper de sauce yaourt à la menthe."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/whoogys-lieu-croustillant-sauce-tartare-a-laneth-69d9019b6bb16e39e1b7e960",
+    "title" => "Lieu croustillant, sauce tartare à l'aneth, haricots verts et pommes de terre",
+    "tags" => [ "poisson" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 sachet(s) Haricots verts",
+      "500 g Pommes de terre",
+      "½ pièce(s) Citron",
+      "1 pièce(s) Gousse d'ail",
+      "50 g Chapelure panko",
+      "240 g Filet de lieu noir",
+      "1 sachet(s) Aneth et ciboulette",
+      "1 sachet(s) Câpres",
+      "½ pièce(s) Échalote",
+      "1 sachet(s) Mayonnaise",
+      "1 pot(s) Yaourt à la grecque",
+      "2 cs Huile d'olive",
+      "2 cs Farine",
+      "1 pièce(s) Œuf",
+      "4 cs Huile de tournesol",
+      "1 cc Vinaigre de vin blanc",
+      "1 cc Moutarde",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Préchauffer le four à 200°C. Couper les pommes de terre en quartiers, les enfourner avec un filet d'huile d'olive, du sel et du poivre, 25 à 30 minutes.",
+      "Cuire les haricots verts à l'eau bouillante salée 5 à 6 minutes, égoutter, assaisonner d'un filet de jus de citron et d'huile d'olive.",
+      "Préparer trois assiettes : une avec la farine, une avec l'œuf battu, une avec la chapelure panko. Enrober les filets de lieu noir successivement de farine, d'œuf puis de panko.",
+      "Faire dorer le poisson pané à la poêle dans l'huile de tournesol quelques minutes de chaque côté jusqu'à ce qu'il soit doré et cuit.",
+      "Émincer l'échalote, la mélanger avec la mayonnaise, le yaourt à la grecque, les câpres hachées, l'aneth ciselé, la moutarde et le vinaigre pour la sauce tartare.",
+      "Servir le poisson pané avec les pommes de terre, les haricots verts et la sauce tartare."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/bruschetta-au-confit-de-canard-and-nectarines-69de49a44af8f3547a643686",
+    "title" => "Bruschetta au confit de canard, nectarines et mascarpone aux herbes de Provence",
+    "tags" => [ "canard" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 pièce(s) Tomate",
+      "2 pièce(s) Confit de canard",
+      "½ pièce(s) Échalote",
+      "1 pièce(s) Nectarine",
+      "3 tranche(s) Pain de campagne tranché",
+      "1 pot(s) Mascarpone",
+      "⅔ sachet(s) Herbes de Provence",
+      "1 sachet(s) Salade",
+      "2 cs Huile d'olive",
+      "1 cs Beurre",
+      "2 cs Miel",
+      "4 cs Vinaigre balsamique noir",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Faire réchauffer le confit de canard à la poêle jusqu'à ce que la peau soit bien dorée et croustillante, puis effilocher la chair.",
+      "Faire griller les tranches de pain de campagne.",
+      "Émincer l'échalote, couper la nectarine et la tomate en petits morceaux.",
+      "Mélanger le mascarpone avec les herbes de Provence, du sel et du poivre.",
+      "Tartiner le pain grillé de mascarpone aux herbes, garnir de canard effiloché, de nectarine, de tomate et d'échalote.",
+      "Arroser d'un filet de miel et de vinaigre balsamique, servir avec la salade."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/le-vege-burger-a-la-provencale-and-compotee-de-tomate-69c640bf1f98ec4533c5951a",
+    "title" => "Burger végétal aux tomates confites, grana padano et herbes de Provence",
+    "tags" => [ "vegetarien" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "500 g Pommes de terre",
+      "1 pièce(s) Oignon",
+      "1 pièce(s) Gousse d'ail",
+      "2 pièce(s) Tomate",
+      "⅔ sachet(s) Herbes de Provence",
+      "180 g Steak végétal",
+      "1 sachet(s) Copeaux de grana padano AOP",
+      "2 pièce(s) Pain burger",
+      "3 cs Huile d'olive",
+      "1 cc Sucre",
+      "1 cs Vinaigre balsamique noir",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Couper les pommes de terre en frites, les cuire au four ou à la poêle avec de l'huile d'olive jusqu'à ce qu'elles soient dorées.",
+      "Émincer l'oignon et l'ail, couper les tomates en dés, les faire mijoter dans l'huile d'olive avec les herbes de Provence et le sucre 10 à 12 minutes jusqu'à obtenir une compotée.",
+      "Faire cuire le steak végétal à la poêle selon les indications de l'emballage.",
+      "Faire griller légèrement les pains burger.",
+      "Garnir le pain de steak végétal, de compotée de tomates et de copeaux de grana padano.",
+      "Servir le burger avec les frites maison."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/burger-a-la-provencale-and-compotee-de-tomate-69c640c09bc4efe70fc53f0b",
+    "title" => "Burger de bœuf aux tomates confites, grana padano et herbes de Provence",
+    "tags" => [ "boeuf" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "500 g Pommes de terre",
+      "1 pièce(s) Oignon",
+      "1 pièce(s) Gousse d'ail",
+      "2 pièce(s) Tomate",
+      "⅔ sachet(s) Herbes de Provence",
+      "1 paquet(s) Viande hachée au bœuf",
+      "1 sachet(s) Copeaux de grana padano AOP",
+      "2 pièce(s) Pain burger",
+      "3 cs Huile d'olive",
+      "1 cc Sucre",
+      "1 cs Vinaigre balsamique noir",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Couper les pommes de terre en frites, les cuire au four ou à la poêle avec de l'huile d'olive jusqu'à ce qu'elles soient dorées.",
+      "Émincer l'oignon et l'ail, couper les tomates en dés, les faire mijoter dans l'huile d'olive avec les herbes de Provence et le sucre 10 à 12 minutes jusqu'à obtenir une compotée.",
+      "Façonner la viande hachée de bœuf en steaks, assaisonner de sel et de poivre, les cuire à la poêle quelques minutes de chaque côté selon la cuisson désirée.",
+      "Faire griller légèrement les pains burger.",
+      "Garnir le pain de steak de bœuf, de compotée de tomates et de copeaux de grana padano.",
+      "Servir le burger avec les frites maison."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/market/citronnade-myrtille-basilic-69cbf9d62898d990f0341d83",
+    "title" => "Mocktail citron, myrtille et basilic",
+    "tags" => [ "boisson" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "4 pièce(s) Citron",
+      "125 g Myrtilles",
+      "1 sachet(s) Basilic",
+      "6 cs Sucre",
+      "1000 ml Eau"
+    ],
+    "steps" => [
+      "Presser les citrons pour en extraire le jus.",
+      "Écraser légèrement une partie des myrtilles à la fourchette pour libérer leur jus.",
+      "Mélanger le jus de citron, les myrtilles écrasées et entières, le sucre et l'eau dans un pichet, remuer jusqu'à dissolution du sucre.",
+      "Froisser les feuilles de basilic entre les doigts pour libérer leur parfum, les ajouter au pichet.",
+      "Réfrigérer au moins 30 minutes et servir bien frais avec des glaçons."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/soiree-tapas-gazpacho-and-patatas-bravas-au-chorizo-69dd015ef5f8c44da2d0fd6e",
+    "title" => "Gazpacho et patatas bravas au chorizo, sauces aïoli et harissa",
+    "tags" => [ "porc" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "500 g Pommes de terre",
+      "1 pièce(s) Gousse d'ail",
+      "1 sachet(s) Dés de chorizo",
+      "½ pièce(s) Échalote",
+      "1 pièce(s) Poivron",
+      "1 pièce(s) Mini concombre / Concombre",
+      "1 pièce(s) Tomate côtelée",
+      "2 pièce(s) Tomate",
+      "1 sachet(s) Basilic",
+      "1 pot(s) Harissa",
+      "1 sachet(s) Aïoli",
+      "2 cc Vinaigre de vin rouge ou de cidre",
+      "4 cs Huile d'olive",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Préchauffer le four à 220°C. Couper les pommes de terre en dés, les enfourner avec un filet d'huile d'olive, du sel et du poivre, 25 à 30 minutes jusqu'à ce qu'elles soient dorées.",
+      "Mixer le concombre, la tomate côtelée, l'échalote, l'ail, le basilic et un filet d'huile d'olive avec un peu d'eau jusqu'à obtenir une texture lisse ; saler, poivrer et réserver au frais pour le gazpacho.",
+      "Émincer le poivron, le faire revenir dans l'huile d'olive avec les dés de chorizo quelques minutes jusqu'à ce que le chorizo ait coloré la poêle.",
+      "Couper les tomates restantes en dés, ajouter au poivron et au chorizo, ajouter le vinaigre, laisser mijoter quelques minutes pour la sauce des patatas bravas.",
+      "Mélanger l'aïoli avec un peu de harissa pour obtenir une sauce piquante à part.",
+      "Servir les patatas bravas nappées de sauce chorizo, le gazpacho glacé et les sauces aïoli-harissa à côté."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/dinde-sauce-pecorino-comme-au-bistrot-69d8b6f26bb16e39e1b7ddd2",
+    "title" => "Escalope de dinde, sauce à l'avoine et au pecorino, purée et salade de tomate",
+    "tags" => [ "dinde" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "500 g Pommes de terre",
+      "1 pièce(s) Tomate",
+      "1 pièce(s) Échalote",
+      "1 pièce(s) Gousse d'ail",
+      "1 pièce(s) Sucrine",
+      "240 g Escalope de dinde",
+      "⅔ paquet(s) Avoine cuisine",
+      "1 sachet(s) Pecorino Romano AOP râpé",
+      "⅔ sachet(s) Herbes de Provence",
+      "2 cs Beurre",
+      "1 cs Huile d'olive",
+      "1 cc Vinaigre balsamique noir",
+      "1 cs Vinaigre balsamique blanc ou de riz",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Couper les pommes de terre en morceaux, les cuire à l'eau bouillante salée 15 à 18 minutes, égoutter et écraser en purée avec un peu de beurre, du sel et du poivre.",
+      "Émincer l'échalote et l'ail, les faire revenir dans l'huile d'olive.",
+      "Assaisonner les escalopes de dinde avec les herbes de Provence, du sel et du poivre, les cuire à la poêle avec un peu de beurre 3 à 4 minutes de chaque côté.",
+      "Ajouter l'avoine cuisine et le pecorino râpé dans la poêle avec l'échalote, laisser épaissir légèrement pour la sauce.",
+      "Couper la tomate en quartiers et émincer la sucrine, assaisonner avec l'huile d'olive et le vinaigre balsamique.",
+      "Dresser la dinde nappée de sauce avec la purée et la salade de tomate."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/market/tzatziki-maison-69cbf9f42898d990f0341d9f",
+    "title" => "Tzatziki maison au concombre et à l'aneth",
+    "tags" => [ "vegetarien" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "1 sachet(s) Aneth",
+      "1 pièce(s) Citron",
+      "1 pièce(s) Gousse d'ail",
+      "1 pièce(s) Mini concombre / Concombre",
+      "2 pot(s) Yaourt à la grecque",
+      "2 cs Huile d'olive",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Râper le concombre, presser entre les mains ou dans un torchon pour bien l'égoutter de son eau.",
+      "Émincer ou écraser l'ail, ciseler l'aneth.",
+      "Mélanger le yaourt à la grecque avec le concombre égoutté, l'ail, l'aneth, un filet de jus de citron et d'huile d'olive.",
+      "Saler et poivrer, mélanger de nouveau.",
+      "Réserver au frais au moins 15 minutes avant de servir pour que les saveurs se développent."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/crevettes-sautees-sauce-coco-cacahuete-and-riz-69d901e56bb16e39e1b7eb08",
+    "title" => "Crevettes sautées, sauce coco-cacahuète et riz à la coriandre",
+    "tags" => [ "fruits_de_mer" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "2 pièce(s) Carotte",
+      "1 pièce(s) Gousse d'ail",
+      "1 cm Gingembre frais",
+      "25 g Oignon nouveau",
+      "1 sachet(s) Coriandre",
+      "½ pièce(s) Citron",
+      "150 g Riz",
+      "1 paquet(s) Crevettes",
+      "2 pot(s) Beurre de cacahuètes",
+      "⅔ paquet(s) Lait de coco",
+      "1 sachet(s) Cacahuètes non salées",
+      "300 ml Bouillon de légumes",
+      "2 cs Vinaigre balsamique blanc ou de riz",
+      "1 cs Beurre",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Cuire le riz dans le bouillon de légumes selon les indications de l'emballage.",
+      "Râper les carottes, émincer l'ail et l'oignon nouveau, râper le gingembre, ciseler la coriandre.",
+      "Faire revenir l'ail, le gingembre et les carottes dans un peu de beurre quelques minutes.",
+      "Ajouter le lait de coco et le beurre de cacahuètes, laisser mijoter en remuant jusqu'à obtenir une sauce onctueuse.",
+      "Ajouter les crevettes, cuire 3 à 4 minutes jusqu'à ce qu'elles soient roses, ajouter un filet de jus de citron et le vinaigre.",
+      "Dresser les crevettes et la sauce sur le riz, parsemer de coriandre, d'oignon nouveau et de cacahuètes concassées."
+    ]
+  },
+  {
+    "source_url" => "https://www.hellofresh.fr/recipes/courgette-farcie-au-boeuf-hache-a-la-mexicaine-69d901eedefeabaeea861701",
+    "title" => "Courgette farcie au bœuf haché à la mexicaine, fromage râpé et salade",
+    "tags" => [ "boeuf" ],
+    "servings" => 2,
+    "prep_time_minutes" => nil,
+    "cook_time_minutes" => nil,
+    "ingredients" => [
+      "150 g Riz",
+      "1 pièce(s) Gousse d'ail",
+      "1 pièce(s) Oignon",
+      "2 pièce(s) Courgette",
+      "1 sachet(s) Concentré de tomates",
+      "1 paquet(s) Viande hachée au bœuf",
+      "⅔ sachet(s) Épices mexicaines",
+      "1 sachet(s) Fromage râpé à l'italienne",
+      "1 sachet(s) Salade",
+      "175 ml Bouillon de légumes",
+      "2 cs Huile d'olive",
+      "1 cs Vinaigre balsamique noir",
+      "1 cc Moutarde",
+      "selon le goût Poivre et sel"
+    ],
+    "steps" => [
+      "Préchauffer le four à 200°C. Couper les courgettes en deux dans la longueur, évider légèrement la chair pour former des barquettes.",
+      "Cuire le riz selon les indications de l'emballage.",
+      "Émincer l'oignon et l'ail, les faire revenir dans l'huile d'olive, ajouter la viande hachée de bœuf et les épices mexicaines, faire dorer en émiettant à la fourchette.",
+      "Ajouter le concentré de tomates et le bouillon de légumes, laisser mijoter quelques minutes, puis incorporer le riz cuit.",
+      "Garnir les barquettes de courgette de cette farce, parsemer de fromage râpé, enfourner 20 à 25 minutes jusqu'à ce que les courgettes soient tendres et le fromage doré.",
+      "Assaisonner la salade avec l'huile d'olive et le vinaigre balsamique, servir avec les courgettes farcies."
+    ]
   }
 ].freeze
 
