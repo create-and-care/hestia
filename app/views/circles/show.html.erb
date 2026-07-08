@@ -1,7 +1,7 @@
 <% content_for :title, @circle.name %>
 <%= turbo_stream_from @circle %>
 
-<div class="mx-auto mt-10 max-w-2xl px-4">
+<div class="mt-10 px-4">
   <header class="mb-4">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("users", css_class: "size-6") %> <%= @circle.name %></h1>
     <p class="text-sm text-gray-500">
