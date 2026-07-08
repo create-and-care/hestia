@@ -5,6 +5,8 @@
 <%= turbo_stream_from Current.household, "cave" %>
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
+  <div class="mb-4"><%= module_breadcrumb(:wine_cellar) %></div>
+
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="text-2xl font-semibold">🍷 <%= t(".title") %></h1>
     <%= form_with url: wine_cellars_path, method: :get do |form| %>
@@ -52,5 +54,4 @@
     <% end %>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

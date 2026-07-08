@@ -2,6 +2,8 @@
 <%= turbo_stream_from Current.household %>
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
+  <div class="mb-4"><%= module_breadcrumb(:service_providers) %></div>
+
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="text-2xl font-semibold">🧰 <%= t(".title") %></h1>
     <div class="flex items-center gap-2">
@@ -39,5 +41,4 @@
     <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".none") %></p>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

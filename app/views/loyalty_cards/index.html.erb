@@ -2,6 +2,8 @@
 <%= turbo_stream_from Current.household %>
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
+  <div class="mb-4"><%= module_breadcrumb(:loyalty) %></div>
+
   <header class="mb-6 flex items-center justify-between">
     <h1 class="text-2xl font-semibold">💳 <%= t(".heading") %></h1>
     <%= link_to t(".new_card"), new_loyalty_card_path,
@@ -18,5 +20,4 @@
     <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".none") %></p>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

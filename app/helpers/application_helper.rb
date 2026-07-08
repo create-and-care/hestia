@@ -9,4 +9,15 @@ module ApplicationHelper
   rescue URI::InvalidURIError
     nil
   end
+
+  # Standard "Dashboard / Module" breadcrumb shown above every module view,
+  # reusing dashboard.show.nav.* so a module's display name has one source of
+  # truth (SidebarHelper::SIDEBAR_GROUPS). Pass extra [label, path] pairs for
+  # sub-pages between the module and the current page (path nil = current).
+  def module_breadcrumb(nav_key, *extra_items, module_path: nil)
+    items = [ [ t("common.dashboard"), root_path ] ]
+    items << [ t("dashboard.show.nav.#{nav_key}"), extra_items.empty? ? nil : module_path ]
+    items.concat(extra_items)
+    render Ui::BreadcrumbComponent.new(items: items)
+  end
 end

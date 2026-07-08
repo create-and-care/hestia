@@ -1,6 +1,8 @@
 <% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-2xl px-4">
+  <div class="mb-4"><%= module_breadcrumb(:gifts) %></div>
+
   <h1 class="mb-6 text-2xl font-semibold">🎁 <%= t(".title") %></h1>
 
   <%= render "shared/flash" %>
@@ -41,5 +43,4 @@
     <% end %>
   </section>
 
-  <p class="mt-6 text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>

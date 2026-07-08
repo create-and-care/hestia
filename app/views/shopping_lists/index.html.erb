@@ -1,6 +1,8 @@
 <% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-3xl px-4">
+  <div class="mb-4"><%= module_breadcrumb(:shopping) %></div>
+
   <header class="mb-6 flex items-center justify-between">
     <h1 class="text-2xl font-semibold"><%= t(".heading") %></h1>
     <%= link_to t(".new_list"), new_shopping_list_path,
@@ -28,7 +30,6 @@
   <% end %>
 
   <div class="mt-6 flex gap-4 text-sm">
-    <%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %>
     <%= link_to t(".catalog_link"), products_path, class: "underline" %>
   </div>
 </div>

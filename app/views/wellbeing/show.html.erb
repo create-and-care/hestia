@@ -1,6 +1,8 @@
 <% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-2xl px-4">
+  <div class="mb-4"><%= module_breadcrumb(:wellbeing) %></div>
+
   <h1 class="mb-1 text-2xl font-semibold">🧘 <%= t(".title") %></h1>
   <p class="mb-6 text-xs text-gray-400"><%= t(".privacy_note") %></p>
 
@@ -57,5 +59,4 @@
     <% end %>
   </section>
 
-  <p class="text-sm"><%= link_to t("common.back_to_dashboard"), root_path, class: "underline" %></p>
 </div>
