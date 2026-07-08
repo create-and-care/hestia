@@ -11,7 +11,9 @@ class RecipeCatalogTest < ApplicationSystemTestCase
     visit recipe_catalog_path
     assert_text recipe_catalog_entries(:carbonara).title
 
-    click_on "Add to my book"
+    within "##{ActionView::RecordIdentifier.dom_id(recipe_catalog_entries(:carbonara), :catalog)}" do
+      click_on "Add to my book"
+    end
     assert_text recipe_catalog_entries(:carbonara).title
     assert_text "Faire cuire les pâtes."
 
