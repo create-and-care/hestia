@@ -23,7 +23,7 @@ module DesignSystemRegistry
       %i[VARIANTS SIZES].filter_map do |const|
         next unless component_class.const_defined?(const, false)
 
-        [const.to_s.downcase, component_class.const_get(const).keys]
+        [ const.to_s.downcase, component_class.const_get(const).keys ]
       end.to_h
     end
 
