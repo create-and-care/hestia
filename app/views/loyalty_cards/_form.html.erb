@@ -1,35 +1,57 @@
 <%= form_with model: card, url: url, data: { controller: "loyalty-brand" } do |form| %>
   <% if card.errors.any? %>
-    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
       <ul class="list-inside list-disc">
         <% card.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
       </ul>
-    </div>
+    <% end %>
   <% end %>
 
   <div class="space-y-4">
-    <div>
-      <%= form.label :loyalty_brand_id, t(".brand_label"), class: "mb-1 block text-sm font-medium" %>
-      <% brand_options = LoyaltyBrand.ordered.map { |b| [ "#{b.logo_emoji} #{b.name}".strip, b.id, { data: { name: b.name, format: b.code_format } } ] } %>
-      <%= form.select :loyalty_brand_id, options_for_select(brand_options, card.loyalty_brand_id),
-            { include_blank: t(".no_brand") },
-            class: "w-full rounded-md border border-gray-300 px-3 py-2",
-            data: { loyalty_brand_target: "select", action: "change->loyalty-brand#apply" } %>
-    </div>
-    <div>
-      <%= form.label :name, t(".name_label"), class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_field :name, required: true, placeholder: t(".name_placeholder"),
-            data: { loyalty_brand_target: "name" }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-    </div>
-    <div>
-      <%= form.label :number, t(".number_label"), class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_field :number, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2 font-mono" %>
-    </div>
-    <div>
-      <%= form.label :code_format, t(".format_label"), class: "mb-1 block text-sm font-medium" %>
-      <%= form.select :code_format, [ [ t(".barcode_option"), "barcode" ], [ t(".qrcode_option"), "qrcode" ] ], {},
-            data: { loyalty_brand_target: "format" }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-    </div>
-    <%= form.submit t(".save"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <%= render(Ui::FieldComponent.new(id: "loyalty_card_loyalty_brand_id")) do |field| %>
+      <% field.with_label { t(".brand_label") } %>
+      <% field.with_control do %>
+        <%
+          # The brand <option>s carry data-name/data-format read by the loyalty-brand Stimulus
+          # controller (app/javascript/controllers/loyalty_brand_controller.js) to pre-fill the
+          # name/format fields below — Ui::NativeSelectComponent has no per-option data-attribute
+          # support, so this <select> stays hand-rolled (styled to match the component's look).
+          brand_options = LoyaltyBrand.ordered.map { |b| [ "#{b.logo_emoji} #{b.name}".strip, b.id, { data: { name: b.name, format: b.code_format } } ] }
+        %>
+        <%= form.select :loyalty_brand_id, options_for_select(brand_options, card.loyalty_brand_id),
+              { include_blank: t(".no_brand") },
+              id: "loyalty_card_loyalty_brand_id",
+              class: "flex h-9 w-full appearance-none rounded-md border border-primary bg-container px-3 text-sm text-primary focus-visible:outline-none focus-visible:ring-focus disabled:opacity-50",
+              data: { loyalty_brand_target: "select", action: "change->loyalty-brand#apply" } %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: "loyalty_card_name")) do |field| %>
+      <% field.with_label { t(".name_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::InputComponent.new(name: "loyalty_card[name]", value: card.name, placeholder: t(".name_placeholder"),
+              html_options: { id: "loyalty_card_name", required: true, data: { loyalty_brand_target: "name" } }) %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: "loyalty_card_number")) do |field| %>
+      <% field.with_label { t(".number_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::InputComponent.new(name: "loyalty_card[number]", value: card.number,
+              html_options: { id: "loyalty_card_number", required: true, class: "font-mono" }) %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: "loyalty_card_code_format")) do |field| %>
+      <% field.with_label { t(".format_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::NativeSelectComponent.new(name: "loyalty_card[code_format]",
+              options: [ [ t(".barcode_option"), "barcode" ], [ t(".qrcode_option"), "qrcode" ] ],
+              selected: card.code_format,
+              html_options: { id: "loyalty_card_code_format", data: { loyalty_brand_target: "format" } }) %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".save") } %>
   </div>
 <% end %>

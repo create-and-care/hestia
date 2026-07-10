@@ -33,7 +33,9 @@ module Ui
       )
 
       if @href
-        link_to @href, **@html_options, class: cn(classes, @html_options[:class])
+        link_to @href, **@html_options, class: cn(classes, @html_options[:class]) do
+          content
+        end
       else
         content_tag :button, type: @type, disabled: @disabled, **@html_options, class: cn(classes, @html_options[:class]) do
           content

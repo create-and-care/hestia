@@ -8,10 +8,10 @@
         <%= [ vehicle_type_label(@vehicle.vehicle_type), @vehicle.manufacturer, @vehicle.plate, @vehicle.year, @vehicle.energy ].reject(&:blank?).join(" · ") %>
       </p>
       <p class="mt-2">
-        <span class="rounded-full px-2 py-0.5 text-xs font-medium <%= inspection_badge_class(@vehicle.inspection_status) %>">
+        <%= render(Ui::BadgeComponent.new(variant: inspection_badge_variant(@vehicle.inspection_status))) do %>
           <%= t(".inspection_prefix") %> <%= inspection_label(@vehicle.inspection_status) %>
           <% if @vehicle.inspection_expires_on %> (<%= @vehicle.inspection_expires_on.strftime("%d/%m/%Y") %>)<% end %>
-        </span>
+        <% end %>
       </p>
     </div>
     <div class="flex gap-2 text-sm">
@@ -25,27 +25,33 @@
 
   <section class="mt-6">
     <h2 class="mb-2 font-medium"><%= t(".maintenance_history") %></h2>
-    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @vehicle.vehicle_maintenance_entries.chronological.each do |entry| %>
-        <li class="flex items-center justify-between px-3 py-2 text-sm">
-          <span>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_title do %>
             <span class="font-medium"><%= entry.entry_type %></span>
             <% if entry.done_on %><span class="text-gray-400">· <%= entry.done_on.strftime("%d/%m/%Y") %></span><% end %>
             <% if entry.cost %><span class="text-gray-400">· <%= entry.cost %> €</span><% end %>
             <% if entry.provider.present? %><span class="text-gray-400">· <%= entry.provider %></span><% end %>
             <% if entry.description.present? %><span class="block text-gray-500"><%= entry.description %></span><% end %>
-          </span>
-          <%= button_to vehicle_maintenance_entry_path(@vehicle, entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-        </li>
+          <% end %>
+          <% item.with_trailing do %>
+            <%= button_to vehicle_maintenance_entry_path(@vehicle, entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+          <% end %>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
 
     <%= form_with model: @entry, url: vehicle_maintenance_entries_path(@vehicle), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :entry_type, required: true, placeholder: t(".entry_type_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.date_field :done_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.number_field :cost, step: :any, placeholder: "€", class: "w-20 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :provider, placeholder: t(".provider_placeholder"), class: "w-28 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(type: "text", name: "vehicle_maintenance_entry[entry_type]", value: @entry.entry_type, placeholder: t(".entry_type_placeholder"),
+            html_options: { id: "vehicle_maintenance_entry_entry_type", required: true, class: "flex-1" }) %>
+      <%= render Ui::InputComponent.new(type: "date", name: "vehicle_maintenance_entry[done_on]", value: @entry.done_on,
+            html_options: { id: "vehicle_maintenance_entry_done_on" }) %>
+      <%= render Ui::InputComponent.new(type: "number", name: "vehicle_maintenance_entry[cost]", value: @entry.cost, placeholder: "€",
+            html_options: { id: "vehicle_maintenance_entry_cost", step: "any", class: "w-20" }) %>
+      <%= render Ui::InputComponent.new(type: "text", name: "vehicle_maintenance_entry[provider]", value: @entry.provider, placeholder: t(".provider_placeholder"),
+            html_options: { id: "vehicle_maintenance_entry_provider", class: "w-28" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 

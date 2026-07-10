@@ -1,0 +1,4 @@
+<%= render(Ui::PopoverComponent.new) do |popover| %>
+  <% popover.with_trigger { render(Ui::ButtonComponent.new(variant: :outline)) { "Open popover" } } %>
+  Place content for the popover here.
+<% end %>

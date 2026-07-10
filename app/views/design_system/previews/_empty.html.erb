@@ -1,0 +1,7 @@
+<div class="w-full">
+  <%= render(Ui::EmptyComponent.new) do |empty| %>
+    <% empty.with_title { "No transactions yet" } %>
+    <% empty.with_description { "Connect a bank account to start tracking your spending." } %>
+    <% empty.with_action { render(Ui::ButtonComponent.new) { "Connect account" } } %>
+  <% end %>
+</div>

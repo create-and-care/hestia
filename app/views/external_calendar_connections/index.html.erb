@@ -8,29 +8,37 @@
 
   <%= render "shared/flash" %>
 
-  <ul class="mb-6 divide-y divide-gray-100 rounded-lg border border-gray-200">
+  <div class="mb-6">
     <% if @connections.none? %>
-      <li class="px-4 py-6 text-center text-sm text-gray-400"><%= t(".empty") %></li>
-    <% end %>
-    <% @connections.each do |connection| %>
-      <li class="flex items-center justify-between px-4 py-3 text-sm">
-        <span>
-          <%= connection.provider.capitalize %>
-          <span class="text-gray-400">· <%= connection.active? ? t(".active") : t(".inactive") %></span>
-          <% if connection.last_synced_at %>
-            <span class="text-gray-400">· <%= t(".last_synced_at", time: l(connection.last_synced_at, format: :long)) %></span>
+      <%= render(Ui::EmptyComponent.new) do |empty| %>
+        <% empty.with_description { t(".empty") } %>
+      <% end %>
+    <% else %>
+      <div class="divide-y divide-gray-100 rounded-lg border border-gray-200 text-sm">
+        <% @connections.each do |connection| %>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title { connection.provider.capitalize } %>
+            <% if connection.last_synced_at %>
+              <% item.with_description { t(".last_synced_at", time: l(connection.last_synced_at, format: :long)) } %>
+            <% end %>
+            <% item.with_trailing do %>
+              <div class="flex items-center gap-2">
+                <%= render(Ui::BadgeComponent.new(variant: connection.active? ? :success : :secondary)) { connection.active? ? t(".active") : t(".inactive") } %>
+                <%= button_to t(".disconnect"), external_calendar_connection_path(connection), method: :delete,
+                      class: "cursor-pointer text-red-600 underline" %>
+              </div>
+            <% end %>
           <% end %>
-        </span>
-        <%= button_to t(".disconnect"), external_calendar_connection_path(connection), method: :delete,
-              class: "cursor-pointer text-red-600 underline" %>
-      </li>
+        <% end %>
+      </div>
     <% end %>
-  </ul>
+  </div>
 
   <div class="flex flex-wrap gap-2">
     <% ExternalCalendarConnection::PROVIDERS.each do |provider| %>
-      <%= link_to t(".connect_provider", provider: provider.capitalize), connect_external_calendar_connections_path(provider: provider),
-            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: connect_external_calendar_connections_path(provider: provider))) do %>
+        <%= t(".connect_provider", provider: provider.capitalize) %>
+      <% end %>
     <% end %>
   </div>
 

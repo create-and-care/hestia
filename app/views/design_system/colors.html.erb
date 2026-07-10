@@ -1,0 +1,79 @@
+<% content_for :title, "Couleurs — Design system — Hestia" %>
+
+<%= render(layout: "design_system/shell") do %>
+  <p class="text-xs font-medium text-subdued">Fondations</p>
+  <h1 class="mt-1 text-2xl font-semibold text-primary">Couleurs</h1>
+  <p class="mt-2 text-sm text-secondary max-w-prose">
+    Lu directement dans <code class="font-mono text-xs">application.tailwind.css</code> — rien n'est recopié à la main ici,
+    donc cette page ne peut pas se désynchroniser des tokens réels. Bascule le thème en haut à droite pour voir les
+    variantes sombres.
+  </p>
+
+  <div class="mt-10 space-y-8">
+    <% DesignTokens.raw_palette.each do |hue, shades| %>
+      <div>
+        <p class="text-sm font-medium text-primary capitalize"><%= hue %></p>
+        <div class="mt-2 flex gap-2 overflow-x-auto pb-1">
+          <% shades.each do |shade| %>
+            <div class="flex flex-col items-center gap-1 shrink-0">
+              <div class="size-11 rounded-md border border-subdued" style="background-color: var(--color-<%= hue %>-<%= shade %>)"></div>
+              <span class="font-mono text-[10px] text-subdued"><%= shade %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-12">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Tokens sémantiques</h2>
+    <p class="mt-2 text-xs text-secondary">Utilisés par Alert, Badge, Field (erreur), les liens…</p>
+    <div class="mt-3 flex flex-wrap gap-4">
+      <% DesignTokens::SEMANTIC_COLORS.each do |token| %>
+        <div class="flex flex-col items-center gap-1">
+          <div class="size-14 rounded-md border border-subdued" style="background-color: var(--color-<%= token %>)"></div>
+          <span class="font-mono text-[11px] text-secondary"><%= token %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Surfaces</h2>
+    <p class="mt-2 text-xs text-secondary">La structure de fond qui distingue page, carte et contenu imbriqué.</p>
+    <div class="mt-3 flex flex-wrap gap-4">
+      <% DesignTokens::SURFACE_COLORS.each do |token| %>
+        <div class="flex flex-col items-center gap-1">
+          <div class="size-14 rounded-md border border-subdued" style="background-color: var(--color-<%= token %>)"></div>
+          <span class="font-mono text-[11px] text-secondary"><%= token %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Ombres</h2>
+    <div class="mt-4 flex flex-wrap gap-6">
+      <% %w[xs sm md lg xl].each do |size| %>
+        <div class="flex flex-col items-center gap-2">
+          <div class="size-16 rounded-md bg-container" style="box-shadow: var(--shadow-<%= size %>)"></div>
+          <span class="font-mono text-[11px] text-secondary">shadow-<%= size %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Rayons</h2>
+    <div class="mt-4 flex flex-wrap gap-6">
+      <div class="flex flex-col items-center gap-2">
+        <div class="size-16 border border-primary bg-surface" style="border-radius: var(--radius-md)"></div>
+        <span class="font-mono text-[11px] text-secondary">rounded-md · 8px</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <div class="size-16 border border-primary bg-surface" style="border-radius: var(--radius-lg)"></div>
+        <span class="font-mono text-[11px] text-secondary">rounded-lg · 10px</span>
+      </div>
+    </div>
+  </div>
+<% end %>

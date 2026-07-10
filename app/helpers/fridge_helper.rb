@@ -1,11 +1,11 @@
 module FridgeHelper
-  # Expiration status → badge Tailwind classes (label comes from the fridge.expiration locale scope).
-  EXPIRATION_BADGE_CLASSES = {
-    expired: "bg-red-100 text-red-700",
-    urgent:  "bg-orange-100 text-orange-700",
-    soon:    "bg-yellow-100 text-yellow-800",
-    ok:      "bg-green-100 text-green-700",
-    none:    "bg-gray-100 text-gray-500"
+  # Expiration status → Ui::BadgeComponent variant (label comes from the fridge.expiration locale scope).
+  EXPIRATION_BADGE_VARIANTS = {
+    expired: :destructive,
+    urgent:  :warning,
+    soon:    :warning,
+    ok:      :success,
+    none:    :secondary
   }.freeze
 
   def location_label(location)
@@ -20,7 +20,7 @@ module FridgeHelper
     t("fridge.expiration.#{status}")
   end
 
-  def expiration_badge_class(status)
-    EXPIRATION_BADGE_CLASSES.fetch(status)
+  def expiration_badge_variant(status)
+    EXPIRATION_BADGE_VARIANTS.fetch(status)
   end
 end

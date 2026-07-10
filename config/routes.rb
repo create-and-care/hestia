@@ -260,6 +260,10 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   get "design-system", to: "design_system#index"
+  get "design-system/colors", to: "design_system#colors"
+  get "design-system/typography", to: "design_system#typography"
+  get "design-system/icons", to: "design_system#icons"
+  get "design-system/components/:id", to: "design_system#component", as: :design_system_component
 
   # Household dashboard (Spec §7).
   root "dashboard#show"

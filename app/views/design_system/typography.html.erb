@@ -1,0 +1,31 @@
+<% content_for :title, "Typographie — Design system — Hestia" %>
+
+<%= render(layout: "design_system/shell") do %>
+  <p class="text-xs font-medium text-subdued">Fondations</p>
+  <h1 class="mt-1 text-2xl font-semibold text-primary">Typographie</h1>
+  <p class="mt-2 text-sm text-secondary max-w-prose">
+    Une échelle par défaut pour le contenu texte, portée par <code class="font-mono text-xs">Ui::TypographyComponent</code>.
+    Les familles de police viennent de <code class="font-mono text-xs">--font-sans</code> (Geist) et
+    <code class="font-mono text-xs">--font-mono</code> (IBM Plex Mono).
+  </p>
+
+  <div class="mt-10">
+    <%= render(Ui::CodeBlockComponent.new(code: design_system_source("typography"))) do %>
+      <%= render "design_system/previews/typography" %>
+    <% end %>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Familles de police</h2>
+    <div class="mt-4 space-y-3">
+      <div class="flex items-baseline gap-4">
+        <span class="w-32 shrink-0 font-mono text-xs text-subdued">font-sans</span>
+        <span class="font-sans text-lg text-primary">Geist — Le lorem ipsum n'est pas nécessaire, ceci est du vrai texte.</span>
+      </div>
+      <div class="flex items-baseline gap-4">
+        <span class="w-32 shrink-0 font-mono text-xs text-subdued">font-mono</span>
+        <span class="font-mono text-lg text-primary">IBM Plex Mono — 12:04, €1 284,90</span>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,6 @@
+<%= render(Ui::SidebarComponent.new) do |sidebar| %>
+  <% sidebar.with_header { tag.span("Hestia", class: "font-semibold text-primary") } %>
+  <%= render(Ui::ItemComponent.new(href: "#")) { |item| item.with_title { "Dashboard" } } %>
+  <%= render(Ui::ItemComponent.new(href: "#")) { |item| item.with_title { "Budgets" } } %>
+  <%= render(Ui::ItemComponent.new(href: "#")) { |item| item.with_title { "Settings" } } %>
+<% end %>

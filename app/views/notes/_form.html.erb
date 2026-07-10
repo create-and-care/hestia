@@ -1,11 +1,11 @@
 <%= tag.div id: "new_note" do %>
   <%= form_with model: note, url: notes_path do |form| %>
-    <div class="space-y-2 rounded-lg border border-gray-200 p-3">
-      <%= form.text_field :title, required: true, placeholder: t(".title_placeholder"),
-            class: "w-full rounded-md border border-gray-300 px-3 py-2 font-medium" %>
-      <%= form.text_area :content, rows: 2, placeholder: t(".content_placeholder"),
-            class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
+    <div class="space-y-2 rounded-lg border border-primary p-3">
+      <%= render Ui::InputComponent.new(name: "note[title]", value: note.title, placeholder: t(".title_placeholder"),
+            html_options: { id: "note_title", required: true, class: "font-medium" }) %>
+      <%= render(Ui::TextareaComponent.new(name: "note[content]", rows: 2, placeholder: t(".content_placeholder"),
+            html_options: { id: "note_content" })) { note.content } %>
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
     </div>
   <% end %>
 <% end %>

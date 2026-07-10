@@ -1,19 +1,26 @@
-<%= tag.div id: dom_id(note), class: "flex flex-col rounded-lg border border-gray-200 p-4" do %>
-  <div class="mb-1 flex items-start justify-between gap-2">
-    <h2 class="flex items-center gap-1.5 font-medium"><%= lucide_icon("star", css_class: "size-4 fill-current text-amber-400") if note.favorite %><%= note.title %></h2>
-    <%= link_to edit_note_path(note), class: "shrink-0 text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
-  </div>
-  <% if note.content.present? %>
-    <p class="mb-3 line-clamp-4 whitespace-pre-line text-sm text-gray-600"><%= note.content %></p>
+<%
+  # Reconstructs Ui::ButtonComponent's variant: :outline, size: :sm classes (see
+  # app/components/ui/button_component.rb) — button_to's own <button> can't be wrapped in
+  # the component without producing an invalid nested <button>, so the class recipe is
+  # applied directly to keep all four action pills visually consistent.
+  action_pill_class = "inline-flex items-center rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-focus bg-transparent text-primary border border-primary hover:bg-button-outline-hover h-8 px-3 text-sm gap-1.5"
+%>
+<%= tag.div id: dom_id(note) do %>
+  <%= render(Ui::CardComponent.new) do %>
+    <div class="flex flex-col">
+      <div class="mb-1 flex items-start justify-between gap-2">
+        <h2 class="flex items-center gap-1.5 font-medium"><%= lucide_icon("star", css_class: "size-4 fill-current text-amber-400") if note.favorite %><%= note.title %></h2>
+        <%= link_to edit_note_path(note), class: "shrink-0 text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+      </div>
+      <% if note.content.present? %>
+        <p class="mb-3 line-clamp-4 whitespace-pre-line text-sm text-secondary"><%= note.content %></p>
+      <% end %>
+      <div class="mt-auto flex flex-wrap gap-2">
+        <%= button_to (note.favorite ? t(".unfavorite") : t(".favorite")), toggle_favorite_note_path(note), method: :patch, class: action_pill_class %>
+        <%= button_to (note.archived ? t(".unarchive") : t(".archive")), toggle_archive_note_path(note), method: :patch, class: action_pill_class %>
+        <%= button_to t(".promote_to_task"), promote_to_task_note_path(note), method: :post, class: action_pill_class %>
+        <%= button_to t(".delete"), note_path(note), method: :delete, class: action_pill_class %>
+      </div>
+    </div>
   <% end %>
-  <div class="mt-auto flex flex-wrap gap-2 text-xs">
-    <%= button_to (note.favorite ? t(".unfavorite") : t(".favorite")), toggle_favorite_note_path(note), method: :patch,
-          class: "cursor-pointer rounded border border-gray-300 px-2 py-1 hover:bg-gray-50" %>
-    <%= button_to (note.archived ? t(".unarchive") : t(".archive")), toggle_archive_note_path(note), method: :patch,
-          class: "cursor-pointer rounded border border-gray-300 px-2 py-1 hover:bg-gray-50" %>
-    <%= button_to t(".promote_to_task"), promote_to_task_note_path(note), method: :post,
-          class: "cursor-pointer rounded border border-gray-300 px-2 py-1 hover:bg-gray-50" %>
-    <%= button_to t(".delete"), note_path(note), method: :delete,
-          class: "cursor-pointer rounded border border-gray-300 px-2 py-1 text-red-600 hover:bg-red-50" %>
-  </div>
 <% end %>

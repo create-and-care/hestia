@@ -1,13 +1,17 @@
-<%= tag.div id: dom_id(loyalty_card), data: { sortable_id: loyalty_card.id },
-      class: "flex items-center justify-between gap-2 rounded-lg border border-gray-200 p-4" do %>
-  <span data-sortable-handle class="cursor-grab select-none text-gray-300 hover:text-gray-500" title="<%= t(".move") %>">⠿</span>
-  <%= link_to loyalty_card_path(loyalty_card), class: "min-w-0 flex-1" do %>
-    <p class="font-medium"><%= loyalty_card.name %></p>
-    <p class="truncate font-mono text-sm text-gray-500"><%= loyalty_card.number %></p>
+<%= tag.div id: dom_id(loyalty_card), data: { sortable_id: loyalty_card.id } do %>
+  <%= render(Ui::CardComponent.new) do %>
+    <div class="flex items-center justify-between gap-2">
+      <span data-sortable-handle class="cursor-grab select-none text-subdued hover:text-secondary" title="<%= t(".move") %>">⠿</span>
+      <%= link_to loyalty_card_path(loyalty_card), class: "min-w-0 flex-1" do %>
+        <p class="font-medium"><%= loyalty_card.name %></p>
+        <p class="truncate font-mono text-sm text-secondary"><%= loyalty_card.number %></p>
+      <% end %>
+      <div class="flex shrink-0 items-center gap-2 text-sm">
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: loyalty_card_path(loyalty_card),
+              html_options: { title: t(".view_large") })) { lucide_icon("search", css_class: "size-4") } %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_loyalty_card_path(loyalty_card))) { lucide_icon("pencil", css_class: "size-4") } %>
+        <%= button_to loyalty_card_path(loyalty_card), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+      </div>
+    </div>
   <% end %>
-  <div class="flex shrink-0 items-center gap-2 text-sm">
-    <%= link_to loyalty_card_path(loyalty_card), class: "hover:opacity-70", title: t(".view_large") do %><%= lucide_icon("search", css_class: "size-4") %><% end %>
-    <%= link_to edit_loyalty_card_path(loyalty_card), class: "text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
-    <%= button_to loyalty_card_path(loyalty_card), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-  </div>
 <% end %>

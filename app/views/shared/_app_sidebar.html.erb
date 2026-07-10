@@ -10,9 +10,8 @@
   <% end %>
 
   <div data-sidebar-target="label">
-    <input type="search" autocomplete="off" data-sidebar-target="searchInput" data-action="input->sidebar#filter"
-      placeholder="<%= t("sidebar.search_placeholder") %>"
-      class="w-full rounded-md border border-primary bg-container px-3 py-1.5 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary">
+    <%= render Ui::InputComponent.new(type: "search", placeholder: t("sidebar.search_placeholder"),
+          html_options: { autocomplete: "off", data: { sidebar_target: "searchInput", action: "input->sidebar#filter" } }) %>
   </div>
 
   <%= link_to root_path, class: "flex items-center gap-3 rounded-md p-2 text-sm #{current_page?(root_path) ? "bg-surface-hover font-medium text-primary" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>

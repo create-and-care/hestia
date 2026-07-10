@@ -11,26 +11,28 @@
         <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
               class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
       <% end %>
-      <%= link_to t(".new_provider"), new_service_provider_path,
-            class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+      <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_service_provider_path)) { t(".new_provider") } %>
     </div>
   </header>
 
   <%= render "shared/flash" %>
 
   <section class="mb-6 flex flex-wrap items-center gap-2">
-    <%= link_to t(".all_types"), service_providers_path,
-          class: "rounded-full px-3 py-0.5 text-xs #{@type ? 'bg-gray-100' : 'bg-gray-900 text-white'}" %>
+    <%= link_to service_providers_path do %>
+      <%= render(Ui::BadgeComponent.new(variant: @type ? :secondary : :default)) { t(".all_types") } %>
+    <% end %>
     <% @types.each do |type| %>
-      <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
+      <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
         <%= link_to "#{type.icon} #{type.name}".strip, service_providers_path(type_id: type.id) %>
         <%= button_to "×", service_provider_type_path(type), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
-      </span>
+      <% end %>
     <% end %>
     <%= form_with url: service_provider_types_path, method: :post, class: "inline-flex gap-1" do %>
-      <%= text_field_tag "service_provider_type[icon]", nil, placeholder: "🔧", maxlength: 4, class: "w-12 rounded-md border border-gray-300 px-2 py-1 text-xs" %>
-      <%= text_field_tag "service_provider_type[name]", nil, placeholder: t(".type_name_placeholder"), class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
-      <%= submit_tag t(".add_type"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(type: "text", name: "service_provider_type[icon]", placeholder: "🔧",
+            html_options: { id: "service_provider_type_icon", maxlength: 4, class: "w-12" }) %>
+      <%= render Ui::InputComponent.new(type: "text", name: "service_provider_type[name]", placeholder: t(".type_name_placeholder"),
+            html_options: { id: "service_provider_type_name" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add_type") } %>
     <% end %>
   </section>
 
@@ -38,7 +40,11 @@
     <%= render @providers %>
   </div>
   <% if @providers.empty? %>
-    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".none") %></p>
+    <div class="mt-4">
+      <%= render(Ui::EmptyComponent.new) do |empty| %>
+        <% empty.with_description { t(".none") } %>
+      <% end %>
+    </div>
   <% end %>
 
 </div>

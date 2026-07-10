@@ -1,0 +1,6 @@
+<div class="w-full">
+  <%= render(Ui::AccordionComponent.new) do |accordion| %>
+    <% accordion.with_item(title: "Is it accessible?", key: "a1") { "Yes, it adheres to standard ARIA patterns." } %>
+    <% accordion.with_item(title: "Is it styled?", key: "a2") { "Yes, with the Hestia design tokens." } %>
+  <% end %>
+</div>

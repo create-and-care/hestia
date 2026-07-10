@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { positionFloating, onClickOutside } from "../utils/floating"
 import { openPanel, closePanel } from "../utils/transition"
+import { focusTrigger } from "../utils/focus"
 
 // Used by dropdown-menu and menubar.
 export default class extends Controller {
@@ -13,6 +14,7 @@ export default class extends Controller {
 
   show() {
     openPanel(this.panelTarget)
+    this.triggerTarget.setAttribute("aria-expanded", "true")
     positionFloating(this.triggerTarget, this.panelTarget, { placement: this.placementValue })
     this.stopWatchingOutside = onClickOutside([ this.triggerTarget, this.panelTarget ], () => this.hide())
     document.addEventListener("keydown", this.onKeydown)
@@ -21,9 +23,10 @@ export default class extends Controller {
 
   hide() {
     closePanel(this.panelTarget)
+    this.triggerTarget.setAttribute("aria-expanded", "false")
     this.stopWatchingOutside?.()
     document.removeEventListener("keydown", this.onKeydown)
-    this.triggerTarget.focus()
+    focusTrigger(this.triggerTarget)
   }
 
   select(event) {

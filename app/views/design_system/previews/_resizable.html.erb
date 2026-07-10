@@ -1,0 +1,6 @@
+<div class="w-full">
+  <%= render(Ui::ResizableComponent.new) do |resizable| %>
+    <% resizable.with_first { "Left pane" } %>
+    <% resizable.with_second { "Right pane" } %>
+  <% end %>
+</div>

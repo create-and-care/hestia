@@ -2,7 +2,7 @@
   <div class="min-w-0 flex-1">
     <div class="flex items-center gap-2">
       <span class="font-medium"><%= address.name %></span>
-      <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600"><%= address_type_label(address.address_type) %></span>
+      <%= render(Ui::BadgeComponent.new(variant: :secondary)) { address_type_label(address.address_type) } %>
       <% if address.rating %><span class="text-xs text-yellow-600"><%= "★" * address.rating %></span><% end %>
     </div>
     <% if address.full_address.present? %>
@@ -12,12 +12,14 @@
 
   <div class="flex shrink-0 items-center gap-2 text-sm">
     <% if address.phone.present? %>
-      <%= link_to "tel:#{address.phone}", class: "hover:opacity-70", title: address.phone do %><%= lucide_icon("phone", css_class: "size-4") %><% end %>
+      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: "tel:#{address.phone}",
+            html_options: { title: address.phone })) { lucide_icon("phone", css_class: "size-4") } %>
     <% end %>
     <% if address.maps_url %>
-      <%= link_to address.maps_url, target: "_blank", rel: "noopener", class: "hover:opacity-70", title: t(".directions") do %><%= lucide_icon("map", css_class: "size-4") %><% end %>
+      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: address.maps_url,
+            html_options: { target: "_blank", rel: "noopener", title: t(".directions") })) { lucide_icon("map", css_class: "size-4") } %>
     <% end %>
-    <%= link_to edit_address_path(address), class: "text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_address_path(address))) { lucide_icon("pencil", css_class: "size-4") } %>
     <%= button_to address_path(address), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
   </div>
 <% end %>

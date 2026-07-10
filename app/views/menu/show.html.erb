@@ -21,32 +21,56 @@
 
   <div class="space-y-3">
     <% @days.each do |day| %>
-      <section class="rounded-lg border border-gray-200 p-3">
+      <%= render(Ui::CardComponent.new) do %>
         <h2 class="mb-2 text-sm font-semibold"><%= day_name(day) %> <span class="text-gray-400"><%= day.strftime("%d/%m") %></span></h2>
-        <ul class="space-y-1">
+        <ul class="divide-y divide-gray-100">
           <% Array(@entries[day]).each do |entry| %>
-            <li class="flex items-center justify-between text-sm">
-              <span><span class="text-gray-400"><%= meal_type_label(entry.meal_type) %> :</span> <%= entry.display_name %></span>
-              <%= button_to meal_plan_entry_path(entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title do %>
+                  <span class="text-gray-400"><%= meal_type_label(entry.meal_type) %> :</span> <%= entry.display_name %>
+                <% end %>
+                <% item.with_trailing do %>
+                  <%= form_with url: meal_plan_entry_path(entry), method: :delete do %>
+                    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
+                  <% end %>
+                <% end %>
+              <% end %>
             </li>
           <% end %>
         </ul>
         <% if (missing = missing_meal_types(day)).any? %>
           <p class="mt-2 flex items-center gap-1 text-xs text-amber-600"><%= lucide_icon("triangle-alert", css_class: "size-3.5") %> <%= t(".missing_meals", meals: missing.map { |type| meal_type_label(type) }.join(", ")) %></p>
         <% end %>
-      </section>
+      <% end %>
     <% end %>
   </div>
 
-  <section class="mt-6 rounded-lg border border-gray-200 p-4">
+  <%= render(Ui::CardComponent.new(class_name: "mt-6")) do %>
     <h2 class="mb-2 font-medium"><%= t(".add_meal") %></h2>
     <%= form_with model: @entry, url: meal_plan_entries_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.date_field :on_date, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.select :meal_type, meal_type_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.select :recipe_id, recipe_options, { include_blank: t(".recipe_blank") }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :free_name, placeholder: t(".free_name_placeholder"), class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+      <div>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:on_date))) do |field| %>
+          <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:on_date), value: form.object.on_date, html_options: { id: form.field_id(:on_date) }) } %>
+        <% end %>
+      </div>
+      <div>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:meal_type))) do |field| %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:meal_type), options: meal_type_options, selected: form.object.meal_type, html_options: { id: form.field_id(:meal_type) }) } %>
+        <% end %>
+      </div>
+      <div>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:recipe_id))) do |field| %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:recipe_id), options: [ [ t(".recipe_blank"), "" ] ] + recipe_options, selected: form.object.recipe_id, html_options: { id: form.field_id(:recipe_id) }) } %>
+        <% end %>
+      </div>
+      <div>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:free_name))) do |field| %>
+          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:free_name), value: form.object.free_name, placeholder: t(".free_name_placeholder"), html_options: { id: form.field_id(:free_name) }) } %>
+        <% end %>
+      </div>
+      <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
-  </section>
+  <% end %>
 
 </div>

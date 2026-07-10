@@ -13,82 +13,142 @@
 
   <section class="mb-10">
     <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("sprout", css_class: "size-5") %> <%= t(".garden_heading") %></h2>
-    <ul class="mb-3 space-y-2">
-      <% @plants.each do |plant| %>
-        <li class="rounded-lg border border-gray-200 px-3 py-2 text-sm">
-          <div class="flex items-center justify-between">
-            <span>
-              <span class="font-medium"><%= plant.name %></span>
-              <% if plant.location.present? %><span class="text-gray-400">· <%= plant.location %></span><% end %>
-              <% if plant.plant_reference %><span class="text-gray-400">· <%= plant.plant_reference.common_name %></span><% end %>
-              <% if plant.notes.present? %><span class="block text-gray-500"><%= plant.notes %></span><% end %>
-            </span>
-            <%= button_to plant_path(plant), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-          </div>
-          <% if plant.plant_reference %>
-            <p class="mt-1 flex items-center gap-1 text-xs text-gray-400">
-              <%= lucide_icon("droplet", css_class: "size-3.5") %> <%= plant.plant_reference.water_needs %> · <%= lucide_icon("sun", css_class: "size-3.5") %> <%= plant.plant_reference.sunlight %>
-            </p>
+    <%= render(Ui::CardComponent.new) do %>
+      <ul class="mb-3 divide-y divide-gray-100">
+        <% @plants.each do |plant| %>
+          <li>
+            <%= render(Ui::ItemComponent.new) do |item| %>
+              <% item.with_title do %>
+                <%= plant.name %><% if plant.location.present? %> · <%= plant.location %><% end %><% if plant.plant_reference %> · <%= plant.plant_reference.common_name %><% end %>
+              <% end %>
+              <% if plant.notes.present? || plant.plant_reference %>
+                <% item.with_description do %>
+                  <%= plant.notes if plant.notes.present? %><% if plant.plant_reference %><%= " · " if plant.notes.present? %><%= lucide_icon("droplet", css_class: "inline size-3") %> <%= plant.plant_reference.water_needs %> · <%= lucide_icon("sun", css_class: "inline size-3") %> <%= plant.plant_reference.sunlight %><% end %>
+                <% end %>
+              <% end %>
+              <% item.with_trailing do %>
+                <%= form_with url: plant_path(plant), method: :delete do %>
+                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+      <%= form_with model: @plant, url: plants_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+        <div class="flex-1">
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".plant_placeholder"), html_options: { id: form.field_id(:name), required: true }) } %>
           <% end %>
-        </li>
+        </div>
+        <div class="w-32">
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:location))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:location), value: form.object.location, placeholder: t(".location_placeholder"), html_options: { id: form.field_id(:location) }) } %>
+          <% end %>
+        </div>
+        <div class="w-48">
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:plant_reference_id))) do |field| %>
+            <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:plant_reference_id), options: [ [ t(".reference_blank"), "" ] ] + PlantReference.ordered.map { |r| [ r.common_name, r.id ] }, selected: form.object.plant_reference_id, html_options: { id: form.field_id(:plant_reference_id) }) } %>
+          <% end %>
+        </div>
+        <div class="w-40">
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:notes))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:notes), value: form.object.notes, placeholder: t(".notes_placeholder"), html_options: { id: form.field_id(:notes) }) } %>
+          <% end %>
+        </div>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
       <% end %>
-    </ul>
-    <%= form_with model: @plant, url: plants_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: t(".plant_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :location, placeholder: t(".location_placeholder"), class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.select :plant_reference_id, PlantReference.ordered.map { |r| [ r.common_name, r.id ] }, { include_blank: t(".reference_blank") },
-            class: "w-48 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :notes, placeholder: t(".notes_placeholder"), class: "w-40 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 
   <section class="mb-8">
     <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("waves", css_class: "size-5") %> <%= t(".pool_heading") %></h2>
     <% @pools.each do |pool| %>
-      <div class="mb-4 rounded-lg border border-gray-200 p-3">
+      <%= render(Ui::CardComponent.new(class_name: "mb-4")) do %>
         <div class="mb-2 flex items-center justify-between">
           <h3 class="font-medium"><%= pool.name %> <span class="text-xs text-gray-400">(<%= treatment_label(pool.treatment_type) %>)</span></h3>
           <%= button_to t(".delete"), pool_path(pool), method: :delete, class: "cursor-pointer text-xs text-red-600 hover:underline" %>
         </div>
 
         <p class="text-xs font-medium text-gray-500"><%= t(".readings_heading") %></p>
-        <ul class="mb-2 text-sm">
+        <ul class="mb-2 divide-y divide-gray-100 text-sm">
           <% pool.pool_readings.recent.first(5).each do |reading| %>
-            <li class="flex items-center justify-between">
-              <span><%= reading.measured_on.strftime("%d/%m") %> · <%= reading.measure_type %> : <%= reading.value %></span>
-              <%= button_to "×", pool_pool_reading_path(pool, reading), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title { "#{reading.measured_on.strftime('%d/%m')} · #{reading.measure_type} : #{reading.value}" } %>
+                <% item.with_trailing do %>
+                  <%= form_with url: pool_pool_reading_path(pool, reading), method: :delete do %>
+                    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
+                  <% end %>
+                <% end %>
+              <% end %>
             </li>
           <% end %>
         </ul>
         <%= form_with model: [ pool, PoolReading.new ], url: pool_pool_readings_path(pool), class: "mb-3 flex flex-wrap items-end gap-2" do |form| %>
-          <%= form.text_field :measure_type, placeholder: t(".measure_type_placeholder"), class: "w-24 rounded-md border border-gray-300 px-2 py-1 text-sm" %>
-          <%= form.number_field :value, step: :any, placeholder: t(".value_placeholder"), class: "w-24 rounded-md border border-gray-300 px-2 py-1 text-sm" %>
-          <%= form.date_field :measured_on, value: Date.current, class: "rounded-md border border-gray-300 px-2 py-1 text-sm" %>
-          <%= form.submit t(".reading_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-sm hover:bg-gray-50" %>
+          <div class="w-24">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:measure_type))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:measure_type), value: form.object.measure_type, placeholder: t(".measure_type_placeholder"), html_options: { id: form.field_id(:measure_type) }) } %>
+            <% end %>
+          </div>
+          <div class="w-24">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:value))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:value), value: form.object.value, placeholder: t(".value_placeholder"), html_options: { id: form.field_id(:value), step: :any }) } %>
+            <% end %>
+          </div>
+          <div>
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:measured_on))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:measured_on), value: Date.current, html_options: { id: form.field_id(:measured_on) }) } %>
+            <% end %>
+          </div>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".reading_submit") } %>
         <% end %>
 
         <p class="text-xs font-medium text-gray-500"><%= t(".actions_heading") %></p>
-        <ul class="mb-2 text-sm">
+        <ul class="mb-2 divide-y divide-gray-100 text-sm">
           <% pool.pool_actions.recent.first(5).each do |action| %>
-            <li class="flex items-center justify-between">
-              <span><%= action.done_on.strftime("%d/%m") %> · <%= pool_action_label(action.action_type) %></span>
-              <%= button_to "×", pool_pool_action_path(pool, action), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title { "#{action.done_on.strftime('%d/%m')} · #{pool_action_label(action.action_type)}" } %>
+                <% item.with_trailing do %>
+                  <%= form_with url: pool_pool_action_path(pool, action), method: :delete do %>
+                    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
+                  <% end %>
+                <% end %>
+              <% end %>
             </li>
           <% end %>
         </ul>
         <%= form_with model: [ pool, PoolAction.new ], url: pool_pool_actions_path(pool), class: "flex flex-wrap items-end gap-2" do |form| %>
-          <%= form.select :action_type, pool_action_options, {}, class: "rounded-md border border-gray-300 px-2 py-1 text-sm" %>
-          <%= form.date_field :done_on, value: Date.current, class: "rounded-md border border-gray-300 px-2 py-1 text-sm" %>
-          <%= form.submit t(".action_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-sm hover:bg-gray-50" %>
+          <div>
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:action_type))) do |field| %>
+              <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:action_type), options: pool_action_options, selected: form.object.action_type, html_options: { id: form.field_id(:action_type) }) } %>
+            <% end %>
+          </div>
+          <div>
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:done_on))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:done_on), value: Date.current, html_options: { id: form.field_id(:done_on) }) } %>
+            <% end %>
+          </div>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".action_submit") } %>
         <% end %>
-      </div>
+      <% end %>
     <% end %>
 
-    <%= form_with model: @pool, url: pools_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: t(".new_pool_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.select :treatment_type, treatment_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    <%= render(Ui::CardComponent.new) do %>
+      <%= form_with model: @pool, url: pools_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+        <div class="flex-1">
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".new_pool_placeholder"), html_options: { id: form.field_id(:name), required: true }) } %>
+          <% end %>
+        </div>
+        <div>
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:treatment_type))) do |field| %>
+            <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:treatment_type), options: treatment_options, selected: form.object.treatment_type, html_options: { id: form.field_id(:treatment_type) }) } %>
+          <% end %>
+        </div>
+        <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".add") } %>
+      <% end %>
     <% end %>
   </section>
 

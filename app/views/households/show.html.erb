@@ -13,111 +13,134 @@
   <%= render(Ui::TabsComponent.new(default: "general")) do |tabs| %>
     <% tabs.with_tab(label: t(".tabs.general"), value: "general") do %>
       <div class="space-y-8">
-        <section class="rounded-lg border border-gray-200 p-5">
-          <h2 class="mb-1 font-medium"><%= t(".invite_code") %></h2>
+        <%= render(Ui::CardComponent.new) do |card| %>
+          <% card.with_title { t(".invite_code") } %>
           <code class="rounded-md bg-gray-100 px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
-        </section>
+        <% end %>
 
-        <section class="rounded-lg border border-gray-200 p-5">
-          <h2 class="mb-3 font-medium"><%= t(".time_zone_heading") %></h2>
+        <%= render(Ui::CardComponent.new) do |card| %>
+          <% card.with_title { t(".language") } %>
+          <%= render "shared/locale_switcher" %>
+        <% end %>
+
+        <%= render(Ui::CardComponent.new) do |card| %>
+          <% card.with_title { t(".time_zone_heading") } %>
           <%= form_with model: @household, url: household_path(@household), method: :patch do |form| %>
             <div class="flex items-end gap-3">
               <div class="flex-1">
-                <%= form.label :time_zone, t(".time_zone_label"), class: "mb-1 block text-sm font-medium" %>
+                <%= render(Ui::LabelComponent.new(for_id: "household_time_zone", html_options: { class: "mb-1 block" })) { t(".time_zone_label") } %>
                 <%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.all,
                       { default: @household.time_zone }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
               </div>
-              <%= form.submit t(".time_zone_submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+              <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".time_zone_submit") } %>
             </div>
           <% end %>
-        </section>
+        <% end %>
 
-        <section class="rounded-lg border border-gray-200 p-5">
-          <h2 class="mb-1 font-medium"><%= t(".required_meal_types_heading") %></h2>
-          <p class="mb-4 text-sm text-gray-500"><%= t(".required_meal_types_description") %></p>
+        <%= render(Ui::CardComponent.new) do |card| %>
+          <% card.with_title { t(".required_meal_types_heading") } %>
+          <% card.with_description { t(".required_meal_types_description") } %>
           <%= form_with model: @household, url: household_path(@household), method: :patch, class: "space-y-4" do |form| %>
             <div class="flex flex-wrap gap-4">
               <% MealPlanEntry::MEAL_TYPES.without("free").each do |type| %>
-                <label class="flex items-center gap-2 text-sm">
-                  <%= check_box_tag "household[required_meal_types][]", type, @household.required_meal_types.include?(type),
-                        id: "required_meal_type_#{type}", class: "size-4" %>
-                  <%= meal_type_label(type) %>
-                </label>
+                <div class="flex items-center gap-2 text-sm">
+                  <%= render Ui::CheckboxComponent.new(name: "household[required_meal_types][]",
+                        checked: @household.required_meal_types.include?(type),
+                        id: "required_meal_type_#{type}", html_options: { value: type }) %>
+                  <%= render(Ui::LabelComponent.new(for_id: "required_meal_type_#{type}")) { meal_type_label(type) } %>
+                </div>
               <% end %>
               <%= hidden_field_tag "household[required_meal_types][]", "" %>
             </div>
-            <%= form.submit t(".required_meal_types_submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+            <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".required_meal_types_submit") } %>
           <% end %>
-        </section>
+        <% end %>
       </div>
     <% end %>
 
     <% tabs.with_tab(label: t(".tabs.notifications"), value: "notifications") do %>
-      <section class="rounded-lg border border-gray-200 p-5">
-        <h2 class="mb-1 flex items-center gap-1.5 font-medium"><%= lucide_icon("bell", css_class: "size-5") %> <%= t("notification_preferences.show.title") %></h2>
-        <p class="mb-4 text-sm text-gray-500"><%= t("notification_preferences.show.description") %></p>
+      <%= render(Ui::CardComponent.new) do |card| %>
+        <% card.with_title do %>
+          <span class="inline-flex items-center gap-1.5"><%= lucide_icon("bell", css_class: "size-5") %> <%= t("notification_preferences.show.title") %></span>
+        <% end %>
+        <% card.with_description { t("notification_preferences.show.description") } %>
 
         <%= form_with model: @notification_preference, url: notification_preference_path, method: :patch, class: "space-y-5" do |form| %>
-          <label class="flex items-center gap-2">
+          <div class="flex items-center gap-2">
             <%= form.check_box :fridge_expiry_enabled, class: "size-4" %>
-            <span><%= t("notification_preferences.show.fridge_expiry_enabled") %></span>
-          </label>
-
-          <div>
-            <%= form.label :fridge_expiry_threshold_days, t("notification_preferences.show.fridge_expiry_threshold_days"), class: "mb-1 block text-sm font-medium text-gray-700" %>
-            <%= form.number_field :fridge_expiry_threshold_days, min: 0, max: 14,
-                  class: "w-24 rounded-md border border-gray-300 px-3 py-2" %>
+            <%= render(Ui::LabelComponent.new(for_id: "notification_preference_fridge_expiry_enabled")) { t("notification_preferences.show.fridge_expiry_enabled") } %>
           </div>
 
-          <label class="flex items-center gap-2">
-            <%= form.check_box :birthday_notifications_enabled, class: "size-4" %>
-            <span><%= t("notification_preferences.show.birthday_notifications_enabled") %></span>
-          </label>
+          <%= render(Ui::FieldComponent.new(id: "notification_preference_fridge_expiry_threshold_days")) do |field| %>
+            <% field.with_label { t("notification_preferences.show.fridge_expiry_threshold_days") } %>
+            <% field.with_control do %>
+              <%= render Ui::InputComponent.new(type: "number", name: "notification_preference[fridge_expiry_threshold_days]",
+                    value: @notification_preference.fridge_expiry_threshold_days,
+                    html_options: { id: "notification_preference_fridge_expiry_threshold_days", min: 0, max: 14, class: "w-24" }) %>
+            <% end %>
+          <% end %>
 
-          <%= form.submit t("notification_preferences.show.save"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+          <div class="flex items-center gap-2">
+            <%= form.check_box :birthday_notifications_enabled, class: "size-4" %>
+            <%= render(Ui::LabelComponent.new(for_id: "notification_preference_birthday_notifications_enabled")) { t("notification_preferences.show.birthday_notifications_enabled") } %>
+          </div>
+
+          <%= render(Ui::ButtonComponent.new(type: "submit")) { t("notification_preferences.show.save") } %>
         <% end %>
-      </section>
+      <% end %>
     <% end %>
 
     <% tabs.with_tab(label: t(".tabs.api"), value: "api") do %>
-      <section class="rounded-lg border border-gray-200 p-5">
-        <h2 class="mb-1 flex items-center gap-1.5 font-medium"><%= lucide_icon("smartphone", css_class: "size-5") %> <%= t("api_tokens.index.title") %></h2>
-        <p class="mb-4 text-sm text-gray-500"><%= t("api_tokens.index.description") %></p>
+      <%= render(Ui::CardComponent.new) do |card| %>
+        <% card.with_title do %>
+          <span class="inline-flex items-center gap-1.5"><%= lucide_icon("smartphone", css_class: "size-5") %> <%= t("api_tokens.index.title") %></span>
+        <% end %>
+        <% card.with_description { t("api_tokens.index.description") } %>
 
         <ul class="mb-4 divide-y divide-gray-100 rounded-lg border border-gray-200">
           <% if @api_tokens.none? %>
             <li class="px-4 py-6 text-center text-sm text-gray-400"><%= t("api_tokens.index.empty") %></li>
           <% end %>
           <% @api_tokens.each do |token| %>
-            <li class="flex items-center justify-between px-4 py-3 text-sm">
-              <span>
-                <%= token.name %>
-                <span class="text-gray-400">· <%= t("api_tokens.index.created_on") %> <%= token.created_at.strftime("%d/%m/%Y") %></span>
-                <% if token.last_used_at %><span class="text-gray-400">· <%= t("api_tokens.index.last_used_on") %> <%= token.last_used_at.strftime("%d/%m/%Y") %></span><% end %>
-              </span>
-              <%= button_to t("api_tokens.index.revoke"), api_token_path(token), method: :delete,
-                    form: { data: { turbo_confirm: t("api_tokens.index.revoke_confirm") } }, class: "cursor-pointer text-red-600 underline" %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title { token.name } %>
+                <% item.with_description do %>
+                  <%= t("api_tokens.index.created_on") %> <%= token.created_at.strftime("%d/%m/%Y") %>
+                  <% if token.last_used_at %> · <%= t("api_tokens.index.last_used_on") %> <%= token.last_used_at.strftime("%d/%m/%Y") %><% end %>
+                <% end %>
+                <% item.with_trailing do %>
+                  <%= button_to t("api_tokens.index.revoke"), api_token_path(token), method: :delete,
+                        form: { data: { turbo_confirm: t("api_tokens.index.revoke_confirm") } }, class: "cursor-pointer text-red-600 underline" %>
+                <% end %>
+              <% end %>
             </li>
           <% end %>
         </ul>
 
         <%= form_with model: @api_token, url: api_tokens_path, class: "flex flex-wrap items-end gap-2" do |form| %>
           <div class="flex-1">
-            <%= form.label :name, t("api_tokens.index.name_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
-            <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+            <%= render(Ui::FieldComponent.new(id: "api_token_name")) do |field| %>
+              <% field.with_label { t("api_tokens.index.name_label") } %>
+              <% field.with_control do %>
+                <%= render Ui::InputComponent.new(name: "api_token[name]", html_options: { id: "api_token_name", required: true }) %>
+              <% end %>
+            <% end %>
           </div>
-          <%= form.submit t("api_tokens.index.create"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+          <%= render(Ui::ButtonComponent.new(type: "submit")) { t("api_tokens.index.create") } %>
         <% end %>
-      </section>
+      <% end %>
     <% end %>
 
     <% tabs.with_tab(label: t(".tabs.modules"), value: "modules") do %>
-      <section class="rounded-lg border border-gray-200 p-5">
-        <h2 class="mb-1 flex items-center gap-1.5 font-medium"><%= lucide_icon("puzzle", css_class: "size-5") %> <%= t(".modules_heading") %></h2>
-        <p class="mb-4 text-sm text-gray-500"><%= t(".modules_description") %></p>
+      <%= render(Ui::CardComponent.new) do |card| %>
+        <% card.with_title do %>
+          <span class="inline-flex items-center gap-1.5"><%= lucide_icon("puzzle", css_class: "size-5") %> <%= t(".modules_heading") %></span>
+        <% end %>
+        <% card.with_description { t(".modules_description") } %>
 
         <% unless current_membership&.admin? %>
-          <p class="mb-4 rounded-md border border-yellow-200 bg-yellow-50 px-3 py-2 text-sm text-yellow-800"><%= t(".modules_admin_only") %></p>
+          <%= render(Ui::AlertComponent.new(variant: :warning, class_name: "mb-4")) { t(".modules_admin_only") } %>
         <% end %>
 
         <%= form_with model: @household, url: update_modules_household_path(@household), method: :patch, class: "space-y-6" do |form| %>
@@ -126,14 +149,19 @@
               <h3 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-gray-500"><%= lucide_icon(group[:icon], css_class: "size-4") %> <%= t("sidebar.groups.#{group[:key]}") %></h3>
               <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
                 <% group[:items].each do |icon, nav_key, _path| %>
-                  <li class="flex items-center justify-between px-4 py-3 text-sm">
-                    <span class="inline-flex items-center gap-1.5"><%= lucide_icon(icon, css_class: "size-4") %> <%= t("dashboard.show.nav.#{nav_key}") %></span>
-                    <%= render Ui::SwitchComponent.new(
-                          name: "household[enabled_modules][]",
-                          checked: @household.module_enabled?(nav_key),
-                          disabled: !current_membership&.admin?,
-                          html_options: { value: nav_key.to_s }
-                        ) %>
+                  <li>
+                    <%= render(Ui::ItemComponent.new) do |item| %>
+                      <% item.with_leading { lucide_icon(icon, css_class: "size-4") } %>
+                      <% item.with_title { t("dashboard.show.nav.#{nav_key}") } %>
+                      <% item.with_trailing do %>
+                        <%= render Ui::SwitchComponent.new(
+                              name: "household[enabled_modules][]",
+                              checked: @household.module_enabled?(nav_key),
+                              disabled: !current_membership&.admin?,
+                              html_options: { value: nav_key.to_s }
+                            ) %>
+                      <% end %>
+                    <% end %>
                   </li>
                 <% end %>
               </ul>
@@ -141,10 +169,10 @@
           <% end %>
 
           <% if current_membership&.admin? %>
-            <%= form.submit t(".modules_submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+            <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".modules_submit") } %>
           <% end %>
         <% end %>
-      </section>
+      <% end %>
     <% end %>
 
     <% tabs.with_tab(label: t(".tabs.roadmap"), value: "roadmap") do %>
@@ -161,24 +189,17 @@
           <h2 class="mb-3 font-medium">Progress by area</h2>
           <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
             <% @phases.each do |phase| %>
+              <% badge_variant, badge_label = case phase[:status]
+                 when :done then [ :success, "Done" ]
+                 when :partial then [ :warning, "Partial" ]
+                 else [ :secondary, "To do" ]
+                 end %>
               <li class="flex items-start justify-between gap-4 px-4 py-3">
                 <div>
                   <p class="font-medium"><%= phase[:name] %></p>
                   <p class="text-sm text-gray-500"><%= phase[:detail] %></p>
                 </div>
-                <span class="mt-0.5 shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium <%=
-                  case phase[:status]
-                  when :done then "bg-green-100 text-green-800"
-                  when :partial then "bg-amber-100 text-amber-800"
-                  else "bg-gray-100 text-gray-700"
-                  end
-                %>">
-                  <%= case phase[:status]
-                      when :done then "Done"
-                      when :partial then "Partial"
-                      else "To do"
-                      end %>
-                </span>
+                <%= render(Ui::BadgeComponent.new(variant: badge_variant, html_options: { class: "mt-0.5 shrink-0" })) { badge_label } %>
               </li>
             <% end %>
           </ul>
@@ -191,19 +212,16 @@
             functional coverage) — not just the gaps already known from the Implementation Plan.
           </p>
 
-          <div class="space-y-3">
+          <%= render(Ui::AccordionComponent.new(multiple: true)) do |accordion| %>
             <% @improvements.each do |group| %>
-              <details class="group rounded-lg border border-gray-200 open:pb-2" <%= "open" if group == @improvements.first %>>
-                <summary class="flex cursor-pointer list-none items-center justify-between px-4 py-3">
-                  <span class="font-medium">
-                    <span class="mr-1"><%= group[:emoji] %></span><%= group[:category] %>
-                  </span>
-                  <span class="flex items-center gap-2 text-sm text-gray-500">
-                    <%= pluralize(group[:items].size, "item") %>
-                    <span class="transition-transform group-open:rotate-180">▾</span>
-                  </span>
-                </summary>
-                <ul class="space-y-2 px-4 pb-3 text-sm text-gray-700">
+              <% group_title = capture do %>
+                <span class="flex flex-1 items-center justify-between pr-2">
+                  <span><span class="mr-1"><%= group[:emoji] %></span><%= group[:category] %></span>
+                  <span class="text-sm text-gray-500"><%= pluralize(group[:items].size, "item") %></span>
+                </span>
+              <% end %>
+              <% accordion.with_item(title: group_title, key: group[:category].parameterize) do %>
+                <ul class="space-y-2 px-4 text-sm text-gray-700">
                   <% group[:items].each do |item| %>
                     <li class="flex gap-2">
                       <span class="text-gray-400">—</span>
@@ -211,9 +229,9 @@
                     </li>
                   <% end %>
                 </ul>
-              </details>
+              <% end %>
             <% end %>
-          </div>
+          <% end %>
         </section>
       </div>
     <% end %>

@@ -5,75 +5,113 @@
 
   <%= form_with model: @task, url: task_path(@task) do |form| %>
     <% if @task.errors.any? %>
-      <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
         <ul class="list-inside list-disc">
           <% @task.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>
-      </div>
+      <% end %>
     <% end %>
 
     <div class="space-y-4">
-      <div>
-        <%= form.label :title, t(".title_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_field :title, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
-      <div>
-        <%= form.label :description, t(".description_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_area :description, rows: 3, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "task_title")) do |field| %>
+        <% field.with_label { t(".title_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "task[title]", value: @task.title, invalid: @task.errors[:title].any?,
+                html_options: { id: "task_title", required: true }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "task_description")) do |field| %>
+        <% field.with_label { t(".description_label") } %>
+        <% field.with_control do %>
+          <%= render(Ui::TextareaComponent.new(name: "task[description]", rows: 3, invalid: @task.errors[:description].any?,
+                html_options: { id: "task_description" })) { @task.description } %>
+        <% end %>
+      <% end %>
+
       <div class="grid grid-cols-2 gap-4">
-        <div>
-          <%= form.label :emoji, t(".emoji_label"), class: "mb-1 block text-sm font-medium" %>
-          <%= form.text_field :emoji, maxlength: 4, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-        </div>
-        <div>
-          <%= form.label :due_on, t(".due_label"), class: "mb-1 block text-sm font-medium" %>
-          <%= form.date_field :due_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-        </div>
+        <%= render(Ui::FieldComponent.new(id: "task_emoji")) do |field| %>
+          <% field.with_label { t(".emoji_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(name: "task[emoji]", value: @task.emoji, invalid: @task.errors[:emoji].any?,
+                  html_options: { id: "task_emoji", maxlength: 4 }) %>
+          <% end %>
+        <% end %>
+
+        <%= render(Ui::FieldComponent.new(id: "task_due_on")) do |field| %>
+          <% field.with_label { t(".due_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "date", name: "task[due_on]", value: @task.due_on, invalid: @task.errors[:due_on].any?,
+                  html_options: { id: "task_due_on" }) %>
+          <% end %>
+        <% end %>
       </div>
+
       <div class="grid grid-cols-2 gap-4">
-        <div>
-          <%= form.label :assignee_id, t(".assignee_label"), class: "mb-1 block text-sm font-medium" %>
-          <%= form.select :assignee_id, task_assignee_options, { include_blank: "—" },
-                class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-        </div>
-        <div>
-          <%= form.label :task_category_id, t(".category_label"), class: "mb-1 block text-sm font-medium" %>
-          <%= form.select :task_category_id, task_category_options, { include_blank: "—" },
-                class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-        </div>
+        <%= render(Ui::FieldComponent.new(id: "task_assignee_id")) do |field| %>
+          <% field.with_label { t(".assignee_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::NativeSelectComponent.new(name: "task[assignee_id]",
+                  options: [ [ "—", "" ] ] + task_assignee_options,
+                  selected: @task.assignee_id, invalid: @task.errors[:assignee_id].any?,
+                  html_options: { id: "task_assignee_id" }) %>
+          <% end %>
+        <% end %>
+
+        <%= render(Ui::FieldComponent.new(id: "task_task_category_id")) do |field| %>
+          <% field.with_label { t(".category_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::NativeSelectComponent.new(name: "task[task_category_id]",
+                  options: [ [ "—", "" ] ] + task_category_options,
+                  selected: @task.task_category_id, invalid: @task.errors[:task_category_id].any?,
+                  html_options: { id: "task_task_category_id" }) %>
+          <% end %>
+        <% end %>
       </div>
-      <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
     </div>
   <% end %>
 
-  <section class="mt-8 border-t border-gray-100 pt-6">
+  <section class="mt-8 border-t border-primary pt-6">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("bell", css_class: "size-5") %> <%= t(".reminders_heading") %></h2>
-    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-primary">
       <% @task.task_reminders.order(:remind_at).each do |reminder| %>
-        <li class="flex items-center justify-between px-3 py-2 text-sm">
-          <span>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_title do %>
             <%= reminder.remind_at.strftime("%d/%m/%Y %H:%M") %>
-            <span class="text-gray-400">· <%= reminder.user.name.presence || reminder.user.email_address %></span>
-            <% if reminder.delivered_at %><span class="text-gray-400">· <%= t(".sent") %></span><% end %>
-          </span>
-          <%= button_to task_task_reminder_path(@task, reminder), method: :delete,
-                class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-        </li>
+            <span class="text-subdued">· <%= reminder.user.name.presence || reminder.user.email_address %></span>
+            <% if reminder.delivered_at %><span class="text-subdued">· <%= t(".sent") %></span><% end %>
+          <% end %>
+          <% item.with_trailing do %>
+            <%= button_to task_task_reminder_path(@task, reminder), method: :delete,
+                  class: "cursor-pointer text-subdued hover:text-destructive" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+          <% end %>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
     <%= form_with model: TaskReminder.new, url: task_task_reminders_path(@task), class: "flex flex-wrap items-end gap-2" do |form| %>
       <div>
-        <%= form.label :remind_at, t(".remind_at_label"), class: "mb-1 block text-xs text-gray-500" %>
-        <%= form.datetime_field :remind_at, required: true, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+        <%= render(Ui::FieldComponent.new(id: "task_reminder_remind_at")) do |field| %>
+          <% field.with_label { t(".remind_at_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "datetime-local", name: "task_reminder[remind_at]",
+                  html_options: { id: "task_reminder_remind_at", required: true }) %>
+          <% end %>
+        <% end %>
       </div>
       <div>
-        <%= form.label :user_id, t(".recipient_label"), class: "mb-1 block text-xs text-gray-500" %>
-        <%= form.select :user_id, task_assignee_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
+        <%= render(Ui::FieldComponent.new(id: "task_reminder_user_id")) do |field| %>
+          <% field.with_label { t(".recipient_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::NativeSelectComponent.new(name: "task_reminder[user_id]", options: task_assignee_options,
+                  html_options: { id: "task_reminder_user_id" }) %>
+          <% end %>
+        <% end %>
       </div>
-      <%= form.submit t(".add_reminder_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add_reminder_submit") } %>
     <% end %>
   </section>
 

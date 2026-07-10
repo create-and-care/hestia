@@ -31,6 +31,29 @@ export default class extends Controller {
     this.render()
   }
 
+  // Arrow-key roving focus between day gridcells. Left/Right move a day,
+  // Up/Down move a week (7 days). Crossing a month boundary shifts the
+  // visible month and re-renders before moving focus to the target day.
+  onKeydown(event) {
+    const deltas = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }
+    const delta = deltas[event.key]
+    if (delta === undefined) return
+
+    event.preventDefault()
+
+    const date = new Date(`${event.currentTarget.dataset.date}T00:00:00`)
+    date.setDate(date.getDate() + delta)
+
+    if (date.getFullYear() !== this.yearValue || date.getMonth() !== this.monthValue) {
+      this.yearValue = date.getFullYear()
+      this.monthValue = date.getMonth()
+      this.render()
+    }
+
+    const dateKey = date.toISOString().slice(0, 10)
+    this.gridTarget.querySelector(`[data-date="${dateKey}"]`)?.focus()
+  }
+
   render() {
     this.labelTarget.textContent = `${MONTH_NAMES[this.monthValue]} ${this.yearValue}`
 
@@ -51,7 +74,8 @@ export default class extends Controller {
       const isToday = date.toDateString() === todayKey
 
       cells.push(`
-        <button type="button" data-action="click->calendar#select" data-date="${dateKey}"
+        <button type="button" role="gridcell" data-action="click->calendar#select keydown->calendar#onKeydown" data-date="${dateKey}"
+          aria-selected="${isSelected}" ${isToday ? `aria-current="date"` : ""}
           class="h-8 w-8 rounded-md text-sm transition-colors ${isSelected ? "bg-button-primary text-inverse" : "text-primary hover:bg-surface-hover"} ${isToday && !isSelected ? "font-semibold" : ""}">
           ${day}
         </button>

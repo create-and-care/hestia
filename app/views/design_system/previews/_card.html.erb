@@ -1,0 +1,8 @@
+<div class="w-full max-w-sm">
+  <%= render(Ui::CardComponent.new) do |card| %>
+    <% card.with_title { "Monthly budget" } %>
+    <% card.with_description { "Track how much you have left to spend." } %>
+    <% card.with_footer { render(Ui::ButtonComponent.new(size: :sm)) { "View details" } } %>
+    <%= render Ui::ProgressComponent.new(value: 64) %>
+  <% end %>
+</div>

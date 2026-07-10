@@ -1,4 +1,4 @@
-<div data-controller="carousel" class="relative w-full">
+<div data-controller="carousel" role="region" aria-roledescription="carousel" class="relative w-full">
   <div data-carousel-target="track" class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth [scrollbar-width:none]">
     <% slides.each do |slide| %>
       <div data-carousel-target="item" class="w-full shrink-0 snap-start">
@@ -6,6 +6,8 @@
       </div>
     <% end %>
   </div>
+
+  <div data-carousel-target="status" role="status" aria-live="polite" class="sr-only"></div>
 
   <button type="button" data-action="click->carousel#previous"
     class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full border border-primary bg-container p-2 shadow-md hover:bg-surface-hover" aria-label="Previous slide">
@@ -19,7 +21,7 @@
   <div class="mt-3 flex justify-center gap-1.5">
     <% slides.each_with_index do |_, index| %>
       <button type="button" data-carousel-target="dot" data-index="<%= index %>" data-action="click->carousel#goTo"
-        class="size-1.5 rounded-full bg-surface-inset transition-colors" aria-label="Go to slide <%= index + 1 %>"></button>
+        class="size-1.5 rounded-full bg-surface-inset transition-colors" aria-label="Go to slide <%= index + 1 %>" aria-current="false"></button>
     <% end %>
   </div>
 </div>

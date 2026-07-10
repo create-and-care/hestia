@@ -1,8 +1,10 @@
-<%= link_to pet_path(pet), id: dom_id(pet),
-      class: "block rounded-lg border border-gray-200 p-4 hover:border-gray-400" do %>
-  <h2 class="flex items-center gap-1.5 font-medium"><%= lucide_icon("paw-print", css_class: "size-4") %> <%= pet.name %></h2>
-  <p class="text-sm text-gray-500">
-    <%= [ pet.species, pet.breed ].reject(&:blank?).join(" · ") %>
-    <% if pet.age %> · <%= t("pets.age_years", count: pet.age) %><% end %>
-  </p>
-<% end %>
+<div id="<%= dom_id(pet) %>">
+  <%= render(Ui::ItemComponent.new(href: pet_path(pet))) do |item| %>
+    <% item.with_leading { lucide_icon("paw-print", css_class: "size-4") } %>
+    <% item.with_title { pet.name } %>
+    <% item.with_description do %>
+      <%= [ pet.species, pet.breed ].reject(&:blank?).join(" · ") %>
+      <% if pet.age %> · <%= t("pets.age_years", count: pet.age) %><% end %>
+    <% end %>
+  <% end %>
+</div>

@@ -4,7 +4,7 @@
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <header class="mb-4">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("users", css_class: "size-6") %> <%= @circle.name %></h1>
-    <p class="text-sm text-gray-500">
+    <p class="text-sm text-secondary">
       <% if @circle.theme.present? %><%= @circle.theme %> · <% end %>
       <%= @circle.members.map { |m| m.name.presence || m.email_address }.join(", ") %>
     </p>
@@ -12,15 +12,16 @@
 
   <%= render "shared/flash" %>
 
-  <section class="mb-6 rounded-lg border border-gray-200 p-3">
-    <p class="text-sm text-gray-600"><%= t(".invite_code_label") %></p>
-    <code class="rounded bg-gray-100 px-3 py-1 font-semibold tracking-widest"><%= @circle.invite_code %></code>
-  </section>
+  <%= render(Ui::CardComponent.new(class_name: "mb-6")) do %>
+    <p class="text-sm text-secondary"><%= t(".invite_code_label") %></p>
+    <code class="rounded bg-surface-inset px-3 py-1 font-semibold tracking-widest"><%= @circle.invite_code %></code>
+  <% end %>
 
   <%= tag.div id: "new_circle_post" do %>
     <%= form_with model: [ @circle, @post ], url: circle_posts_path(@circle), class: "mb-6 flex gap-2" do |form| %>
-      <%= form.text_area :body, required: true, rows: 2, placeholder: t("circles.post_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm" %>
-      <%= form.submit t("circles.publish"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
+      <%= render Ui::TextareaComponent.new(name: "circle_post[body]", rows: 2, placeholder: t("circles.post_placeholder"),
+            html_options: { id: "circle_post_body", required: true, class: "flex-1" }) %>
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t("circles.publish") } %>
     <% end %>
   <% end %>
 

@@ -5,28 +5,25 @@
 
   <header class="mb-6 flex items-center justify-between">
     <h1 class="text-2xl font-semibold"><%= t(".heading") %></h1>
-    <%= link_to t(".new_list"), new_shopping_list_path,
-          class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_shopping_list_path)) { t(".new_list") } %>
   </header>
 
   <%= render "shared/flash" %>
 
   <% if @shopping_lists.any? %>
-    <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="rounded-lg border border-primary divide-y divide-gray-100">
       <% @shopping_lists.each do |list| %>
-        <li class="flex items-center justify-between px-4 py-3">
-          <%= link_to shopping_list_path(list), class: "flex items-center gap-2 font-medium hover:underline" do %>
-            <span><%= list.icon.presence || lucide_icon("shopping-cart", css_class: "size-4") %></span>
-            <span><%= list.name %></span>
+        <%= render(Ui::ItemComponent.new(href: shopping_list_path(list))) do |item| %>
+          <% item.with_leading { list.icon.presence || lucide_icon("shopping-cart", css_class: "size-4") } %>
+          <% item.with_title { list.name } %>
+          <% item.with_trailing do %>
+            <span class="text-sm text-secondary"><%= t(".items_count", count: list.items.where(checked: false).count) %></span>
           <% end %>
-          <span class="text-sm text-gray-500"><%= t(".items_count", count: list.items.where(checked: false).count) %></span>
-        </li>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
   <% else %>
-    <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
-      <%= t(".empty") %>
-    </p>
+    <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty") } } %>
   <% end %>
 
   <div class="mt-6 flex gap-4 text-sm">

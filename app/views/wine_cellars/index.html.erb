@@ -18,23 +18,25 @@
   <%= render "shared/flash" %>
 
   <%= form_with model: @cellar, url: wine_cellars_path, class: "mb-6 flex gap-2" do |form| %>
-    <%= form.text_field :name, required: true, placeholder: t(".new_cellar_placeholder"),
-          class: "flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm" %>
-    <%= form.submit t(".create_cellar"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700" %>
+    <%= render Ui::InputComponent.new(name: "wine_cellar[name]", value: @cellar.name, placeholder: t(".new_cellar_placeholder"),
+          html_options: { id: "wine_cellar_name", required: true, class: "flex-1" }) %>
+    <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".create_cellar") } %>
   <% end %>
 
   <% if @query.present? %>
     <h2 class="mb-2 font-medium"><%= t(".results_for", query: @query) %></h2>
     <div class="space-y-2"><%= render @results %></div>
-    <% if @results.empty? %><p class="text-sm text-gray-500"><%= t(".no_bottles_found") %></p><% end %>
+    <% if @results.empty? %>
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_bottles_found") } } %>
+    <% end %>
   <% else %>
     <% if @cellars.empty? %>
-      <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".empty") %></p>
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty") } } %>
     <% end %>
     <% @cellars.each do |cellar| %>
-      <section class="mb-6 rounded-lg border border-gray-200 p-4">
+      <%= render(Ui::CardComponent.new(class_name: "mb-6")) do %>
         <div class="mb-3 flex items-center justify-between">
-          <h2 class="font-medium"><%= cellar.name %> <span class="text-sm text-gray-400">(<%= t(".in_stock_count", count: cellar.bottles.in_stock.size) %>)</span></h2>
+          <h2 class="font-medium"><%= cellar.name %> <span class="text-sm text-secondary">(<%= t(".in_stock_count", count: cellar.bottles.in_stock.size) %>)</span></h2>
           <%= button_to t(".delete_cellar"), wine_cellar_path(cellar), method: :delete,
                 form: { data: { turbo_confirm: t(".delete_cellar_confirm") } },
                 class: "cursor-pointer text-xs text-red-600 hover:underline" %>
@@ -44,13 +46,17 @@
 
         <%= form_with model: @bottle, url: bottles_path, class: "flex flex-wrap items-end gap-2" do |form| %>
           <%= form.hidden_field :wine_cellar_id, value: cellar.id %>
-          <%= form.text_field :name, required: true, placeholder: t(".bottle_name_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-          <%= form.number_field :vintage, placeholder: t(".vintage_placeholder"), class: "w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-          <%= form.text_field :region, placeholder: t(".region_placeholder"), class: "w-28 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-          <%= form.select :wine_type, wine_type_options, { include_blank: t(".type_blank") }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-          <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+          <%= render Ui::InputComponent.new(name: "bottle[name]", value: @bottle.name, placeholder: t(".bottle_name_placeholder"),
+                html_options: { id: "bottle_name", required: true, class: "flex-1" }) %>
+          <%= render Ui::InputComponent.new(type: "number", name: "bottle[vintage]", value: @bottle.vintage, placeholder: t(".vintage_placeholder"),
+                html_options: { id: "bottle_vintage", class: "w-24" }) %>
+          <%= render Ui::InputComponent.new(name: "bottle[region]", value: @bottle.region, placeholder: t(".region_placeholder"),
+                html_options: { id: "bottle_region", class: "w-28" }) %>
+          <%= render Ui::NativeSelectComponent.new(name: "bottle[wine_type]", options: [ [ t(".type_blank"), "" ] ] + wine_type_options,
+                selected: @bottle.wine_type, html_options: { id: "bottle_wine_type" }) %>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, type: "submit")) { t(".add") } %>
         <% end %>
-      </section>
+      <% end %>
     <% end %>
   <% end %>
 

@@ -14,8 +14,7 @@
               class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
         <%= form.submit t(".search_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
       <% end %>
-      <%= link_to t(".new_address"), new_address_path,
-            class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+      <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_address_path)) { t(".new_address") } %>
     </div>
   </header>
 
@@ -25,7 +24,11 @@
     <%= render @addresses %>
   </div>
   <% if @addresses.empty? %>
-    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".none") %></p>
+    <div class="mt-4">
+      <%= render(Ui::EmptyComponent.new) do |empty| %>
+        <% empty.with_description { t(".none") } %>
+      <% end %>
+    </div>
   <% end %>
 
 </div>

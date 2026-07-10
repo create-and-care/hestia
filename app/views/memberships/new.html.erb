@@ -5,16 +5,17 @@
 
   <%= render "shared/flash" %>
 
-  <%= form_with url: membership_path, method: :post do |form| %>
+  <%= form_with url: membership_path, method: :post do %>
     <div class="space-y-4">
-      <div>
-        <%= form.label :invite_code, t(".invite_code_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_field :invite_code, required: true, autofocus: true, value: params[:invite_code],
-              placeholder: t(".invite_code_placeholder"),
-              class: "w-full rounded-md border border-gray-300 px-3 py-2 uppercase tracking-widest" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "invite_code")) do |field| %>
+        <% field.with_label { t(".invite_code_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "invite_code", value: params[:invite_code], placeholder: t(".invite_code_placeholder"),
+                html_options: { id: "invite_code", required: true, autofocus: true, class: "uppercase tracking-widest" }) %>
+        <% end %>
+      <% end %>
 
-      <%= form.submit t(".submit"), class: "w-full cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= render(Ui::ButtonComponent.new(type: "submit", html_options: { class: "w-full" })) { t(".submit") } %>
     </div>
   <% end %>
 

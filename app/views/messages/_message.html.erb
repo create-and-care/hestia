@@ -1,7 +1,14 @@
-<%= tag.div id: dom_id(message), class: "rounded-lg border border-gray-200 px-3 py-2" do %>
-  <div class="flex items-baseline justify-between gap-2">
-    <span class="text-sm font-medium"><%= message.author.name.presence || message.author.email_address %></span>
-    <span class="text-xs text-gray-400"><%= message.created_at.strftime("%d/%m %H:%M") %></span>
-  </div>
-  <p class="whitespace-pre-line text-gray-800"><%= message.content %></p>
+<%# Hestia's conversations are an N-party household group chat, not the binary
+    AI-chat pattern Ui::MessageComponent models — so `role:` here only drives the
+    "mine vs. theirs" alignment/color Bubble provides. We always pass the real
+    author name explicitly rather than letting the component default to
+    "Vous"/"Assistant", since "Assistant" would misname a real household member. %>
+<%= tag.div id: dom_id(message) do %>
+  <%= render(Ui::MessageComponent.new(
+        role: message.author == Current.user ? :user : :assistant,
+        name: message.author.name.presence || message.author.email_address,
+        timestamp: message.created_at.strftime("%d/%m %H:%M")
+      )) do %>
+    <p class="whitespace-pre-line"><%= message.content %></p>
+  <% end %>
 <% end %>

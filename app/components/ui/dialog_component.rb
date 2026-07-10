@@ -20,8 +20,9 @@ module Ui
       bottom: "data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom"
     }.freeze
 
-    def initialize(position: :center)
+    def initialize(position: :center, role: "dialog")
       @position = position
+      @role = role
     end
   end
 end

@@ -2,19 +2,19 @@
   <%= link_to vehicle_path(vehicle), class: "min-w-0 flex-1" do %>
     <div class="flex items-center gap-2">
       <span class="font-medium"><%= vehicle.name %></span>
-      <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600"><%= vehicle_type_label(vehicle.vehicle_type) %></span>
+      <%= render(Ui::BadgeComponent.new(variant: :secondary)) { vehicle_type_label(vehicle.vehicle_type) } %>
     </div>
     <p class="text-sm text-gray-500">
       <%= [ vehicle.manufacturer, vehicle.plate, vehicle.year ].reject(&:blank?).join(" · ") %>
     </p>
   <% end %>
 
-  <span class="shrink-0 rounded-full px-2 py-0.5 text-xs font-medium <%= inspection_badge_class(vehicle.inspection_status) %>">
+  <%= render(Ui::BadgeComponent.new(variant: inspection_badge_variant(vehicle.inspection_status), html_options: { class: "shrink-0" })) do %>
     <%= t(".inspection_prefix") %> <%= inspection_label(vehicle.inspection_status) %>
-  </span>
+  <% end %>
 
   <div class="flex shrink-0 items-center gap-2 text-sm">
-    <%= link_to edit_vehicle_path(vehicle), class: "text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_vehicle_path(vehicle))) { lucide_icon("pencil", css_class: "size-4") } %>
     <%= button_to vehicle_path(vehicle), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
   </div>
 <% end %>

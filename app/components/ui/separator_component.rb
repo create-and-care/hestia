@@ -5,7 +5,7 @@ module Ui
     end
 
     def call
-      tag.div role: "separator", class: cn(
+      tag.div role: "separator", "aria-orientation": (@orientation == :vertical ? "vertical" : nil), class: cn(
         "bg-tertiary",
         @orientation == :vertical ? "w-px h-full" : "h-px w-full"
       )

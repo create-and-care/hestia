@@ -1,0 +1,7 @@
+<%= render(Ui::DialogComponent.new) do |dialog| %>
+  <% dialog.with_trigger { render(Ui::ButtonComponent.new) { "Open dialog" } } %>
+  <% dialog.with_title { "Edit profile" } %>
+  <% dialog.with_description { "Make changes to your profile here." } %>
+  <% dialog.with_footer { render(Ui::ButtonComponent.new) { "Save" } } %>
+  Profile form goes here.
+<% end %>

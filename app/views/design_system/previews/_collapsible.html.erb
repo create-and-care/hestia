@@ -1,0 +1,4 @@
+<%= render(Ui::CollapsibleComponent.new) do |collapsible| %>
+  <% collapsible.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { "Toggle details" } } %>
+  Additional details revealed on toggle.
+<% end %>

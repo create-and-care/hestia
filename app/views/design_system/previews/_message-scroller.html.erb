@@ -1,0 +1,7 @@
+<%= render(Ui::MessageScrollerComponent.new(class_name: "h-56 w-full")) do %>
+  <%= render(Ui::MessageComponent.new(role: :assistant, timestamp: "10:00")) { "Bonjour ! Comment puis-je aider avec le budget ?" } %>
+  <%= render(Ui::MessageComponent.new(role: :user, timestamp: "10:01")) { "Combien reste-t-il sur les courses ce mois-ci ?" } %>
+  <%= render(Ui::MessageComponent.new(role: :assistant, timestamp: "10:01")) { "Il reste 180 € sur les 600 € alloués." } %>
+  <%= render(Ui::MessageComponent.new(role: :user, timestamp: "10:02")) { "Et pour les loisirs ?" } %>
+  <%= render(Ui::MessageComponent.new(role: :assistant, timestamp: "10:02")) { "35 € restants sur 100 €." } %>
+<% end %>

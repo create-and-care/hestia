@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = [ "panel", "label", "group", "groupPanel", "groupChevron", "item", "searchInput", "empty" ]
+  static targets = [ "panel", "panelToggle", "label", "group", "groupPanel", "groupChevron", "item", "searchInput", "empty" ]
   static classes = [ "collapsed", "expanded" ]
 
   connect() {
@@ -21,6 +21,7 @@ export default class extends Controller {
     this.panelTarget.classList.remove(this.expandedClass)
     this.panelTarget.classList.add(this.collapsedClass)
     this.labelTargets.forEach((el) => el.classList.add("hidden"))
+    if (this.hasPanelToggleTarget) this.panelToggleTarget.setAttribute("aria-expanded", "false")
     localStorage.setItem("sidebar:collapsed", "true")
   }
 
@@ -28,6 +29,7 @@ export default class extends Controller {
     this.panelTarget.classList.remove(this.collapsedClass)
     this.panelTarget.classList.add(this.expandedClass)
     this.labelTargets.forEach((el) => el.classList.remove("hidden"))
+    if (this.hasPanelToggleTarget) this.panelToggleTarget.setAttribute("aria-expanded", "true")
     localStorage.setItem("sidebar:collapsed", "false")
   }
 

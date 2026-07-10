@@ -10,8 +10,8 @@
   <%= render "shared/flash" %>
 
   <% if @list.perspective == "receive" %>
-    <section class="mb-6 rounded-lg border border-gray-200 p-3">
-      <h2 class="mb-2 font-medium"><%= t(".public_sharing") %></h2>
+    <%= render(Ui::CardComponent.new(class_name: "mb-6")) do |card| %>
+      <% card.with_title { t(".public_sharing") } %>
       <% if @list.shared? %>
         <p class="mb-2 text-sm text-gray-600"><%= t(".share_link_description") %></p>
         <code class="block rounded bg-gray-100 px-3 py-2 text-sm break-all"><%= public_gift_list_url(@list.gift_list_share.token) %></code>
@@ -20,7 +20,7 @@
         <%= button_to t(".enable_link"), gift_list_share_path(@list), method: :post,
               class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
       <% end %>
-    </section>
+    <% end %>
   <% end %>
 
   <section class="mb-6">
@@ -32,17 +32,20 @@
             <span class="font-medium"><%= idea.name %></span>
             <% if idea.price %>· <%= number_to_currency(idea.price, unit: "€", format: "%n %u") %><% end %>
             <% if (idea_url = safe_url(idea.url)) %>· <%= link_to t(".link_label"), idea_url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
-            <span class="ml-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs"><%= gift_status_label(idea.status) %></span>
+            <%= render(Ui::BadgeComponent.new(variant: :secondary, html_options: { class: "ml-1" })) { gift_status_label(idea.status) } %>
           </span>
           <%= button_to "×", gift_list_gift_idea_path(@list, idea), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
         </li>
       <% end %>
     </ul>
     <%= form_with model: [ @list, @idea ], url: gift_list_gift_ideas_path(@list), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: t(".idea_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.number_field :price, step: :any, placeholder: "€", class: "w-20 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.url_field :url, placeholder: t(".link_placeholder"), class: "w-40 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(name: "gift_idea[name]", value: @idea.name, placeholder: t(".idea_placeholder"),
+            html_options: { id: "gift_idea_name", required: true, class: "flex-1" }) %>
+      <%= render Ui::InputComponent.new(type: "number", name: "gift_idea[price]", value: @idea.price, placeholder: "€",
+            html_options: { id: "gift_idea_price", step: "any", class: "w-20" }) %>
+      <%= render Ui::InputComponent.new(type: "url", name: "gift_idea[url]", value: @idea.url, placeholder: t(".link_placeholder"),
+            html_options: { id: "gift_idea_url", class: "w-40" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 

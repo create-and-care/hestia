@@ -17,6 +17,11 @@ module Ui
 
     def initialize(multiple: false)
       @multiple = multiple
+      @uid = SecureRandom.hex(4)
+    end
+
+    def panel_id(key)
+      "accordion-#{@uid}-panel-#{key}"
     end
   end
 end

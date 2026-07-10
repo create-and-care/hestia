@@ -8,9 +8,9 @@
 
   <%= form_with url: import_recipes_path, method: :post do |form| %>
     <div class="flex gap-2">
-      <%= form.url_field :url, required: true, placeholder: "https://…",
-            class: "flex-1 rounded-md border border-gray-300 px-3 py-2" %>
-      <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= render Ui::InputComponent.new(type: "url", name: "url", placeholder: "https://…",
+            html_options: { id: "import_url", required: true, class: "flex-1" }) %>
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
     </div>
   <% end %>
 

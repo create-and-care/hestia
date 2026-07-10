@@ -5,25 +5,22 @@
 
   <header class="mb-6 flex items-center justify-between">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("message-circle", css_class: "size-6") %> <%= t(".title") %></h1>
-    <%= link_to t(".new_conversation"), new_conversation_path,
-          class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_conversation_path)) { t(".new_conversation") } %>
   </header>
 
   <%= render "shared/flash" %>
 
   <% if @conversations.any? %>
-    <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="divide-y divide-gray-100 rounded-lg border border-primary">
       <% @conversations.each do |conversation| %>
-        <li>
-          <%= link_to conversation_path(conversation), class: "block px-4 py-3 hover:bg-gray-50" do %>
-            <p class="font-medium"><%= conversation.name %></p>
-            <p class="text-sm text-gray-500"><%= conversation.participants.map { |u| u.name.presence || u.email_address }.join(", ") %></p>
-          <% end %>
-        </li>
+        <%= render(Ui::ItemComponent.new(href: conversation_path(conversation))) do |item| %>
+          <% item.with_title { conversation.name } %>
+          <% item.with_description { conversation.participants.map { |u| u.name.presence || u.email_address }.join(", ") } %>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
   <% else %>
-    <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".empty") %></p>
+    <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty") } } %>
   <% end %>
 
 </div>

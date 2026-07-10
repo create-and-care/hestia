@@ -6,20 +6,18 @@
 
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("cake", css_class: "size-6") %> <%= t(".title") %></h1>
-    <%= link_to t(".new_contact"), new_contact_path,
-          class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+    <%= render Ui::ButtonComponent.new(href: new_contact_path) { t(".new_contact") } %>
   </header>
 
   <%= render "shared/flash" %>
 
   <section class="mb-6 flex flex-wrap items-center gap-2">
-    <%= link_to t(".all_filter"), contacts_path,
-          class: "rounded-full px-3 py-0.5 text-xs #{@tag ? 'bg-gray-100' : 'bg-gray-900 text-white'}" %>
+    <%= render(Ui::BadgeComponent.new(variant: @tag ? :secondary : :default)) { link_to t(".all_filter"), contacts_path } %>
     <% @tags.each do |tag| %>
-      <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs #{'bg-gray-900 text-white' if @tag == tag} bg-gray-100">
+      <%= render(Ui::BadgeComponent.new(variant: @tag == tag ? :default : :secondary)) do %>
         <%= link_to "#{tag.emoji} #{tag.name}".strip, contacts_path(tag_id: tag.id) %>
         <%= button_to "×", contact_tag_path(tag), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
-      </span>
+      <% end %>
     <% end %>
     <%= form_with url: contact_tags_path, method: :post, class: "inline-flex gap-1" do %>
       <%= text_field_tag "contact_tag[emoji]", nil, placeholder: "🙂", maxlength: 4, class: "w-12 rounded-md border border-gray-300 px-2 py-1 text-xs" %>
@@ -32,7 +30,7 @@
     <%= render @contacts %>
   </div>
   <% if @contacts.empty? %>
-    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".none") %></p>
+    <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".none") } } %>
   <% end %>
 
 </div>

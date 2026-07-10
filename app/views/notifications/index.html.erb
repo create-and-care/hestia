@@ -11,14 +11,16 @@
 
   <%= render "shared/flash" %>
 
-  <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
-    <% if @notifications.none? %>
-      <li class="px-4 py-6 text-center text-sm text-gray-400"><%= t(".none") %></li>
+  <% if @notifications.none? %>
+    <%= render(Ui::EmptyComponent.new) do |empty| %>
+      <% empty.with_icon { lucide_icon("bell", css_class: "size-8") } %>
+      <% empty.with_description { t(".none") } %>
     <% end %>
-    <% @notifications.each do |notification| %>
-      <li class="px-3 py-1">
+  <% else %>
+    <div class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <% @notifications.each do |notification| %>
         <%= render "notifications/notification", notification: notification %>
-      </li>
-    <% end %>
-  </ul>
+      <% end %>
+    </div>
+  <% end %>
 </div>

@@ -1,0 +1,10 @@
+<%= render(Ui::NavigationMenuComponent.new) do |nav| %>
+  <% nav.with_menu(label: "Product", key: "product") do %>
+    <p class="text-sm font-medium text-primary mb-1">Product</p>
+    <p class="text-sm text-secondary">Budgets, accounts, and reports.</p>
+  <% end %>
+  <% nav.with_menu(label: "Resources", key: "resources") do %>
+    <p class="text-sm font-medium text-primary mb-1">Resources</p>
+    <p class="text-sm text-secondary">Guides, blog, and changelog.</p>
+  <% end %>
+<% end %>

@@ -1,4 +1,4 @@
-<div role="alert" class="<%= cn("flex gap-3 rounded-lg border bg-container p-4 text-sm", VARIANTS.fetch(@variant)) %>">
+<div role="alert" class="<%= cn("flex gap-3 rounded-lg border bg-container p-4 text-sm", VARIANTS.fetch(@variant), @class_name) %>">
   <% if icon? %><div class="shrink-0 mt-0.5"><%= icon %></div><% end %>
   <div class="space-y-1">
     <% if title? %><p class="font-medium leading-none"><%= title %></p><% end %>

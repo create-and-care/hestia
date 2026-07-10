@@ -24,67 +24,83 @@
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("syringe", css_class: "size-5") %> <%= t(".vaccinations_title") %></h2>
-    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @pet.pet_vaccinations.ordered.each do |vaccination| %>
-        <li class="flex items-center justify-between px-3 py-2 text-sm">
-          <span>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_title do %>
             <%= vaccination.name %>
             <% if vaccination.injected_on %><span class="text-gray-400">· <%= t(".vaccination_done_on", date: vaccination.injected_on.strftime("%d/%m/%Y")) %></span><% end %>
             <% if vaccination.booster_on %>
               <span class="<%= vaccination.booster_overdue? ? "font-medium text-red-600" : "text-gray-400" %>">· <%= t(".vaccination_booster_on", date: vaccination.booster_on.strftime("%d/%m/%Y")) %></span>
             <% end %>
-          </span>
-          <%= button_to pet_vaccination_path(@pet, vaccination), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-        </li>
+          <% end %>
+          <% item.with_trailing do %>
+            <%= button_to pet_vaccination_path(@pet, vaccination), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+          <% end %>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
     <%= form_with model: @vaccination, url: pet_vaccinations_path(@pet), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: t(".vaccination_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.date_field :injected_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.date_field :booster_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(type: "text", name: "pet_vaccination[name]", value: @vaccination.name, placeholder: t(".vaccination_placeholder"),
+            html_options: { id: "pet_vaccination_name", required: true, class: "flex-1" }) %>
+      <%= render Ui::InputComponent.new(type: "date", name: "pet_vaccination[injected_on]", value: @vaccination.injected_on,
+            html_options: { id: "pet_vaccination_injected_on" }) %>
+      <%= render Ui::InputComponent.new(type: "date", name: "pet_vaccination[booster_on]", value: @vaccination.booster_on,
+            html_options: { id: "pet_vaccination_booster_on" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("pill", css_class: "size-5") %> <%= t(".treatments_title") %></h2>
-    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @pet.pet_treatments.ordered.each do |treatment| %>
-        <li class="flex items-center justify-between px-3 py-2 text-sm">
-          <span><%= treatment.name %>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_title do %>
+            <%= treatment.name %>
             <% if treatment.frequency.present? %><span class="text-gray-400">· <%= treatment.frequency %></span><% end %>
             <% if treatment.last_done_on %><span class="text-gray-400">· <%= t(".treatment_last_done", date: treatment.last_done_on.strftime("%d/%m/%Y")) %></span><% end %>
-          </span>
-          <%= button_to pet_treatment_path(@pet, treatment), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-        </li>
+          <% end %>
+          <% item.with_trailing do %>
+            <%= button_to pet_treatment_path(@pet, treatment), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+          <% end %>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
     <%= form_with model: @treatment, url: pet_treatments_path(@pet), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: t(".treatment_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :frequency, placeholder: t(".frequency_placeholder"), class: "w-28 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.date_field :last_done_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(type: "text", name: "pet_treatment[name]", value: @treatment.name, placeholder: t(".treatment_placeholder"),
+            html_options: { id: "pet_treatment_name", required: true, class: "flex-1" }) %>
+      <%= render Ui::InputComponent.new(type: "text", name: "pet_treatment[frequency]", value: @treatment.frequency, placeholder: t(".frequency_placeholder"),
+            html_options: { id: "pet_treatment_frequency", class: "w-28" }) %>
+      <%= render Ui::InputComponent.new(type: "date", name: "pet_treatment[last_done_on]", value: @treatment.last_done_on,
+            html_options: { id: "pet_treatment_last_done_on" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("shopping-cart", css_class: "size-5") %> <%= t(".supplies_title") %></h2>
-    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @pet.pet_supplies.ordered.each do |supply| %>
-        <li class="flex items-center justify-between px-3 py-2 text-sm">
-          <span>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_title do %>
             <% if supply.order_url.present? %><%= link_to supply.name, supply.order_url, target: "_blank", rel: "noopener", class: "underline" %><% else %><%= supply.name %><% end %>
             <% if supply.next_order_on %><span class="text-gray-400">· <%= t(".next_order_on", date: supply.next_order_on.strftime("%d/%m/%Y")) %></span><% end %>
-          </span>
-          <%= button_to pet_supply_path(@pet, supply), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-        </li>
+          <% end %>
+          <% item.with_trailing do %>
+            <%= button_to pet_supply_path(@pet, supply), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+          <% end %>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
     <%= form_with model: @supply, url: pet_supplies_path(@pet), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: t(".supply_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.url_field :order_url, placeholder: t(".order_link_placeholder"), class: "w-40 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.date_field :next_order_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(type: "text", name: "pet_supply[name]", value: @supply.name, placeholder: t(".supply_placeholder"),
+            html_options: { id: "pet_supply_name", required: true, class: "flex-1" }) %>
+      <%= render Ui::InputComponent.new(type: "url", name: "pet_supply[order_url]", value: @supply.order_url, placeholder: t(".order_link_placeholder"),
+            html_options: { id: "pet_supply_order_url", class: "w-40" }) %>
+      <%= render Ui::InputComponent.new(type: "date", name: "pet_supply[next_order_on]", value: @supply.next_order_on,
+            html_options: { id: "pet_supply_next_order_on" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 

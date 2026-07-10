@@ -1,0 +1,18 @@
+<div class="space-y-4 w-full">
+  <%= render(Ui::TypographyComponent.new(variant: :h1)) { "Le budget du foyer" } %>
+  <%= render(Ui::TypographyComponent.new(variant: :h2)) { "Dépenses de juillet" } %>
+  <%= render(Ui::TypographyComponent.new(variant: :h3)) { "Par catégorie" } %>
+  <%= render(Ui::TypographyComponent.new(variant: :h4)) { "Courses" } %>
+  <%= render(Ui::TypographyComponent.new(variant: :lead)) { "Un aperçu clair de ce qui reste à dépenser ce mois-ci." } %>
+  <%= render(Ui::TypographyComponent.new(variant: :p)) { "Le foyer a dépensé 1 284,90 € ce mois-ci, réparti sur 6 catégories. Les courses restent le premier poste." } %>
+  <%= render(Ui::TypographyComponent.new(variant: :large)) { "1 284,90 €" } %>
+  <%= render(Ui::TypographyComponent.new(variant: :small)) { "Mis à jour il y a 2 minutes" } %>
+  <%= render(Ui::TypographyComponent.new(variant: :muted)) { "Les montants incluent les remboursements en attente." } %>
+  <%= render(Ui::TypographyComponent.new(variant: :blockquote)) { "« On ne gère pas ce qu'on ne mesure pas. »" } %>
+  <%= render(Ui::TypographyComponent.new(variant: :inline_code)) { "budget.remaining" } %>
+  <%= render(Ui::TypographyComponent.new(variant: :list)) do %>
+    <li>Loyer — 950 €</li>
+    <li>Courses — 420 €</li>
+    <li>Internet — 35 €</li>
+  <% end %>
+</div>

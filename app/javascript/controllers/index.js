@@ -16,6 +16,9 @@ application.register("calendar", CalendarController)
 import CarouselController from "./carousel_controller"
 application.register("carousel", CarouselController)
 
+import ClipboardController from "./clipboard_controller"
+application.register("clipboard", ClipboardController)
+
 import CollapsibleController from "./collapsible_controller"
 application.register("collapsible", CollapsibleController)
 
@@ -28,11 +31,20 @@ application.register("command", CommandController)
 import ContextMenuController from "./context_menu_controller"
 application.register("context-menu", ContextMenuController)
 
+import DataTableController from "./data_table_controller"
+application.register("data-table", DataTableController)
+
+import DatePickerController from "./date_picker_controller"
+application.register("date-picker", DatePickerController)
+
 import DialogController from "./dialog_controller"
 application.register("dialog", DialogController)
 
 import DropdownMenuController from "./dropdown_menu_controller"
 application.register("dropdown-menu", DropdownMenuController)
+
+import FormController from "./form_controller"
+application.register("form", FormController)
 
 import GeocodeLookupController from "./geocode_lookup_controller"
 application.register("geocode-lookup", GeocodeLookupController)
@@ -43,8 +55,17 @@ application.register("hello", HelloController)
 import HoverCardController from "./hover_card_controller"
 application.register("hover-card", HoverCardController)
 
+import IconSearchController from "./icon_search_controller"
+application.register("icon-search", IconSearchController)
+
 import InputOtpController from "./input_otp_controller"
 application.register("input-otp", InputOtpController)
+
+import MenubarController from "./menubar_controller"
+application.register("menubar", MenubarController)
+
+import MessageScrollerController from "./message_scroller_controller"
+application.register("message-scroller", MessageScrollerController)
 
 import NavigationMenuController from "./navigation_menu_controller"
 application.register("navigation-menu", NavigationMenuController)
@@ -72,6 +93,9 @@ application.register("sortable", SortableController)
 
 import TabsController from "./tabs_controller"
 application.register("tabs", TabsController)
+
+import ThemeController from "./theme_controller"
+application.register("theme", ThemeController)
 
 import ToggleController from "./toggle_controller"
 application.register("toggle", ToggleController)

@@ -4,8 +4,8 @@
   <header class="mb-4">
     <h1 class="text-2xl font-semibold"><%= @recipe.title %></h1>
     <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-500">
-      <% if @recipe.category.present? %><span class="rounded-full bg-gray-100 px-2 py-0.5"><%= @recipe.category %></span><% end %>
-      <% @recipe.tags.each do |tag| %><span class="rounded-full bg-gray-100 px-2 py-0.5">#<%= tag %></span><% end %>
+      <% if @recipe.category.present? %><%= render(Ui::BadgeComponent.new(variant: :secondary)) { @recipe.category } %><% end %>
+      <% @recipe.tags.each do |tag| %><%= render(Ui::BadgeComponent.new(variant: :secondary)) { "##{tag}" } %><% end %>
       <% if @recipe.prep_time_minutes %><span><%= t(".prep_time", minutes: @recipe.prep_time_minutes) %></span><% end %>
       <% if @recipe.cook_time_minutes %><span><%= t(".cook_time", minutes: @recipe.cook_time_minutes) %></span><% end %>
       <% if @recipe.servings %><span><%= t(".servings", count: @recipe.servings) %></span><% end %>
@@ -15,26 +15,28 @@
   <%= render "shared/flash" %>
 
   <div class="mb-6 flex flex-wrap gap-2">
-    <%= link_to cook_recipe_path(@recipe),
-          class: "inline-flex items-center gap-1.5 rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" do %><%= lucide_icon("chef-hat", css_class: "size-4") %> <%= t('.cook_mode_link') %><% end %>
+    <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: cook_recipe_path(@recipe))) do %>
+      <%= lucide_icon("chef-hat", css_class: "size-4") %> <%= t(".cook_mode_link") %>
+    <% end %>
     <%= button_to add_to_shopping_list_recipe_path(@recipe), method: :post,
           class: "cursor-pointer inline-flex items-center gap-1.5 rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" do %><%= lucide_icon("shopping-cart", css_class: "size-4") %> <%= t('.add_to_shopping_list_link') %><% end %>
-    <%= link_to t(".edit_link"), edit_recipe_path(@recipe),
-          class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+    <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_recipe_path(@recipe))) { t(".edit_link") } %>
     <%= button_to t(".delete_link"), recipe_path(@recipe), method: :delete,
           form: { data: { turbo_confirm: t(".delete_confirm") } },
           class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" %>
   </div>
 
-  <section class="mb-6 rounded-lg border border-gray-200 p-4">
+  <%= render(Ui::CardComponent.new(class_name: "mb-6")) do %>
     <h2 class="mb-2 font-medium"><%= t(".plan_meal_heading") %></h2>
     <%= form_with url: meal_plan_entries_path, scope: :meal_plan_entry, class: "flex flex-wrap items-end gap-2" do |form| %>
       <%= form.hidden_field :recipe_id, value: @recipe.id %>
-      <%= form.date_field :on_date, value: Date.current, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.select :meal_type, meal_type_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".plan_meal_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(type: "date", name: "meal_plan_entry[on_date]", value: Date.current,
+            html_options: { id: "meal_plan_entry_on_date" }) %>
+      <%= render Ui::NativeSelectComponent.new(name: "meal_plan_entry[meal_type]", options: meal_type_options,
+            html_options: { id: "meal_plan_entry_meal_type" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".plan_meal_submit") } %>
     <% end %>
-  </section>
+  <% end %>
 
   <section class="mb-6">
     <h2 class="mb-2 font-medium"><%= t(".ingredients_heading") %></h2>

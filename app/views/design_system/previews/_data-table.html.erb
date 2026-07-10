@@ -1,0 +1,15 @@
+<div class="w-full">
+  <%= render Ui::DataTableComponent.new(
+    headers: [ "Name", "Category", "Amount" ],
+    rows: [
+      [ "Rent", "Housing", "€950" ],
+      [ "Groceries", "Food", "€420" ],
+      [ "Internet", "Utilities", "€35" ],
+      [ "Gym", "Health", "€29" ],
+      [ "Streaming", "Leisure", "€18" ],
+      [ "Electricity", "Utilities", "€64" ],
+      [ "Insurance", "Housing", "€40" ]
+    ],
+    page_size: 4
+  ) %>
+</div>

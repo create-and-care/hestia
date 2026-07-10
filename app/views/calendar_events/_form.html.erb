@@ -1,61 +1,89 @@
 <%= form_with model: event, url: url do |form| %>
   <% if event.errors.any? %>
-    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
       <ul class="list-inside list-disc">
         <% event.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
       </ul>
-    </div>
+    <% end %>
   <% end %>
 
   <div class="space-y-4">
-    <div>
-      <%= form.label :title, t(".title_label"), class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_field :title, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-    </div>
+    <%= render(Ui::FieldComponent.new(id: "calendar_event_title")) do |field| %>
+      <% field.with_label { t(".title_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::InputComponent.new(name: "calendar_event[title]", value: event.title,
+              html_options: { id: "calendar_event_title", required: true }) %>
+      <% end %>
+    <% end %>
 
-    <label class="flex items-center gap-2 text-sm">
-      <%= form.check_box :all_day %> <%= t(".all_day_label") %>
-    </label>
-
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <div>
-        <%= form.label :starts_at, t(".starts_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.datetime_field :starts_at, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
-      <div>
-        <%= form.label :ends_at, t(".ends_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.datetime_field :ends_at, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+    <div class="flex items-center gap-2 text-sm">
+      <%= hidden_field_tag "calendar_event[all_day]", "0", id: nil %>
+      <%= render Ui::CheckboxComponent.new(name: "calendar_event[all_day]", id: "calendar_event_all_day", checked: event.all_day) %>
+      <%= render(Ui::LabelComponent.new(for_id: "calendar_event_all_day")) { t(".all_day_label") } %>
     </div>
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <div>
-        <%= form.label :location, t(".location_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_field :location, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
-      <div>
-        <%= form.label :color, t(".color_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.select :color, color_options, {}, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "calendar_event_starts_at")) do |field| %>
+        <% field.with_label { t(".starts_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "datetime-local", name: "calendar_event[starts_at]",
+                value: event.starts_at&.strftime("%Y-%m-%dT%H:%M"),
+                html_options: { id: "calendar_event_starts_at", required: true }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::FieldComponent.new(id: "calendar_event_ends_at")) do |field| %>
+        <% field.with_label { t(".ends_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "datetime-local", name: "calendar_event[ends_at]",
+                value: event.ends_at&.strftime("%Y-%m-%dT%H:%M"),
+                html_options: { id: "calendar_event_ends_at" }) %>
+        <% end %>
+      <% end %>
     </div>
 
-    <fieldset class="rounded-md border border-gray-200 p-3">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <%= render(Ui::FieldComponent.new(id: "calendar_event_location")) do |field| %>
+        <% field.with_label { t(".location_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "calendar_event[location]", value: event.location,
+                html_options: { id: "calendar_event_location" }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::FieldComponent.new(id: "calendar_event_color")) do |field| %>
+        <% field.with_label { t(".color_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "calendar_event[color]", options: color_options,
+                selected: event.color, html_options: { id: "calendar_event_color" }) %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <fieldset class="rounded-md border border-primary p-3">
       <legend class="px-1 text-sm font-medium"><%= t(".recurrence_legend") %></legend>
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div>
-          <%= form.label :frequency, t(".frequency_label"), class: "mb-1 block text-xs text-gray-500" %>
-          <%= form.select :frequency, frequency_options, {}, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-        </div>
-        <div>
-          <%= form.label :recurrence_interval, t(".every_label"), class: "mb-1 block text-xs text-gray-500" %>
-          <%= form.number_field :recurrence_interval, min: 1, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-        </div>
-        <div>
-          <%= form.label :recurrence_until, t(".until_label"), class: "mb-1 block text-xs text-gray-500" %>
-          <%= form.date_field :recurrence_until, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-        </div>
+        <%= render(Ui::FieldComponent.new(id: "calendar_event_frequency")) do |field| %>
+          <% field.with_label { t(".frequency_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::NativeSelectComponent.new(name: "calendar_event[frequency]", options: frequency_options,
+                  selected: event.frequency, html_options: { id: "calendar_event_frequency" }) %>
+          <% end %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: "calendar_event_recurrence_interval")) do |field| %>
+          <% field.with_label { t(".every_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "number", name: "calendar_event[recurrence_interval]",
+                  value: event.recurrence_interval, html_options: { id: "calendar_event_recurrence_interval", min: 1 }) %>
+          <% end %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: "calendar_event_recurrence_until")) do |field| %>
+          <% field.with_label { t(".until_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "date", name: "calendar_event[recurrence_until]",
+                  value: event.recurrence_until, html_options: { id: "calendar_event_recurrence_until" }) %>
+          <% end %>
+        <% end %>
       </div>
     </fieldset>
 
@@ -63,14 +91,15 @@
       <span class="mb-1 block text-sm font-medium"><%= t(".participants_label") %></span>
       <div class="flex flex-wrap gap-3">
         <% Current.household.users.order(:name).each do |user| %>
-          <label class="flex items-center gap-2 text-sm">
-            <%= check_box_tag "participant_ids[]", user.id, event.participant_ids.include?(user.id), id: "participant_#{user.id}" %>
-            <%= user.name.presence || user.email_address %>
-          </label>
+          <div class="flex items-center gap-2 text-sm">
+            <%= render Ui::CheckboxComponent.new(name: "participant_ids[]", id: "participant_#{user.id}",
+                  checked: event.participant_ids.include?(user.id), html_options: { value: user.id }) %>
+            <%= render(Ui::LabelComponent.new(for_id: "participant_#{user.id}")) { user.name.presence || user.email_address } %>
+          </div>
         <% end %>
       </div>
     </div>
 
-    <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".submit") } %>
   </div>
 <% end %>

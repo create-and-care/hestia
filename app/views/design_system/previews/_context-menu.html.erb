@@ -1,0 +1,5 @@
+<%= render(Ui::ContextMenuComponent.new(items: [ [ "Reload", "reload" ], [ "Save page as…", "save" ], :separator, [ "Inspect", "inspect" ] ])) do %>
+  <div class="flex h-24 w-full items-center justify-center rounded-md border border-dashed border-primary text-sm text-secondary">
+    Right-click here
+  </div>
+<% end %>

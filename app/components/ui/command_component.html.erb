@@ -1,14 +1,18 @@
 <div data-controller="command" class="w-full max-w-md rounded-lg border border-primary bg-container shadow-lg">
-  <input type="text" data-command-target="input" data-action="input->command#filter" placeholder="<%= @placeholder %>"
+  <input type="text" data-command-target="input" data-action="input->command#filter keydown->command#onKeydown"
+    placeholder="<%= @placeholder %>" role="combobox" aria-expanded="true" aria-controls="<%= list_id %>" aria-activedescendant=""
     class="w-full border-0 border-b border-primary px-3 py-3 text-sm text-primary focus:outline-none">
-  <div class="max-h-80 overflow-auto p-2">
+  <div id="<%= list_id %>" role="listbox" class="max-h-80 overflow-auto p-2">
+    <% item_index = 0 %>
     <% @groups.each do |label, items| %>
       <p class="px-2 py-1 text-xs font-medium text-secondary"><%= label %></p>
       <% items.each do |item_label, value| %>
-        <button type="button" data-command-target="item" data-value="<%= value %>" data-action="click->command#select"
+        <button type="button" id="<%= item_id(item_index) %>" role="option" aria-selected="false"
+          data-command-target="item" data-value="<%= value %>" data-action="click->command#select"
           class="flex w-full items-center rounded-sm px-2 py-1.5 text-sm text-primary hover:bg-surface-hover">
           <%= item_label %>
         </button>
+        <% item_index += 1 %>
       <% end %>
     <% end %>
     <p data-command-target="empty" hidden class="px-2 py-1.5 text-sm text-secondary">No results found.</p>

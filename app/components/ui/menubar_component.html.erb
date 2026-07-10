@@ -1,8 +1,9 @@
-<div class="inline-flex items-center gap-1 rounded-md border border-primary bg-container p-1">
+<div role="menubar" data-controller="menubar" class="inline-flex items-center gap-1 rounded-md border border-primary bg-container p-1">
   <% @menus.each do |label, items| %>
     <%= render(Ui::DropdownMenuComponent.new(items: items)) do |menu| %>
       <% menu.with_trigger do %>
-        <button type="button" class="rounded-sm px-3 h-7 text-sm font-medium text-primary hover:bg-surface-hover"><%= label %></button>
+        <button type="button" role="menuitem" data-menubar-target="item" data-action="keydown->menubar#onKeydown"
+          class="rounded-sm px-3 h-7 text-sm font-medium text-primary hover:bg-surface-hover"><%= label %></button>
       <% end %>
     <% end %>
   <% end %>

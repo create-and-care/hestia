@@ -14,7 +14,7 @@
             <% if (idea_url = safe_url(idea.url)) %>· <%= link_to t(".view_link"), idea_url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
           </span>
           <% if idea.reserved? %>
-            <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700"><%= t(".reserved") %></span>
+            <%= render(Ui::BadgeComponent.new(variant: :success)) { t(".reserved") } %>
           <% end %>
         </div>
         <% if idea.comment.present? %><p class="mt-1 text-sm text-gray-500"><%= idea.comment %></p><% end %>
@@ -25,13 +25,16 @@
                   class: "cursor-pointer text-xs text-gray-500 underline" %>
           <% else %>
             <%= form_with url: reserve_public_gift_path(@share.token, idea), method: :post, class: "flex gap-2" do |form| %>
-              <%= text_field_tag :reserver_name, nil, placeholder: t(".reserver_name_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1 text-sm" %>
-              <%= submit_tag t(".reserve"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1 text-sm font-medium text-white hover:bg-gray-700" %>
+              <%= render Ui::InputComponent.new(name: "reserver_name", placeholder: t(".reserver_name_placeholder"),
+                    html_options: { id: "reserver_name", class: "flex-1" }) %>
+              <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".reserve") } %>
             <% end %>
           <% end %>
         </div>
       </li>
     <% end %>
   </ul>
-  <% if @ideas.empty? %><p class="text-gray-500"><%= t(".empty") %></p><% end %>
+  <% if @ideas.empty? %>
+    <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty") } } %>
+  <% end %>
 </div>

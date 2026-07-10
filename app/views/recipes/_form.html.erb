@@ -1,62 +1,84 @@
 <%= form_with model: recipe, url: url do |form| %>
   <% if recipe.errors.any? %>
-    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
       <ul class="list-inside list-disc">
         <% recipe.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
       </ul>
-    </div>
+    <% end %>
   <% end %>
 
   <div class="space-y-4">
-    <div>
-      <%= form.label :title, t(".title_label"), class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_field :title, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-    </div>
+    <%= render(Ui::FieldComponent.new(id: "recipe_title")) do |field| %>
+      <% field.with_label { t(".title_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::InputComponent.new(name: "recipe[title]", value: recipe.title, invalid: recipe.errors[:title].any?,
+              html_options: { id: "recipe_title", required: true }) %>
+      <% end %>
+    <% end %>
 
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-      <div>
-        <%= form.label :category, t(".category_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_field :category, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
-      <div>
-        <%= form.label :prep_time_minutes, t(".prep_time_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.number_field :prep_time_minutes, min: 0, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
-      <div>
-        <%= form.label :cook_time_minutes, t(".cook_time_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.number_field :cook_time_minutes, min: 0, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
-      <div>
-        <%= form.label :servings, t(".servings_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.number_field :servings, min: 1, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "recipe_category")) do |field| %>
+        <% field.with_label { t(".category_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "recipe[category]", value: recipe.category, html_options: { id: "recipe_category" }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::FieldComponent.new(id: "recipe_prep_time_minutes")) do |field| %>
+        <% field.with_label { t(".prep_time_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "number", name: "recipe[prep_time_minutes]", value: recipe.prep_time_minutes,
+                html_options: { id: "recipe_prep_time_minutes", min: 0 }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::FieldComponent.new(id: "recipe_cook_time_minutes")) do |field| %>
+        <% field.with_label { t(".cook_time_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "number", name: "recipe[cook_time_minutes]", value: recipe.cook_time_minutes,
+                html_options: { id: "recipe_cook_time_minutes", min: 0 }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::FieldComponent.new(id: "recipe_servings")) do |field| %>
+        <% field.with_label { t(".servings_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "number", name: "recipe[servings]", value: recipe.servings,
+                html_options: { id: "recipe_servings", min: 1 }) %>
+        <% end %>
+      <% end %>
     </div>
 
-    <div>
-      <%= form.label :tags_text, t(".tags_label"), class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_field :tags_text, value: recipe.tags_text, name: "recipe[tags_text]",
-            placeholder: t(".tags_placeholder"), class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-    </div>
+    <%= render(Ui::FieldComponent.new(id: "recipe_tags_text")) do |field| %>
+      <% field.with_label { t(".tags_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::InputComponent.new(name: "recipe[tags_text]", value: recipe.tags_text, placeholder: t(".tags_placeholder"),
+              html_options: { id: "recipe_tags_text" }) %>
+      <% end %>
+    <% end %>
 
-    <div>
-      <%= form.label :ingredients_text, t(".ingredients_label"), class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_area :ingredients_text, value: recipe.ingredients_text, name: "recipe[ingredients_text]",
-            rows: 6, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-    </div>
+    <%= render(Ui::FieldComponent.new(id: "recipe_ingredients_text")) do |field| %>
+      <% field.with_label { t(".ingredients_label") } %>
+      <% field.with_control do %>
+        <%= render(Ui::TextareaComponent.new(name: "recipe[ingredients_text]", rows: 6,
+              html_options: { id: "recipe_ingredients_text" })) { recipe.ingredients_text } %>
+      <% end %>
+    <% end %>
 
-    <div>
-      <%= form.label :steps_text, t(".steps_label"), class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_area :steps_text, value: recipe.steps_text, name: "recipe[steps_text]",
-            rows: 6, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-    </div>
+    <%= render(Ui::FieldComponent.new(id: "recipe_steps_text")) do |field| %>
+      <% field.with_label { t(".steps_label") } %>
+      <% field.with_control do %>
+        <%= render(Ui::TextareaComponent.new(name: "recipe[steps_text]", rows: 6,
+              html_options: { id: "recipe_steps_text" })) { recipe.steps_text } %>
+      <% end %>
+    <% end %>
 
-    <div>
-      <%= form.label :source_url, t(".source_label"), class: "mb-1 block text-sm font-medium" %>
-      <%= form.url_field :source_url, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-    </div>
+    <%= render(Ui::FieldComponent.new(id: "recipe_source_url")) do |field| %>
+      <% field.with_label { t(".source_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::InputComponent.new(type: "url", name: "recipe[source_url]", value: recipe.source_url, html_options: { id: "recipe_source_url" }) %>
+      <% end %>
+    <% end %>
 
-    <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
   </div>
 <% end %>

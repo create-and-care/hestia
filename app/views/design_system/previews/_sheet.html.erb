@@ -1,0 +1,5 @@
+<%= render(Ui::SheetComponent.new(side: :right)) do |sheet| %>
+  <% sheet.with_trigger { render(Ui::ButtonComponent.new(variant: :outline)) { "Open sheet" } } %>
+  <% sheet.with_title { "Settings" } %>
+  Sheet content slides in from the side.
+<% end %>
