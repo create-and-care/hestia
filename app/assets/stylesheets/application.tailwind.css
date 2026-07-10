@@ -361,8 +361,8 @@
    Paired with app/javascript/utils/transition.js, which flips [data-state]
    and unhides/hides the element around the animation.
    ───────────────────────────────────────────────────────────────────────── */
-@utility animate-in { animation: enter var(--tw-duration, 150ms) var(--tw-ease, ease-out); }
-@utility animate-out { animation: exit var(--tw-duration, 150ms) var(--tw-ease, ease-in); }
+@utility animate-in { animation: enter var(--tw-duration, 150ms) var(--tw-ease, ease-out) forwards; }
+@utility animate-out { animation: exit var(--tw-duration, 150ms) var(--tw-ease, ease-in) forwards; }
 
 @utility fade-in-0 { --tw-enter-opacity: 0; }
 @utility fade-out-0 { --tw-exit-opacity: 0; }

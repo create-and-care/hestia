@@ -4,14 +4,16 @@
 // for us. Each panel needs `hidden` + `data-state="closed"` initially.
 export function openPanel(panel) {
   clearTimeout(panel._hideTimer)
+  cancelAnimationFrame(panel._openFrame)
   panel.hidden = false
   // rAF so the browser registers the element as visible before the
   // [data-state="open"] selector starts matching — otherwise the enter
   // animation can be skipped on the same frame as un-hiding.
-  requestAnimationFrame(() => { panel.dataset.state = "open" })
+  panel._openFrame = requestAnimationFrame(() => { panel.dataset.state = "open" })
 }
 
 export function closePanel(panel, { duration = 200 } = {}) {
+  cancelAnimationFrame(panel._openFrame)
   panel.dataset.state = "closed"
   clearTimeout(panel._hideTimer)
   panel._hideTimer = setTimeout(() => { panel.hidden = true }, duration)
