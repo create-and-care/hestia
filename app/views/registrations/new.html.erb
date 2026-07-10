@@ -7,41 +7,49 @@
 
   <%= form_with model: @user, url: registration_path do |form| %>
     <% if @user.errors.any? %>
-      <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
         <ul class="list-inside list-disc">
           <% @user.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>
-      </div>
+      <% end %>
     <% end %>
 
     <div class="space-y-4">
-      <div>
-        <%= form.label :name, t(".name"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_field :name, required: true, autofocus: true, autocomplete: "name",
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "user_name")) do |field| %>
+        <% field.with_label { t(".name") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "user[name]", value: @user.name,
+                html_options: { id: "user_name", required: true, autofocus: true, autocomplete: "name" }) %>
+        <% end %>
+      <% end %>
 
-      <div>
-        <%= form.label :email_address, t(".email"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.email_field :email_address, required: true, autocomplete: "username",
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "user_email_address")) do |field| %>
+        <% field.with_label { t(".email") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "email", name: "user[email_address]", value: @user.email_address,
+                html_options: { id: "user_email_address", required: true, autocomplete: "username" }) %>
+        <% end %>
+      <% end %>
 
-      <div>
-        <%= form.label :password, t(".password"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.password_field :password, required: true, autocomplete: "new-password", maxlength: 72,
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "user_password")) do |field| %>
+        <% field.with_label { t(".password") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "password", name: "user[password]",
+                html_options: { id: "user_password", required: true, autocomplete: "new-password", maxlength: 72 }) %>
+        <% end %>
+      <% end %>
 
-      <div>
-        <%= form.label :password_confirmation, t(".password_confirmation"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", maxlength: 72,
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "user_password_confirmation")) do |field| %>
+        <% field.with_label { t(".password_confirmation") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "password", name: "user[password_confirmation]",
+                html_options: { id: "user_password_confirmation", required: true, autocomplete: "new-password", maxlength: 72 }) %>
+        <% end %>
+      <% end %>
 
-      <%= form.submit t(".submit"), class: "w-full cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= render(Ui::ButtonComponent.new(type: "submit", html_options: { class: "w-full" })) { t(".submit") } %>
     </div>
   <% end %>
 

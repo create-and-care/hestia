@@ -9,8 +9,8 @@
         <div class="my-1 h-px bg-tertiary"></div>
       <% else %>
         <% label, value = item %>
-        <button type="button" role="menuitem" data-action="click->context-menu#select" data-value="<%= value %>"
-          class="flex w-full items-center rounded-sm px-2 py-1.5 text-sm text-primary hover:bg-surface-hover">
+        <button type="button" role="menuitem" tabindex="-1" data-context-menu-target="item" data-action="click->context-menu#select" data-value="<%= value %>"
+          class="flex w-full items-center rounded-sm px-2 py-1.5 text-sm text-primary hover:bg-surface-hover focus:bg-surface-hover focus:outline-none">
           <%= label %>
         </button>
       <% end %>

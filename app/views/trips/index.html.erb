@@ -8,27 +8,51 @@
   <%= render "shared/flash" %>
 
   <% if @trips.any? %>
-    <ul class="mb-6 divide-y divide-gray-100 rounded-lg border border-gray-200">
-      <% @trips.each do |trip| %>
-        <li class="flex items-center justify-between px-4 py-3">
-          <%= link_to trip.name, trip_path(trip), class: "font-medium hover:underline" %>
-          <% if trip.starts_on %><span class="text-sm text-gray-400"><%= trip.starts_on.strftime("%d/%m/%y") %><%= " → #{trip.ends_on.strftime("%d/%m/%y")}" if trip.ends_on %></span><% end %>
-        </li>
-      <% end %>
-    </ul>
+    <%= render(Ui::CardComponent.new(class_name: "mb-6")) do %>
+      <ul class="divide-y divide-gray-100">
+        <% @trips.each do |trip| %>
+          <li>
+            <%= render(Ui::ItemComponent.new) do |item| %>
+              <% item.with_title { link_to trip.name, trip_path(trip), class: "hover:underline" } %>
+              <% if trip.starts_on %>
+                <% item.with_trailing do %>
+                  <span class="text-sm text-gray-400"><%= trip.starts_on.strftime("%d/%m/%y") %><%= " → #{trip.ends_on.strftime("%d/%m/%y")}" if trip.ends_on %></span>
+                <% end %>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
   <% else %>
-    <p class="mb-6 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".empty") %></p>
+    <div class="mb-6">
+      <%= render(Ui::EmptyComponent.new) do |empty| %>
+        <% empty.with_description { t(".empty") } %>
+      <% end %>
+    </div>
   <% end %>
 
-  <section class="rounded-lg border border-gray-200 p-4">
+  <%= render(Ui::CardComponent.new) do %>
     <h2 class="mb-2 font-medium"><%= t(".new_trip") %></h2>
     <%= form_with model: @trip, url: trips_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: t(".name_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.date_field :starts_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.date_field :ends_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".create"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+      <div class="flex-1">
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
+          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".name_placeholder"), html_options: { id: form.field_id(:name), required: true }) } %>
+        <% end %>
+      </div>
+      <div>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:starts_on))) do |field| %>
+          <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:starts_on), value: form.object.starts_on, html_options: { id: form.field_id(:starts_on) }) } %>
+        <% end %>
+      </div>
+      <div>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:ends_on))) do |field| %>
+          <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:ends_on), value: form.object.ends_on, html_options: { id: form.field_id(:ends_on) }) } %>
+        <% end %>
+      </div>
+      <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".create") } %>
     <% end %>
     <p class="mt-2 text-xs text-gray-400"><%= t(".hint") %></p>
-  </section>
+  <% end %>
 
 </div>

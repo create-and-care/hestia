@@ -7,23 +7,31 @@
 
   <%= form_with model: ExternalCalendarConnection.new, url: external_calendar_connections_path do |form| %>
     <div class="space-y-4">
-      <div>
-        <%= form.label :caldav_url, t(".url_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.url_field :caldav_url, required: true, autofocus: true, placeholder: t(".url_placeholder"),
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "external_calendar_connection_caldav_url")) do |field| %>
+        <% field.with_label { t(".url_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "url", name: "external_calendar_connection[caldav_url]", placeholder: t(".url_placeholder"),
+                html_options: { id: "external_calendar_connection_caldav_url", required: true, autofocus: true }) %>
+        <% end %>
+      <% end %>
 
-      <div>
-        <%= form.label :username, t(".username_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_field :username, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "external_calendar_connection_username")) do |field| %>
+        <% field.with_label { t(".username_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "external_calendar_connection[username]",
+                html_options: { id: "external_calendar_connection_username", required: true }) %>
+        <% end %>
+      <% end %>
 
-      <div>
-        <%= form.label :password, t(".password_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.password_field :password, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "external_calendar_connection_password")) do |field| %>
+        <% field.with_label { t(".password_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "password", name: "external_calendar_connection[password]",
+                html_options: { id: "external_calendar_connection_password", required: true }) %>
+        <% end %>
+      <% end %>
 
-      <%= form.submit t(".submit"), class: "w-full cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= render(Ui::ButtonComponent.new(type: "submit", html_options: { class: "w-full" })) { t(".submit") } %>
     </div>
   <% end %>
 

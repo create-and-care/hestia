@@ -8,54 +8,112 @@
 
   <%= render "shared/flash" %>
 
-  <section class="mb-8 rounded-lg border border-gray-200 p-4">
-    <h2 class="mb-3 font-medium"><%= t(".my_profile") %></h2>
-    <%= form_with model: @profile, url: wellbeing_profile_path, method: :patch, class: "grid grid-cols-2 gap-3 sm:grid-cols-3" do |form| %>
-      <label class="text-sm"><%= t(".height_label") %><%= form.number_field :height, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
-      <label class="text-sm"><%= t(".age_label") %><%= form.number_field :age, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
-      <label class="text-sm"><%= t(".sex_label") %><%= form.select :sex, sex_options, { include_blank: "—" }, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
-      <label class="text-sm"><%= t(".activity_label") %><%= form.select :activity_level, activity_options, { include_blank: "—" }, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
-      <label class="text-sm"><%= t(".start_weight_label") %><%= form.number_field :start_weight, step: :any, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
-      <label class="text-sm"><%= t(".goal_weight_label") %><%= form.number_field :goal_weight, step: :any, class: "mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5" %></label>
-      <div class="col-span-2 sm:col-span-3"><%= form.submit t(".save_profile"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %></div>
-    <% end %>
-    <% if @latest_weight && @profile.bmi(@latest_weight) %>
-      <p class="mt-3 text-sm"><%= t(".bmi_prefix") %> <span class="font-semibold"><%= @profile.bmi(@latest_weight) %></span> <%= t(".bmi_suffix", weight: @latest_weight) %></p>
+  <section class="mb-8">
+    <%= render(Ui::CardComponent.new) do %>
+      <h2 class="mb-3 font-medium"><%= t(".my_profile") %></h2>
+      <%= form_with model: @profile, url: wellbeing_profile_path, method: :patch, class: "grid grid-cols-2 gap-3 sm:grid-cols-3" do |form| %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:height))) do |field| %>
+          <% field.with_label { t(".height_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:height), value: form.object.height, html_options: { id: form.field_id(:height) }) } %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:age))) do |field| %>
+          <% field.with_label { t(".age_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:age), value: form.object.age, html_options: { id: form.field_id(:age) }) } %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:sex))) do |field| %>
+          <% field.with_label { t(".sex_label") } %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:sex), options: [ [ "—", "" ] ] + sex_options, selected: form.object.sex, html_options: { id: form.field_id(:sex) }) } %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:activity_level))) do |field| %>
+          <% field.with_label { t(".activity_label") } %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:activity_level), options: [ [ "—", "" ] ] + activity_options, selected: form.object.activity_level, html_options: { id: form.field_id(:activity_level) }) } %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:start_weight))) do |field| %>
+          <% field.with_label { t(".start_weight_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:start_weight), value: form.object.start_weight, html_options: { id: form.field_id(:start_weight), step: :any }) } %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:goal_weight))) do |field| %>
+          <% field.with_label { t(".goal_weight_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:goal_weight), value: form.object.goal_weight, html_options: { id: form.field_id(:goal_weight), step: :any }) } %>
+        <% end %>
+        <div class="col-span-2 sm:col-span-3"><%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".save_profile") } %></div>
+      <% end %>
+      <% if @latest_weight && @profile.bmi(@latest_weight) %>
+        <p class="mt-3 text-sm"><%= t(".bmi_prefix") %> <span class="font-semibold"><%= @profile.bmi(@latest_weight) %></span> <%= t(".bmi_suffix", weight: @latest_weight) %></p>
+      <% end %>
     <% end %>
   </section>
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("scale", css_class: "size-5") %> <%= t(".weight") %></h2>
-    <ul class="mb-2 text-sm">
-      <% @weight_entries.reverse.first(15).each do |entry| %>
-        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
-          <span><%= entry.recorded_on.strftime("%d/%m/%Y") %> — <span class="font-medium"><%= entry.weight %> kg</span></span>
-          <%= button_to "×", weight_entry_path(entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
-        </li>
+    <%= render(Ui::CardComponent.new) do %>
+      <ul class="mb-2 divide-y divide-gray-100 text-sm">
+        <% @weight_entries.reverse.first(15).each do |entry| %>
+          <li>
+            <%= render(Ui::ItemComponent.new) do |item| %>
+              <% item.with_title { "#{entry.recorded_on.strftime('%d/%m/%Y')} — #{entry.weight} kg" } %>
+              <% item.with_trailing do %>
+                <%= form_with url: weight_entry_path(entry), method: :delete do %>
+                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { "×" } %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+      <%= form_with model: @weight_entry, url: weight_entries_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+        <div class="w-24">
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:weight))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:weight), value: form.object.weight, placeholder: t(".weight_placeholder"), html_options: { id: form.field_id(:weight), step: :any, required: true }) } %>
+          <% end %>
+        </div>
+        <div>
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:recorded_on))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:recorded_on), value: form.object.recorded_on, html_options: { id: form.field_id(:recorded_on) }) } %>
+          <% end %>
+        </div>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
       <% end %>
-    </ul>
-    <%= form_with model: @weight_entry, url: weight_entries_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.number_field :weight, step: :any, required: true, placeholder: t(".weight_placeholder"), class: "w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.date_field :recorded_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("dumbbell", css_class: "size-5") %> <%= t(".workouts") %></h2>
-    <ul class="mb-2 text-sm">
-      <% @workout_entries.first(15).each do |entry| %>
-        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
-          <span><%= entry.done_on.strftime("%d/%m") %> — <%= entry.exercise %><% if entry.duration_minutes %> (<%= entry.duration_minutes %> min)<% end %></span>
-          <%= button_to "×", workout_entry_path(entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
-        </li>
+    <%= render(Ui::CardComponent.new) do %>
+      <ul class="mb-2 divide-y divide-gray-100 text-sm">
+        <% @workout_entries.first(15).each do |entry| %>
+          <li>
+            <%= render(Ui::ItemComponent.new) do |item| %>
+              <% item.with_title do %>
+                <%= entry.done_on.strftime("%d/%m") %> — <%= entry.exercise %><% if entry.duration_minutes %> (<%= entry.duration_minutes %> min)<% end %>
+              <% end %>
+              <% item.with_trailing do %>
+                <%= form_with url: workout_entry_path(entry), method: :delete do %>
+                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { "×" } %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+      <%= form_with model: @workout_entry, url: workout_entries_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+        <div class="flex-1">
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:exercise))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:exercise), value: form.object.exercise, placeholder: t(".exercise_placeholder"), html_options: { id: form.field_id(:exercise), required: true }) } %>
+          <% end %>
+        </div>
+        <div class="w-20">
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:duration_minutes))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:duration_minutes), value: form.object.duration_minutes, placeholder: t(".duration_placeholder"), html_options: { id: form.field_id(:duration_minutes) }) } %>
+          <% end %>
+        </div>
+        <div>
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:done_on))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:done_on), value: form.object.done_on, html_options: { id: form.field_id(:done_on) }) } %>
+          <% end %>
+        </div>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
       <% end %>
-    </ul>
-    <%= form_with model: @workout_entry, url: workout_entries_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :exercise, required: true, placeholder: t(".exercise_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.number_field :duration_minutes, placeholder: t(".duration_placeholder"), class: "w-20 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.date_field :done_on, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
     <% end %>
   </section>
 

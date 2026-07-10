@@ -11,29 +11,36 @@
 
   <section class="mt-8 border-t border-gray-100 pt-6">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("bell", css_class: "size-5") %> <%= t(".reminders_heading") %></h2>
-    <ul class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
       <% @event.event_reminders.each do |reminder| %>
-        <li class="flex items-center justify-between px-3 py-2 text-sm">
-          <span>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_title do %>
             <%= EventReminder::MINUTES_BEFORE_OPTIONS.find { |_, v| v == reminder.minutes_before }&.first || t(".minutes_before_fallback", minutes: reminder.minutes_before) %>
             <span class="text-gray-400">· <%= reminder.user.name.presence || reminder.user.email_address %></span>
-          </span>
-          <%= button_to calendar_event_event_reminder_path(@event, reminder), method: :delete,
-                class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-        </li>
+          <% end %>
+          <% item.with_trailing do %>
+            <%= button_to calendar_event_event_reminder_path(@event, reminder), method: :delete,
+                  class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+          <% end %>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
     <%= form_with model: EventReminder.new, url: calendar_event_event_reminders_path(@event), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <div>
-        <%= form.label :minutes_before, t(".delay_label"), class: "mb-1 block text-xs text-gray-500" %>
-        <%= form.select :minutes_before, EventReminder::MINUTES_BEFORE_OPTIONS, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      </div>
-      <div>
-        <%= form.label :user_id, t(".recipient_label"), class: "mb-1 block text-xs text-gray-500" %>
-        <%= form.select :user_id, Current.household.users.order(:name).map { |u| [ u.name.presence || u.email_address, u.id ] }, {},
-              class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      </div>
-      <%= form.submit t(".add_reminder_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render(Ui::FieldComponent.new(id: "event_reminder_minutes_before")) do |field| %>
+        <% field.with_label { t(".delay_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "event_reminder[minutes_before]", options: EventReminder::MINUTES_BEFORE_OPTIONS,
+                html_options: { id: "event_reminder_minutes_before" }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::FieldComponent.new(id: "event_reminder_user_id")) do |field| %>
+        <% field.with_label { t(".recipient_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "event_reminder[user_id]", options: calendar_participant_options,
+                html_options: { id: "event_reminder_user_id" }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add_reminder_submit") } %>
     <% end %>
   </section>
 

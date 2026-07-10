@@ -1,15 +1,17 @@
 <div data-controller="tabs" data-tabs-active-value="<%= active_value %>">
   <div role="tablist" class="inline-flex gap-1 rounded-md bg-tab-bg-group p-1">
     <% tabs.each do |tab| %>
-      <button type="button" role="tab" data-tabs-target="tab" data-value="<%= tab.value %>"
-        data-action="click->tabs#select" aria-selected="<%= tab.value == active_value %>"
+      <button type="button" role="tab" id="<%= tab_id(tab.value) %>" data-tabs-target="tab" data-value="<%= tab.value %>"
+        data-action="click->tabs#select keydown->tabs#onKeydown" aria-selected="<%= tab.value == active_value %>"
+        aria-controls="<%= panel_id(tab.value) %>" tabindex="<%= tab.value == active_value ? "0" : "-1" %>"
         class="rounded-md px-3 h-8 text-sm font-medium transition-colors <%= tab.value == active_value ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary" %>">
         <%= tab.label %>
       </button>
     <% end %>
   </div>
   <% tabs.each do |tab| %>
-    <div data-tabs-target="panel" data-value="<%= tab.value %>" class="pt-4" <%= "hidden" unless tab.value == active_value %>>
+    <div role="tabpanel" id="<%= panel_id(tab.value) %>" aria-labelledby="<%= tab_id(tab.value) %>"
+      data-tabs-target="panel" data-value="<%= tab.value %>" class="pt-4" <%= "hidden" unless tab.value == active_value %>>
       <%= tab %>
     </div>
   <% end %>

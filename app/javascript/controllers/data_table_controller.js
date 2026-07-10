@@ -83,5 +83,11 @@ export default class extends Controller {
       const index = Number(arrow.dataset.index)
       arrow.textContent = index === this.sortIndexValue ? (this.sortDirValue === "asc" ? "↑" : "↓") : ""
     })
+
+    this.headerTargets.forEach((header) => {
+      const index = Number(header.dataset.index)
+      const sorted = index === this.sortIndexValue
+      header.setAttribute("aria-sort", sorted ? (this.sortDirValue === "asc" ? "ascending" : "descending") : "none")
+    })
   }
 }

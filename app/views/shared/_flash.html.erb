@@ -1,6 +1,4 @@
 <% flash.each do |type, message| %>
   <% next if message.blank? %>
-  <div class="mb-4 rounded-md border px-4 py-3 text-sm <%= type.to_s == "alert" ? "border-red-200 bg-red-50 text-red-700" : "border-green-200 bg-green-50 text-green-700" %>">
-    <%= message %>
-  </div>
+  <%= render(Ui::AlertComponent.new(variant: type.to_s == "alert" ? :destructive : :success, class_name: "mb-4")) { message } %>
 <% end %>

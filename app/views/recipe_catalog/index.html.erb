@@ -6,18 +6,19 @@
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("search", css_class: "size-6") %> <%= t(".title") %></h1>
     <%= form_with url: recipe_catalog_path, method: :get, class: "flex flex-wrap items-center gap-2" do |form| %>
-      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
-            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
-      <%= form.select :tag, options_for_select(@tags.map { |tag| [ t("recipe_catalog.tags.#{tag}", default: tag.humanize), tag ] }, @tag),
-            { include_blank: t(".tag_blank") }, class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
-      <%= form.submit t(".filter_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
+            html_options: { id: "recipe_catalog_q" }) %>
+      <%= render Ui::NativeSelectComponent.new(name: "tag",
+            options: [ [ t(".tag_blank"), "" ] ] + @tags.map { |tag| [ t("recipe_catalog.tags.#{tag}", default: tag.humanize), tag ] },
+            selected: @tag, html_options: { id: "recipe_catalog_tag" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".filter_submit") } %>
     <% end %>
   </header>
 
   <div class="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm">
     <div class="flex gap-2">
-      <%= link_to t(".mine_tab"), recipes_path, class: "rounded-md border border-gray-300 px-3 py-1.5 hover:bg-gray-50" %>
-      <span class="rounded-md bg-gray-900 px-3 py-1.5 font-medium text-white"><%= t(".discover_tab") %></span>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: recipes_path)) { t(".mine_tab") } %>
+      <%= render(Ui::ButtonComponent.new(size: :sm, href: recipe_catalog_path(q: @query, tag: @tag, view: @view_mode))) { t(".discover_tab") } %>
     </div>
     <%= render "recipes/view_mode_toggle", path_helper: ->(view) { recipe_catalog_path(q: @query, tag: @tag, view: view) } %>
   </div>
@@ -28,9 +29,9 @@
     <%= render partial: "entry", collection: @entries, locals: { view_mode: @view_mode } %>
   </div>
   <% if @entries.empty? %>
-    <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
-      <%= @query.present? ? t(".empty_search") : t(".empty") %>
-    </p>
+    <%= render(Ui::EmptyComponent.new) do |empty| %>
+      <% empty.with_description { @query.present? ? t(".empty_search") : t(".empty") } %>
+    <% end %>
   <% end %>
 
   <% if @total_pages > 1 %>

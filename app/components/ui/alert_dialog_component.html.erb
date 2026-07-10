@@ -1,5 +1,5 @@
-<%= render(Ui::DialogComponent.new(position: :center)) do |dialog| %>
-  <% dialog.with_trigger { trigger } %>
+<%= render(Ui::DialogComponent.new(position: :center, role: "alertdialog")) do |dialog| %>
+  <% dialog.with_trigger { trigger.to_s } %>
   <% dialog.with_title { @title } %>
   <% dialog.with_description { @description } if @description %>
   <% dialog.with_footer do %>

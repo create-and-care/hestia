@@ -1,17 +1,26 @@
-<%= tag.div id: dom_id(routine), class: "flex flex-wrap items-center gap-3 rounded-lg border px-3 py-2 #{routine.overdue? ? 'border-red-300 bg-red-50' : 'border-gray-200'}" do %>
-  <div class="min-w-0 flex-1">
-    <p class="font-medium"><%= "#{routine.emoji} " if routine.emoji.present? %><%= routine.name %></p>
-    <p class="text-xs text-gray-500">
+<%
+  # Reconstructs Ui::ButtonComponent's variant: :outline, size: :sm classes (see
+  # app/components/ui/button_component.rb) — button_to's own <button> can't be wrapped in
+  # the component without producing an invalid nested <button>.
+  complete_button_class = "inline-flex h-8 shrink-0 cursor-pointer items-center gap-1.5 rounded-md border border-primary bg-transparent px-3 text-sm font-medium text-primary transition-colors hover:bg-button-outline-hover focus-visible:ring-focus disabled:opacity-50"
+%>
+<%= tag.div id: dom_id(routine), class: "rounded-lg border #{routine.overdue? ? "border-destructive bg-red-50" : "border-primary"}" do %>
+  <%= render(Ui::ItemComponent.new) do |item| %>
+    <% item.with_title do %><%= "#{routine.emoji} " if routine.emoji.present? %><%= routine.name %><% end %>
+    <% item.with_description do %>
       <%= routine_frequency_label(routine.frequency) %><%= " ×#{routine.interval}" if routine.interval.to_i > 1 %>
       <% if routine.next_due_on %>· <%= t(".next_due") %> : <%= routine.next_due_on.strftime("%d/%m/%Y") %><% end %>
-      <% if routine.overdue? %><span class="font-medium text-red-600">· <%= t(".overdue") %></span><% end %>
+      <% if routine.overdue? %><span class="font-medium text-destructive">· <%= t(".overdue") %></span><% end %>
       <% if routine.assignee %>· <%= routine.assignee.name.presence || routine.assignee.email_address %><% end %>
       <% if routine.list_name.present? %>· <%= routine.list_name %><% end %>
-    </p>
-  </div>
-
-  <%= button_to complete_routine_path(routine), method: :post,
-        class: "shrink-0 inline-flex cursor-pointer items-center gap-1 rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50" do %><%= lucide_icon("check", css_class: "size-4") %> <%= t(".done") %><% end %>
-  <%= link_to edit_routine_path(routine), class: "shrink-0 text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
-  <%= button_to routine_path(routine), method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+    <% end %>
+    <% item.with_trailing do %>
+      <div class="flex items-center gap-2">
+        <%= button_to complete_routine_path(routine), method: :post,
+              class: complete_button_class do %><%= lucide_icon("check", css_class: "size-4") %> <%= t(".done") %><% end %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_routine_path(routine))) { lucide_icon("pencil", css_class: "size-4") } %>
+        <%= button_to routine_path(routine), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+      </div>
+    <% end %>
+  <% end %>
 <% end %>

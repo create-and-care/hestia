@@ -10,8 +10,9 @@ module Ui
       destructive: "border-destructive text-destructive"
     }.freeze
 
-    def initialize(variant: :default)
+    def initialize(variant: :default, class_name: nil)
       @variant = variant
+      @class_name = class_name
     end
   end
 end

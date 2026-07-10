@@ -13,56 +13,66 @@
     <h2 class="mb-2 font-medium"><%= t(".participants_heading") %></h2>
     <div class="mb-2 flex flex-wrap gap-2">
       <% @project.shared_project_participants.each do |participant| %>
-        <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-sm">
+        <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
           <%= participant.name %>
-          <%= button_to "×", shared_project_shared_project_participant_path(@project, participant), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
-        </span>
+          <%= button_to shared_project_shared_project_participant_path(@project, participant), method: :delete,
+                class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } do %><%= lucide_icon("x", css_class: "size-3.5") %><% end %>
+        <% end %>
       <% end %>
     </div>
     <%= form_with model: [ @project, @participant ], url: shared_project_shared_project_participants_path(@project), class: "flex gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: t(".participant_name_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(name: "shared_project_participant[name]", value: @participant.name, placeholder: t(".participant_name_placeholder"),
+            html_options: { id: "shared_project_participant_name", required: true, class: "flex-1" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 
   <section class="mb-6">
     <h2 class="mb-2 font-medium"><%= t(".expenses_heading") %></h2>
-    <ul class="mb-2 text-sm">
+    <div class="mb-2 divide-y divide-gray-100 rounded-lg border border-gray-200 text-sm">
       <% @project.shared_expenses.recent.each do |expense| %>
-        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
-          <span>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_title do %>
             <%= number_to_currency(expense.amount, unit: "€", format: "%n %u") %>
             <% if expense.description.present? %>· <%= expense.description %><% end %>
             <% if expense.shared_project_participant %><span class="text-gray-400">· <%= t(".paid_by") %> <%= expense.shared_project_participant.name %></span><% end %>
-          </span>
-          <%= button_to "×", shared_project_shared_expense_path(@project, expense), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
-        </li>
+          <% end %>
+          <% item.with_trailing do %>
+            <%= button_to shared_project_shared_expense_path(@project, expense), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+          <% end %>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
     <%= form_with model: [ @project, @expense ], url: shared_project_shared_expenses_path(@project), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.number_field :amount, step: :any, required: true, placeholder: "€", class: "w-24 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :description, placeholder: t(".description_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.collection_select :shared_project_participant_id, @project.shared_project_participants, :id, :name, { include_blank: t(".payer_blank") }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(type: "number", name: "shared_expense[amount]", value: @expense.amount, placeholder: "€",
+            html_options: { id: "shared_expense_amount", step: "any", required: true, class: "w-24" }) %>
+      <%= render Ui::InputComponent.new(name: "shared_expense[description]", value: @expense.description, placeholder: t(".description_placeholder"),
+            html_options: { id: "shared_expense_description", class: "flex-1" }) %>
+      <%= render Ui::NativeSelectComponent.new(name: "shared_expense[shared_project_participant_id]",
+            options: [ [ t(".payer_blank"), "" ] ] + @project.shared_project_participants.map { |participant| [ participant.name, participant.id ] },
+            selected: @expense.shared_project_participant_id, html_options: { id: "shared_expense_shared_project_participant_id" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 
   <section class="mb-6">
     <h2 class="mb-2 font-medium"><%= t(".settlement_heading", total: number_to_currency(@project.total_spent, unit: "€", format: "%n %u")) %></h2>
-    <ul class="text-sm">
+    <div class="divide-y divide-gray-100 rounded-lg border border-gray-200 text-sm">
       <% @balances.each do |balance| %>
-        <li class="flex items-center justify-between rounded border border-gray-200 px-3 py-1.5">
-          <span><%= balance.participant.name %></span>
-          <% if balance.amount.positive? %>
-            <span class="text-green-600"><%= t(".is_owed_prefix") %> <%= number_to_currency(balance.amount, unit: "€", format: "%n %u") %></span>
-          <% elsif balance.amount.negative? %>
-            <span class="text-red-600"><%= t(".owes_prefix") %> <%= number_to_currency(-balance.amount, unit: "€", format: "%n %u") %></span>
-          <% else %>
-            <span class="text-gray-400"><%= t(".settled") %></span>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_title { balance.participant.name } %>
+          <% item.with_trailing do %>
+            <% if balance.amount.positive? %>
+              <%= render(Ui::BadgeComponent.new(variant: :success)) { "#{t(".is_owed_prefix")} #{number_to_currency(balance.amount, unit: "€", format: "%n %u")}" } %>
+            <% elsif balance.amount.negative? %>
+              <%= render(Ui::BadgeComponent.new(variant: :destructive)) { "#{t(".owes_prefix")} #{number_to_currency(-balance.amount, unit: "€", format: "%n %u")}" } %>
+            <% else %>
+              <%= render(Ui::BadgeComponent.new(variant: :secondary)) { t(".settled") } %>
+            <% end %>
           <% end %>
-        </li>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
   </section>
 
   <p class="text-sm"><%= link_to t(".back_to_projects"), shared_projects_path, class: "underline" %></p>

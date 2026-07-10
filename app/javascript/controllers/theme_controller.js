@@ -10,6 +10,12 @@ export default class extends Controller {
 
   static ORDER = [ "light", "dark", "system" ]
 
+  static LABELS = {
+    light: "Thème actuel : clair. Cliquer pour changer de thème.",
+    dark: "Thème actuel : sombre. Cliquer pour changer de thème.",
+    system: "Thème actuel : système. Cliquer pour changer de thème."
+  }
+
   connect() {
     this.media = window.matchMedia("(prefers-color-scheme: dark)")
     this.mediaListener = () => { if (this.current() === "system") this.apply() }
@@ -41,5 +47,6 @@ export default class extends Controller {
   render() {
     const theme = this.current()
     this.optionTargets.forEach((el) => { el.hidden = el.dataset.theme !== theme })
+    this.element.setAttribute("aria-label", this.constructor.LABELS[theme])
   }
 }

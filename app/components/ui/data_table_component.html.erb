@@ -7,9 +7,12 @@
       <thead class="border-b border-primary bg-surface">
         <tr>
           <% @headers.each_with_index do |header, index| %>
-            <th data-data-table-target="header" data-index="<%= index %>" data-action="click->data-table#sort"
-              class="h-10 px-4 text-left font-medium text-secondary cursor-pointer select-none hover:text-primary">
-              <%= header %><span data-data-table-target="arrow" data-index="<%= index %>" class="ml-1 inline-block w-3"></span>
+            <th data-data-table-target="header" data-index="<%= index %>" aria-sort="none"
+              class="h-10 px-4 text-left font-medium text-secondary">
+              <button type="button" data-action="click->data-table#sort" data-index="<%= index %>"
+                class="inline-flex select-none items-center hover:text-primary focus-visible:ring-focus">
+                <%= header %><span data-data-table-target="arrow" data-index="<%= index %>" class="ml-1 inline-block w-3"></span>
+              </button>
             </th>
           <% end %>
         </tr>

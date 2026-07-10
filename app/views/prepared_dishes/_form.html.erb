@@ -1,21 +1,35 @@
 <%= tag.div id: "new_prepared_dish" do %>
   <%= form_with model: prepared_dish, url: prepared_dishes_path do |form| %>
-    <div class="flex flex-wrap items-end gap-2 rounded-lg border border-gray-200 p-3">
+    <div class="flex flex-wrap items-end gap-2 rounded-lg border border-primary p-3">
       <div class="min-w-40 flex-1">
-        <%= form.label :name, t(".name_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <%= form.text_field :name, required: true, autocomplete: "off", placeholder: t(".name_placeholder"),
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= render(Ui::FieldComponent.new(id: "prepared_dish_name")) do |field| %>
+          <% field.with_label { t(".name_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(name: "prepared_dish[name]", value: prepared_dish.name,
+                  placeholder: t(".name_placeholder"),
+                  html_options: { id: "prepared_dish_name", required: true, autocomplete: "off" }) %>
+          <% end %>
+        <% end %>
       </div>
       <div class="w-44">
-        <%= form.label :location, t(".location_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <%= form.select :location, location_select_options, {},
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= render(Ui::FieldComponent.new(id: "prepared_dish_location")) do |field| %>
+          <% field.with_label { t(".location_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::NativeSelectComponent.new(name: "prepared_dish[location]", options: location_select_options,
+                  selected: prepared_dish.location, html_options: { id: "prepared_dish_location" }) %>
+          <% end %>
+        <% end %>
       </div>
       <div class="w-40">
-        <%= form.label :expires_on, t(".expires_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <%= form.date_field :expires_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= render(Ui::FieldComponent.new(id: "prepared_dish_expires_on")) do |field| %>
+          <% field.with_label { t(".expires_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "date", name: "prepared_dish[expires_on]", value: prepared_dish.expires_on,
+                  html_options: { id: "prepared_dish_expires_on" }) %>
+          <% end %>
+        <% end %>
       </div>
-      <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
     </div>
   <% end %>
 <% end %>

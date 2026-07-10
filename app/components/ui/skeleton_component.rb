@@ -5,7 +5,7 @@ module Ui
     end
 
     def call
-      tag.div class: cn("bg-loader rounded-md", @class_name)
+      tag.div "aria-hidden": "true", class: cn("bg-loader rounded-md", @class_name)
     end
   end
 end

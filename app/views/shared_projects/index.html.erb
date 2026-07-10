@@ -12,16 +12,18 @@
   <%= render "shared/flash" %>
 
   <% if @projects.any? %>
-    <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="divide-y divide-gray-100 rounded-lg border border-primary">
       <% @projects.each do |project| %>
-        <li class="flex items-center justify-between px-4 py-3">
-          <%= link_to project.name, shared_project_path(project), class: "font-medium hover:underline" %>
-          <span class="text-sm text-gray-500"><%= number_to_currency(project.total_spent, unit: "€", format: "%n %u") %></span>
-        </li>
+        <%= render Ui::ItemComponent.new(href: shared_project_path(project)) do |item| %>
+          <% item.with_title { project.name } %>
+          <% item.with_trailing { number_to_currency(project.total_spent, unit: "€", format: "%n %u") } %>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
   <% else %>
-    <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".empty") %></p>
+    <%= render Ui::EmptyComponent.new do |empty| %>
+      <% empty.with_description { t(".empty") } %>
+    <% end %>
   <% end %>
 
   <p class="mt-6 text-sm"><%= link_to t(".back_to_budget"), budget_path, class: "underline" %></p>

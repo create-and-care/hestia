@@ -4,7 +4,7 @@
   <h2 class="font-medium"><%= recipe.title %></h2>
   <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500 <%= "mt-0 shrink-0" if list_mode %>">
     <% if recipe.category.present? %>
-      <span class="rounded-full bg-gray-100 px-2 py-0.5"><%= recipe.category %></span>
+      <%= render(Ui::BadgeComponent.new(variant: :secondary)) { recipe.category } %>
     <% end %>
     <% if recipe.total_time_minutes %>
       <span class="inline-flex items-center gap-1"><%= lucide_icon("clock", css_class: "size-3.5") %> <%= t(".total_time", minutes: recipe.total_time_minutes) %></span>

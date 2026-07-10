@@ -19,4 +19,13 @@ export default class extends Controller {
   closeOnBackdrop(event) {
     if (event.target === this.dialogTarget) this.close()
   }
+
+  // Escape fires the dialog's native `cancel` event, which by default calls
+  // the browser's own immediate .close() — bypassing the state transition
+  // above entirely and skipping the exit animation. Intercept it and route
+  // through the same close() the click handlers use.
+  onCancel(event) {
+    event.preventDefault()
+    this.close()
+  }
 }

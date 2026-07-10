@@ -1,25 +1,23 @@
-<%= tag.div id: dom_id(fridge_item), class: "flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 px-3 py-2" do %>
-  <div class="min-w-0 flex-1">
-    <p class="truncate font-medium"><%= fridge_item.name %></p>
+<%= tag.div id: dom_id(fridge_item), class: "rounded-lg border border-primary" do %>
+  <%= render(Ui::ItemComponent.new) do |item| %>
+    <% item.with_title { fridge_item.name } %>
     <% if fridge_item.expires_on.present? %>
-      <p class="text-xs text-gray-500"><%= t(".until_date", date: fridge_item.expires_on.strftime("%d/%m/%Y")) %></p>
+      <% item.with_description { t(".until_date", date: fridge_item.expires_on.strftime("%d/%m/%Y")) } %>
     <% end %>
-  </div>
+    <% item.with_trailing do %>
+      <div class="flex flex-wrap items-center gap-2">
+        <%= render(Ui::BadgeComponent.new(variant: :secondary)) { location_label(fridge_item.location) } %>
+        <%= render(Ui::BadgeComponent.new(variant: expiration_badge_variant(fridge_item.expiration_status))) { expiration_label(fridge_item.expiration_status) } %>
 
-  <span class="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
-    <%= location_label(fridge_item.location) %>
-  </span>
-
-  <span class="shrink-0 rounded-full px-2 py-0.5 text-xs font-medium <%= expiration_badge_class(fridge_item.expiration_status) %>">
-    <%= expiration_label(fridge_item.expiration_status) %>
-  </span>
-
-  <div class="flex shrink-0 items-center gap-2">
-    <%= link_to t(".edit"), edit_fridge_item_path(fridge_item), class: "text-sm text-gray-500 hover:underline" %>
-    <%= button_to move_to_shopping_list_fridge_item_path(fridge_item), method: :post,
-          class: "cursor-pointer text-gray-400 hover:text-gray-900",
-          form: { title: t(".add_to_list_title") }, aria: { label: t(".rebuy_aria") } do %><%= lucide_icon("shopping-cart", css_class: "size-4") %><% end %>
-    <%= button_to fridge_item_path(fridge_item), method: :delete,
-          class: "cursor-pointer text-gray-400 hover:text-red-600", aria: { label: t(".delete_aria") } do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-  </div>
+        <div class="flex shrink-0 items-center gap-2">
+          <%= link_to t(".edit"), edit_fridge_item_path(fridge_item), class: "text-sm text-secondary hover:underline" %>
+          <%= button_to move_to_shopping_list_fridge_item_path(fridge_item), method: :post,
+                class: "cursor-pointer text-subdued hover:text-primary",
+                form: { title: t(".add_to_list_title") }, aria: { label: t(".rebuy_aria") } do %><%= lucide_icon("shopping-cart", css_class: "size-4") %><% end %>
+          <%= button_to fridge_item_path(fridge_item), method: :delete,
+                class: "cursor-pointer text-subdued hover:text-destructive", aria: { label: t(".delete_aria") } do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
 <% end %>

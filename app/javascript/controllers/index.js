@@ -43,6 +43,9 @@ application.register("dialog", DialogController)
 import DropdownMenuController from "./dropdown_menu_controller"
 application.register("dropdown-menu", DropdownMenuController)
 
+import FormController from "./form_controller"
+application.register("form", FormController)
+
 import GeocodeLookupController from "./geocode_lookup_controller"
 application.register("geocode-lookup", GeocodeLookupController)
 
@@ -57,6 +60,9 @@ application.register("icon-search", IconSearchController)
 
 import InputOtpController from "./input_otp_controller"
 application.register("input-otp", InputOtpController)
+
+import MenubarController from "./menubar_controller"
+application.register("menubar", MenubarController)
 
 import MessageScrollerController from "./message_scroller_controller"
 application.register("message-scroller", MessageScrollerController)

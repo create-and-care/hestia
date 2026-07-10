@@ -5,32 +5,46 @@
                 barcode_lookup_not_found_text_value: t(".barcode_not_found"),
                 barcode_lookup_unavailable_text_value: t(".barcode_unavailable"),
                 barcode_lookup_found_text_value: t(".barcode_found_prefix") } do |form| %>
-    <div class="flex flex-wrap items-end gap-2 rounded-lg border border-gray-200 p-3">
+    <div class="flex flex-wrap items-end gap-2 rounded-lg border border-primary p-3">
       <div class="w-36">
-        <%= label_tag nil, t(".barcode_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <div class="flex gap-1">
-          <%= text_field_tag nil, nil, autocomplete: "off", placeholder: t(".barcode_placeholder"),
-                data: { barcode_lookup_target: "barcode" }, class: "w-full rounded-md border border-gray-300 px-2 py-2 text-sm" %>
-          <button type="button" data-action="click->barcode-lookup#lookup"
-                  class="cursor-pointer rounded-md border border-gray-300 px-2 text-sm hover:bg-gray-50"><%= lucide_icon("search", css_class: "size-4") %></button>
+        <%= render Ui::LabelComponent.new { t(".barcode_label") } %>
+        <div class="mt-1 flex gap-1">
+          <%= render Ui::InputComponent.new(placeholder: t(".barcode_placeholder"),
+                html_options: { autocomplete: "off", data: { barcode_lookup_target: "barcode" } }) %>
+          <%= render(Ui::ButtonComponent.new(type: "button", variant: :outline, size: :icon,
+                html_options: { data: { action: "click->barcode-lookup#lookup" } })) { lucide_icon("search", css_class: "size-4") } %>
         </div>
       </div>
       <div class="min-w-40 flex-1">
-        <%= form.label :name, t(".name_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <%= form.text_field :name, required: true, autocomplete: "off", placeholder: t(".name_placeholder"),
-              data: { barcode_lookup_target: "name" }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= render(Ui::FieldComponent.new(id: "fridge_item_name")) do |field| %>
+          <% field.with_label { t(".name_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(name: "fridge_item[name]", value: fridge_item.name,
+                  placeholder: t(".name_placeholder"),
+                  html_options: { id: "fridge_item_name", required: true, autocomplete: "off", data: { barcode_lookup_target: "name" } }) %>
+          <% end %>
+        <% end %>
       </div>
       <div class="w-44">
-        <%= form.label :location, t(".location_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <%= form.select :location, location_select_options, {},
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= render(Ui::FieldComponent.new(id: "fridge_item_location")) do |field| %>
+          <% field.with_label { t(".location_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::NativeSelectComponent.new(name: "fridge_item[location]", options: location_select_options,
+                  selected: fridge_item.location, html_options: { id: "fridge_item_location" }) %>
+          <% end %>
+        <% end %>
       </div>
       <div class="w-40">
-        <%= form.label :expires_on, t(".expires_label"), class: "mb-1 block text-xs font-medium text-gray-500" %>
-        <%= form.date_field :expires_on, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= render(Ui::FieldComponent.new(id: "fridge_item_expires_on")) do |field| %>
+          <% field.with_label { t(".expires_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "date", name: "fridge_item[expires_on]", value: fridge_item.expires_on,
+                  html_options: { id: "fridge_item_expires_on" }) %>
+          <% end %>
+        <% end %>
       </div>
-      <%= form.submit t(".submit"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
-      <p class="w-full text-xs text-gray-400" data-barcode-lookup-target="status"></p>
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
+      <p class="w-full text-xs text-subdued" data-barcode-lookup-target="status"></p>
     </div>
   <% end %>
 <% end %>

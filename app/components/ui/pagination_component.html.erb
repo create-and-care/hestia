@@ -1,7 +1,14 @@
 <nav aria-label="Pagination" class="flex items-center gap-1">
-  <%= link_to page_href(@current - 1), rel: "prev",
-    class: cn("inline-flex h-9 items-center rounded-md px-3 text-sm text-primary hover:bg-surface-hover", "pointer-events-none opacity-50" => @current <= 1) do %>
-    &larr; <span class="sr-only">Previous</span>
+  <% if @current <= 1 %>
+    <span aria-disabled="true"
+      class="inline-flex h-9 items-center rounded-md px-3 text-sm text-primary pointer-events-none opacity-50">
+      &larr; <span class="sr-only">Previous</span>
+    </span>
+  <% else %>
+    <%= link_to page_href(@current - 1), rel: "prev",
+      class: "inline-flex h-9 items-center rounded-md px-3 text-sm text-primary hover:bg-surface-hover" do %>
+      &larr; <span class="sr-only">Previous</span>
+    <% end %>
   <% end %>
 
   <% (1..@total).each do |page| %>
@@ -10,8 +17,15 @@
         page == @current ? "bg-button-primary text-inverse" : "text-primary hover:bg-surface-hover") %>
   <% end %>
 
-  <%= link_to page_href(@current + 1), rel: "next",
-    class: cn("inline-flex h-9 items-center rounded-md px-3 text-sm text-primary hover:bg-surface-hover", "pointer-events-none opacity-50" => @current >= @total) do %>
-    <span class="sr-only">Next</span> &rarr;
+  <% if @current >= @total %>
+    <span aria-disabled="true"
+      class="inline-flex h-9 items-center rounded-md px-3 text-sm text-primary pointer-events-none opacity-50">
+      <span class="sr-only">Next</span> &rarr;
+    </span>
+  <% else %>
+    <%= link_to page_href(@current + 1), rel: "next",
+      class: "inline-flex h-9 items-center rounded-md px-3 text-sm text-primary hover:bg-surface-hover" do %>
+      <span class="sr-only">Next</span> &rarr;
+    <% end %>
   <% end %>
 </nav>

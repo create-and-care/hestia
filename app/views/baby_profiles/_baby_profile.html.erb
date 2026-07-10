@@ -1,7 +1,9 @@
-<%= link_to baby_profile_path(baby_profile), id: dom_id(baby_profile),
-      class: "block rounded-lg border border-gray-200 p-4 hover:border-gray-400" do %>
-  <h2 class="flex items-center gap-1.5 font-medium"><%= lucide_icon("baby", css_class: "size-4") %> <%= baby_profile.name %></h2>
-  <% if baby_profile.born_on %>
-    <p class="text-sm text-gray-500"><%= t("baby_profiles.born_on", date: baby_profile.born_on.strftime("%d/%m/%Y")) %></p>
+<div id="<%= dom_id(baby_profile) %>">
+  <%= render(Ui::ItemComponent.new(href: baby_profile_path(baby_profile))) do |item| %>
+    <% item.with_leading { lucide_icon("baby", css_class: "size-4") } %>
+    <% item.with_title { baby_profile.name } %>
+    <% if baby_profile.born_on %>
+      <% item.with_description { t("baby_profiles.born_on", date: baby_profile.born_on.strftime("%d/%m/%Y")) } %>
+    <% end %>
   <% end %>
-<% end %>
+</div>

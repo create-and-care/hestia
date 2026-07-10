@@ -17,29 +17,31 @@
   <%= render "form", task: @task %>
 
   <section class="my-6 flex flex-wrap items-center gap-2">
-    <span class="text-sm text-gray-500"><%= t(".categories_label") %></span>
+    <span class="text-sm text-secondary"><%= t(".categories_label") %></span>
     <% @categories.each do |category| %>
-      <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs">
+      <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
         <%= category.name %>
         <%= button_to "×", task_category_path(category), method: :delete,
               class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
-      </span>
+      <% end %>
     <% end %>
     <%= form_with url: task_categories_path, method: :post, class: "inline-flex gap-1" do %>
-      <%= text_field_tag "task_category[name]", nil, placeholder: t(".new_category_placeholder"),
-            class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
-      <%= submit_tag t(".add_category_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+      <%= render Ui::InputComponent.new(type: "text", name: "task_category[name]", placeholder: t(".new_category_placeholder"),
+            html_options: { id: "task_category_name" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add_category_submit") } %>
     <% end %>
   </section>
 
   <div class="flex gap-4 overflow-x-auto pb-4">
     <% @columns.each do |(category, tasks)| %>
       <div class="w-72 shrink-0">
-        <h2 class="mb-2 text-sm font-semibold text-gray-600"><%= category&.name || t(".uncategorized") %></h2>
-        <div id="<%= category ? "tasks_category_#{category.id}" : "tasks_uncategorized" %>" class="min-h-4 space-y-2"
-             data-controller="sortable" data-sortable-url-value="<%= reorder_tasks_path %>">
-          <%= render tasks %>
-        </div>
+        <%= render(Ui::CardComponent.new) do %>
+          <h2 class="mb-2 text-sm font-semibold text-secondary"><%= category&.name || t(".uncategorized") %></h2>
+          <div id="<%= category ? "tasks_category_#{category.id}" : "tasks_uncategorized" %>" class="min-h-4 space-y-2"
+               data-controller="sortable" data-sortable-url-value="<%= reorder_tasks_path %>">
+            <%= render tasks %>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>

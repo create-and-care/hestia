@@ -3,7 +3,7 @@
     <%= trigger %>
   </div>
 
-  <dialog data-dialog-target="dialog" data-action="click->dialog#closeOnBackdrop" data-state="closed"
+  <dialog data-dialog-target="dialog" role="<%= @role %>" data-action="click->dialog#closeOnBackdrop cancel->dialog#onCancel" data-state="closed"
     class="<%= cn(
       "p-0 border border-primary bg-container shadow-lg duration-200 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
       POSITION_CLASSES.fetch(@position), ANIMATION_CLASSES.fetch(@position)

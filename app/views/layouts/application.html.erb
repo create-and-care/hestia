@@ -33,10 +33,9 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-  <body>
+  <body class="min-h-screen bg-surface text-primary">
     <% if Current.user %>
       <div class="fixed top-3 right-3 z-40 flex items-center gap-1">
-        <%= render "shared/locale_switcher" %>
         <%= render "shared/notifications" %>
       </div>
     <% end %>
@@ -44,7 +43,7 @@
     <% if Current.household %>
       <div class="flex min-h-screen">
         <%= render "shared/app_sidebar" %>
-        <div class="min-w-0 flex-1"><%= yield %></div>
+        <div class="min-w-0 flex-1 bg-white"><%= yield %></div>
       </div>
     <% else %>
       <%= yield %>

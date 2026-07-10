@@ -1,7 +1,7 @@
 <%= render(Ui::DialogComponent.new(position: @side)) do |dialog| %>
-  <% dialog.with_trigger { trigger } %>
-  <% dialog.with_title { title } if title? %>
-  <% dialog.with_description { description } if description? %>
-  <% dialog.with_footer { footer } if footer? %>
+  <% dialog.with_trigger { trigger.to_s } %>
+  <% dialog.with_title { title.to_s } if title? %>
+  <% dialog.with_description { description.to_s } if description? %>
+  <% dialog.with_footer { footer.to_s } if footer? %>
   <%= content %>
 <% end %>

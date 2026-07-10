@@ -15,14 +15,14 @@
   <%= render "shared/flash" %>
 
   <% if @recipe_suggestions.present? %>
-    <section class="mb-10 rounded-lg border border-gray-200 p-4">
-      <h2 class="mb-3 font-medium"><%= t(".suggestions_heading") %></h2>
+    <%= render(Ui::CardComponent.new(class_name: "mb-10")) do |card| %>
+      <% card.with_title { t(".suggestions_heading") } %>
       <ul class="space-y-1 text-sm">
         <% @recipe_suggestions.each do |recipe| %>
           <li><%= link_to recipe.title, recipe_path(recipe), class: "underline" %></li>
         <% end %>
       </ul>
-    </section>
+    <% end %>
   <% end %>
 
   <section class="mb-10">
@@ -33,7 +33,7 @@
       <%= render @fridge_items %>
     </div>
     <% if @fridge_items.empty? %>
-      <p class="mt-4 text-sm text-gray-500"><%= @query.present? ? t(".no_items_for_search") : t(".no_items") %></p>
+      <p class="mt-4 text-sm text-secondary"><%= @query.present? ? t(".no_items_for_search") : t(".no_items") %></p>
     <% end %>
   </section>
 
@@ -45,7 +45,7 @@
       <%= render @prepared_dishes %>
     </div>
     <% if @prepared_dishes.empty? %>
-      <p class="mt-4 text-sm text-gray-500"><%= t(".no_dishes") %></p>
+      <p class="mt-4 text-sm text-secondary"><%= t(".no_dishes") %></p>
     <% end %>
   </section>
 

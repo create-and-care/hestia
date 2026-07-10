@@ -11,26 +11,31 @@
   <%= render "shared/flash" %>
 
   <% if @circles.any? %>
-    <ul class="mb-6 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="mb-6 divide-y divide-gray-100 rounded-lg border border-primary">
       <% @circles.each do |circle| %>
-        <li class="px-4 py-3">
-          <%= link_to circle.name, circle_path(circle), class: "font-medium hover:underline" %>
-          <% if circle.theme.present? %><span class="text-sm text-gray-400">· <%= circle.theme %></span><% end %>
-          <span class="text-xs text-gray-400">· <%= t(".members", count: circle.members.size) %></span>
-        </li>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_title { link_to circle.name, circle_path(circle), class: "hover:underline" } %>
+          <% item.with_description do %>
+            <% if circle.theme.present? %>· <%= circle.theme %> <% end %>· <%= t(".members", count: circle.members.size) %>
+          <% end %>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
   <% else %>
-    <p class="mb-6 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".empty") %></p>
+    <div class="mb-6">
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty") } } %>
+    </div>
   <% end %>
 
-  <section class="rounded-lg border border-gray-200 p-4">
-    <h2 class="mb-2 font-medium"><%= t(".new_circle") %></h2>
+  <%= render(Ui::CardComponent.new) do |card| %>
+    <% card.with_title { t(".new_circle") } %>
     <%= form_with model: @circle, url: circles_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: t(".name_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :theme, placeholder: t(".theme_placeholder"), class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".create"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+      <%= render Ui::InputComponent.new(name: "circle[name]", placeholder: t(".name_placeholder"),
+            html_options: { id: "circle_name", required: true, class: "flex-1" }) %>
+      <%= render Ui::InputComponent.new(name: "circle[theme]", placeholder: t(".theme_placeholder"),
+            html_options: { id: "circle_theme", class: "w-32" }) %>
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".create") } %>
     <% end %>
-  </section>
+  <% end %>
 
 </div>

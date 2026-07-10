@@ -2,10 +2,10 @@
 
 <%= render Ui::PopoverComponent.new do |popover| %>
   <% popover.with_trigger do %>
-    <button type="button" class="relative cursor-pointer rounded-full p-2 hover:bg-gray-100" aria-label="<%= t(".title") %>">
+    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, html_options: { class: "relative", aria: { label: t(".title") } })) do %>
       <%= lucide_icon("bell", css_class: "size-5") %>
       <%= render "notifications/badge", count: Current.user.notifications.unread.count %>
-    </button>
+    <% end %>
   <% end %>
 
   <div class="flex items-center justify-between border-b border-gray-100 pb-2">
@@ -16,7 +16,9 @@
   <div id="notifications_list" class="max-h-80 divide-y divide-gray-50 overflow-y-auto">
     <% notifications = Current.user.notifications.recent.limit(10) %>
     <% if notifications.none? %>
-      <p class="py-4 text-center text-xs text-gray-400"><%= t(".none") %></p>
+      <%= render(Ui::EmptyComponent.new) do |empty| %>
+        <% empty.with_description { t(".none") } %>
+      <% end %>
     <% end %>
     <% notifications.each do |notification| %>
       <%= render "notifications/notification", notification: notification %>

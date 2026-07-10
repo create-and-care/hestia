@@ -1,6 +1,6 @@
 <div class="flex gap-1" role="group" aria-label="<%= t("recipes.index.view_mode_label") %>">
-  <%= link_to path_helper.call("card"),
-        class: "rounded-md border border-gray-300 px-2 py-1 #{'bg-gray-900 text-white' if @view_mode == 'card'}" do %><%= lucide_icon("layout-grid", css_class: "size-4") %><% end %>
-  <%= link_to path_helper.call("list"),
-        class: "rounded-md border border-gray-300 px-2 py-1 #{'bg-gray-900 text-white' if @view_mode == 'list'}" do %><%= lucide_icon("list", css_class: "size-4") %><% end %>
+  <%= render(Ui::ButtonComponent.new(variant: @view_mode == "card" ? :secondary : :outline, size: :icon,
+        href: path_helper.call("card"))) { lucide_icon("layout-grid", css_class: "size-4") } %>
+  <%= render(Ui::ButtonComponent.new(variant: @view_mode == "list" ? :secondary : :outline, size: :icon,
+        href: path_helper.call("list"))) { lucide_icon("list", css_class: "size-4") } %>
 </div>

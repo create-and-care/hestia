@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = [ "track", "item", "dot" ]
+  static targets = [ "track", "item", "dot", "status" ]
 
   connect() {
     this.update()
@@ -29,6 +29,15 @@ export default class extends Controller {
   update() {
     const trackLeft = this.trackTarget.scrollLeft
     this.currentIndex = this.itemTargets.findIndex((item) => item.offsetLeft >= trackLeft - 4)
-    this.dotTargets.forEach((dot, index) => dot.classList.toggle("bg-button-primary", index === this.currentIndex))
+
+    this.dotTargets.forEach((dot, index) => {
+      const isCurrent = index === this.currentIndex
+      dot.classList.toggle("bg-button-primary", isCurrent)
+      dot.setAttribute("aria-current", String(isCurrent))
+    })
+
+    if (this.hasStatusTarget && this.itemTargets.length) {
+      this.statusTarget.textContent = `Diapositive ${this.currentIndex + 1} sur ${this.itemTargets.length}`
+    }
   }
 }

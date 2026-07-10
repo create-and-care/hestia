@@ -7,15 +7,19 @@
   <%= render "shared/flash" %>
 
   <div class="grid gap-4 sm:grid-cols-2">
-    <%= link_to new_household_path, class: "block rounded-lg border border-gray-200 p-5 hover:border-gray-400" do %>
-      <h2 class="mb-1 font-medium"><%= t(".create_household") %></h2>
-      <p class="text-sm text-gray-600"><%= t(".create_household_description") %></p>
-    <% end %>
+    <div class="rounded-lg border border-gray-200 hover:border-gray-400">
+      <%= render(Ui::ItemComponent.new(href: new_household_path)) do |item| %>
+        <% item.with_title { t(".create_household") } %>
+        <% item.with_description { t(".create_household_description") } %>
+      <% end %>
+    </div>
 
-    <%= link_to new_membership_path, class: "block rounded-lg border border-gray-200 p-5 hover:border-gray-400" do %>
-      <h2 class="mb-1 font-medium"><%= t(".join_household") %></h2>
-      <p class="text-sm text-gray-600"><%= t(".join_household_description") %></p>
-    <% end %>
+    <div class="rounded-lg border border-gray-200 hover:border-gray-400">
+      <%= render(Ui::ItemComponent.new(href: new_membership_path)) do |item| %>
+        <% item.with_title { t(".join_household") } %>
+        <% item.with_description { t(".join_household_description") } %>
+      <% end %>
+    </div>
   </div>
 
   <p class="mt-6 text-sm text-gray-600">

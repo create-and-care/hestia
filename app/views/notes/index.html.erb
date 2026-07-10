@@ -12,8 +12,8 @@
         <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
               class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
       <% end %>
-      <%= link_to (@archived ? t(".active_filter") : t(".archived_filter")), notes_path(archived: (@archived ? nil : 1)),
-            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= render Ui::ButtonComponent.new(variant: :outline, size: :sm, href: notes_path(archived: (@archived ? nil : 1))) {
+            (@archived ? t(".active_filter") : t(".archived_filter")) } %>
     </div>
   </header>
 
@@ -27,9 +27,11 @@
     <%= render @notes %>
   </div>
   <% if @notes.empty? %>
-    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
-      <%= t(".none") %><%= t(".none_archived_suffix") if @archived %><%= t(".none_search_suffix") if @query.present? %>.
-    </p>
+    <%= render(Ui::EmptyComponent.new) do |empty| %>
+      <% empty.with_description do %>
+        <%= t(".none") %><%= t(".none_archived_suffix") if @archived %><%= t(".none_search_suffix") if @query.present? %>.
+      <% end %>
+    <% end %>
   <% end %>
 
 </div>

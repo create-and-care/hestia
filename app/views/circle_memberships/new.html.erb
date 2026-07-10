@@ -5,11 +5,11 @@
 
   <%= render "shared/flash" %>
 
-  <%= form_with url: circle_membership_path, method: :post do |form| %>
+  <%= form_with url: circle_membership_path, method: :post do %>
     <div class="flex gap-2">
-      <%= form.text_field :invite_code, required: true, autofocus: true, placeholder: t(".invite_code_placeholder"),
-            class: "flex-1 rounded-md border border-gray-300 px-3 py-2 uppercase tracking-widest" %>
-      <%= form.submit t(".join"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= render Ui::InputComponent.new(name: "invite_code", placeholder: t(".invite_code_placeholder"),
+            html_options: { id: "invite_code", required: true, autofocus: true, class: "flex-1 uppercase tracking-widest" }) %>
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".join") } %>
     </div>
   <% end %>
 

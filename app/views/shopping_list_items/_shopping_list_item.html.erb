@@ -1,38 +1,46 @@
 <%= tag.div id: dom_id(shopping_list_item), data: { sortable_id: shopping_list_item.id },
-      class: "flex items-center gap-3 rounded-lg border border-gray-200 px-3 py-2 #{'opacity-50' if shopping_list_item.checked}" do %>
-  <span data-sortable-handle class="cursor-grab select-none text-gray-300 hover:text-gray-500" title="<%= t('.move_title') %>"><%= lucide_icon("grip-vertical", css_class: "size-4") %></span>
-  <%= button_to toggle_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
-        method: :patch, class: "shrink-0 cursor-pointer",
-        aria: { label: shopping_list_item.checked ? t(".uncheck_aria") : t(".check_aria") } do %>
-    <span class="flex size-5 items-center justify-center rounded border <%= shopping_list_item.checked ? "border-gray-900 bg-gray-900 text-white" : "border-gray-300" %>">
-      <%= lucide_icon("check", css_class: "size-3.5") if shopping_list_item.checked %>
-    </span>
-  <% end %>
+      class: "rounded-lg border border-primary #{'opacity-50' if shopping_list_item.checked}" do %>
+  <%= render(Ui::ItemComponent.new) do |item| %>
+    <% item.with_leading do %>
+      <div class="flex items-center gap-2">
+        <span data-sortable-handle class="cursor-grab select-none text-subdued hover:text-secondary" title="<%= t('.move_title') %>"><%= lucide_icon("grip-vertical", css_class: "size-4") %></span>
+        <%= button_to toggle_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
+              method: :patch, class: "shrink-0 cursor-pointer",
+              aria: { label: shopping_list_item.checked ? t(".uncheck_aria") : t(".check_aria") } do %>
+          <span class="flex size-5 items-center justify-center rounded border <%= shopping_list_item.checked ? "border-button-primary bg-button-primary text-inverse" : "border-primary" %>">
+            <%= lucide_icon("check", css_class: "size-3.5") if shopping_list_item.checked %>
+          </span>
+        <% end %>
+      </div>
+    <% end %>
 
-  <div class="min-w-0 flex-1">
-    <p class="truncate <%= "line-through text-gray-400" if shopping_list_item.checked %>">
-      <%= shopping_list_item.name %>
-      <% if shopping_list_item.quantity.present? %>
-        <span class="text-sm text-gray-500">
-          — <%= shopping_list_item.quantity.to_s.sub(/\.0+\z/, "") %> <%= shopping_list_item.unit %>
-        </span>
-      <% end %>
-    </p>
-  </div>
+    <% item.with_title do %>
+      <span class="<%= "line-through text-subdued" if shopping_list_item.checked %>">
+        <%= shopping_list_item.name %>
+        <% if shopping_list_item.quantity.present? %>
+          <span class="text-sm text-secondary">
+            — <%= shopping_list_item.quantity.to_s.sub(/\.0+\z/, "") %> <%= shopping_list_item.unit %>
+          </span>
+        <% end %>
+      </span>
+    <% end %>
 
-  <span class="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
-    <%= rayon_label(shopping_list_item.rayon) %>
-  </span>
+    <% item.with_trailing do %>
+      <div class="flex shrink-0 items-center gap-2">
+        <%= render(Ui::BadgeComponent.new(variant: :secondary)) { rayon_label(shopping_list_item.rayon) } %>
 
-  <% if shopping_list_item.checked %>
-    <%= button_to move_to_fridge_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
-          method: :post, class: "shrink-0 cursor-pointer text-gray-400 hover:text-gray-900",
-          form: { title: t(".move_to_fridge_title") }, aria: { label: t(".move_to_fridge_title") } do %><%= lucide_icon("refrigerator", css_class: "size-4") %><% end %>
-  <% end %>
+        <% if shopping_list_item.checked %>
+          <%= button_to move_to_fridge_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
+                method: :post, class: "shrink-0 cursor-pointer text-subdued hover:text-primary",
+                form: { title: t(".move_to_fridge_title") }, aria: { label: t(".move_to_fridge_title") } do %><%= lucide_icon("refrigerator", css_class: "size-4") %><% end %>
+        <% end %>
 
-  <%= button_to shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
-        method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600",
-        aria: { label: t(".delete_aria") } do %>
-    <%= lucide_icon("x", css_class: "size-4") %>
+        <%= button_to shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
+              method: :delete, class: "shrink-0 cursor-pointer text-subdued hover:text-destructive",
+              aria: { label: t(".delete_aria") } do %>
+          <%= lucide_icon("x", css_class: "size-4") %>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 <% end %>

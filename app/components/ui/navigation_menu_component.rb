@@ -14,5 +14,17 @@ module Ui
     end
 
     renders_many :menus, Menu
+
+    def initialize
+      @uid = SecureRandom.hex(4)
+    end
+
+    def trigger_id(key)
+      "navigation-menu-#{@uid}-trigger-#{key}"
+    end
+
+    def panel_id(key)
+      "navigation-menu-#{@uid}-panel-#{key}"
+    end
   end
 end

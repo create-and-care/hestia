@@ -10,9 +10,9 @@
 
   <% if @lists.any? %>
     <nav class="mb-4 flex flex-wrap gap-2 text-sm">
-      <%= link_to t(".all"), routines_path, class: "rounded-full px-3 py-0.5 #{@list ? 'bg-gray-100' : 'bg-gray-900 text-white'}" %>
+      <%= render(Ui::BadgeComponent.new(variant: @list ? :secondary : :default)) { link_to t(".all"), routines_path } %>
       <% @lists.each do |list| %>
-        <%= link_to list, routines_path(list: list), class: "rounded-full px-3 py-0.5 #{@list == list ? 'bg-gray-900 text-white' : 'bg-gray-100'}" %>
+        <%= render(Ui::BadgeComponent.new(variant: @list == list ? :default : :secondary)) { link_to list, routines_path(list: list) } %>
       <% end %>
     </nav>
   <% end %>
@@ -21,20 +21,29 @@
     <%= render @routines %>
   </div>
   <% if @routines.empty? %>
-    <p class="mt-4 rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".empty") %></p>
+    <div class="mt-4">
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty") } } %>
+    </div>
   <% end %>
 
-  <section class="mt-6 rounded-lg border border-gray-200 p-4">
-    <h2 class="mb-2 font-medium"><%= t(".new_routine") %></h2>
+  <%= render(Ui::CardComponent.new(class_name: "mt-6")) do |card| %>
+    <% card.with_title { t(".new_routine") } %>
     <%= form_with model: @routine, url: routines_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.text_field :emoji, placeholder: "🧹", maxlength: 4, class: "w-14 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :name, required: true, placeholder: t(".name_placeholder"), class: "flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.select :frequency, routine_frequency_options, {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.number_field :interval, value: 1, min: 1, class: "w-16 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.text_field :list_name, placeholder: t(".list_placeholder"), class: "w-32 rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.select :assignee_id, routine_member_options, { include_blank: "—" }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+      <%= render Ui::InputComponent.new(name: "routine[emoji]", value: @routine.emoji, placeholder: "🧹",
+            html_options: { id: "routine_emoji", maxlength: 4, class: "w-14" }) %>
+      <%= render Ui::InputComponent.new(name: "routine[name]", value: @routine.name, placeholder: t(".name_placeholder"),
+            html_options: { id: "routine_name", required: true, class: "flex-1" }) %>
+      <%= render Ui::NativeSelectComponent.new(name: "routine[frequency]", options: routine_frequency_options,
+            selected: @routine.frequency, html_options: { id: "routine_frequency" }) %>
+      <%= render Ui::InputComponent.new(type: "number", name: "routine[interval]", value: 1,
+            html_options: { id: "routine_interval", min: 1, class: "w-16" }) %>
+      <%= render Ui::InputComponent.new(name: "routine[list_name]", value: @routine.list_name, placeholder: t(".list_placeholder"),
+            html_options: { id: "routine_list_name", class: "w-32" }) %>
+      <%= render Ui::NativeSelectComponent.new(name: "routine[assignee_id]",
+            options: [ [ "—", "" ] ] + routine_member_options, selected: @routine.assignee_id,
+            html_options: { id: "routine_assignee_id" }) %>
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".add") } %>
     <% end %>
-  </section>
+  <% end %>
 
 </div>

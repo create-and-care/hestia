@@ -3,9 +3,9 @@
     <div class="flex items-center gap-2">
       <span class="font-medium"><%= service_provider.name %></span>
       <% if service_provider.service_provider_type %>
-        <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
+        <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
           <%= "#{service_provider.service_provider_type.icon} #{service_provider.service_provider_type.name}".strip %>
-        </span>
+        <% end %>
       <% end %>
     </div>
     <% if service_provider.address.present? %>
@@ -15,15 +15,18 @@
 
   <div class="flex shrink-0 items-center gap-2 text-sm">
     <% if service_provider.phone.present? %>
-      <%= link_to "tel:#{service_provider.phone}", class: "hover:opacity-70", title: service_provider.phone do %><%= lucide_icon("phone", css_class: "size-4") %><% end %>
+      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: "tel:#{service_provider.phone}",
+            html_options: { title: service_provider.phone })) { lucide_icon("phone", css_class: "size-4") } %>
     <% end %>
     <% if service_provider.email.present? %>
-      <%= link_to "mailto:#{service_provider.email}", class: "hover:opacity-70", title: service_provider.email do %><%= lucide_icon("mail", css_class: "size-4") %><% end %>
+      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: "mailto:#{service_provider.email}",
+            html_options: { title: service_provider.email })) { lucide_icon("mail", css_class: "size-4") } %>
     <% end %>
     <% if service_provider.maps_url %>
-      <%= link_to service_provider.maps_url, target: "_blank", rel: "noopener", class: "hover:opacity-70", title: t(".directions") do %><%= lucide_icon("map", css_class: "size-4") %><% end %>
+      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: service_provider.maps_url,
+            html_options: { target: "_blank", rel: "noopener", title: t(".directions") })) { lucide_icon("map", css_class: "size-4") } %>
     <% end %>
-    <%= link_to edit_service_provider_path(service_provider), class: "text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_service_provider_path(service_provider))) { lucide_icon("pencil", css_class: "size-4") } %>
     <%= button_to service_provider_path(service_provider), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
   </div>
 <% end %>

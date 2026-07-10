@@ -10,27 +10,29 @@
   <header class="mb-4 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("calendar", css_class: "size-6") %> <%= @view == "list" ? t(".agenda_heading") : month_label(@month) %></h1>
     <div class="flex flex-wrap items-center gap-2">
-      <%= link_to t(".month_view"), calendar_path(view: :month, member_id: @member_id),
-            class: "rounded-md border px-3 py-1.5 text-sm #{@view == 'month' ? 'border-gray-900 font-medium' : 'border-gray-300 hover:bg-gray-50'}" %>
-      <%= link_to t(".list_view"), calendar_path(view: :list, member_id: @member_id),
-            class: "rounded-md border px-3 py-1.5 text-sm #{@view == 'list' ? 'border-gray-900 font-medium' : 'border-gray-300 hover:bg-gray-50'}" %>
+      <%= render(Ui::ButtonComponent.new(variant: @view == "month" ? :secondary : :outline, size: :sm,
+            href: calendar_path(view: :month, member_id: @member_id))) { t(".month_view") } %>
+      <%= render(Ui::ButtonComponent.new(variant: @view == "list" ? :secondary : :outline, size: :sm,
+            href: calendar_path(view: :list, member_id: @member_id))) { t(".list_view") } %>
       <%= form_with url: calendar_path, method: :get, class: "flex items-center gap-1" do |form| %>
         <%= form.hidden_field :view, value: @view %>
-        <%= form.select :member_id, options_for_select(@members.map { |m| [ m.name.presence || m.email_address, m.id ] }, @member_id),
-              { include_blank: t(".all_members") }, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-        <%= form.submit t(".filter_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+        <%= render Ui::NativeSelectComponent.new(name: "member_id",
+              options: [ [ t(".all_members"), "" ] ] + @members.map { |member| [ member.name.presence || member.email_address, member.id.to_s ] },
+              selected: @member_id.to_s, html_options: { id: "calendar_member_id" }) %>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".filter_submit") } %>
       <% end %>
       <%= form_with model: Current.household, url: household_path(Current.household), method: :patch, class: "flex items-center gap-1" do |form| %>
-        <%= form.select :holiday_country,
-              options_for_select([ [ t(".holidays_none"), "" ] ] + Household::HOLIDAY_COUNTRIES.map { |c| [ t(".holidays_country", country: c), c ] }, Current.household.holiday_country),
-              {}, class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm", onchange: "this.form.requestSubmit()" %>
+        <%= render Ui::NativeSelectComponent.new(name: "household[holiday_country]",
+              options: [ [ t(".holidays_none"), "" ] ] + Household::HOLIDAY_COUNTRIES.map { |country| [ t(".holidays_country", country: country), country ] },
+              selected: Current.household.holiday_country, html_options: { id: "household_holiday_country", onchange: "this.form.requestSubmit()" }) %>
       <% end %>
-      <%= link_to t(".export_pdf"), calendar_path(format: :pdf, month: (@month || Date.current).strftime("%Y-%m"), member_id: @member_id), target: "_blank",
-            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
-      <%= link_to external_calendar_connections_path,
-            class: "inline-flex items-center gap-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" do %><%= lucide_icon("refresh-cw", css_class: "size-4") %> <%= t(".sync_external") %><% end %>
-      <%= link_to t(".new_event"), new_calendar_event_path,
-            class: "rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm,
+            href: calendar_path(format: :pdf, month: (@month || Date.current).strftime("%Y-%m"), member_id: @member_id),
+            html_options: { target: "_blank" })) { t(".export_pdf") } %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: external_calendar_connections_path)) do %>
+        <%= lucide_icon("refresh-cw", css_class: "size-4") %> <%= t(".sync_external") %>
+      <% end %>
+      <%= render(Ui::ButtonComponent.new(size: :sm, href: new_calendar_event_path)) { t(".new_event") } %>
     </div>
   </header>
 
@@ -66,18 +68,22 @@
     </div>
   <% else %>
     <% if @occurrences.any? %>
-      <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+      <div class="divide-y divide-gray-100 rounded-lg border border-gray-200">
         <% @occurrences.each do |time, event| %>
-          <li class="flex flex-wrap items-center gap-3 px-4 py-2">
-            <span class="size-2 shrink-0 rounded-full <%= event_color_class(event.color) %>"></span>
-            <span class="w-44 text-sm text-gray-500"><%= time.strftime("%a %d/%m — %H:%M") %></span>
-            <%= link_to event.title, edit_calendar_event_path(event), class: "font-medium hover:underline" %>
-            <% if event.location.present? %><span class="text-sm text-gray-400"><%= event.location %></span><% end %>
-          </li>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_leading { tag.span "", class: "size-2 rounded-full #{event_color_class(event.color)}" } %>
+            <% item.with_title { link_to event.title, edit_calendar_event_path(event), class: "hover:underline" } %>
+            <% item.with_description do %>
+              <%= time.strftime("%a %d/%m — %H:%M") %>
+              <% if event.location.present? %>· <%= event.location %><% end %>
+            <% end %>
+          <% end %>
         <% end %>
-      </ul>
+      </div>
     <% else %>
-      <p class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500"><%= t(".no_events") %></p>
+      <%= render(Ui::EmptyComponent.new) do |empty| %>
+        <% empty.with_description { t(".no_events") } %>
+      <% end %>
     <% end %>
   <% end %>
 

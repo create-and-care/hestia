@@ -1,38 +1,64 @@
 <%= form_with model: service_provider, url: url do |form| %>
   <% if service_provider.errors.any? %>
-    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
       <ul class="list-inside list-disc">
         <% service_provider.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
       </ul>
-    </div>
+    <% end %>
   <% end %>
 
   <div class="space-y-4">
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
-        <%= form.label :name, t(".name_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_field :name, required: true, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= render(Ui::FieldComponent.new(id: "service_provider_name")) do |field| %>
+          <% field.with_label { t(".name_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "text", name: "service_provider[name]", value: service_provider.name,
+                  html_options: { id: "service_provider_name", required: true }) %>
+          <% end %>
+        <% end %>
       </div>
       <div>
-        <%= form.label :service_provider_type_id, t(".type_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.collection_select :service_provider_type_id, Current.household.service_provider_types.order(:name), :id, :name, { include_blank: "—" },
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= render(Ui::FieldComponent.new(id: "service_provider_service_provider_type_id")) do |field| %>
+          <% field.with_label { t(".type_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::NativeSelectComponent.new(name: "service_provider[service_provider_type_id]",
+                  options: [ [ "—", "" ] ] + Current.household.service_provider_types.order(:name).map { |type| [ type.name, type.id ] },
+                  selected: service_provider.service_provider_type_id,
+                  html_options: { id: "service_provider_service_provider_type_id" }) %>
+          <% end %>
+        <% end %>
       </div>
     </div>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
-        <%= form.label :phone, t(".phone_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.telephone_field :phone, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= render(Ui::FieldComponent.new(id: "service_provider_phone")) do |field| %>
+          <% field.with_label { t(".phone_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "tel", name: "service_provider[phone]", value: service_provider.phone,
+                  html_options: { id: "service_provider_phone" }) %>
+          <% end %>
+        <% end %>
       </div>
       <div>
-        <%= form.label :email, t(".email_label"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.email_field :email, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+        <%= render(Ui::FieldComponent.new(id: "service_provider_email")) do |field| %>
+          <% field.with_label { t(".email_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "email", name: "service_provider[email]", value: service_provider.email,
+                  html_options: { id: "service_provider_email" }) %>
+          <% end %>
+        <% end %>
       </div>
     </div>
     <div>
-      <%= form.label :address, t(".address_label"), class: "mb-1 block text-sm font-medium" %>
-      <%= form.text_area :address, rows: 2, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+      <%= render(Ui::FieldComponent.new(id: "service_provider_address")) do |field| %>
+        <% field.with_label { t(".address_label") } %>
+        <% field.with_control do %>
+          <%= render(Ui::TextareaComponent.new(name: "service_provider[address]", rows: 2,
+                html_options: { id: "service_provider_address" })) { service_provider.address } %>
+        <% end %>
+      <% end %>
     </div>
-    <%= form.submit t(".save"), class: "cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+    <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".save") } %>
   </div>
 <% end %>

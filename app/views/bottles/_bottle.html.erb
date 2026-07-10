@@ -1,21 +1,28 @@
-<%= tag.div id: dom_id(bottle), class: "flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 px-3 py-2 #{'opacity-50' unless bottle.in_stock}" do %>
-  <div class="min-w-0 flex-1">
-    <p class="flex items-center gap-1.5 font-medium <%= "line-through" unless bottle.in_stock %>">
-      <%= lucide_icon("wine", css_class: "size-4") %> <%= bottle.name %>
-      <% if bottle.vintage %><span class="text-sm text-gray-500"><%= bottle.vintage %></span><% end %>
-    </p>
-    <p class="text-xs text-gray-500">
+<%= tag.div id: dom_id(bottle), class: "rounded-lg border border-primary #{"opacity-50" unless bottle.in_stock}" do %>
+  <%= render(Ui::ItemComponent.new) do |item| %>
+    <% item.with_leading { lucide_icon("wine", css_class: "size-4") } %>
+    <% item.with_title do %>
+      <span class="<%= "line-through" unless bottle.in_stock %>">
+        <%= bottle.name %>
+        <% if bottle.vintage %><span class="text-sm text-secondary"><%= bottle.vintage %></span><% end %>
+      </span>
+    <% end %>
+    <% item.with_description do %>
       <%= [ (wine_type_label(bottle.wine_type) if bottle.wine_type.present?), bottle.region ].reject(&:blank?).join(" · ") %>
-    </p>
-  </div>
+    <% end %>
+    <% item.with_trailing do %>
+      <div class="flex flex-wrap items-center gap-2">
+        <%= button_to (bottle.in_stock ? t(".take_out") : t(".put_back")), toggle_stock_bottle_path(bottle), method: :patch,
+              class: "cursor-pointer rounded border border-primary px-2 py-1 text-xs hover:bg-button-outline-hover" %>
 
-  <%= button_to (bottle.in_stock ? t(".take_out") : t(".put_back")), toggle_stock_bottle_path(bottle), method: :patch,
-        class: "shrink-0 cursor-pointer rounded border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+        <%= form_with model: bottle, url: bottle_path(bottle), method: :patch, class: "flex items-center gap-1" do |form| %>
+          <%= render Ui::NativeSelectComponent.new(name: "bottle[wine_cellar_id]", options: cellar_options, selected: bottle.wine_cellar_id,
+                html_options: { id: "bottle_wine_cellar_id", class: "text-xs" }) %>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".move") } %>
+        <% end %>
 
-  <%= form_with model: bottle, url: bottle_path(bottle), method: :patch, class: "flex shrink-0 items-center gap-1" do |form| %>
-    <%= form.select :wine_cellar_id, cellar_options, {}, class: "rounded-md border border-gray-300 px-1 py-1 text-xs" %>
-    <%= form.submit t(".move"), class: "cursor-pointer rounded border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+        <%= button_to bottle_path(bottle), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+      </div>
+    <% end %>
   <% end %>
-
-  <%= button_to bottle_path(bottle), method: :delete, class: "shrink-0 cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
 <% end %>

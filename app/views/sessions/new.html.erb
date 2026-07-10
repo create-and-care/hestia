@@ -5,23 +5,27 @@
 
   <%= render "shared/flash" %>
 
-  <%= form_with url: session_path do |form| %>
+  <%= form_with url: session_path do %>
     <div class="space-y-4">
-      <div>
-        <%= form.label :email_address, t(".email"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username",
-              placeholder: t(".email_placeholder"), value: params[:email_address],
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "email_address")) do |field| %>
+        <% field.with_label { t(".email") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "email", name: "email_address", value: params[:email_address],
+                placeholder: t(".email_placeholder"),
+                html_options: { id: "email_address", required: true, autofocus: true, autocomplete: "username" }) %>
+        <% end %>
+      <% end %>
 
-      <div>
-        <%= form.label :password, t(".password"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.password_field :password, required: true, autocomplete: "current-password", maxlength: 72,
-              placeholder: t(".password_placeholder"),
-              class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
-      </div>
+      <%= render(Ui::FieldComponent.new(id: "password")) do |field| %>
+        <% field.with_label { t(".password") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "password", name: "password",
+                placeholder: t(".password_placeholder"),
+                html_options: { id: "password", required: true, autocomplete: "current-password", maxlength: 72 }) %>
+        <% end %>
+      <% end %>
 
-      <%= form.submit t(".submit"), class: "w-full cursor-pointer rounded-md bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700" %>
+      <%= render(Ui::ButtonComponent.new(type: "submit", html_options: { class: "w-full" })) { t(".submit") } %>
     </div>
   <% end %>
 
