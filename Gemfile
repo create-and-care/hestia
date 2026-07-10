@@ -96,4 +96,4 @@ group :test do
   gem "simplecov", require: false
 end
 
-gem "prawn", "~> 2.4"
+gem "prawn", "~> 2.5"
