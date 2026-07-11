@@ -6,7 +6,16 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [ "dialog" ]
 
-  open() {
+  // Also bound to `keydown@window` by the search palette (⌘K/Ctrl+K) — every
+  // other caller triggers this via a plain click, so the guard below only
+  // engages for a keydown-sourced event and leaves click behavior untouched.
+  open(event) {
+    if (event?.type === "keydown") {
+      const isShortcut = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k"
+      if (!isShortcut || this.dialogTarget.open) return
+      event.preventDefault() // browsers default Ctrl/Cmd+K to focusing the address bar
+    }
+
     this.dialogTarget.showModal()
     requestAnimationFrame(() => { this.dialogTarget.dataset.state = "open" })
   }

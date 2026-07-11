@@ -1,7 +1,5 @@
 en:
   sidebar:
-    search_placeholder: "Search…"
-    no_results: "No matching module"
     home: "Home"
     groups:
       daily: "Daily life"

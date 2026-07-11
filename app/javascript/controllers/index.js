@@ -61,6 +61,9 @@ application.register("icon-search", IconSearchController)
 import InputOtpController from "./input_otp_controller"
 application.register("input-otp", InputOtpController)
 
+import LoyaltyBrandController from "./loyalty_brand_controller"
+application.register("loyalty-brand", LoyaltyBrandController)
+
 import MenubarController from "./menubar_controller"
 application.register("menubar", MenubarController)
 
@@ -75,6 +78,9 @@ application.register("popover", PopoverController)
 
 import ResizableController from "./resizable_controller"
 application.register("resizable", ResizableController)
+
+import SearchPaletteController from "./search_palette_controller"
+application.register("search-palette", SearchPaletteController)
 
 import SelectController from "./select_controller"
 application.register("select", SelectController)

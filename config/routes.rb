@@ -265,6 +265,10 @@ Rails.application.routes.draw do
   get "design-system/icons", to: "design_system#icons"
   get "design-system/components/:id", to: "design_system#component", as: :design_system_component
 
+  # Global command-palette search (sidebar) — searches across all household
+  # modules at once (Household improvements backlog item).
+  resource :search, only: :show
+
   # Household dashboard (Spec §7).
   root "dashboard#show"
 end

@@ -10,8 +10,7 @@
   <% end %>
 
   <div data-sidebar-target="label">
-    <%= render Ui::InputComponent.new(type: "search", placeholder: t("sidebar.search_placeholder"),
-          html_options: { autocomplete: "off", data: { sidebar_target: "searchInput", action: "input->sidebar#filter" } }) %>
+    <%= render "shared/search_dialog" %>
   </div>
 
   <%= link_to root_path, class: "flex items-center gap-3 rounded-md p-2 text-sm #{current_page?(root_path) ? "bg-surface-hover font-medium text-primary" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>
@@ -46,8 +45,6 @@
       </div>
     </div>
   <% end %>
-
-  <p data-sidebar-target="empty" hidden class="px-2 py-1.5 text-xs text-secondary"><%= t("sidebar.no_results") %></p>
 
   <% sidebar.with_footer do %>
     <div class="flex flex-col gap-0.5 border-t border-primary pt-3">

@@ -1,0 +1,6 @@
+fr:
+  search:
+    button_label: "Rechercher…"
+    placeholder: "Rechercher dans le foyer…"
+    hint: "Tapez pour rechercher dans toutes vos données."
+    no_results: "Aucun résultat."

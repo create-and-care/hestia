@@ -1,7 +1,5 @@
 fr:
   sidebar:
-    search_placeholder: "Rechercher…"
-    no_results: "Aucun module ne correspond"
     home: "Accueil"
     groups:
       daily: "Quotidien"

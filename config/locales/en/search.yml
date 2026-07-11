@@ -1,0 +1,6 @@
+en:
+  search:
+    button_label: "Search…"
+    placeholder: "Search across the household…"
+    hint: "Type to search across all your data."
+    no_results: "No results found."
