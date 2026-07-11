@@ -12,16 +12,12 @@ class RecipeCatalogTest < ApplicationSystemTestCase
     assert_text recipe_catalog_entries(:carbonara).title
 
     within "##{ActionView::RecordIdentifier.dom_id(recipe_catalog_entries(:carbonara), :catalog)}" do
-      click_on "Add to my book"
+      submit_button_to "Add to my book"
     end
     assert_text recipe_catalog_entries(:carbonara).title
     assert_text "Faire cuire les pâtes."
 
-    # A short settle beat after the Turbo-driven redirect above avoids a
-    # race where a second turbo-stream form submission fired immediately
-    # after the first lands before Turbo has fully finished the visit.
-    sleep 1
-    click_on "Add to shopping list"
+    submit_button_to "Add to shopping list"
     assert_text "Ingredients added to the shopping list."
   end
 end

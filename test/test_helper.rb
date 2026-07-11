@@ -9,6 +9,7 @@ require_relative "../config/environment"
 require "rails/test_help"
 require "webmock/minitest"
 require_relative "test_helpers/session_test_helper"
+require_relative "test_helpers/system_test_helper"
 
 # No real network calls in tests (Open Food Facts, Nominatim...): every test must
 # explicitly stub the requests it exercises.
