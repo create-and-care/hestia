@@ -1,0 +1,114 @@
+/* design-sync build entry — compiles the app's real stylesheet PLUS a forced
+   core-utility vocabulary so Claude Design's layout glue resolves against
+   Hestia's theme. Built by: npx @tailwindcss/cli -i .design-sync/sync-entry.css
+   -o ds-bundle/_ds_bundle.css --minify (run from repo root so the app's
+   templates are content-scanned too). See .design-sync/NOTES.md. */
+@import "../app/assets/stylesheets/application.tailwind.css";
+
+/* ── Hestia palette utilities (25–900; steps missing from a scale are skipped) ── */
+@source inline("{hover:,}bg-{gray,red,green,yellow,cyan,blue,indigo,violet,fuchsia,pink,orange}-{25,50,{100..900..100}}");
+@source inline("text-{gray,red,green,yellow,cyan,blue,indigo,violet,fuchsia,pink,orange}-{25,50,{100..900..100}}");
+@source inline("border-{gray,red,green,yellow,cyan,blue,indigo,violet,fuchsia,pink,orange}-{25,50,{100..900..100}}");
+@source inline("{hover:,}bg-{white,black}");
+@source inline("text-{white,black}");
+
+/* ── Semantic color utilities (from @theme --color-*) ── */
+@source inline("{hover:,}bg-{background,foreground,surface,surface-hover,surface-inset,surface-inset-hover,container,container-hover,container-inset,container-inset-hover}");
+@source inline("{hover:,}bg-{success,warning,destructive,destructive-subtle,info,link,tertiary,nav-indicator,toggle-track}");
+@source inline("text-{background,foreground,success,warning,destructive,info,link,tertiary}");
+@source inline("border-{success,warning,info,link,tertiary}");
+
+/* ── Hestia custom @utility classes (single-property token utilities) ── */
+@source inline("text-{primary,secondary,subdued,inverse}");
+@source inline("{hover:,}bg-{inverse,inverse-hover,overlay,loader}");
+@source inline("border-{primary,secondary,divider,subdued,solid,destructive,inverse}");
+@source inline("{focus-visible:,}ring-focus");
+@source inline("shadow-border-{xs,sm,md,lg,xl}");
+@source inline("{hover:,}bg-button-{primary,primary-hover,secondary,secondary-hover,secondary-strong,secondary-strong-hover,disabled,destructive,destructive-hover,ghost-hover,outline-hover}");
+@source inline("bg-tab-{item-active,item-hover,group}");
+@source inline("animate-{in,out}");
+@source inline("fade-{in,out}-0");
+@source inline("zoom-in-{90,95}");
+@source inline("zoom-out-95");
+@source inline("slide-in-from-{top,bottom,left,right}{-2,}");
+@source inline("slide-out-to-{top,bottom,left,right}");
+@source inline("animate-accordion-{down,up}");
+
+/* ── Layout & flex/grid ── */
+@source inline("{flex,inline-flex,grid,block,inline-block,inline,hidden,contents}");
+@source inline("flex-{1,auto,none,col,row,col-reverse,row-reverse,wrap,nowrap}");
+@source inline("items-{start,center,end,baseline,stretch}");
+@source inline("justify-{start,center,end,between,around,evenly}");
+@source inline("self-{start,center,end,stretch}");
+@source inline("{shrink,grow}-0");
+@source inline("{shrink,grow}");
+@source inline("gap-{0,0.5,1,1.5,2,2.5,3,4,5,6,8,10,12,16}");
+@source inline("gap-{x,y}-{1,2,3,4,6,8}");
+@source inline("grid-cols-{1..12}");
+@source inline("col-span-{1..12}");
+@source inline("order-{1,2,first,last}");
+
+/* ── Spacing ── */
+@source inline("p-{0,0.5,1,1.5,2,2.5,3,3.5,4,5,6,8,10,12,16,20}");
+@source inline("p{x,y,t,r,b,l}-{0,0.5,1,1.5,2,2.5,3,3.5,4,5,6,8,10,12,16,20}");
+@source inline("m-{0,1,2,3,4,5,6,8,10,12,16,auto}");
+@source inline("m{x,y,t,r,b,l}-{0,1,2,3,4,5,6,8,10,12,16,auto}");
+@source inline("-m{x,y,t,r,b,l}-{1,2,3,4}");
+@source inline("space-{x,y}-{0.5,1,1.5,2,3,4,6,8}");
+
+/* ── Sizing ── */
+@source inline("w-{0,1,2,3,4,5,6,8,10,12,14,16,20,24,32,40,48,56,64,72,80,96,auto,full,fit,screen,min,max,px}");
+@source inline("h-{0,1,2,3,4,5,6,8,10,12,14,16,20,24,32,40,48,56,64,auto,full,fit,screen,px}");
+@source inline("size-{2,3,4,5,6,7,8,9,10,11,12,14,16,20,24}");
+@source inline("min-w-{0,fit,full,24,32,48,64}");
+@source inline("min-h-{0,screen,full,dvh}");
+@source inline("max-w-{xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,full,fit,none,prose}");
+@source inline("max-h-{32,48,64,80,96,full,screen}");
+
+/* ── Typography ── */
+@source inline("text-{xs,sm,base,lg,xl,2xl,3xl,4xl,5xl}");
+@source inline("font-{sans,mono}");
+@source inline("font-{normal,medium,semibold,bold}");
+@source inline("leading-{none,tight,snug,normal,relaxed}");
+@source inline("tracking-{tighter,tight,normal,wide,widest}");
+@source inline("text-{left,center,right}");
+@source inline("{truncate,uppercase,lowercase,capitalize,italic,underline,line-through,no-underline}");
+@source inline("line-clamp-{1,2,3}");
+@source inline("whitespace-{nowrap,pre-wrap,pre-line}");
+@source inline("break-{words,all}");
+@source inline("{tabular-nums,antialiased}");
+@source inline("list-{disc,decimal,none,inside}");
+
+/* ── Borders, radius, rings ── */
+@source inline("border{-0,-2,-4,}");
+@source inline("border-{t,r,b,l,x,y}{-0,-2,}");
+@source inline("divide-{x,y}");
+@source inline("rounded{-none,-xs,-sm,-md,-lg,-xl,-2xl,-3xl,-full,}");
+@source inline("rounded-{t,r,b,l,tl,tr,br,bl}-{sm,md,lg,xl,full,none}");
+@source inline("ring{-0,-1,-2,-4,}");
+@source inline("ring-offset-{1,2}");
+@source inline("outline-none");
+
+/* ── Effects & misc ── */
+@source inline("shadow-{xs,sm,md,lg,xl,none}");
+@source inline("opacity-{0,25,40,50,60,75,90,100}");
+@source inline("{hover:,}opacity-{50,75,100}");
+@source inline("disabled:opacity-50");
+@source inline("disabled:pointer-events-none");
+@source inline("{transition,transition-colors,transition-opacity,transition-transform,transition-all}");
+@source inline("duration-{75,100,150,200,300,500}");
+@source inline("ease-{in,out,in-out,linear}");
+@source inline("animate-{spin,pulse,bounce,none}");
+@source inline("{cursor-pointer,cursor-default,cursor-not-allowed,select-none,pointer-events-none,sr-only,appearance-none,resize-none}");
+@source inline("scale-{95,100,105}");
+@source inline("rotate-{45,90,180}");
+@source inline("{overflow-hidden,overflow-auto,overflow-x-auto,overflow-y-auto,overflow-visible,overscroll-contain}");
+@source inline("object-{cover,contain,center}");
+@source inline("aspect-{square,video,auto}");
+
+/* ── Position ── */
+@source inline("{relative,absolute,fixed,sticky,static}");
+@source inline("inset-{0,x-0,y-0}");
+@source inline("{top,right,bottom,left}-{0,0.5,1,1.5,2,3,4,6,8,full,auto}");
+@source inline("-{top,right,bottom,left}-{1,2,4}");
+@source inline("z-{0,10,20,30,40,50}");
