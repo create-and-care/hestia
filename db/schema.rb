@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_17_185745) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -346,11 +346,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
   create_table "gift_lists", force: :cascade do |t|
     t.bigint "contact_id"
     t.datetime "created_at", null: false
+    t.bigint "created_by_id"
     t.bigint "household_id", null: false
     t.string "name", null: false
     t.string "perspective", default: "receive", null: false
+    t.boolean "restricted", default: false, null: false
+    t.string "theme"
     t.datetime "updated_at", null: false
+    t.bigint "visible_to_ids", default: [], null: false, array: true
     t.index ["contact_id"], name: "index_gift_lists_on_contact_id"
+    t.index ["created_by_id"], name: "index_gift_lists_on_created_by_id"
     t.index ["household_id"], name: "index_gift_lists_on_household_id"
   end
 
@@ -358,8 +363,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
     t.datetime "created_at", null: false
     t.bigint "gift_idea_id", null: false
     t.string "reserver_name"
+    t.string "token"
     t.datetime "updated_at", null: false
     t.index ["gift_idea_id"], name: "index_gift_reservations_on_gift_idea_id"
+    t.index ["token"], name: "index_gift_reservations_on_token", unique: true
   end
 
   create_table "households", force: :cascade do |t|
@@ -963,6 +970,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
   add_foreign_key "gift_list_shares", "gift_lists"
   add_foreign_key "gift_lists", "contacts"
   add_foreign_key "gift_lists", "households"
+  add_foreign_key "gift_lists", "users", column: "created_by_id"
   add_foreign_key "gift_reservations", "gift_ideas"
   add_foreign_key "loyalty_cards", "households"
   add_foreign_key "loyalty_cards", "loyalty_brands"

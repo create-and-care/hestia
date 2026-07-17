@@ -220,7 +220,7 @@ Rails.application.routes.draw do
   resources :document_folders, only: %i[create destroy]
 
   # Modules with an architecture deviation (Phase 2.d).
-  resources :gift_lists, only: %i[index show create destroy] do
+  resources :gift_lists, only: %i[index show create edit update destroy] do
     resource :share, only: %i[create destroy], controller: "gift_list_shares"
     resources :gift_ideas, only: %i[create update destroy]
   end

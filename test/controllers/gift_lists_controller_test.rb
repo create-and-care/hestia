@@ -44,4 +44,65 @@ class GiftListsControllerTest < ActionDispatch::IntegrationTest
     get gift_list_path(gift_lists(:beta_list))
     assert_response :not_found
   end
+
+  test "create ignores contact_id for a receive list" do
+    post gift_lists_path, params: { gift_list: { name: "Souhaits", perspective: "receive", contact_id: contacts(:alpha_mom).id } }
+    assert_nil GiftList.find_by!(name: "Souhaits").contact_id
+  end
+
+  test "the creator can rename their list" do
+    list = gift_lists(:alpha_wishlist)
+    list.update!(created_by: users(:one))
+    patch gift_list_path(list), params: { gift_list: { name: "Nouveau nom", perspective: "receive" } }
+    assert_equal "Nouveau nom", list.reload.name
+  end
+
+  test "a non-creator household member cannot edit the list" do
+    other = User.create!(name: "Autre", email_address: "autre@example.com", password: "password")
+    households(:alpha).memberships.create!(user: other, role: "member")
+
+    list = gift_lists(:alpha_wishlist)
+    list.update!(created_by: users(:one))
+
+    sign_in_as(other)
+    patch gift_list_path(list), params: { gift_list: { name: "Piraté", perspective: "receive" } }
+    assert_not_equal "Piraté", list.reload.name
+  end
+
+  test "a restricted list is hidden from household members who aren't included" do
+    other = User.create!(name: "Autre", email_address: "autre@example.com", password: "password")
+    households(:alpha).memberships.create!(user: other, role: "member")
+
+    list = gift_lists(:alpha_wishlist)
+    list.update!(created_by: users(:one), restricted: true, visible_to_ids: [])
+
+    sign_in_as(other)
+    get gift_list_path(list)
+    assert_response :not_found
+  end
+
+  test "a restricted list stays visible to members explicitly included" do
+    other = User.create!(name: "Autre", email_address: "autre@example.com", password: "password")
+    households(:alpha).memberships.create!(user: other, role: "member")
+
+    list = gift_lists(:alpha_wishlist)
+    list.update!(created_by: users(:one), restricted: true, visible_to_ids: [ other.id ])
+
+    sign_in_as(other)
+    get gift_list_path(list)
+    assert_response :success
+  end
+
+  test "edit renders the settings page" do
+    list = gift_lists(:alpha_wishlist)
+    list.update!(created_by: users(:one))
+    get edit_gift_list_path(list)
+    assert_response :success
+  end
+
+  test "the creator can never be excluded from their own restricted list" do
+    list = gift_lists(:alpha_wishlist)
+    list.update!(created_by: users(:one), restricted: true, visible_to_ids: [])
+    assert_includes list.reload.visible_to_ids, users(:one).id
+  end
 end

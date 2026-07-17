@@ -43,6 +43,9 @@ application.register("dialog", DialogController)
 import DropdownMenuController from "./dropdown_menu_controller"
 application.register("dropdown-menu", DropdownMenuController)
 
+import FieldVisibilityController from "./field_visibility_controller"
+application.register("field-visibility", FieldVisibilityController)
+
 import FormController from "./form_controller"
 application.register("form", FormController)
 

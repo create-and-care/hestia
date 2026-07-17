@@ -18,6 +18,13 @@ class GiftIdeasControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to list
   end
 
+  test "create attaches an optional photo" do
+    list = gift_lists(:alpha_wishlist)
+    photo = fixture_file_upload("sample.png", "image/png")
+    post gift_list_gift_ideas_path(list), params: { gift_idea: { name: "Écharpe", photo: photo } }
+    assert list.gift_ideas.order(:created_at).last.photo.attached?
+  end
+
   test "update changes the idea's status" do
     list = gift_lists(:alpha_wishlist)
     idea = gift_ideas(:alpha_book)

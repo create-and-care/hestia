@@ -47,15 +47,17 @@
 
   <%= render(Ui::CardComponent.new) do |card| %>
     <% card.with_title { t(".new_list") } %>
-    <%= form_with model: @list, url: gift_lists_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+    <%= form_with model: @list, url: gift_lists_path, class: "flex flex-wrap items-end gap-2", data: { controller: "field-visibility", field_visibility_show_when_value: [ "give" ].to_json } do |form| %>
       <%= render Ui::InputComponent.new(name: "gift_list[name]", value: @list.name, placeholder: t(".name_placeholder"),
             html_options: { id: "gift_list_name", required: true, class: "flex-1" }) %>
       <%= render Ui::NativeSelectComponent.new(name: "gift_list[perspective]",
             options: [ [ t(".receive"), "receive" ], [ t(".give"), "give" ] ],
-            selected: @list.perspective, html_options: { id: "gift_list_perspective", class: "!w-auto" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: "gift_list[contact_id]",
-            options: [ [ t(".recipient_placeholder"), "" ] ] + contact_options,
-            selected: @list.contact_id, html_options: { id: "gift_list_contact_id", class: "!w-auto" }) %>
+            selected: @list.perspective, html_options: { id: "gift_list_perspective", class: "!w-auto", data: { field_visibility_target: "trigger", action: "change->field-visibility#refresh" } }) %>
+      <div data-field-visibility-target="field">
+        <%= render Ui::NativeSelectComponent.new(name: "gift_list[contact_id]",
+              options: [ [ t(".recipient_placeholder"), "" ] ] + contact_options,
+              selected: @list.contact_id, html_options: { id: "gift_list_contact_id", class: "!w-auto" }) %>
+      </div>
       <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".create") } %>
     <% end %>
   <% end %>

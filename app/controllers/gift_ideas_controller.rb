@@ -20,6 +20,7 @@ class GiftIdeasController < ApplicationController
   private
     def set_list
       @list = Current.household.gift_lists.find(params[:gift_list_id])
+      raise ActiveRecord::RecordNotFound unless @list.visible_to?(Current.user)
     end
 
     def set_idea
@@ -27,6 +28,6 @@ class GiftIdeasController < ApplicationController
     end
 
     def idea_params
-      params.require(:gift_idea).permit(:name, :price, :url, :comment, :status)
+      params.require(:gift_idea).permit(:name, :price, :url, :comment, :status, :photo)
     end
 end

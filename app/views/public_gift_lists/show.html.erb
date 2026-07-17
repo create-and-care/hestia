@@ -17,12 +17,17 @@
             <%= render(Ui::BadgeComponent.new(variant: :success)) { t(".reserved") } %>
           <% end %>
         </div>
+        <% if idea.photo.attached? %>
+          <%= image_tag idea.photo.variant(resize_to_limit: [ 300, 300 ]), alt: "", class: "mt-2 max-h-40 w-auto rounded-md object-cover" %>
+        <% end %>
         <% if idea.comment.present? %><p class="mt-1 text-sm text-gray-500"><%= idea.comment %></p><% end %>
 
         <div class="mt-2">
           <% if idea.reserved? %>
-            <%= button_to t(".cancel_reservation"), unreserve_public_gift_path(@share.token, idea), method: :delete,
-                  class: "cursor-pointer text-xs text-gray-500 underline" %>
+            <%= form_with url: unreserve_public_gift_path(@share.token, idea), method: :delete,
+                  data: { turbo_confirm: t(".cancel_reservation_confirm") } do %>
+              <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :sm)) { t(".cancel_reservation") } %>
+            <% end %>
           <% else %>
             <%= form_with url: reserve_public_gift_path(@share.token, idea), method: :post, class: "flex gap-2" do |form| %>
               <%= render Ui::InputComponent.new(name: "reserver_name", placeholder: t(".reserver_name_placeholder"),

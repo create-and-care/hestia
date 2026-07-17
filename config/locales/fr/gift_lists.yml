@@ -1,5 +1,6 @@
 fr:
   gift_lists:
+    not_creator: "Seul le créateur de cette liste peut modifier ces réglages."
     index:
       title: "Cadeaux"
       receive: "Recevoir"
@@ -12,18 +13,32 @@ fr:
       recipient_placeholder: "Destinataire (offrir)"
       create: "Créer"
     show:
+      edit: "Modifier"
       delete: "Supprimer"
       delete_confirm: "Supprimer cette liste ?"
+      restricted_badge: "Visibilité restreinte"
       public_sharing: "Partage public"
       share_link_description: "Lien à partager (consultable et réservable sans compte) :"
       disable_link: "Désactiver le lien"
       enable_link: "Activer un lien de partage"
       ideas: "Idées"
+      no_ideas: "Aucune idée pour l'instant."
       link_label: "lien"
       link_placeholder: "Lien"
       idea_placeholder: "Idée"
+      comment_placeholder: "Commentaire (optionnel)"
+      delete_idea: "Supprimer cette idée"
+      delete_idea_confirm: "Supprimer cette idée ?"
       add: "Ajouter"
       back_to_gifts: "← Cadeaux"
+    edit:
+      title: "Réglages de « %{name} »"
+      theme_placeholder: "Occasion (Noël, anniversaire…)"
+      restricted_label: "Visibilité restreinte (préparer une surprise)"
+      restricted_description: "Seuls vous et les membres cochés ci-dessous verront cette liste — le reste du foyer, y compris le destinataire, n'y aura pas accès."
+      save: "Enregistrer"
+    update:
+      updated: "Liste mise à jour."
     destroy:
       deleted: "Liste supprimée."
     perspectives:
@@ -43,7 +58,10 @@ fr:
       description: "Réservez une idée pour éviter que plusieurs personnes offrent la même chose. Aucun compte nécessaire."
       reserved: "Réservé"
       cancel_reservation: "Annuler la réservation"
+      cancel_reservation_confirm: "Annuler cette réservation ?"
       reserver_name_placeholder: "Votre nom (optionnel)"
       reserve: "Réserver"
       view_link: "voir"
       empty: "Cette liste est vide pour l'instant."
+    unreserve:
+      not_authorized: "Seule la personne ayant fait cette réservation peut l'annuler."

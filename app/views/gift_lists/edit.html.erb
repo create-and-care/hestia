@@ -1,0 +1,50 @@
+<% content_for :title, t(".title", name: @list.name) %>
+
+<div class="mx-auto mt-10 max-w-xl px-4">
+  <div class="mb-4"><%= module_breadcrumb(:gifts, [ @list.name, gift_list_path(@list) ], [ t(".title", name: @list.name), nil ], module_path: gift_lists_path) %></div>
+
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title", name: @list.name) %></h1>
+
+  <%= render "shared/flash" %>
+
+  <%= render(Ui::CardComponent.new) do %>
+    <%= form_with model: @list, url: gift_list_path(@list), method: :patch, class: "space-y-4",
+          data: { controller: "field-visibility", field_visibility_show_when_value: [ "give" ].to_json } do |form| %>
+      <%= render Ui::InputComponent.new(name: "gift_list[name]", value: @list.name,
+            html_options: { id: "gift_list_name", required: true }) %>
+      <%= render Ui::InputComponent.new(name: "gift_list[theme]", value: @list.theme, placeholder: t(".theme_placeholder"),
+            html_options: { id: "gift_list_theme" }) %>
+      <%= render Ui::NativeSelectComponent.new(name: "gift_list[perspective]",
+            options: [ [ t("gift_lists.index.receive"), "receive" ], [ t("gift_lists.index.give"), "give" ] ],
+            selected: @list.perspective, html_options: { id: "gift_list_perspective",
+              data: { field_visibility_target: "trigger", action: "change->field-visibility#refresh" } }) %>
+      <div data-field-visibility-target="field">
+        <%= render Ui::NativeSelectComponent.new(name: "gift_list[contact_id]",
+              options: [ [ t("gift_lists.index.recipient_placeholder"), "" ] ] + contact_options,
+              selected: @list.contact_id, html_options: { id: "gift_list_contact_id" }) %>
+      </div>
+
+      <div class="border-t border-primary pt-4">
+        <label class="flex items-center gap-2 text-sm">
+          <%= render Ui::CheckboxComponent.new(name: "gift_list[restricted]", id: "gift_list_restricted", checked: @list.restricted?, html_options: { value: "1" }) %>
+          <%= t(".restricted_label") %>
+        </label>
+        <p class="mt-1 text-xs text-secondary"><%= t(".restricted_description") %></p>
+
+        <div class="mt-3 flex flex-wrap gap-3">
+          <% @household_members.each do |member| %>
+            <div class="flex items-center gap-2 text-sm">
+              <%= render Ui::CheckboxComponent.new(name: "gift_list[visible_to_ids][]", id: "gift_list_visible_to_#{member.id}",
+                    checked: @list.visible_to_ids.include?(member.id), html_options: { value: member.id }) %>
+              <%= render(Ui::LabelComponent.new(for_id: "gift_list_visible_to_#{member.id}")) { member.name.presence || member.email_address } %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".save") } %>
+    <% end %>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t("gift_lists.show.back_to_gifts"), gift_list_path(@list), class: "underline" %></p>
+</div>

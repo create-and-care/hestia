@@ -3,6 +3,7 @@ class GiftIdea < ApplicationRecord
 
   belongs_to :gift_list
   has_many :gift_reservations, dependent: :destroy
+  has_one_attached :photo
 
   validates :name, presence: true
   validates :status, inclusion: { in: STATUSES }

@@ -1,10 +1,22 @@
 <% content_for :title, @list.name %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:gifts, [ @list.name, nil ], module_path: gift_lists_path) %></div>
+
   <header class="mb-4 flex items-center justify-between">
-    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("gift", css_class: "size-6") %> <%= @list.name %> <span class="text-sm text-gray-400">(<%= perspective_label(@list.perspective) %>)</span></h1>
-    <%= button_to t(".delete"), gift_list_path(@list), method: :delete,
-          form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-sm text-red-600 underline" %>
+    <h1 class="flex items-center gap-2 text-2xl font-semibold">
+      <%= lucide_icon("gift", css_class: "size-6") %> <%= @list.name %>
+      <span class="text-sm text-gray-400">(<%= perspective_label(@list.perspective) %><%= " · #{@list.theme}" if @list.theme.present? %>)</span>
+      <% if @list.restricted? %><%= render(Ui::BadgeComponent.new(variant: :secondary)) { t(".restricted_badge") } %><% end %>
+    </h1>
+    <div class="flex items-center gap-3">
+      <% if @list.created_by_id.nil? || @list.created_by_id == Current.user.id %>
+        <%= link_to t(".edit"), edit_gift_list_path(@list), class: "text-sm underline" %>
+      <% end %>
+      <%= form_with url: gift_list_path(@list), method: :delete, data: { turbo_confirm: t(".delete_confirm") } do %>
+        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete") } %>
+      <% end %>
+    </div>
   </header>
 
   <%= render "shared/flash" %>
@@ -13,31 +25,57 @@
     <%= render(Ui::CardComponent.new(class_name: "mb-6")) do |card| %>
       <% card.with_title { t(".public_sharing") } %>
       <% if @list.shared? %>
-        <p class="mb-2 text-sm text-gray-600"><%= t(".share_link_description") %></p>
-        <code class="block rounded bg-gray-100 px-3 py-2 text-sm break-all"><%= public_gift_list_url(@list.gift_list_share.token) %></code>
-        <%= button_to t(".disable_link"), gift_list_share_path(@list), method: :delete, class: "mt-2 cursor-pointer text-sm text-red-600 underline" %>
+        <p class="mb-2 text-sm text-secondary"><%= t(".share_link_description") %></p>
+        <div class="flex items-center gap-2">
+          <code class="block flex-1 rounded bg-surface-inset px-3 py-2 text-sm break-all"><%= public_gift_list_url(@list.gift_list_share.token) %></code>
+          <button type="button" class="shrink-0 cursor-pointer text-sm text-secondary underline" data-controller="clipboard"
+                data-clipboard-text-value="<%= public_gift_list_url(@list.gift_list_share.token) %>" data-action="clipboard#copy"><%= t("circles.copy_code") %></button>
+        </div>
+        <%= form_with url: gift_list_share_path(@list), method: :delete, class: "mt-2" do %>
+          <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :sm)) { t(".disable_link") } %>
+        <% end %>
       <% else %>
-        <%= button_to t(".enable_link"), gift_list_share_path(@list), method: :post,
-              class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" %>
+        <%= form_with url: gift_list_share_path(@list), method: :post do %>
+          <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".enable_link") } %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>
 
   <section class="mb-6">
     <h2 class="mb-2 font-medium"><%= t(".ideas") %></h2>
-    <ul class="mb-3 space-y-2">
-      <% @list.gift_ideas.ordered.each do |idea| %>
-        <li class="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2 text-sm">
-          <span>
-            <span class="font-medium"><%= idea.name %></span>
-            <% if idea.price %>· <%= number_to_currency(idea.price, unit: "€", format: "%n %u") %><% end %>
-            <% if (idea_url = safe_url(idea.url)) %>· <%= link_to t(".link_label"), idea_url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
-            <%= render(Ui::BadgeComponent.new(variant: :secondary, html_options: { class: "ml-1" })) { gift_status_label(idea.status) } %>
-          </span>
-          <%= button_to "×", gift_list_gift_idea_path(@list, idea), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" %>
-        </li>
-      <% end %>
-    </ul>
+    <% if @ideas.any? %>
+      <ul class="mb-3 space-y-2">
+        <% @ideas.each do |idea| %>
+          <li class="rounded-lg border border-primary px-3 py-2 text-sm">
+            <div class="flex items-center justify-between gap-2">
+              <span>
+                <span class="font-medium"><%= idea.name %></span>
+                <% if idea.price %>· <%= number_to_currency(idea.price, unit: "€", format: "%n %u") %><% end %>
+                <% if (idea_url = safe_url(idea.url)) %>· <%= link_to t(".link_label"), idea_url, target: "_blank", rel: "noopener", class: "underline" %><% end %>
+              </span>
+              <div class="flex shrink-0 items-center gap-2">
+                <%= form_with url: gift_list_gift_idea_path(@list, idea), method: :patch, class: "inline" do %>
+                  <input type="hidden" name="gift_idea[status]" value="<%= idea.status == "wanted" ? "bought" : "wanted" %>">
+                  <%= render(Ui::ButtonComponent.new(type: "submit", variant: idea.status == "bought" ? :secondary : :outline, size: :sm)) { gift_status_label(idea.status) } %>
+                <% end %>
+                <%= form_with url: gift_list_gift_idea_path(@list, idea), method: :delete, class: "inline",
+                      data: { turbo_confirm: t(".delete_idea_confirm") } do %>
+                  <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :icon, html_options: { "aria-label": t(".delete_idea") })) { "×" } %>
+                <% end %>
+              </div>
+            </div>
+            <% if idea.photo.attached? %>
+              <%= image_tag idea.photo.variant(resize_to_limit: [ 200, 200 ]), alt: "", class: "mt-2 max-h-32 w-auto rounded-md object-cover" %>
+            <% end %>
+            <% if idea.comment.present? %><p class="mt-1 text-secondary"><%= idea.comment %></p><% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_ideas") } } %>
+    <% end %>
+
     <%= form_with model: [ @list, @idea ], url: gift_list_gift_ideas_path(@list), class: "flex flex-wrap items-end gap-2" do |form| %>
       <%= render Ui::InputComponent.new(name: "gift_idea[name]", value: @idea.name, placeholder: t(".idea_placeholder"),
             html_options: { id: "gift_idea_name", required: true, class: "flex-1" }) %>
@@ -45,6 +83,14 @@
             html_options: { id: "gift_idea_price", step: "any", class: "w-20" }) %>
       <%= render Ui::InputComponent.new(type: "url", name: "gift_idea[url]", value: @idea.url, placeholder: t(".link_placeholder"),
             html_options: { id: "gift_idea_url", class: "w-40" }) %>
+      <%= render Ui::NativeSelectComponent.new(name: "gift_idea[status]",
+            options: GiftIdea::STATUSES.map { |s| [ gift_status_label(s), s ] },
+            selected: "wanted", html_options: { id: "gift_idea_status", class: "!w-auto" }) %>
+      <%= form.file_field :photo, accept: "image/*", class: "text-xs text-secondary" %>
+      <div class="w-full">
+        <%= render(Ui::TextareaComponent.new(name: "gift_idea[comment]", rows: 1, placeholder: t(".comment_placeholder"),
+              html_options: { id: "gift_idea_comment", class: "w-full" })) %>
+      </div>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
