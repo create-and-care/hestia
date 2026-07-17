@@ -29,6 +29,17 @@ class Contact < ApplicationRecord
     years
   end
 
+  # Every birthday date landing within [from, to] — used to surface birthdays
+  # on the Calendar (month/week/day/list views, Spec §9.2 interconnection).
+  def birthdays_between(from, to)
+    return [] if born_on.blank?
+
+    (from.year..to.year).filter_map do |year|
+      date = birthday_in(year)
+      date if (from..to).cover?(date)
+    end
+  end
+
   # today / week / month / later / none — recalculated every day (Spec §10.2).
   def proximity_status(from = Date.current)
     days = days_until_birthday(from)

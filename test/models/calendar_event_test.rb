@@ -49,4 +49,12 @@ class CalendarEventTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).calendar_events, calendar_events(:beta_event)
   end
+
+  test "excluded_occurrences skips that date without affecting the rest of the series" do
+    start = Time.zone.local(2026, 7, 1, 9)
+    event = CalendarEvent.new(title: "X", starts_at: start, frequency: "weekly", recurrence_interval: 1,
+      excluded_occurrences: [ Date.new(2026, 7, 15) ])
+    occurrences = event.occurrences_between(Time.zone.local(2026, 7, 1), Time.zone.local(2026, 7, 31, 23, 59))
+    assert_equal [ Time.zone.local(2026, 7, 1, 9), Time.zone.local(2026, 7, 8, 9), Time.zone.local(2026, 7, 22, 9), Time.zone.local(2026, 7, 29, 9) ], occurrences
+  end
 end

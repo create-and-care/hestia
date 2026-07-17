@@ -12,6 +12,15 @@ class EventRemindersControllerTest < ActionDispatch::IntegrationTest
     assert_equal users(:one), event.event_reminders.last.user
   end
 
+  test "create shows an error instead of failing silently when invalid" do
+    event = calendar_events(:alpha_meeting)
+    assert_no_difference -> { event.event_reminders.count } do
+      post calendar_event_event_reminders_path(event), params: { event_reminder: { minutes_before: 0 } }
+    end
+    assert_redirected_to edit_calendar_event_path(event)
+    assert_includes flash[:alert], "greater than 0"
+  end
+
   test "ignores a user_id from another household and falls back to the current user" do
     event = calendar_events(:alpha_meeting)
     post calendar_event_event_reminders_path(event), params: { event_reminder: { minutes_before: 30, user_id: users(:two).id } }

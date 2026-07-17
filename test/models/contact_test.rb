@@ -29,4 +29,21 @@ class ContactTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).contacts, contacts(:beta_friend)
   end
+
+  test "birthdays_between finds the birthday date within a range" do
+    contact = Contact.new(name: "X", born_on: Date.new(1990, 8, 15))
+    dates = contact.birthdays_between(Date.new(2026, 8, 1), Date.new(2026, 8, 31))
+    assert_equal [ Date.new(2026, 8, 15) ], dates
+  end
+
+  test "birthdays_between returns nothing outside the range" do
+    contact = Contact.new(name: "X", born_on: Date.new(1990, 8, 15))
+    assert_empty contact.birthdays_between(Date.new(2026, 9, 1), Date.new(2026, 9, 30))
+  end
+
+  test "birthdays_between handles a Feb 29 birthday in a non-leap year" do
+    contact = Contact.new(name: "X", born_on: Date.new(2000, 2, 29))
+    dates = contact.birthdays_between(Date.new(2026, 2, 1), Date.new(2026, 2, 28))
+    assert_equal [ Date.new(2026, 2, 28) ], dates
+  end
 end

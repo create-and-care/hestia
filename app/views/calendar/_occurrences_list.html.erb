@@ -1,0 +1,34 @@
+<% if occurrences.any? %>
+  <div class="divide-y divide-primary rounded-lg border border-primary">
+    <% occurrences.each do |time, occurrence| %>
+      <% if birthday_occurrence?(occurrence) %>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_leading { "🎂" } %>
+          <% item.with_title { link_to occurrence.name, edit_contact_path(occurrence), class: "hover:underline" } %>
+          <% item.with_description { t(".birthday_description") } %>
+        <% end %>
+      <% else %>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_leading { tag.span "", class: "size-2 rounded-full #{event_color_class(occurrence.color)}" } %>
+          <% item.with_title { link_to occurrence.title, edit_calendar_event_path(occurrence, occurrence: time.iso8601), class: "hover:underline" } %>
+          <% item.with_description do %>
+            <%= time.strftime("%a %d/%m — %H:%M") %>
+            <% if occurrence.location.present? %>· <%= occurrence.location %><% end %>
+            <% if event_type_label(occurrence.event_type) %>· <%= event_type_label(occurrence.event_type) %><% end %>
+          <% end %>
+          <% if occurrence.participants.any? %>
+            <% item.with_trailing do %>
+              <div class="flex -space-x-1.5">
+                <% occurrence.participants.first(4).each do |participant| %>
+                  <%= render(Ui::AvatarComponent.new(alt: participant.name.presence || participant.email_address, size: :sm)) %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t("calendar.show.no_events") } } %>
+<% end %>

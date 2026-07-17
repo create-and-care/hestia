@@ -5,6 +5,8 @@ module Calendar
     # than duplicating. Imported events are read-only from the source's point
     # of view but remain regular, editable CalendarEvent rows locally.
     class Importer
+      IMPORTED_COLOR = "gray"
+
       def self.call(...) = new(...).call
 
       def initialize(connection, events)
@@ -27,7 +29,13 @@ module Calendar
             location: event[:location],
             starts_at: event[:starts_at],
             ends_at: event[:ends_at],
-            all_day: event[:all_day] || false
+            all_day: event[:all_day] || false,
+            # A consistent, distinct color so an imported event is visually
+            # recognizable as coming from an external calendar (Spec §9.2
+            # business rule) — the source's own color isn't otherwise
+            # representable in Hestia's fixed 6-color set. Only set on first
+            # import: a color the user changed afterward must survive re-syncs.
+            color: record.new_record? ? IMPORTED_COLOR : record.color
           )
           record.save!
         end

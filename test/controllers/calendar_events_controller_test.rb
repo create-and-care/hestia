@@ -47,4 +47,65 @@ class CalendarEventsControllerTest < ActionDispatch::IntegrationTest
     get edit_calendar_event_path(calendar_events(:beta_event))
     assert_response :not_found
   end
+
+  test "new prefills starts_at when given (clicking a day in the grid)" do
+    get new_calendar_event_path(starts_at: "2026-08-15T09:00:00")
+    assert_response :success
+    assert_select "input#calendar_event_starts_at[value=?]", "2026-08-15T09:00"
+  end
+
+  test "editing this occurrence only detaches it without touching the series" do
+    series = households(:alpha).calendar_events.create!(
+      title: "Yoga", starts_at: Time.zone.parse("2026-08-03 09:00"), frequency: "weekly", recurrence_interval: 1
+    )
+    third_occurrence = Time.zone.parse("2026-08-17 09:00")
+
+    patch calendar_event_path(series), params: {
+      calendar_event: { title: "Yoga (remplacement)", starts_at: third_occurrence, frequency: "none" },
+      scope: "occurrence", occurrence: third_occurrence.iso8601
+    }
+
+    assert_redirected_to calendar_path
+    assert_equal "Yoga", series.reload.title
+    assert_includes series.excluded_occurrences, third_occurrence.to_date
+    standalone = households(:alpha).calendar_events.find_by(title: "Yoga (remplacement)")
+    assert standalone
+    assert_equal "none", standalone.frequency
+  end
+
+  test "editing the whole series updates the original event and keeps recurring" do
+    series = households(:alpha).calendar_events.create!(
+      title: "Yoga", starts_at: Time.zone.parse("2026-08-03 09:00"), frequency: "weekly", recurrence_interval: 1
+    )
+
+    patch calendar_event_path(series), params: {
+      calendar_event: { title: "Yoga du matin", starts_at: series.starts_at, frequency: "weekly", recurrence_interval: 1 },
+      scope: "series", occurrence: Time.zone.parse("2026-08-17 09:00").iso8601
+    }
+
+    assert_equal "Yoga du matin", series.reload.title
+    assert series.recurring?
+  end
+
+  test "deleting a single occurrence excludes just that date from the series" do
+    series = households(:alpha).calendar_events.create!(
+      title: "Yoga", starts_at: Time.zone.parse("2026-08-03 09:00"), frequency: "weekly", recurrence_interval: 1
+    )
+    third_occurrence = Time.zone.parse("2026-08-17 09:00")
+
+    assert_no_difference -> { CalendarEvent.count } do
+      delete calendar_event_path(series), params: { scope: "occurrence", occurrence: third_occurrence.iso8601 }
+    end
+    assert_includes series.reload.excluded_occurrences, third_occurrence.to_date
+    assert CalendarEvent.exists?(series.id)
+  end
+
+  test "deleting scope=series removes the whole recurring event" do
+    series = households(:alpha).calendar_events.create!(
+      title: "Yoga", starts_at: Time.zone.parse("2026-08-03 09:00"), frequency: "weekly", recurrence_interval: 1
+    )
+
+    delete calendar_event_path(series), params: { scope: "series" }
+    assert_not CalendarEvent.exists?(series.id)
+  end
 end

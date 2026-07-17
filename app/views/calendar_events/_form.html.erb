@@ -10,6 +10,23 @@
   <% end %>
 
   <div class="space-y-4">
+    <% if local_assigns[:occurrence] && event.recurring? %>
+      <input type="hidden" name="occurrence" value="<%= occurrence.iso8601 %>">
+      <fieldset class="rounded-md border border-primary p-3">
+        <legend class="px-1 text-sm font-medium"><%= t(".scope_legend") %></legend>
+        <div class="flex flex-col gap-2 text-sm">
+          <label class="flex items-center gap-2">
+            <input type="radio" name="scope" value="occurrence" checked>
+            <%= t(".scope_occurrence") %>
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="radio" name="scope" value="series">
+            <%= t(".scope_series") %>
+          </label>
+        </div>
+      </fieldset>
+    <% end %>
+
     <%= render(Ui::FieldComponent.new(id: "calendar_event_title")) do |field| %>
       <% field.with_label { t(".title_label") } %>
       <% field.with_control do %>
@@ -59,6 +76,14 @@
         <% end %>
       <% end %>
     </div>
+
+    <%= render(Ui::FieldComponent.new(id: "calendar_event_event_type")) do |field| %>
+      <% field.with_label { t(".event_type_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::InputComponent.new(name: "calendar_event[event_type]", value: event.event_type,
+              placeholder: t(".event_type_placeholder"), html_options: { id: "calendar_event_event_type" }) %>
+      <% end %>
+    <% end %>
 
     <fieldset class="rounded-md border border-primary p-3">
       <legend class="px-1 text-sm font-medium"><%= t(".recurrence_legend") %></legend>

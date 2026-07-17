@@ -8,10 +8,14 @@
   <div class="mb-4"><%= module_breadcrumb(:calendar) %></div>
 
   <header class="mb-4 flex flex-wrap items-center justify-between gap-3">
-    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("calendar", css_class: "size-6") %> <%= @view == "list" ? t(".agenda_heading") : month_label(@month) %></h1>
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("calendar", css_class: "size-6") %> <%= calendar_heading(@view, @month, @date) %></h1>
     <div class="flex flex-wrap items-center gap-2">
       <%= render(Ui::ButtonComponent.new(variant: @view == "month" ? :secondary : :outline, size: :sm,
             href: calendar_path(view: :month, member_id: @member_id))) { t(".month_view") } %>
+      <%= render(Ui::ButtonComponent.new(variant: @view == "week" ? :secondary : :outline, size: :sm,
+            href: calendar_path(view: :week, member_id: @member_id))) { t(".week_view") } %>
+      <%= render(Ui::ButtonComponent.new(variant: @view == "day" ? :secondary : :outline, size: :sm,
+            href: calendar_path(view: :day, member_id: @member_id))) { t(".day_view") } %>
       <%= render(Ui::ButtonComponent.new(variant: @view == "list" ? :secondary : :outline, size: :sm,
             href: calendar_path(view: :list, member_id: @member_id))) { t(".list_view") } %>
       <%= form_with url: calendar_path, method: :get, class: "flex items-center gap-1" do |form| %>
@@ -40,51 +44,30 @@
 
   <% if @view == "month" %>
     <div class="mb-3 flex items-center justify-between text-sm">
-      <%= link_to t(".prev_month"), calendar_path(month: (@month - 1.month).strftime("%Y-%m"), member_id: @member_id), class: "underline" %>
-      <%= link_to t(".today"), calendar_path(member_id: @member_id), class: "underline" %>
-      <%= link_to t(".next_month"), calendar_path(month: (@month + 1.month).strftime("%Y-%m"), member_id: @member_id), class: "underline" %>
+      <%= link_to t(".prev_month"), calendar_path(view: "month", month: (@month - 1.month).strftime("%Y-%m"), member_id: @member_id), class: "underline" %>
+      <%= link_to t(".today"), calendar_path(view: "month", member_id: @member_id), class: "underline" %>
+      <%= link_to t(".next_month"), calendar_path(view: "month", month: (@month + 1.month).strftime("%Y-%m"), member_id: @member_id), class: "underline" %>
     </div>
-
-    <div class="grid grid-cols-7 gap-px overflow-hidden rounded-lg border border-gray-200 bg-gray-200 text-sm">
-      <% weekday_labels.each do |day| %>
-        <div class="bg-gray-50 p-2 text-center text-xs font-medium text-gray-500"><%= day %></div>
-      <% end %>
-      <% (@grid_start.to_date..@grid_end.to_date).each do |date| %>
-        <% holiday = @holidays&.dig(date) %>
-        <div class="min-h-24 bg-white p-1 <%= "bg-gray-50 text-gray-400" unless date.month == @month.month %> <%= "bg-red-50" if holiday %>"
-             title="<%= holiday&.fetch(:name) %>">
-          <div class="mb-1 text-right text-xs <%= "font-bold text-gray-900" if date == Date.current %>"><%= date.day %></div>
-          <% if holiday %>
-            <p class="mb-0.5 truncate text-[10px] font-medium text-red-600"><%= holiday[:name] %></p>
-          <% end %>
-          <% Array(@by_day[date]).each do |time, event| %>
-            <%= link_to edit_calendar_event_path(event),
-                  class: "mb-0.5 block truncate rounded px-1 py-0.5 text-xs #{event_color_class(event.color)}" do %>
-              <% unless event.all_day %><span class="font-medium"><%= time.strftime("%H:%M") %></span> <% end %><%= event.title %>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
+    <%= render "calendar/grid", dates: (@grid_start.to_date..@grid_end.to_date), by_day: @by_day, holidays: @holidays, current_month: @month %>
+  <% elsif @view == "week" %>
+    <div class="mb-3 flex items-center justify-between text-sm">
+      <%= link_to t(".prev_week"), calendar_path(view: "week", date: (@date - 1.week).iso8601, member_id: @member_id), class: "underline" %>
+      <%= link_to t(".today"), calendar_path(view: "week", member_id: @member_id), class: "underline" %>
+      <%= link_to t(".next_week"), calendar_path(view: "week", date: (@date + 1.week).iso8601, member_id: @member_id), class: "underline" %>
     </div>
-  <% else %>
-    <% if @occurrences.any? %>
-      <div class="divide-y divide-gray-100 rounded-lg border border-gray-200">
-        <% @occurrences.each do |time, event| %>
-          <%= render(Ui::ItemComponent.new) do |item| %>
-            <% item.with_leading { tag.span "", class: "size-2 rounded-full #{event_color_class(event.color)}" } %>
-            <% item.with_title { link_to event.title, edit_calendar_event_path(event), class: "hover:underline" } %>
-            <% item.with_description do %>
-              <%= time.strftime("%a %d/%m — %H:%M") %>
-              <% if event.location.present? %>· <%= event.location %><% end %>
-            <% end %>
-          <% end %>
-        <% end %>
-      </div>
-    <% else %>
-      <%= render(Ui::EmptyComponent.new) do |empty| %>
-        <% empty.with_description { t(".no_events") } %>
-      <% end %>
+    <%= render "calendar/grid", dates: (@grid_start.to_date..@grid_end.to_date), by_day: @by_day, holidays: @holidays, current_month: nil %>
+  <% elsif @view == "day" %>
+    <div class="mb-3 flex items-center justify-between text-sm">
+      <%= link_to t(".prev_day"), calendar_path(view: "day", date: (@date - 1.day).iso8601, member_id: @member_id), class: "underline" %>
+      <%= link_to t(".today"), calendar_path(view: "day", member_id: @member_id), class: "underline" %>
+      <%= link_to t(".next_day"), calendar_path(view: "day", date: (@date + 1.day).iso8601, member_id: @member_id), class: "underline" %>
+    </div>
+    <% if (holiday = @holidays&.dig(@date)) %>
+      <%= render(Ui::BadgeComponent.new(variant: :destructive, html_options: { class: "mb-3" })) { holiday[:name] } %>
     <% end %>
+    <%= render "calendar/occurrences_list", occurrences: @occurrences %>
+  <% else %>
+    <%= render "calendar/occurrences_list", occurrences: @occurrences %>
   <% end %>
 
 </div>

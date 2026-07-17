@@ -14,8 +14,22 @@ module CalendarHelper
   def color_options = CalendarEvent::COLORS.map { |color| [ color.capitalize, color ] }
   def month_label(date) = "#{t("calendar.months")[date.month - 1]} #{date.year}"
   def weekday_labels = t("calendar.weekdays")
+  def event_type_label(type) = type.present? ? t("calendar_events.event_types.#{type}", default: type.humanize) : nil
 
   def calendar_participant_options
     Current.household.users.order(:name).map { |user| [ user.name.presence || user.email_address, user.id ] }
   end
+
+  def calendar_heading(view, month, date)
+    case view
+    when "list" then t("calendar.show.agenda_heading")
+    when "week" then t("calendar.show.week_heading", start: l(date.beginning_of_week, format: :short), end: l(date.end_of_week, format: :short))
+    when "day" then l(date, format: :long)
+    else month_label(month)
+    end
+  end
+
+  # A birthday is represented as [time, Contact] rather than [time,
+  # CalendarEvent] — the grid/list partials render either kind.
+  def birthday_occurrence?(occurrence) = occurrence.is_a?(Contact)
 end

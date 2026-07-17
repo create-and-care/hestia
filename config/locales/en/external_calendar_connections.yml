@@ -9,6 +9,7 @@ en:
       inactive: "inactive"
       last_synced_at: "last synced %{time}"
       disconnect: "Disconnect"
+      disconnect_confirm: "Disconnect this calendar? Events already imported will remain in Hestia."
       connect_provider: "Connect %{provider}"
       back_to_calendar: "← Calendar"
     connect:
