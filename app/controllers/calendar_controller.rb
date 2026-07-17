@@ -46,6 +46,7 @@ class CalendarController < ApplicationController
     def load_list_view
       range = Time.current.beginning_of_day..(Time.current + 60.days).end_of_day
       @occurrences = occurrences_in(range)
+      @overdue_tasks = overdue_tasks
     end
 
     def load_month_view
@@ -71,6 +72,7 @@ class CalendarController < ApplicationController
       range = @date.beginning_of_day..@date.end_of_day
       @occurrences = occurrences_in(range)
       @holidays = holidays_by_date(@date, @date)
+      @overdue_tasks = overdue_tasks if @date == Date.current
     end
 
     # France/Belgium/Switzerland public holidays (Spec §9.2, §16), optionally enabled per
@@ -116,5 +118,11 @@ class CalendarController < ApplicationController
     def occurrences_in(range)
       event_occurrences = @events.flat_map { |event| event.occurrences_between(range.begin, range.end).map { |time| [ time, event ] } }
       (event_occurrences + birthday_occurrences_in(range)).sort_by(&:first)
+    end
+
+    # Tasks/Calendar interconnection (Spec §9.3): surface overdue tasks
+    # alongside events instead of them only ever showing on the Tasks board.
+    def overdue_tasks
+      Current.household.tasks.general.where(done: false).where("due_on < ?", Date.current).order(:due_on)
     end
 end

@@ -2,11 +2,22 @@ en:
   tasks:
     index:
       title: "Tasks"
+      search_label: "Search tasks"
       search_placeholder: "Search…"
+      no_results: "No task matches this search."
+      sort_due_date: "By due date"
+      sort_assignee: "By assignee"
+      sort_submit: "Sort"
+      sort_hint: "Sorting rearranges each column's unfinished tasks once — you can still drag and drop them afterward."
       categories_label: "Categories:"
       new_category_placeholder: "New category"
       add_category_submit: "Add"
+      delete_category_confirm: "Delete this category? Its tasks will become \"Uncategorized\"."
+      delete_category_aria: "Delete category %{name}"
       uncategorized: "Uncategorized"
+      empty_column: "No tasks."
+    sort:
+      notice: "Tasks sorted."
     form:
       title_label: "Task"
       title_placeholder: "Take out the trash…"
@@ -17,10 +28,13 @@ en:
       submit: "Add"
     task:
       move_title: "Move"
+      move_up_aria: "Move up"
+      move_down_aria: "Move down"
       reopen_aria: "Reopen"
       complete_aria: "Complete"
       edit_aria: "Edit"
       delete_aria: "Delete"
+      delete_confirm: "Delete this task?"
     edit:
       title: "Edit task"
       heading: "Edit task"
@@ -36,6 +50,8 @@ en:
       remind_at_label: "When"
       recipient_label: "Recipient"
       add_reminder_submit: "Add"
+      delete_reminder_confirm: "Delete this reminder?"
+      delete_reminder_aria: "Delete this reminder"
       back_link: "← Tasks"
     create:
       alert: "Couldn't create the task."

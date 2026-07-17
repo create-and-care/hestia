@@ -23,6 +23,8 @@ fr:
       next_week: "Semaine suivante →"
       next_day: "Lendemain →"
       no_events: "Aucun événement à venir."
+      overdue_tasks_heading: "Tâches en retard"
+      overdue_since: "échéance dépassée le %{date}"
       pdf_filename_prefix: "calendrier"
       pdf:
         title: "Calendrier — %{month} %{year}"

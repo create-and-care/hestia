@@ -23,6 +23,17 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Faire la vaisselle"
   end
 
+  test "search also matches the description" do
+    tasks(:alpha_call).update!(description: "Prendre rendez-vous urgent")
+    get tasks_path(q: "urgent")
+    assert_includes @response.body, "Appeler le médecin"
+  end
+
+  test "create passes the description through instead of dropping it" do
+    post tasks_path, params: { task: { title: "Nouvelle", description: "Des détails" } }, as: :turbo_stream
+    assert_equal "Des détails", Task.find_by!(title: "Nouvelle").description
+  end
+
   test "create with a category and an assignee" do
     assert_difference -> { households(:alpha).tasks.count }, 1 do
       post tasks_path, params: { task: {
@@ -64,5 +75,49 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   test "cannot touch another household's task" do
     delete task_path(tasks(:beta_report))
     assert_response :not_found
+  end
+
+  test "move_up swaps position with the previous task in the same column" do
+    first = tasks(:alpha_dishes) # alpha_home, position 0
+    second = households(:alpha).tasks.create!(title: "Ranger", task_category: task_categories(:alpha_home), position: 5)
+
+    patch move_up_task_path(second)
+
+    assert_equal 0, second.reload.position
+    assert_equal 5, first.reload.position
+  end
+
+  test "move_up does nothing for the first task in its column" do
+    first = tasks(:alpha_dishes)
+    patch move_up_task_path(first)
+    assert_equal 0, first.reload.position
+  end
+
+  test "move_down swaps position with the next task in the same column" do
+    first = tasks(:alpha_dishes) # alpha_home, position 0
+    second = households(:alpha).tasks.create!(title: "Ranger", task_category: task_categories(:alpha_home), position: 5)
+
+    patch move_down_task_path(first)
+
+    assert_equal 5, first.reload.position
+    assert_equal 0, second.reload.position
+  end
+
+  test "sort by due_date reorders unfinished tasks within a column without touching other columns" do
+    no_due = households(:alpha).tasks.create!(title: "Sans échéance", task_category: task_categories(:alpha_home), position: 0)
+    with_due = households(:alpha).tasks.create!(title: "Avec échéance", task_category: task_categories(:alpha_home),
+      due_on: 1.day.from_now, position: 10)
+    tasks(:alpha_dishes).update!(position: 20) # also alpha_home, due in 3 days — should sort after with_due
+
+    post sort_tasks_path, params: { by: "due_date" }
+
+    assert_equal 0, with_due.reload.position
+    assert_equal 1, tasks(:alpha_dishes).reload.position
+    assert_equal 2, no_due.reload.position
+  end
+
+  test "sort ignores an unknown 'by' value" do
+    post sort_tasks_path, params: { by: "nonsense" }
+    assert_redirected_to tasks_path
   end
 end

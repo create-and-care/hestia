@@ -6,6 +6,7 @@ module Ui
       outline: "bg-transparent text-primary border border-primary",
       success: "bg-success/10 text-success",
       warning: "bg-warning/10 text-warning",
+      urgent: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
       destructive: "bg-destructive/10 text-destructive"
     }.freeze
 

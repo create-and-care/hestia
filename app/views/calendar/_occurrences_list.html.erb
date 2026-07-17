@@ -1,3 +1,19 @@
+<% if local_assigns[:overdue_tasks] && overdue_tasks.any? %>
+  <div class="mb-4 rounded-lg border border-destructive/30 bg-destructive-subtle/40 p-3">
+    <h2 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-destructive"><%= lucide_icon("triangle-alert", css_class: "size-4") %> <%= t("calendar.show.overdue_tasks_heading") %></h2>
+    <ul class="space-y-1 text-sm">
+      <% overdue_tasks.each do |task| %>
+        <li>
+          <%= link_to edit_task_path(task), class: "hover:underline" do %>
+            <%= "#{task.emoji} " if task.emoji.present? %><%= task.title %>
+            <span class="text-destructive/70">— <%= t("calendar.show.overdue_since", date: l(task.due_on, format: :short)) %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <% if occurrences.any? %>
   <div class="divide-y divide-primary rounded-lg border border-primary">
     <% occurrences.each do |time, occurrence| %>

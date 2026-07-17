@@ -65,9 +65,9 @@
     <% if (holiday = @holidays&.dig(@date)) %>
       <%= render(Ui::BadgeComponent.new(variant: :destructive, html_options: { class: "mb-3" })) { holiday[:name] } %>
     <% end %>
-    <%= render "calendar/occurrences_list", occurrences: @occurrences %>
+    <%= render "calendar/occurrences_list", occurrences: @occurrences, overdue_tasks: @overdue_tasks %>
   <% else %>
-    <%= render "calendar/occurrences_list", occurrences: @occurrences %>
+    <%= render "calendar/occurrences_list", occurrences: @occurrences, overdue_tasks: @overdue_tasks %>
   <% end %>
 
 </div>

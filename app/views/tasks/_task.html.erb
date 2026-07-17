@@ -1,7 +1,15 @@
 <%= tag.div id: dom_id(task), data: { sortable_id: task.id },
       class: "rounded-lg border border-primary bg-container p-3 #{'opacity-60' if task.done}" do %>
   <div class="flex items-start gap-2">
-    <span data-sortable-handle class="mt-0.5 shrink-0 cursor-grab select-none text-subdued hover:text-secondary" title="<%= t('.move_title') %>"><%= lucide_icon("grip-vertical", css_class: "size-4") %></span>
+    <div class="mt-0.5 flex shrink-0 items-center gap-0.5">
+      <span data-sortable-handle class="cursor-grab select-none text-subdued hover:text-secondary" title="<%= t('.move_title') %>"><%= lucide_icon("grip-vertical", css_class: "size-4") %></span>
+      <div class="flex flex-col">
+        <%= button_to move_up_task_path(task), method: :patch,
+              class: "-mb-1 cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_up_aria") } do %><%= lucide_icon("chevron-up", css_class: "size-3") %><% end %>
+        <%= button_to move_down_task_path(task), method: :patch,
+              class: "cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_down_aria") } do %><%= lucide_icon("chevron-down", css_class: "size-3") %><% end %>
+      </div>
+    </div>
     <%= button_to toggle_task_path(task), method: :patch, class: "mt-0.5 shrink-0 cursor-pointer",
           aria: { label: task.done ? t(".reopen_aria") : t(".complete_aria") } do %>
       <span class="flex size-5 items-center justify-center rounded border <%= task.done ? "border-button-primary bg-button-primary text-inverse" : "border-primary" %>">
@@ -15,7 +23,10 @@
       </p>
       <div class="mt-1 flex flex-wrap items-center gap-1 text-xs">
         <% if task.assignee %>
-          <span class="text-secondary"><%= task.assignee.name.presence || task.assignee.email_address %></span>
+          <span class="flex items-center gap-1 text-secondary">
+            <%= render(Ui::AvatarComponent.new(alt: task.assignee.name.presence || task.assignee.email_address, size: :sm)) %>
+            <%= task.assignee.name.presence || task.assignee.email_address %>
+          </span>
         <% end %>
         <% unless task.due_status == :none %>
           <%= render(Ui::BadgeComponent.new(variant: due_badge_variant(task.due_status))) { due_label(task.due_status) } %>
@@ -26,8 +37,10 @@
     <div class="flex shrink-0 flex-col items-end gap-1">
       <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_task_path(task),
             html_options: { class: "size-auto p-0.5", aria: { label: t(".edit_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
-      <%= button_to task_path(task), method: :delete,
-            class: "cursor-pointer text-subdued hover:text-destructive", aria: { label: t(".delete_aria") } do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+      <%= form_with url: task_path(task), method: :delete, data: { turbo_confirm: t(".delete_confirm") } do %>
+        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :icon,
+              html_options: { class: "size-auto p-0.5", aria: { label: t(".delete_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+      <% end %>
     </div>
   </div>
 <% end %>

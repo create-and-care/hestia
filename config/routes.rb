@@ -148,8 +148,15 @@ Rails.application.routes.draw do
 
   # Tasks module (Phase 2.a).
   resources :tasks, only: %i[index create edit update destroy] do
-    member { patch :toggle }
-    collection { patch :reorder }
+    member do
+      patch :toggle
+      patch :move_up
+      patch :move_down
+    end
+    collection do
+      patch :reorder
+      post :sort
+    end
     resources :task_reminders, only: %i[create destroy]
   end
   resources :task_categories, only: %i[create destroy]

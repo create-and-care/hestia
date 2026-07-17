@@ -53,6 +53,18 @@ class CalendarControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Mamie"
   end
 
+  test "surfaces overdue tasks in the list view" do
+    households(:alpha).tasks.create!(title: "Tâche en retard", due_on: 2.days.ago.to_date)
+    get calendar_path(view: :list)
+    assert_includes @response.body, "Tâche en retard"
+  end
+
+  test "does not surface tasks that are not overdue" do
+    households(:alpha).tasks.create!(title: "Pas en retard", due_on: 2.days.from_now.to_date)
+    get calendar_path(view: :list)
+    assert_not_includes @response.body, "Pas en retard"
+  end
+
   test "PDF export does not crash when a birthday falls within the month" do
     households(:alpha).contacts.create!(name: "Papi", born_on: Date.current.change(year: 1945))
     get calendar_path(format: :pdf)
