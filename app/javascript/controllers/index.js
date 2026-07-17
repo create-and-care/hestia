@@ -88,6 +88,9 @@ application.register("search-palette", SearchPaletteController)
 import SelectController from "./select_controller"
 application.register("select", SelectController)
 
+import ShoppingCatalogController from "./shopping_catalog_controller"
+application.register("shopping-catalog", ShoppingCatalogController)
+
 import SidebarController from "./sidebar_controller"
 application.register("sidebar", SidebarController)
 

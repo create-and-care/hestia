@@ -8,6 +8,12 @@
       <span><%= @shopping_list.name %></span>
     </h1>
     <div class="flex gap-2">
+      <% if @shopping_list.items.where(checked: true).any? %>
+        <%= form_with url: clear_checked_shopping_list_items_path(@shopping_list), method: :delete,
+              data: { turbo_confirm: t(".clear_checked_confirm") } do %>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, type: "submit")) { t(".clear_checked") } %>
+        <% end %>
+      <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: shopping_list_path(@shopping_list, format: :pdf),
             html_options: { target: "_blank" })) { t(".export_pdf") } %>
       <%= form_with url: shopping_list_path(@shopping_list), method: :delete,
@@ -23,7 +29,7 @@
 
   <div id="shopping_list_items" class="mt-6 space-y-2"
        data-controller="sortable" data-sortable-url-value="<%= reorder_shopping_list_items_path(@shopping_list) %>">
-    <%= render @shopping_list.items %>
+    <%= render "shopping_list_items/list", shopping_list: @shopping_list %>
   </div>
 
   <p class="mt-6 text-sm">

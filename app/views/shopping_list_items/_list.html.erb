@@ -1,0 +1,8 @@
+<% if shopping_list.items.any? %>
+  <% shopping_list.items_by_rayon.each do |rayon, items| %>
+    <h3 class="pt-2 text-xs font-semibold uppercase tracking-wide text-subdued"><%= rayon_label(rayon) %></h3>
+    <%= render items %>
+  <% end %>
+<% else %>
+  <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t("shopping_lists.show.no_items") } } %>
+<% end %>

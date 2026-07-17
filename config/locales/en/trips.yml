@@ -10,6 +10,7 @@ en:
     show:
       delete_trip: "Delete the trip"
       delete_trip_confirm: "Delete this trip and all its data? This action cannot be undone."
+      delete_shopping_list_confirm: "Delete this shopping list?"
       shopping_lists: "Trip groceries"
       shopping_list_placeholder: "List (e.g. « cabin »)"
       add: "Add"

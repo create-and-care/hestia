@@ -24,7 +24,8 @@
                 <%= link_to shopping_list_path(list), class: "inline-flex items-center gap-1.5 hover:underline" do %><%= list.icon.presence || lucide_icon("shopping-cart", css_class: "size-4") %> <%= list.name %><% end %>
               <% end %>
               <% item.with_trailing do %>
-                <%= form_with url: trip_shopping_list_path(@trip, list), method: :delete do %>
+                <%= form_with url: trip_shopping_list_path(@trip, list), method: :delete,
+                      data: { turbo_confirm: t(".delete_shopping_list_confirm") } do %>
                   <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
                 <% end %>
               <% end %>

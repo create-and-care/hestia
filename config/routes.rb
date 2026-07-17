@@ -106,12 +106,18 @@ Rails.application.routes.draw do
       member do
         patch :toggle
         post :move_to_fridge
+        patch :move_up
+        patch :move_down
       end
-      collection { patch :reorder }
+      collection do
+        patch :reorder
+        delete :clear_checked
+      end
     end
   end
   resources :products, only: :index do
     collection { get :lookup }
+    member { post :add_to_list }
   end
 
   # Fridge module (Phase 2.a).

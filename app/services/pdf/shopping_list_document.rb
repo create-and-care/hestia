@@ -27,7 +27,7 @@ module Pdf
 
     private
       def items_by_rayon
-        @shopping_list.items.group_by(&:rayon)
+        @shopping_list.items_by_rayon
       end
 
       def rayon_label(rayon)

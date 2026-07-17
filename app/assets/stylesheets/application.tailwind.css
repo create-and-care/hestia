@@ -334,6 +334,10 @@
 @utility bg-border-primary { background-color: var(--border-primary); }
 @utility ring-focus { box-shadow: 0 0 0 2px var(--focus-ring); }
 
+/* divide-{color} has no semantic-token equivalent yet — most lists still use
+   divide-gray-100, which never adapts to dark mode (raw Tailwind gray). */
+@utility divide-primary { & > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-primary); } }
+
 @utility shadow-border-xs { box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--shadow-border-color); }
 @utility shadow-border-sm { box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--shadow-border-color); }
 @utility shadow-border-md { box-shadow: var(--shadow-md), 0px 0px 0px 1px var(--shadow-border-color); }

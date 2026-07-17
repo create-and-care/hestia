@@ -55,4 +55,47 @@ class ShoppingListItemsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :success
   end
+
+  test "move_to_fridge captures an expiration date when given" do
+    item = shopping_list_items(:alpha_apples)
+    post move_to_fridge_shopping_list_item_path(@list, item), params: { expires_on: "2026-08-01" }
+    fridge_item = households(:alpha).fridge_items.order(:created_at).last
+    assert_equal Date.new(2026, 8, 1), fridge_item.expires_on
+  end
+
+  test "move_up swaps position with the previous item in the same rayon" do
+    first = shopping_list_items(:alpha_apples) # fruits_legumes, position 0
+    second = @list.items.create!(name: "Poires", rayon: "fruits_legumes", position: 1)
+
+    patch move_up_shopping_list_item_path(@list, second)
+
+    assert_equal 0, second.reload.position
+    assert_equal 1, first.reload.position
+  end
+
+  test "move_up does nothing for the first item in its section" do
+    first = shopping_list_items(:alpha_apples)
+    patch move_up_shopping_list_item_path(@list, first)
+    assert_equal 0, first.reload.position
+  end
+
+  test "move_down swaps position with the next item in the same rayon" do
+    first = shopping_list_items(:alpha_apples) # fruits_legumes, position 0
+    second = @list.items.create!(name: "Poires", rayon: "fruits_legumes", position: 1)
+
+    patch move_down_shopping_list_item_path(@list, first)
+
+    assert_equal 1, first.reload.position
+    assert_equal 0, second.reload.position
+  end
+
+  test "clear_checked removes every checked item but leaves unchecked ones" do
+    checked = shopping_list_items(:alpha_bread) # checked: true
+    unchecked = shopping_list_items(:alpha_apples) # checked: false
+
+    delete clear_checked_shopping_list_items_path(@list)
+
+    assert_not ShoppingListItem.exists?(checked.id)
+    assert ShoppingListItem.exists?(unchecked.id)
+  end
 end

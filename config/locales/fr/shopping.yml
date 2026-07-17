@@ -1,5 +1,6 @@
 fr:
   shopping_lists:
+    default_list_name: "Courses"
     index:
       title: "Courses"
       heading: "Listes de courses"
@@ -21,6 +22,9 @@ fr:
       export_pdf: "Export PDF"
       delete: "Supprimer la liste"
       delete_confirm: "Supprimer cette liste et tous ses articles ?"
+      clear_checked: "Vider les articles cochés"
+      clear_checked_confirm: "Retirer tous les articles cochés de la liste ?"
+      no_items: "Aucun article pour l'instant."
       back_link: "← Toutes les listes"
     create:
       created: "Liste créée."
@@ -43,6 +47,8 @@ fr:
       barcode_found_prefix: "Trouvé :"
       barcode_label: "Code-barres"
       barcode_placeholder: "Scan…"
+      catalog_label: "Depuis le catalogue"
+      catalog_placeholder: "Choisir un produit…"
       name_label: "Article"
       name_placeholder: "Lait, pommes…"
       quantity_label: "Qté"
@@ -53,9 +59,12 @@ fr:
       submit: "Ajouter"
     shopping_list_item:
       move_title: "Déplacer"
+      move_up_aria: "Monter"
+      move_down_aria: "Descendre"
       uncheck_aria: "Décocher"
       check_aria: "Cocher"
       move_to_fridge_title: "Ranger au frigo"
+      expires_on_title: "Date de péremption (optionnel)"
       delete_aria: "Supprimer"
     create:
       alert: "Impossible d'ajouter l'article."
@@ -66,5 +75,11 @@ fr:
       title: "Catalogue de produits"
       heading: "Catalogue de produits"
       description: "Référentiel du foyer, alimenté automatiquement au fil des courses."
+      search_placeholder: "Rechercher un produit ou une marque…"
       empty: "Le catalogue se remplira au fur et à mesure que vous ajoutez des articles."
+      no_results: "Aucun produit ne correspond à cette recherche."
+      list_select_aria: "Liste de destination"
+      add_to_list: "Ajouter"
       back_link: "← Listes de courses"
+    add_to_list:
+      added: "« %{name} » ajouté à « %{list} »."
