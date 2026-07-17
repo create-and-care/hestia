@@ -45,4 +45,10 @@ class CirclePostTest < ActiveSupport::TestCase
     post = circle_posts(:family_post) # authored by users(:one), the family admin
     assert_not post.deletable_by?(users(:two)) # users(:two) is a plain member
   end
+
+  test "can have a photo attached" do
+    post = circle_posts(:family_post)
+    post.photo.attach(io: File.open(Rails.root.join("test/fixtures/files/sample.png")), filename: "sample.png", content_type: "image/png")
+    assert post.photo.attached?
+  end
 end

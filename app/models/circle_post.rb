@@ -1,7 +1,10 @@
 class CirclePost < ApplicationRecord
+  PAGE_SIZE = 25
+
   belongs_to :circle
   belongs_to :author, class_name: "User"
   has_many :circle_post_reactions, dependent: :destroy
+  has_one_attached :photo
 
   validates :body, presence: true
 

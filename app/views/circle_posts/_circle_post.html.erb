@@ -5,7 +5,11 @@
       <span class="text-xs text-subdued"><%= circle_post.created_at.strftime("%d/%m %H:%M") %></span>
     </div>
     <p class="mt-1 whitespace-pre-line"><%= circle_post.body %></p>
+    <% if circle_post.photo.attached? %>
+      <%= image_tag circle_post.photo.variant(resize_to_limit: [ 480, 480 ]), alt: "", class: "mt-2 max-h-80 w-auto rounded-lg object-cover" %>
+    <% end %>
 
+    <% my_reaction = circle_post.circle_post_reactions.detect { |r| r.user_id == Current.user.id } %>
     <div class="mt-2 flex flex-wrap items-center gap-2">
       <% circle_post.circle_post_reactions.group_by(&:emoji).each do |emoji, reactions| %>
         <%= render(Ui::BadgeComponent.new(variant: :secondary)) { "#{emoji} #{reactions.size}" } %>
@@ -14,12 +18,19 @@
           low value to convert to Ui::ButtonComponent (it renders a real <button>, not
           a full form_with, so reusing it here would mean rebuilding 5 mini-forms for
           little visual gain). Left hand-rolled. %>
-      <% %w[👍 ❤️ 😂 🎉 😮].each do |emoji| %>
+      <% CirclePostReaction::ALLOWED_EMOJIS.each do |emoji| %>
         <%= button_to emoji, react_circle_post_path(circle_post, emoji: emoji), method: :post,
-              class: "cursor-pointer rounded-full px-1 text-sm hover:bg-gray-100", form: { class: "inline" } %>
+              class: "cursor-pointer rounded-full px-1 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 #{"bg-gray-100 dark:bg-gray-800" if my_reaction&.emoji == emoji}",
+              form: { class: "inline" },
+              aria: { label: t("circles.react_with", emoji: emoji), pressed: my_reaction&.emoji == emoji } %>
+      <% end %>
+      <% if my_reaction %>
+        <%= button_to t(".remove_reaction"), unreact_circle_post_path(circle_post), method: :delete,
+              class: "cursor-pointer text-xs text-subdued underline", form: { class: "inline" } %>
       <% end %>
       <% if circle_post.deletable_by?(Current.user) %>
-        <%= form_with url: circle_post_path(circle_post.circle, circle_post), method: :delete, class: "inline" do %>
+        <%= form_with url: circle_post_path(circle_post.circle, circle_post), method: :delete, class: "inline",
+              data: { turbo_confirm: t(".delete_confirm") } do %>
           <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :sm)) { t(".delete") } %>
         <% end %>
       <% end %>

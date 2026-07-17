@@ -51,4 +51,27 @@ class CirclePostsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "destroy by a non-author non-admin returns forbidden instead of silently no-op'ing" do
+    sign_in_as(users(:two))
+    post_record = circle_posts(:family_post) # authored by users(:one), the family admin
+    delete circle_post_path(circles(:family), post_record), as: :turbo_stream
+    assert_response :forbidden
+  end
+
+  test "create attaches an optional photo" do
+    circle = circles(:family)
+    photo = fixture_file_upload("sample.png", "image/png")
+    post circle_posts_path(circle), params: { circle_post: { body: "Regardez !", photo: photo } }, as: :turbo_stream
+    assert circle.circle_posts.order(:created_at).last.photo.attached?
+  end
+
+  test "create with a blank body redirects with an error instead of silently resetting the form" do
+    circle = circles(:family)
+    assert_no_difference -> { circle.circle_posts.count } do
+      post circle_posts_path(circle), params: { circle_post: { body: "" } }, as: :turbo_stream
+    end
+    assert_redirected_to circle
+    assert_equal "Body can't be blank", flash[:alert]
+  end
 end

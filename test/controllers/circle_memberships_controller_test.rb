@@ -43,4 +43,57 @@ class CircleMembershipsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to circles(:family)
   end
+
+  test "a member can leave a circle" do
+    sign_in_as(users(:two)) # family_two, role: member
+    membership = circle_memberships(:family_two)
+    assert_difference -> { CircleMembership.count }, -1 do
+      delete circle_member_path(circles(:family), membership)
+    end
+    assert_redirected_to circles_path
+  end
+
+  test "an admin can remove another member" do
+    membership = circle_memberships(:family_two)
+    assert_difference -> { CircleMembership.count }, -1 do
+      delete circle_member_path(circles(:family), membership)
+    end
+    assert_redirected_to edit_circle_path(circles(:family))
+  end
+
+  test "a member cannot remove another member" do
+    sign_in_as(users(:two)) # family_two, role: member
+    other_membership = circle_memberships(:family_one)
+    assert_no_difference -> { CircleMembership.count } do
+      delete circle_member_path(circles(:family), other_membership)
+    end
+    assert_redirected_to circles(:family)
+  end
+
+  test "the last admin cannot leave the circle" do
+    membership = circle_memberships(:family_one) # users(:one), the only admin
+    assert_no_difference -> { CircleMembership.count } do
+      delete circle_member_path(circles(:family), membership)
+    end
+    assert_redirected_to circles(:family)
+  end
+
+  test "an admin can promote a member to admin" do
+    membership = circle_memberships(:family_two)
+    patch circle_member_path(circles(:family), membership), params: { role: "admin" }
+    assert_equal "admin", membership.reload.role
+  end
+
+  test "the last admin cannot be demoted" do
+    membership = circle_memberships(:family_one)
+    patch circle_member_path(circles(:family), membership), params: { role: "member" }
+    assert_equal "admin", membership.reload.role
+  end
+
+  test "a member cannot change roles" do
+    sign_in_as(users(:two)) # family_two, role: member
+    membership = circle_memberships(:family_two)
+    patch circle_member_path(circles(:family), membership), params: { role: "admin" }
+    assert_equal "member", membership.reload.role
+  end
 end

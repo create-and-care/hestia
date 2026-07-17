@@ -37,6 +37,11 @@ module ModuleGating
     "conversations" => "messages", "messages" => "messages",
     "loyalty_cards" => "loyalty",
     "gift_lists" => "gifts", "gift_ideas" => "gifts", "gift_list_shares" => "gifts",
+    # Circle data is cross-household (Spec §5, point 1), but access is still
+    # gated on the *current* household's module toggle: this is the household
+    # admin's control over which features their own members can use, not a
+    # claim of ownership over the Circle itself — a member could belong to
+    # several households and see this module gated differently in each.
     "circles" => "circles", "circle_memberships" => "circles", "circle_posts" => "circles", "circle_post_reactions" => "circles",
     "trips" => "trips", "trips/addresses" => "trips", "trips/notes" => "trips", "trips/shopping_lists" => "trips", "trips/tasks" => "trips"
   }.freeze

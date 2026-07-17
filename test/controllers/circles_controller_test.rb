@@ -58,4 +58,46 @@ class CirclesControllerTest < ActionDispatch::IntegrationTest
       post react_circle_post_path(post_record, emoji: "❤️")
     end
   end
+
+  test "edit renders the settings page for an admin" do
+    get edit_circle_path(circles(:family))
+    assert_response :success
+  end
+
+  test "edit redirects a non-admin member away from settings" do
+    sign_in_as(users(:two)) # family_two, role: member
+    get edit_circle_path(circles(:family))
+    assert_redirected_to circles(:family)
+  end
+
+  test "an admin can rename the circle" do
+    patch circle_path(circles(:family)), params: { circle: { name: "Nouveau nom" } }
+    assert_equal "Nouveau nom", circles(:family).reload.name
+  end
+
+  test "a non-admin member cannot edit the circle" do
+    sign_in_as(users(:two)) # family_two, role: member
+    patch circle_path(circles(:family)), params: { circle: { name: "Piraté" } }
+    assert_not_equal "Piraté", circles(:family).reload.name
+  end
+
+  test "an admin can delete the circle" do
+    assert_difference -> { Circle.count }, -1 do
+      delete circle_path(circles(:family))
+    end
+    assert_redirected_to circles_path
+  end
+
+  test "a non-admin member cannot delete the circle" do
+    sign_in_as(users(:two)) # family_two, role: member
+    assert_no_difference -> { Circle.count } do
+      delete circle_path(circles(:family))
+    end
+  end
+
+  test "an admin can regenerate the invite code" do
+    old_code = circles(:family).invite_code
+    post regenerate_invite_code_circle_path(circles(:family))
+    assert_not_equal old_code, circles(:family).reload.invite_code
+  end
 end

@@ -3,6 +3,12 @@ en:
     post_placeholder: "Share a moment…"
     publish: "Post"
     back_to_circles: "← Circles"
+    copy_code: "Copy"
+    react_with: "React with %{emoji}"
+    not_admin: "Only a circle admin can do that."
+    roles:
+      admin: "Admin"
+      member: "Member"
     index:
       title: "Circles"
       join_circle: "Join a circle"
@@ -16,6 +22,33 @@ en:
       create: "Create"
     show:
       invite_code_label: "Invite code (beyond the household):"
+      settings: "Settings"
+      empty_posts: "No posts yet."
+      load_more: "Older posts"
+      leave: "Leave this circle"
+      leave_confirm: "Leave this circle? You can rejoin later with the invite code."
+    edit:
+      title: "Settings for \"%{name}\""
+      details: "Details"
+      save: "Save"
+      invite_code: "Invite code"
+      invite_code_description: "Share this code to invite people, even outside your household."
+      regenerate: "Regenerate code"
+      regenerate_confirm: "Regenerate the invite code? The old code will stop working immediately."
+      members: "Members"
+      promote: "Make admin"
+      demote: "Make member"
+      remove_member: "Remove"
+      remove_member_confirm: "Remove this member from the circle?"
+      danger_zone: "Danger zone"
+      delete: "Delete this circle"
+      delete_confirm: "Permanently delete this circle, its posts, and its members?"
+    update:
+      updated: "Circle updated."
+    destroy:
+      deleted: "Circle deleted."
+    regenerate_invite_code:
+      regenerated: "Invite code regenerated."
   circle_memberships:
     new:
       title: "Join a circle"
@@ -25,6 +58,16 @@ en:
       invalid_code: "Invalid invite code."
       already_member: "You are already a member of this circle."
       joined: "You joined \"%{name}\"."
+    update:
+      last_admin: "Can't demote the last admin: promote another member first."
+    destroy:
+      last_admin: "Can't remove the last admin: promote another member first, or delete the circle."
+      left: "You left the circle."
+      removed: "Member removed from the circle."
   circle_posts:
     circle_post:
       delete: "Delete"
+      delete_confirm: "Delete this post?"
+      remove_reaction: "Remove my reaction"
+    destroy:
+      not_authorized: "You can't delete this post."

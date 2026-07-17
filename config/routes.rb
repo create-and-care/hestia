@@ -230,8 +230,10 @@ Rails.application.routes.draw do
   delete "g/:token/reserve/:idea_id", to: "public_gift_lists#unreserve", as: :unreserve_public_gift
 
   # Circles (independent of the household, Spec §5, point 1).
-  resources :circles, only: %i[index show create] do
+  resources :circles, only: %i[index show create edit update destroy] do
     resources :posts, only: %i[create destroy], controller: "circle_posts"
+    resources :members, only: %i[update destroy], controller: "circle_memberships"
+    post "regenerate_invite_code", on: :member
   end
   resource :circle_membership, only: %i[new create]
   post   "circle_posts/:id/react", to: "circle_post_reactions#create",  as: :react_circle_post

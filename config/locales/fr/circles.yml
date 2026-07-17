@@ -3,6 +3,12 @@ fr:
     post_placeholder: "Partagez un moment…"
     publish: "Publier"
     back_to_circles: "← Cercles"
+    copy_code: "Copier"
+    react_with: "Réagir avec %{emoji}"
+    not_admin: "Seul un administrateur du cercle peut faire cela."
+    roles:
+      admin: "Administrateur"
+      member: "Membre"
     index:
       title: "Cercles"
       join_circle: "Rejoindre un cercle"
@@ -16,6 +22,33 @@ fr:
       create: "Créer"
     show:
       invite_code_label: "Code d'invitation (au-delà du foyer) :"
+      settings: "Paramètres"
+      empty_posts: "Aucune publication pour l'instant."
+      load_more: "Publications plus anciennes"
+      leave: "Quitter ce cercle"
+      leave_confirm: "Quitter ce cercle ? Vous pourrez le rejoindre à nouveau avec le code d'invitation."
+    edit:
+      title: "Paramètres de « %{name} »"
+      details: "Informations"
+      save: "Enregistrer"
+      invite_code: "Code d'invitation"
+      invite_code_description: "Partagez ce code pour inviter des proches, même hors de votre foyer."
+      regenerate: "Régénérer le code"
+      regenerate_confirm: "Régénérer le code d'invitation ? L'ancien code cessera de fonctionner immédiatement."
+      members: "Membres"
+      promote: "Passer administrateur"
+      demote: "Passer membre"
+      remove_member: "Retirer"
+      remove_member_confirm: "Retirer ce membre du cercle ?"
+      danger_zone: "Zone de danger"
+      delete: "Supprimer ce cercle"
+      delete_confirm: "Supprimer définitivement ce cercle, ses publications et ses membres ?"
+    update:
+      updated: "Cercle mis à jour."
+    destroy:
+      deleted: "Cercle supprimé."
+    regenerate_invite_code:
+      regenerated: "Code d'invitation régénéré."
   circle_memberships:
     new:
       title: "Rejoindre un cercle"
@@ -25,6 +58,16 @@ fr:
       invalid_code: "Code d'invitation invalide."
       already_member: "Vous faites déjà partie de ce cercle."
       joined: "Vous avez rejoint « %{name} »."
+    update:
+      last_admin: "Impossible de rétrograder le dernier administrateur : promouvez d'abord un autre membre."
+    destroy:
+      last_admin: "Impossible de retirer le dernier administrateur : promouvez d'abord un autre membre, ou supprimez le cercle."
+      left: "Vous avez quitté le cercle."
+      removed: "Membre retiré du cercle."
   circle_posts:
     circle_post:
       delete: "Supprimer"
+      delete_confirm: "Supprimer cette publication ?"
+      remove_reaction: "Retirer ma réaction"
+    destroy:
+      not_authorized: "Vous ne pouvez pas supprimer cette publication."
