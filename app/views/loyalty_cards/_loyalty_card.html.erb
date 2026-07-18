@@ -1,16 +1,30 @@
 <%= tag.div id: dom_id(loyalty_card), data: { sortable_id: loyalty_card.id } do %>
   <%= render(Ui::CardComponent.new) do %>
     <div class="flex items-center justify-between gap-2">
-      <span data-sortable-handle class="cursor-grab select-none text-subdued hover:text-secondary" title="<%= t(".move") %>">⠿</span>
+      <div class="flex shrink-0 items-center gap-0.5">
+        <span data-sortable-handle class="cursor-grab select-none text-subdued hover:text-secondary" title="<%= t(".move") %>">⠿</span>
+        <div class="flex flex-col">
+          <%= button_to move_up_loyalty_card_path(loyalty_card), method: :patch,
+                class: "-mb-1 cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_up_aria") } do %><%= lucide_icon("chevron-up", css_class: "size-3") %><% end %>
+          <%= button_to move_down_loyalty_card_path(loyalty_card), method: :patch,
+                class: "cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_down_aria") } do %><%= lucide_icon("chevron-down", css_class: "size-3") %><% end %>
+        </div>
+      </div>
       <%= link_to loyalty_card_path(loyalty_card), class: "min-w-0 flex-1" do %>
-        <p class="font-medium"><%= loyalty_card.name %></p>
+        <p class="flex items-center gap-1.5 font-medium">
+          <% if loyalty_card.loyalty_brand&.logo_emoji.present? %><span aria-hidden="true"><%= loyalty_card.loyalty_brand.logo_emoji %></span><% end %>
+          <%= loyalty_card.name %>
+        </p>
         <p class="truncate font-mono text-sm text-secondary"><%= loyalty_card.number %></p>
       <% end %>
       <div class="flex shrink-0 items-center gap-2 text-sm">
-        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: loyalty_card_path(loyalty_card),
-              html_options: { title: t(".view_large") })) { lucide_icon("search", css_class: "size-4") } %>
-        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_loyalty_card_path(loyalty_card))) { lucide_icon("pencil", css_class: "size-4") } %>
-        <%= button_to loyalty_card_path(loyalty_card), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: kiosk_loyalty_card_path(loyalty_card),
+              html_options: { aria: { label: t(".view_large") } })) { lucide_icon("search", css_class: "size-4") } %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_loyalty_card_path(loyalty_card),
+              html_options: { aria: { label: t(".edit_aria", name: loyalty_card.name) } })) { lucide_icon("pencil", css_class: "size-4") } %>
+        <%= render(Ui::ButtonToComponent.new(loyalty_card_path(loyalty_card), method: :delete, variant: :ghost, size: :icon,
+              html_options: { aria: { label: t(".delete_aria", name: loyalty_card.name) },
+                              form: { data: { turbo_confirm: t(".delete_confirm", name: loyalty_card.name) } } })) { lucide_icon("x", css_class: "size-4") } %>
       </div>
     </div>
   <% end %>

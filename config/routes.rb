@@ -188,6 +188,11 @@ Rails.application.routes.draw do
   resources :service_provider_types, only: %i[create edit update destroy]
   resources :loyalty_cards, only: %i[index show new create edit update destroy] do
     collection { patch :reorder }
+    member do
+      get :kiosk
+      patch :move_up
+      patch :move_down
+    end
   end
   resources :pets do
     resources :vaccinations, only: %i[create destroy], controller: "pet_vaccinations"

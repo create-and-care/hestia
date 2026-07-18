@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_18_092822) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_18_095505) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -397,6 +397,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_092822) do
   end
 
   create_table "loyalty_cards", force: :cascade do |t|
+    t.bigint "address_id"
     t.string "code_format", default: "barcode", null: false
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
@@ -405,6 +406,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_092822) do
     t.string "number", null: false
     t.integer "position", default: 0, null: false
     t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_loyalty_cards_on_address_id"
     t.index ["household_id"], name: "index_loyalty_cards_on_household_id"
     t.index ["loyalty_brand_id"], name: "index_loyalty_cards_on_loyalty_brand_id"
   end
@@ -989,6 +991,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_092822) do
   add_foreign_key "gift_lists", "households"
   add_foreign_key "gift_lists", "users", column: "created_by_id"
   add_foreign_key "gift_reservations", "gift_ideas"
+  add_foreign_key "loyalty_cards", "addresses"
   add_foreign_key "loyalty_cards", "households"
   add_foreign_key "loyalty_cards", "loyalty_brands"
   add_foreign_key "meal_plan_entries", "households"

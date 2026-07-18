@@ -6,6 +6,7 @@ en:
       heading: "Loyalty cards"
       new_card: "New card"
       none: "No card."
+      reorder_error: "Couldn't save the new order."
     new:
       title: "New card"
       heading: "New loyalty card"
@@ -13,13 +14,21 @@ en:
       title: "Edit card"
     loyalty_card:
       move: "Move"
+      move_up_aria: "Move up"
+      move_down_aria: "Move down"
       view_large: "View large"
+      edit_aria: "Edit \"%{name}\""
+      delete_aria: "Delete \"%{name}\""
+      delete_confirm: "Permanently delete \"%{name}\"?"
     show:
       qrcode_label: "QR code"
       barcode_label: "Barcode"
       present_at_checkout: "to show at checkout"
+      kiosk_link: "Full screen"
       edit: "Edit"
       back_to_all: "← All cards"
+    kiosk:
+      close_aria: "Close full screen"
     form:
       brand_label: "Brand from the catalog"
       no_brand: "Not in catalog"
@@ -29,6 +38,9 @@ en:
       format_label: "Format"
       barcode_option: "Barcode"
       qrcode_option: "QR code"
+      address_label: "Store (address book)"
+      address_hint: "Links this card to an entry in the household's address book."
+      no_address: "None"
       save: "Save"
     create:
       created: "Card added."

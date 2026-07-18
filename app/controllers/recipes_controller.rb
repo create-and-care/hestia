@@ -1,7 +1,7 @@
 class RecipesController < ApplicationController
   include RecipeViewMode
 
-  layout "cook", only: :cook
+  layout "minimal", only: :cook
 
   before_action :set_recipe, only: %i[show edit update destroy cook add_to_shopping_list link_note link_bottle]
 

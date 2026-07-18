@@ -98,3 +98,7 @@ group :test do
 end
 
 gem "prawn", "~> 2.5"
+
+gem "rqrcode", "~> 3.2"
+
+gem "barby", "~> 0.7.0"

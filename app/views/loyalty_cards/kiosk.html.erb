@@ -1,0 +1,17 @@
+<% content_for :title, @card.name %>
+
+<div class="relative flex min-h-screen flex-col items-center justify-center gap-6 bg-white p-6 text-center text-black">
+  <%= link_to loyalty_card_path(@card), class: "absolute top-4 right-4 rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-900",
+        aria: { label: t(".close_aria") } do %><%= lucide_icon("x", css_class: "size-6") %><% end %>
+
+  <h1 class="flex items-center gap-2 text-xl font-semibold">
+    <% if @card.loyalty_brand&.logo_emoji.present? %><span aria-hidden="true"><%= @card.loyalty_brand.logo_emoji %></span><% end %>
+    <%= @card.name %>
+  </h1>
+
+  <% if (svg = Loyalty::CodeRenderer.call(@card)) %>
+    <div class="w-full max-w-sm"><%= svg %></div>
+  <% end %>
+
+  <p class="break-all font-mono text-3xl font-bold tracking-widest"><%= @card.number %></p>
+</div>

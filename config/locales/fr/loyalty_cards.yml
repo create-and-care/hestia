@@ -6,6 +6,7 @@ fr:
       heading: "Cartes de fidélité"
       new_card: "Nouvelle carte"
       none: "Aucune carte."
+      reorder_error: "Le nouvel ordre n'a pas pu être enregistré."
     new:
       title: "Nouvelle carte"
       heading: "Nouvelle carte de fidélité"
@@ -13,13 +14,21 @@ fr:
       title: "Modifier la carte"
     loyalty_card:
       move: "Déplacer"
+      move_up_aria: "Monter"
+      move_down_aria: "Descendre"
       view_large: "Afficher en grand"
+      edit_aria: "Modifier « %{name} »"
+      delete_aria: "Supprimer « %{name} »"
+      delete_confirm: "Supprimer définitivement « %{name} » ?"
     show:
       qrcode_label: "QR code"
       barcode_label: "Code-barres"
       present_at_checkout: "à présenter en caisse"
+      kiosk_link: "Plein écran"
       edit: "Modifier"
       back_to_all: "← Toutes les cartes"
+    kiosk:
+      close_aria: "Fermer le plein écran"
     form:
       brand_label: "Enseigne du catalogue"
       no_brand: "Hors catalogue"
@@ -29,6 +38,9 @@ fr:
       format_label: "Format"
       barcode_option: "Code-barres"
       qrcode_option: "QR code"
+      address_label: "Magasin (carnet d'adresses)"
+      address_hint: "Relie cette carte à une adresse du carnet du foyer."
+      no_address: "Aucun"
       save: "Enregistrer"
     create:
       created: "Carte ajoutée."

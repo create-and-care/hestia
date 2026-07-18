@@ -52,6 +52,16 @@
       <% end %>
     <% end %>
 
+    <%= render(Ui::FieldComponent.new(id: "loyalty_card_address_id")) do |field| %>
+      <% field.with_label { t(".address_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::NativeSelectComponent.new(name: "loyalty_card[address_id]",
+              options: [ [ t(".no_address"), "" ] ] + @addresses.map { |address| [ address.name, address.id ] },
+              selected: card.address_id, html_options: { id: "loyalty_card_address_id" }) %>
+      <% end %>
+      <% field.with_description { t(".address_hint") } %>
+    <% end %>
+
     <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".save") } %>
   </div>
 <% end %>

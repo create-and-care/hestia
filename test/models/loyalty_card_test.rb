@@ -15,4 +15,15 @@ class LoyaltyCardTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).loyalty_cards, loyalty_cards(:beta_card)
   end
+
+  test "rejects an address from another household" do
+    card = households(:alpha).loyalty_cards.build(name: "X", number: "1", code_format: "barcode", address: addresses(:beta_place))
+    assert_not card.valid?
+    assert_includes card.errors[:address], "is invalid"
+  end
+
+  test "accepts an address from the same household" do
+    card = households(:alpha).loyalty_cards.build(name: "X", number: "1", code_format: "barcode", address: addresses(:alpha_resto))
+    assert card.valid?
+  end
 end
