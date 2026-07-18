@@ -1,0 +1,6 @@
+<% if Current.household.module_enabled?("messages") %>
+  <%= render(Ui::ButtonToComponent.new(discuss_conversations_path(subject_type: subject.class.name, subject_id: subject.id),
+        method: :post, variant: :outline, size: :sm)) do %>
+    <%= lucide_icon("message-circle", css_class: "size-4") %> <%= t("conversations.discuss_button") %>
+  <% end %>
+<% end %>

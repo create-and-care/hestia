@@ -2,8 +2,16 @@
     AI-chat pattern Ui::MessageComponent models — so `role:` here only drives the
     "mine vs. theirs" alignment/color Bubble provides. We always pass the real
     author name explicitly rather than letting the component default to
-    "Vous"/"Assistant", since "Assistant" would misname a real household member. %>
-<%= tag.div id: dom_id(message) do %>
+    "Vous"/"Assistant", since "Assistant" would misname a real household member.
+
+    `role:` is correct here on the INITIAL page load (Current.user is the
+    request's signed-in user), but this same partial is also rendered by
+    Message#broadcasts_to's async Solid Queue job for every live message,
+    where Current.user is always nil — see message_role_controller.js, which
+    corrects "mine vs. theirs" client-side using data-author-id once the row
+    lands in the DOM (works for both the correctly- and incorrectly-aligned
+    initial render, since re-applying the same classes is a no-op). %>
+<%= tag.div id: dom_id(message), data: { message_role_target: "row", author_id: message.author_id } do %>
   <%= render(Ui::MessageComponent.new(
         role: message.author == Current.user ? :user : :assistant,
         name: message.author.name.presence || message.author.email_address,

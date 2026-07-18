@@ -57,6 +57,25 @@ class GlobalSearchTest < ActiveSupport::TestCase
     assert_includes recipes_group[:records].map { |r| r[:label] }, recipe.title
   end
 
+  test "conversations are searched by participant, not merely by household" do
+    results = GlobalSearch.call(query: "Organisation", household: @household, user: @user)
+    messages_group = results.find { |g| g[:module_key] == "messages" }
+    assert messages_group, "expected user one, a participant, to find their own conversation"
+
+    results = GlobalSearch.call(query: "Organisation", household: @household, user: users(:two))
+    assert_nil results.find { |g| g[:module_key] == "messages" },
+      "a household member who never joined the conversation must not find it (nor its 404 on click)"
+  end
+
+  test "a conversation the user participates in from another household does not leak into the current household's search" do
+    households(:beta).memberships.create!(user: @user, role: "member")
+    conversations(:beta_chat).conversation_participants.create!(user: @user)
+
+    results = GlobalSearch.call(query: "Chat Beta", household: @household, user: @user)
+    assert_nil results.find { |g| g[:module_key] == "messages" },
+      "being a participant of a conversation in a household the user ALSO belongs to must not surface it while viewing a different household"
+  end
+
   test "finds a bottle and a wine cellar" do
     bottle_results = GlobalSearch.call(query: "margaux", household: @household, user: @user)
     bottle_group = bottle_results.find { |g| g[:module_key] == "wine_cellar" && g[:records].any? { |r| r[:label] == "Château Margaux" } }
