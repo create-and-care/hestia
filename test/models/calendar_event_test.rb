@@ -57,4 +57,15 @@ class CalendarEventTest < ActiveSupport::TestCase
     occurrences = event.occurrences_between(Time.zone.local(2026, 7, 1), Time.zone.local(2026, 7, 31, 23, 59))
     assert_equal [ Time.zone.local(2026, 7, 1, 9), Time.zone.local(2026, 7, 8, 9), Time.zone.local(2026, 7, 22, 9), Time.zone.local(2026, 7, 29, 9) ], occurrences
   end
+
+  test "rejects an address from another household" do
+    event = households(:alpha).calendar_events.build(title: "X", starts_at: Time.current, frequency: "none", address: addresses(:beta_place))
+    assert_not event.valid?
+    assert_includes event.errors[:address], "is invalid"
+  end
+
+  test "accepts an address from the same household" do
+    event = households(:alpha).calendar_events.build(title: "X", starts_at: Time.current, frequency: "none", address: addresses(:alpha_resto))
+    assert event.valid?
+  end
 end

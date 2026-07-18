@@ -25,4 +25,10 @@ class AddressTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).addresses, addresses(:beta_place)
   end
+
+  test "can have a photo attached" do
+    address = addresses(:alpha_resto)
+    address.photo.attach(io: File.open(Rails.root.join("test/fixtures/files/sample.png")), filename: "sample.png", content_type: "image/png")
+    assert address.photo.attached?
+  end
 end

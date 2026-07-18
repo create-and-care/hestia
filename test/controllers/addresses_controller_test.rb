@@ -57,4 +57,38 @@ class AddressesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal "Tour Eiffel", JSON.parse(@response.body).first["name"]
   end
+
+  test "create attaches an optional photo" do
+    photo = fixture_file_upload("sample.png", "image/png")
+    post addresses_path, params: { address: { name: "Musée Y", address_type: "musee", photo: photo } }
+    assert Address.find_by!(name: "Musée Y").photo.attached?
+  end
+
+  test "delete button asks for confirmation and has an accessible name" do
+    address = addresses(:alpha_resto)
+    get addresses_path
+    assert_select "form[action=?][data-turbo-confirm]", address_path(address)
+    assert_select "a[href=?][aria-label=?]", edit_address_path(address), "Edit \"Chez Léon\""
+  end
+
+  test "index filter bar uses design-system inputs and no longer references the internal spec" do
+    get addresses_path
+    assert_response :success
+    assert_select "select#addresses_address_type"
+    assert_select "input#addresses_q[type='search']"
+    get new_address_path
+    assert_not_includes @response.body, "CDC"
+    assert_not_includes @response.body, "Spec §"
+  end
+
+  test "paginates when there are more addresses than the page size" do
+    households(:alpha).addresses.general.destroy_all
+    (AddressesController::PER_PAGE + 1).times { |i| households(:alpha).addresses.create!(name: "Lieu #{'%02d' % i}") }
+
+    get addresses_path
+    assert_select "#addresses > div", count: AddressesController::PER_PAGE
+
+    get addresses_path(page: 2)
+    assert_select "#addresses > div", count: 1
+  end
 end

@@ -23,16 +23,22 @@ en:
       search_submit: "OK"
       new_address: "New"
       none: "No address."
+      none_filtered: "No address matches this filter or search."
     new:
       title: "New address"
     edit:
       title: "Edit address"
     address:
       directions: "Directions"
+      call_aria: "Call %{phone}"
+      edit_aria: "Edit \"%{name}\""
+      delete_aria: "Delete \"%{name}\""
+      delete_confirm: "Permanently delete \"%{name}\"?"
     form:
       online_search_label: "Online search (optional)"
       place_name_placeholder: "Place name…"
-      manual_entry_hint: "Leave blank for a confidential address entered manually (Spec §10.3)."
+      results_aria: "Online search results"
+      manual_entry_hint: "Leave blank for a confidential address entered manually."
       searching: "Searching…"
       no_results: "No results — enter manually."
       unavailable: "Search unavailable — enter manually."
@@ -43,6 +49,7 @@ en:
       rating_label: "Rating (1-5)"
       latitude_label: "Latitude"
       longitude_label: "Longitude"
+      photo_label: "Photo"
       save: "Save"
     create:
       created: "Address added."

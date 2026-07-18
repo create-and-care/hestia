@@ -51,6 +51,17 @@
       </div>
     </div>
     <div>
+      <%= render(Ui::FieldComponent.new(id: "service_provider_linked_address_id")) do |field| %>
+        <% field.with_label { t(".linked_address_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "service_provider[linked_address_id]",
+                options: [ [ t(".none_option"), "" ] ] + @addresses.map { |address| [ address.name, address.id ] },
+                selected: service_provider.linked_address_id, html_options: { id: "service_provider_linked_address_id" }) %>
+        <% end %>
+        <% field.with_description { t(".linked_address_hint") } %>
+      <% end %>
+    </div>
+    <div>
       <%= render(Ui::FieldComponent.new(id: "service_provider_address")) do |field| %>
         <% field.with_label { t(".address_label") } %>
         <% field.with_control do %>

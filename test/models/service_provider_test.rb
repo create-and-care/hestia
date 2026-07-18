@@ -16,4 +16,16 @@ class ServiceProviderTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).service_providers, service_providers(:beta_provider)
   end
+
+  test "maps_url prefers the linked address over the free-text address" do
+    provider = service_providers(:alpha_plombier)
+    provider.linked_address = addresses(:alpha_resto)
+    assert_equal addresses(:alpha_resto).maps_url, provider.maps_url
+  end
+
+  test "rejects a linked address from another household" do
+    provider = households(:alpha).service_providers.build(name: "X", linked_address: addresses(:beta_place))
+    assert_not provider.valid?
+    assert_includes provider.errors[:linked_address], "is invalid"
+  end
 end

@@ -8,7 +8,9 @@
         <% end %>
       <% end %>
     </div>
-    <% if service_provider.address.present? %>
+    <% if service_provider.linked_address %>
+      <p class="text-sm text-gray-500"><%= service_provider.linked_address.full_address.presence || service_provider.linked_address.name %></p>
+    <% elsif service_provider.address.present? %>
       <p class="text-sm text-gray-500"><%= service_provider.address %></p>
     <% end %>
   </div>

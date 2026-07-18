@@ -48,6 +48,26 @@ class CalendarEventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "create links an address from the household's address book" do
+    post calendar_events_path, params: {
+      calendar_event: { title: "Dîner", starts_at: 1.day.from_now.change(min: 0), frequency: "none", color: "blue",
+                         address_id: addresses(:alpha_resto).id }
+    }
+    assert_equal addresses(:alpha_resto), CalendarEvent.find_by!(title: "Dîner").address
+  end
+
+  test "the event form offers the household's addresses" do
+    get new_calendar_event_path
+    assert_select "select#calendar_event_address_id option", text: addresses(:alpha_resto).name
+    assert_select "select#calendar_event_address_id option", text: addresses(:beta_place).name, count: 0
+  end
+
+  test "an event with a linked address shows a directions link in the agenda view" do
+    calendar_events(:alpha_meeting).update!(address: addresses(:alpha_resto))
+    get calendar_path(view: "list")
+    assert_select "a[href=?]", addresses(:alpha_resto).maps_url, text: addresses(:alpha_resto).name
+  end
+
   test "new prefills starts_at when given (clicking a day in the grid)" do
     get new_calendar_event_path(starts_at: "2026-08-15T09:00:00")
     assert_response :success

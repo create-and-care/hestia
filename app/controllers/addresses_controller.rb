@@ -1,13 +1,19 @@
 class AddressesController < ApplicationController
   before_action :set_address, only: %i[edit update destroy]
 
+  PER_PAGE = 24
+
   def index
     @query = params[:q].to_s.strip
     @type = params[:address_type].presence
-    addresses = Current.household.addresses.general.ordered
+    addresses = Current.household.addresses.general.ordered.includes(photo_attachment: :blob)
     addresses = addresses.where(address_type: @type) if @type
     addresses = addresses.where("name ILIKE :q OR full_address ILIKE :q", q: "%#{@query}%") if @query.present?
-    @addresses = addresses
+
+    @total = addresses.count
+    @total_pages = [ (@total / PER_PAGE.to_f).ceil, 1 ].max
+    @page = [ [ params[:page].to_i, 1 ].max, @total_pages ].min
+    @addresses = addresses.offset((@page - 1) * PER_PAGE).limit(PER_PAGE)
   end
 
   def new
@@ -51,6 +57,6 @@ class AddressesController < ApplicationController
     end
 
     def address_params
-      params.require(:address).permit(:address_type, :name, :full_address, :latitude, :longitude, :phone, :rating)
+      params.require(:address).permit(:address_type, :name, :full_address, :latitude, :longitude, :phone, :rating, :photo)
     end
 end

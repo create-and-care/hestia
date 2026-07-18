@@ -20,7 +20,10 @@ en:
       type_label: "Type"
       phone_label: "Phone"
       email_label: "Email"
-      address_label: "Address"
+      linked_address_label: "Address book entry"
+      linked_address_hint: "Links this provider to an entry in the household's address book."
+      none_option: "None"
+      address_label: "Address (free text)"
       save: "Save"
     create:
       created: "Provider added."

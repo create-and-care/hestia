@@ -7,6 +7,9 @@ class Address < ApplicationRecord
              bien_etre lieu_phare tourisme prive autre].freeze
 
   belongs_to :trip, optional: true
+  has_one_attached :photo
+  has_many :calendar_events, dependent: :nullify
+  has_many :service_providers, foreign_key: :linked_address_id, dependent: :nullify, inverse_of: :linked_address
 
   validates :name, presence: true
   validates :address_type, inclusion: { in: TYPES }

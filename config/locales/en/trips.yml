@@ -22,6 +22,7 @@ en:
       addresses: "Address book"
       address_name_placeholder: "Place"
       address_full_placeholder: "Address"
+      address_phone_placeholder: "Phone"
       back_to_trips: "← Trips"
     destroy:
       deleted: "Trip deleted (and all its data)."

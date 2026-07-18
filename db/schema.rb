@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_18_090057) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_18_092822) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -127,6 +127,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_090057) do
   end
 
   create_table "calendar_events", force: :cascade do |t|
+    t.bigint "address_id"
     t.boolean "all_day", default: false, null: false
     t.string "color", default: "blue", null: false
     t.datetime "created_at", null: false
@@ -143,6 +144,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_090057) do
     t.datetime "starts_at", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_calendar_events_on_address_id"
     t.index ["external_calendar_connection_id", "external_uid"], name: "index_calendar_events_on_connection_and_external_uid", unique: true
     t.index ["external_calendar_connection_id"], name: "index_calendar_events_on_external_calendar_connection_id"
     t.index ["household_id", "starts_at"], name: "index_calendar_events_on_household_id_and_starts_at"
@@ -715,11 +717,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_090057) do
     t.datetime "created_at", null: false
     t.string "email"
     t.bigint "household_id", null: false
+    t.bigint "linked_address_id"
     t.string "name", null: false
     t.string "phone"
     t.bigint "service_provider_type_id"
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_service_providers_on_household_id"
+    t.index ["linked_address_id"], name: "index_service_providers_on_linked_address_id"
     t.index ["service_provider_type_id"], name: "index_service_providers_on_service_provider_type_id"
   end
 
@@ -951,6 +955,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_090057) do
   add_foreign_key "bottles", "wine_cellars"
   add_foreign_key "budget_categories", "households"
   add_foreign_key "budget_entries", "budget_categories"
+  add_foreign_key "calendar_events", "addresses"
   add_foreign_key "calendar_events", "external_calendar_connections"
   add_foreign_key "calendar_events", "households"
   add_foreign_key "circle_memberships", "circles"
@@ -1021,6 +1026,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_090057) do
   add_foreign_key "routines", "users", column: "assignee_id"
   add_foreign_key "savings_envelopes", "households"
   add_foreign_key "service_provider_types", "households"
+  add_foreign_key "service_providers", "addresses", column: "linked_address_id"
   add_foreign_key "service_providers", "households"
   add_foreign_key "service_providers", "service_provider_types"
   add_foreign_key "sessions", "households", column: "active_household_id"

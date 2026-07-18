@@ -11,11 +11,18 @@ export default class extends Controller {
     unavailableText: String
   }
 
+  // The query field lives inside the address <form> — without this, Enter submits the whole
+  // form (and its required "name" field) instead of running the online search.
+  onKeydown(event) {
+    event.preventDefault()
+    this.search()
+  }
+
   async search() {
     const query = this.queryTarget.value.trim()
     if (!query) return
 
-    this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-gray-400">${this.searchingTextValue}</p>`
+    this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-subdued">${this.searchingTextValue}</p>`
 
     try {
       const response = await fetch(`${this.urlValue}?q=${encodeURIComponent(query)}`, {
@@ -24,7 +31,7 @@ export default class extends Controller {
       const results = response.ok ? await response.json() : []
 
       if (results.length === 0) {
-        this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-gray-400">${this.noResultsTextValue}</p>`
+        this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-subdued">${this.noResultsTextValue}</p>`
         return
       }
 
@@ -32,7 +39,8 @@ export default class extends Controller {
       results.forEach((result, index) => {
         const button = document.createElement("button")
         button.type = "button"
-        button.className = "block w-full rounded px-2 py-1 text-left text-sm hover:bg-gray-50"
+        button.setAttribute("role", "option")
+        button.className = "block w-full rounded px-2 py-1 text-left text-sm hover:bg-surface-hover"
         button.textContent = result.full_address
         button.dataset.action = "click->geocode-lookup#select"
         button.dataset.index = index
@@ -41,7 +49,7 @@ export default class extends Controller {
       })
       this.results = results
     } catch (error) {
-      this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-gray-400">${this.unavailableTextValue}</p>`
+      this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-subdued">${this.unavailableTextValue}</p>`
     }
   }
 

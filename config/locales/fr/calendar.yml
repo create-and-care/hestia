@@ -76,6 +76,8 @@ fr:
       ends_label: "Fin"
       location_label: "Lieu"
       color_label: "Couleur"
+      address_label: "Adresse du carnet"
+      none_option: "Aucune"
       event_type_label: "Type (optionnel)"
       event_type_placeholder: "Rendez-vous, sport, école…"
       recurrence_legend: "Récurrence"

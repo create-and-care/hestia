@@ -76,6 +76,8 @@ en:
       ends_label: "End"
       location_label: "Location"
       color_label: "Color"
+      address_label: "Address book entry"
+      none_option: "None"
       event_type_label: "Type (optional)"
       event_type_placeholder: "Appointment, sports, school…"
       recurrence_legend: "Recurrence"

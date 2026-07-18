@@ -130,15 +130,40 @@
         <% end %>
       </ul>
     <% end %>
-    <%= form_with model: @address, url: trip_addresses_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
+    <%= form_with model: @address, url: trip_addresses_path(@trip), class: "flex flex-wrap items-end gap-2",
+          data: { controller: "geocode-lookup", geocode_lookup_url_value: search_addresses_path,
+                  geocode_lookup_searching_text_value: t("addresses.form.searching"),
+                  geocode_lookup_no_results_text_value: t("addresses.form.no_results"),
+                  geocode_lookup_unavailable_text_value: t("addresses.form.unavailable") } do |form| %>
+      <div class="w-full">
+        <label for="trip_address_online_search" class="mb-1 block text-xs font-medium text-secondary"><%= t("addresses.form.online_search_label") %></label>
+        <div class="flex gap-1">
+          <%= render Ui::InputComponent.new(type: "text", placeholder: t("addresses.form.place_name_placeholder"),
+                html_options: { id: "trip_address_online_search", autocomplete: "off",
+                                data: { geocode_lookup_target: "query", action: "keydown.enter->geocode-lookup#onKeydown" } }) %>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, type: "button",
+                html_options: { data: { action: "click->geocode-lookup#search" } })) { lucide_icon("search", css_class: "size-4") } %>
+        </div>
+        <div data-geocode-lookup-target="results" role="listbox" aria-live="polite" class="mt-1"></div>
+      </div>
       <div class="w-32">
         <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
-          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".address_name_placeholder"), html_options: { id: form.field_id(:name), required: true }) } %>
+          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".address_name_placeholder"), html_options: { id: form.field_id(:name), required: true, data: { geocode_lookup_target: "name" } }) } %>
         <% end %>
       </div>
       <div class="flex-1">
         <%= render(Ui::FieldComponent.new(id: form.field_id(:full_address))) do |field| %>
-          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:full_address), value: form.object.full_address, placeholder: t(".address_full_placeholder"), html_options: { id: form.field_id(:full_address) }) } %>
+          <% field.with_control { render Ui::TextareaComponent.new(name: form.field_name(:full_address), rows: 1, html_options: { id: form.field_id(:full_address), data: { geocode_lookup_target: "fullAddress" } }) { form.object.full_address } } %>
+        <% end %>
+      </div>
+      <div class="w-36">
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:address_type))) do |field| %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:address_type), options: address_type_options, selected: form.object.address_type, html_options: { id: form.field_id(:address_type) }) } %>
+        <% end %>
+      </div>
+      <div class="w-32">
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:phone))) do |field| %>
+          <% field.with_control { render Ui::InputComponent.new(type: "tel", name: form.field_name(:phone), value: form.object.phone, placeholder: t(".address_phone_placeholder"), html_options: { id: form.field_id(:phone) }) } %>
         <% end %>
       </div>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>

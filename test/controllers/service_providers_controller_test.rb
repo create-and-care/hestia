@@ -55,4 +55,17 @@ class ServiceProvidersControllerTest < ActionDispatch::IntegrationTest
     get edit_service_provider_path(service_providers(:beta_provider))
     assert_response :not_found
   end
+
+  test "create links an address from the household's address book" do
+    post service_providers_path, params: {
+      service_provider: { name: "Vitrier", linked_address_id: addresses(:alpha_resto).id }
+    }
+    assert_equal addresses(:alpha_resto), ServiceProvider.find_by!(name: "Vitrier").linked_address
+  end
+
+  test "the provider form offers the household's addresses" do
+    get new_service_provider_path
+    assert_select "select#service_provider_linked_address_id option", text: addresses(:alpha_resto).name
+    assert_select "select#service_provider_linked_address_id option", text: addresses(:beta_place).name, count: 0
+  end
 end

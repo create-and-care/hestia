@@ -5,6 +5,7 @@ class CalendarEventsController < ApplicationController
     start = params[:starts_at].present? ? (Time.zone.parse(params[:starts_at]) rescue nil) : nil
     start ||= Time.current.change(min: 0) + 1.hour
     @event = Current.household.calendar_events.new(starts_at: start, ends_at: start + 1.hour, color: "blue")
+    @addresses = Current.household.addresses.order(:name)
   end
 
   def create
@@ -16,12 +17,14 @@ class CalendarEventsController < ApplicationController
     redirect_to calendar_path, notice: t(".notice")
   rescue ActiveRecord::RecordInvalid => e
     @event = e.record
+    @addresses = Current.household.addresses.order(:name)
     render :new, status: :unprocessable_entity
   end
 
   def edit
     @occurrence = parse_occurrence
     apply_occurrence_preview(@occurrence) if @occurrence && @event.recurring?
+    @addresses = Current.household.addresses.order(:name)
   end
 
   # A recurring event's edit form can target either "this occurrence only"
@@ -39,6 +42,7 @@ class CalendarEventsController < ApplicationController
         @event.participants = Current.household.users.where(id: participant_ids)
         redirect_to calendar_path, notice: t(".notice")
       else
+        @addresses = Current.household.addresses.order(:name)
         render :edit, status: :unprocessable_entity
       end
     end
@@ -63,7 +67,7 @@ class CalendarEventsController < ApplicationController
 
     def event_params
       params.require(:calendar_event).permit(:title, :starts_at, :ends_at, :all_day,
-        :location, :color, :frequency, :recurrence_interval, :recurrence_until, :event_type)
+        :location, :color, :frequency, :recurrence_interval, :recurrence_until, :event_type, :address_id)
     end
 
     def participant_ids

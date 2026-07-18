@@ -8,11 +8,13 @@ class CalendarEvent < ApplicationRecord
   has_many :participants, through: :event_participants, source: :user
   has_many :event_reminders, dependent: :destroy
   belongs_to :external_calendar_connection, optional: true
+  belongs_to :address, optional: true
 
   validates :title, presence: true
   validates :starts_at, presence: true
   validates :frequency, inclusion: { in: FREQUENCIES }
   validates :color, inclusion: { in: COLORS }, allow_blank: true
+  validate :address_belongs_to_household
 
   scope :chronological, -> { order(:starts_at) }
 
@@ -46,5 +48,9 @@ class CalendarEvent < ApplicationRecord
   private
     def advance_from(time)
       Recurrence.advance(time, frequency, recurrence_interval.to_i.clamp(1, 52))
+    end
+
+    def address_belongs_to_household
+      errors.add(:address, :invalid) if address && address.household_id != household_id
     end
 end

@@ -7,12 +7,13 @@
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("map-pin", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex flex-wrap items-center gap-2">
-      <%= form_with url: addresses_path, method: :get, class: "flex items-center gap-1" do |form| %>
-        <%= form.select :address_type, address_type_options, { include_blank: t(".all_types"), selected: @type },
-              class: "rounded-md border border-gray-300 px-2 py-1.5 text-sm" %>
-        <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
-              class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
-        <%= form.submit t(".search_submit"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1.5 text-sm hover:bg-gray-50" %>
+      <%= form_with url: addresses_path, method: :get, class: "flex items-center gap-2" do |form| %>
+        <%= render Ui::NativeSelectComponent.new(name: "address_type",
+              options: [ [ t(".all_types"), "" ] ] + address_type_options,
+              selected: @type, html_options: { id: "addresses_address_type" }) %>
+        <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
+              html_options: { id: "addresses_q" }) %>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".search_submit") } %>
       <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_address_path)) { t(".new_address") } %>
     </div>
@@ -26,8 +27,15 @@
   <% if @addresses.empty? %>
     <div class="mt-4">
       <%= render(Ui::EmptyComponent.new) do |empty| %>
-        <% empty.with_description { t(".none") } %>
+        <% empty.with_description { (@query.present? || @type) ? t(".none_filtered") : t(".none") } %>
       <% end %>
+    </div>
+  <% end %>
+
+  <% if @total_pages > 1 %>
+    <div class="mt-6 flex justify-center">
+      <%= render Ui::PaginationComponent.new(current: @page, total: @total_pages,
+            path: ->(page) { addresses_path(q: @query, address_type: @type, page: page) }) %>
     </div>
   <% end %>
 

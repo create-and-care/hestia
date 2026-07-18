@@ -20,7 +20,10 @@ fr:
       type_label: "Type"
       phone_label: "Téléphone"
       email_label: "E-mail"
-      address_label: "Adresse"
+      linked_address_label: "Adresse du carnet"
+      linked_address_hint: "Relie ce prestataire à une fiche du carnet d'adresses du foyer."
+      none_option: "Aucune"
+      address_label: "Adresse (texte libre)"
       save: "Enregistrer"
     create:
       created: "Prestataire ajouté."

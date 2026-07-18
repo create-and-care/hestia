@@ -23,16 +23,22 @@ fr:
       search_submit: "OK"
       new_address: "Nouvelle"
       none: "Aucune adresse."
+      none_filtered: "Aucune adresse pour ce filtre ou cette recherche."
     new:
       title: "Nouvelle adresse"
     edit:
       title: "Modifier l'adresse"
     address:
       directions: "Itinéraire"
+      call_aria: "Appeler le %{phone}"
+      edit_aria: "Modifier « %{name} »"
+      delete_aria: "Supprimer « %{name} »"
+      delete_confirm: "Supprimer définitivement « %{name} » ?"
     form:
       online_search_label: "Recherche en ligne (facultatif)"
       place_name_placeholder: "Nom du lieu…"
-      manual_entry_hint: "Laissez vide pour une adresse confidentielle en saisie manuelle (CDC §10.3)."
+      results_aria: "Résultats de la recherche en ligne"
+      manual_entry_hint: "Laissez vide pour une adresse confidentielle en saisie manuelle."
       searching: "Recherche…"
       no_results: "Aucun résultat — saisie manuelle."
       unavailable: "Recherche indisponible — saisie manuelle."
@@ -43,6 +49,7 @@ fr:
       rating_label: "Note (1-5)"
       latitude_label: "Latitude"
       longitude_label: "Longitude"
+      photo_label: "Photo"
       save: "Enregistrer"
     create:
       created: "Adresse ajoutée."

@@ -39,10 +39,20 @@ class TripsControllerTest < ActionDispatch::IntegrationTest
     trip = trips(:alpha_trip)
     post trip_shopping_lists_path(trip), params: { shopping_list: { name: "Chalet" } }
     post trip_tasks_path(trip), params: { task: { title: "Réserver" } }
-    post trip_addresses_path(trip), params: { address: { name: "Hôtel", address_type: "hotel" } }
+    post trip_addresses_path(trip), params: { address: { name: "Hôtel", address_type: "hotel", phone: "0102030405" } }
     assert_equal 1, trip.shopping_lists.count
     assert_equal 1, trip.tasks.count
     assert_equal 1, trip.addresses.count
+    address = trip.addresses.sole
+    assert_equal "hotel", address.address_type
+    assert_equal "0102030405", address.phone
+  end
+
+  test "trip address subform offers a type select, a phone field, and online search" do
+    get trip_path(trips(:alpha_trip))
+    assert_select "select#address_address_type"
+    assert_select "input#address_phone"
+    assert_select "[data-controller='geocode-lookup']"
   end
 
   test "delete a trip" do

@@ -22,6 +22,7 @@ fr:
       addresses: "Carnet d'adresses"
       address_name_placeholder: "Lieu"
       address_full_placeholder: "Adresse"
+      address_phone_placeholder: "Téléphone"
       back_to_trips: "← Voyages"
     destroy:
       deleted: "Voyage supprimé (et toutes ses données)."

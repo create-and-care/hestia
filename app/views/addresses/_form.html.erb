@@ -11,16 +11,17 @@
     <% end %>
   <% end %>
 
-  <div class="mb-4 rounded-md border border-gray-200 bg-gray-50 p-3">
-    <label class="mb-1 block text-xs font-medium text-gray-500"><%= t(".online_search_label") %></label>
+  <div class="mb-4 rounded-md border border-primary bg-surface-inset p-3">
+    <label for="address_online_search" class="mb-1 block text-xs font-medium text-secondary"><%= t(".online_search_label") %></label>
     <div class="flex gap-1">
       <%= render Ui::InputComponent.new(type: "text", placeholder: t(".place_name_placeholder"),
-            html_options: { autocomplete: "off", data: { geocode_lookup_target: "query" } }) %>
+            html_options: { id: "address_online_search", autocomplete: "off",
+                            data: { geocode_lookup_target: "query", action: "keydown.enter->geocode-lookup#onKeydown" } }) %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, type: "button",
             html_options: { data: { action: "click->geocode-lookup#search" } })) { lucide_icon("search", css_class: "size-4") } %>
     </div>
-    <div data-geocode-lookup-target="results" class="mt-1"></div>
-    <p class="mt-1 text-xs text-gray-400"><%= t(".manual_entry_hint") %></p>
+    <div id="address_online_search_results" data-geocode-lookup-target="results" role="listbox" aria-label="<%= t(".results_aria") %>" class="mt-1" aria-live="polite"></div>
+    <p class="mt-1 text-xs text-subdued"><%= t(".manual_entry_hint") %></p>
   </div>
 
   <div class="space-y-4">
@@ -91,6 +92,21 @@
         <% end %>
       </div>
     </div>
+
+    <%= render(Ui::FieldComponent.new(id: "address_photo")) do |field| %>
+      <% field.with_label { t(".photo_label") } %>
+      <% field.with_control do %>
+        <% if address.photo.attached? %>
+          <div class="mb-2 max-w-40">
+            <%= render(Ui::AspectRatioComponent.new) do %>
+              <%= image_tag address.photo.variant(resize_to_fill: [ 160, 90 ]), alt: "", class: "size-full object-cover" %>
+            <% end %>
+          </div>
+        <% end %>
+        <%= form.file_field :photo, accept: "image/*", id: "address_photo", class: "block text-sm text-secondary" %>
+      <% end %>
+    <% end %>
+
     <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".save") } %>
   </div>
 <% end %>

@@ -14,6 +14,7 @@ class ServiceProvidersController < ApplicationController
 
   def new
     @provider = Current.household.service_providers.new
+    @addresses = Current.household.addresses.order(:name)
   end
 
   def create
@@ -21,17 +22,20 @@ class ServiceProvidersController < ApplicationController
     if @provider.save
       redirect_to service_providers_path, notice: t(".created")
     else
+      @addresses = Current.household.addresses.order(:name)
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    @addresses = Current.household.addresses.order(:name)
   end
 
   def update
     if @provider.update(provider_params)
       redirect_to service_providers_path, notice: t(".updated")
     else
+      @addresses = Current.household.addresses.order(:name)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -47,7 +51,7 @@ class ServiceProvidersController < ApplicationController
     end
 
     def provider_params
-      permitted = params.require(:service_provider).permit(:name, :phone, :email, :address, :service_provider_type_id)
+      permitted = params.require(:service_provider).permit(:name, :phone, :email, :address, :service_provider_type_id, :linked_address_id)
       permitted[:service_provider_type_id] = nil unless valid_type_id?(permitted[:service_provider_type_id])
       permitted
     end
