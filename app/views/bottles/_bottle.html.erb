@@ -1,6 +1,15 @@
+<% show_cellar ||= false %>
 <%= tag.div id: dom_id(bottle), class: "rounded-lg border border-primary #{"opacity-50" unless bottle.in_stock}" do %>
   <%= render(Ui::ItemComponent.new) do |item| %>
-    <% item.with_leading { lucide_icon("wine", css_class: "size-4") } %>
+    <% if bottle.photo.attached? %>
+      <% item.with_leading do %>
+        <div class="size-8 overflow-hidden rounded">
+          <%= image_tag bottle.photo.variant(resize_to_fill: [ 32, 32 ]), alt: "", class: "size-full object-cover" %>
+        </div>
+      <% end %>
+    <% else %>
+      <% item.with_leading { lucide_icon("wine", css_class: "size-4") } %>
+    <% end %>
     <% item.with_title do %>
       <span class="<%= "line-through" unless bottle.in_stock %>">
         <%= bottle.name %>
@@ -8,20 +17,18 @@
       </span>
     <% end %>
     <% item.with_description do %>
-      <%= [ (wine_type_label(bottle.wine_type) if bottle.wine_type.present?), bottle.region ].reject(&:blank?).join(" · ") %>
+      <%= [ (wine_type_label(bottle.wine_type) if bottle.wine_type.present?), bottle.region,
+            (show_cellar ? bottle.wine_cellar.name : nil), (t(".paired_indicator") if bottle.recipe) ].reject(&:blank?).join(" · ") %>
     <% end %>
     <% item.with_trailing do %>
       <div class="flex flex-wrap items-center gap-2">
-        <%= button_to (bottle.in_stock ? t(".take_out") : t(".put_back")), toggle_stock_bottle_path(bottle), method: :patch,
-              class: "cursor-pointer rounded border border-primary px-2 py-1 text-xs hover:bg-button-outline-hover" %>
-
-        <%= form_with model: bottle, url: bottle_path(bottle), method: :patch, class: "flex items-center gap-1" do |form| %>
-          <%= render Ui::NativeSelectComponent.new(name: "bottle[wine_cellar_id]", options: cellar_options, selected: bottle.wine_cellar_id,
-                html_options: { id: "bottle_wine_cellar_id", class: "text-xs" }) %>
-          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".move") } %>
-        <% end %>
-
-        <%= button_to bottle_path(bottle), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+        <%= render(Ui::ButtonToComponent.new(toggle_stock_bottle_path(bottle), method: :patch, variant: :outline, size: :sm)) {
+              bottle.in_stock ? t(".take_out") : t(".put_back") } %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_bottle_path(bottle),
+              html_options: { aria: { label: t(".edit_aria", name: bottle.name) } })) { lucide_icon("pencil", css_class: "size-4") } %>
+        <%= render(Ui::ButtonToComponent.new(bottle_path(bottle), method: :delete, variant: :ghost, size: :icon,
+              html_options: { aria: { label: t(".delete_aria", name: bottle.name) },
+                              form: { data: { turbo_confirm: t(".delete_confirm", name: bottle.name) } } })) { lucide_icon("x", css_class: "size-4") } %>
       </div>
     <% end %>
   <% end %>

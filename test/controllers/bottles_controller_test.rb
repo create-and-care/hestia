@@ -40,4 +40,39 @@ class BottlesControllerTest < ActionDispatch::IntegrationTest
     delete bottle_path(bottle)
     assert_not Bottle.exists?(bottle.id)
   end
+
+  test "create with a blank name does not persist and surfaces an error" do
+    cellar = wine_cellars(:alpha_reds)
+    assert_no_difference -> { Bottle.count } do
+      post bottles_path, params: { bottle: { wine_cellar_id: cellar.id, name: "" } }
+    end
+    assert_redirected_to wine_cellars_path
+    assert_equal "Name can't be blank", flash[:alert]
+  end
+
+  test "edit and update a bottle's own details and photo" do
+    bottle = bottles(:alpha_bordeaux)
+    get edit_bottle_path(bottle)
+    assert_response :success
+
+    photo = fixture_file_upload("sample.png", "image/png")
+    patch bottle_path(bottle), params: { bottle: { name: "Château Latour", vintage: 2018, region: "Pauillac", wine_type: "rouge", photo: photo } }
+    assert_redirected_to wine_cellars_path
+    bottle.reload
+    assert_equal "Château Latour", bottle.name
+    assert_equal 2018, bottle.vintage
+    assert bottle.photo.attached?
+  end
+
+  test "cannot edit another household's bottle" do
+    get edit_bottle_path(bottles(:beta_bottle))
+    assert_response :not_found
+  end
+
+  test "shows the paired recipe when the bottle is linked to one" do
+    bottle = bottles(:alpha_bordeaux)
+    bottle.update!(recipe: recipes(:alpha_pancakes))
+    get wine_cellars_path
+    assert_includes @response.body, "Recipe pairing"
+  end
 end

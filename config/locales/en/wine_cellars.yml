@@ -20,8 +20,11 @@ en:
       bottle_name_placeholder: "Name"
       vintage_placeholder: "Vintage"
       region_placeholder: "Region"
+      wine_type_label: "Type"
       type_blank: "Type"
       add: "Add"
+    create:
+      created: "Cellar added."
     destroy:
       deleted: "Cellar deleted."
   bottles:
@@ -29,5 +32,25 @@ en:
       take_out: "Take out"
       put_back: "Put back"
       move: "Move"
+      edit_aria: "Edit \"%{name}\""
+      delete_aria: "Delete \"%{name}\""
+      delete_confirm: "Permanently delete \"%{name}\"?"
+      paired_indicator: "Recipe pairing"
+    edit:
+      title: "Edit bottle"
+      name_label: "Name"
+      vintage_label: "Vintage"
+      region_label: "Region"
+      wine_type_label: "Type"
+      type_blank: "Type"
+      wine_cellar_label: "Cellar"
+      photo_label: "Photo"
+      paired_with: "Paired with"
+      save: "Save"
+      back_to_wine_cellar: "← Wine Cellar"
+    create:
+      created: "Bottle added."
+    update:
+      updated: "Bottle updated."
     destroy:
       deleted: "Bottle deleted."

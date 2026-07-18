@@ -56,4 +56,14 @@ class GlobalSearchTest < ActiveSupport::TestCase
     assert recipes_group, "expected a recipes group matched by tag"
     assert_includes recipes_group[:records].map { |r| r[:label] }, recipe.title
   end
+
+  test "finds a bottle and a wine cellar" do
+    bottle_results = GlobalSearch.call(query: "margaux", household: @household, user: @user)
+    bottle_group = bottle_results.find { |g| g[:module_key] == "wine_cellar" && g[:records].any? { |r| r[:label] == "Château Margaux" } }
+    assert bottle_group, "expected a wine_cellar group matched by bottle name"
+
+    cellar_results = GlobalSearch.call(query: wine_cellars(:alpha_reds).name, household: @household, user: @user)
+    cellar_group = cellar_results.find { |g| g[:module_key] == "wine_cellar" && g[:records].any? { |r| r[:label] == wine_cellars(:alpha_reds).name } }
+    assert cellar_group, "expected a wine_cellar group matched by cellar name"
+  end
 end

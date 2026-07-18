@@ -108,7 +108,17 @@ class GlobalSearch
     Definition.new(model: SharedProject, module_key: "budget", icon: "euro",
       label: ->(r) { r.name },
       scope: ->(household, q) { SharedProject.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
-      url: ->(r) { shared_project_path(r) })
+      url: ->(r) { shared_project_path(r) }),
+
+    Definition.new(model: Bottle, module_key: "wine_cellar", icon: "wine",
+      label: ->(r) { r.name },
+      scope: ->(household, q) { Bottle.for_household(household).where("name ILIKE :q OR region ILIKE :q OR wine_type ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
+      url: ->(r) { edit_bottle_path(r) }),
+
+    Definition.new(model: WineCellar, module_key: "wine_cellar", icon: "wine",
+      label: ->(r) { r.name },
+      scope: ->(household, q) { WineCellar.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
+      url: ->(r) { wine_cellars_path(q: r.name) })
   ].freeze
 
   def self.call(query:, household:, user:)

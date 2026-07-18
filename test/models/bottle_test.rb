@@ -30,4 +30,16 @@ class BottleTest < ActiveSupport::TestCase
       cellar.destroy
     end
   end
+
+  test "can have a photo attached" do
+    bottle = bottles(:alpha_bordeaux)
+    bottle.photo.attach(io: File.open(Rails.root.join("test/fixtures/files/sample.png")), filename: "sample.png", content_type: "image/png")
+    assert bottle.photo.attached?
+  end
+
+  test "rejects a wine cellar from another household" do
+    bottle = households(:alpha).bottles.build(name: "X", wine_cellar: wine_cellars(:beta_cellar))
+    assert_not bottle.valid?
+    assert_includes bottle.errors[:wine_cellar], "is invalid"
+  end
 end

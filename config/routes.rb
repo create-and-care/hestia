@@ -205,7 +205,7 @@ Rails.application.routes.draw do
     resources :maintenance_entries, only: %i[create destroy], controller: "vehicle_maintenance_entries"
   end
   resources :wine_cellars, only: %i[index create destroy]
-  resources :bottles, only: %i[create update destroy] do
+  resources :bottles, only: %i[create edit update destroy] do
     member { patch :toggle_stock }
   end
   resource :waste, only: :show, controller: "waste"

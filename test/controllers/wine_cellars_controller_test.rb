@@ -43,4 +43,39 @@ class WineCellarsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "search matches region and wine type, and shows the bottle's cellar" do
+    get wine_cellars_path(q: "bordeaux")
+    assert_response :success
+    assert_includes @response.body, "Château Margaux"
+    assert_includes @response.body, wine_cellars(:alpha_reds).name
+
+    get wine_cellars_path(q: "rouge")
+    assert_includes @response.body, "Château Margaux"
+  end
+
+  test "create a cellar with a blank name does not persist and surfaces an error" do
+    assert_no_difference -> { WineCellar.count } do
+      post wine_cellars_path, params: { wine_cellar: { name: "" } }
+    end
+    assert_redirected_to wine_cellars_path
+    assert_equal "Name can't be blank", flash[:alert]
+  end
+
+  test "delete cellar button asks for confirmation" do
+    cellar = wine_cellars(:alpha_reds)
+    get wine_cellars_path
+    assert_select "form[action=?][data-turbo-confirm]", wine_cellar_path(cellar)
+  end
+
+  test "paginates cellars when there are more than the page size" do
+    households(:alpha).wine_cellars.destroy_all
+    (WineCellarsController::PER_PAGE + 1).times { |i| households(:alpha).wine_cellars.create!(name: "Cave #{'%02d' % i}") }
+
+    get wine_cellars_path
+    assert_select "#wine_cellars h2.font-medium", count: WineCellarsController::PER_PAGE
+
+    get wine_cellars_path(page: 2)
+    assert_select "#wine_cellars h2.font-medium", count: 1
+  end
 end

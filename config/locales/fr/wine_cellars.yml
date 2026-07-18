@@ -20,8 +20,11 @@ fr:
       bottle_name_placeholder: "Nom"
       vintage_placeholder: "Millésime"
       region_placeholder: "Région"
+      wine_type_label: "Type"
       type_blank: "Type"
       add: "Ajouter"
+    create:
+      created: "Cave ajoutée."
     destroy:
       deleted: "Cave supprimée."
   bottles:
@@ -29,5 +32,25 @@ fr:
       take_out: "Sortir"
       put_back: "Remettre"
       move: "Déplacer"
+      edit_aria: "Modifier « %{name} »"
+      delete_aria: "Supprimer « %{name} »"
+      delete_confirm: "Supprimer définitivement « %{name} » ?"
+      paired_indicator: "Accord recette"
+    edit:
+      title: "Modifier la bouteille"
+      name_label: "Nom"
+      vintage_label: "Millésime"
+      region_label: "Région"
+      wine_type_label: "Type"
+      type_blank: "Type"
+      wine_cellar_label: "Cave"
+      photo_label: "Photo"
+      paired_with: "Accordée avec"
+      save: "Enregistrer"
+      back_to_wine_cellar: "← Cave à vin"
+    create:
+      created: "Bouteille ajoutée."
+    update:
+      updated: "Bouteille mise à jour."
     destroy:
       deleted: "Bouteille supprimée."
