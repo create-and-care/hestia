@@ -3,7 +3,7 @@
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <header class="mb-4">
     <h1 class="text-2xl font-semibold"><%= @recipe.title %></h1>
-    <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-500">
+    <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-secondary">
       <% if @recipe.category.present? %><%= render(Ui::BadgeComponent.new(variant: :secondary)) { @recipe.category } %><% end %>
       <% @recipe.tags.each do |tag| %><%= render(Ui::BadgeComponent.new(variant: :secondary)) { "##{tag}" } %><% end %>
       <% if @recipe.prep_time_minutes %><span><%= t(".prep_time", minutes: @recipe.prep_time_minutes) %></span><% end %>
@@ -13,17 +13,33 @@
   </header>
 
   <%= render "shared/flash" %>
+  <% if flash[:shopping_list_id] %>
+    <p class="-mt-2 mb-4 text-sm">
+      <%= link_to t(".view_shopping_list_link"), shopping_list_path(flash[:shopping_list_id]), class: "underline" %>
+    </p>
+  <% end %>
+
+  <% if @recipe.photo.attached? %>
+    <div class="mb-6 max-w-md">
+      <%= render(Ui::AspectRatioComponent.new) do %>
+        <%= image_tag @recipe.photo.variant(resize_to_fill: [ 800, 450 ]), alt: "", class: "size-full object-cover" %>
+      <% end %>
+    </div>
+  <% end %>
 
   <div class="mb-6 flex flex-wrap gap-2">
     <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: cook_recipe_path(@recipe))) do %>
       <%= lucide_icon("chef-hat", css_class: "size-4") %> <%= t(".cook_mode_link") %>
     <% end %>
-    <%= button_to add_to_shopping_list_recipe_path(@recipe), method: :post,
-          class: "cursor-pointer inline-flex items-center gap-1.5 rounded-md border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50" do %><%= lucide_icon("shopping-cart", css_class: "size-4") %> <%= t('.add_to_shopping_list_link') %><% end %>
+    <%= form_with url: add_to_shopping_list_recipe_path(@recipe), method: :post, class: "inline" do %>
+      <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) do %>
+        <%= lucide_icon("shopping-cart", css_class: "size-4") %> <%= t(".add_to_shopping_list_link") %>
+      <% end %>
+    <% end %>
     <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_recipe_path(@recipe))) { t(".edit_link") } %>
-    <%= button_to t(".delete_link"), recipe_path(@recipe), method: :delete,
-          form: { data: { turbo_confirm: t(".delete_confirm") } },
-          class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" %>
+    <%= form_with url: recipe_path(@recipe), method: :delete, class: "inline", data: { turbo_confirm: t(".delete_confirm") } do %>
+      <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete_link") } %>
+    <% end %>
   </div>
 
   <%= render(Ui::CardComponent.new(class_name: "mb-6")) do %>
@@ -40,7 +56,7 @@
 
   <section class="mb-6">
     <h2 class="mb-2 font-medium"><%= t(".ingredients_heading") %></h2>
-    <ul class="list-inside list-disc space-y-1 text-gray-800">
+    <ul class="list-inside list-disc space-y-1 text-primary">
       <% @recipe.recipe_ingredients.each do |ingredient| %>
         <li><%= ingredient.name %></li>
       <% end %>
@@ -49,15 +65,51 @@
 
   <section class="mb-6">
     <h2 class="mb-2 font-medium"><%= t(".steps_heading") %></h2>
-    <ol class="list-inside list-decimal space-y-2 text-gray-800">
+    <ol class="list-inside list-decimal space-y-2 text-primary">
       <% @recipe.recipe_steps.each do |step| %>
         <li><%= step.content %></li>
       <% end %>
     </ol>
   </section>
 
+  <%= render(Ui::CardComponent.new(class_name: "mb-6")) do %>
+    <h2 class="mb-2 font-medium"><%= t(".notes_heading") %></h2>
+    <% if @recipe.notes.any? %>
+      <ul class="mb-3 space-y-1 text-sm">
+        <% @recipe.notes.each do |note| %>
+          <li><%= link_to note.title, edit_note_path(note), class: "underline" %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <% if @linkable_notes.any? %>
+      <%= form_with url: link_note_recipe_path(@recipe), method: :post, class: "flex flex-wrap items-end gap-2" do %>
+        <%= render Ui::NativeSelectComponent.new(name: "note_id",
+              options: @linkable_notes.map { |note| [ note.title, note.id ] },
+              html_options: { class: "!w-auto" }) %>
+        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".link_note_submit") } %>
+      <% end %>
+    <% end %>
+
+    <h2 class="mt-4 mb-2 font-medium"><%= t(".pairings_heading") %></h2>
+    <% if @recipe.bottles.any? %>
+      <ul class="mb-3 space-y-1 text-sm">
+        <% @recipe.bottles.each do |bottle| %>
+          <li><%= bottle.name %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <% if @linkable_bottles.any? %>
+      <%= form_with url: link_bottle_recipe_path(@recipe), method: :post, class: "flex flex-wrap items-end gap-2" do %>
+        <%= render Ui::NativeSelectComponent.new(name: "bottle_id",
+              options: @linkable_bottles.map { |bottle| [ bottle.name, bottle.id ] },
+              html_options: { class: "!w-auto" }) %>
+        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".link_bottle_submit") } %>
+      <% end %>
+    <% end %>
+  <% end %>
+
   <% if (source = safe_url(@recipe.source_url)) %>
-    <p class="mb-4 text-sm text-gray-500"><%= t(".source_label") %> <%= link_to source, source, class: "underline", target: "_blank", rel: "noopener" %></p>
+    <p class="mb-4 text-sm text-secondary"><%= t(".source_label") %> <%= link_to source, source, class: "underline", target: "_blank", rel: "noopener" %></p>
   <% end %>
 
   <p class="text-sm"><%= link_to t(".back_link"), recipes_path, class: "underline" %></p>

@@ -22,6 +22,6 @@ class PreparedDishesController < ApplicationController
 
   private
     def prepared_dish_params
-      params.require(:prepared_dish).permit(:name, :location, :expires_on)
+      params.require(:prepared_dish).permit(:name, :location, :expires_on, :photo)
     end
 end

@@ -1,14 +1,18 @@
 module Recipes
   # Exports a recipe's ingredients to a shopping list. In Phase 2, without
   # duplicate merging or unit conversion (a Hest.AI capability, Phase 3 — Spec §9.5).
+  #
+  # Ingredients are always entered/imported as a single free-text line (e.g.
+  # "200 g de farine") — RecipeIngredient#quantity/#unit are never populated
+  # by any code path today, so they're deliberately not passed through here;
+  # wiring them up for real means parsing that free text into structured
+  # fields first, which belongs with the Hest.AI extraction work above.
   class AddIngredientsToShoppingList
     def self.call(recipe:, shopping_list:)
       recipe.recipe_ingredients.map do |ingredient|
         Courses::AddItem.call(
           shopping_list: shopping_list,
           name: ingredient.name,
-          quantity: ingredient.quantity,
-          unit: ingredient.unit,
           recipe: recipe
         )
       end

@@ -14,5 +14,6 @@ class GiftListSharesController < ApplicationController
   private
     def set_list
       @list = Current.household.gift_lists.find(params[:gift_list_id])
+      raise ActiveRecord::RecordNotFound unless @list.visible_to?(Current.user)
     end
 end

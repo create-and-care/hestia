@@ -330,7 +330,13 @@
 @utility border-solid { border-color: var(--border-solid); }
 @utility border-destructive { border-color: var(--border-destructive); }
 @utility border-inverse { border-color: var(--border-inverse); }
+@utility border-button-primary { border-color: var(--button-bg-primary); }
+@utility bg-border-primary { background-color: var(--border-primary); }
 @utility ring-focus { box-shadow: 0 0 0 2px var(--focus-ring); }
+
+/* divide-{color} has no semantic-token equivalent yet — most lists still use
+   divide-gray-100, which never adapts to dark mode (raw Tailwind gray). */
+@utility divide-primary { & > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-primary); } }
 
 @utility shadow-border-xs { box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--shadow-border-color); }
 @utility shadow-border-sm { box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--shadow-border-color); }

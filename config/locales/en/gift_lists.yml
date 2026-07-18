@@ -1,5 +1,6 @@
 en:
   gift_lists:
+    not_creator: "Only this list's creator can change these settings."
     index:
       title: "Gifts"
       receive: "Receive"
@@ -12,18 +13,32 @@ en:
       recipient_placeholder: "Recipient (give)"
       create: "Create"
     show:
+      edit: "Edit"
       delete: "Delete"
       delete_confirm: "Delete this list?"
+      restricted_badge: "Restricted visibility"
       public_sharing: "Public sharing"
       share_link_description: "Link to share (viewable and reservable without an account):"
       disable_link: "Disable the link"
       enable_link: "Enable a sharing link"
       ideas: "Ideas"
+      no_ideas: "No ideas yet."
       link_label: "link"
       link_placeholder: "Link"
       idea_placeholder: "Idea"
+      comment_placeholder: "Comment (optional)"
+      delete_idea: "Delete this idea"
+      delete_idea_confirm: "Delete this idea?"
       add: "Add"
       back_to_gifts: "← Gifts"
+    edit:
+      title: "Settings for \"%{name}\""
+      theme_placeholder: "Occasion (Christmas, birthday…)"
+      restricted_label: "Restricted visibility (preparing a surprise)"
+      restricted_description: "Only you and the members checked below will see this list — the rest of the household, including the recipient, won't have access."
+      save: "Save"
+    update:
+      updated: "List updated."
     destroy:
       deleted: "List deleted."
     perspectives:
@@ -43,7 +58,10 @@ en:
       description: "Reserve an idea to avoid several people giving the same thing. No account needed."
       reserved: "Reserved"
       cancel_reservation: "Cancel the reservation"
+      cancel_reservation_confirm: "Cancel this reservation?"
       reserver_name_placeholder: "Your name (optional)"
       reserve: "Reserve"
       view_link: "view"
       empty: "This list is empty for now."
+    unreserve:
+      not_authorized: "Only the person who made this reservation can cancel it."

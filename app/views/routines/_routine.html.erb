@@ -1,9 +1,3 @@
-<%
-  # Reconstructs Ui::ButtonComponent's variant: :outline, size: :sm classes (see
-  # app/components/ui/button_component.rb) — button_to's own <button> can't be wrapped in
-  # the component without producing an invalid nested <button>.
-  complete_button_class = "inline-flex h-8 shrink-0 cursor-pointer items-center gap-1.5 rounded-md border border-primary bg-transparent px-3 text-sm font-medium text-primary transition-colors hover:bg-button-outline-hover focus-visible:ring-focus disabled:opacity-50"
-%>
 <%= tag.div id: dom_id(routine), class: "rounded-lg border #{routine.overdue? ? "border-destructive bg-red-50" : "border-primary"}" do %>
   <%= render(Ui::ItemComponent.new) do |item| %>
     <% item.with_title do %><%= "#{routine.emoji} " if routine.emoji.present? %><%= routine.name %><% end %>
@@ -16,8 +10,8 @@
     <% end %>
     <% item.with_trailing do %>
       <div class="flex items-center gap-2">
-        <%= button_to complete_routine_path(routine), method: :post,
-              class: complete_button_class do %><%= lucide_icon("check", css_class: "size-4") %> <%= t(".done") %><% end %>
+        <%= render(Ui::ButtonToComponent.new(complete_routine_path(routine), method: :post)) {
+              safe_join([ lucide_icon("check", css_class: "size-4"), t(".done") ], " ") } %>
         <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_routine_path(routine))) { lucide_icon("pencil", css_class: "size-4") } %>
         <%= button_to routine_path(routine), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
       </div>

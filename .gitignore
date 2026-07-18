@@ -44,3 +44,6 @@
 
 # SimpleCov output (Spec §18 — reliability).
 /coverage/
+# design-sync build output (see .design-sync/NOTES.md)
+/ds-bundle/
+/.design-sync/out/

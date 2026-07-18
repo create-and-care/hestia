@@ -1,0 +1,50 @@
+<% if local_assigns[:overdue_tasks] && overdue_tasks.any? %>
+  <div class="mb-4 rounded-lg border border-destructive/30 bg-destructive-subtle/40 p-3">
+    <h2 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-destructive"><%= lucide_icon("triangle-alert", css_class: "size-4") %> <%= t("calendar.show.overdue_tasks_heading") %></h2>
+    <ul class="space-y-1 text-sm">
+      <% overdue_tasks.each do |task| %>
+        <li>
+          <%= link_to edit_task_path(task), class: "hover:underline" do %>
+            <%= "#{task.emoji} " if task.emoji.present? %><%= task.title %>
+            <span class="text-destructive/70">— <%= t("calendar.show.overdue_since", date: l(task.due_on, format: :short)) %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if occurrences.any? %>
+  <div class="divide-y divide-primary rounded-lg border border-primary">
+    <% occurrences.each do |time, occurrence| %>
+      <% if birthday_occurrence?(occurrence) %>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_leading { "🎂" } %>
+          <% item.with_title { link_to occurrence.name, edit_contact_path(occurrence), class: "hover:underline" } %>
+          <% item.with_description { t(".birthday_description") } %>
+        <% end %>
+      <% else %>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_leading { tag.span "", class: "size-2 rounded-full #{event_color_class(occurrence.color)}" } %>
+          <% item.with_title { link_to occurrence.title, edit_calendar_event_path(occurrence, occurrence: time.iso8601), class: "hover:underline" } %>
+          <% item.with_description do %>
+            <%= time.strftime("%a %d/%m — %H:%M") %>
+            <% if occurrence.location.present? %>· <%= occurrence.location %><% end %>
+            <% if event_type_label(occurrence.event_type) %>· <%= event_type_label(occurrence.event_type) %><% end %>
+          <% end %>
+          <% if occurrence.participants.any? %>
+            <% item.with_trailing do %>
+              <div class="flex -space-x-1.5">
+                <% occurrence.participants.first(4).each do |participant| %>
+                  <%= render(Ui::AvatarComponent.new(alt: participant.name.presence || participant.email_address, size: :sm)) %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t("calendar.show.no_events") } } %>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_18_090057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -94,12 +94,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
     t.bigint "household_id", null: false
     t.boolean "in_stock", default: true, null: false
     t.string "name", null: false
+    t.bigint "recipe_id"
     t.string "region"
     t.datetime "updated_at", null: false
     t.integer "vintage"
     t.bigint "wine_cellar_id", null: false
     t.string "wine_type"
     t.index ["household_id"], name: "index_bottles_on_household_id"
+    t.index ["recipe_id"], name: "index_bottles_on_recipe_id"
     t.index ["wine_cellar_id"], name: "index_bottles_on_wine_cellar_id"
   end
 
@@ -129,6 +131,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
     t.string "color", default: "blue", null: false
     t.datetime "created_at", null: false
     t.datetime "ends_at"
+    t.string "event_type"
+    t.date "excluded_occurrences", default: [], null: false, array: true
     t.bigint "external_calendar_connection_id"
     t.string "external_uid"
     t.string "frequency", default: "none", null: false
@@ -346,11 +350,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
   create_table "gift_lists", force: :cascade do |t|
     t.bigint "contact_id"
     t.datetime "created_at", null: false
+    t.bigint "created_by_id"
     t.bigint "household_id", null: false
     t.string "name", null: false
     t.string "perspective", default: "receive", null: false
+    t.boolean "restricted", default: false, null: false
+    t.string "theme"
     t.datetime "updated_at", null: false
+    t.bigint "visible_to_ids", default: [], null: false, array: true
     t.index ["contact_id"], name: "index_gift_lists_on_contact_id"
+    t.index ["created_by_id"], name: "index_gift_lists_on_created_by_id"
     t.index ["household_id"], name: "index_gift_lists_on_household_id"
   end
 
@@ -358,8 +367,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
     t.datetime "created_at", null: false
     t.bigint "gift_idea_id", null: false
     t.string "reserver_name"
+    t.string "token"
     t.datetime "updated_at", null: false
     t.index ["gift_idea_id"], name: "index_gift_reservations_on_gift_idea_id"
+    t.index ["token"], name: "index_gift_reservations_on_token", unique: true
   end
 
   create_table "households", force: :cascade do |t|
@@ -434,16 +445,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
   create_table "notes", force: :cascade do |t|
     t.boolean "archived", default: false, null: false
     t.bigint "author_id"
+    t.string "color", default: "default", null: false
     t.text "content"
     t.datetime "created_at", null: false
+    t.bigint "document_id"
     t.boolean "favorite", default: false, null: false
     t.bigint "household_id", null: false
+    t.bigint "recipe_id"
     t.string "title", null: false
     t.bigint "trip_id"
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_notes_on_author_id"
+    t.index ["document_id"], name: "index_notes_on_document_id"
     t.index ["household_id", "archived"], name: "index_notes_on_household_id_and_archived"
     t.index ["household_id"], name: "index_notes_on_household_id"
+    t.index ["recipe_id"], name: "index_notes_on_recipe_id"
     t.index ["trip_id"], name: "index_notes_on_trip_id"
   end
 
@@ -600,6 +616,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
   create_table "recipe_catalog_entries", force: :cascade do |t|
     t.integer "cook_time_minutes"
     t.datetime "created_at", null: false
+    t.string "image_url"
     t.jsonb "ingredients", default: [], null: false
     t.datetime "last_synced_at"
     t.integer "prep_time_minutes"
@@ -822,6 +839,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "calendar_view", default: "month", null: false
     t.datetime "created_at", null: false
     t.string "email_address", null: false
     t.string "locale", default: "en", null: false
@@ -929,6 +947,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
   add_foreign_key "api_tokens", "users"
   add_foreign_key "baby_profiles", "households"
   add_foreign_key "bottles", "households"
+  add_foreign_key "bottles", "recipes"
   add_foreign_key "bottles", "wine_cellars"
   add_foreign_key "budget_categories", "households"
   add_foreign_key "budget_entries", "budget_categories"
@@ -963,6 +982,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
   add_foreign_key "gift_list_shares", "gift_lists"
   add_foreign_key "gift_lists", "contacts"
   add_foreign_key "gift_lists", "households"
+  add_foreign_key "gift_lists", "users", column: "created_by_id"
   add_foreign_key "gift_reservations", "gift_ideas"
   add_foreign_key "loyalty_cards", "households"
   add_foreign_key "loyalty_cards", "loyalty_brands"
@@ -972,7 +992,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_223131) do
   add_foreign_key "memberships", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users", column: "author_id"
+  add_foreign_key "notes", "documents"
   add_foreign_key "notes", "households"
+  add_foreign_key "notes", "recipes"
   add_foreign_key "notes", "trips"
   add_foreign_key "notes", "users", column: "author_id"
   add_foreign_key "notification_preferences", "users"

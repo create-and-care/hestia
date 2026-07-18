@@ -23,7 +23,8 @@ class CalendarEvent < ApplicationRecord
   def recurring? = frequency.in?(%w[weekly monthly])
 
   # Occurrences (start times) within [from, to]. Expands weekly/monthly recurring
-  # series up to the optional recurrence end.
+  # series up to the optional recurrence end, skipping any date detached into
+  # its own standalone event (excluded_occurrences — see #detach_occurrence).
   def occurrences_between(from, to)
     return [] if starts_at.blank?
     return (from..to).cover?(starts_at) ? [ starts_at ] : [] unless recurring?
@@ -34,7 +35,7 @@ class CalendarEvent < ApplicationRecord
     guard = 0
 
     while cursor <= ceiling && guard < 1_000
-      occurrences << cursor if cursor >= from
+      occurrences << cursor if cursor >= from && !excluded_occurrences.include?(cursor.to_date)
       cursor = advance_from(cursor)
       guard += 1
     end

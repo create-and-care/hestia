@@ -1,5 +1,5 @@
 <%= render Ui::ButtonGroupComponent.new do %>
-  <%= render Ui::ButtonComponent.new(variant: :outline) { "Day" } %>
-  <%= render Ui::ButtonComponent.new(variant: :outline) { "Week" } %>
-  <%= render Ui::ButtonComponent.new(variant: :outline) { "Month" } %>
+  <%= render(Ui::ButtonComponent.new(variant: :outline)) { "Day" } %>
+  <%= render(Ui::ButtonComponent.new(variant: :outline)) { "Week" } %>
+  <%= render(Ui::ButtonComponent.new(variant: :outline)) { "Month" } %>
 <% end %>

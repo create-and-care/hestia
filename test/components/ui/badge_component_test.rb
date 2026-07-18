@@ -31,6 +31,7 @@ class Ui::BadgeComponentTest < ViewComponent::TestCase
       outline: "bg-transparent",
       success: /bg-success/,
       warning: /bg-warning/,
+      urgent: /bg-orange/,
       destructive: /bg-destructive/
     }.fetch(variant)
   end

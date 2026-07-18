@@ -2,11 +2,22 @@ fr:
   tasks:
     index:
       title: "Tâches"
+      search_label: "Rechercher une tâche"
       search_placeholder: "Rechercher…"
+      no_results: "Aucune tâche ne correspond à cette recherche."
+      sort_due_date: "Par échéance"
+      sort_assignee: "Par responsable"
+      sort_submit: "Trier"
+      sort_hint: "Le tri réorganise une fois les tâches non terminées de chaque colonne — vous pourrez toujours les glisser-déposer ensuite."
       categories_label: "Catégories :"
       new_category_placeholder: "Nouvelle catégorie"
       add_category_submit: "Ajouter"
+      delete_category_confirm: "Supprimer cette catégorie ? Les tâches associées deviendront « Sans catégorie »."
+      delete_category_aria: "Supprimer la catégorie %{name}"
       uncategorized: "Sans catégorie"
+      empty_column: "Aucune tâche."
+    sort:
+      notice: "Tâches triées."
     form:
       title_label: "Tâche"
       title_placeholder: "Sortir les poubelles…"
@@ -17,10 +28,13 @@ fr:
       submit: "Ajouter"
     task:
       move_title: "Déplacer"
+      move_up_aria: "Monter"
+      move_down_aria: "Descendre"
       reopen_aria: "Rouvrir"
       complete_aria: "Terminer"
       edit_aria: "Modifier"
       delete_aria: "Supprimer"
+      delete_confirm: "Supprimer cette tâche ?"
     edit:
       title: "Modifier la tâche"
       heading: "Modifier la tâche"
@@ -36,6 +50,8 @@ fr:
       remind_at_label: "Quand"
       recipient_label: "Destinataire"
       add_reminder_submit: "Ajouter"
+      delete_reminder_confirm: "Supprimer ce rappel ?"
+      delete_reminder_aria: "Supprimer ce rappel"
       back_link: "← Tâches"
     create:
       alert: "Impossible de créer la tâche."

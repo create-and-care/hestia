@@ -11,6 +11,7 @@ module Api
       private
         def set_gift_list
           @gift_list = Current.household.gift_lists.find(params[:gift_list_id])
+          head :not_found and return unless @gift_list.visible_to?(Current.user)
         end
 
         def idea_params

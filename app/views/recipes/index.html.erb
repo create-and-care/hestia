@@ -7,9 +7,13 @@
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("book-open", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex items-center gap-2">
-      <%= form_with url: recipes_path, method: :get do |form| %>
+      <%= form_with url: recipes_path, method: :get, class: "flex flex-wrap items-center gap-2" do |form| %>
         <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
               html_options: { id: "recipes_q" }) %>
+        <%= render Ui::NativeSelectComponent.new(name: "category",
+              options: [ [ t(".category_blank"), "" ] ] + @categories.map { |category| [ category, category ] },
+              selected: @category, html_options: { id: "recipes_category" }) %>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".filter_submit") } %>
       <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: new_import_recipes_path)) { t(".import_link") } %>
       <%= render(Ui::ButtonComponent.new(size: :sm, href: new_recipe_path)) { t(".new_link") } %>
@@ -18,21 +22,28 @@
 
   <div class="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm">
     <div class="flex gap-2">
-      <%= render(Ui::ButtonComponent.new(size: :sm, href: recipes_path(q: @query, view: @view_mode))) { t(".mine_tab") } %>
+      <%= render(Ui::ButtonComponent.new(size: :sm, href: recipes_path(q: @query, category: @category, view: @view_mode))) { t(".mine_tab") } %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: recipe_catalog_path)) { t(".discover_tab") } %>
     </div>
-    <%= render "recipes/view_mode_toggle", path_helper: ->(view) { recipes_path(q: @query, view: view) } %>
+    <%= render "recipes/view_mode_toggle", path_helper: ->(view) { recipes_path(q: @query, category: @category, view: view) } %>
   </div>
 
   <%= render "shared/flash" %>
 
-  <div id="recipes" class="<%= @view_mode == "list" ? "divide-y divide-gray-100 rounded-lg border border-gray-200" : "grid gap-3 sm:grid-cols-2" %>">
+  <div id="recipes" class="<%= @view_mode == "list" ? "divide-y divide-primary rounded-lg border border-primary" : "grid gap-3 sm:grid-cols-2" %>">
     <%= render partial: "recipe", collection: @recipes, locals: { view_mode: @view_mode } %>
   </div>
   <% if @recipes.empty? %>
     <%= render(Ui::EmptyComponent.new) do |empty| %>
       <% empty.with_description { @query.present? ? t(".empty_search") : t(".empty") } %>
     <% end %>
+  <% end %>
+
+  <% if @total_pages > 1 %>
+    <div class="mt-6 flex justify-center">
+      <%= render Ui::PaginationComponent.new(current: @page, total: @total_pages,
+            path: ->(page) { recipes_path(q: @query, category: @category, view: @view_mode, page: page) }) %>
+    </div>
   <% end %>
 
 </div>

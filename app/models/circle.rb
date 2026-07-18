@@ -17,6 +17,12 @@ class Circle < ApplicationRecord
     circle_memberships.exists?(user: user, role: "admin")
   end
 
+  # True when `user` is an admin and the only one — used to block leaving
+  # (or self-demoting) a circle into a state with no one left to manage it.
+  def only_admin?(user)
+    admin?(user) && circle_memberships.where(role: "admin").count == 1
+  end
+
   def self.generate_invite_code
     loop do
       code = Array.new(INVITE_CODE_LENGTH) { INVITE_CODE_ALPHABET.sample }.join

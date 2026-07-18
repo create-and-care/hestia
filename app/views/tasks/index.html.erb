@@ -6,11 +6,21 @@
 
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("square-check", css_class: "size-6") %> <%= t(".title") %></h1>
-    <%= form_with url: tasks_path, method: :get do |form| %>
-      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
-            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
-    <% end %>
+    <div class="flex flex-wrap items-center gap-2">
+      <%= form_with url: tasks_path, method: :get do |form| %>
+        <%= render(Ui::LabelComponent.new(for_id: "tasks_q", html_options: { class: "sr-only" })) { t(".search_label") } %>
+        <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"), id: "tasks_q",
+              class: "rounded-md border border-primary bg-container px-3 py-1.5 text-sm text-primary placeholder:text-subdued" %>
+      <% end %>
+      <%= form_with url: sort_tasks_path, method: :post, class: "flex items-center gap-1" do %>
+        <%= render Ui::NativeSelectComponent.new(name: "by",
+              options: [ [ t(".sort_due_date"), "due_date" ], [ t(".sort_assignee"), "assignee" ] ],
+              html_options: { class: "!h-8 !text-xs" }) %>
+        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".sort_submit") } %>
+      <% end %>
+    </div>
   </header>
+  <p class="mb-4 -mt-3 text-xs text-subdued"><%= t(".sort_hint") %></p>
 
   <%= render "shared/flash" %>
 
@@ -21,8 +31,10 @@
     <% @categories.each do |category| %>
       <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
         <%= category.name %>
-        <%= button_to "×", task_category_path(category), method: :delete,
-              class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
+        <%= form_with url: task_category_path(category), method: :delete, class: "inline",
+              data: { turbo_confirm: t(".delete_category_confirm") } do %>
+          <button type="submit" class="cursor-pointer text-subdued hover:text-destructive" aria-label="<%= t(".delete_category_aria", name: category.name) %>">×</button>
+        <% end %>
       <% end %>
     <% end %>
     <%= form_with url: task_categories_path, method: :post, class: "inline-flex gap-1" do %>
@@ -32,18 +44,26 @@
     <% end %>
   </section>
 
-  <div class="flex gap-4 overflow-x-auto pb-4">
-    <% @columns.each do |(category, tasks)| %>
-      <div class="w-72 shrink-0">
-        <%= render(Ui::CardComponent.new) do %>
-          <h2 class="mb-2 text-sm font-semibold text-secondary"><%= category&.name || t(".uncategorized") %></h2>
-          <div id="<%= category ? "tasks_category_#{category.id}" : "tasks_uncategorized" %>" class="min-h-4 space-y-2"
-               data-controller="sortable" data-sortable-url-value="<%= reorder_tasks_path %>">
-            <%= render tasks %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
+  <% if @query.present? && @tasks.empty? %>
+    <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_results") } } %>
+  <% else %>
+    <div class="flex gap-4 overflow-x-auto pb-4">
+      <% @columns.each do |(category, tasks)| %>
+        <div class="w-72 shrink-0">
+          <%= render(Ui::CardComponent.new) do %>
+            <h2 class="mb-2 text-sm font-semibold text-secondary"><%= category&.name || t(".uncategorized") %></h2>
+            <div id="<%= category ? "tasks_category_#{category.id}" : "tasks_uncategorized" %>" class="min-h-4 space-y-2"
+                 data-controller="sortable" data-sortable-url-value="<%= reorder_tasks_path %>">
+              <% if tasks.any? %>
+                <%= render tasks %>
+              <% else %>
+                <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty_column") } } %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 
 </div>

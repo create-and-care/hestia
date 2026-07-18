@@ -3,24 +3,41 @@
 <div class="mx-auto mt-10 max-w-lg px-4">
   <div class="mb-6 flex items-center justify-between">
     <h1 class="text-2xl font-semibold"><%= t(".heading") %></h1>
-    <%= button_to t(".delete"), calendar_event_path(@event), method: :delete,
-          form: { data: { turbo_confirm: t(".delete_confirm") } },
-          class: "cursor-pointer rounded-md border border-gray-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50" %>
+    <% if @event.recurring? && @occurrence %>
+      <div class="flex items-center gap-2">
+        <%= form_with url: calendar_event_path(@event), method: :delete,
+              data: { turbo_confirm: t(".delete_confirm") } do %>
+          <input type="hidden" name="occurrence" value="<%= @occurrence.iso8601 %>">
+          <input type="hidden" name="scope" value="occurrence">
+          <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".delete_occurrence") } %>
+        <% end %>
+        <%= form_with url: calendar_event_path(@event), method: :delete,
+              data: { turbo_confirm: t(".delete_series_confirm") } do %>
+          <input type="hidden" name="scope" value="series">
+          <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete_series") } %>
+        <% end %>
+      </div>
+    <% else %>
+      <%= form_with url: calendar_event_path(@event), method: :delete,
+            data: { turbo_confirm: t(".delete_confirm") } do %>
+        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete") } %>
+      <% end %>
+    <% end %>
   </div>
-  <%= render "form", event: @event, url: calendar_event_path(@event) %>
+  <%= render "form", event: @event, url: calendar_event_path(@event), occurrence: @occurrence %>
 
-  <section class="mt-8 border-t border-gray-100 pt-6">
+  <section class="mt-8 border-t border-primary pt-6">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("bell", css_class: "size-5") %> <%= t(".reminders_heading") %></h2>
-    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
       <% @event.event_reminders.each do |reminder| %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_title do %>
             <%= EventReminder::MINUTES_BEFORE_OPTIONS.find { |_, v| v == reminder.minutes_before }&.first || t(".minutes_before_fallback", minutes: reminder.minutes_before) %>
-            <span class="text-gray-400">· <%= reminder.user.name.presence || reminder.user.email_address %></span>
+            <span class="text-subdued">· <%= reminder.user.name.presence || reminder.user.email_address %></span>
           <% end %>
           <% item.with_trailing do %>
             <%= button_to calendar_event_event_reminder_path(@event, reminder), method: :delete,
-                  class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+                  class: "cursor-pointer text-subdued hover:text-destructive", aria: { label: t(".delete_reminder_aria") } do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
           <% end %>
         <% end %>
       <% end %>

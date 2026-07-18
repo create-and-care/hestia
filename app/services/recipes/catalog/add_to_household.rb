@@ -29,6 +29,7 @@ module Recipes
           RecipeStep.new(content: content, position: index)
         end
         recipe.save!
+        Recipes::AttachPhotoFromUrl.call(recipe: recipe, image_url: @entry.image_url)
         recipe
       end
     end

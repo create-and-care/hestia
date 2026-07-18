@@ -1,25 +1,39 @@
-<%
-  # Reconstructs Ui::ButtonComponent's variant: :outline, size: :sm classes (see
-  # app/components/ui/button_component.rb) — button_to's own <button> can't be wrapped in
-  # the component without producing an invalid nested <button>, so the class recipe is
-  # applied directly to keep all four action pills visually consistent.
-  action_pill_class = "inline-flex items-center rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-focus bg-transparent text-primary border border-primary hover:bg-button-outline-hover h-8 px-3 text-sm gap-1.5"
-%>
+<% filter_params = { q: query.presence, archived: (archived ? 1 : nil) } %>
 <%= tag.div id: dom_id(note) do %>
-  <%= render(Ui::CardComponent.new) do %>
+  <%= render(Ui::CardComponent.new(class_name: note_card_color_class(note.color))) do %>
     <div class="flex flex-col">
       <div class="mb-1 flex items-start justify-between gap-2">
-        <h2 class="flex items-center gap-1.5 font-medium"><%= lucide_icon("star", css_class: "size-4 fill-current text-amber-400") if note.favorite %><%= note.title %></h2>
-        <%= link_to edit_note_path(note), class: "shrink-0 text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+        <h2 class="flex items-center gap-1.5 font-medium">
+          <% if note.favorite %>
+            <span class="sr-only"><%= t(".favorite_indicator") %></span>
+            <%= lucide_icon("star", css_class: "size-4 fill-current text-primary") %>
+          <% end %>
+          <%= note.title %>
+        </h2>
+        <%= link_to edit_note_path(note), class: "shrink-0 text-subdued hover:text-primary",
+              aria: { label: t(".edit_aria", title: note.title) } do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
       </div>
       <% if note.content.present? %>
-        <p class="mb-3 line-clamp-4 whitespace-pre-line text-sm text-secondary"><%= note.content %></p>
+        <div class="mb-3 line-clamp-4 space-y-1 text-sm text-secondary"><%= format_note_content(note.content) %></div>
+      <% end %>
+      <% if note.recipe || note.document %>
+        <div class="mb-3 flex flex-wrap gap-3 text-xs">
+          <% if note.recipe %>
+            <%= link_to recipe_path(note.recipe), class: "inline-flex items-center gap-1 text-link hover:underline" do %><%= lucide_icon("book-open", css_class: "size-3.5") %> <%= note.recipe.title %><% end %>
+          <% end %>
+          <% if note.document %>
+            <%= link_to document_path(note.document), class: "inline-flex items-center gap-1 text-link hover:underline" do %><%= lucide_icon("paperclip", css_class: "size-3.5") %> <%= note.document.name %><% end %>
+          <% end %>
+        </div>
       <% end %>
       <div class="mt-auto flex flex-wrap gap-2">
-        <%= button_to (note.favorite ? t(".unfavorite") : t(".favorite")), toggle_favorite_note_path(note), method: :patch, class: action_pill_class %>
-        <%= button_to (note.archived ? t(".unarchive") : t(".archive")), toggle_archive_note_path(note), method: :patch, class: action_pill_class %>
-        <%= button_to t(".promote_to_task"), promote_to_task_note_path(note), method: :post, class: action_pill_class %>
-        <%= button_to t(".delete"), note_path(note), method: :delete, class: action_pill_class %>
+        <%= render(Ui::ButtonToComponent.new(toggle_favorite_note_path(note, **filter_params), method: :patch)) {
+              note.favorite ? t(".unfavorite") : t(".favorite") } %>
+        <%= render(Ui::ButtonToComponent.new(toggle_archive_note_path(note, **filter_params), method: :patch)) {
+              note.archived ? t(".unarchive") : t(".archive") } %>
+        <%= render(Ui::ButtonToComponent.new(promote_to_task_note_path(note, **filter_params), method: :post)) { t(".promote_to_task") } %>
+        <%= render(Ui::ButtonToComponent.new(note_path(note, **filter_params), method: :delete,
+              html_options: { form: { data: { turbo_confirm: t(".delete_confirm") } } })) { t(".delete") } %>
       </div>
     </div>
   <% end %>

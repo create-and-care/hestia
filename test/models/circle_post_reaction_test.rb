@@ -7,6 +7,12 @@ class CirclePostReactionTest < ActiveSupport::TestCase
     assert_includes reaction.errors[:emoji], "can't be blank"
   end
 
+  test "rejects an emoji outside the allowed list" do
+    reaction = CirclePostReaction.new(circle_post: circle_posts(:family_post), user: users(:two), emoji: "🐍")
+    assert_not reaction.valid?
+    assert_includes reaction.errors[:emoji], "is not included in the list"
+  end
+
   test "belongs to a circle_post and a user" do
     reaction = CirclePostReaction.new(emoji: "❤️")
     assert_not reaction.valid?

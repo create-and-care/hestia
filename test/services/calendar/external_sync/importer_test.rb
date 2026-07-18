@@ -37,6 +37,19 @@ module Calendar
           Importer.call(@connection, [ { uid: "evt1", title: "Broken", starts_at: nil } ])
         end
       end
+
+      test "assigns a distinct color so imported events are visually recognizable" do
+        Importer.call(@connection, [ { uid: "evt1", title: "Standup", starts_at: 1.day.from_now, all_day: false } ])
+        assert_equal "gray", @connection.calendar_events.sole.color
+      end
+
+      test "does not override a color the user manually set on a re-import" do
+        Importer.call(@connection, [ { uid: "evt1", title: "Standup", starts_at: 1.day.from_now, all_day: false } ])
+        @connection.calendar_events.sole.update!(color: "purple")
+
+        Importer.call(@connection, [ { uid: "evt1", title: "Standup (updated)", starts_at: 1.day.from_now, all_day: false } ])
+        assert_equal "purple", @connection.calendar_events.sole.color
+      end
     end
   end
 end

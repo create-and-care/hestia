@@ -116,6 +116,7 @@ class HouseholdsController < ApplicationController
       ActiveRecord::Base.transaction do
         @household.save!
         @household.memberships.create!(user: Current.user, role: :admin)
+        @household.shopping_lists.create!(name: t("shopping_lists.default_list_name"))
       end
       switch_household(@household)
       redirect_to root_path, notice: t(".created", name: @household.name)

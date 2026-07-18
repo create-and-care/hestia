@@ -1,16 +1,25 @@
 <% list_mode = local_assigns[:view_mode] == "list" %>
 <%= link_to recipe_path(recipe), id: dom_id(recipe),
-      class: list_mode ? "flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50" : "block rounded-lg border border-gray-200 p-4 hover:border-gray-400" do %>
-  <h2 class="font-medium"><%= recipe.title %></h2>
-  <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500 <%= "mt-0 shrink-0" if list_mode %>">
-    <% if recipe.category.present? %>
-      <%= render(Ui::BadgeComponent.new(variant: :secondary)) { recipe.category } %>
+      class: list_mode ? "flex items-center gap-3 px-4 py-3 hover:bg-surface-hover" : "block rounded-lg border border-primary p-4 hover:border-secondary" do %>
+  <% if !list_mode && recipe.photo.attached? %>
+    <%= render(Ui::AspectRatioComponent.new) do %>
+      <%= image_tag recipe.photo.variant(resize_to_fill: [ 400, 225 ]), alt: "", class: "size-full object-cover" %>
     <% end %>
-    <% if recipe.total_time_minutes %>
-      <span class="inline-flex items-center gap-1"><%= lucide_icon("clock", css_class: "size-3.5") %> <%= t(".total_time", minutes: recipe.total_time_minutes) %></span>
-    <% end %>
-    <% if recipe.servings %>
-      <span class="inline-flex items-center gap-1"><%= lucide_icon("utensils", css_class: "size-3.5") %> <%= recipe.servings %></span>
-    <% end %>
+  <% elsif list_mode && recipe.photo.attached? %>
+    <%= image_tag recipe.photo.variant(resize_to_fill: [ 64, 64 ]), alt: "", class: "size-12 shrink-0 rounded-md object-cover" %>
+  <% end %>
+  <div class="<%= "mt-3" unless list_mode %>">
+    <h2 class="font-medium"><%= recipe.title %></h2>
+    <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-secondary">
+      <% if recipe.category.present? %>
+        <%= render(Ui::BadgeComponent.new(variant: :secondary)) { recipe.category } %>
+      <% end %>
+      <% if recipe.total_time_minutes %>
+        <span class="inline-flex items-center gap-1"><%= lucide_icon("clock", css_class: "size-3.5") %> <%= t(".total_time", minutes: recipe.total_time_minutes) %></span>
+      <% end %>
+      <% if recipe.servings %>
+        <span class="inline-flex items-center gap-1"><%= lucide_icon("utensils", css_class: "size-3.5") %> <%= recipe.servings %></span>
+      <% end %>
+    </div>
   </div>
 <% end %>

@@ -1,0 +1,66 @@
+<% content_for :title, t(".title", name: @circle.name) %>
+
+<div class="mx-auto mt-10 max-w-xl px-4">
+  <div class="mb-4"><%= module_breadcrumb(:circles, [ @circle.name, circle_path(@circle) ], module_path: circles_path) %></div>
+
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title", name: @circle.name) %></h1>
+
+  <%= render "shared/flash" %>
+
+  <%= render(Ui::CardComponent.new(class_name: "mb-6")) do |card| %>
+    <% card.with_title { t(".details") } %>
+    <%= form_with model: @circle, url: circle_path(@circle), method: :patch, class: "space-y-3" do |form| %>
+      <%= render Ui::InputComponent.new(name: "circle[name]", value: @circle.name,
+            html_options: { id: "circle_name", required: true }) %>
+      <%= render Ui::InputComponent.new(name: "circle[theme]", value: @circle.theme, placeholder: t("circles.index.theme_placeholder"),
+            html_options: { id: "circle_theme" }) %>
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".save") } %>
+    <% end %>
+  <% end %>
+
+  <%= render(Ui::CardComponent.new(class_name: "mb-6")) do |card| %>
+    <% card.with_title { t(".invite_code") } %>
+    <p class="mb-2 text-sm text-secondary"><%= t(".invite_code_description") %></p>
+    <div class="flex items-center gap-2">
+      <code id="circle_invite_code" class="rounded bg-surface-inset px-3 py-1 font-semibold tracking-widest"><%= @circle.invite_code %></code>
+      <button type="button" class="cursor-pointer text-sm text-secondary underline" data-controller="clipboard" data-clipboard-text-value="<%= @circle.invite_code %>" data-action="clipboard#copy"><%= t("circles.copy_code") %></button>
+    </div>
+    <%= button_to t(".regenerate"), regenerate_invite_code_circle_path(@circle), method: :post,
+          form: { data: { turbo_confirm: t(".regenerate_confirm") }, class: "mt-2" },
+          class: "cursor-pointer text-sm text-secondary underline" %>
+  <% end %>
+
+  <%= render(Ui::CardComponent.new(class_name: "mb-6")) do |card| %>
+    <% card.with_title { t(".members") } %>
+    <div class="divide-y divide-gray-100 dark:divide-gray-800">
+      <% @circle.circle_memberships.includes(:user).order(:role).each do |membership| %>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_leading { render(Ui::AvatarComponent.new(alt: membership.user.name.presence || membership.user.email_address)) } %>
+          <% item.with_title { membership.user.name.presence || membership.user.email_address } %>
+          <% item.with_description { t("circles.roles.#{membership.role}") } %>
+          <% if membership.user != Current.user %>
+            <% item.with_trailing do %>
+              <div class="flex items-center gap-2">
+                <%= form_with url: circle_member_path(@circle, membership), method: :patch, class: "inline" do %>
+                  <input type="hidden" name="role" value="<%= membership.role == "admin" ? "member" : "admin" %>">
+                  <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :sm)) { membership.role == "admin" ? t(".demote") : t(".promote") } %>
+                <% end %>
+                <%= button_to t(".remove_member"), circle_member_path(@circle, membership), method: :delete,
+                      form: { data: { turbo_confirm: t(".remove_member_confirm") } },
+                      class: "cursor-pointer text-sm text-red-600 underline" %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= render(Ui::CardComponent.new(class_name: "mb-6 border-red-200 dark:border-red-900")) do |card| %>
+    <% card.with_title { t(".danger_zone") } %>
+    <%= button_to t(".delete"), circle_path(@circle), method: :delete,
+          form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-sm text-red-600 underline" %>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t("circles.back_to_circles"), circle_path(@circle), class: "underline" %></p>
+</div>

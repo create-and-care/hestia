@@ -2,11 +2,13 @@ class EventRemindersController < ApplicationController
   before_action :set_event
 
   def create
-    @event.event_reminders.create(
-      minutes_before: reminder_params[:minutes_before],
-      user: recipient
-    )
-    redirect_to edit_calendar_event_path(@event)
+    reminder = @event.event_reminders.new(minutes_before: reminder_params[:minutes_before], user: recipient)
+
+    if reminder.save
+      redirect_to edit_calendar_event_path(@event), notice: t(".notice")
+    else
+      redirect_to edit_calendar_event_path(@event), alert: reminder.errors.full_messages.to_sentence
+    end
   end
 
   def destroy

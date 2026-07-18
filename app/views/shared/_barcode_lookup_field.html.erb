@@ -1,0 +1,9 @@
+<div class="w-36">
+  <%= render Ui::LabelComponent.new { t("shared.barcode_lookup_field.label") } %>
+  <div class="mt-1 flex gap-1">
+    <%= render Ui::InputComponent.new(placeholder: t("shared.barcode_lookup_field.placeholder"),
+          html_options: { autocomplete: "off", data: { barcode_lookup_target: "barcode" } }) %>
+    <%= render(Ui::ButtonComponent.new(type: "button", variant: :outline, size: :icon,
+          html_options: { data: { action: "click->barcode-lookup#lookup" } })) { lucide_icon("search", css_class: "size-4") } %>
+  </div>
+</div>

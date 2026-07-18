@@ -17,6 +17,16 @@ module Recipes
         assert_equal entry.steps, recipe.recipe_steps.order(:position).map(&:content)
         assert_nil recipe.source_url
       end
+
+      test "attaches the catalog entry's cached image when present" do
+        entry = recipe_catalog_entries(:carbonara)
+        entry.update!(image_url: "https://example.com/carbonara.jpg")
+        stub_request(:get, "https://example.com/carbonara.jpg").to_return(status: 200, body: File.binread(Rails.root.join("test/fixtures/files/sample.png")))
+
+        recipe = Recipes::Catalog::AddToHousehold.call(entry: entry, household: households(:alpha))
+
+        assert recipe.photo.attached?
+      end
     end
   end
 end

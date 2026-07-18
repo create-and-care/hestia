@@ -3,6 +3,8 @@ fr:
     index:
       title: "Recettes"
       search_placeholder: "Rechercher…"
+      category_blank: "Toutes catégories"
+      filter_submit: "Filtrer"
       import_link: "Importer"
       new_link: "Nouvelle"
       empty: "Aucune recette."
@@ -10,10 +12,13 @@ fr:
       mine_tab: "Mes recettes"
       discover_tab: "Découvrir"
       view_mode_label: "Mode d'affichage"
+      view_mode_card: "Affichage en cartes"
+      view_mode_list: "Affichage en liste"
     recipe:
       total_time: "%{minutes} min"
     cook:
       title: "%{title} — cuisine"
+      exit_link: "Quitter le mode cuisine"
       ingredients_heading: "Ingrédients"
       steps_heading: "Étapes"
       back_link: "← Retour à la recette"
@@ -42,9 +47,14 @@ fr:
       delete_confirm: "Supprimer cette recette ?"
       ingredients_heading: "Ingrédients"
       steps_heading: "Étapes"
+      notes_heading: "Notes liées"
+      pairings_heading: "Accords vins"
+      link_note_submit: "Lier une note"
+      link_bottle_submit: "Lier une bouteille"
       source_label: "Source :"
       plan_meal_heading: "Planifier ce repas"
       plan_meal_submit: "Ajouter au menu"
+      view_shopping_list_link: "Voir la liste de courses"
       back_link: "← Toutes les recettes"
     form:
       title_label: "Titre"
@@ -57,6 +67,7 @@ fr:
       ingredients_label: "Ingrédients (un par ligne)"
       steps_label: "Étapes (une par ligne)"
       source_label: "Source (URL)"
+      photo_label: "Photo (optionnel)"
       submit: "Enregistrer"
     create:
       created: "Recette créée."
@@ -67,6 +78,10 @@ fr:
     add_to_shopping_list:
       notice: "Ingrédients ajoutés à la liste de courses."
       already_notice: "Les ingrédients de cette recette sont déjà dans la liste de courses."
+    link_note:
+      notice: "Note liée à la recette."
+    link_bottle:
+      notice: "Bouteille liée à la recette."
     import:
       notice: "Recette importée."
       alert: "Impossible d'importer cette recette (page injoignable ou sans microdonnées)."

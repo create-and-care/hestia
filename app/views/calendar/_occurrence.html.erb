@@ -1,0 +1,10 @@
+<% if birthday_occurrence?(occurrence) %>
+  <%= link_to edit_contact_path(occurrence), class: "mb-0.5 flex items-center gap-1 truncate rounded px-1 py-0.5 text-xs bg-destructive-subtle text-destructive" do %>
+    🎂 <%= occurrence.name %>
+  <% end %>
+<% else %>
+  <%= link_to edit_calendar_event_path(occurrence, occurrence: time.iso8601),
+        class: "mb-0.5 block truncate rounded px-1 py-0.5 text-xs #{event_color_class(occurrence.color)}" do %>
+    <% unless occurrence.all_day %><span class="font-medium"><%= time.strftime("%H:%M") %></span> <% end %><%= occurrence.title %>
+  <% end %>
+<% end %>

@@ -26,6 +26,30 @@
           <%= render(Ui::TextareaComponent.new(name: "note[content]", rows: 8, invalid: @note.errors[:content].any?,
                 html_options: { id: "note_content" })) { @note.content } %>
         <% end %>
+        <% field.with_description { t(".content_hint") } %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "note_color")) do |field| %>
+        <% field.with_label { t(".color_label") } %>
+        <% field.with_control { render "notes/color_picker", note: @note } %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "note_recipe_id")) do |field| %>
+        <% field.with_label { t(".recipe_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "note[recipe_id]",
+                options: [ [ t(".none_option"), "" ] ] + @recipes.map { |recipe| [ recipe.title, recipe.id ] },
+                selected: @note.recipe_id, html_options: { id: "note_recipe_id" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "note_document_id")) do |field| %>
+        <% field.with_label { t(".document_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "note[document_id]",
+                options: [ [ t(".none_option"), "" ] ] + @documents.map { |document| [ document.name, document.id ] },
+                selected: @note.document_id, html_options: { id: "note_document_id" }) %>
+        <% end %>
       <% end %>
 
       <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".save") } %>

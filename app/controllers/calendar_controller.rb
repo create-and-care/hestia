@@ -1,8 +1,12 @@
 class CalendarController < ApplicationController
-  # Month view (default) or list view, with filter by member. Recurring event
-  # occurrences are expanded server-side over the displayed range.
+  VIEWS = %w[month week day list].freeze
+
+  # Month, week, day, or list view, with filter by member. Recurring event
+  # occurrences are expanded server-side over the displayed range. The
+  # chosen view is remembered per user (Spec §9.2) so returning to the
+  # calendar defaults to whatever was last used, not always month.
   def show
-    @view = params[:view] == "list" ? "list" : "month"
+    @view = resolve_view
     @member_id = params[:member_id].presence
     @members = Current.household.users.order(:name)
     @events = filtered_events
@@ -12,25 +16,63 @@ class CalendarController < ApplicationController
       format.pdf do
         month = parse_month
         range = month.beginning_of_month.beginning_of_day..month.end_of_month.end_of_day
-        send_data Pdf::CalendarMonthDocument.new(month, occurrences_in(range)).render,
+        # Birthdays are Contact, not CalendarEvent, records — the PDF layout
+        # assumes the CalendarEvent interface, so only real events go in it.
+        event_only_occurrences = occurrences_in(range).reject { |_time, occurrence| occurrence.is_a?(Contact) }
+        send_data Pdf::CalendarMonthDocument.new(month, event_only_occurrences).render,
           filename: "#{t('.pdf_filename_prefix')}-#{month.strftime('%Y-%m')}.pdf", type: "application/pdf", disposition: "inline"
       end
     end
   end
 
   private
+    def resolve_view
+      requested = params[:view].presence
+      return Current.user.calendar_view.presence || "month" unless requested && VIEWS.include?(requested)
+
+      Current.user.update_column(:calendar_view, requested) if requested != Current.user.calendar_view
+      requested
+    end
+
     def load_html_view
-      if @view == "list"
-        range = Time.current.beginning_of_day..(Time.current + 60.days).end_of_day
-        @occurrences = occurrences_in(range)
-      else
-        @month = parse_month
-        @grid_start = @month.beginning_of_week
-        @grid_end = @month.end_of_month.end_of_week
-        range = @grid_start.beginning_of_day..@grid_end.end_of_day
-        @by_day = occurrences_in(range).group_by { |time, _event| time.to_date }
-        @holidays = holidays_by_date(@grid_start.to_date, @grid_end.to_date)
+      case @view
+      when "list" then load_list_view
+      when "week" then load_week_view
+      when "day" then load_day_view
+      else load_month_view
       end
+    end
+
+    def load_list_view
+      range = Time.current.beginning_of_day..(Time.current + 60.days).end_of_day
+      @occurrences = occurrences_in(range)
+      @overdue_tasks = overdue_tasks
+    end
+
+    def load_month_view
+      @month = parse_month
+      @grid_start = @month.beginning_of_week
+      @grid_end = @month.end_of_month.end_of_week
+      range = @grid_start.beginning_of_day..@grid_end.end_of_day
+      @by_day = occurrences_in(range).group_by { |time, _event| time.to_date }
+      @holidays = holidays_by_date(@grid_start.to_date, @grid_end.to_date)
+    end
+
+    def load_week_view
+      @date = parse_date
+      @grid_start = @date.beginning_of_week
+      @grid_end = @date.end_of_week
+      range = @grid_start.beginning_of_day..@grid_end.end_of_day
+      @by_day = occurrences_in(range).group_by { |time, _event| time.to_date }
+      @holidays = holidays_by_date(@grid_start.to_date, @grid_end.to_date)
+    end
+
+    def load_day_view
+      @date = parse_date
+      range = @date.beginning_of_day..@date.end_of_day
+      @occurrences = occurrences_in(range)
+      @holidays = holidays_by_date(@date, @date)
+      @overdue_tasks = overdue_tasks if @date == Date.current
     end
 
     # France/Belgium/Switzerland public holidays (Spec §9.2, §16), optionally enabled per
@@ -43,11 +85,22 @@ class CalendarController < ApplicationController
     end
 
     def filtered_events
-      scope = Current.household.calendar_events
+      scope = Current.household.calendar_events.includes(:participants)
       if @member_id
         scope = scope.joins(:event_participants).where(event_participants: { user_id: @member_id }).distinct
       end
       scope.to_a
+    end
+
+    # Birthdays (Contact#born_on) surfaced alongside real events (Spec §9.2
+    # interconnection with Birthdays) — represented as [date, contact] pairs
+    # so the view can tell them apart from [time, CalendarEvent] pairs.
+    def birthday_occurrences_in(range)
+      return [] if @member_id
+
+      Current.household.contacts.where.not(born_on: nil).flat_map do |contact|
+        contact.birthdays_between(range.begin.to_date, range.end.to_date).map { |date| [ date.to_time, contact ] }
+      end
     end
 
     def parse_month
@@ -56,8 +109,20 @@ class CalendarController < ApplicationController
       Date.current.beginning_of_month
     end
 
+    def parse_date
+      Date.parse(params[:date])
+    rescue ArgumentError, TypeError
+      Date.current
+    end
+
     def occurrences_in(range)
-      @events.flat_map { |event| event.occurrences_between(range.begin, range.end).map { |time| [ time, event ] } }
-        .sort_by(&:first)
+      event_occurrences = @events.flat_map { |event| event.occurrences_between(range.begin, range.end).map { |time| [ time, event ] } }
+      (event_occurrences + birthday_occurrences_in(range)).sort_by(&:first)
+    end
+
+    # Tasks/Calendar interconnection (Spec §9.3): surface overdue tasks
+    # alongside events instead of them only ever showing on the Tasks board.
+    def overdue_tasks
+      Current.household.tasks.general.where(done: false).where("due_on < ?", Date.current).order(:due_on)
     end
 end

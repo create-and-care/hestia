@@ -2,20 +2,39 @@
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <h1 class="mb-2 text-2xl font-semibold"><%= t(".heading") %></h1>
-  <p class="mb-6 text-sm text-gray-500"><%= t(".description") %></p>
+  <p class="mb-6 text-sm text-secondary"><%= t(".description") %></p>
 
   <%= render "shared/flash" %>
 
+  <%= form_with url: products_path, method: :get, class: "mb-4" do %>
+    <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
+          html_options: { id: "products_q", class: "max-w-sm" }) %>
+  <% end %>
+
   <% if @products.any? %>
-    <div class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="divide-y divide-primary rounded-lg border border-primary">
       <% @products.each do |product| %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_title { product.name } %>
           <% item.with_description { product.brand } if product.brand.present? %>
-          <% item.with_trailing { render(Ui::BadgeComponent.new(variant: :secondary)) { rayon_label(product.rayon) } } %>
+          <% item.with_trailing do %>
+            <div class="flex items-center gap-2">
+              <%= render(Ui::BadgeComponent.new(variant: :secondary)) { rayon_label(product.rayon) } %>
+              <% if @shopping_lists.any? %>
+                <%= form_with url: add_to_list_product_path(product), method: :post, class: "flex items-center gap-1" do %>
+                  <%= render Ui::NativeSelectComponent.new(name: "shopping_list_id",
+                        options: @shopping_lists.map { |l| [ l.name, l.id ] },
+                        html_options: { class: "!h-8 !w-32 !text-xs", "aria-label": t(".list_select_aria") }) %>
+                  <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".add_to_list") } %>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
       <% end %>
     </div>
+  <% elsif @query.present? %>
+    <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_results") } } %>
   <% else %>
     <%= render(Ui::EmptyComponent.new) do |empty| %>
       <% empty.with_description { t(".empty") } %>

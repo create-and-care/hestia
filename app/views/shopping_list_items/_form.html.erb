@@ -1,20 +1,22 @@
 <%= tag.div id: "new_shopping_list_item" do %>
   <%= form_with model: item, url: shopping_list_items_path(shopping_list),
-        data: { controller: "barcode-lookup", barcode_lookup_url_value: lookup_products_path,
+        data: { controller: "barcode-lookup shopping-catalog", barcode_lookup_url_value: lookup_products_path,
                 barcode_lookup_searching_text_value: t(".barcode_searching"),
                 barcode_lookup_not_found_text_value: t(".barcode_not_found"),
                 barcode_lookup_unavailable_text_value: t(".barcode_unavailable"),
-                barcode_lookup_found_text_value: t(".barcode_found_prefix") } do |form| %>
+                barcode_lookup_found_text_value: t(".barcode_found_prefix"),
+                action: "combobox:select->shopping-catalog#pick" } do |form| %>
     <div class="flex flex-wrap items-end gap-2 rounded-lg border border-primary p-3">
-      <div class="w-36">
-        <%= render Ui::LabelComponent.new { t(".barcode_label") } %>
-        <div class="mt-1 flex gap-1">
-          <%= render Ui::InputComponent.new(placeholder: t(".barcode_placeholder"),
-                html_options: { autocomplete: "off", data: { barcode_lookup_target: "barcode" } }) %>
-          <%= render(Ui::ButtonComponent.new(type: "button", variant: :outline, size: :icon,
-                html_options: { data: { action: "click->barcode-lookup#lookup" } })) { lucide_icon("search", css_class: "size-4") } %>
+      <%= render "shared/barcode_lookup_field" %>
+      <% if catalog_products.any? %>
+        <div class="w-48">
+          <%= render Ui::LabelComponent.new { t(".catalog_label") } %>
+          <div class="mt-1">
+            <%= render Ui::ComboboxComponent.new(name: "_catalog_picker", placeholder: t(".catalog_placeholder"),
+                  options: catalog_products.map { |p| [ [ p.name, p.brand.presence, "· #{rayon_label(p.rayon)}" ].compact.join(" "), "#{p.id}|#{p.rayon}|#{p.name}" ] }) %>
+          </div>
         </div>
-      </div>
+      <% end %>
       <div class="min-w-40 flex-1">
         <%= render(Ui::FieldComponent.new(id: "shopping_list_item_name")) do |field| %>
           <% field.with_label { t(".name_label") } %>
@@ -22,7 +24,7 @@
             <%= render Ui::InputComponent.new(name: "shopping_list_item[name]", value: item.name,
                   placeholder: t(".name_placeholder"),
                   html_options: { id: "shopping_list_item_name", required: true, autofocus: true, autocomplete: "off",
-                                  data: { barcode_lookup_target: "name" } }) %>
+                                  data: { barcode_lookup_target: "name", shopping_catalog_target: "name" } }) %>
           <% end %>
         <% end %>
       </div>
@@ -51,7 +53,7 @@
           <% field.with_control do %>
             <%= render Ui::NativeSelectComponent.new(name: "shopping_list_item[rayon]",
                   options: [ [ t(".rayon_blank"), "" ] ] + rayon_select_options,
-                  selected: item.rayon, html_options: { id: "shopping_list_item_rayon", data: { barcode_lookup_target: "rayon" } }) %>
+                  selected: item.rayon, html_options: { id: "shopping_list_item_rayon", data: { barcode_lookup_target: "rayon", shopping_catalog_target: "rayon" } }) %>
           <% end %>
         <% end %>
       </div>

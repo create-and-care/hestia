@@ -6,4 +6,8 @@ module ShoppingListItemsHelper
   def rayon_select_options
     ShoppingListItem::RAYONS.map { |rayon| [ rayon_label(rayon), rayon ] }
   end
+
+  def catalog_products
+    Current.household.products.order(:name)
+  end
 end

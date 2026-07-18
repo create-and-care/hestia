@@ -2,7 +2,7 @@ module TasksHelper
   # Due-date status → Ui::BadgeComponent variant (label comes from the tasks.due locale scope).
   DUE_BADGE_VARIANTS = {
     overdue: :destructive,
-    urgent:  :warning,
+    urgent:  :urgent,
     soon:    :warning,
     later:   :secondary,
     none:    nil

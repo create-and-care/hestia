@@ -17,11 +17,20 @@ class PublicGiftListsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to public_gift_list_path(gift_list_shares(:alpha_share).token)
   end
 
-  test "cancel a reservation" do
+  test "the reserving browser can cancel its own reservation" do
     idea = gift_ideas(:alpha_book)
-    idea.gift_reservations.create!(reserver_name: "X")
+    post reserve_public_gift_path(gift_list_shares(:alpha_share).token, idea), params: { reserver_name: "X" }
+
     delete unreserve_public_gift_path(gift_list_shares(:alpha_share).token, idea)
     assert_equal 0, idea.gift_reservations.count
+  end
+
+  test "a different browser cannot cancel someone else's reservation" do
+    idea = gift_ideas(:alpha_book)
+    idea.gift_reservations.create!(reserver_name: "X") # no reservation cookie set for this session
+
+    delete unreserve_public_gift_path(gift_list_shares(:alpha_share).token, idea)
+    assert_equal 1, idea.gift_reservations.count
   end
 
   test "an unknown token returns not found" do

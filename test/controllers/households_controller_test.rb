@@ -20,6 +20,14 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_equal household.id, user.sessions.last.reload.active_household_id
   end
 
+  test "create provisions a default shopping list so the household isn't empty" do
+    sign_in_as(users(:one))
+    post households_path, params: { household: { name: "Nouveau Foyer" } }
+
+    household = Household.find_by!(name: "Nouveau Foyer")
+    assert_equal 1, household.shopping_lists.count
+  end
+
   test "create with a blank name re-renders" do
     sign_in_as(users(:one))
 

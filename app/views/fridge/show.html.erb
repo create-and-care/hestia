@@ -7,8 +7,9 @@
   <header class="mb-6 flex items-center justify-between">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("refrigerator", css_class: "size-6") %> <%= t(".title") %></h1>
     <%= form_with url: fridge_path, method: :get do |form| %>
-      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
-            class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+      <%= render(Ui::LabelComponent.new(for_id: "fridge_q", html_options: { class: "sr-only" })) { t(".search_label") } %>
+      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"), id: "fridge_q",
+            class: "rounded-md border border-primary bg-container px-3 py-1.5 text-sm text-primary placeholder:text-subdued" %>
     <% end %>
   </header>
 
@@ -29,12 +30,31 @@
     <h2 class="mb-3 font-medium"><%= t(".foods_heading") %></h2>
     <%= render "fridge_items/form", fridge_item: @fridge_item %>
 
-    <div id="fridge_items" class="mt-4 space-y-2">
-      <%= render @fridge_items %>
+    <div class="mt-4">
+      <%= render(Ui::TabsComponent.new(default: "all")) do |tabs| %>
+        <% tabs.with_tab(label: t(".all_locations"), value: "all") do %>
+          <div id="fridge_items" class="mt-3 space-y-2">
+            <% if @fridge_items.any? %>
+              <%= render @fridge_items %>
+            <% else %>
+              <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { @query.present? ? t(".no_items_for_search") : t(".no_items") } } %>
+            <% end %>
+          </div>
+        <% end %>
+        <% FridgeItem::LOCATIONS.each do |location| %>
+          <% items_for_location = @fridge_items.select { |item| item.location == location } %>
+          <% tabs.with_tab(label: location_label(location), value: location) do %>
+            <div class="mt-3 space-y-2">
+              <% if items_for_location.any? %>
+                <%= render items_for_location %>
+              <% else %>
+                <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_items") } } %>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
     </div>
-    <% if @fridge_items.empty? %>
-      <p class="mt-4 text-sm text-secondary"><%= @query.present? ? t(".no_items_for_search") : t(".no_items") %></p>
-    <% end %>
   </section>
 
   <section class="mb-8">
@@ -42,11 +62,12 @@
     <%= render "prepared_dishes/form", prepared_dish: @prepared_dish %>
 
     <div id="prepared_dishes" class="mt-4 space-y-2">
-      <%= render @prepared_dishes %>
+      <% if @prepared_dishes.any? %>
+        <%= render @prepared_dishes %>
+      <% else %>
+        <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_dishes") } } %>
+      <% end %>
     </div>
-    <% if @prepared_dishes.empty? %>
-      <p class="mt-4 text-sm text-secondary"><%= t(".no_dishes") %></p>
-    <% end %>
   </section>
 
 </div>

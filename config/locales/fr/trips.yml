@@ -10,6 +10,7 @@ fr:
     show:
       delete_trip: "Supprimer le voyage"
       delete_trip_confirm: "Supprimer ce voyage et toutes ses données ? Action irréversible."
+      delete_shopping_list_confirm: "Supprimer cette liste de courses ?"
       shopping_lists: "Courses du voyage"
       shopping_list_placeholder: "Liste (ex. « chalet »)"
       add: "Ajouter"

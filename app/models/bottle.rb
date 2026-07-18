@@ -4,6 +4,7 @@ class Bottle < ApplicationRecord
   WINE_TYPES = %w[rouge blanc rose petillant autre].freeze
 
   belongs_to :wine_cellar
+  belongs_to :recipe, optional: true
 
   validates :name, presence: true
 

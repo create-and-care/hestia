@@ -4,7 +4,10 @@ en:
       title: "Calendar"
       agenda_heading: "Agenda"
       month_view: "Month"
+      week_view: "Week"
+      day_view: "Day"
       list_view: "List"
+      week_heading: "Week of %{start} to %{end}"
       all_members: "All members"
       filter_submit: "Filter"
       holidays_none: "Public holidays: none"
@@ -13,9 +16,15 @@ en:
       sync_external: "External sync"
       new_event: "New event"
       prev_month: "← Previous month"
+      prev_week: "← Previous week"
+      prev_day: "← Previous day"
       today: "Today"
       next_month: "Next month →"
+      next_week: "Next week →"
+      next_day: "Next day →"
       no_events: "No upcoming events."
+      overdue_tasks_heading: "Overdue tasks"
+      overdue_since: "was due %{date}"
       pdf_filename_prefix: "calendar"
       pdf:
         title: "Calendar — %{month} %{year}"
@@ -29,6 +38,11 @@ en:
           - "Thursday"
           - "Friday"
           - "Saturday"
+    grid:
+      grid_aria: "Calendar"
+      new_event_on: "Create an event on %{date}"
+    occurrences_list:
+      birthday_description: "Birthday"
     frequencies:
       none: "None"
       weekly: "Weekly"
@@ -62,17 +76,26 @@ en:
       ends_label: "End"
       location_label: "Location"
       color_label: "Color"
+      event_type_label: "Type (optional)"
+      event_type_placeholder: "Appointment, sports, school…"
       recurrence_legend: "Recurrence"
       frequency_label: "Frequency"
       every_label: "Every"
       until_label: "Until"
       participants_label: "Participants"
+      scope_legend: "Scope of the change"
+      scope_occurrence: "This occurrence only"
+      scope_series: "The whole series"
       submit: "Save"
     edit:
       title: "Edit event"
       heading: "Edit event"
       delete: "Delete"
       delete_confirm: "Delete this event?"
+      delete_occurrence: "Delete this occurrence"
+      delete_series: "Delete the whole series"
+      delete_series_confirm: "Delete the entire recurring series?"
+      delete_reminder_aria: "Delete this reminder"
       reminders_heading: "Reminders"
       minutes_before_fallback: "%{minutes} min before"
       delay_label: "Delay"
@@ -90,5 +113,7 @@ en:
     destroy:
       notice: "Event deleted."
   event_reminders:
+    create:
+      notice: "Reminder added."
     destroy:
       notice: "Reminder deleted."

@@ -1,0 +1,5 @@
+en:
+  shared:
+    barcode_lookup_field:
+      label: "Barcode"
+      placeholder: "Scan…"

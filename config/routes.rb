@@ -106,12 +106,18 @@ Rails.application.routes.draw do
       member do
         patch :toggle
         post :move_to_fridge
+        patch :move_up
+        patch :move_down
       end
-      collection { patch :reorder }
+      collection do
+        patch :reorder
+        delete :clear_checked
+      end
     end
   end
   resources :products, only: :index do
     collection { get :lookup }
+    member { post :add_to_list }
   end
 
   # Fridge module (Phase 2.a).
@@ -133,6 +139,8 @@ Rails.application.routes.draw do
     member do
       get :cook
       post :add_to_shopping_list
+      post :link_note
+      post :link_bottle
     end
     collection do
       get :new_import
@@ -142,8 +150,15 @@ Rails.application.routes.draw do
 
   # Tasks module (Phase 2.a).
   resources :tasks, only: %i[index create edit update destroy] do
-    member { patch :toggle }
-    collection { patch :reorder }
+    member do
+      patch :toggle
+      patch :move_up
+      patch :move_down
+    end
+    collection do
+      patch :reorder
+      post :sort
+    end
     resources :task_reminders, only: %i[create destroy]
   end
   resources :task_categories, only: %i[create destroy]
@@ -220,7 +235,7 @@ Rails.application.routes.draw do
   resources :document_folders, only: %i[create destroy]
 
   # Modules with an architecture deviation (Phase 2.d).
-  resources :gift_lists, only: %i[index show create destroy] do
+  resources :gift_lists, only: %i[index show create edit update destroy] do
     resource :share, only: %i[create destroy], controller: "gift_list_shares"
     resources :gift_ideas, only: %i[create update destroy]
   end
@@ -230,8 +245,10 @@ Rails.application.routes.draw do
   delete "g/:token/reserve/:idea_id", to: "public_gift_lists#unreserve", as: :unreserve_public_gift
 
   # Circles (independent of the household, Spec §5, point 1).
-  resources :circles, only: %i[index show create] do
+  resources :circles, only: %i[index show create edit update destroy] do
     resources :posts, only: %i[create destroy], controller: "circle_posts"
+    resources :members, only: %i[update destroy], controller: "circle_memberships"
+    post "regenerate_invite_code", on: :member
   end
   resource :circle_membership, only: %i[new create]
   post   "circle_posts/:id/react", to: "circle_post_reactions#create",  as: :react_circle_post

@@ -1,5 +1,6 @@
 en:
   shopping_lists:
+    default_list_name: "Groceries"
     index:
       title: "Shopping"
       heading: "Shopping lists"
@@ -21,6 +22,9 @@ en:
       export_pdf: "Export PDF"
       delete: "Delete list"
       delete_confirm: "Delete this list and all its items?"
+      clear_checked: "Clear checked items"
+      clear_checked_confirm: "Remove every checked item from this list?"
+      no_items: "No items yet."
       back_link: "← All lists"
     create:
       created: "List created."
@@ -41,8 +45,8 @@ en:
       barcode_not_found: "Product not found — enter manually."
       barcode_unavailable: "Search unavailable — enter manually."
       barcode_found_prefix: "Found:"
-      barcode_label: "Barcode"
-      barcode_placeholder: "Scan…"
+      catalog_label: "From the catalog"
+      catalog_placeholder: "Choose a product…"
       name_label: "Item"
       name_placeholder: "Milk, apples…"
       quantity_label: "Qty"
@@ -53,9 +57,12 @@ en:
       submit: "Add"
     shopping_list_item:
       move_title: "Move"
+      move_up_aria: "Move up"
+      move_down_aria: "Move down"
       uncheck_aria: "Uncheck"
       check_aria: "Check"
       move_to_fridge_title: "Store in the fridge"
+      expires_on_title: "Expiration date (optional)"
       delete_aria: "Delete"
     create:
       alert: "Couldn't add the item."
@@ -66,5 +73,11 @@ en:
       title: "Product catalog"
       heading: "Product catalog"
       description: "Household reference, filled automatically as you shop."
+      search_placeholder: "Search by product or brand…"
       empty: "The catalog will fill up as you add items."
+      no_results: "No product matches this search."
+      list_select_aria: "Target list"
+      add_to_list: "Add"
       back_link: "← Shopping lists"
+    add_to_list:
+      added: "\"%{name}\" added to \"%{list}\"."

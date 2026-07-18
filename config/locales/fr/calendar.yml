@@ -4,7 +4,10 @@ fr:
       title: "Calendrier"
       agenda_heading: "Agenda"
       month_view: "Mois"
+      week_view: "Semaine"
+      day_view: "Jour"
       list_view: "Liste"
+      week_heading: "Semaine du %{start} au %{end}"
       all_members: "Tous les membres"
       filter_submit: "Filtrer"
       holidays_none: "Jours fériés : aucun"
@@ -13,9 +16,15 @@ fr:
       sync_external: "Sync externe"
       new_event: "Nouvel événement"
       prev_month: "← Mois précédent"
+      prev_week: "← Semaine précédente"
+      prev_day: "← Veille"
       today: "Aujourd'hui"
       next_month: "Mois suivant →"
+      next_week: "Semaine suivante →"
+      next_day: "Lendemain →"
       no_events: "Aucun événement à venir."
+      overdue_tasks_heading: "Tâches en retard"
+      overdue_since: "échéance dépassée le %{date}"
       pdf_filename_prefix: "calendrier"
       pdf:
         title: "Calendrier — %{month} %{year}"
@@ -29,6 +38,11 @@ fr:
           - "Jeudi"
           - "Vendredi"
           - "Samedi"
+    grid:
+      grid_aria: "Calendrier"
+      new_event_on: "Créer un événement le %{date}"
+    occurrences_list:
+      birthday_description: "Anniversaire"
     frequencies:
       none: "Aucune"
       weekly: "Hebdomadaire"
@@ -62,17 +76,26 @@ fr:
       ends_label: "Fin"
       location_label: "Lieu"
       color_label: "Couleur"
+      event_type_label: "Type (optionnel)"
+      event_type_placeholder: "Rendez-vous, sport, école…"
       recurrence_legend: "Récurrence"
       frequency_label: "Fréquence"
       every_label: "Tous les"
       until_label: "Jusqu'au"
       participants_label: "Participants"
+      scope_legend: "Portée de la modification"
+      scope_occurrence: "Cette occurrence uniquement"
+      scope_series: "Toute la série"
       submit: "Enregistrer"
     edit:
       title: "Modifier l'événement"
       heading: "Modifier l'événement"
       delete: "Supprimer"
       delete_confirm: "Supprimer cet événement ?"
+      delete_occurrence: "Supprimer cette occurrence"
+      delete_series: "Supprimer toute la série"
+      delete_series_confirm: "Supprimer toute la série d'événements récurrents ?"
+      delete_reminder_aria: "Supprimer ce rappel"
       reminders_heading: "Rappels"
       minutes_before_fallback: "%{minutes} min avant"
       delay_label: "Délai"
@@ -90,5 +113,7 @@ fr:
     destroy:
       notice: "Événement supprimé."
   event_reminders:
+    create:
+      notice: "Rappel ajouté."
     destroy:
       notice: "Rappel supprimé."
