@@ -14,7 +14,10 @@ class FridgeControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "turbo-cable-stream-source"
     assert_includes @response.body, "Yaourts"
-    assert_not_includes @response.body, "Lait" # beta's item
+    # Not a plain text check: alpha's own product catalog (shared with
+    # Shopping) happens to also contain a product named "Lait", same as
+    # beta's fridge item — so isolation is verified by DOM id instead.
+    assert_select "##{dom_id(fridge_items(:beta_milk))}", false
   end
 
   test "search filters the items" do

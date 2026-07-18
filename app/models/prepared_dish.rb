@@ -2,6 +2,8 @@ class PreparedDish < ApplicationRecord
   include HouseholdScoped
   include Perishable
 
+  has_one_attached :photo
+
   validates :name, presence: true
   validates :location, inclusion: { in: FridgeItem::LOCATIONS }
 

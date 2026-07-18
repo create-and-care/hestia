@@ -1,27 +1,30 @@
 <%= tag.div id: "new_fridge_item" do %>
   <%= form_with model: fridge_item, url: fridge_items_path,
-        data: { controller: "barcode-lookup", barcode_lookup_url_value: lookup_products_path,
+        data: { controller: "barcode-lookup shopping-catalog", barcode_lookup_url_value: lookup_products_path,
                 barcode_lookup_searching_text_value: t(".barcode_searching"),
                 barcode_lookup_not_found_text_value: t(".barcode_not_found"),
                 barcode_lookup_unavailable_text_value: t(".barcode_unavailable"),
-                barcode_lookup_found_text_value: t(".barcode_found_prefix") } do |form| %>
+                barcode_lookup_found_text_value: t(".barcode_found_prefix"),
+                action: "combobox:select->shopping-catalog#pick" } do |form| %>
     <div class="flex flex-wrap items-end gap-2 rounded-lg border border-primary p-3">
-      <div class="w-36">
-        <%= render Ui::LabelComponent.new { t(".barcode_label") } %>
-        <div class="mt-1 flex gap-1">
-          <%= render Ui::InputComponent.new(placeholder: t(".barcode_placeholder"),
-                html_options: { autocomplete: "off", data: { barcode_lookup_target: "barcode" } }) %>
-          <%= render(Ui::ButtonComponent.new(type: "button", variant: :outline, size: :icon,
-                html_options: { data: { action: "click->barcode-lookup#lookup" } })) { lucide_icon("search", css_class: "size-4") } %>
+      <%= render "shared/barcode_lookup_field" %>
+      <% if catalog_products.any? %>
+        <div class="w-48">
+          <%= render Ui::LabelComponent.new { t(".catalog_label") } %>
+          <div class="mt-1">
+            <%= render Ui::ComboboxComponent.new(name: "_catalog_picker", placeholder: t(".catalog_placeholder"),
+                  options: catalog_products.map { |p| [ [ p.name, p.brand.presence ].compact.join(" · "), "#{p.id}||#{p.name}" ] }) %>
+          </div>
         </div>
-      </div>
+      <% end %>
       <div class="min-w-40 flex-1">
         <%= render(Ui::FieldComponent.new(id: "fridge_item_name")) do |field| %>
           <% field.with_label { t(".name_label") } %>
           <% field.with_control do %>
             <%= render Ui::InputComponent.new(name: "fridge_item[name]", value: fridge_item.name,
                   placeholder: t(".name_placeholder"),
-                  html_options: { id: "fridge_item_name", required: true, autocomplete: "off", data: { barcode_lookup_target: "name" } }) %>
+                  html_options: { id: "fridge_item_name", required: true, autocomplete: "off",
+                                  data: { barcode_lookup_target: "name", shopping_catalog_target: "name" } }) %>
           <% end %>
         <% end %>
       </div>

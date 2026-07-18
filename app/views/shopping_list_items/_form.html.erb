@@ -7,15 +7,7 @@
                 barcode_lookup_found_text_value: t(".barcode_found_prefix"),
                 action: "combobox:select->shopping-catalog#pick" } do |form| %>
     <div class="flex flex-wrap items-end gap-2 rounded-lg border border-primary p-3">
-      <div class="w-36">
-        <%= render Ui::LabelComponent.new { t(".barcode_label") } %>
-        <div class="mt-1 flex gap-1">
-          <%= render Ui::InputComponent.new(placeholder: t(".barcode_placeholder"),
-                html_options: { autocomplete: "off", data: { barcode_lookup_target: "barcode" } }) %>
-          <%= render(Ui::ButtonComponent.new(type: "button", variant: :outline, size: :icon,
-                html_options: { data: { action: "click->barcode-lookup#lookup" } })) { lucide_icon("search", css_class: "size-4") } %>
-        </div>
-      </div>
+      <%= render "shared/barcode_lookup_field" %>
       <% if catalog_products.any? %>
         <div class="w-48">
           <%= render Ui::LabelComponent.new { t(".catalog_label") } %>

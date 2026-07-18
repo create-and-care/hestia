@@ -45,8 +45,6 @@ en:
       barcode_not_found: "Product not found — enter manually."
       barcode_unavailable: "Search unavailable — enter manually."
       barcode_found_prefix: "Found:"
-      barcode_label: "Barcode"
-      barcode_placeholder: "Scan…"
       catalog_label: "From the catalog"
       catalog_placeholder: "Choose a product…"
       name_label: "Item"

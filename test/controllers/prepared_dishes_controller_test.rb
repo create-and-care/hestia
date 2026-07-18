@@ -12,6 +12,14 @@ class PreparedDishesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "create attaches an optional photo" do
+    photo = fixture_file_upload("sample.png", "image/png")
+    post prepared_dishes_path,
+      params: { prepared_dish: { name: "Quiche", location: "refrigerateur", photo: photo } },
+      as: :turbo_stream
+    assert households(:alpha).prepared_dishes.find_by!(name: "Quiche").photo.attached?
+  end
+
   test "destroy" do
     dish = prepared_dishes(:alpha_lasagna)
     delete prepared_dish_path(dish), as: :turbo_stream

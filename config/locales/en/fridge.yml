@@ -2,7 +2,9 @@ en:
   fridge:
     show:
       title: "Fridge"
+      search_label: "Search food items"
       search_placeholder: "Search…"
+      all_locations: "All"
       suggestions_heading: "Recipes you can make with your fridge"
       foods_heading: "Food"
       no_items: "No food items."
@@ -25,8 +27,8 @@ en:
       barcode_not_found: "Product not found — enter manually."
       barcode_unavailable: "Search unavailable — enter manually."
       barcode_found_prefix: "Found:"
-      barcode_label: "Barcode"
-      barcode_placeholder: "Scan…"
+      catalog_label: "From the catalog"
+      catalog_placeholder: "Choose a product…"
       name_label: "Food"
       name_placeholder: "Butter, chicken…"
       location_label: "Location"
@@ -38,6 +40,7 @@ en:
       add_to_list_title: "Add to the shopping list"
       rebuy_aria: "Buy again"
       delete_aria: "Delete"
+      delete_confirm: "Delete this food item?"
     edit:
       title: "Edit a food item"
       heading: "Edit food item"
@@ -58,9 +61,11 @@ en:
       name_placeholder: "Lasagna, tomato sauce…"
       location_label: "Location"
       expires_label: "Best before"
+      photo_label: "Photo (optional)"
       submit: "Add"
     prepared_dish:
       best_before: "Best before %{date}"
       delete_aria: "Delete"
+      delete_confirm: "Delete this prepared dish?"
     create:
       alert: "Couldn't add this dish."

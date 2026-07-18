@@ -29,6 +29,10 @@
           <% end %>
         <% end %>
       </div>
+      <div>
+        <%= render Ui::LabelComponent.new(for_id: "prepared_dish_photo") { t(".photo_label") } %>
+        <%= form.file_field :photo, accept: "image/*", id: "prepared_dish_photo", class: "mt-1 block text-xs text-secondary" %>
+      </div>
       <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
     </div>
   <% end %>

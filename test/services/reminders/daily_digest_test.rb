@@ -9,6 +9,15 @@ module Reminders
       end
     end
 
+    test "includes prepared dishes expiring within the threshold, not just fridge items" do
+      households(:alpha).fridge_items.destroy_all # isolate: only alpha_lasagna (prepared dish) expiring soon
+
+      assert_difference "users(:one).notifications.where(kind: 'fridge_expiry').count", 1 do
+        Reminders::DailyDigest.call
+      end
+      assert_includes users(:one).notifications.last.body, "Lasagnes"
+    end
+
     test "does not notify twice the same day" do
       Reminders::DailyDigest.call
 

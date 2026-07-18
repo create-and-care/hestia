@@ -1,5 +1,8 @@
 <%= tag.div id: dom_id(prepared_dish), class: "rounded-lg border border-primary" do %>
   <%= render(Ui::ItemComponent.new) do |item| %>
+    <% if prepared_dish.photo.attached? %>
+      <% item.with_leading { image_tag prepared_dish.photo.variant(resize_to_limit: [ 48, 48 ]), alt: "", class: "size-12 rounded-md object-cover" } %>
+    <% end %>
     <% item.with_title { prepared_dish.name } %>
     <% if prepared_dish.expires_on.present? %>
       <% item.with_description { t(".best_before", date: prepared_dish.expires_on.strftime("%d/%m/%Y")) } %>
@@ -8,8 +11,12 @@
       <div class="flex flex-wrap items-center gap-2">
         <%= render(Ui::BadgeComponent.new(variant: :secondary)) { location_label(prepared_dish.location) } %>
         <%= render(Ui::BadgeComponent.new(variant: expiration_badge_variant(prepared_dish.expiration_status))) { expiration_label(prepared_dish.expiration_status) } %>
-        <%= button_to prepared_dish_path(prepared_dish), method: :delete,
-              class: "shrink-0 cursor-pointer text-subdued hover:text-destructive", aria: { label: t(".delete_aria") } do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+        <%= form_with url: prepared_dish_path(prepared_dish), method: :delete, class: "inline",
+              data: { turbo_confirm: t(".delete_confirm") } do %>
+          <button type="submit" class="shrink-0 cursor-pointer text-subdued hover:text-destructive" aria-label="<%= t(".delete_aria") %>">
+            <%= lucide_icon("x", css_class: "size-4") %>
+          </button>
+        <% end %>
       </div>
     <% end %>
   <% end %>

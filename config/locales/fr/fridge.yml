@@ -2,7 +2,9 @@ fr:
   fridge:
     show:
       title: "Frigo"
+      search_label: "Rechercher un aliment"
       search_placeholder: "Rechercher…"
+      all_locations: "Tous"
       suggestions_heading: "Recettes réalisables avec ton frigo"
       foods_heading: "Aliments"
       no_items: "Aucun aliment."
@@ -25,8 +27,8 @@ fr:
       barcode_not_found: "Produit non trouvé — saisie manuelle."
       barcode_unavailable: "Recherche indisponible — saisie manuelle."
       barcode_found_prefix: "Trouvé :"
-      barcode_label: "Code-barres"
-      barcode_placeholder: "Scan…"
+      catalog_label: "Depuis le catalogue"
+      catalog_placeholder: "Choisir un produit…"
       name_label: "Aliment"
       name_placeholder: "Beurre, poulet…"
       location_label: "Emplacement"
@@ -38,6 +40,7 @@ fr:
       add_to_list_title: "Ajouter à la liste de courses"
       rebuy_aria: "Racheter"
       delete_aria: "Supprimer"
+      delete_confirm: "Supprimer cet aliment ?"
     edit:
       title: "Modifier un aliment"
       heading: "Modifier l'aliment"
@@ -58,9 +61,11 @@ fr:
       name_placeholder: "Lasagnes, sauce tomate…"
       location_label: "Emplacement"
       expires_label: "À consommer avant"
+      photo_label: "Photo (optionnel)"
       submit: "Ajouter"
     prepared_dish:
       best_before: "À consommer avant le %{date}"
       delete_aria: "Supprimer"
+      delete_confirm: "Supprimer ce plat préparé ?"
     create:
       alert: "Impossible d'ajouter ce plat."

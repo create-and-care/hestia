@@ -23,13 +23,15 @@ module Reminders
         return if already_notified_today?(user, "fridge_expiry")
 
         threshold = preference.fridge_expiry_threshold_days
-        items = household.fridge_items.where(expires_on: Date.current..(Date.current + threshold.days))
-        return if items.none?
+        range = Date.current..(Date.current + threshold.days)
+        items = household.fridge_items.where(expires_on: range).order(:expires_on).to_a
+        dishes = household.prepared_dishes.where(expires_on: range).order(:expires_on).to_a
+        return if items.empty? && dishes.empty?
 
         Notification.create!(
           user: user, household: household, kind: "fridge_expiry",
-          title: I18n.t("reminders.daily_digest.fridge_expiry", count: items.count),
-          body: items.order(:expires_on).map(&:name).join(", ")
+          title: I18n.t("reminders.daily_digest.fridge_expiry", count: items.size + dishes.size),
+          body: (items + dishes).sort_by(&:expires_on).map(&:name).join(", ")
         )
       end
 

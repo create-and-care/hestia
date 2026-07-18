@@ -45,8 +45,6 @@ fr:
       barcode_not_found: "Produit non trouvé — saisie manuelle."
       barcode_unavailable: "Recherche indisponible — saisie manuelle."
       barcode_found_prefix: "Trouvé :"
-      barcode_label: "Code-barres"
-      barcode_placeholder: "Scan…"
       catalog_label: "Depuis le catalogue"
       catalog_placeholder: "Choisir un produit…"
       name_label: "Article"
