@@ -3,7 +3,7 @@ class VehiclesController < ApplicationController
 
   def index
     @query = params[:q].to_s.strip
-    vehicles = Current.household.vehicles.ordered
+    vehicles = Current.household.vehicles.ordered.includes(photo_attachment: :blob)
     if @query.present?
       vehicles = vehicles.where("name ILIKE :q OR manufacturer ILIKE :q OR plate ILIKE :q", q: "%#{@query}%")
     end
@@ -12,6 +12,7 @@ class VehiclesController < ApplicationController
 
   def show
     @entry = @vehicle.vehicle_maintenance_entries.new(done_on: Date.current)
+    @service_providers = Current.household.service_providers.order(:name)
   end
 
   def new
@@ -49,6 +50,6 @@ class VehiclesController < ApplicationController
     end
 
     def vehicle_params
-      params.require(:vehicle).permit(:name, :vehicle_type, :manufacturer, :plate, :year, :energy, :inspection_expires_on)
+      params.require(:vehicle).permit(:name, :vehicle_type, :manufacturer, :plate, :year, :energy, :inspection_expires_on, :photo)
     end
 end

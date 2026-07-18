@@ -1,23 +1,36 @@
 <% content_for :title, @vehicle.name %>
+<%= turbo_stream_from @vehicle %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
-  <header class="mb-4 flex items-start justify-between">
-    <div>
-      <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("car", css_class: "size-6") %> <%= @vehicle.name %></h1>
-      <p class="text-sm text-gray-500">
-        <%= [ vehicle_type_label(@vehicle.vehicle_type), @vehicle.manufacturer, @vehicle.plate, @vehicle.year, @vehicle.energy ].reject(&:blank?).join(" · ") %>
-      </p>
-      <p class="mt-2">
-        <%= render(Ui::BadgeComponent.new(variant: inspection_badge_variant(@vehicle.inspection_status))) do %>
-          <%= t(".inspection_prefix") %> <%= inspection_label(@vehicle.inspection_status) %>
-          <% if @vehicle.inspection_expires_on %> (<%= @vehicle.inspection_expires_on.strftime("%d/%m/%Y") %>)<% end %>
-        <% end %>
-      </p>
+  <header class="mb-4 flex items-start justify-between gap-4">
+    <div class="flex items-start gap-4">
+      <% if @vehicle.photo.attached? %>
+        <div class="size-16 shrink-0">
+          <%= render(Ui::AspectRatioComponent.new(ratio: 1)) do %>
+            <%= image_tag @vehicle.photo.variant(resize_to_fill: [ 128, 128 ]), alt: "", class: "size-full rounded-lg object-cover" %>
+          <% end %>
+        </div>
+      <% end %>
+      <div>
+        <h1 class="flex items-center gap-2 text-2xl font-semibold">
+          <% unless @vehicle.photo.attached? %><%= lucide_icon("car", css_class: "size-6") %><% end %>
+          <%= @vehicle.name %>
+        </h1>
+        <p class="text-sm text-secondary">
+          <%= [ vehicle_type_label(@vehicle.vehicle_type), @vehicle.manufacturer, @vehicle.plate, @vehicle.year, @vehicle.energy ].reject(&:blank?).join(" · ") %>
+        </p>
+        <p class="mt-2">
+          <%= render(Ui::BadgeComponent.new(variant: inspection_badge_variant(@vehicle.inspection_status))) do %>
+            <%= t(".inspection_prefix") %> <%= inspection_label(@vehicle.inspection_status) %>
+            <% if @vehicle.inspection_expires_on %> (<%= @vehicle.inspection_expires_on.strftime("%d/%m/%Y") %>)<% end %>
+          <% end %>
+        </p>
+      </div>
     </div>
     <div class="flex gap-2 text-sm">
       <%= link_to t(".edit"), edit_vehicle_path(@vehicle), class: "underline" %>
       <%= button_to t(".delete"), vehicle_path(@vehicle), method: :delete,
-            form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-red-600 underline" %>
+            form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-destructive underline" %>
     </div>
   </header>
 
@@ -25,32 +38,46 @@
 
   <section class="mt-6">
     <h2 class="mb-2 font-medium"><%= t(".maintenance_history") %></h2>
-    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
-      <% @vehicle.vehicle_maintenance_entries.chronological.each do |entry| %>
-        <%= render(Ui::ItemComponent.new) do |item| %>
-          <% item.with_title do %>
-            <span class="font-medium"><%= entry.entry_type %></span>
-            <% if entry.done_on %><span class="text-gray-400">· <%= entry.done_on.strftime("%d/%m/%Y") %></span><% end %>
-            <% if entry.cost %><span class="text-gray-400">· <%= entry.cost %> €</span><% end %>
-            <% if entry.provider.present? %><span class="text-gray-400">· <%= entry.provider %></span><% end %>
-            <% if entry.description.present? %><span class="block text-gray-500"><%= entry.description %></span><% end %>
-          <% end %>
-          <% item.with_trailing do %>
-            <%= button_to vehicle_maintenance_entry_path(@vehicle, entry), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-    </div>
+    <% if @vehicle.vehicle_maintenance_entries.chronological.any? %>
+      <div id="vehicle_maintenance_entries" class="mb-3 divide-y divide-primary rounded-lg border border-primary">
+        <%= render @vehicle.vehicle_maintenance_entries.chronological %>
+      </div>
+    <% else %>
+      <div id="vehicle_maintenance_entries" class="mb-3">
+        <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_entries") } } %>
+      </div>
+    <% end %>
 
-    <%= form_with model: @entry, url: vehicle_maintenance_entries_path(@vehicle), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(type: "text", name: "vehicle_maintenance_entry[entry_type]", value: @entry.entry_type, placeholder: t(".entry_type_placeholder"),
-            html_options: { id: "vehicle_maintenance_entry_entry_type", required: true, class: "flex-1" }) %>
-      <%= render Ui::InputComponent.new(type: "date", name: "vehicle_maintenance_entry[done_on]", value: @entry.done_on,
-            html_options: { id: "vehicle_maintenance_entry_done_on" }) %>
-      <%= render Ui::InputComponent.new(type: "number", name: "vehicle_maintenance_entry[cost]", value: @entry.cost, placeholder: "€",
-            html_options: { id: "vehicle_maintenance_entry_cost", step: "any", class: "w-20" }) %>
-      <%= render Ui::InputComponent.new(type: "text", name: "vehicle_maintenance_entry[provider]", value: @entry.provider, placeholder: t(".provider_placeholder"),
-            html_options: { id: "vehicle_maintenance_entry_provider", class: "w-28" }) %>
+    <%= form_with model: @entry, url: vehicle_maintenance_entries_path(@vehicle), class: "flex flex-wrap items-end gap-2",
+          data: { controller: "maintenance-entry-type", action: "submit->maintenance-entry-type#beforeSubmit" } do |form| %>
+      <div>
+        <label for="vehicle_maintenance_entry_entry_type" class="sr-only"><%= t(".entry_type_label") %></label>
+        <%= render Ui::NativeSelectComponent.new(name: "vehicle_maintenance_entry[entry_type]", options: maintenance_entry_type_options,
+              html_options: { id: "vehicle_maintenance_entry_entry_type", data: { maintenance_entry_type_target: "select", action: "change->maintenance-entry-type#sync" } }) %>
+      </div>
+      <%= render Ui::InputComponent.new(type: "text", name: "vehicle_maintenance_entry[entry_type]", placeholder: t(".entry_type_custom_placeholder"),
+            html_options: { id: "vehicle_maintenance_entry_entry_type_custom", class: "hidden flex-1", data: { maintenance_entry_type_target: "custom" } }) %>
+      <div>
+        <label for="vehicle_maintenance_entry_done_on" class="sr-only"><%= t(".done_on_label") %></label>
+        <%= render Ui::InputComponent.new(type: "date", name: "vehicle_maintenance_entry[done_on]", value: @entry.done_on,
+              html_options: { id: "vehicle_maintenance_entry_done_on" }) %>
+      </div>
+      <div>
+        <label for="vehicle_maintenance_entry_cost" class="sr-only"><%= t(".cost_label") %></label>
+        <%= render Ui::InputComponent.new(type: "number", name: "vehicle_maintenance_entry[cost]", value: @entry.cost, placeholder: "€",
+              html_options: { id: "vehicle_maintenance_entry_cost", step: "any", class: "w-20" }) %>
+      </div>
+      <div>
+        <label for="vehicle_maintenance_entry_service_provider_id" class="sr-only"><%= t(".provider_label") %></label>
+        <%= render Ui::NativeSelectComponent.new(name: "vehicle_maintenance_entry[service_provider_id]",
+              options: [ [ t(".no_provider_option"), "" ] ] + @service_providers.map { |provider| [ provider.name, provider.id ] },
+              html_options: { id: "vehicle_maintenance_entry_service_provider_id" }) %>
+      </div>
+      <div class="w-full">
+        <label for="vehicle_maintenance_entry_description" class="sr-only"><%= t(".description_label") %></label>
+        <%= render(Ui::TextareaComponent.new(name: "vehicle_maintenance_entry[description]", rows: 1, placeholder: t(".description_placeholder"),
+              html_options: { id: "vehicle_maintenance_entry_description" })) %>
+      </div>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>

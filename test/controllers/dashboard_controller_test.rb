@@ -28,6 +28,26 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes households(:beta).users, users(:one)
   end
 
+  test "surfaces a vehicle with an urgent or expired inspection" do
+    sign_in_as(users(:one))
+    households(:alpha).vehicles.create!(name: "Urgent Car", inspection_expires_on: 10.days.from_now.to_date)
+
+    get root_path
+
+    assert_response :success
+    assert_includes @response.body, "Urgent Car"
+  end
+
+  test "does not surface a vehicle with an up-to-date inspection" do
+    sign_in_as(users(:one))
+    households(:alpha).vehicles.create!(name: "Fine Car", inspection_expires_on: 200.days.from_now.to_date)
+
+    get root_path
+
+    assert_response :success
+    assert_not_includes @response.body, "Fine Car"
+  end
+
   test "the sidebar hides a module the household has disabled" do
     households(:alpha).update!(disabled_modules: [ "shopping" ])
     sign_in_as(users(:one))

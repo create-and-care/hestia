@@ -1,0 +1,20 @@
+<%= tag.div id: dom_id(vehicle_maintenance_entry) do %>
+  <%= render(Ui::ItemComponent.new) do |item| %>
+    <% item.with_title do %>
+      <span class="font-medium"><%= maintenance_entry_type_label(vehicle_maintenance_entry.entry_type) %></span>
+      <% if vehicle_maintenance_entry.done_on %><span class="text-subdued">· <%= vehicle_maintenance_entry.done_on.strftime("%d/%m/%Y") %></span><% end %>
+      <% if vehicle_maintenance_entry.cost %><span class="text-subdued">· <%= number_to_currency(vehicle_maintenance_entry.cost, unit: "€", format: "%n %u") %></span><% end %>
+      <% if vehicle_maintenance_entry.service_provider %>
+        <span class="text-subdued">· <%= link_to vehicle_maintenance_entry.service_provider.name, edit_service_provider_path(vehicle_maintenance_entry.service_provider), class: "hover:underline" %></span>
+      <% elsif vehicle_maintenance_entry.provider.present? %>
+        <span class="text-subdued">· <%= vehicle_maintenance_entry.provider %></span>
+      <% end %>
+      <% if vehicle_maintenance_entry.description.present? %><span class="block text-secondary"><%= vehicle_maintenance_entry.description %></span><% end %>
+    <% end %>
+    <% item.with_trailing do %>
+      <%= render(Ui::ButtonToComponent.new(vehicle_maintenance_entry_path(vehicle_maintenance_entry.vehicle, vehicle_maintenance_entry), method: :delete, variant: :ghost, size: :icon,
+            html_options: { aria: { label: t("vehicles.show.delete_entry_aria", type: maintenance_entry_type_label(vehicle_maintenance_entry.entry_type)) },
+                            form: { data: { turbo_confirm: t("vehicles.show.delete_entry_confirm") } } })) { lucide_icon("x", css_class: "size-4") } %>
+    <% end %>
+  <% end %>
+<% end %>

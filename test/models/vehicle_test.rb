@@ -28,4 +28,10 @@ class VehicleTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).vehicles, vehicles(:beta_car)
   end
+
+  test "can have a photo attached" do
+    vehicle = vehicles(:alpha_car)
+    vehicle.photo.attach(io: File.open(Rails.root.join("test/fixtures/files/sample.png")), filename: "sample.png", content_type: "image/png")
+    assert vehicle.photo.attached?
+  end
 end

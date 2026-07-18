@@ -35,6 +35,8 @@ en:
         wellbeing: "Wellbeing"
       invite_member: "Invite a member"
       invite_description: "Share this code to join the household:"
+      vehicles_needing_attention: "Technical inspections to watch"
+      inspection_expires_on: "Due %{date}"
       members: "Members (%{count})"
       admin: "Admin"
       member: "Member"

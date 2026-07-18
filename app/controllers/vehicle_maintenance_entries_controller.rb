@@ -2,8 +2,12 @@ class VehicleMaintenanceEntriesController < ApplicationController
   before_action :set_vehicle
 
   def create
-    @vehicle.vehicle_maintenance_entries.create(entry_params)
-    redirect_to @vehicle
+    entry = @vehicle.vehicle_maintenance_entries.new(entry_params)
+    if entry.save
+      redirect_to @vehicle, notice: t(".created")
+    else
+      redirect_to @vehicle, alert: entry.errors.full_messages.to_sentence
+    end
   end
 
   def destroy
@@ -17,6 +21,6 @@ class VehicleMaintenanceEntriesController < ApplicationController
     end
 
     def entry_params
-      params.require(:vehicle_maintenance_entry).permit(:entry_type, :done_on, :cost, :provider, :description)
+      params.require(:vehicle_maintenance_entry).permit(:entry_type, :done_on, :cost, :provider, :description, :service_provider_id)
     end
 end

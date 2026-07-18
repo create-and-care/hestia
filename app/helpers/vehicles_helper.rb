@@ -1,10 +1,10 @@
 module VehiclesHelper
-  # Maps inspection status to a Ui::BadgeComponent variant. `urgent` and `soon`
-  # both collapse onto :warning since BadgeComponent has no intermediate
-  # (orange vs yellow) variant between :warning and :destructive.
+  # Maps inspection status to a Ui::BadgeComponent variant. `urgent` (<30 days) now gets its
+  # own :urgent variant (added for Tasks/Fridge) instead of collapsing onto the same :warning
+  # as `soon` (<90 days) — the spec calls for 4 distinct colors, not 3.
   INSPECTION_BADGE_VARIANTS = {
     expired: :destructive,
-    urgent:  :warning,
+    urgent:  :urgent,
     soon:    :warning,
     ok:      :success,
     none:    :secondary
@@ -14,4 +14,7 @@ module VehiclesHelper
   def inspection_badge_variant(status) = INSPECTION_BADGE_VARIANTS.fetch(status)
   def vehicle_type_label(type) = t("vehicles.types.#{type}", default: type.to_s.humanize)
   def vehicle_type_options = Vehicle::TYPES.map { |type| [ vehicle_type_label(type), type ] }
+
+  def maintenance_entry_type_label(type) = t("vehicle_maintenance_entries.types.#{type}", default: type)
+  def maintenance_entry_type_options = VehicleMaintenanceEntry::TYPES.map { |type| [ maintenance_entry_type_label(type), type ] }
 end

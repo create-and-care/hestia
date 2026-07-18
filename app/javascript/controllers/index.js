@@ -73,6 +73,9 @@ application.register("input-otp", InputOtpController)
 import LoyaltyBrandController from "./loyalty_brand_controller"
 application.register("loyalty-brand", LoyaltyBrandController)
 
+import MaintenanceEntryTypeController from "./maintenance_entry_type_controller"
+application.register("maintenance-entry-type", MaintenanceEntryTypeController)
+
 import MenubarController from "./menubar_controller"
 application.register("menubar", MenubarController)
 

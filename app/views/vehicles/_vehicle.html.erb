@@ -1,20 +1,32 @@
-<%= tag.div id: dom_id(vehicle), class: "flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 px-3 py-2" do %>
-  <%= link_to vehicle_path(vehicle), class: "min-w-0 flex-1" do %>
-    <div class="flex items-center gap-2">
-      <span class="font-medium"><%= vehicle.name %></span>
+<div id="<%= dom_id(vehicle) %>">
+  <%= render(Ui::ItemComponent.new) do |item| %>
+    <% if vehicle.photo.attached? %>
+      <% item.with_leading do %>
+        <div class="size-8 overflow-hidden rounded-md">
+          <%= image_tag vehicle.photo.variant(resize_to_fill: [ 32, 32 ]), alt: "", class: "size-full object-cover" %>
+        </div>
+      <% end %>
+    <% else %>
+      <% item.with_leading { lucide_icon("car", css_class: "size-4") } %>
+    <% end %>
+    <% item.with_title do %>
+      <%= link_to vehicle.name, vehicle_path(vehicle), class: "hover:underline" %>
       <%= render(Ui::BadgeComponent.new(variant: :secondary)) { vehicle_type_label(vehicle.vehicle_type) } %>
-    </div>
-    <p class="text-sm text-gray-500">
+    <% end %>
+    <% item.with_description do %>
       <%= [ vehicle.manufacturer, vehicle.plate, vehicle.year ].reject(&:blank?).join(" · ") %>
-    </p>
+    <% end %>
+    <% item.with_trailing do %>
+      <div class="flex items-center gap-2 text-sm">
+        <%= render(Ui::BadgeComponent.new(variant: inspection_badge_variant(vehicle.inspection_status))) do %>
+          <%= t(".inspection_prefix") %> <%= inspection_label(vehicle.inspection_status) %>
+        <% end %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_vehicle_path(vehicle),
+              html_options: { aria: { label: t(".edit_aria", name: vehicle.name) } })) { lucide_icon("pencil", css_class: "size-4") } %>
+        <%= render(Ui::ButtonToComponent.new(vehicle_path(vehicle), method: :delete, variant: :ghost, size: :icon,
+              html_options: { aria: { label: t(".delete_aria", name: vehicle.name) },
+                              form: { data: { turbo_confirm: t(".delete_confirm", name: vehicle.name) } } })) { lucide_icon("x", css_class: "size-4") } %>
+      </div>
+    <% end %>
   <% end %>
-
-  <%= render(Ui::BadgeComponent.new(variant: inspection_badge_variant(vehicle.inspection_status), html_options: { class: "shrink-0" })) do %>
-    <%= t(".inspection_prefix") %> <%= inspection_label(vehicle.inspection_status) %>
-  <% end %>
-
-  <div class="flex shrink-0 items-center gap-2 text-sm">
-    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_vehicle_path(vehicle))) { lucide_icon("pencil", css_class: "size-4") } %>
-    <%= button_to vehicle_path(vehicle), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-  </div>
-<% end %>
+</div>

@@ -14,6 +14,21 @@
     <code class="rounded-md bg-surface-inset px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
   <% end %>
 
+  <% if @vehicles_needing_attention.any? %>
+    <section class="mb-8">
+      <h2 class="mb-3 flex items-center gap-1.5 font-medium text-destructive"><%= lucide_icon("triangle-alert", css_class: "size-4") %> <%= t(".vehicles_needing_attention") %></h2>
+      <div class="divide-y divide-primary rounded-lg border border-primary">
+        <% @vehicles_needing_attention.each do |vehicle| %>
+          <%= render Ui::ItemComponent.new do |item| %>
+            <% item.with_title { link_to vehicle.name, vehicle_path(vehicle), class: "hover:underline" } %>
+            <% item.with_description { t(".inspection_expires_on", date: l(vehicle.inspection_expires_on, format: :short)) } %>
+            <% item.with_trailing { render(Ui::BadgeComponent.new(variant: inspection_badge_variant(vehicle.inspection_status))) { inspection_label(vehicle.inspection_status) } } %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
   <section class="mb-8">
     <h2 class="mb-3 font-medium"><%= t(".members", count: @memberships.size) %></h2>
     <div class="divide-y divide-gray-100 rounded-lg border border-primary">

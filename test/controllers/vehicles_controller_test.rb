@@ -48,4 +48,26 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
     get vehicle_path(vehicles(:beta_car))
     assert_response :not_found
   end
+
+  test "create attaches an optional photo" do
+    photo = fixture_file_upload("sample.png", "image/png")
+    post vehicles_path, params: { vehicle: { name: "Le van", photo: photo } }
+    assert Vehicle.find_by!(name: "Le van").photo.attached?
+  end
+
+  test "urgent and soon inspection statuses use different badge colors" do
+    urgent = households(:alpha).vehicles.create!(name: "Urgent", inspection_expires_on: 10.days.from_now.to_date)
+    soon = households(:alpha).vehicles.create!(name: "Soon", inspection_expires_on: 60.days.from_now.to_date)
+
+    get vehicles_path
+    assert_select "##{dom_id(urgent)} span.bg-orange-500\\/10"
+    assert_select "##{dom_id(soon)} span.bg-warning\\/10"
+  end
+
+  test "delete button asks for confirmation and has an accessible name" do
+    vehicle = vehicles(:alpha_car)
+    get vehicles_path
+    assert_select "form[action=?][data-turbo-confirm]", vehicle_path(vehicle)
+    assert_select "a[href=?][aria-label=?]", edit_vehicle_path(vehicle), "Edit \"La Clio\""
+  end
 end

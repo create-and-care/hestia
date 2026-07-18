@@ -16,6 +16,9 @@ fr:
       empty: "Aucun véhicule."
     vehicle:
       inspection_prefix: "CT :"
+      edit_aria: "Modifier « %{name} »"
+      delete_aria: "Supprimer « %{name} »"
+      delete_confirm: "Supprimer « %{name} » ?"
     form:
       name_label: "Nom"
       type_label: "Type"
@@ -25,6 +28,7 @@ fr:
       energy_label: "Énergie"
       energy_placeholder: "Essence, diesel, électrique…"
       inspection_expires_label: "Fin de validité du contrôle technique"
+      photo_label: "Photo"
       submit: "Enregistrer"
     edit:
       title: "Modifier le véhicule"
@@ -38,8 +42,17 @@ fr:
       delete: "Supprimer"
       delete_confirm: "Supprimer ce véhicule ?"
       maintenance_history: "Historique d'entretien"
-      entry_type_placeholder: "Vidange, pneus…"
-      provider_placeholder: "Garage"
+      no_entries: "Aucune entrée d'entretien."
+      entry_type_label: "Type d'entretien"
+      entry_type_custom_placeholder: "Préciser le type…"
+      done_on_label: "Date"
+      cost_label: "Coût"
+      provider_label: "Prestataire"
+      no_provider_option: "Aucun"
+      description_label: "Description"
+      description_placeholder: "Détails (optionnel)"
+      delete_entry_aria: "Supprimer l'entrée « %{type} »"
+      delete_entry_confirm: "Supprimer cette entrée d'entretien ?"
       add: "Ajouter"
       back_to_vehicles: "← Tous les véhicules"
     create:
@@ -49,5 +62,14 @@ fr:
     destroy:
       deleted: "Véhicule supprimé."
   vehicle_maintenance_entries:
+    types:
+      oil_change: "Vidange"
+      tires: "Pneus"
+      brake_pads: "Plaquettes de frein"
+      inspection: "Contrôle technique"
+      service_check: "Révision"
+      other: "Autre…"
+    create:
+      created: "Entrée ajoutée."
     destroy:
       deleted: "Entrée supprimée."

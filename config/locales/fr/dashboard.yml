@@ -35,6 +35,8 @@ fr:
         wellbeing: "Bien-être"
       invite_member: "Inviter un membre"
       invite_description: "Partagez ce code pour rejoindre le foyer :"
+      vehicles_needing_attention: "Contrôles techniques à surveiller"
+      inspection_expires_on: "Échéance le %{date}"
       members: "Membres (%{count})"
       admin: "Administrateur"
       member: "Membre"

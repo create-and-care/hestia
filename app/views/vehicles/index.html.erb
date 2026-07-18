@@ -7,9 +7,10 @@
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("car", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex items-center gap-2">
-      <%= form_with url: vehicles_path, method: :get do |form| %>
-        <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
-              class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+      <%= form_with url: vehicles_path, method: :get do %>
+        <label for="vehicles_q" class="sr-only"><%= t(".search_placeholder") %></label>
+        <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
+              html_options: { id: "vehicles_q" }) %>
       <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_vehicle_path)) { t(".new_vehicle") } %>
     </div>

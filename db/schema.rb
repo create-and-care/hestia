@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_18_100308) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -864,8 +864,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_100308) do
     t.date "done_on"
     t.string "entry_type"
     t.string "provider"
+    t.bigint "service_provider_id"
     t.datetime "updated_at", null: false
     t.bigint "vehicle_id", null: false
+    t.index ["service_provider_id"], name: "index_vehicle_maintenance_entries_on_service_provider_id"
     t.index ["vehicle_id"], name: "index_vehicle_maintenance_entries_on_vehicle_id"
   end
 
@@ -1054,6 +1056,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_100308) do
   add_foreign_key "tasks", "trips"
   add_foreign_key "tasks", "users", column: "assignee_id"
   add_foreign_key "trips", "households"
+  add_foreign_key "vehicle_maintenance_entries", "service_providers"
   add_foreign_key "vehicle_maintenance_entries", "vehicles"
   add_foreign_key "vehicles", "households"
   add_foreign_key "waste_collection_events", "households"

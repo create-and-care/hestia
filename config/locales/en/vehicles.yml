@@ -16,6 +16,9 @@ en:
       empty: "No vehicles."
     vehicle:
       inspection_prefix: "Inspection:"
+      edit_aria: "Edit \"%{name}\""
+      delete_aria: "Delete \"%{name}\""
+      delete_confirm: "Delete \"%{name}\"?"
     form:
       name_label: "Name"
       type_label: "Type"
@@ -25,6 +28,7 @@ en:
       energy_label: "Energy"
       energy_placeholder: "Gasoline, diesel, electric…"
       inspection_expires_label: "Inspection expiry date"
+      photo_label: "Photo"
       submit: "Save"
     edit:
       title: "Edit vehicle"
@@ -38,8 +42,17 @@ en:
       delete: "Delete"
       delete_confirm: "Delete this vehicle?"
       maintenance_history: "Maintenance history"
-      entry_type_placeholder: "Oil change, tires…"
-      provider_placeholder: "Garage"
+      no_entries: "No maintenance entries."
+      entry_type_label: "Maintenance type"
+      entry_type_custom_placeholder: "Specify the type…"
+      done_on_label: "Date"
+      cost_label: "Cost"
+      provider_label: "Provider"
+      no_provider_option: "None"
+      description_label: "Description"
+      description_placeholder: "Details (optional)"
+      delete_entry_aria: "Delete the \"%{type}\" entry"
+      delete_entry_confirm: "Delete this maintenance entry?"
       add: "Add"
       back_to_vehicles: "← All vehicles"
     create:
@@ -49,5 +62,14 @@ en:
     destroy:
       deleted: "Vehicle deleted."
   vehicle_maintenance_entries:
+    types:
+      oil_change: "Oil change"
+      tires: "Tires"
+      brake_pads: "Brake pads"
+      inspection: "Technical inspection"
+      service_check: "Service check"
+      other: "Other…"
+    create:
+      created: "Entry added."
     destroy:
       deleted: "Entry deleted."
