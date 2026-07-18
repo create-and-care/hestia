@@ -13,6 +13,9 @@ en:
       weight_label: "Weight (kg)"
       identifier_label: "ID (chip)"
       born_on_label: "Date of birth"
+      service_provider_label: "Veterinarian"
+      no_service_provider: "None"
+      photo_label: "Photo"
       submit: "Save"
     edit:
       title: "Edit pet"
@@ -26,19 +29,35 @@ en:
       delete: "Delete"
       delete_confirm: "Delete this pet?"
       disclaimer: "Organizational aid only — does not replace the official veterinary health record."
+      view_shopping_list_link: "View shopping list"
       vaccinations_title: "Vaccinations"
       vaccination_done_on: "done on %{date}"
       vaccination_booster_on: "booster %{date}"
       vaccination_placeholder: "Vaccine"
+      price_placeholder: "Price"
+      no_vaccinations: "No vaccinations recorded."
+      edit_vaccination_aria: "Edit the \"%{name}\" vaccine"
+      delete_vaccination_aria: "Delete the \"%{name}\" vaccine"
+      delete_vaccination_confirm: "Delete the \"%{name}\" vaccine?"
       add: "Add"
       treatments_title: "Treatments"
       treatment_placeholder: "Treatment"
       frequency_placeholder: "Frequency"
+      quantity_placeholder: "Quantity"
       treatment_last_done: "last done %{date}"
+      no_treatments: "No treatments recorded."
+      edit_treatment_aria: "Edit the \"%{name}\" treatment"
+      delete_treatment_aria: "Delete the \"%{name}\" treatment"
+      delete_treatment_confirm: "Delete the \"%{name}\" treatment?"
       supplies_title: "Recurring supplies"
       supply_placeholder: "Food, litter…"
       order_link_placeholder: "Order link"
       next_order_on: "order by %{date}"
+      no_supplies: "No recurring supplies recorded."
+      add_to_shopping_list_aria: "Add \"%{name}\" to the shopping list"
+      edit_supply_aria: "Edit \"%{name}\""
+      delete_supply_aria: "Delete \"%{name}\""
+      delete_supply_confirm: "Delete \"%{name}\"?"
       back_to_pets: "← All pets"
     create:
       created: "Pet added."
@@ -47,11 +66,49 @@ en:
     destroy:
       deleted: "Pet deleted."
   pet_vaccinations:
+    create:
+      created: "Vaccine added."
+    edit:
+      title: "Edit vaccine"
+      name_label: "Name"
+      injected_on_label: "Done on"
+      booster_on_label: "Booster due"
+      price_label: "Price"
+      save: "Save"
+      back_to_pet: "← Pet profile"
+    update:
+      updated: "Vaccine updated."
     destroy:
       deleted: "Vaccination deleted."
   pet_treatments:
+    create:
+      created: "Treatment added."
+    edit:
+      title: "Edit treatment"
+      name_label: "Name"
+      frequency_label: "Frequency"
+      quantity_label: "Quantity"
+      last_done_on_label: "Last done"
+      price_label: "Price"
+      save: "Save"
+      back_to_pet: "← Pet profile"
+    update:
+      updated: "Treatment updated."
     destroy:
       deleted: "Treatment deleted."
   pet_supplies:
+    create:
+      created: "Supply added."
+    edit:
+      title: "Edit supply"
+      name_label: "Name"
+      order_url_label: "Order link"
+      next_order_on_label: "Next order by"
+      save: "Save"
+      back_to_pet: "← Pet profile"
+    update:
+      updated: "Supply updated."
     destroy:
       deleted: "Supply deleted."
+    add_to_shopping_list:
+      notice: "Added to the shopping list."

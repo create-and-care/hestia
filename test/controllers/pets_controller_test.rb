@@ -63,4 +63,29 @@ class PetsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "create attaches an optional photo" do
+    photo = fixture_file_upload("sample.png", "image/png")
+    post pets_path, params: { pet: { name: "Milo", photo: photo } }
+    assert Pet.find_by!(name: "Milo").photo.attached?
+  end
+
+  test "links a veterinarian from the household's service providers" do
+    provider = service_providers(:alpha_plombier)
+    patch pet_path(pets(:alpha_dog)), params: { pet: { name: "Rex", service_provider_id: provider.id } }
+    assert_equal provider, pets(:alpha_dog).reload.service_provider
+  end
+
+  test "the pet form offers the household's service providers" do
+    get new_pet_path
+    assert_select "select#pet_service_provider_id option", text: service_providers(:alpha_plombier).name
+    assert_select "select#pet_service_provider_id option", text: service_providers(:beta_provider).name, count: 0
+  end
+
+  test "shows an empty state for each sub-list when a pet has no records yet" do
+    get pet_path(pets(:alpha_dog))
+    assert_select "p", text: "No vaccinations recorded."
+    assert_select "p", text: "No treatments recorded."
+    assert_select "p", text: "No recurring supplies recorded."
+  end
 end

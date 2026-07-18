@@ -33,4 +33,49 @@ class PetSuppliesControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "create with a blank name does not persist and surfaces an error" do
+    pet = pets(:alpha_dog)
+    assert_no_difference -> { PetSupply.count } do
+      post pet_supplies_path(pet), params: { pet_supply: { name: "" } }
+    end
+    assert_redirected_to pet
+    assert_equal "Name can't be blank", flash[:alert]
+  end
+
+  test "edit and update a supply's fields" do
+    pet = pets(:alpha_dog)
+    supply = pet.pet_supplies.create!(name: "Croquettes")
+    get edit_pet_supply_path(pet, supply)
+    assert_response :success
+
+    patch pet_supply_path(pet, supply), params: { pet_supply: { name: "Croquettes premium", order_url: "https://example.com" } }
+    assert_redirected_to pet
+    assert_equal "Croquettes premium", supply.reload.name
+  end
+
+  test "cannot edit another household's supply" do
+    supply = pets(:beta_cat).pet_supplies.create!(name: "Litière Beta")
+    get edit_pet_supply_path(pets(:beta_cat), supply)
+    assert_response :not_found
+  end
+
+  test "add_to_shopping_list exports the supply to the household's shopping list" do
+    pet = pets(:alpha_dog)
+    supply = pet.pet_supplies.create!(name: "Croquettes")
+    assert_difference -> { ShoppingListItem.count }, 1 do
+      post add_to_shopping_list_pet_supply_path(pet, supply)
+    end
+    assert_redirected_to pet
+    follow_redirect!
+    assert_includes @response.body, "Croquettes"
+  end
+
+  test "cannot export another household's supply to the shopping list" do
+    supply = pets(:beta_cat).pet_supplies.create!(name: "Litière Beta")
+    assert_no_difference -> { ShoppingListItem.count } do
+      post add_to_shopping_list_pet_supply_path(pets(:beta_cat), supply)
+    end
+    assert_response :not_found
+  end
 end

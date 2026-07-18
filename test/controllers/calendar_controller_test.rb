@@ -65,6 +65,21 @@ class CalendarControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Pas en retard"
   end
 
+  test "surfaces an overdue pet vaccine booster in the list view" do
+    pet = households(:alpha).pets.create!(name: "Rex")
+    pet.pet_vaccinations.create!(name: "Rage", booster_on: 2.days.ago.to_date)
+    get calendar_path(view: :list)
+    assert_includes @response.body, "Rex"
+    assert_includes @response.body, "Rage"
+  end
+
+  test "does not surface a pet vaccine booster that is not overdue" do
+    pet = households(:alpha).pets.create!(name: "Milo")
+    pet.pet_vaccinations.create!(name: "Rage", booster_on: 2.days.from_now.to_date)
+    get calendar_path(view: :list)
+    assert_not_includes @response.body, "Milo"
+  end
+
   test "PDF export does not crash when a birthday falls within the month" do
     households(:alpha).contacts.create!(name: "Papi", born_on: Date.current.change(year: 1945))
     get calendar_path(format: :pdf)

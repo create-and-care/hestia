@@ -13,6 +13,9 @@ fr:
       weight_label: "Poids (kg)"
       identifier_label: "Identification (puce)"
       born_on_label: "Date de naissance"
+      service_provider_label: "Vétérinaire"
+      no_service_provider: "Aucun"
+      photo_label: "Photo"
       submit: "Enregistrer"
     edit:
       title: "Modifier l'animal"
@@ -26,19 +29,35 @@ fr:
       delete: "Supprimer"
       delete_confirm: "Supprimer cet animal ?"
       disclaimer: "Aide à l'organisation — ne remplace pas le carnet de santé vétérinaire officiel."
+      view_shopping_list_link: "Voir la liste de courses"
       vaccinations_title: "Vaccins"
       vaccination_done_on: "fait le %{date}"
       vaccination_booster_on: "rappel %{date}"
       vaccination_placeholder: "Vaccin"
+      price_placeholder: "Prix"
+      no_vaccinations: "Aucun vaccin enregistré."
+      edit_vaccination_aria: "Modifier le vaccin « %{name} »"
+      delete_vaccination_aria: "Supprimer le vaccin « %{name} »"
+      delete_vaccination_confirm: "Supprimer le vaccin « %{name} » ?"
       add: "Ajouter"
       treatments_title: "Traitements"
       treatment_placeholder: "Traitement"
       frequency_placeholder: "Fréquence"
+      quantity_placeholder: "Quantité"
       treatment_last_done: "dernier %{date}"
+      no_treatments: "Aucun traitement enregistré."
+      edit_treatment_aria: "Modifier le traitement « %{name} »"
+      delete_treatment_aria: "Supprimer le traitement « %{name} »"
+      delete_treatment_confirm: "Supprimer le traitement « %{name} » ?"
       supplies_title: "Produits récurrents"
       supply_placeholder: "Croquettes, litière…"
       order_link_placeholder: "Lien de commande"
       next_order_on: "à commander le %{date}"
+      no_supplies: "Aucun produit récurrent enregistré."
+      add_to_shopping_list_aria: "Ajouter « %{name} » à la liste de courses"
+      edit_supply_aria: "Modifier « %{name} »"
+      delete_supply_aria: "Supprimer « %{name} »"
+      delete_supply_confirm: "Supprimer « %{name} » ?"
       back_to_pets: "← Tous les animaux"
     create:
       created: "Animal ajouté."
@@ -47,11 +66,49 @@ fr:
     destroy:
       deleted: "Animal supprimé."
   pet_vaccinations:
+    create:
+      created: "Vaccin ajouté."
+    edit:
+      title: "Modifier le vaccin"
+      name_label: "Nom"
+      injected_on_label: "Fait le"
+      booster_on_label: "Rappel le"
+      price_label: "Prix"
+      save: "Enregistrer"
+      back_to_pet: "← Fiche animal"
+    update:
+      updated: "Vaccin mis à jour."
     destroy:
       deleted: "Vaccin supprimé."
   pet_treatments:
+    create:
+      created: "Traitement ajouté."
+    edit:
+      title: "Modifier le traitement"
+      name_label: "Nom"
+      frequency_label: "Fréquence"
+      quantity_label: "Quantité"
+      last_done_on_label: "Dernière prise"
+      price_label: "Prix"
+      save: "Enregistrer"
+      back_to_pet: "← Fiche animal"
+    update:
+      updated: "Traitement mis à jour."
     destroy:
       deleted: "Traitement supprimé."
   pet_supplies:
+    create:
+      created: "Produit ajouté."
+    edit:
+      title: "Modifier le produit"
+      name_label: "Nom"
+      order_url_label: "Lien de commande"
+      next_order_on_label: "Prochaine commande le"
+      save: "Enregistrer"
+      back_to_pet: "← Fiche animal"
+    update:
+      updated: "Produit mis à jour."
     destroy:
       deleted: "Produit supprimé."
+    add_to_shopping_list:
+      notice: "Ajouté à la liste de courses."

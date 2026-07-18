@@ -2,7 +2,7 @@ class PetsController < ApplicationController
   before_action :set_pet, only: %i[show edit update destroy]
 
   def index
-    @pets = Current.household.pets.ordered
+    @pets = Current.household.pets.ordered.includes(photo_attachment: :blob)
   end
 
   def show
@@ -13,6 +13,7 @@ class PetsController < ApplicationController
 
   def new
     @pet = Current.household.pets.new
+    @service_providers = Current.household.service_providers.order(:name)
   end
 
   def create
@@ -20,17 +21,20 @@ class PetsController < ApplicationController
     if @pet.save
       redirect_to @pet, notice: t(".created")
     else
+      @service_providers = Current.household.service_providers.order(:name)
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    @service_providers = Current.household.service_providers.order(:name)
   end
 
   def update
     if @pet.update(pet_params)
       redirect_to @pet, notice: t(".updated")
     else
+      @service_providers = Current.household.service_providers.order(:name)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -46,6 +50,6 @@ class PetsController < ApplicationController
     end
 
     def pet_params
-      params.require(:pet).permit(:name, :species, :breed, :weight, :identifier, :born_on)
+      params.require(:pet).permit(:name, :species, :breed, :weight, :identifier, :born_on, :photo, :service_provider_id)
     end
 end

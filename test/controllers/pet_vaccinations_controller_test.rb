@@ -33,4 +33,49 @@ class PetVaccinationsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "create with a blank name does not persist and surfaces an error" do
+    pet = pets(:alpha_dog)
+    assert_no_difference -> { PetVaccination.count } do
+      post pet_vaccinations_path(pet), params: { pet_vaccination: { name: "" } }
+    end
+    assert_redirected_to pet
+    assert_equal "Name can't be blank", flash[:alert]
+  end
+
+  test "edit and update a vaccination's name, dates and price" do
+    pet = pets(:alpha_dog)
+    vaccination = pet.pet_vaccinations.create!(name: "Rage")
+    get edit_pet_vaccination_path(pet, vaccination)
+    assert_response :success
+
+    patch pet_vaccination_path(pet, vaccination), params: {
+      pet_vaccination: { name: "Rage (rappel)", injected_on: Date.current, booster_on: Date.current + 1.year, price: 45 }
+    }
+    assert_redirected_to pet
+    vaccination.reload
+    assert_equal "Rage (rappel)", vaccination.name
+    assert_equal 45, vaccination.price.to_i
+  end
+
+  test "cannot edit another household's vaccination" do
+    vaccination = pets(:beta_cat).pet_vaccinations.create!(name: "Vaccin Beta")
+    get edit_pet_vaccination_path(pets(:beta_cat), vaccination)
+    assert_response :not_found
+  end
+
+  test "price shows on the pet page and a destructive badge marks an overdue booster" do
+    pet = pets(:alpha_dog)
+    pet.pet_vaccinations.create!(name: "Rage", price: 30, booster_on: Date.current - 1)
+    get pet_path(pet)
+    assert_includes @response.body, "30.00"
+    assert_select "span.bg-destructive\\/10", text: /booster/
+  end
+
+  test "delete button asks for confirmation and has an accessible name" do
+    pet = pets(:alpha_dog)
+    vaccination = pet.pet_vaccinations.create!(name: "Rage")
+    get pet_path(pet)
+    assert_select "form[action=?][data-turbo-confirm]", pet_vaccination_path(pet, vaccination)
+  end
 end

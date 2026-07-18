@@ -195,9 +195,11 @@ Rails.application.routes.draw do
     end
   end
   resources :pets do
-    resources :vaccinations, only: %i[create destroy], controller: "pet_vaccinations"
-    resources :treatments, only: %i[create destroy], controller: "pet_treatments"
-    resources :supplies, only: %i[create destroy], controller: "pet_supplies"
+    resources :vaccinations, only: %i[create edit update destroy], controller: "pet_vaccinations"
+    resources :treatments, only: %i[create edit update destroy], controller: "pet_treatments"
+    resources :supplies, only: %i[create edit update destroy], controller: "pet_supplies" do
+      member { post :add_to_shopping_list }
+    end
   end
   resources :vehicles do
     resources :maintenance_entries, only: %i[create destroy], controller: "vehicle_maintenance_entries"

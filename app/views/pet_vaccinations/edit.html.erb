@@ -1,0 +1,53 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= form_with model: @vaccination, url: pet_vaccination_path(@pet, @vaccination) do %>
+    <% if @vaccination.errors.any? %>
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
+        <ul class="list-inside list-disc">
+          <% @vaccination.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <div class="space-y-4">
+      <%= render(Ui::FieldComponent.new(id: "pet_vaccination_name")) do |field| %>
+        <% field.with_label { t(".name_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "pet_vaccination[name]", value: @vaccination.name,
+                html_options: { id: "pet_vaccination_name", required: true }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "pet_vaccination_injected_on")) do |field| %>
+        <% field.with_label { t(".injected_on_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "date", name: "pet_vaccination[injected_on]", value: @vaccination.injected_on,
+                html_options: { id: "pet_vaccination_injected_on" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "pet_vaccination_booster_on")) do |field| %>
+        <% field.with_label { t(".booster_on_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "date", name: "pet_vaccination[booster_on]", value: @vaccination.booster_on,
+                html_options: { id: "pet_vaccination_booster_on" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "pet_vaccination_price")) do |field| %>
+        <% field.with_label { t(".price_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "number", name: "pet_vaccination[price]", value: @vaccination.price,
+                html_options: { id: "pet_vaccination_price", step: "0.01", min: 0 }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".save") } %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_pet"), pet_path(@pet), class: "underline" %></p>
+</div>

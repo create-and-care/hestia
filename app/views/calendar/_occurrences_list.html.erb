@@ -14,6 +14,22 @@
   </div>
 <% end %>
 
+<% if local_assigns[:overdue_vaccinations] && overdue_vaccinations.any? %>
+  <div class="mb-4 rounded-lg border border-destructive/30 bg-destructive-subtle/40 p-3">
+    <h2 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-destructive"><%= lucide_icon("syringe", css_class: "size-4") %> <%= t("calendar.show.overdue_vaccinations_heading") %></h2>
+    <ul class="space-y-1 text-sm">
+      <% overdue_vaccinations.each do |vaccination| %>
+        <li>
+          <%= link_to pet_path(vaccination.pet), class: "hover:underline" do %>
+            <%= vaccination.pet.name %> — <%= vaccination.name %>
+            <span class="text-destructive/70">— <%= t("calendar.show.overdue_since", date: l(vaccination.booster_on, format: :short)) %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <% if occurrences.any? %>
   <div class="divide-y divide-primary rounded-lg border border-primary">
     <% occurrences.each do |time, occurrence| %>

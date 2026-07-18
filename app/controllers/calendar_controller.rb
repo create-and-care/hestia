@@ -47,6 +47,7 @@ class CalendarController < ApplicationController
       range = Time.current.beginning_of_day..(Time.current + 60.days).end_of_day
       @occurrences = occurrences_in(range)
       @overdue_tasks = overdue_tasks
+      @overdue_vaccinations = overdue_vaccinations
     end
 
     def load_month_view
@@ -72,7 +73,10 @@ class CalendarController < ApplicationController
       range = @date.beginning_of_day..@date.end_of_day
       @occurrences = occurrences_in(range)
       @holidays = holidays_by_date(@date, @date)
-      @overdue_tasks = overdue_tasks if @date == Date.current
+      if @date == Date.current
+        @overdue_tasks = overdue_tasks
+        @overdue_vaccinations = overdue_vaccinations
+      end
     end
 
     # France/Belgium/Switzerland public holidays (Spec §9.2, §16), optionally enabled per
@@ -124,5 +128,11 @@ class CalendarController < ApplicationController
     # alongside events instead of them only ever showing on the Tasks board.
     def overdue_tasks
       Current.household.tasks.general.where(done: false).where("due_on < ?", Date.current).order(:due_on)
+    end
+
+    # Pets/Calendar interconnection: surfaces overdue vaccine boosters across every pet in the
+    # household in one place, instead of requiring each pet's page to be opened individually.
+    def overdue_vaccinations
+      PetVaccination.where(pet_id: Current.household.pet_ids).where("booster_on < ?", Date.current).order(:booster_on)
     end
 end

@@ -63,7 +63,32 @@
           <% end %>
         <% end %>
       </div>
+      <div>
+        <%= render(Ui::FieldComponent.new(id: "pet_service_provider_id")) do |field| %>
+          <% field.with_label { t(".service_provider_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::NativeSelectComponent.new(name: "pet[service_provider_id]",
+                  options: [ [ t(".no_service_provider"), "" ] ] + @service_providers.map { |provider| [ provider.name, provider.id ] },
+                  selected: pet.service_provider_id, html_options: { id: "pet_service_provider_id" }) %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
+
+    <%= render(Ui::FieldComponent.new(id: "pet_photo")) do |field| %>
+      <% field.with_label { t(".photo_label") } %>
+      <% field.with_control do %>
+        <% if pet.photo.attached? %>
+          <div class="mb-2 size-24">
+            <%= render(Ui::AspectRatioComponent.new(ratio: 1)) do %>
+              <%= image_tag pet.photo.variant(resize_to_fill: [ 160, 160 ]), alt: "", class: "size-full rounded-full object-cover" %>
+            <% end %>
+          </div>
+        <% end %>
+        <%= form.file_field :photo, accept: "image/*", id: "pet_photo", class: "block text-sm text-secondary" %>
+      <% end %>
+    <% end %>
+
     <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".submit") } %>
   </div>
 <% end %>

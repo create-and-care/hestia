@@ -1,45 +1,83 @@
 <% content_for :title, @pet.name %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
-  <header class="mb-2 flex items-start justify-between">
-    <div>
-      <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("paw-print", css_class: "size-6") %> <%= @pet.name %></h1>
-      <p class="text-sm text-gray-500">
-        <%= [ @pet.species, @pet.breed ].reject(&:blank?).join(" · ") %>
-        <% if @pet.weight %> · <%= @pet.weight %> kg<% end %>
-        <% if @pet.age %> · <%= t("pets.age_years", count: @pet.age) %><% end %>
-        <% if @pet.identifier.present? %> · <%= t(".chip_prefix") %> <%= @pet.identifier %><% end %>
-      </p>
+  <header class="mb-2 flex items-start justify-between gap-4">
+    <div class="flex items-start gap-4">
+      <% if @pet.photo.attached? %>
+        <div class="size-16 shrink-0">
+          <%= render(Ui::AspectRatioComponent.new(ratio: 1)) do %>
+            <%= image_tag @pet.photo.variant(resize_to_fill: [ 128, 128 ]), alt: "", class: "size-full rounded-full object-cover" %>
+          <% end %>
+        </div>
+      <% end %>
+      <div>
+        <h1 class="flex items-center gap-2 text-2xl font-semibold">
+          <% unless @pet.photo.attached? %><%= lucide_icon("paw-print", css_class: "size-6") %><% end %>
+          <%= @pet.name %>
+        </h1>
+        <p class="text-sm text-secondary">
+          <%= [ @pet.species, @pet.breed ].reject(&:blank?).join(" · ") %>
+          <% if @pet.weight %> · <%= @pet.weight %> kg<% end %>
+          <% if @pet.age %> · <%= t("pets.age_years", count: @pet.age) %><% end %>
+          <% if @pet.identifier.present? %> · <%= t(".chip_prefix") %> <%= @pet.identifier %><% end %>
+        </p>
+        <% if @pet.service_provider %>
+          <p class="text-sm text-secondary">
+            <%= lucide_icon("stethoscope", css_class: "inline size-3.5") %>
+            <%= link_to @pet.service_provider.name, edit_service_provider_path(@pet.service_provider), class: "hover:underline" %>
+          </p>
+        <% end %>
+      </div>
     </div>
     <div class="flex gap-2 text-sm">
       <%= link_to t(".edit"), edit_pet_path(@pet), class: "underline" %>
       <%= button_to t(".delete"), pet_path(@pet), method: :delete,
-            form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-red-600 underline" %>
+            form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-destructive underline" %>
     </div>
   </header>
 
-  <p class="mb-6 text-xs text-gray-400"><%= t(".disclaimer") %></p>
+  <p class="mb-6 text-xs text-subdued"><%= t(".disclaimer") %></p>
 
   <%= render "shared/flash" %>
+  <% if flash[:shopping_list_id] %>
+    <p class="-mt-2 mb-4 text-sm">
+      <%= link_to t(".view_shopping_list_link"), shopping_list_path(flash[:shopping_list_id]), class: "underline" %>
+    </p>
+  <% end %>
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("syringe", css_class: "size-5") %> <%= t(".vaccinations_title") %></h2>
-    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
-      <% @pet.pet_vaccinations.ordered.each do |vaccination| %>
-        <%= render(Ui::ItemComponent.new) do |item| %>
-          <% item.with_title do %>
-            <%= vaccination.name %>
-            <% if vaccination.injected_on %><span class="text-gray-400">· <%= t(".vaccination_done_on", date: vaccination.injected_on.strftime("%d/%m/%Y")) %></span><% end %>
-            <% if vaccination.booster_on %>
-              <span class="<%= vaccination.booster_overdue? ? "font-medium text-red-600" : "text-gray-400" %>">· <%= t(".vaccination_booster_on", date: vaccination.booster_on.strftime("%d/%m/%Y")) %></span>
+    <% if @pet.pet_vaccinations.ordered.any? %>
+      <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
+        <% @pet.pet_vaccinations.ordered.each do |vaccination| %>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title do %>
+              <%= vaccination.name %>
+              <% if vaccination.injected_on %><span class="text-subdued">· <%= t(".vaccination_done_on", date: vaccination.injected_on.strftime("%d/%m/%Y")) %></span><% end %>
+              <% if vaccination.booster_on %>
+                <% if vaccination.booster_overdue? %>
+                  <%= render(Ui::BadgeComponent.new(variant: :destructive)) { t(".vaccination_booster_on", date: vaccination.booster_on.strftime("%d/%m/%Y")) } %>
+                <% else %>
+                  <span class="text-subdued">· <%= t(".vaccination_booster_on", date: vaccination.booster_on.strftime("%d/%m/%Y")) %></span>
+                <% end %>
+              <% end %>
+              <% if vaccination.price %><span class="text-subdued">· <%= number_to_currency(vaccination.price, unit: "€", format: "%n %u") %></span><% end %>
+            <% end %>
+            <% item.with_trailing do %>
+              <div class="flex items-center gap-1">
+                <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_pet_vaccination_path(@pet, vaccination),
+                      html_options: { aria: { label: t(".edit_vaccination_aria", name: vaccination.name) } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                <%= render(Ui::ButtonToComponent.new(pet_vaccination_path(@pet, vaccination), method: :delete, variant: :ghost, size: :icon,
+                      html_options: { aria: { label: t(".delete_vaccination_aria", name: vaccination.name) },
+                                      form: { data: { turbo_confirm: t(".delete_vaccination_confirm", name: vaccination.name) } } })) { lucide_icon("x", css_class: "size-4") } %>
+              </div>
             <% end %>
           <% end %>
-          <% item.with_trailing do %>
-            <%= button_to pet_vaccination_path(@pet, vaccination), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-          <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <div class="mb-3"><%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_vaccinations") } } %></div>
+    <% end %>
     <%= form_with model: @vaccination, url: pet_vaccinations_path(@pet), class: "flex flex-wrap items-end gap-2" do |form| %>
       <%= render Ui::InputComponent.new(type: "text", name: "pet_vaccination[name]", value: @vaccination.name, placeholder: t(".vaccination_placeholder"),
             html_options: { id: "pet_vaccination_name", required: true, class: "flex-1" }) %>
@@ -47,52 +85,82 @@
             html_options: { id: "pet_vaccination_injected_on" }) %>
       <%= render Ui::InputComponent.new(type: "date", name: "pet_vaccination[booster_on]", value: @vaccination.booster_on,
             html_options: { id: "pet_vaccination_booster_on" }) %>
+      <%= render Ui::InputComponent.new(type: "number", name: "pet_vaccination[price]", placeholder: t(".price_placeholder"),
+            html_options: { id: "pet_vaccination_price", step: "0.01", min: 0, class: "w-24" }) %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("pill", css_class: "size-5") %> <%= t(".treatments_title") %></h2>
-    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
-      <% @pet.pet_treatments.ordered.each do |treatment| %>
-        <%= render(Ui::ItemComponent.new) do |item| %>
-          <% item.with_title do %>
-            <%= treatment.name %>
-            <% if treatment.frequency.present? %><span class="text-gray-400">· <%= treatment.frequency %></span><% end %>
-            <% if treatment.last_done_on %><span class="text-gray-400">· <%= t(".treatment_last_done", date: treatment.last_done_on.strftime("%d/%m/%Y")) %></span><% end %>
-          <% end %>
-          <% item.with_trailing do %>
-            <%= button_to pet_treatment_path(@pet, treatment), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+    <% if @pet.pet_treatments.ordered.any? %>
+      <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
+        <% @pet.pet_treatments.ordered.each do |treatment| %>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title do %>
+              <%= treatment.name %>
+              <% if treatment.frequency.present? %><span class="text-subdued">· <%= treatment.frequency %></span><% end %>
+              <% if treatment.quantity.present? %><span class="text-subdued">· <%= treatment.quantity %></span><% end %>
+              <% if treatment.last_done_on %><span class="text-subdued">· <%= t(".treatment_last_done", date: treatment.last_done_on.strftime("%d/%m/%Y")) %></span><% end %>
+              <% if treatment.price %><span class="text-subdued">· <%= number_to_currency(treatment.price, unit: "€", format: "%n %u") %></span><% end %>
+            <% end %>
+            <% item.with_trailing do %>
+              <div class="flex items-center gap-1">
+                <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_pet_treatment_path(@pet, treatment),
+                      html_options: { aria: { label: t(".edit_treatment_aria", name: treatment.name) } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                <%= render(Ui::ButtonToComponent.new(pet_treatment_path(@pet, treatment), method: :delete, variant: :ghost, size: :icon,
+                      html_options: { aria: { label: t(".delete_treatment_aria", name: treatment.name) },
+                                      form: { data: { turbo_confirm: t(".delete_treatment_confirm", name: treatment.name) } } })) { lucide_icon("x", css_class: "size-4") } %>
+              </div>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <div class="mb-3"><%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_treatments") } } %></div>
+    <% end %>
     <%= form_with model: @treatment, url: pet_treatments_path(@pet), class: "flex flex-wrap items-end gap-2" do |form| %>
       <%= render Ui::InputComponent.new(type: "text", name: "pet_treatment[name]", value: @treatment.name, placeholder: t(".treatment_placeholder"),
             html_options: { id: "pet_treatment_name", required: true, class: "flex-1" }) %>
       <%= render Ui::InputComponent.new(type: "text", name: "pet_treatment[frequency]", value: @treatment.frequency, placeholder: t(".frequency_placeholder"),
             html_options: { id: "pet_treatment_frequency", class: "w-28" }) %>
+      <%= render Ui::InputComponent.new(type: "text", name: "pet_treatment[quantity]", value: @treatment.quantity, placeholder: t(".quantity_placeholder"),
+            html_options: { id: "pet_treatment_quantity", class: "w-24" }) %>
       <%= render Ui::InputComponent.new(type: "date", name: "pet_treatment[last_done_on]", value: @treatment.last_done_on,
             html_options: { id: "pet_treatment_last_done_on" }) %>
+      <%= render Ui::InputComponent.new(type: "number", name: "pet_treatment[price]", placeholder: t(".price_placeholder"),
+            html_options: { id: "pet_treatment_price", step: "0.01", min: 0, class: "w-24" }) %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("shopping-cart", css_class: "size-5") %> <%= t(".supplies_title") %></h2>
-    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
-      <% @pet.pet_supplies.ordered.each do |supply| %>
-        <%= render(Ui::ItemComponent.new) do |item| %>
-          <% item.with_title do %>
-            <% if supply.order_url.present? %><%= link_to supply.name, supply.order_url, target: "_blank", rel: "noopener", class: "underline" %><% else %><%= supply.name %><% end %>
-            <% if supply.next_order_on %><span class="text-gray-400">· <%= t(".next_order_on", date: supply.next_order_on.strftime("%d/%m/%Y")) %></span><% end %>
-          <% end %>
-          <% item.with_trailing do %>
-            <%= button_to pet_supply_path(@pet, supply), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+    <% if @pet.pet_supplies.ordered.any? %>
+      <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
+        <% @pet.pet_supplies.ordered.each do |supply| %>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title do %>
+              <% if supply.order_url.present? %><%= link_to supply.name, supply.order_url, target: "_blank", rel: "noopener", class: "underline" %><% else %><%= supply.name %><% end %>
+              <% if supply.next_order_on %><span class="text-subdued">· <%= t(".next_order_on", date: supply.next_order_on.strftime("%d/%m/%Y")) %></span><% end %>
+            <% end %>
+            <% item.with_trailing do %>
+              <div class="flex items-center gap-1">
+                <%= button_to add_to_shopping_list_pet_supply_path(@pet, supply), method: :post,
+                      class: "cursor-pointer text-subdued hover:text-primary", aria: { label: t(".add_to_shopping_list_aria", name: supply.name) } do %><%= lucide_icon("shopping-cart", css_class: "size-4") %><% end %>
+                <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_pet_supply_path(@pet, supply),
+                      html_options: { aria: { label: t(".edit_supply_aria", name: supply.name) } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                <%= render(Ui::ButtonToComponent.new(pet_supply_path(@pet, supply), method: :delete, variant: :ghost, size: :icon,
+                      html_options: { aria: { label: t(".delete_supply_aria", name: supply.name) },
+                                      form: { data: { turbo_confirm: t(".delete_supply_confirm", name: supply.name) } } })) { lucide_icon("x", css_class: "size-4") } %>
+              </div>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <div class="mb-3"><%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_supplies") } } %></div>
+    <% end %>
     <%= form_with model: @supply, url: pet_supplies_path(@pet), class: "flex flex-wrap items-end gap-2" do |form| %>
       <%= render Ui::InputComponent.new(type: "text", name: "pet_supply[name]", value: @supply.name, placeholder: t(".supply_placeholder"),
             html_options: { id: "pet_supply_name", required: true, class: "flex-1" }) %>

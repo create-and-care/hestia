@@ -32,4 +32,21 @@ class PetTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).pets, pets(:beta_cat)
   end
+
+  test "can have a photo attached" do
+    pet = pets(:alpha_dog)
+    pet.photo.attach(io: File.open(Rails.root.join("test/fixtures/files/sample.png")), filename: "sample.png", content_type: "image/png")
+    assert pet.photo.attached?
+  end
+
+  test "rejects a service provider from another household" do
+    pet = households(:alpha).pets.build(name: "X", service_provider: service_providers(:beta_provider))
+    assert_not pet.valid?
+    assert_includes pet.errors[:service_provider], "is invalid"
+  end
+
+  test "accepts a service provider from the same household" do
+    pet = households(:alpha).pets.build(name: "X", service_provider: service_providers(:alpha_plombier))
+    assert pet.valid?
+  end
 end

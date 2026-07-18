@@ -1,6 +1,14 @@
 <div id="<%= dom_id(pet) %>">
   <%= render(Ui::ItemComponent.new(href: pet_path(pet))) do |item| %>
-    <% item.with_leading { lucide_icon("paw-print", css_class: "size-4") } %>
+    <% if pet.photo.attached? %>
+      <% item.with_leading do %>
+        <div class="size-8 overflow-hidden rounded-full">
+          <%= image_tag pet.photo.variant(resize_to_fill: [ 32, 32 ]), alt: "", class: "size-full object-cover" %>
+        </div>
+      <% end %>
+    <% else %>
+      <% item.with_leading { lucide_icon("paw-print", css_class: "size-4") } %>
+    <% end %>
     <% item.with_title { pet.name } %>
     <% item.with_description do %>
       <%= [ pet.species, pet.breed ].reject(&:blank?).join(" · ") %>

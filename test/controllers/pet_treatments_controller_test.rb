@@ -33,4 +33,42 @@ class PetTreatmentsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "create with a blank name does not persist and surfaces an error" do
+    pet = pets(:alpha_dog)
+    assert_no_difference -> { PetTreatment.count } do
+      post pet_treatments_path(pet), params: { pet_treatment: { name: "" } }
+    end
+    assert_redirected_to pet
+    assert_equal "Name can't be blank", flash[:alert]
+  end
+
+  test "edit and update a treatment's fields" do
+    pet = pets(:alpha_dog)
+    treatment = pet.pet_treatments.create!(name: "Vermifuge")
+    get edit_pet_treatment_path(pet, treatment)
+    assert_response :success
+
+    patch pet_treatment_path(pet, treatment), params: {
+      pet_treatment: { name: "Vermifuge", frequency: "Mensuel", quantity: "2 comprimés", price: 15 }
+    }
+    assert_redirected_to pet
+    treatment.reload
+    assert_equal "Mensuel", treatment.frequency
+    assert_equal "2 comprimés", treatment.quantity
+  end
+
+  test "cannot edit another household's treatment" do
+    treatment = pets(:beta_cat).pet_treatments.create!(name: "Traitement Beta")
+    get edit_pet_treatment_path(pets(:beta_cat), treatment)
+    assert_response :not_found
+  end
+
+  test "quantity and price show on the pet page" do
+    pet = pets(:alpha_dog)
+    pet.pet_treatments.create!(name: "Vermifuge", quantity: "2 comprimés", price: 15)
+    get pet_path(pet)
+    assert_includes @response.body, "2 comprimés"
+    assert_includes @response.body, "15.00"
+  end
 end
