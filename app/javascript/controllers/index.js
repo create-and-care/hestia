@@ -28,6 +28,9 @@ application.register("combobox", ComboboxController)
 import CommandController from "./command_controller"
 application.register("command", CommandController)
 
+import ContactPickerController from "./contact_picker_controller"
+application.register("contact-picker", ContactPickerController)
+
 import ContextMenuController from "./context_menu_controller"
 application.register("context-menu", ContextMenuController)
 

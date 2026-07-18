@@ -68,4 +68,36 @@ class ServiceProvidersControllerTest < ActionDispatch::IntegrationTest
     assert_select "select#service_provider_linked_address_id option", text: addresses(:alpha_resto).name
     assert_select "select#service_provider_linked_address_id option", text: addresses(:beta_place).name, count: 0
   end
+
+  test "the active type filter is highlighted, others are not" do
+    plumber = service_provider_types(:alpha_plumber)
+    get service_providers_path(type_id: plumber.id)
+    assert_select "span.bg-button-primary" do
+      assert_select "a[href=?]", service_providers_path(type_id: plumber.id)
+    end
+  end
+
+  test "delete buttons ask for confirmation and have accessible names" do
+    provider = service_providers(:alpha_plombier)
+    type = service_provider_types(:alpha_plumber)
+    get service_providers_path
+    assert_select "form[action=?][data-turbo-confirm]", service_provider_path(provider)
+    assert_select "form[action=?][data-turbo-confirm]", service_provider_type_path(type)
+  end
+
+  test "search input is wired for debounced auto-submit" do
+    get service_providers_path
+    assert_select "form[data-controller='debounced-search']" do
+      assert_select "input[data-action='input->debounced-search#submit']"
+    end
+  end
+
+  test "provider form is wired for the mobile contact picker" do
+    get new_service_provider_path
+    assert_select "[data-controller='contact-picker']" do
+      assert_select "[data-contact-picker-target='name']"
+      assert_select "[data-contact-picker-target='phone']"
+      assert_select "[data-contact-picker-target='email']"
+    end
+  end
 end

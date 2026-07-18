@@ -1,0 +1,46 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= form_with model: @type, url: service_provider_type_path(@type) do %>
+    <% if @type.errors.any? %>
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
+        <ul class="list-inside list-disc">
+          <% @type.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <div class="space-y-4">
+      <%= render(Ui::FieldComponent.new(id: "service_provider_type_name")) do |field| %>
+        <% field.with_label { t(".name_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "service_provider_type[name]", value: @type.name,
+                html_options: { id: "service_provider_type_name", required: true }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "service_provider_type_icon")) do |field| %>
+        <% field.with_label { t(".icon_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "service_provider_type[icon]", value: @type.icon, placeholder: "🔧",
+                html_options: { id: "service_provider_type_icon", maxlength: 4 }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "service_provider_type_color")) do |field| %>
+        <% field.with_label { t(".color_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "service_provider_type[color]",
+                options: [ [ t(".no_color_option"), "" ] ] + ServiceProviderType::COLORS.map { |color| [ t("service_provider_types.colors.#{color}"), color ] },
+                selected: @type.color, html_options: { id: "service_provider_type_color" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".save") } %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t("service_providers.back_to_providers"), service_providers_path, class: "underline" %></p>
+</div>

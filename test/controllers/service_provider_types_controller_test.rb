@@ -8,6 +8,33 @@ class ServiceProviderTypesControllerTest < ActionDispatch::IntegrationTest
       post service_provider_types_path, params: { service_provider_type: { name: "Électricien", icon: "⚡" } }
     end
     assert_redirected_to service_providers_path
+    follow_redirect!
+    assert_includes @response.body, "Type added."
+  end
+
+  test "create with a blank name does not persist and surfaces an error" do
+    assert_no_difference -> { ServiceProviderType.count } do
+      post service_provider_types_path, params: { service_provider_type: { name: "" } }
+    end
+    assert_redirected_to service_providers_path
+    assert_equal "Name can't be blank", flash[:alert]
+  end
+
+  test "edit and update the name, icon, and color" do
+    type = service_provider_types(:alpha_plumber)
+    get edit_service_provider_type_path(type)
+    assert_response :success
+
+    patch service_provider_type_path(type), params: { service_provider_type: { name: "Plombier pro", icon: "🚰", color: "blue" } }
+    assert_redirected_to service_providers_path
+    type.reload
+    assert_equal "Plombier pro", type.name
+    assert_equal "blue", type.color
+  end
+
+  test "cannot edit another household's type" do
+    get edit_service_provider_type_path(service_provider_types(:beta_type))
+    assert_response :not_found
   end
 
   test "destroy removes the type" do

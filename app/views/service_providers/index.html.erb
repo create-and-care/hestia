@@ -7,9 +7,10 @@
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("wrench", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex items-center gap-2">
-      <%= form_with url: service_providers_path, method: :get do |form| %>
-        <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
-              class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+      <%= form_with url: service_providers_path, method: :get, data: { controller: "debounced-search" } do |form| %>
+        <label for="service_providers_q" class="sr-only"><%= t(".search_placeholder") %></label>
+        <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
+              html_options: { id: "service_providers_q", data: { action: "input->debounced-search#submit" } }) %>
       <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_service_provider_path)) { t(".new_provider") } %>
     </div>
@@ -22,16 +23,26 @@
       <%= render(Ui::BadgeComponent.new(variant: @type ? :secondary : :default)) { t(".all_types") } %>
     <% end %>
     <% @types.each do |type| %>
-      <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
+      <%= render(Ui::BadgeComponent.new(variant: @type == type ? :default : :secondary)) do %>
+        <% if type.color.present? %><span class="inline-block size-2 rounded-full <%= service_provider_type_dot_class(type.color) %>"></span><% end %>
         <%= link_to "#{type.icon} #{type.name}".strip, service_providers_path(type_id: type.id) %>
-        <%= button_to "×", service_provider_type_path(type), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
+        <%= link_to edit_service_provider_type_path(type), aria: { label: t(".edit_type_aria", name: type.name) }, class: "text-subdued hover:text-primary" do %><%= lucide_icon("pencil", css_class: "size-3") %><% end %>
+        <%= button_to "×", service_provider_type_path(type), method: :delete, class: "cursor-pointer text-subdued hover:text-destructive",
+              aria: { label: t(".delete_type_aria", name: type.name) },
+              form: { class: "inline", data: { turbo_confirm: t(".delete_type_confirm", name: type.name) } } %>
       <% end %>
     <% end %>
     <%= form_with url: service_provider_types_path, method: :post, class: "inline-flex gap-1" do %>
-      <%= render Ui::InputComponent.new(type: "text", name: "service_provider_type[icon]", placeholder: "🔧",
-            html_options: { id: "service_provider_type_icon", maxlength: 4, class: "w-12" }) %>
-      <%= render Ui::InputComponent.new(type: "text", name: "service_provider_type[name]", placeholder: t(".type_name_placeholder"),
-            html_options: { id: "service_provider_type_name" }) %>
+      <div>
+        <label for="service_provider_type_icon" class="sr-only"><%= t(".type_icon_label") %></label>
+        <%= render Ui::InputComponent.new(type: "text", name: "service_provider_type[icon]", placeholder: "🔧",
+              html_options: { id: "service_provider_type_icon", maxlength: 4, class: "w-12" }) %>
+      </div>
+      <div>
+        <label for="service_provider_type_name" class="sr-only"><%= t(".type_name_placeholder") %></label>
+        <%= render Ui::InputComponent.new(type: "text", name: "service_provider_type[name]", placeholder: t(".type_name_placeholder"),
+              html_options: { id: "service_provider_type_name" }) %>
+      </div>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add_type") } %>
     <% end %>
   </section>

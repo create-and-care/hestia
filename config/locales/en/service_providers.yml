@@ -6,8 +6,12 @@ en:
       search_placeholder: "Search…"
       new_provider: "New"
       all_types: "All"
+      type_icon_label: "Type icon"
       type_name_placeholder: "Type"
       add_type: "Add"
+      edit_type_aria: "Edit the \"%{name}\" type"
+      delete_type_aria: "Delete the \"%{name}\" type"
+      delete_type_confirm: "Delete the \"%{name}\" type? Providers using it will be uncategorized."
       none: "No provider."
     new:
       title: "New provider"
@@ -15,7 +19,13 @@ en:
       title: "Edit provider"
     service_provider:
       directions: "Directions"
+      call_aria: "Call %{phone}"
+      email_aria: "Email %{email}"
+      edit_aria: "Edit \"%{name}\""
+      delete_aria: "Delete \"%{name}\""
+      delete_confirm: "Permanently delete \"%{name}\"?"
     form:
+      import_from_contacts: "Import from contacts"
       name_label: "Name"
       type_label: "Type"
       phone_label: "Phone"
@@ -32,5 +42,25 @@ en:
     destroy:
       deleted: "Provider deleted."
   service_provider_types:
+    colors:
+      gray: "Gray"
+      red: "Red"
+      orange: "Orange"
+      yellow: "Yellow"
+      green: "Green"
+      blue: "Blue"
+      purple: "Purple"
+      pink: "Pink"
+    edit:
+      title: "Edit type"
+      name_label: "Name"
+      icon_label: "Icon"
+      color_label: "Color"
+      no_color_option: "None"
+      save: "Save"
+    create:
+      created: "Type added."
+    update:
+      updated: "Type updated."
     destroy:
       deleted: "Type deleted."

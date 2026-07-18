@@ -1,34 +1,42 @@
-<%= tag.div id: dom_id(service_provider), class: "flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 px-3 py-2" do %>
-  <div class="min-w-0 flex-1">
-    <div class="flex items-center gap-2">
-      <span class="font-medium"><%= service_provider.name %></span>
-      <% if service_provider.service_provider_type %>
-        <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
-          <%= "#{service_provider.service_provider_type.icon} #{service_provider.service_provider_type.name}".strip %>
+<%= tag.div id: dom_id(service_provider) do %>
+  <%= render(Ui::CardComponent.new) do %>
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center gap-2">
+          <span class="font-medium"><%= service_provider.name %></span>
+          <% if service_provider.service_provider_type %>
+            <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
+              <% if service_provider.service_provider_type.color.present? %><span class="inline-block size-2 rounded-full <%= service_provider_type_dot_class(service_provider.service_provider_type.color) %>"></span><% end %>
+              <%= "#{service_provider.service_provider_type.icon} #{service_provider.service_provider_type.name}".strip %>
+            <% end %>
+          <% end %>
+        </div>
+        <% if service_provider.linked_address %>
+          <p class="text-sm text-secondary"><%= service_provider.linked_address.full_address.presence || service_provider.linked_address.name %></p>
+        <% elsif service_provider.address.present? %>
+          <p class="text-sm text-secondary"><%= service_provider.address %></p>
         <% end %>
-      <% end %>
-    </div>
-    <% if service_provider.linked_address %>
-      <p class="text-sm text-gray-500"><%= service_provider.linked_address.full_address.presence || service_provider.linked_address.name %></p>
-    <% elsif service_provider.address.present? %>
-      <p class="text-sm text-gray-500"><%= service_provider.address %></p>
-    <% end %>
-  </div>
+      </div>
 
-  <div class="flex shrink-0 items-center gap-2 text-sm">
-    <% if service_provider.phone.present? %>
-      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: "tel:#{service_provider.phone}",
-            html_options: { title: service_provider.phone })) { lucide_icon("phone", css_class: "size-4") } %>
-    <% end %>
-    <% if service_provider.email.present? %>
-      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: "mailto:#{service_provider.email}",
-            html_options: { title: service_provider.email })) { lucide_icon("mail", css_class: "size-4") } %>
-    <% end %>
-    <% if service_provider.maps_url %>
-      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: service_provider.maps_url,
-            html_options: { target: "_blank", rel: "noopener", title: t(".directions") })) { lucide_icon("map", css_class: "size-4") } %>
-    <% end %>
-    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_service_provider_path(service_provider))) { lucide_icon("pencil", css_class: "size-4") } %>
-    <%= button_to service_provider_path(service_provider), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
-  </div>
+      <div class="flex shrink-0 items-center gap-2 text-sm">
+        <% if service_provider.phone.present? %>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: "tel:#{service_provider.phone}",
+                html_options: { aria: { label: t(".call_aria", phone: service_provider.phone) } })) { lucide_icon("phone", css_class: "size-4") } %>
+        <% end %>
+        <% if service_provider.email.present? %>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: "mailto:#{service_provider.email}",
+                html_options: { aria: { label: t(".email_aria", email: service_provider.email) } })) { lucide_icon("mail", css_class: "size-4") } %>
+        <% end %>
+        <% if service_provider.maps_url %>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: service_provider.maps_url,
+                html_options: { target: "_blank", rel: "noopener", aria: { label: t(".directions") } })) { lucide_icon("map", css_class: "size-4") } %>
+        <% end %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_service_provider_path(service_provider),
+              html_options: { aria: { label: t(".edit_aria", name: service_provider.name) } })) { lucide_icon("pencil", css_class: "size-4") } %>
+        <%= render(Ui::ButtonToComponent.new(service_provider_path(service_provider), method: :delete, variant: :ghost, size: :icon,
+              html_options: { aria: { label: t(".delete_aria", name: service_provider.name) },
+                              form: { data: { turbo_confirm: t(".delete_confirm", name: service_provider.name) } } })) { lucide_icon("x", css_class: "size-4") } %>
+      </div>
+    </div>
+  <% end %>
 <% end %>

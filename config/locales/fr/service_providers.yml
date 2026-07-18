@@ -6,8 +6,12 @@ fr:
       search_placeholder: "Rechercher…"
       new_provider: "Nouveau"
       all_types: "Tous"
+      type_icon_label: "Icône du type"
       type_name_placeholder: "Type"
       add_type: "Ajouter"
+      edit_type_aria: "Modifier le type « %{name} »"
+      delete_type_aria: "Supprimer le type « %{name} »"
+      delete_type_confirm: "Supprimer le type « %{name} » ? Les prestataires liés seront décatégorisés."
       none: "Aucun prestataire."
     new:
       title: "Nouveau prestataire"
@@ -15,7 +19,13 @@ fr:
       title: "Modifier le prestataire"
     service_provider:
       directions: "Itinéraire"
+      call_aria: "Appeler le %{phone}"
+      email_aria: "Écrire à %{email}"
+      edit_aria: "Modifier « %{name} »"
+      delete_aria: "Supprimer « %{name} »"
+      delete_confirm: "Supprimer définitivement « %{name} » ?"
     form:
+      import_from_contacts: "Importer depuis les contacts"
       name_label: "Nom"
       type_label: "Type"
       phone_label: "Téléphone"
@@ -32,5 +42,25 @@ fr:
     destroy:
       deleted: "Prestataire supprimé."
   service_provider_types:
+    colors:
+      gray: "Gris"
+      red: "Rouge"
+      orange: "Orange"
+      yellow: "Jaune"
+      green: "Vert"
+      blue: "Bleu"
+      purple: "Violet"
+      pink: "Rose"
+    edit:
+      title: "Modifier le type"
+      name_label: "Nom"
+      icon_label: "Icône"
+      color_label: "Couleur"
+      no_color_option: "Aucune"
+      save: "Enregistrer"
+    create:
+      created: "Type ajouté."
+    update:
+      updated: "Type mis à jour."
     destroy:
       deleted: "Type supprimé."
