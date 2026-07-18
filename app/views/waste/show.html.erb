@@ -12,19 +12,30 @@
   <%= render "shared/flash" %>
 
   <section class="mb-8">
-    <h2 class="mb-3 font-medium"><%= t(".upcoming_title") %></h2>
+    <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+      <h2 class="font-medium"><%= t(".upcoming_title") %></h2>
+      <div class="flex items-center gap-2 text-sm">
+        <%= link_to t(".prev_window"), waste_path(from: (@from - 4.weeks).iso8601), class: "underline" %>
+        <%= link_to t(".today"), waste_path, class: "underline" %>
+        <%= link_to t(".next_window"), waste_path(from: (@from + 4.weeks).iso8601), class: "underline" %>
+      </div>
+    </div>
     <% if @events.any? %>
       <%= render(Ui::CardComponent.new) do %>
-        <ul class="divide-y divide-gray-100">
+        <ul class="divide-y divide-primary">
           <% @events.each do |date, events| %>
             <li class="px-4 py-2">
-              <p class="text-xs font-medium text-gray-500"><%= weekday_label(date.wday) %> <%= date.strftime("%d/%m") %></p>
+              <p class="text-xs font-medium text-secondary"><%= weekday_label(date.wday) %> <%= date.strftime("%d/%m") %></p>
               <div class="mt-1 flex flex-wrap gap-2">
                 <% events.each do |event| %>
-                  <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs <%= waste_type_badge_class(event.waste_type) %>">
+                  <%= render(Ui::BadgeComponent.new(variant: waste_type_badge_variant(event.waste_type))) do %>
                     <%= waste_type_icon(event.waste_type) %> <%= waste_type_label(event.waste_type) %>
-                    <%= button_to "×", waste_collection_event_path(event), method: :delete, class: "cursor-pointer hover:text-red-600", form: { class: "inline" } %>
-                  </span>
+                    <%= link_to edit_waste_collection_event_path(event), class: "hover:underline",
+                          aria: { label: t(".edit_event_aria", type: waste_type_label(event.waste_type)) } do %><%= lucide_icon("pencil", css_class: "size-3") %><% end %>
+                    <%= button_to waste_collection_event_path(event), method: :delete, class: "cursor-pointer hover:text-destructive",
+                          aria: { label: t(".delete_event_aria", type: waste_type_label(event.waste_type)) },
+                          form: { class: "inline", data: { turbo_confirm: t(".delete_event_confirm") } } do %>×<% end %>
+                  <% end %>
                 <% end %>
               </div>
             </li>
@@ -43,11 +54,13 @@
     <%= form_with model: @event, url: waste_collection_events_path, class: "flex flex-wrap items-end gap-2" do |form| %>
       <div>
         <%= render(Ui::FieldComponent.new(id: form.field_id(:waste_type))) do |field| %>
+          <% field.with_label { t(".waste_type_label") } %>
           <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:waste_type), options: waste_type_options, selected: form.object.waste_type, html_options: { id: form.field_id(:waste_type) }) } %>
         <% end %>
       </div>
       <div>
         <%= render(Ui::FieldComponent.new(id: form.field_id(:collected_on))) do |field| %>
+          <% field.with_label { t(".collected_on_label") } %>
           <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:collected_on), value: form.object.collected_on, html_options: { id: form.field_id(:collected_on) }) } %>
         <% end %>
       </div>
@@ -57,49 +70,59 @@
 
   <section class="mb-8">
     <h2 class="mb-3 font-medium"><%= t(".series_title") %></h2>
-    <%= render(Ui::CardComponent.new(class_name: "mb-3")) do %>
-      <ul class="divide-y divide-gray-100 text-sm">
-        <% @series.each do |series| %>
-          <li>
-            <%= render(Ui::ItemComponent.new) do |item| %>
-              <% item.with_title do %>
-                <%= waste_type_icon(series.waste_type) %> <%= waste_type_label(series.waste_type) %> —
-                <%= weekday_label(series.weekday) %>, <%= t(".every_n_weeks", count: series.interval_weeks) %>
-                <span class="text-gray-400">(<%= series.starts_on.strftime("%d/%m/%y") %> → <%= series.ends_on.strftime("%d/%m/%y") %>)</span>
+    <% if @series.any? %>
+      <%= render(Ui::CardComponent.new(class_name: "mb-3")) do %>
+        <ul class="divide-y divide-primary text-sm">
+          <% @series.each do |series| %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title do %>
+                  <%= waste_type_icon(series.waste_type) %> <%= waste_type_label(series.waste_type) %> —
+                  <%= weekday_label(series.weekday) %>, <%= t(".every_n_weeks", count: series.interval_weeks) %>
+                  <span class="text-subdued">(<%= series.starts_on.strftime("%d/%m/%y") %> → <%= series.ends_on.strftime("%d/%m/%y") %>)</span>
+                <% end %>
+                <% item.with_trailing do %>
+                  <%= render(Ui::ButtonToComponent.new(waste_collection_series_path(series), method: :delete, variant: :ghost, size: :sm,
+                        html_options: { aria: { label: t(".delete_series_aria", type: waste_type_label(series.waste_type)) },
+                                        form: { data: { turbo_confirm: t(".delete_series_confirm") } } })) { t(".delete_series") } %>
+                <% end %>
               <% end %>
-              <% item.with_trailing do %>
-                <%= button_to t(".delete_series"), waste_collection_series_path(series), method: :delete,
-                      class: "cursor-pointer text-xs text-red-600 hover:underline" %>
-              <% end %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% else %>
+      <%= render(Ui::EmptyComponent.new(class_name: "mb-3")) { |empty| empty.with_description { t(".no_series") } } %>
     <% end %>
 
     <%= form_with url: waste_collection_series_index_path, method: :post, scope: :waste_collection_series, class: "mt-3 flex flex-wrap items-end gap-2" do |form| %>
       <div>
         <%= render(Ui::FieldComponent.new(id: form.field_id(:waste_type))) do |field| %>
+          <% field.with_label { t(".waste_type_label") } %>
           <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:waste_type), options: waste_type_options, html_options: { id: form.field_id(:waste_type) }) } %>
         <% end %>
       </div>
       <div>
         <%= render(Ui::FieldComponent.new(id: form.field_id(:weekday))) do |field| %>
+          <% field.with_label { t(".weekday_label") } %>
           <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:weekday), options: weekday_options, html_options: { id: form.field_id(:weekday) }) } %>
         <% end %>
       </div>
       <div class="w-16">
         <%= render(Ui::FieldComponent.new(id: form.field_id(:interval_weeks))) do |field| %>
+          <% field.with_label { t(".interval_weeks_label") } %>
           <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:interval_weeks), value: 1, html_options: { id: form.field_id(:interval_weeks), min: 1 }) } %>
         <% end %>
       </div>
       <div>
         <%= render(Ui::FieldComponent.new(id: form.field_id(:starts_on))) do |field| %>
+          <% field.with_label { t(".starts_on_label") } %>
           <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:starts_on), value: Date.current, html_options: { id: form.field_id(:starts_on) }) } %>
         <% end %>
       </div>
       <div>
         <%= render(Ui::FieldComponent.new(id: form.field_id(:ends_on))) do |field| %>
+          <% field.with_label { t(".ends_on_label") } %>
           <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:ends_on), value: 3.months.from_now.to_date, html_options: { id: form.field_id(:ends_on) }) } %>
         <% end %>
       </div>

@@ -32,4 +32,7 @@ module CalendarHelper
   # A birthday is represented as [time, Contact] rather than [time,
   # CalendarEvent] — the grid/list partials render either kind.
   def birthday_occurrence?(occurrence) = occurrence.is_a?(Contact)
+
+  # Same idea for a waste collection: [time, WasteCollectionEvent] rather than [time, CalendarEvent].
+  def waste_occurrence?(occurrence) = occurrence.is_a?(WasteCollectionEvent)
 end
