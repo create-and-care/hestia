@@ -38,6 +38,7 @@ module Recipes
           RecipeStep.new(content: content, position: index)
         end
         recipe.save!
+        AttachPhotoFromUrl.call(recipe: recipe, image_url: result.image_url)
         recipe
       end
   end

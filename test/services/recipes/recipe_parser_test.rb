@@ -49,5 +49,36 @@ module Recipes
     test "returns nil when there is no recipe" do
       assert_nil Recipes::RecipeParser.parse("<html><body>rien</body></html>")
     end
+
+    test "extracts a plain string image URL" do
+      html = <<~HTML
+        <script type="application/ld+json">
+        {"@type":"Recipe","name":"Tarte","image":"https://example.com/tarte.jpg"}
+        </script>
+      HTML
+      assert_equal "https://example.com/tarte.jpg", Recipes::RecipeParser.parse(html).image_url
+    end
+
+    test "extracts an image URL from an ImageObject" do
+      html = <<~HTML
+        <script type="application/ld+json">
+        {"@type":"Recipe","name":"Tarte","image":{"@type":"ImageObject","url":"https://example.com/tarte.jpg"}}
+        </script>
+      HTML
+      assert_equal "https://example.com/tarte.jpg", Recipes::RecipeParser.parse(html).image_url
+    end
+
+    test "extracts an image URL from an array of images" do
+      html = <<~HTML
+        <script type="application/ld+json">
+        {"@type":"Recipe","name":"Tarte","image":["https://example.com/tarte.jpg","https://example.com/tarte2.jpg"]}
+        </script>
+      HTML
+      assert_equal "https://example.com/tarte.jpg", Recipes::RecipeParser.parse(html).image_url
+    end
+
+    test "image_url is nil when absent" do
+      assert_nil Recipes::RecipeParser.parse(SAMPLE).image_url
+    end
   end
 end

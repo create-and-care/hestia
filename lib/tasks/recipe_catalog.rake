@@ -21,7 +21,8 @@ namespace :recipes do
           "prep_time_minutes" => parsed.prep_time_minutes,
           "cook_time_minutes" => parsed.cook_time_minutes,
           "ingredients" => parsed.ingredients,
-          "steps" => parsed.steps
+          "steps" => parsed.steps,
+          "image_url" => parsed.image_url
         }
       end
 
@@ -46,6 +47,7 @@ namespace :recipes do
           cook_time_minutes: data["cook_time_minutes"],
           ingredients: data["ingredients"] || [],
           steps: data["steps"] || [],
+          image_url: data["image_url"],
           last_synced_at: Time.current
         )
         entry.save!

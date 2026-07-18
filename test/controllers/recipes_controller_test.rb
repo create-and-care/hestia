@@ -101,9 +101,10 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to recipe
   end
 
-  test "add_to_shopping_list is idempotent and notices when already added" do
+  test "add_to_shopping_list is idempotent and links to the shopping list when already added" do
     recipe = recipes(:alpha_pancakes)
     post add_to_shopping_list_recipe_path(recipe)
+    list = households(:alpha).shopping_lists.order(:created_at).first
 
     assert_no_difference -> { ShoppingListItem.count } do
       post add_to_shopping_list_recipe_path(recipe)
@@ -111,6 +112,7 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to recipe
     follow_redirect!
     assert_includes @response.body, "already on the shopping list"
+    assert_select "a[href=?]", shopping_list_path(list)
   end
 
   test "import with a blank url re-renders the form" do
@@ -120,6 +122,58 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
 
   test "cannot access another household's recipe" do
     get recipe_path(recipes(:beta_soup))
+    assert_response :not_found
+  end
+
+  test "filters by category" do
+    households(:alpha).recipes.create!(title: "Soupe froide", category: "Entrée")
+    get recipes_path(category: "Entrée")
+    assert_includes @response.body, "Soupe froide"
+    assert_not_includes @response.body, "Pancakes"
+  end
+
+  test "paginates when there are more recipes than the page size" do
+    households(:alpha).recipes.destroy_all
+    (RecipesController::PER_PAGE + 1).times { |i| households(:alpha).recipes.create!(title: "Recette #{'%02d' % i}") }
+
+    get recipes_path
+    assert_includes @response.body, "Recette 00"
+    assert_not_includes @response.body, "Recette #{'%02d' % RecipesController::PER_PAGE}"
+
+    get recipes_path(page: 2)
+    assert_includes @response.body, "Recette #{'%02d' % RecipesController::PER_PAGE}"
+  end
+
+  test "create attaches an optional photo" do
+    photo = fixture_file_upload("sample.png", "image/png")
+    post recipes_path, params: { recipe: { title: "Gâteau", photo: photo } }
+    assert Recipe.find_by!(title: "Gâteau").photo.attached?
+  end
+
+  test "cook mode does not render the app sidebar" do
+    get cook_recipe_path(recipes(:alpha_pancakes))
+    assert_response :success
+    assert_select "[data-controller='sidebar']", false
+    assert_select "[data-controller='wake-lock']"
+  end
+
+  test "link_note links an existing unlinked note to the recipe" do
+    recipe = recipes(:alpha_pancakes)
+    note = notes(:alpha_idea)
+    post link_note_recipe_path(recipe), params: { note_id: note.id }
+    assert_equal recipe, note.reload.recipe
+  end
+
+  test "link_bottle links an existing unlinked bottle to the recipe" do
+    recipe = recipes(:alpha_pancakes)
+    bottle = bottles(:alpha_bordeaux)
+    post link_bottle_recipe_path(recipe), params: { bottle_id: bottle.id }
+    assert_equal recipe, bottle.reload.recipe
+  end
+
+  test "cannot link another household's note" do
+    recipe = recipes(:alpha_pancakes)
+    post link_note_recipe_path(recipe), params: { note_id: notes(:beta_note).id }
     assert_response :not_found
   end
 end

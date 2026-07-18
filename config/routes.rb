@@ -139,6 +139,8 @@ Rails.application.routes.draw do
     member do
       get :cook
       post :add_to_shopping_list
+      post :link_note
+      post :link_bottle
     end
     collection do
       get :new_import

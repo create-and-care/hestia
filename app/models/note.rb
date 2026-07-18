@@ -3,6 +3,7 @@ class Note < ApplicationRecord
 
   belongs_to :author, class_name: "User", optional: true
   belongs_to :trip, optional: true
+  belongs_to :recipe, optional: true
 
   validates :title, presence: true
 

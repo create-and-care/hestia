@@ -117,3 +117,6 @@ application.register("toggle-group", ToggleGroupController)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
+
+import WakeLockController from "./wake_lock_controller"
+application.register("wake-lock", WakeLockController)

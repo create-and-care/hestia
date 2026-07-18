@@ -79,6 +79,20 @@
       <% end %>
     <% end %>
 
+    <%= render(Ui::FieldComponent.new(id: "recipe_photo")) do |field| %>
+      <% field.with_label { t(".photo_label") } %>
+      <% field.with_control do %>
+        <% if recipe.photo.attached? %>
+          <div class="mb-2 max-w-40">
+            <%= render(Ui::AspectRatioComponent.new) do %>
+              <%= image_tag recipe.photo.variant(resize_to_fill: [ 160, 90 ]), alt: "", class: "size-full object-cover" %>
+            <% end %>
+          </div>
+        <% end %>
+        <%= form.file_field :photo, accept: "image/*", id: "recipe_photo", class: "block text-sm text-secondary" %>
+      <% end %>
+    <% end %>
+
     <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
   </div>
 <% end %>

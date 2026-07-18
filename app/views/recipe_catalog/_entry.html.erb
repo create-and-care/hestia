@@ -13,13 +13,13 @@
 
 <% action = capture do %>
   <% if @added_entry_ids&.include?(entry.id) %>
-    <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-400" title="<%= t(".already_added") %>">
+    <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-primary bg-surface text-subdued" title="<%= t(".already_added") %>">
       &minus;<span class="sr-only"><%= t(".already_added") %></span>
     </span>
   <% else %>
-    <%= button_to add_to_household_recipe_catalog_path(entry), method: :post, title: t(".add_link"),
-          class: "inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-gray-300 font-medium hover:bg-gray-50" do %>
-      +<span class="sr-only"><%= t(".add_link") %></span>
+    <%= form_with url: add_to_household_recipe_catalog_path(entry), method: :post, class: "inline" do %>
+      <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :icon,
+            html_options: { class: "rounded-full", title: t(".add_link"), aria: { label: t(".add_link") } })) { "+" } %>
     <% end %>
   <% end %>
 <% end %>
@@ -27,13 +27,21 @@
 <div id="<%= dom_id(entry, :catalog) %>">
   <% if list_mode %>
     <%= render(Ui::ItemComponent.new) do |item| %>
+      <% if entry.image_url.present? %>
+        <% item.with_leading { image_tag entry.image_url, alt: "", class: "size-12 shrink-0 rounded-md object-cover" } %>
+      <% end %>
       <% item.with_title { entry.title } %>
       <% item.with_description { meta } %>
       <% item.with_trailing { action } %>
     <% end %>
   <% else %>
     <%= render(Ui::CardComponent.new) do %>
-      <h2 class="font-medium text-primary"><%= entry.title %></h2>
+      <% if entry.image_url.present? %>
+        <%= render(Ui::AspectRatioComponent.new) do %>
+          <%= image_tag entry.image_url, alt: "", class: "size-full object-cover" %>
+        <% end %>
+      <% end %>
+      <h2 class="<%= "mt-3" if entry.image_url.present? %> font-medium text-primary"><%= entry.title %></h2>
       <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-secondary"><%= meta %></div>
       <div class="mt-3"><%= action %></div>
     <% end %>

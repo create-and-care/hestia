@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_17_195119) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_18_082651) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -94,12 +94,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_17_195119) do
     t.bigint "household_id", null: false
     t.boolean "in_stock", default: true, null: false
     t.string "name", null: false
+    t.bigint "recipe_id"
     t.string "region"
     t.datetime "updated_at", null: false
     t.integer "vintage"
     t.bigint "wine_cellar_id", null: false
     t.string "wine_type"
     t.index ["household_id"], name: "index_bottles_on_household_id"
+    t.index ["recipe_id"], name: "index_bottles_on_recipe_id"
     t.index ["wine_cellar_id"], name: "index_bottles_on_wine_cellar_id"
   end
 
@@ -447,12 +449,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_17_195119) do
     t.datetime "created_at", null: false
     t.boolean "favorite", default: false, null: false
     t.bigint "household_id", null: false
+    t.bigint "recipe_id"
     t.string "title", null: false
     t.bigint "trip_id"
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_notes_on_author_id"
     t.index ["household_id", "archived"], name: "index_notes_on_household_id_and_archived"
     t.index ["household_id"], name: "index_notes_on_household_id"
+    t.index ["recipe_id"], name: "index_notes_on_recipe_id"
     t.index ["trip_id"], name: "index_notes_on_trip_id"
   end
 
@@ -609,6 +613,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_17_195119) do
   create_table "recipe_catalog_entries", force: :cascade do |t|
     t.integer "cook_time_minutes"
     t.datetime "created_at", null: false
+    t.string "image_url"
     t.jsonb "ingredients", default: [], null: false
     t.datetime "last_synced_at"
     t.integer "prep_time_minutes"
@@ -939,6 +944,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_17_195119) do
   add_foreign_key "api_tokens", "users"
   add_foreign_key "baby_profiles", "households"
   add_foreign_key "bottles", "households"
+  add_foreign_key "bottles", "recipes"
   add_foreign_key "bottles", "wine_cellars"
   add_foreign_key "budget_categories", "households"
   add_foreign_key "budget_entries", "budget_categories"
@@ -984,6 +990,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_17_195119) do
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users", column: "author_id"
   add_foreign_key "notes", "households"
+  add_foreign_key "notes", "recipes"
   add_foreign_key "notes", "trips"
   add_foreign_key "notes", "users", column: "author_id"
   add_foreign_key "notification_preferences", "users"

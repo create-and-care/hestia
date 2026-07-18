@@ -6,7 +6,7 @@ module Recipes
   # (basic import — Spec §9.5). Pure (no network access): testable on raw HTML.
   class RecipeParser
     Result = Struct.new(:title, :ingredients, :steps, :servings,
-      :prep_time_minutes, :cook_time_minutes, keyword_init: true)
+      :prep_time_minutes, :cook_time_minutes, :image_url, keyword_init: true)
 
     def self.parse(html) = new(html).parse
 
@@ -24,7 +24,8 @@ module Recipes
         steps: instructions(node["recipeInstructions"]),
         servings: servings(node["recipeYield"]),
         prep_time_minutes: iso8601_minutes(node["prepTime"]),
-        cook_time_minutes: iso8601_minutes(node["cookTime"])
+        cook_time_minutes: iso8601_minutes(node["cookTime"]),
+        image_url: image_url(node["image"])
       )
     end
 
@@ -93,6 +94,16 @@ module Recipes
 
       def servings(value)
         string(value)[/\d+/]&.to_i
+      end
+
+      # schema.org/Recipe's `image` is a URL string, an array of URLs, or an
+      # ImageObject (or array thereof) with its own `url` property.
+      def image_url(value)
+        candidate = value.is_a?(Array) ? value.first : value
+        case candidate
+        when String then candidate.strip.presence
+        when Hash then candidate["url"].to_s.strip.presence
+        end
       end
 
       def iso8601_minutes(value)

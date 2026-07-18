@@ -1,17 +1,32 @@
 class RecipesController < ApplicationController
   include RecipeViewMode
 
-  before_action :set_recipe, only: %i[show edit update destroy cook add_to_shopping_list]
+  layout "cook", only: :cook
+
+  before_action :set_recipe, only: %i[show edit update destroy cook add_to_shopping_list link_note link_bottle]
+
+  PER_PAGE = 24
 
   def index
     @query = params[:q].to_s.strip
+    @category = params[:category].to_s.strip
+    @categories = Current.household.recipes.distinct.where.not(category: [ nil, "" ]).order(:category).pluck(:category)
     @view_mode = recipe_view_mode
-    recipes = Current.household.recipes.ordered
+
+    recipes = Current.household.recipes.ordered.includes(photo_attachment: :blob)
     recipes = recipes.where("title ILIKE ?", "%#{@query}%") if @query.present?
-    @recipes = recipes
+    recipes = recipes.where(category: @category) if @category.present?
+
+    @per_page = PER_PAGE
+    @total = recipes.count
+    @total_pages = [ (@total / @per_page.to_f).ceil, 1 ].max
+    @page = [ [ params[:page].to_i, 1 ].max, @total_pages ].min
+    @recipes = recipes.offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def show
+    @linkable_notes = Current.household.notes.general.where(recipe_id: nil).order(:title)
+    @linkable_bottles = Current.household.bottles.where(recipe_id: nil).order(:name)
   end
 
   def new
@@ -59,11 +74,31 @@ class RecipesController < ApplicationController
     list = target_shopping_list
 
     if list.items.exists?(recipe_id: @recipe.id)
-      redirect_to @recipe, notice: t(".already_notice")
+      flash[:notice] = t(".already_notice")
     else
       Recipes::AddIngredientsToShoppingList.call(recipe: @recipe, shopping_list: list)
-      redirect_to @recipe, notice: t(".notice")
+      flash[:notice] = t(".notice")
     end
+
+    # A plain id, not a rendered link: flash values round-trip through the
+    # session (JSON), which would silently strip any html_safe marking on a
+    # pre-built <a> string — the view builds the actual link itself instead.
+    flash[:shopping_list_id] = list.id
+    redirect_to @recipe
+  end
+
+  # Notes/Wine Cellar interconnections (Spec §9.5): link an existing note
+  # or bottle to this recipe (a tasting note, a wine pairing…).
+  def link_note
+    note = Current.household.notes.general.find(params[:note_id])
+    note.update!(recipe: @recipe)
+    redirect_to @recipe, notice: t(".notice")
+  end
+
+  def link_bottle
+    bottle = Current.household.bottles.find(params[:bottle_id])
+    bottle.update!(recipe: @recipe)
+    redirect_to @recipe, notice: t(".notice")
   end
 
   # Import form from a URL.
@@ -88,11 +123,11 @@ class RecipesController < ApplicationController
 
     def target_shopping_list
       Current.household.shopping_lists.order(:created_at).first ||
-        Current.household.shopping_lists.create!(name: "Courses")
+        Current.household.shopping_lists.create!(name: t("shopping_lists.default_list_name"))
     end
 
     def recipe_params
-      params.require(:recipe).permit(:title, :category, :prep_time_minutes, :cook_time_minutes, :servings, :source_url)
+      params.require(:recipe).permit(:title, :category, :prep_time_minutes, :cook_time_minutes, :servings, :source_url, :photo)
     end
 
     def apply_text_fields(recipe)

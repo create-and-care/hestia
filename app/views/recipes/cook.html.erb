@@ -1,6 +1,12 @@
 <% content_for :title, t(".title", title: @recipe.title) %>
 
-<div class="mx-auto max-w-2xl px-6 py-10">
+<div class="mx-auto max-w-2xl px-6 py-10" data-controller="wake-lock">
+  <p class="mb-6">
+    <%= link_to recipe_path(@recipe), class: "inline-flex items-center gap-1.5 text-sm text-secondary hover:underline" do %>
+      <%= lucide_icon("x", css_class: "size-4") %> <%= t(".exit_link") %>
+    <% end %>
+  </p>
+
   <h1 class="mb-6 text-3xl font-bold"><%= @recipe.title %></h1>
 
   <section class="mb-8">

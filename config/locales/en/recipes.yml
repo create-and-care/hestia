@@ -3,6 +3,8 @@ en:
     index:
       title: "Recipes"
       search_placeholder: "Search…"
+      category_blank: "All categories"
+      filter_submit: "Filter"
       import_link: "Import"
       new_link: "New"
       empty: "No recipes."
@@ -10,10 +12,13 @@ en:
       mine_tab: "My recipes"
       discover_tab: "Discover"
       view_mode_label: "Display mode"
+      view_mode_card: "Card view"
+      view_mode_list: "List view"
     recipe:
       total_time: "%{minutes} min"
     cook:
       title: "%{title} — cooking"
+      exit_link: "Exit cook mode"
       ingredients_heading: "Ingredients"
       steps_heading: "Steps"
       back_link: "← Back to the recipe"
@@ -42,9 +47,14 @@ en:
       delete_confirm: "Delete this recipe?"
       ingredients_heading: "Ingredients"
       steps_heading: "Steps"
+      notes_heading: "Linked notes"
+      pairings_heading: "Wine pairings"
+      link_note_submit: "Link a note"
+      link_bottle_submit: "Link a bottle"
       source_label: "Source:"
       plan_meal_heading: "Plan this meal"
       plan_meal_submit: "Add to menu"
+      view_shopping_list_link: "View shopping list"
       back_link: "← All recipes"
     form:
       title_label: "Title"
@@ -57,6 +67,7 @@ en:
       ingredients_label: "Ingredients (one per line)"
       steps_label: "Steps (one per line)"
       source_label: "Source (URL)"
+      photo_label: "Photo (optional)"
       submit: "Save"
     create:
       created: "Recipe created."
@@ -67,6 +78,10 @@ en:
     add_to_shopping_list:
       notice: "Ingredients added to the shopping list."
       already_notice: "This recipe's ingredients are already on the shopping list."
+    link_note:
+      notice: "Note linked to the recipe."
+    link_bottle:
+      notice: "Bottle linked to the recipe."
     import:
       notice: "Recipe imported."
       alert: "Couldn't import this recipe (page unreachable or no microdata)."
