@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_18_082651) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_18_090057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -445,8 +445,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_082651) do
   create_table "notes", force: :cascade do |t|
     t.boolean "archived", default: false, null: false
     t.bigint "author_id"
+    t.string "color", default: "default", null: false
     t.text "content"
     t.datetime "created_at", null: false
+    t.bigint "document_id"
     t.boolean "favorite", default: false, null: false
     t.bigint "household_id", null: false
     t.bigint "recipe_id"
@@ -454,6 +456,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_082651) do
     t.bigint "trip_id"
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_notes_on_author_id"
+    t.index ["document_id"], name: "index_notes_on_document_id"
     t.index ["household_id", "archived"], name: "index_notes_on_household_id_and_archived"
     t.index ["household_id"], name: "index_notes_on_household_id"
     t.index ["recipe_id"], name: "index_notes_on_recipe_id"
@@ -989,6 +992,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_082651) do
   add_foreign_key "memberships", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users", column: "author_id"
+  add_foreign_key "notes", "documents"
   add_foreign_key "notes", "households"
   add_foreign_key "notes", "recipes"
   add_foreign_key "notes", "trips"

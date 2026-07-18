@@ -1,0 +1,11 @@
+<%# Shared by the quick-add form and the edit form — absolute locale keys since this partial is
+    rendered from two different lazy-lookup namespaces (notes.form / notes.edit). %>
+<div class="flex items-center gap-1.5" role="radiogroup" aria-label="<%= t("notes.color_picker.label") %>">
+  <% Note::COLORS.each do |color| %>
+    <label class="cursor-pointer">
+      <%= radio_button_tag "note[color]", color, color == (note.color || Note::COLORS.first), class: "peer sr-only" %>
+      <span class="block size-5 rounded-full border-2 border-transparent peer-checked:border-primary peer-focus-visible:ring-2 peer-focus-visible:ring-focus <%= note_color_swatch_class(color) %>"
+            title="<%= t("notes.color_picker.#{color}") %>"></span>
+    </label>
+  <% end %>
+</div>

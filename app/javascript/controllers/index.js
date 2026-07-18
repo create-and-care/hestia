@@ -37,6 +37,9 @@ application.register("data-table", DataTableController)
 import DatePickerController from "./date_picker_controller"
 application.register("date-picker", DatePickerController)
 
+import DebouncedSearchController from "./debounced_search_controller"
+application.register("debounced-search", DebouncedSearchController)
+
 import DialogController from "./dialog_controller"
 application.register("dialog", DialogController)
 
@@ -117,6 +120,9 @@ application.register("toggle-group", ToggleGroupController)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
+
+import VoiceDictationController from "./voice_dictation_controller"
+application.register("voice-dictation", VoiceDictationController)
 
 import WakeLockController from "./wake_lock_controller"
 application.register("wake-lock", WakeLockController)

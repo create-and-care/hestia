@@ -1,11 +1,26 @@
 <%= tag.div id: "new_note" do %>
   <%= form_with model: note, url: notes_path do |form| %>
-    <div class="space-y-2 rounded-lg border border-primary p-3">
+    <div class="space-y-2 rounded-lg border border-primary p-3" data-controller="voice-dictation">
+      <label for="note_title" class="sr-only"><%= t(".title_label") %></label>
       <%= render Ui::InputComponent.new(name: "note[title]", value: note.title, placeholder: t(".title_placeholder"),
             html_options: { id: "note_title", required: true, class: "font-medium" }) %>
-      <%= render(Ui::TextareaComponent.new(name: "note[content]", rows: 2, placeholder: t(".content_placeholder"),
-            html_options: { id: "note_content" })) { note.content } %>
-      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
+
+      <div class="flex items-start gap-1.5">
+        <label for="note_content" class="sr-only"><%= t(".content_label") %></label>
+        <div class="flex-1">
+          <%= render(Ui::TextareaComponent.new(name: "note[content]", rows: 2, placeholder: t(".content_placeholder"),
+                html_options: { id: "note_content", data: { "voice-dictation-target": "output" } })) { note.content } %>
+        </div>
+        <button type="button" class="mt-1.5 shrink-0 text-subdued hover:text-primary" data-voice-dictation-target="button"
+                data-action="voice-dictation#toggle" aria-label="<%= t(".dictate_aria") %>">
+          <%= lucide_icon("mic", css_class: "size-4") %>
+        </button>
+      </div>
+
+      <div class="flex items-center justify-between gap-2">
+        <%= render "notes/color_picker", note: note %>
+        <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
+      </div>
     </div>
   <% end %>
 <% end %>

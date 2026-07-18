@@ -7,12 +7,12 @@
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("notebook-pen", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex items-center gap-2">
-      <%= form_with url: notes_path, method: :get do |form| %>
+      <%= form_with url: notes_path, method: :get, data: { controller: "debounced-search" } do |form| %>
         <%= form.hidden_field :archived, value: ("1" if @archived) %>
-        <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"),
-              class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+        <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
+              html_options: { id: "notes_q", data: { action: "input->debounced-search#submit" } }) %>
       <% end %>
-      <%= render Ui::ButtonComponent.new(variant: :outline, size: :sm, href: notes_path(archived: (@archived ? nil : 1))) {
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: notes_path(archived: (@archived ? nil : 1)))) {
             (@archived ? t(".active_filter") : t(".archived_filter")) } %>
     </div>
   </header>
@@ -24,7 +24,7 @@
   <% end %>
 
   <div id="notes" class="mt-4 grid gap-3 sm:grid-cols-2">
-    <%= render @notes %>
+    <%= render partial: "note", collection: @notes, locals: { query: @query, archived: @archived } %>
   </div>
   <% if @notes.empty? %>
     <%= render(Ui::EmptyComponent.new) do |empty| %>
@@ -32,6 +32,13 @@
         <%= t(".none") %><%= t(".none_archived_suffix") if @archived %><%= t(".none_search_suffix") if @query.present? %>.
       <% end %>
     <% end %>
+  <% end %>
+
+  <% if @total_pages > 1 %>
+    <div class="mt-6 flex justify-center">
+      <%= render Ui::PaginationComponent.new(current: @page, total: @total_pages,
+            path: ->(page) { notes_path(q: @query, archived: (@archived ? 1 : nil), page: page) }) %>
+    </div>
   <% end %>
 
 </div>
