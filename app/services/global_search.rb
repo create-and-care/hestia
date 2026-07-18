@@ -57,6 +57,11 @@ class GlobalSearch
       scope: ->(household, q) { Pet.for_household(household).where("name ILIKE :q OR breed ILIKE :q OR species ILIKE :q OR identifier ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
       url: ->(r) { pet_path(r) }),
 
+    Definition.new(model: BabyProfile, module_key: "baby", icon: "baby",
+      label: ->(r) { r.name },
+      scope: ->(household, q) { BabyProfile.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
+      url: ->(r) { baby_profile_path(r) }),
+
     Definition.new(model: Address, module_key: "addresses", icon: "map-pin",
       label: ->(r) { r.name },
       scope: ->(household, q) { Address.for_household(household).where("name ILIKE :q OR full_address ILIKE :q OR address_type ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
