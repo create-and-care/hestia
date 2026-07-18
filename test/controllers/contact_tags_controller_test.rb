@@ -14,13 +14,16 @@ class ContactTagsControllerTest < ActionDispatch::IntegrationTest
       post contact_tags_path, params: { contact_tag: { name: "Amis", emoji: "🎉" } }
     end
     assert_redirected_to contacts_path
+    follow_redirect!
+    assert_includes @response.body, "Tag added."
   end
 
-  test "create with a blank name does not persist" do
+  test "create with a blank name does not persist and surfaces an error" do
     assert_no_difference -> { ContactTag.count } do
       post contact_tags_path, params: { contact_tag: { name: "" } }
     end
     assert_redirected_to contacts_path
+    assert_equal "Name can't be blank", flash[:alert]
   end
 
   test "destroy" do

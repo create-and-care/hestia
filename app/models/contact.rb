@@ -4,6 +4,7 @@ class Contact < ApplicationRecord
   # Entity shared with the Gifts module (Phase 2.d).
   has_many :contact_taggings, dependent: :destroy
   has_many :contact_tags, through: :contact_taggings
+  has_many :gift_lists, dependent: :nullify
 
   validates :name, presence: true
 

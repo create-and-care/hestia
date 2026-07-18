@@ -177,7 +177,9 @@ Rails.application.routes.draw do
       post :promote_to_task
     end
   end
-  resources :contacts, only: %i[index new create edit update destroy]
+  resources :contacts, only: %i[index new create edit update destroy] do
+    collection { get :calendar }
+  end
   resources :contact_tags, only: %i[create destroy]
   resources :addresses, only: %i[index new create edit update destroy] do
     collection { get :search }

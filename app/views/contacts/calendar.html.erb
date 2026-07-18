@@ -1,0 +1,19 @@
+<% content_for :title, t(".title") %>
+
+<div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:birthdays) %></div>
+
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("cake", css_class: "size-6") %> <%= month_label(@month) %></h1>
+    <div class="flex items-center gap-2">
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: calendar_contacts_path(month: (@month - 1.month).strftime("%Y-%m")))) { t(".prev_month") } %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: calendar_contacts_path)) { t(".today") } %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: calendar_contacts_path(month: (@month + 1.month).strftime("%Y-%m")))) { t(".next_month") } %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: contacts_path)) { t(".list_link") } %>
+    </div>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <%= render "contacts/calendar_grid", dates: @dates, current_month: @month, by_day: @by_day %>
+</div>

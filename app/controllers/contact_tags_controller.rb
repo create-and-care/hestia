@@ -1,7 +1,11 @@
 class ContactTagsController < ApplicationController
   def create
-    Current.household.contact_tags.create(contact_tag_params)
-    redirect_to contacts_path
+    tag = Current.household.contact_tags.new(contact_tag_params)
+    if tag.save
+      redirect_to contacts_path, notice: t(".created")
+    else
+      redirect_to contacts_path, alert: tag.errors.full_messages.to_sentence
+    end
   end
 
   def destroy

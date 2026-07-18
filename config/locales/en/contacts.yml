@@ -10,10 +10,22 @@ en:
     index:
       title: "Birthdays"
       new_contact: "New contact"
+      calendar_link: "Calendar view"
       all_filter: "All"
+      tag_emoji_label: "Tag emoji"
       tag_name_placeholder: "Tag"
       add_tag: "Add"
+      delete_tag_aria: "Delete tag \"%{name}\""
+      delete_tag_confirm: "Delete the tag \"%{name}\"?"
       none: "No contact."
+    calendar:
+      title: "Birthdays calendar"
+      prev_month: "← Previous month"
+      next_month: "Next month →"
+      today: "Today"
+      list_link: "List view"
+    calendar_grid:
+      grid_aria: "Birthdays calendar"
     new:
       title: "New contact"
     edit:
@@ -22,6 +34,9 @@ en:
       no_date: "No date"
       years: "years"
       days_until_prefix: "D-"
+      edit_aria: "Edit \"%{name}\""
+      delete_aria: "Delete \"%{name}\""
+      delete_confirm: "Permanently delete \"%{name}\"?"
     form:
       name_label: "Name"
       born_on_label: "Date of birth"
@@ -35,5 +50,7 @@ en:
     destroy:
       deleted: "Contact deleted."
   contact_tags:
+    create:
+      created: "Tag added."
     destroy:
       deleted: "Tag deleted."

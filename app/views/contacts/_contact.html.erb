@@ -14,6 +14,14 @@
             <%= render(Ui::BadgeComponent.new(variant: :secondary, html_options: { class: "ml-1" })) { "#{tag.emoji} #{tag.name}".strip } %>
           <% end %>
         </p>
+        <% visible_gift_lists = contact.gift_lists.select { |list| list.visible_to?(Current.user) } %>
+        <% if visible_gift_lists.any? %>
+          <p class="mt-1 flex flex-wrap gap-2 text-xs">
+            <% visible_gift_lists.each do |list| %>
+              <%= link_to gift_list_path(list), class: "inline-flex items-center gap-1 text-link hover:underline" do %><%= lucide_icon("gift", css_class: "size-3.5") %> <%= list.name %><% end %>
+            <% end %>
+          </p>
+        <% end %>
       </div>
 
       <%= render(Ui::BadgeComponent.new(variant: proximity_badge_variant(contact.proximity_status))) do %>
@@ -22,8 +30,10 @@
       <% end %>
 
       <div class="flex shrink-0 items-center gap-2 text-sm">
-        <%= link_to edit_contact_path(contact), class: "text-gray-400 hover:text-gray-900" do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
-        <%= button_to contact_path(contact), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+        <%= link_to edit_contact_path(contact), class: "text-subdued hover:text-primary", aria: { label: t(".edit_aria", name: contact.name) } do %><%= lucide_icon("pencil", css_class: "size-4") %><% end %>
+        <%= button_to contact_path(contact), method: :delete, class: "cursor-pointer text-subdued hover:text-destructive",
+              aria: { label: t(".delete_aria", name: contact.name) },
+              form: { data: { turbo_confirm: t(".delete_confirm", name: contact.name) } } do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
       </div>
     </div>
   <% end %>

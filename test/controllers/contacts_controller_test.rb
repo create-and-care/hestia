@@ -55,4 +55,43 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     get edit_contact_path(contacts(:beta_friend))
     assert_response :not_found
   end
+
+  test "delete and edit controls have accessible names and a delete confirmation" do
+    contact = contacts(:alpha_mom)
+    get contacts_path
+    assert_select "a[href=?][aria-label=?]", edit_contact_path(contact), "Edit \"Maman\""
+    assert_select "form[action=?][data-turbo-confirm]", contact_path(contact)
+  end
+
+  test "distinguishes this week from this month with different badge colors" do
+    assert_equal :urgent, ContactsHelper::PROXIMITY_VARIANTS[:week]
+    assert_equal :warning, ContactsHelper::PROXIMITY_VARIANTS[:month]
+  end
+
+  test "shows a link to the contact's visible gift lists" do
+    list = households(:alpha).gift_lists.create!(name: "Cadeau pour Maman", perspective: "give", contact: contacts(:alpha_mom))
+    get contacts_path
+    assert_select "a[href=?]", gift_list_path(list), text: /Cadeau pour Maman/
+  end
+
+  test "does not link a restricted gift list the current user cannot see" do
+    other_user = users(:two)
+    list = households(:alpha).gift_lists.create!(name: "Surprise", perspective: "give",
+      contact: contacts(:alpha_mom), created_by: other_user, restricted: true, visible_to_ids: [ other_user.id ])
+    get contacts_path
+    assert_not_includes @response.body, "Surprise"
+  end
+
+  test "calendar shows the monthly grid with birthdays placed on their day" do
+    get calendar_contacts_path
+    assert_response :success
+    assert_select "[role='grid']"
+    assert_includes @response.body, "Maman"
+  end
+
+  test "calendar navigates to another month" do
+    get calendar_contacts_path(month: "2026-01")
+    assert_response :success
+    assert_includes @response.body, "January 2026"
+  end
 end

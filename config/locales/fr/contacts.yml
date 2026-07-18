@@ -10,10 +10,22 @@ fr:
     index:
       title: "Anniversaires"
       new_contact: "Nouveau contact"
+      calendar_link: "Vue calendrier"
       all_filter: "Tous"
+      tag_emoji_label: "Emoji de l'étiquette"
       tag_name_placeholder: "Étiquette"
       add_tag: "Ajouter"
+      delete_tag_aria: "Supprimer l'étiquette « %{name} »"
+      delete_tag_confirm: "Supprimer l'étiquette « %{name} » ?"
       none: "Aucun contact."
+    calendar:
+      title: "Calendrier des anniversaires"
+      prev_month: "← Mois précédent"
+      next_month: "Mois suivant →"
+      today: "Aujourd'hui"
+      list_link: "Vue liste"
+    calendar_grid:
+      grid_aria: "Calendrier des anniversaires"
     new:
       title: "Nouveau contact"
     edit:
@@ -22,6 +34,9 @@ fr:
       no_date: "Sans date"
       years: "ans"
       days_until_prefix: "J-"
+      edit_aria: "Modifier « %{name} »"
+      delete_aria: "Supprimer « %{name} »"
+      delete_confirm: "Supprimer définitivement « %{name} » ?"
     form:
       name_label: "Nom"
       born_on_label: "Date de naissance"
@@ -35,5 +50,7 @@ fr:
     destroy:
       deleted: "Contact supprimé."
   contact_tags:
+    create:
+      created: "Étiquette ajoutée."
     destroy:
       deleted: "Étiquette supprimée."

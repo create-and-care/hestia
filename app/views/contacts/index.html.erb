@@ -6,7 +6,10 @@
 
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("cake", css_class: "size-6") %> <%= t(".title") %></h1>
-    <%= render Ui::ButtonComponent.new(href: new_contact_path) { t(".new_contact") } %>
+    <div class="flex items-center gap-2">
+      <%= render(Ui::ButtonComponent.new(variant: :outline, href: calendar_contacts_path)) { t(".calendar_link") } %>
+      <%= render Ui::ButtonComponent.new(href: new_contact_path) { t(".new_contact") } %>
+    </div>
   </header>
 
   <%= render "shared/flash" %>
@@ -16,13 +19,23 @@
     <% @tags.each do |tag| %>
       <%= render(Ui::BadgeComponent.new(variant: @tag == tag ? :default : :secondary)) do %>
         <%= link_to "#{tag.emoji} #{tag.name}".strip, contacts_path(tag_id: tag.id) %>
-        <%= button_to "×", contact_tag_path(tag), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
+        <%= button_to "×", contact_tag_path(tag), method: :delete, class: "cursor-pointer text-subdued hover:text-destructive",
+              aria: { label: t(".delete_tag_aria", name: tag.name) },
+              form: { class: "inline", data: { turbo_confirm: t(".delete_tag_confirm", name: tag.name) } } %>
       <% end %>
     <% end %>
-    <%= form_with url: contact_tags_path, method: :post, class: "inline-flex gap-1" do %>
-      <%= text_field_tag "contact_tag[emoji]", nil, placeholder: "🙂", maxlength: 4, class: "w-12 rounded-md border border-gray-300 px-2 py-1 text-xs" %>
-      <%= text_field_tag "contact_tag[name]", nil, placeholder: t(".tag_name_placeholder"), class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
-      <%= submit_tag t(".add_tag"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+    <%= form_with url: contact_tags_path, method: :post, class: "inline-flex items-end gap-1" do %>
+      <div>
+        <label for="contact_tag_emoji" class="sr-only"><%= t(".tag_emoji_label") %></label>
+        <%= render Ui::InputComponent.new(name: "contact_tag[emoji]", placeholder: "🙂",
+              html_options: { id: "contact_tag_emoji", maxlength: 4, class: "w-12 text-xs" }) %>
+      </div>
+      <div>
+        <label for="contact_tag_name" class="sr-only"><%= t(".tag_name_placeholder") %></label>
+        <%= render Ui::InputComponent.new(name: "contact_tag[name]", placeholder: t(".tag_name_placeholder"),
+              html_options: { id: "contact_tag_name", class: "text-xs" }) %>
+      </div>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add_tag") } %>
     <% end %>
   </section>
 

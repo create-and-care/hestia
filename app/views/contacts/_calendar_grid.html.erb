@@ -1,0 +1,19 @@
+<div role="grid" aria-label="<%= t(".grid_aria") %>" class="grid grid-cols-7 gap-px overflow-hidden rounded-lg border border-primary bg-border-primary text-sm">
+  <div role="row" class="contents">
+    <% weekday_labels.each do |day| %>
+      <div role="columnheader" class="bg-surface p-2 text-center text-xs font-medium text-secondary"><%= day %></div>
+    <% end %>
+  </div>
+  <% dates.each do |date| %>
+    <% muted = date.month != current_month.month %>
+    <div role="gridcell" aria-current="<%= "date" if date == Date.current %>"
+         class="min-h-20 p-1 <%= muted ? "bg-surface text-subdued" : "bg-container" %>">
+      <p class="mb-1 text-xs <%= "font-bold text-primary" if date == Date.current %>"><%= date.day %></p>
+      <% Array(by_day[date]).each do |contact| %>
+        <p class="truncate text-[10px]" title="<%= contact.name %>">
+          <%= lucide_icon("cake", css_class: "inline size-2.5") %> <%= contact.name %>
+        </p>
+      <% end %>
+    </div>
+  <% end %>
+</div>
