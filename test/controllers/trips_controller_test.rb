@@ -55,6 +55,32 @@ class TripsControllerTest < ActionDispatch::IntegrationTest
     assert_select "[data-controller='geocode-lookup']"
   end
 
+  test "track_expenses creates a linked shared project on first use" do
+    trip = trips(:alpha_trip)
+    assert_difference -> { SharedProject.count }, 1 do
+      post track_expenses_trip_path(trip)
+    end
+    project = trip.reload.shared_project
+    assert_equal trip.name, project.name
+    assert_redirected_to project
+  end
+
+  test "track_expenses reuses the existing linked project on later calls" do
+    trip = trips(:alpha_trip)
+    post track_expenses_trip_path(trip)
+    existing = trip.reload.shared_project
+
+    assert_no_difference -> { SharedProject.count } do
+      post track_expenses_trip_path(trip)
+    end
+    assert_redirected_to existing
+  end
+
+  test "cannot track expenses for another household's trip" do
+    post track_expenses_trip_path(trips(:beta_trip))
+    assert_response :not_found
+  end
+
   test "delete a trip" do
     trip = trips(:alpha_trip)
     delete trip_path(trip)

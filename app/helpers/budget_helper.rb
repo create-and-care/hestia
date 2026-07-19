@@ -6,11 +6,13 @@ module BudgetHelper
     number_to_currency(amount, unit: "€", format: "%n %u", precision: 0, delimiter: " ")
   end
 
-  # Budget-health gauge color based on the savings rate / disposable income.
-  def health_class(summary)
-    if summary[:remaining].negative? then "bg-red-100 text-red-700"
-    elsif summary[:savings_rate] >= 10 then "bg-green-100 text-green-700"
-    else "bg-yellow-100 text-yellow-800"
+  # Budget-health gauge variant based on the savings rate / disposable income,
+  # using the design system's semantic (dark-mode-aware) badge variants
+  # instead of hardcoded pastel Tailwind colors.
+  def health_variant(summary)
+    if summary[:remaining].negative? then :destructive
+    elsif summary[:savings_rate] >= 10 then :success
+    else :warning
     end
   end
 end

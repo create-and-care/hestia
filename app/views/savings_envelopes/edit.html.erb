@@ -1,0 +1,37 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= form_with model: @envelope, url: savings_envelope_path(@envelope) do |form| %>
+    <% if @envelope.errors.any? %>
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
+        <ul class="list-inside list-disc">
+          <% @envelope.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <div class="space-y-4">
+      <%= render(Ui::FieldComponent.new(id: "savings_envelope_name")) do |field| %>
+        <% field.with_label { t(".name_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "savings_envelope[name]", value: @envelope.name,
+                html_options: { id: "savings_envelope_name", required: true }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "savings_envelope_recurring_deposit")) do |field| %>
+        <% field.with_label { t(".recurring_deposit_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "number", name: "savings_envelope[recurring_deposit]", value: @envelope.recurring_deposit,
+                html_options: { id: "savings_envelope_recurring_deposit", step: :any }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".save") } %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_budget"), budget_path, class: "underline" %></p>
+</div>

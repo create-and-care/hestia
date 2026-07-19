@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_19_102557) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -85,8 +85,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.string "name", null: false
+    t.bigint "service_provider_id"
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_baby_profiles_on_household_id"
+    t.index ["service_provider_id"], name: "index_baby_profiles_on_service_provider_id"
   end
 
   create_table "bottles", force: :cascade do |t|
@@ -224,6 +226,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
   create_table "conversation_participants", force: :cascade do |t|
     t.bigint "conversation_id", null: false
     t.datetime "created_at", null: false
+    t.datetime "last_read_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["conversation_id", "user_id"], name: "index_conversation_participants_on_conversation_id_and_user_id", unique: true
@@ -235,8 +238,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.string "name", null: false
+    t.bigint "subject_id"
+    t.string "subject_type"
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_conversations_on_household_id"
+    t.index ["subject_type", "subject_id"], name: "index_conversations_on_subject"
   end
 
   create_table "document_folders", force: :cascade do |t|
@@ -546,6 +552,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
     t.text "common_diseases"
     t.string "common_name", null: false
     t.datetime "created_at", null: false
+    t.text "fertilizing"
     t.text "pruning"
     t.string "scientific_name"
     t.string "sunlight"
@@ -590,9 +597,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.string "name", null: false
+    t.bigint "service_provider_id"
     t.string "treatment_type", default: "chlore", null: false
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_pools_on_household_id"
+    t.index ["service_provider_id"], name: "index_pools_on_service_provider_id"
   end
 
   create_table "prepared_dishes", force: :cascade do |t|
@@ -766,8 +775,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.string "name", null: false
+    t.bigint "trip_id"
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_shared_projects_on_household_id"
+    t.index ["trip_id"], name: "index_shared_projects_on_trip_id"
   end
 
   create_table "shopping_list_items", force: :cascade do |t|
@@ -956,6 +967,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
   add_foreign_key "allergen_tests", "baby_profiles"
   add_foreign_key "api_tokens", "users"
   add_foreign_key "baby_profiles", "households"
+  add_foreign_key "baby_profiles", "service_providers"
   add_foreign_key "bottles", "households"
   add_foreign_key "bottles", "recipes"
   add_foreign_key "bottles", "wine_cellars"
@@ -1022,6 +1034,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
   add_foreign_key "pool_actions", "pools"
   add_foreign_key "pool_readings", "pools"
   add_foreign_key "pools", "households"
+  add_foreign_key "pools", "service_providers"
   add_foreign_key "prepared_dishes", "households"
   add_foreign_key "products", "households"
   add_foreign_key "recipe_ingredients", "recipes"
@@ -1043,6 +1056,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
   add_foreign_key "shared_expenses", "shared_projects"
   add_foreign_key "shared_project_participants", "shared_projects"
   add_foreign_key "shared_projects", "households"
+  add_foreign_key "shared_projects", "trips"
   add_foreign_key "shopping_list_items", "products"
   add_foreign_key "shopping_list_items", "recipes"
   add_foreign_key "shopping_list_items", "shopping_lists"

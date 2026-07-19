@@ -3,18 +3,25 @@ class SharedProjectsController < ApplicationController
 
   def index
     @projects = Current.household.shared_projects.ordered
+    @project = Current.household.shared_projects.new
   end
 
   def show
     @participant = SharedProjectParticipant.new
     @expense = SharedExpense.new(spent_on: Date.current)
     @balances = Budget::SettleProject.call(project: @project)
+    @transfers = Budget::SettleProject.transfers(project: @project)
   end
 
   def create
-    project = Current.household.shared_projects.create(project_params)
-    project.shared_project_participants.create(name: Current.user.name.presence || Current.user.email_address) if project.persisted?
-    redirect_to(project.persisted? ? project : shared_projects_path)
+    @project = Current.household.shared_projects.new(project_params)
+    if @project.save
+      @project.shared_project_participants.create!(name: Current.user.name.presence || Current.user.email_address)
+      redirect_to @project
+    else
+      @projects = Current.household.shared_projects.ordered
+      render :index, status: :unprocessable_entity
+    end
   end
 
   def destroy
