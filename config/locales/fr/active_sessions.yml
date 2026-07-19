@@ -1,0 +1,4 @@
+fr:
+  active_sessions:
+    destroy:
+      revoked: "Session révoquée."

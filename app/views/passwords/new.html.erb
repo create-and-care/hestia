@@ -1,8 +1,26 @@
-<h1><%= t(".title") %></h1>
+<% content_for :title, t(".title") %>
 
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+<div class="mx-auto mt-16 max-w-md px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
 
-<%= form_with url: passwords_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: t(".email_placeholder"), value: params[:email_address] %><br>
-  <%= form.submit t(".submit") %>
-<% end %>
+  <%= render "shared/flash" %>
+
+  <%= form_with url: passwords_path do |form| %>
+    <div class="space-y-4">
+      <%= render(Ui::FieldComponent.new(id: "email_address")) do |field| %>
+        <% field.with_label { t(".email_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "email", name: "email_address", value: params[:email_address],
+                placeholder: t(".email_placeholder"),
+                html_options: { id: "email_address", required: true, autofocus: true, autocomplete: "username" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::ButtonComponent.new(type: "submit", html_options: { class: "w-full" })) { t(".submit") } %>
+    </div>
+  <% end %>
+
+  <p class="mt-4 text-sm">
+    <%= link_to t(".back_to_sign_in"), new_session_path, class: "underline" %>
+  </p>
+</div>

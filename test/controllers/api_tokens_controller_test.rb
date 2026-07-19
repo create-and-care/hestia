@@ -33,4 +33,15 @@ class ApiTokensControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
     assert ApiToken.exists?(other_token.id)
   end
+
+  test "create with no expiration choice never expires" do
+    post api_tokens_path, params: { api_token: { name: "iPhone", expires_in: "" } }
+    assert_nil users(:one).api_tokens.find_by!(name: "iPhone").expires_at
+  end
+
+  test "create with a 30 day expiration sets expires_at" do
+    post api_tokens_path, params: { api_token: { name: "iPhone", expires_in: "30" } }
+    token = users(:one).api_tokens.find_by!(name: "iPhone")
+    assert_in_delta 30.days.from_now, token.expires_at, 1.minute
+  end
 end

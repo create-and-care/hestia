@@ -22,7 +22,7 @@ class PasswordsController < ApplicationController
       @user.sessions.destroy_all
       redirect_to new_session_path, notice: t(".success")
     else
-      redirect_to edit_password_path(params[:token]), alert: t(".mismatch")
+      redirect_to edit_password_path(params[:token]), alert: @user.errors.full_messages.to_sentence
     end
   end
 

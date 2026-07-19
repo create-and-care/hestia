@@ -12,3 +12,4 @@ en:
       sign_in: "Sign in"
     create:
       welcome: "Welcome to Hestia!"
+      rate_limited: "Try again later."

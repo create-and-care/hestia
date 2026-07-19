@@ -145,4 +145,80 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal "UTC", Time.zone.name
   end
+
+  test "show renders the members, sessions, and modules tabs" do
+    sign_in_as(users(:one))
+
+    get household_path(households(:alpha))
+
+    assert_response :success
+    assert_select "button[role=tab][data-value=members]"
+    assert_select "button[role=tab][data-value=sessions]"
+    assert_select "button[role=tab][data-value=modules]"
+  end
+
+  test "regenerate_invite_code changes the code for an admin" do
+    sign_in_as(users(:one)) # admin of :alpha
+    old_code = households(:alpha).invite_code
+
+    post regenerate_invite_code_household_path(households(:alpha))
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_not_equal old_code, households(:alpha).reload.invite_code
+  end
+
+  test "regenerate_invite_code refuses a non-admin member" do
+    sign_in_as(users(:two))
+    households(:alpha).memberships.create!(user: users(:two), role: :member)
+    users(:two).sessions.last.update!(active_household: households(:alpha))
+    old_code = households(:alpha).invite_code
+
+    post regenerate_invite_code_household_path(households(:alpha))
+
+    assert_equal old_code, households(:alpha).reload.invite_code
+  end
+
+  test "destroy removes the household and switches the admin to another household" do
+    user = users(:one)
+    sign_in_as(user)
+    other = Household.create!(name: "Second")
+    other.memberships.create!(user: user, role: :admin)
+
+    assert_difference -> { Household.count }, -1 do
+      delete household_path(households(:alpha))
+    end
+
+    assert_redirected_to root_path
+    assert_equal other.id, user.sessions.last.reload.active_household_id
+  end
+
+  test "destroy redirects to onboarding when it was the user's only household" do
+    sign_in_as(users(:one))
+
+    delete household_path(households(:alpha))
+
+    assert_redirected_to onboarding_path
+    assert_not Household.exists?(households(:alpha).id)
+  end
+
+  test "destroy refuses a non-admin member" do
+    sign_in_as(users(:two))
+    households(:alpha).memberships.create!(user: users(:two), role: :member)
+    users(:two).sessions.last.update!(active_household: households(:alpha))
+
+    assert_no_difference -> { Household.count } do
+      delete household_path(households(:alpha))
+    end
+  end
+
+  test "destroy clears every member's active_household without a foreign key violation" do
+    other_member = User.create!(name: "Coloc", email_address: "coloc@example.com", password: "secret123")
+    households(:alpha).memberships.create!(user: other_member, role: :member)
+    other_session = other_member.sessions.create!(active_household: households(:alpha))
+
+    sign_in_as(users(:one))
+    delete household_path(households(:alpha))
+
+    assert_nil other_session.reload.active_household_id
+  end
 end

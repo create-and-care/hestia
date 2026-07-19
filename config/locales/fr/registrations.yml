@@ -12,3 +12,4 @@ fr:
       sign_in: "Se connecter"
     create:
       welcome: "Bienvenue sur Hestia !"
+      rate_limited: "Réessayez plus tard."

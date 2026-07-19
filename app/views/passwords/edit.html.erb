@@ -1,9 +1,31 @@
-<h1><%= t(".title") %></h1>
+<% content_for :title, t(".title") %>
 
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+<div class="mx-auto mt-16 max-w-md px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
 
-<%= form_with url: password_path(params[:token]), method: :put do |form| %>
-  <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: t(".password_placeholder"), maxlength: 72 %><br>
-  <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: t(".password_confirmation_placeholder"), maxlength: 72 %><br>
-  <%= form.submit t(".submit") %>
-<% end %>
+  <%= render "shared/flash" %>
+
+  <%= form_with url: password_path(params[:token]), method: :put do |form| %>
+    <div class="space-y-4">
+      <%= render(Ui::FieldComponent.new(id: "password")) do |field| %>
+        <% field.with_label { t(".password_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "password", name: "password",
+                placeholder: t(".password_placeholder"),
+                html_options: { id: "password", required: true, autocomplete: "new-password", maxlength: 72, minlength: 8 }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "password_confirmation")) do |field| %>
+        <% field.with_label { t(".password_confirmation_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "password", name: "password_confirmation",
+                placeholder: t(".password_confirmation_placeholder"),
+                html_options: { id: "password_confirmation", required: true, autocomplete: "new-password", maxlength: 72, minlength: 8 }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::ButtonComponent.new(type: "submit", html_options: { class: "w-full" })) { t(".submit") } %>
+    </div>
+  <% end %>
+</div>

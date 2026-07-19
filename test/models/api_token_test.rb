@@ -27,4 +27,24 @@ class ApiTokenTest < ActiveSupport::TestCase
     token.touch_last_used!
     assert token.reload.last_used_at.present?
   end
+
+  test "a token with no expires_at never expires" do
+    token = ApiToken.create!(user: users(:one), name: "Test")
+    assert_not token.expired?
+  end
+
+  test "expired? is true once expires_at is in the past" do
+    token = ApiToken.create!(user: users(:one), name: "Test", expires_at: 1.day.ago)
+    assert token.expired?
+  end
+
+  test "authenticate does not find an expired token" do
+    token = ApiToken.create!(user: users(:one), name: "Test", expires_at: 1.day.ago)
+    assert_nil ApiToken.authenticate(token.plaintext_token)
+  end
+
+  test "authenticate still finds a token that expires in the future" do
+    token = ApiToken.create!(user: users(:one), name: "Test", expires_at: 1.day.from_now)
+    assert_equal token, ApiToken.authenticate(token.plaintext_token)
+  end
 end

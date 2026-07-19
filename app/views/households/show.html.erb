@@ -4,7 +4,7 @@
   <div class="mb-4"><%= render Ui::BreadcrumbComponent.new(items: [ [ t("common.dashboard"), root_path ], [ t(".household"), nil ] ]) %></div>
 
   <header class="mb-8">
-    <p class="text-sm text-gray-500"><%= t(".household") %></p>
+    <p class="text-sm text-secondary"><%= t(".household") %></p>
     <h1 class="text-2xl font-semibold"><%= @household.name %></h1>
   </header>
 
@@ -15,7 +15,14 @@
       <div class="space-y-8">
         <%= render(Ui::CardComponent.new) do |card| %>
           <% card.with_title { t(".invite_code") } %>
-          <code class="rounded-md bg-gray-100 px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
+          <% card.with_description { t(".invite_code_description") } %>
+          <div class="flex items-center gap-2">
+            <code class="rounded-md bg-surface-inset px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
+            <% if current_membership&.admin? %>
+              <%= render(Ui::ButtonToComponent.new(regenerate_invite_code_household_path(@household), method: :post, variant: :outline, size: :sm,
+                    html_options: { form: { data: { turbo_confirm: t(".regenerate_code_confirm") } } })) { t(".regenerate_code") } %>
+            <% end %>
+          </div>
         <% end %>
 
         <%= render(Ui::CardComponent.new) do |card| %>
@@ -28,9 +35,14 @@
           <%= form_with model: @household, url: household_path(@household), method: :patch do |form| %>
             <div class="flex items-end gap-3">
               <div class="flex-1">
-                <%= render(Ui::LabelComponent.new(for_id: "household_time_zone", html_options: { class: "mb-1 block" })) { t(".time_zone_label") } %>
-                <%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.all,
-                      { default: @household.time_zone }, class: "w-full rounded-md border border-gray-300 px-3 py-2" %>
+                <%= render(Ui::FieldComponent.new(id: "household_time_zone")) do |field| %>
+                  <% field.with_label { t(".time_zone_label") } %>
+                  <% field.with_control do %>
+                    <%= render Ui::NativeSelectComponent.new(name: "household[time_zone]", selected: @household.time_zone,
+                          options: ActiveSupport::TimeZone.all.map { |zone| [ zone.to_s, zone.name ] },
+                          html_options: { id: "household_time_zone" }) %>
+                  <% end %>
+                <% end %>
               </div>
               <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".time_zone_submit") } %>
             </div>
@@ -55,6 +67,75 @@
             <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".required_meal_types_submit") } %>
           <% end %>
         <% end %>
+
+        <% if current_membership&.admin? %>
+          <%= render(Ui::CardComponent.new(class_name: "border-destructive")) do |card| %>
+            <% card.with_title { t(".danger_zone") } %>
+            <% card.with_description { t(".delete_household_description") } %>
+            <%= form_with url: household_path(@household), method: :delete, data: { turbo_confirm: t(".delete_household_confirm") } do %>
+              <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm, type: "submit")) { t(".delete_household") } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% tabs.with_tab(label: t(".tabs.members"), value: "members") do %>
+      <div class="space-y-8">
+        <%= render(Ui::CardComponent.new) do |card| %>
+          <% card.with_title { t(".members", count: @memberships.size) } %>
+          <ul class="divide-y divide-primary rounded-lg border border-primary">
+            <% @memberships.each do |membership| %>
+              <li>
+                <%= render(Ui::ItemComponent.new) do |item| %>
+                  <% item.with_leading { render(Ui::AvatarComponent.new(alt: membership.user.name.presence || membership.user.email_address)) } %>
+                  <% item.with_title { membership.user.name.presence || membership.user.email_address } %>
+                  <% item.with_description { membership.admin? ? t(".admin") : t(".member") } %>
+                  <% if current_membership&.admin? && membership.user != Current.user %>
+                    <% item.with_trailing do %>
+                      <div class="flex shrink-0 items-center gap-2">
+                        <%= form_with url: household_member_path(@household, membership), method: :patch, class: "inline" do %>
+                          <input type="hidden" name="role" value="<%= membership.admin? ? "member" : "admin" %>">
+                          <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { membership.admin? ? t(".demote") : t(".promote") } %>
+                        <% end %>
+                        <%= form_with url: household_member_path(@household, membership), method: :delete, data: { turbo_confirm: t(".remove_member_confirm", name: membership.user.name.presence || membership.user.email_address) } do %>
+                          <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm, type: "submit")) { t(".remove_member") } %>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  <% elsif membership.user == Current.user %>
+                    <% item.with_trailing do %>
+                      <%= form_with url: household_member_path(@household, membership), method: :delete, data: { turbo_confirm: t(".leave_confirm") } do %>
+                        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".leave") } %>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+
+        <% if @other_households.any? %>
+          <%= render(Ui::CardComponent.new) do |card| %>
+            <% card.with_title { t(".switch_household") } %>
+            <ul class="space-y-2">
+              <% @other_households.each do |household| %>
+                <li>
+                  <%= render(Ui::ButtonToComponent.new(activate_household_path(household), method: :patch, variant: :outline, size: :sm)) { t(".switch_to", name: household.name) } %>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+
+        <%= render(Ui::CardComponent.new) do |card| %>
+          <% card.with_title { t(".other_households") } %>
+          <div class="flex gap-4 text-sm">
+            <%= link_to t(".create_household"), new_household_path, class: "underline" %>
+            <%= link_to t(".join_household"), new_membership_path, class: "underline" %>
+          </div>
+        <% end %>
       </div>
     <% end %>
 
@@ -67,7 +148,8 @@
 
         <%= form_with model: @notification_preference, url: notification_preference_path, method: :patch, class: "space-y-5" do |form| %>
           <div class="flex items-center gap-2">
-            <%= form.check_box :fridge_expiry_enabled, class: "size-4" %>
+            <%= render Ui::CheckboxComponent.new(name: "notification_preference[fridge_expiry_enabled]",
+                  checked: @notification_preference.fridge_expiry_enabled, id: "notification_preference_fridge_expiry_enabled") %>
             <%= render(Ui::LabelComponent.new(for_id: "notification_preference_fridge_expiry_enabled")) { t("notification_preferences.show.fridge_expiry_enabled") } %>
           </div>
 
@@ -81,7 +163,8 @@
           <% end %>
 
           <div class="flex items-center gap-2">
-            <%= form.check_box :birthday_notifications_enabled, class: "size-4" %>
+            <%= render Ui::CheckboxComponent.new(name: "notification_preference[birthday_notifications_enabled]",
+                  checked: @notification_preference.birthday_notifications_enabled, id: "notification_preference_birthday_notifications_enabled") %>
             <%= render(Ui::LabelComponent.new(for_id: "notification_preference_birthday_notifications_enabled")) { t("notification_preferences.show.birthday_notifications_enabled") } %>
           </div>
 
@@ -97,26 +180,29 @@
         <% end %>
         <% card.with_description { t("api_tokens.index.description") } %>
 
-        <ul class="mb-4 divide-y divide-gray-100 rounded-lg border border-gray-200">
-          <% if @api_tokens.none? %>
-            <li class="px-4 py-6 text-center text-sm text-gray-400"><%= t("api_tokens.index.empty") %></li>
-          <% end %>
-          <% @api_tokens.each do |token| %>
-            <li>
-              <%= render(Ui::ItemComponent.new) do |item| %>
-                <% item.with_title { token.name } %>
-                <% item.with_description do %>
-                  <%= t("api_tokens.index.created_on") %> <%= token.created_at.strftime("%d/%m/%Y") %>
-                  <% if token.last_used_at %> · <%= t("api_tokens.index.last_used_on") %> <%= token.last_used_at.strftime("%d/%m/%Y") %><% end %>
+        <% if @api_tokens.any? %>
+          <ul class="mb-4 divide-y divide-primary rounded-lg border border-primary">
+            <% @api_tokens.each do |token| %>
+              <li>
+                <%= render(Ui::ItemComponent.new) do |item| %>
+                  <% item.with_title { token.name } %>
+                  <% item.with_description do %>
+                    <%= t("api_tokens.index.created_on") %> <%= token.created_at.strftime("%d/%m/%Y") %>
+                    <% if token.last_used_at %> · <%= t("api_tokens.index.last_used_on") %> <%= token.last_used_at.strftime("%d/%m/%Y") %><% end %>
+                    · <%= token.expires_at ? t("api_tokens.index.expires_on", date: token.expires_at.strftime("%d/%m/%Y")) : t("api_tokens.index.never_expires") %>
+                  <% end %>
+                  <% item.with_trailing do %>
+                    <%= form_with url: api_token_path(token), method: :delete, data: { turbo_confirm: t("api_tokens.index.revoke_confirm") } do %>
+                      <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm, type: "submit")) { t("api_tokens.index.revoke") } %>
+                    <% end %>
+                  <% end %>
                 <% end %>
-                <% item.with_trailing do %>
-                  <%= button_to t("api_tokens.index.revoke"), api_token_path(token), method: :delete,
-                        form: { data: { turbo_confirm: t("api_tokens.index.revoke_confirm") } }, class: "cursor-pointer text-red-600 underline" %>
-                <% end %>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <div class="mb-4"><%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t("api_tokens.index.empty") } } %></div>
+        <% end %>
 
         <%= form_with model: @api_token, url: api_tokens_path, class: "flex flex-wrap items-end gap-2" do |form| %>
           <div class="flex-1">
@@ -127,8 +213,49 @@
               <% end %>
             <% end %>
           </div>
+          <div class="w-40">
+            <%= render(Ui::FieldComponent.new(id: "api_token_expires_in")) do |field| %>
+              <% field.with_label { t("api_tokens.index.expires_in_label") } %>
+              <% field.with_control do %>
+                <%= render Ui::NativeSelectComponent.new(name: "api_token[expires_in]", selected: "90", html_options: { id: "api_token_expires_in" },
+                      options: [ [ t("api_tokens.index.expires_in_30"), "30" ], [ t("api_tokens.index.expires_in_90"), "90" ],
+                                 [ t("api_tokens.index.expires_in_365"), "365" ], [ t("api_tokens.index.expires_in_never"), "" ] ]) %>
+              <% end %>
+            <% end %>
+          </div>
           <%= render(Ui::ButtonComponent.new(type: "submit")) { t("api_tokens.index.create") } %>
         <% end %>
+      <% end %>
+    <% end %>
+
+    <% tabs.with_tab(label: t(".tabs.sessions"), value: "sessions") do %>
+      <%= render(Ui::CardComponent.new) do |card| %>
+        <% card.with_title do %>
+          <span class="inline-flex items-center gap-1.5"><%= lucide_icon("smartphone", css_class: "size-5") %> <%= t(".sessions_heading") %></span>
+        <% end %>
+        <% card.with_description { t(".sessions_description") } %>
+
+        <ul class="divide-y divide-primary rounded-lg border border-primary">
+          <% @sessions.each do |session| %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title { session.user_agent.presence || t(".unknown_device") } %>
+                <% item.with_description do %>
+                  <%= session.ip_address %> · <%= t(".last_active_on") %> <%= session.updated_at.strftime("%d/%m/%Y %H:%M") %>
+                <% end %>
+                <% item.with_trailing do %>
+                  <% if session == Current.session %>
+                    <%= render(Ui::BadgeComponent.new(variant: :secondary)) { t(".this_device") } %>
+                  <% else %>
+                    <%= form_with url: active_session_path(session), method: :delete, data: { turbo_confirm: t(".revoke_session_confirm") } do %>
+                      <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm, type: "submit")) { t(".revoke") } %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
       <% end %>
     <% end %>
 
@@ -146,19 +273,19 @@
         <%= form_with model: @household, url: update_modules_household_path(@household), method: :patch, class: "space-y-6" do |form| %>
           <% SidebarHelper::SIDEBAR_GROUPS.each do |group| %>
             <div>
-              <h3 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-gray-500"><%= lucide_icon(group[:icon], css_class: "size-4") %> <%= t("sidebar.groups.#{group[:key]}") %></h3>
-              <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+              <h3 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-secondary"><%= lucide_icon(group[:icon], css_class: "size-4") %> <%= t("sidebar.groups.#{group[:key]}") %></h3>
+              <ul class="divide-y divide-primary rounded-lg border border-primary">
                 <% group[:items].each do |icon, nav_key, _path| %>
                   <li>
                     <%= render(Ui::ItemComponent.new) do |item| %>
                       <% item.with_leading { lucide_icon(icon, css_class: "size-4") } %>
-                      <% item.with_title { t("dashboard.show.nav.#{nav_key}") } %>
+                      <% item.with_title { tag.span(t("dashboard.show.nav.#{nav_key}"), id: "module_label_#{nav_key}") } %>
                       <% item.with_trailing do %>
                         <%= render Ui::SwitchComponent.new(
                               name: "household[enabled_modules][]",
                               checked: @household.module_enabled?(nav_key),
                               disabled: !current_membership&.admin?,
-                              html_options: { value: nav_key.to_s }
+                              html_options: { value: nav_key.to_s, aria: { labelledby: "module_label_#{nav_key}" } }
                             ) %>
                       <% end %>
                     <% end %>
@@ -177,17 +304,17 @@
 
     <% tabs.with_tab(label: t(".tabs.roadmap"), value: "roadmap") do %>
       <div class="space-y-8">
-        <p class="text-sm text-gray-600">
+        <p class="text-sm text-secondary">
           Project progress and planned improvements. Full detail in the
-          <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">Specification</code> and the
-          <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">Implementation Plan</code>
+          <code class="rounded bg-surface-inset px-1 py-0.5 text-xs">Specification</code> and the
+          <code class="rounded bg-surface-inset px-1 py-0.5 text-xs">Implementation Plan</code>
           versioned with the code; precise version history in
-          <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">CHANGELOG.md</code>.
+          <code class="rounded bg-surface-inset px-1 py-0.5 text-xs">CHANGELOG.md</code>.
         </p>
 
         <section>
           <h2 class="mb-3 font-medium">Progress by area</h2>
-          <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+          <ul class="divide-y divide-primary rounded-lg border border-primary">
             <% @phases.each do |phase| %>
               <% badge_variant, badge_label = case phase[:status]
                  when :done then [ :success, "Done" ]
@@ -197,7 +324,7 @@
               <li class="flex items-start justify-between gap-4 px-4 py-3">
                 <div>
                   <p class="font-medium"><%= phase[:name] %></p>
-                  <p class="text-sm text-gray-500"><%= phase[:detail] %></p>
+                  <p class="text-sm text-secondary"><%= phase[:detail] %></p>
                 </div>
                 <%= render(Ui::BadgeComponent.new(variant: badge_variant, html_options: { class: "mt-0.5 shrink-0" })) { badge_label } %>
               </li>
@@ -207,7 +334,7 @@
 
         <section>
           <h2 class="mb-1 font-medium">Planned improvements</h2>
-          <p class="mb-3 text-sm text-gray-600">
+          <p class="mb-3 text-sm text-secondary">
             A list drawn from analyzing the existing code (tests, security, UI consistency,
             functional coverage) — not just the gaps already known from the Implementation Plan.
           </p>
@@ -217,14 +344,14 @@
               <% group_title = capture do %>
                 <span class="flex flex-1 items-center justify-between pr-2">
                   <span><span class="mr-1"><%= group[:emoji] %></span><%= group[:category] %></span>
-                  <span class="text-sm text-gray-500"><%= pluralize(group[:items].size, "item") %></span>
+                  <span class="text-sm text-secondary"><%= pluralize(group[:items].size, "item") %></span>
                 </span>
               <% end %>
               <% accordion.with_item(title: group_title, key: group[:category].parameterize) do %>
-                <ul class="space-y-2 px-4 text-sm text-gray-700">
+                <ul class="space-y-2 px-4 text-sm text-secondary">
                   <% group[:items].each do |item| %>
                     <li class="flex gap-2">
-                      <span class="text-gray-400">—</span>
+                      <span class="text-subdued">—</span>
                       <span><%= item %></span>
                     </li>
                   <% end %>

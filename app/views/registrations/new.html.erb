@@ -37,7 +37,7 @@
         <% field.with_label { t(".password") } %>
         <% field.with_control do %>
           <%= render Ui::InputComponent.new(type: "password", name: "user[password]",
-                html_options: { id: "user_password", required: true, autocomplete: "new-password", maxlength: 72 }) %>
+                html_options: { id: "user_password", required: true, autocomplete: "new-password", maxlength: 72, minlength: 8 }) %>
         <% end %>
       <% end %>
 

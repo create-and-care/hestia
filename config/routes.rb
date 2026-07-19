@@ -71,14 +71,21 @@ Rails.application.routes.draw do
 
   # Onboarding: choosing to create / join a household.
   resource :onboarding, only: :show, controller: "onboarding"
-  resources :households, only: %i[new create show update] do
+  resources :households, only: %i[new create show update destroy] do
     member do
       patch :activate
       patch :update_modules
+      post :regenerate_invite_code
     end
+    resources :members, only: %i[update destroy], controller: "memberships"
   end
   # Joining a household via an invite code.
   resource :membership, only: %i[new create]
+
+  # Active session management (Spec §5): revoke a device signed into this
+  # account, distinct from the singular `resource :session` above (the
+  # current one). Listed as a tab in household settings, not a page of its own.
+  resources :active_sessions, only: :destroy
 
   # Reminders & notifications (Spec §9.2, §9.3, §9.4, §10.2).
   resources :notifications, only: :index do
