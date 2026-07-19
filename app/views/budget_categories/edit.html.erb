@@ -1,0 +1,45 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= form_with model: @category, url: budget_category_path(@category) do |form| %>
+    <% if @category.errors.any? %>
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
+        <ul class="list-inside list-disc">
+          <% @category.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <div class="space-y-4">
+      <%= render(Ui::FieldComponent.new(id: "budget_category_kind")) do |field| %>
+        <% field.with_label { t(".kind_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "budget_category[kind]", options: budget_kind_options,
+                selected: @category.kind, html_options: { id: "budget_category_kind" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "budget_category_name")) do |field| %>
+        <% field.with_label { t(".name_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "budget_category[name]", value: @category.name,
+                html_options: { id: "budget_category_name", required: true }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "budget_category_emoji")) do |field| %>
+        <% field.with_label { t(".emoji_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "budget_category[emoji]", value: @category.emoji,
+                html_options: { id: "budget_category_emoji", maxlength: 4 }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".save") } %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_budget"), budget_path, class: "underline" %></p>
+</div>

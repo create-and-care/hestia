@@ -1,10 +1,20 @@
 <% content_for :title, @project.name %>
+<% content_for :head do %>
+  <meta name="turbo-refresh-method" content="morph">
+<% end %>
+<%= turbo_stream_from @project, "project" %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <header class="mb-4 flex items-center justify-between">
-    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("handshake", css_class: "size-6") %> <%= @project.name %></h1>
-    <%= button_to t(".delete"), shared_project_path(@project), method: :delete,
-          form: { data: { turbo_confirm: t(".confirm_delete") } }, class: "cursor-pointer text-sm text-red-600 underline" %>
+    <div>
+      <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("handshake", css_class: "size-6") %> <%= @project.name %></h1>
+      <% if @project.trip %>
+        <p class="mt-1 text-sm text-secondary"><%= t(".trip_prefix") %> <%= link_to @project.trip.name, trip_path(@project.trip), class: "underline" %></p>
+      <% end %>
+    </div>
+    <%= form_with url: shared_project_path(@project), method: :delete, data: { turbo_confirm: t(".confirm_delete") } do %>
+      <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete") } %>
+    <% end %>
   </header>
 
   <%= render "shared/flash" %>
@@ -16,7 +26,9 @@
         <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
           <%= participant.name %>
           <%= button_to shared_project_shared_project_participant_path(@project, participant), method: :delete,
-                class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } do %><%= lucide_icon("x", css_class: "size-3.5") %><% end %>
+                class: "cursor-pointer text-subdued hover:text-destructive", form: { class: "inline" },
+                aria: { label: t(".delete_participant_aria", name: participant.name) },
+                data: { turbo_confirm: t(".delete_participant_confirm") } do %><%= lucide_icon("x", css_class: "size-3.5") %><% end %>
         <% end %>
       <% end %>
     </div>
@@ -29,20 +41,33 @@
 
   <section class="mb-6">
     <h2 class="mb-2 font-medium"><%= t(".expenses_heading") %></h2>
-    <div class="mb-2 divide-y divide-gray-100 rounded-lg border border-gray-200 text-sm">
-      <% @project.shared_expenses.recent.each do |expense| %>
-        <%= render(Ui::ItemComponent.new) do |item| %>
-          <% item.with_title do %>
-            <%= number_to_currency(expense.amount, unit: "€", format: "%n %u") %>
-            <% if expense.description.present? %>· <%= expense.description %><% end %>
-            <% if expense.shared_project_participant %><span class="text-gray-400">· <%= t(".paid_by") %> <%= expense.shared_project_participant.name %></span><% end %>
-          <% end %>
-          <% item.with_trailing do %>
-            <%= button_to shared_project_shared_expense_path(@project, expense), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+    <% if @project.shared_expenses.recent.any? %>
+      <div class="mb-2 divide-y divide-primary rounded-lg border border-primary text-sm">
+        <% @project.shared_expenses.recent.each do |expense| %>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title do %>
+              <%= number_to_currency(expense.amount, unit: "€", format: "%n %u") %>
+              <% if expense.description.present? %>· <%= expense.description %><% end %>
+              <% if expense.shared_project_participant %><span class="text-subdued">· <%= t(".paid_by") %> <%= expense.shared_project_participant.name %></span><% end %>
+            <% end %>
+            <% item.with_trailing do %>
+              <div class="flex shrink-0 items-center gap-1">
+                <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_shared_project_shared_expense_path(@project, expense),
+                      html_options: { aria: { label: t(".edit_expense_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                <%= form_with url: shared_project_shared_expense_path(@project, expense), method: :delete, data: { turbo_confirm: t(".delete_expense_confirm") } do %>
+                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
+                        html_options: { aria: { label: t(".delete_expense_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+                <% end %>
+              </div>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <div class="mb-2">
+        <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_expenses") } } %>
+      </div>
+    <% end %>
     <%= form_with model: [ @project, @expense ], url: shared_project_shared_expenses_path(@project), class: "flex flex-wrap items-end gap-2" do |form| %>
       <%= render Ui::InputComponent.new(type: "number", name: "shared_expense[amount]", value: @expense.amount, placeholder: "€",
             html_options: { id: "shared_expense_amount", step: "any", required: true, class: "w-24" }) %>
@@ -51,13 +76,13 @@
       <%= render Ui::NativeSelectComponent.new(name: "shared_expense[shared_project_participant_id]",
             options: [ [ t(".payer_blank"), "" ] ] + @project.shared_project_participants.map { |participant| [ participant.name, participant.id ] },
             selected: @expense.shared_project_participant_id, html_options: { id: "shared_expense_shared_project_participant_id" }) %>
-      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
+      <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".add") } %>
     <% end %>
   </section>
 
   <section class="mb-6">
     <h2 class="mb-2 font-medium"><%= t(".settlement_heading", total: number_to_currency(@project.total_spent, unit: "€", format: "%n %u")) %></h2>
-    <div class="divide-y divide-gray-100 rounded-lg border border-gray-200 text-sm">
+    <div class="divide-y divide-primary rounded-lg border border-primary text-sm">
       <% @balances.each do |balance| %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_title { balance.participant.name } %>
@@ -73,6 +98,19 @@
         <% end %>
       <% end %>
     </div>
+
+    <% if @transfers.any? %>
+      <div class="mt-3">
+        <p class="mb-1 text-xs font-medium text-secondary"><%= t(".transfers_heading") %></p>
+        <ul class="space-y-1 text-sm">
+          <% @transfers.each do |transfer| %>
+            <li>
+              <%= t(".transfer_line", from: transfer.from.name, to: transfer.to.name, amount: number_to_currency(transfer.amount, unit: "€", format: "%n %u")) %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
   </section>
 
   <p class="text-sm"><%= link_to t(".back_to_projects"), shared_projects_path, class: "underline" %></p>

@@ -23,6 +23,43 @@ class BudgetEntriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "create with an invalid periodicity does not persist and flashes an error" do
+    assert_no_difference -> { BudgetEntry.count } do
+      post budget_entries_path, params: { budget_entry: { budget_category_id: budget_categories(:alpha_rent).id, amount: 50, periodicity: "weekly" } }
+    end
+    assert_redirected_to budget_path
+    assert_not_nil flash[:alert]
+  end
+
+  test "edit" do
+    get edit_budget_entry_path(budget_entries(:rent_entry))
+    assert_response :success
+  end
+
+  test "cannot edit another household's entry" do
+    get edit_budget_entry_path(budget_entries(:beta_entry))
+    assert_response :not_found
+  end
+
+  test "update" do
+    entry = budget_entries(:rent_entry)
+    patch budget_entry_path(entry), params: { budget_entry: { amount: 850 } }
+    assert_redirected_to budget_path
+    assert_equal 850, entry.reload.amount
+  end
+
+  test "update with an invalid periodicity re-renders the edit form" do
+    entry = budget_entries(:rent_entry)
+    patch budget_entry_path(entry), params: { budget_entry: { periodicity: "weekly" } }
+    assert_response :unprocessable_entity
+    assert_equal "monthly", entry.reload.periodicity
+  end
+
+  test "cannot update another household's entry" do
+    patch budget_entry_path(budget_entries(:beta_entry)), params: { budget_entry: { amount: 1 } }
+    assert_response :not_found
+  end
+
   test "destroy" do
     entry = budget_entries(:rent_entry)
     delete budget_entry_path(entry)

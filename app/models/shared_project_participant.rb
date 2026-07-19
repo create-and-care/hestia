@@ -3,4 +3,6 @@ class SharedProjectParticipant < ApplicationRecord
   has_many :shared_expenses, dependent: :nullify
 
   validates :name, presence: true
+
+  broadcasts_refreshes_to ->(participant) { [ participant.shared_project, "project" ] }
 end

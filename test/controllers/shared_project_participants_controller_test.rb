@@ -18,6 +18,15 @@ class SharedProjectParticipantsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to project
   end
 
+  test "create with a blank name does not persist and flashes an error" do
+    project = shared_projects(:alpha_trip)
+    assert_no_difference -> { project.shared_project_participants.count } do
+      post shared_project_shared_project_participants_path(project), params: { shared_project_participant: { name: "" } }
+    end
+    assert_redirected_to project
+    assert_not_nil flash[:alert]
+  end
+
   test "destroy" do
     project = shared_projects(:alpha_trip)
     participant = shared_project_participants(:trip_bob)

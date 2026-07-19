@@ -240,12 +240,12 @@ Rails.application.routes.draw do
     resources :pool_actions, only: %i[create destroy]
   end
   resource :budget, only: :show, controller: "budget"
-  resources :budget_categories, only: %i[create destroy]
-  resources :budget_entries, only: %i[create destroy]
-  resources :savings_envelopes, only: %i[create destroy]
+  resources :budget_categories, only: %i[create edit update destroy]
+  resources :budget_entries, only: %i[create edit update destroy]
+  resources :savings_envelopes, only: %i[create edit update destroy]
   resources :shared_projects, only: %i[index show create destroy] do
     resources :shared_project_participants, only: %i[create destroy]
-    resources :shared_expenses, only: %i[create destroy]
+    resources :shared_expenses, only: %i[create edit update destroy]
   end
   resources :documents, only: %i[index show create destroy]
   resources :document_folders, only: %i[create destroy]
@@ -276,6 +276,7 @@ Rails.application.routes.draw do
     resources :tasks, only: %i[create destroy], module: :trips
     resources :addresses, only: %i[create destroy], module: :trips
     resources :shopping_lists, only: %i[create destroy], module: :trips
+    member { post :track_expenses }
   end
 
   # Wellbeing: data strictly private to the user (Spec §5, point 4).

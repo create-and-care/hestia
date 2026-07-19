@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_19_101255) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_19_102557) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -775,8 +775,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_101255) do
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.string "name", null: false
+    t.bigint "trip_id"
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_shared_projects_on_household_id"
+    t.index ["trip_id"], name: "index_shared_projects_on_trip_id"
   end
 
   create_table "shopping_list_items", force: :cascade do |t|
@@ -1054,6 +1056,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_101255) do
   add_foreign_key "shared_expenses", "shared_projects"
   add_foreign_key "shared_project_participants", "shared_projects"
   add_foreign_key "shared_projects", "households"
+  add_foreign_key "shared_projects", "trips"
   add_foreign_key "shopping_list_items", "products"
   add_foreign_key "shopping_list_items", "recipes"
   add_foreign_key "shopping_list_items", "shopping_lists"

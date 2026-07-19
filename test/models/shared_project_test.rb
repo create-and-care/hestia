@@ -31,4 +31,15 @@ class SharedProjectTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).shared_projects, shared_projects(:beta_project)
   end
+
+  test "trip is optional" do
+    project = households(:alpha).shared_projects.new(name: "Sans voyage")
+    assert project.valid?
+  end
+
+  test "rejects a trip from another household" do
+    project = households(:alpha).shared_projects.new(name: "Voyage", trip: trips(:beta_trip))
+    assert_not project.valid?
+    assert_includes project.errors[:trip], "is invalid"
+  end
 end

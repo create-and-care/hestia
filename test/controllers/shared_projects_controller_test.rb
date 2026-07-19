@@ -24,6 +24,19 @@ class SharedProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, project.shared_project_participants.count
   end
 
+  test "create with a blank name re-renders the index and preserves the entered name" do
+    assert_no_difference -> { SharedProject.count } do
+      post shared_projects_path, params: { shared_project: { name: "" } }
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test "show renders a minimal transfer suggestion" do
+    get shared_project_path(shared_projects(:alpha_trip))
+    assert_response :success
+    assert_includes @response.body, "Bob"
+  end
+
   test "add a participant and an expense" do
     project = shared_projects(:alpha_trip)
     post shared_project_shared_project_participants_path(project), params: { shared_project_participant: { name: "Chris" } }
