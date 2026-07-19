@@ -23,6 +23,13 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Rapport" # beta's task
   end
 
+  test "results are exposed as an accessible listbox of options" do
+    get search_path(q: "vaisselle")
+    assert_response :success
+    assert_select "turbo-frame#global_search_results[role=listbox]"
+    assert_select "a[role=option][aria-selected=false]", text: "Faire la vaisselle"
+  end
+
   test "renders the no-results state for a query matching nothing" do
     get search_path(q: "zzzznomatchzzzz")
     assert_response :success

@@ -24,5 +24,6 @@
 
   <p class="mt-6 text-sm text-secondary">
     <%= button_to t(".sign_out"), session_path, method: :delete, class: "cursor-pointer underline" %>
+    · <%= link_to t("roadmap.show.title"), roadmap_path, class: "underline" %>
   </p>
 </div>

@@ -71,6 +71,9 @@ Rails.application.routes.draw do
 
   # Onboarding: choosing to create / join a household.
   resource :onboarding, only: :show, controller: "onboarding"
+  # Same content as household settings' Roadmap tab, reachable without an
+  # active household (e.g. from onboarding).
+  resource :roadmap, only: :show, controller: "roadmap"
   resources :households, only: %i[new create show update destroy] do
     member do
       patch :activate

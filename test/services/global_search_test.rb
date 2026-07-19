@@ -85,4 +85,56 @@ class GlobalSearchTest < ActiveSupport::TestCase
     cellar_group = cellar_results.find { |g| g[:module_key] == "wine_cellar" && g[:records].any? { |r| r[:label] == wine_cellars(:alpha_reds).name } }
     assert cellar_group, "expected a wine_cellar group matched by cellar name"
   end
+
+  test "finds a fridge item" do
+    results = GlobalSearch.call(query: "yaourt", household: @household, user: @user)
+    group = results.find { |g| g[:module_key] == "fridge" }
+
+    assert group, "expected a fridge group"
+    assert_includes group[:records].map { |r| r[:label] }, fridge_items(:alpha_yogurt).name
+  end
+
+  test "finds a free-text menu entry but not one already covered by the recipe search" do
+    entry = meal_plan_entries(:alpha_dinner)
+    household_entry = @household.meal_plan_entries.create!(on_date: Date.current, meal_type: "lunch", free_name: "Salade composée")
+
+    results = GlobalSearch.call(query: "composée", household: @household, user: @user)
+    group = results.find { |g| g[:module_key] == "menu" }
+    assert group, "expected a menu group matched by free_name"
+    assert_includes group[:records].map { |r| r[:label] }, household_entry.display_name
+
+    results = GlobalSearch.call(query: entry.recipe.title, household: @household, user: @user)
+    assert_nil results.find { |g| g[:module_key] == "menu" }, "a recipe-backed entry should surface via the recipe search, not menu"
+  end
+
+  test "finds a waste collection series by its translated type label" do
+    results = GlobalSearch.call(query: "ordures", household: @household, user: @user)
+    group = results.find { |g| g[:module_key] == "waste" }
+
+    assert group, "expected a waste group matched by waste_type"
+    assert_includes group[:records].map { |r| r[:label] }, "Household waste"
+  end
+
+  test "finds a plant and a pool under the outdoor module" do
+    results = GlobalSearch.call(query: "Rosier", household: @household, user: @user)
+    plant_group = results.find { |g| g[:module_key] == "outdoor" && g[:records].any? { |r| r[:label] == "Rosier" } }
+    assert plant_group, "expected an outdoor group matched by plant name"
+
+    results = GlobalSearch.call(query: "Piscine principale", household: @household, user: @user)
+    pool_group = results.find { |g| g[:module_key] == "outdoor" && g[:records].any? { |r| r[:label] == "Piscine principale" } }
+    assert pool_group, "expected an outdoor group matched by pool name"
+  end
+
+  test "finds a workout entry scoped to the searching user only, never another household member's" do
+    @user.workout_entries.create!(exercise: "Squats bulgares", done_on: Date.current)
+    users(:two).workout_entries.create!(exercise: "Squats sautés", done_on: Date.current)
+
+    results = GlobalSearch.call(query: "squats", household: @household, user: @user)
+    group = results.find { |g| g[:module_key] == "wellbeing" }
+
+    assert group, "expected a wellbeing group for the searching user's own workout"
+    labels = group[:records].map { |r| r[:label] }
+    assert_includes labels, "Squats bulgares"
+    assert_not_includes labels, "Squats sautés", "another user's private workout must never leak into this search"
+  end
 end

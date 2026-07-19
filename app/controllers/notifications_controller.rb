@@ -4,12 +4,22 @@ class NotificationsController < ApplicationController
   end
 
   def mark_read
-    Current.user.notifications.find(params[:id]).mark_read!
-    redirect_back fallback_location: notifications_path
+    @notification = Current.user.notifications.find(params[:id])
+    @notification.mark_read!
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_back fallback_location: notifications_path }
+    end
   end
 
   def mark_all_read
-    Current.user.notifications.unread.update_all(read_at: Time.current)
-    redirect_back fallback_location: notifications_path
+    @notifications = Current.user.notifications.unread.to_a
+    @notifications.each(&:mark_read!)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_back fallback_location: notifications_path }
+    end
   end
 end

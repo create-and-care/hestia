@@ -1,18 +1,21 @@
-<%= turbo_frame_tag "global_search_results" do %>
+<%= turbo_frame_tag "global_search_results", role: "listbox" do %>
   <% if @query.blank? %>
     <p class="px-2 py-6 text-center text-sm text-secondary"><%= t("search.hint") %></p>
   <% elsif @results.empty? %>
     <p class="px-2 py-6 text-center text-sm text-secondary"><%= t("search.no_results") %></p>
   <% else %>
+    <% item_index = 0 %>
     <% @results.each do |group| %>
-      <div class="mb-1">
+      <div class="mb-1" role="group" aria-label="<%= t("dashboard.show.nav.#{group[:module_key]}") %>">
         <p class="flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-secondary">
           <%= lucide_icon(group[:icon], css_class: "size-3.5") %>
           <%= t("dashboard.show.nav.#{group[:module_key]}") %>
         </p>
         <% group[:records].each do |record| %>
-          <%= link_to record[:label], record[:url], data: { search_palette_target: "item", turbo_frame: "_top" },
+          <%= link_to record[:label], record[:url], id: "global-search-result-#{item_index}", role: "option", "aria-selected": "false",
+                data: { search_palette_target: "item", turbo_frame: "_top" },
                 class: "flex w-full items-center rounded-sm px-2 py-1.5 text-sm text-primary hover:bg-surface-hover" %>
+          <% item_index += 1 %>
         <% end %>
       </div>
     <% end %>
