@@ -29,6 +29,21 @@ class WasteCollectionSeriesTest < ActiveSupport::TestCase
     assert_not_includes households(:alpha).waste_collection_series, waste_collection_series(:beta_series)
   end
 
+  test "rejects an end date before the start date" do
+    series = households(:alpha).waste_collection_series.build(
+      waste_type: "ordures", weekday: 1, starts_on: Date.current, ends_on: Date.current - 1.day
+    )
+    assert_not series.valid?
+    assert_includes series.errors[:ends_on], "must be on or after the start date"
+  end
+
+  test "accepts an end date equal to the start date" do
+    series = households(:alpha).waste_collection_series.build(
+      waste_type: "ordures", weekday: 1, starts_on: Date.current, ends_on: Date.current
+    )
+    assert series.valid?
+  end
+
   test "destroying a series destroys its events" do
     series = waste_collection_series(:alpha_trash)
     assert_difference -> { WasteCollectionEvent.count }, -series.waste_collection_events.count do
