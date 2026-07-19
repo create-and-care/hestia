@@ -39,6 +39,12 @@
           <% item.with_title { link_to occurrence.name, edit_contact_path(occurrence), class: "hover:underline" } %>
           <% item.with_description { t(".birthday_description") } %>
         <% end %>
+      <% elsif waste_occurrence?(occurrence) %>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_leading { waste_type_icon(occurrence.waste_type) } %>
+          <% item.with_title { link_to waste_type_label(occurrence.waste_type), edit_waste_collection_event_path(occurrence), class: "hover:underline" } %>
+          <% item.with_description { time.strftime("%a %d/%m") } %>
+        <% end %>
       <% else %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_leading { tag.span "", class: "size-2 rounded-full #{event_color_class(occurrence.color)}" } %>

@@ -22,6 +22,44 @@ class BabyProfilesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Lou"
   end
 
+  test "show wires the real-time stream" do
+    get baby_profile_path(baby_profiles(:alpha_baby))
+    assert_response :success
+    assert_select "turbo-cable-stream-source"
+  end
+
+  test "show displays the baby's age in months" do
+    get baby_profile_path(baby_profiles(:alpha_baby))
+    assert_response :success
+    assert_includes @response.body, "months old"
+  end
+
+  test "show links to the linked pediatrician" do
+    baby = baby_profiles(:alpha_baby)
+    baby.update!(service_provider: service_providers(:alpha_plombier))
+    get baby_profile_path(baby)
+    assert_response :success
+    assert_includes @response.body, service_providers(:alpha_plombier).name
+  end
+
+  test "create with a pediatrician links the service provider" do
+    provider = service_providers(:alpha_plombier)
+    post baby_profiles_path, params: { baby_profile: { name: "Sam", service_provider_id: provider.id } }
+    assert_equal provider, BabyProfile.find_by(name: "Sam").service_provider
+  end
+
+  test "cannot link a pediatrician from another household" do
+    post baby_profiles_path, params: { baby_profile: { name: "Sam", service_provider_id: service_providers(:beta_provider).id } }
+    assert_not BabyProfile.exists?(name: "Sam")
+  end
+
+  test "is searchable via GlobalSearch" do
+    results = GlobalSearch.call(query: "Lou", household: households(:alpha), user: users(:one))
+    baby_group = results.find { |g| g[:module_key] == "baby" }
+    assert baby_group
+    assert_includes baby_group[:records].map { |r| r[:label] }, "Lou"
+  end
+
   test "create" do
     assert_difference -> { households(:alpha).baby_profiles.count }, 1 do
       post baby_profiles_path, params: { baby_profile: { name: "Sam" } }

@@ -16,4 +16,12 @@ class FeedingSessionTest < ActiveSupport::TestCase
   test "baby profile is scoped to its household" do
     assert_not_includes households(:alpha).baby_profiles, baby_profiles(:beta_baby)
   end
+
+  test "in_progress scope returns sessions without an end time" do
+    baby = baby_profiles(:alpha_baby)
+    ongoing = baby.feeding_sessions.create!(kind: "bottle", started_at: Time.current)
+    baby.feeding_sessions.create!(kind: "bottle", started_at: 1.hour.ago, ended_at: 30.minutes.ago)
+
+    assert_equal [ ongoing ], baby.feeding_sessions.in_progress.to_a
+  end
 end

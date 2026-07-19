@@ -41,4 +41,10 @@ class ShoppingListsControllerTest < ActionDispatch::IntegrationTest
     get shopping_list_path(shopping_lists(:beta_groceries))
     assert_response :not_found
   end
+
+  test "show offers a discuss-this-list shortcut into Messages" do
+    get shopping_list_path(shopping_lists(:alpha_groceries))
+    assert_response :success
+    assert_select "form[action^=?]", discuss_conversations_path
+  end
 end

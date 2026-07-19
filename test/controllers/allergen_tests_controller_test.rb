@@ -33,4 +33,38 @@ class AllergenTestsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "create gives a success flash notice" do
+    baby = baby_profiles(:alpha_baby)
+    post baby_profile_allergen_tests_path(baby), params: { allergen_test: { allergen: "Arachide" } }
+    follow_redirect!
+    assert_includes @response.body, "Allergen test added."
+  end
+
+  test "create with a blank allergen does not persist and surfaces an error" do
+    baby = baby_profiles(:alpha_baby)
+    assert_no_difference -> { AllergenTest.count } do
+      post baby_profile_allergen_tests_path(baby), params: { allergen_test: { allergen: "" } }
+    end
+    assert_redirected_to baby
+    assert_equal "Allergen can't be blank", flash[:alert]
+  end
+
+  test "edit and update an allergen test" do
+    baby = baby_profiles(:alpha_baby)
+    test_record = baby.allergen_tests.create!(allergen: "Arachide")
+
+    get edit_baby_profile_allergen_test_path(baby, test_record)
+    assert_response :success
+
+    patch baby_profile_allergen_test_path(baby, test_record), params: { allergen_test: { severity: "Légère" } }
+    assert_redirected_to baby
+    assert_equal "Légère", test_record.reload.severity
+  end
+
+  test "cannot edit another household's allergen test" do
+    test_record = baby_profiles(:beta_baby).allergen_tests.create!(allergen: "Gluten Beta")
+    get edit_baby_profile_allergen_test_path(baby_profiles(:beta_baby), test_record)
+    assert_response :not_found
+  end
 end

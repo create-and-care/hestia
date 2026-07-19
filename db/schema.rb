@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_18_211056) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -85,8 +85,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.string "name", null: false
+    t.bigint "service_provider_id"
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_baby_profiles_on_household_id"
+    t.index ["service_provider_id"], name: "index_baby_profiles_on_service_provider_id"
   end
 
   create_table "bottles", force: :cascade do |t|
@@ -224,6 +226,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
   create_table "conversation_participants", force: :cascade do |t|
     t.bigint "conversation_id", null: false
     t.datetime "created_at", null: false
+    t.datetime "last_read_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["conversation_id", "user_id"], name: "index_conversation_participants_on_conversation_id_and_user_id", unique: true
@@ -235,8 +238,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.string "name", null: false
+    t.bigint "subject_id"
+    t.string "subject_type"
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_conversations_on_household_id"
+    t.index ["subject_type", "subject_id"], name: "index_conversations_on_subject"
   end
 
   create_table "document_folders", force: :cascade do |t|
@@ -956,6 +962,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_101710) do
   add_foreign_key "allergen_tests", "baby_profiles"
   add_foreign_key "api_tokens", "users"
   add_foreign_key "baby_profiles", "households"
+  add_foreign_key "baby_profiles", "service_providers"
   add_foreign_key "bottles", "households"
   add_foreign_key "bottles", "recipes"
   add_foreign_key "bottles", "wine_cellars"

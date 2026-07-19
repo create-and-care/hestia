@@ -1,0 +1,4 @@
+<%# Invalid message (e.g. blank content): re-render the composer with the error and the typed content preserved. %>
+<%= turbo_stream.replace "new_message" do %>
+  <%= render "messages/form", conversation: @conversation, message: @message %>
+<% end %>

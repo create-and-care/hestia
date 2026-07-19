@@ -1,6 +1,7 @@
 en:
   sidebar:
     home: "Home"
+    unread: "Unread"
     groups:
       daily: "Daily life"
       home: "Home & assets"
