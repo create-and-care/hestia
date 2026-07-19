@@ -79,4 +79,29 @@ class HouseholdTest < ActiveSupport::TestCase
     assert_not household.valid?
     assert_includes household.errors[:required_meal_types].join, "brunch"
   end
+
+  test "admin? is true for an admin member and false for a regular member or stranger" do
+    household = Household.create!(name: "Test")
+    admin = User.create!(name: "Admin", email_address: "admin_x@example.com", password: "secret123")
+    member = User.create!(name: "Member", email_address: "member_x@example.com", password: "secret123")
+    stranger = User.create!(name: "Stranger", email_address: "stranger_x@example.com", password: "secret123")
+    household.memberships.create!(user: admin, role: :admin)
+    household.memberships.create!(user: member, role: :member)
+
+    assert household.admin?(admin)
+    assert_not household.admin?(member)
+    assert_not household.admin?(stranger)
+  end
+
+  test "only_admin? is true only for a sole admin" do
+    household = Household.create!(name: "Test")
+    admin = User.create!(name: "Admin", email_address: "admin_y@example.com", password: "secret123")
+    household.memberships.create!(user: admin, role: :admin)
+    assert household.only_admin?(admin)
+
+    co_admin = User.create!(name: "Co-admin", email_address: "coadmin_y@example.com", password: "secret123")
+    household.memberships.create!(user: co_admin, role: :admin)
+    assert_not household.only_admin?(admin)
+    assert_not household.only_admin?(co_admin)
+  end
 end

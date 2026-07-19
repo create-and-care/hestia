@@ -8,12 +8,14 @@ class ApiToken < ApplicationRecord
 
   validates :name, presence: true
 
+  scope :active, -> { where("expires_at IS NULL OR expires_at > ?", Time.current) }
+
   attr_reader :plaintext_token
 
   def self.authenticate(raw_token)
     return nil if raw_token.blank?
 
-    find_by(token_digest: digest(raw_token))
+    active.find_by(token_digest: digest(raw_token))
   end
 
   def self.digest(raw_token)
@@ -22,6 +24,10 @@ class ApiToken < ApplicationRecord
 
   def touch_last_used!
     update_column(:last_used_at, Time.current)
+  end
+
+  def expired?
+    expires_at.present? && expires_at.past?
   end
 
   private

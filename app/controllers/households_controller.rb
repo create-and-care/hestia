@@ -25,7 +25,6 @@ class HouseholdsController < ApplicationController
       category: "Dashboard & cross-cutting experience",
       emoji: "🧭",
       items: [
-        "Enrich the dashboard with the widgets planned in Spec §7 (Fridge items close to expiring, upcoming birthdays, overdue tasks, upcoming events): it currently only shows the household, its members, and the invite code.",
         "Wire up a global search/navigation component (Ui::CommandComponent, already in the library but used nowhere outside /design-system) instead of navigating via the dashboard's 25-link grid.",
         "Finish adopting the Ui:: component library in business views: 730 occurrences of hardcoded gray classes (gray-100, bg-gray-50…) versus only 16 uses of semantic tokens (bg-container, text-primary…) outside the library itself. Dark mode exists at the token level (the .dark class) but isn't functionally exercised by nearly any module view.",
         "Add a household activity feed (who did what, when) — useful for trust in multi-member use and reusable as a logging building block for Hest.AI (Spec §13).",
@@ -36,12 +35,8 @@ class HouseholdsController < ApplicationController
       category: "Security & account management",
       emoji: "🔐",
       items: [
-        "Let a member leave a household and an admin remove another member: MembershipsController and HouseholdsController expose no destroy action today.",
-        "Allow deleting a household (no destroy route on households): a household created by mistake stays permanent today.",
         "Add user account deletion and a personal-data export, for portability even when self-hosted (see the privacy-policy recommendation, Spec §8).",
-        "Add expiration/rotation for API tokens: ApiToken has no expires_at, a token stays valid indefinitely until manually deleted from /api_tokens.",
-        "Strengthen the password policy: User relies solely on has_secure_password, with no minimum length or complexity rule.",
-        "Add rate limiting to the public, unauthenticated gift-reservation route (g/:token/reserve/:idea_id), which has none unlike login and forgot-password."
+        "Add rate limiting to the public, unauthenticated gift-reservation route (g/:token/reserve/:idea_id), which has none unlike login, forgot-password, and (now) registration."
       ]
     },
     {
@@ -127,9 +122,12 @@ class HouseholdsController < ApplicationController
 
   def show
     @household = Current.household
+    @memberships = @household.memberships.includes(:user).order(:role)
+    @other_households = Current.user.households.where.not(id: @household.id)
     @notification_preference = NotificationPreference.for_user(Current.user)
     @api_tokens = Current.user.api_tokens.order(created_at: :desc)
     @api_token = ApiToken.new
+    @sessions = Current.user.sessions.order(created_at: :desc)
     @phases = PHASES
     @improvements = IMPROVEMENTS
   end
@@ -169,6 +167,39 @@ class HouseholdsController < ApplicationController
       redirect_to root_path, notice: t(".switched", name: membership.household.name)
     else
       redirect_to root_path, alert: t(".not_found")
+    end
+  end
+
+  def regenerate_invite_code
+    unless current_membership&.admin?
+      return redirect_to household_path(Current.household), alert: t(".not_authorized")
+    end
+
+    Current.household.regenerate_invite_code!
+    redirect_to household_path(Current.household), notice: t(".regenerated")
+  end
+
+  # A household created by mistake shouldn't stay permanent (admin only).
+  # Every session with this household set as active — this user's and every
+  # other member's — must be cleared first: `sessions.active_household_id`
+  # has no ON DELETE clause, so destroying the household would otherwise hit
+  # a foreign key violation for anyone still "on" it.
+  def destroy
+    household = Current.household
+    unless current_membership&.admin?
+      return redirect_to household_path(household), alert: t(".not_authorized")
+    end
+
+    Session.where(active_household: household).update_all(active_household_id: nil)
+    household.destroy!
+
+    next_household = Current.user.households.reload.first
+    if next_household
+      switch_household(next_household)
+      redirect_to root_path, notice: t(".deleted")
+    else
+      Current.household = nil
+      redirect_to onboarding_path, notice: t(".deleted")
     end
   end
 

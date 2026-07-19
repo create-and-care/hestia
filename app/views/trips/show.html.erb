@@ -196,13 +196,14 @@
       <%= render(Ui::CardComponent.new) do %>
         <p class="mb-3 text-sm text-secondary"><%= t(".sections_hint") %></p>
         <%= form_with model: @trip, url: update_sections_trip_path(@trip), method: :patch, class: "space-y-4" do %>
-          <ul class="divide-y divide-gray-100 rounded-lg border border-primary">
+          <ul class="divide-y divide-primary rounded-lg border border-primary">
             <% Trip::SECTIONS.each do |key| %>
               <li>
                 <%= render(Ui::ItemComponent.new) do |item| %>
-                  <% item.with_title { t(".sections.#{key}") } %>
+                  <% item.with_title { tag.span(t(".sections.#{key}"), id: "trip_section_label_#{key}") } %>
                   <% item.with_trailing do %>
-                    <%= render Ui::SwitchComponent.new(name: "trip[enabled_sections][]", checked: @trip.section_enabled?(key), html_options: { value: key }) %>
+                    <%= render Ui::SwitchComponent.new(name: "trip[enabled_sections][]", checked: @trip.section_enabled?(key),
+                          html_options: { value: key, aria: { labelledby: "trip_section_label_#{key}" } }) %>
                   <% end %>
                 <% end %>
               </li>

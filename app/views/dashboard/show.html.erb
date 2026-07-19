@@ -2,7 +2,7 @@
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <header class="mb-8">
-    <p class="text-sm text-gray-500"><%= t(".active_household") %></p>
+    <p class="text-sm text-secondary"><%= t(".active_household") %></p>
     <h1 class="text-2xl font-semibold"><%= @household.name %></h1>
   </header>
 
@@ -29,9 +29,82 @@
     </section>
   <% end %>
 
+  <% if @overdue_tasks&.any? %>
+    <section class="mb-8">
+      <h2 class="mb-3 flex items-center gap-1.5 font-medium text-destructive"><%= lucide_icon("square-check", css_class: "size-4") %> <%= t(".overdue_tasks") %></h2>
+      <div class="divide-y divide-primary rounded-lg border border-primary">
+        <% @overdue_tasks.each do |task| %>
+          <%= render Ui::ItemComponent.new do |item| %>
+            <% item.with_title { link_to task.title, tasks_path, class: "hover:underline" } %>
+            <% item.with_description { l(task.due_on, format: :short) } %>
+            <% item.with_trailing { render(Ui::BadgeComponent.new(variant: due_badge_variant(:overdue))) { due_label(:overdue) } } %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <% if @fridge_items_expiring&.any? %>
+    <section class="mb-8">
+      <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("refrigerator", css_class: "size-4") %> <%= t(".fridge_expiring") %></h2>
+      <div class="divide-y divide-primary rounded-lg border border-primary">
+        <% @fridge_items_expiring.each do |item| %>
+          <%= render Ui::ItemComponent.new do |i| %>
+            <% i.with_title { link_to item.name, fridge_path, class: "hover:underline" } %>
+            <% i.with_description { l(item.expires_on, format: :short) } %>
+            <% i.with_trailing { render(Ui::BadgeComponent.new(variant: expiration_badge_variant(item.expiration_status))) { expiration_label(item.expiration_status) } } %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <% if @upcoming_birthdays&.any? %>
+    <section class="mb-8">
+      <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("cake", css_class: "size-4") %> <%= t(".upcoming_birthdays") %></h2>
+      <div class="divide-y divide-primary rounded-lg border border-primary">
+        <% @upcoming_birthdays.each do |contact| %>
+          <%= render Ui::ItemComponent.new do |item| %>
+            <% item.with_title { link_to contact.name, contacts_path, class: "hover:underline" } %>
+            <% item.with_description { l(contact.next_birthday, format: :short) } %>
+            <% item.with_trailing { render(Ui::BadgeComponent.new(variant: proximity_badge_variant(contact.proximity_status))) { proximity_label(contact.proximity_status) } } %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <% if @upcoming_events&.any? %>
+    <section class="mb-8">
+      <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("calendar", css_class: "size-4") %> <%= t(".upcoming_events") %></h2>
+      <div class="divide-y divide-primary rounded-lg border border-primary">
+        <% @upcoming_events.each do |time, event| %>
+          <%= render Ui::ItemComponent.new do |item| %>
+            <% item.with_title { link_to event.title, calendar_path, class: "hover:underline" } %>
+            <% item.with_description { time.strftime("%a %d/%m — %H:%M") } %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <% if @recipe_suggestions&.any? %>
+    <section class="mb-8">
+      <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("chef-hat", css_class: "size-4") %> <%= t(".recipe_suggestions") %></h2>
+      <p class="mb-2 text-sm text-secondary"><%= t(".recipe_suggestions_description") %></p>
+      <div class="divide-y divide-primary rounded-lg border border-primary">
+        <% @recipe_suggestions.each do |recipe| %>
+          <%= render Ui::ItemComponent.new(href: recipe_path(recipe)) do |item| %>
+            <% item.with_title { recipe.title } %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
   <section class="mb-8">
     <h2 class="mb-3 font-medium"><%= t(".members", count: @memberships.size) %></h2>
-    <div class="divide-y divide-gray-100 rounded-lg border border-primary">
+    <div class="divide-y divide-primary rounded-lg border border-primary">
       <% @memberships.each do |membership| %>
         <%= render Ui::ItemComponent.new do |item| %>
           <% item.with_title { membership.user.name.presence || membership.user.email_address } %>
@@ -50,8 +123,7 @@
       <ul class="space-y-2">
         <% @other_households.each do |household| %>
           <li>
-            <%= button_to t(".switch_to", name: household.name), activate_household_path(household), method: :patch,
-                  class: "cursor-pointer inline-flex items-center rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-focus bg-transparent text-primary border border-primary hover:bg-button-outline-hover h-8 px-3 text-sm gap-1.5" %>
+            <%= render(Ui::ButtonToComponent.new(activate_household_path(household), method: :patch, variant: :outline, size: :sm)) { t(".switch_to", name: household.name) } %>
           </li>
         <% end %>
       </ul>

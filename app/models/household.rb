@@ -73,6 +73,16 @@ class Household < ApplicationRecord
     disabled_modules.exclude?(key.to_s)
   end
 
+  def admin?(user)
+    memberships.exists?(user: user, role: "admin")
+  end
+
+  # True when `user` is an admin and the only one — used to block leaving,
+  # demoting, or removing a household's last remaining admin.
+  def only_admin?(user)
+    admin?(user) && memberships.where(role: "admin").count == 1
+  end
+
   # "Today"-sensitive calculations (Fridge expiry, Task due dates, birthdays)
   # must resolve against the household's own time zone rather than the
   # server's, since members can be anywhere. See ApplicationController#switch_time_zone

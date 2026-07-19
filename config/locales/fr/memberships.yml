@@ -11,3 +11,11 @@ fr:
       invalid_code: "Code d'invitation invalide."
       already_member: "Vous faites déjà partie de ce foyer."
       joined: "Vous avez rejoint « %{name} »."
+    update:
+      not_authorized: "Seuls les administrateurs peuvent modifier les rôles des membres."
+      last_admin: "Ce foyer a besoin d'au moins un administrateur — promouvez quelqu'un d'autre d'abord."
+    destroy:
+      not_authorized: "Seuls les administrateurs peuvent retirer un membre."
+      last_admin: "Ce foyer a besoin d'au moins un administrateur — promouvez quelqu'un d'autre d'abord."
+      left: "Vous avez quitté le foyer."
+      removed: "Membre retiré."

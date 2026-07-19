@@ -27,4 +27,10 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
   end
+
+  # No test covers the `rate_limit` behavior itself here, matching Sessions#create
+  # and Passwords#create (also untested for the same reason): the `store:` it
+  # writes to is resolved from `Rails.cache` once, when the controller class
+  # first loads — which happens long before any per-test override of
+  # `Rails.cache` could take effect against the test environment's :null_store.
 end

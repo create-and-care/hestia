@@ -11,3 +11,11 @@ en:
       invalid_code: "Invalid invite code."
       already_member: "You're already part of this household."
       joined: "You joined “%{name}”."
+    update:
+      not_authorized: "Only administrators can change member roles."
+      last_admin: "This household needs at least one admin — promote someone else first."
+    destroy:
+      not_authorized: "Only administrators can remove a member."
+      last_admin: "This household needs at least one admin — promote someone else first."
+      left: "You left the household."
+      removed: "Member removed."
