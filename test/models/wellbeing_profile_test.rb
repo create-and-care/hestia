@@ -10,4 +10,21 @@ class WellbeingProfileTest < ActiveSupport::TestCase
     assert_nil WellbeingProfile.new(height: 0).bmi(70)
     assert_nil WellbeingProfile.new(height: 180).bmi(nil)
   end
+
+  test "rejects an unknown sex" do
+    profile = WellbeingProfile.new(user: users(:one), sex: "unknown")
+    assert_not profile.valid?
+    assert_includes profile.errors[:sex], "is not included in the list"
+  end
+
+  test "rejects an unknown activity level" do
+    profile = WellbeingProfile.new(user: users(:one), activity_level: "unknown")
+    assert_not profile.valid?
+    assert_includes profile.errors[:activity_level], "is not included in the list"
+  end
+
+  test "allows a blank sex and activity level" do
+    profile = WellbeingProfile.new(user: users(:one))
+    assert profile.valid?
+  end
 end

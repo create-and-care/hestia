@@ -14,12 +14,44 @@ class WorkoutEntriesControllerTest < ActionDispatch::IntegrationTest
       post workout_entries_path, params: { workout_entry: { exercise: "Course", duration_minutes: 30, done_on: Date.current } }
     end
     assert_redirected_to wellbeing_path
+    assert_equal I18n.t("workout_entries.create.added"), flash[:notice]
+  end
+
+  test "create with a blank exercise flashes an alert instead of failing silently" do
+    assert_no_difference -> { WorkoutEntry.count } do
+      post workout_entries_path, params: { workout_entry: { exercise: "", done_on: Date.current } }
+    end
+    assert_redirected_to wellbeing_path
+    assert_not_nil flash[:alert]
+  end
+
+  test "gets the edit form" do
+    entry = users(:one).workout_entries.create!(done_on: Date.current, exercise: "Vélo", duration_minutes: 45)
+    get edit_workout_entry_path(entry)
+    assert_response :success
+  end
+
+  test "update changes the exercise" do
+    entry = users(:one).workout_entries.create!(done_on: Date.current, exercise: "Vélo", duration_minutes: 45)
+    patch workout_entry_path(entry), params: { workout_entry: { exercise: "Course", duration_minutes: 20, done_on: Date.current } }
+    assert_redirected_to wellbeing_path
+    assert_equal I18n.t("workout_entries.update.updated"), flash[:notice]
+    entry.reload
+    assert_equal "Course", entry.exercise
+    assert_equal 20, entry.duration_minutes
+  end
+
+  test "update with a blank exercise re-renders the edit form" do
+    entry = users(:one).workout_entries.create!(done_on: Date.current, exercise: "Vélo", duration_minutes: 45)
+    patch workout_entry_path(entry), params: { workout_entry: { exercise: "" } }
+    assert_response :unprocessable_entity
   end
 
   test "destroy" do
     entry = users(:one).workout_entries.create!(done_on: Date.current, exercise: "Vélo", duration_minutes: 45)
     delete workout_entry_path(entry)
     assert_redirected_to wellbeing_path
+    assert_equal I18n.t("workout_entries.destroy.deleted"), flash[:notice]
     assert_not WorkoutEntry.exists?(entry.id)
   end
 
@@ -44,5 +76,20 @@ class WorkoutEntriesControllerTest < ActionDispatch::IntegrationTest
       delete workout_entry_path(entry)
     end
     assert_response :not_found
+  end
+
+  test "a user cannot edit another user's workout entry" do
+    entry = users(:one).workout_entries.create!(done_on: Date.current, exercise: "Vélo", duration_minutes: 45)
+    sign_in_as(users(:two))
+    get edit_workout_entry_path(entry)
+    assert_response :not_found
+  end
+
+  test "a user cannot update another user's workout entry" do
+    entry = users(:one).workout_entries.create!(done_on: Date.current, exercise: "Vélo", duration_minutes: 45)
+    sign_in_as(users(:two))
+    patch workout_entry_path(entry), params: { workout_entry: { exercise: "Hack" } }
+    assert_response :not_found
+    assert_equal "Vélo", entry.reload.exercise
   end
 end

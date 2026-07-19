@@ -13,12 +13,29 @@ en:
       save_profile: "Save profile"
       bmi_prefix: "Current BMI:"
       bmi_suffix: "(weight %{weight} kg)"
+      chart_heading: "Weight trend"
+      see_full_history: "See full history"
       weight: "Weight"
       weight_placeholder: "kg"
+      weight_empty: "No weigh-ins yet."
+      edit_weight_entry_aria: "Edit the %{date} weigh-in"
+      delete_weight_entry_aria: "Delete the %{date} weigh-in"
+      delete_weight_entry_confirm: "Delete this weigh-in?"
       add: "Add"
       workouts: "Workouts"
+      workouts_empty: "No workouts logged yet."
       exercise_placeholder: "Exercise"
       duration_placeholder: "min"
+      edit_workout_entry_aria: "Edit the %{exercise} workout"
+      delete_workout_entry_aria: "Delete the %{exercise} workout"
+      delete_workout_entry_confirm: "Delete this workout?"
+    history:
+      title: "Wellbeing history"
+      weight_heading: "Weight history"
+      weight_empty: "No weigh-ins yet."
+      workouts_heading: "Workout history"
+      workouts_empty: "No workouts logged yet."
+      back_to_wellbeing: "Back to Wellbeing"
     sexes:
       female: "Female"
       male: "Male"
@@ -32,3 +49,30 @@ en:
   wellbeing_profiles:
     update:
       updated: "Profile updated."
+  weight_entries:
+    create:
+      added: "Weigh-in added."
+    edit:
+      title: "Edit weigh-in"
+      weight_label: "Weight (kg)"
+      recorded_on_label: "Date"
+      save: "Save"
+      back_to_wellbeing: "Back to Wellbeing"
+    update:
+      updated: "Weigh-in updated."
+    destroy:
+      deleted: "Weigh-in deleted."
+  workout_entries:
+    create:
+      added: "Workout added."
+    edit:
+      title: "Edit workout"
+      exercise_label: "Exercise"
+      duration_label: "Duration (min)"
+      done_on_label: "Date"
+      save: "Save"
+      back_to_wellbeing: "Back to Wellbeing"
+    update:
+      updated: "Workout updated."
+    destroy:
+      deleted: "Workout deleted."

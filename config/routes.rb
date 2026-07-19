@@ -286,10 +286,12 @@ Rails.application.routes.draw do
   end
 
   # Wellbeing: data strictly private to the user (Spec §5, point 4).
-  resource :wellbeing, only: :show, controller: "wellbeing"
+  resource :wellbeing, only: :show, controller: "wellbeing" do
+    get :history
+  end
   resource :wellbeing_profile, only: :update
-  resources :weight_entries, only: %i[create destroy]
-  resources :workout_entries, only: %i[create destroy]
+  resources :weight_entries, only: %i[create edit update destroy]
+  resources :workout_entries, only: %i[create edit update destroy]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
