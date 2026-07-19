@@ -5,4 +5,6 @@ class SharedExpense < ApplicationRecord
   validates :amount, presence: true
 
   scope :recent, -> { order(spent_on: :desc, created_at: :desc) }
+
+  broadcasts_refreshes_to ->(expense) { [ expense.shared_project, "project" ] }
 end

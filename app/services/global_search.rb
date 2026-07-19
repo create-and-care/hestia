@@ -100,9 +100,13 @@ class GlobalSearch
       scope: ->(user, q) { user.circles.where("circles.name ILIKE :q OR circles.theme ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
       url: ->(r) { circle_path(r) }),
 
-    Definition.new(model: Conversation, module_key: "messages", icon: "message-circle",
+    # Unlike every other household-scoped definition, a conversation is only
+    # searchable by a participant, not by every household member — otherwise
+    # this would leak the name/existence of private conversations the current
+    # user isn't part of (clicking the result would then 404).
+    Definition.new(model: Conversation, module_key: "messages", icon: "message-circle", scoped_by: :user,
       label: ->(r) { r.name },
-      scope: ->(household, q) { Conversation.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
+      scope: ->(user, q) { user.conversations.merge(Conversation.for_household(@household)).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
       url: ->(r) { conversation_path(r) }),
 
     Definition.new(model: ShoppingList, module_key: "shopping", icon: "shopping-cart",
@@ -145,7 +149,11 @@ class GlobalSearch
       next unless @household.module_enabled?(definition.module_key)
 
       subject = definition.scoped_by == :user ? @user : @household
-      records = definition.scope.call(subject, wildcard)
+      # instance_exec (not .call) so a scope lambda can reach @household even
+      # when scoped_by: :user — Conversation's needs both (participant AND
+      # current household) to avoid leaking conversations from a household
+      # the user belongs to but isn't currently viewing.
+      records = instance_exec(subject, wildcard, &definition.scope)
       next if records.empty?
 
       {

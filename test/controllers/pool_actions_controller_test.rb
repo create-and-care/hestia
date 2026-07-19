@@ -25,6 +25,15 @@ class PoolActionsControllerTest < ActionDispatch::IntegrationTest
     assert_not PoolAction.exists?(action.id)
   end
 
+  test "create with a blank action_type redirects with an error instead of failing silently" do
+    pool = pools(:alpha_pool)
+    assert_no_difference -> { PoolAction.count } do
+      post pool_pool_actions_path(pool), params: { pool_action: { action_type: "", done_on: Date.current } }
+    end
+    assert_redirected_to exterior_path
+    assert_not_nil flash[:alert]
+  end
+
   test "cannot add an action to another household's pool" do
     assert_no_difference -> { PoolAction.count } do
       post pool_pool_actions_path(pools(:beta_pool)), params: { pool_action: { action_type: "hivernage", done_on: Date.current } }

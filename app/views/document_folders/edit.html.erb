@@ -1,0 +1,28 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-xl px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= render "shared/flash" %>
+
+  <%= form_with model: @folder, url: document_folder_path(@folder), class: "flex flex-col gap-4" do |form| %>
+    <%= render(Ui::FieldComponent.new(id: "document_folder_name")) do |field| %>
+      <% field.with_label { t(".name_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::InputComponent.new(name: "document_folder[name]", value: @folder.name, html_options: { id: "document_folder_name", required: true }) %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: "document_folder_color")) do |field| %>
+      <% field.with_label { t(".color_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::NativeSelectComponent.new(name: "document_folder[color]", options: folder_color_options,
+              selected: @folder.color, html_options: { id: "document_folder_color" }) %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t("documents.back_to_documents"), documents_path, class: "underline" %></p>
+</div>

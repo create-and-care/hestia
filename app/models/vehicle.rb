@@ -4,6 +4,7 @@ class Vehicle < ApplicationRecord
   TYPES = %w[car motorcycle].freeze
 
   has_many :vehicle_maintenance_entries, dependent: :destroy
+  has_many :documents, as: :documentable, dependent: :nullify
   has_one_attached :photo
 
   validates :name, presence: true

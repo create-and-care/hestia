@@ -38,4 +38,22 @@ class PoolTest < ActiveSupport::TestCase
     a = Pool.create!(household: households(:alpha), name: "Alpha", treatment_type: "sel")
     assert_equal [ a, b ], Pool.where(household: households(:alpha)).ordered.to_a
   end
+
+  test "service_provider is optional" do
+    pool = Pool.new(household: households(:alpha), name: "Spa", treatment_type: "sel")
+    assert pool.valid?
+  end
+
+  test "rejects a service_provider from another household" do
+    pool = Pool.new(household: households(:alpha), name: "Spa", treatment_type: "sel",
+      service_provider: service_providers(:beta_provider))
+    assert_not pool.valid?
+    assert_includes pool.errors[:service_provider], "is invalid"
+  end
+
+  test "measure_types depends on treatment_type" do
+    assert_equal %w[pH temperature chlore_libre], Pool.new(treatment_type: "chlore").measure_types
+    assert_equal %w[pH temperature taux_sel], Pool.new(treatment_type: "sel").measure_types
+    assert_equal %w[pH temperature], Pool.new(treatment_type: "uv").measure_types
+  end
 end

@@ -9,7 +9,27 @@ class MenuController < ApplicationController
       .includes(:recipe)
       .ordered
       .group_by(&:on_date)
-    @entry = Current.household.meal_plan_entries.new(on_date: Date.current, meal_type: "dinner")
+  end
+
+  # Menu → Shopping interconnection (Spec §11.1): exports the ingredients of
+  # every recipe planned this week to the household's shopping list. Reuses
+  # Recipes::AddIngredientsToShoppingList (already Recipes' own "add to
+  # shopping list" action) rather than duplicating the export logic, and
+  # skips a recipe already exported so repeat clicks don't pile up duplicates.
+  def add_ingredients
+    week_start = parse_monday
+    recipes = Current.household.meal_plan_entries
+      .where(on_date: week_start..(week_start + 6.days))
+      .where.not(recipe_id: nil)
+      .includes(:recipe).map(&:recipe).uniq
+
+    list = target_shopping_list
+    new_recipes = recipes.reject { |recipe| list.items.exists?(recipe_id: recipe.id) }
+    new_recipes.each { |recipe| Recipes::AddIngredientsToShoppingList.call(recipe: recipe, shopping_list: list) }
+
+    flash[:notice] = new_recipes.any? ? t(".notice", count: new_recipes.size) : t(".already_notice")
+    flash[:shopping_list_id] = list.id
+    redirect_to menu_path(week: week_start)
   end
 
   private
@@ -20,5 +40,10 @@ class MenuController < ApplicationController
         Date.current
       end
       base.beginning_of_week
+    end
+
+    def target_shopping_list
+      Current.household.shopping_lists.order(:created_at).first ||
+        Current.household.shopping_lists.create!(name: t("shopping_lists.default_list_name"))
     end
 end

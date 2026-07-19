@@ -28,6 +28,16 @@ class ServiceProvidersControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Plomberie Martin"
   end
 
+  test "edit lists documents linked to the provider" do
+    document = households(:alpha).documents.build(name: "Devis", documentable: service_providers(:alpha_plombier))
+    document.file.attach(io: File.open(Rails.root.join("test/fixtures/files/sample.pdf")), filename: "sample.pdf", content_type: "application/pdf")
+    document.save!
+
+    get edit_service_provider_path(service_providers(:alpha_plombier))
+    assert_response :success
+    assert_includes @response.body, "Devis"
+  end
+
   test "create with a household type" do
     assert_difference -> { households(:alpha).service_providers.count }, 1 do
       post service_providers_path, params: {

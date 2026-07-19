@@ -2,8 +2,12 @@ class PoolActionsController < ApplicationController
   before_action :set_pool
 
   def create
-    @pool.pool_actions.create(action_params)
-    redirect_to exterior_path
+    action = @pool.pool_actions.new(action_params)
+    if action.save
+      redirect_to exterior_path
+    else
+      redirect_to exterior_path, alert: action.errors.full_messages.to_sentence
+    end
   end
 
   def destroy

@@ -10,25 +10,39 @@
   <header class="mb-4 flex flex-wrap items-center justify-between gap-2">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("file-text", css_class: "size-6") %> <%= t(".title") %></h1>
     <%= form_with url: documents_path, method: :get do |form| %>
-      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"), class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
+      <%= form.hidden_field :folder_id, value: @folder&.id %>
+      <%= render(Ui::LabelComponent.new(for_id: "documents_q", html_options: { class: "sr-only" })) { t(".search_label") } %>
+      <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
+            html_options: { id: "documents_q" }) %>
     <% end %>
   </header>
 
-  <p class="mb-4 text-xs text-gray-400"><%= t(".disclaimer") %></p>
+  <p class="mb-4 text-xs text-subdued"><%= t(".disclaimer") %></p>
 
   <%= render "shared/flash" %>
 
   <section class="mb-4 flex flex-wrap items-center gap-2">
-    <%= render(Ui::BadgeComponent.new(variant: @folder ? :secondary : :default)) { link_to t(".all"), documents_path } %>
+    <%= render(Ui::BadgeComponent.new(variant: @folder ? :secondary : :default)) { link_to t(".all"), documents_path(q: @query.presence) } %>
     <% @folders.each do |folder| %>
       <%= render(Ui::BadgeComponent.new(variant: @folder == folder ? :default : :secondary)) do %>
-        <%= link_to folder.name, documents_path(folder_id: folder.id) %>
-        <%= button_to "×", document_folder_path(folder), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600", form: { class: "inline" } %>
+        <% if (dot = folder_color_dot_class(folder.color)) %>
+          <span class="size-2 rounded-full <%= dot %>"></span>
+        <% end %>
+        <%= link_to folder.name, documents_path(folder_id: folder.id, q: @query.presence) %>
+        <%= link_to edit_document_folder_path(folder), "aria-label": t(".edit_folder_aria", name: folder.name), class: "text-subdued hover:text-primary" do %>
+          <%= lucide_icon("pencil", css_class: "size-3") %>
+        <% end %>
+        <%= form_with url: document_folder_path(folder), method: :delete, class: "inline", data: { turbo_confirm: t(".delete_folder_confirm") } do %>
+          <button type="submit" class="cursor-pointer text-subdued hover:text-destructive" aria-label="<%= t(".delete_folder_aria", name: folder.name) %>"><%= lucide_icon("x", css_class: "size-3") %></button>
+        <% end %>
       <% end %>
     <% end %>
-    <%= form_with url: document_folders_path, method: :post, scope: :document_folder, class: "inline-flex gap-1" do |form| %>
-      <%= form.text_field :name, placeholder: t(".new_folder_placeholder"), class: "rounded-md border border-gray-300 px-2 py-1 text-xs" %>
-      <%= form.submit t(".add"), class: "cursor-pointer rounded-md border border-gray-300 px-2 py-1 text-xs hover:bg-gray-50" %>
+    <%= form_with url: document_folders_path, method: :post, scope: :document_folder, class: "inline-flex items-center gap-1" do |form| %>
+      <%= render Ui::InputComponent.new(name: form.field_name(:name), placeholder: t(".new_folder_placeholder"),
+            html_options: { id: form.field_id(:name), class: "!h-8 !w-36 !text-xs" }) %>
+      <%= render Ui::NativeSelectComponent.new(name: form.field_name(:color), options: folder_color_options,
+            html_options: { id: form.field_id(:color), class: "!h-8 !w-auto !text-xs" }) %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 
@@ -40,21 +54,34 @@
       <%= render Ui::NativeSelectComponent.new(name: "document[document_folder_id]",
             options: [ [ t(".folder_blank"), "" ] ] + @folders.map { |folder| [ folder.name, folder.id ] },
             selected: @document.document_folder_id, html_options: { id: "document_document_folder_id", class: "!w-auto" }) %>
+      <%= render Ui::NativeSelectComponent.new(name: "document[documentable_key]", options: @documentable_options,
+            html_options: { id: "document_documentable_key", class: "!w-auto", "aria-label": t(".documentable_label") }) %>
       <%= form.file_field :file, required: true, accept: "application/pdf,image/*", class: "text-sm" %>
       <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".upload") } %>
     <% end %>
   <% end %>
 
-  <div class="rounded-lg border border-primary divide-y divide-gray-100">
+  <div class="rounded-lg border border-primary divide-y divide-primary">
     <% @documents.each do |document| %>
       <%= render(Ui::ItemComponent.new) do |item| %>
-        <% item.with_title { link_to document.name, document_path(document), class: "hover:underline", target: "_blank" } %>
+        <% item.with_title { render "documents/preview_trigger", document: document } %>
         <% item.with_trailing do %>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1">
+            <% if document.documentable %>
+              <%= render(Ui::BadgeComponent.new(variant: :outline)) { document.documentable.name } %>
+            <% end %>
             <% if document.document_folder %>
               <%= render(Ui::BadgeComponent.new(variant: :secondary)) { document.document_folder.name } %>
             <% end %>
-            <%= button_to document_path(document), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+            <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: "mailto:?subject=#{ERB::Util.url_encode(document.name)}&body=#{ERB::Util.url_encode(document_url(document))}",
+                  html_options: { aria: { label: t(".share_aria", name: document.name) },
+                                  data: { controller: "share", share_url_value: document_url(document), share_title_value: document.name, action: "click->share#share" } })) { lucide_icon("mail", css_class: "size-4") } %>
+            <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_document_path(document),
+                  html_options: { aria: { label: t(".edit_document_aria", name: document.name) } })) { lucide_icon("pencil", css_class: "size-4") } %>
+            <%= form_with url: document_path(document), method: :delete, data: { turbo_confirm: t(".delete_confirm") } do %>
+              <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
+                    html_options: { aria: { label: t(".delete_document_aria", name: document.name) } })) { lucide_icon("x", css_class: "size-4") } %>
+            <% end %>
           </div>
         <% end %>
       <% end %>

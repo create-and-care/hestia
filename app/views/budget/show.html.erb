@@ -9,20 +9,46 @@
 
   <header class="mb-4 flex flex-wrap items-center justify-between gap-2">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("euro", css_class: "size-6") %> <%= t(".title") %></h1>
-    <div class="flex gap-2 text-sm">
-      <%= link_to t(".monthly"), budget_path(period: :monthly), class: "rounded-md border px-3 py-1 #{@period == :monthly ? 'border-gray-900 font-medium' : 'border-gray-300'}" %>
-      <%= link_to t(".annual"), budget_path(period: :annual), class: "rounded-md border px-3 py-1 #{@period == :annual ? 'border-gray-900 font-medium' : 'border-gray-300'}" %>
-      <%= link_to t(".shared_projects_link"), shared_projects_path, class: "rounded-md border border-gray-300 px-3 py-1 hover:bg-gray-50" %>
+    <div class="flex items-center gap-2 text-sm">
+      <%# Styled like Ui::Tabs (bg-tab-group/bg-tab-item-active tokens) with real
+          tablist/tab ARIA roles, but kept as plain navigation links: this toggle
+          just switches ?period= on a single server-rendered dashboard, so a
+          client-side Ui::Tabs panel switcher would add complexity without
+          removing any real problem (unlike Routines' list filter, there's no
+          Turbo broadcast-sync concern here since there's only one panel). %>
+      <nav role="tablist" aria-label="<%= t(".periods_nav_aria") %>" class="inline-flex gap-1 rounded-md bg-tab-group p-1">
+        <%= link_to t(".monthly"), budget_path(period: :monthly), role: "tab", aria: { selected: @period == :monthly },
+              class: "flex h-8 items-center rounded-md px-3 font-medium transition-colors #{@period == :monthly ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
+        <%= link_to t(".annual"), budget_path(period: :annual), role: "tab", aria: { selected: @period == :annual },
+              class: "flex h-8 items-center rounded-md px-3 font-medium transition-colors #{@period == :annual ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
+      </nav>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: shared_projects_path)) { t(".shared_projects_link") } %>
     </div>
   </header>
 
   <%= render "shared/flash" %>
 
   <section class="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-    <div class="rounded-lg border border-gray-200 p-3"><p class="text-xs text-gray-500"><%= t("budget.kinds.income") %></p><p class="text-lg font-semibold"><%= money(@summary[:income]) %></p></div>
-    <div class="rounded-lg border border-gray-200 p-3"><p class="text-xs text-gray-500"><%= t("budget.kinds.expense") %></p><p class="text-lg font-semibold"><%= money(@summary[:expense]) %></p></div>
-    <div class="rounded-lg border border-gray-200 p-3"><p class="text-xs text-gray-500"><%= t("budget.kinds.savings") %></p><p class="text-lg font-semibold"><%= money(@summary[:savings]) %></p></div>
-    <div class="rounded-lg border p-3 <%= health_class(@summary) %>"><p class="text-xs"><%= t(".remaining_label") %></p><p class="text-lg font-semibold"><%= money(@summary[:remaining]) %></p><p class="text-xs"><%= t(".savings_rate_label", rate: @summary[:savings_rate]) %></p></div>
+    <%= render(Ui::CardComponent.new) do %>
+      <p class="text-xs text-secondary"><%= t("budget.kinds.income") %></p>
+      <p class="text-lg font-semibold"><%= money(@summary[:income]) %></p>
+    <% end %>
+    <%= render(Ui::CardComponent.new) do %>
+      <p class="text-xs text-secondary"><%= t("budget.kinds.expense") %></p>
+      <p class="text-lg font-semibold"><%= money(@summary[:expense]) %></p>
+    <% end %>
+    <%= render(Ui::CardComponent.new) do %>
+      <p class="text-xs text-secondary"><%= t("budget.kinds.savings") %></p>
+      <p class="text-lg font-semibold"><%= money(@summary[:savings]) %></p>
+    <% end %>
+    <%= render(Ui::CardComponent.new) do %>
+      <div class="mb-1 flex items-center justify-between">
+        <p class="text-xs text-secondary"><%= t(".remaining_label") %></p>
+        <%= render(Ui::BadgeComponent.new(variant: health_variant(@summary))) { t(".savings_rate_label", rate: @summary[:savings_rate]) } %>
+      </div>
+      <p class="mb-2 text-lg font-semibold"><%= money(@summary[:remaining]) %></p>
+      <%= render Ui::ProgressComponent.new(value: [ @summary[:savings_rate], 0 ].max, max: 100) %>
+    <% end %>
   </section>
 
   <% @categories.group_by(&:kind).each do |kind, categories| %>
@@ -32,42 +58,62 @@
         <%= render(Ui::CardComponent.new(class_name: "mb-3")) do %>
           <div class="mb-2 flex items-center justify-between">
             <span class="font-medium"><%= "#{category.emoji} " if category.emoji.present? %><%= category.name %></span>
-            <%= button_to t(".delete"), budget_category_path(category), method: :delete, class: "cursor-pointer text-xs text-red-600 hover:underline" %>
+            <div class="flex shrink-0 items-center gap-1">
+              <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_budget_category_path(category),
+                    html_options: { aria: { label: t(".edit_category_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
+              <%= form_with url: budget_category_path(category), method: :delete, data: { turbo_confirm: t(".delete_category_confirm") } do %>
+                <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete") } %>
+              <% end %>
+            </div>
           </div>
-          <ul class="mb-2 divide-y divide-gray-100 text-sm">
+          <% if category.documents.any? %>
+            <p class="mb-2 text-xs text-subdued">
+              <%= lucide_icon("paperclip", css_class: "inline size-3") %>
+              <%= link_to t(".documents_count", count: category.documents.count), documents_path, class: "hover:underline" %>
+            </p>
+          <% end %>
+          <ul class="mb-2 divide-y divide-primary text-sm">
             <% category.budget_entries.each do |entry| %>
               <li>
                 <%= render(Ui::ItemComponent.new) do |item| %>
                   <% item.with_title do %>
-                    <%= entry.name.presence || t(".unnamed_entry") %> — <%= money(entry.amount) %> <span class="text-gray-400">/ <%= entry.periodicity == "yearly" ? t(".per_year") : t(".per_month") %></span>
+                    <%= entry.name.presence || t(".unnamed_entry") %> — <%= money(entry.amount) %> <span class="text-subdued">/ <%= entry.periodicity == "yearly" ? t(".per_year") : t(".per_month") %></span>
                   <% end %>
                   <% item.with_trailing do %>
-                    <%= form_with url: budget_entry_path(entry), method: :delete do %>
-                      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { "×" } %>
-                    <% end %>
+                    <div class="flex shrink-0 items-center gap-1">
+                      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_budget_entry_path(entry),
+                            html_options: { aria: { label: t(".edit_entry_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                      <%= form_with url: budget_entry_path(entry), method: :delete, data: { turbo_confirm: t(".delete_entry_confirm") } do %>
+                        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
+                              html_options: { aria: { label: t(".delete_entry_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+                      <% end %>
+                    </div>
                   <% end %>
                 <% end %>
               </li>
             <% end %>
           </ul>
-          <%= form_with url: budget_entries_path, scope: :budget_entry, class: "flex flex-wrap items-end gap-2" do |form| %>
+          <%= form_with url: budget_entries_path, scope: :budget_entry, class: "flex flex-wrap items-end gap-3" do |form| %>
             <%= form.hidden_field :budget_category_id, value: category.id %>
             <div class="flex-1">
               <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
-                <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), placeholder: t(".entry_name_placeholder"), html_options: { id: form.field_id(:name) }) } %>
+                <% field.with_label { t(".entry_name_label") } %>
+                <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), html_options: { id: form.field_id(:name) }) } %>
               <% end %>
             </div>
             <div class="w-24">
               <%= render(Ui::FieldComponent.new(id: form.field_id(:amount))) do |field| %>
-                <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:amount), placeholder: "€", html_options: { id: form.field_id(:amount), step: :any }) } %>
+                <% field.with_label { t(".amount_label") } %>
+                <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:amount), html_options: { id: form.field_id(:amount), step: :any }) } %>
               <% end %>
             </div>
             <div>
               <%= render(Ui::FieldComponent.new(id: form.field_id(:periodicity))) do |field| %>
+                <% field.with_label { t(".periodicity_label") } %>
                 <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:periodicity), options: [ [ t(".per_month_option"), "monthly" ], [ t(".per_year_option"), "yearly" ] ], html_options: { id: form.field_id(:periodicity) }) } %>
               <% end %>
             </div>
-            <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { "+" } %>
+            <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
           <% end %>
         <% end %>
       <% end %>
@@ -76,20 +122,23 @@
 
   <%= render(Ui::CardComponent.new(class_name: "mb-6")) do %>
     <h2 class="mb-2 font-medium"><%= t(".new_category_heading") %></h2>
-    <%= form_with model: @category, url: budget_categories_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+    <%= form_with model: @category, url: budget_categories_path, class: "flex flex-wrap items-end gap-3" do |form| %>
       <div>
         <%= render(Ui::FieldComponent.new(id: form.field_id(:kind))) do |field| %>
+          <% field.with_label { t(".kind_label") } %>
           <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:kind), options: budget_kind_options, selected: form.object.kind, html_options: { id: form.field_id(:kind) }) } %>
         <% end %>
       </div>
       <div class="w-14">
         <%= render(Ui::FieldComponent.new(id: form.field_id(:emoji))) do |field| %>
+          <% field.with_label { t(".emoji_label") } %>
           <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:emoji), value: form.object.emoji, placeholder: "💰", html_options: { id: form.field_id(:emoji), maxlength: 4 }) } %>
         <% end %>
       </div>
       <div class="flex-1">
         <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
-          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".name_placeholder"), html_options: { id: form.field_id(:name), required: true }) } %>
+          <% field.with_label { t(".name_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, html_options: { id: form.field_id(:name), required: true }) } %>
         <% end %>
       </div>
       <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".add") } %>
@@ -99,31 +148,42 @@
   <section class="mb-8">
     <h2 class="mb-2 font-medium"><%= t(".envelopes_heading") %></h2>
     <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
-      <ul class="divide-y divide-gray-100 text-sm">
-        <% @envelopes.each do |envelope| %>
-          <li>
-            <%= render(Ui::ItemComponent.new) do |item| %>
-              <% item.with_title do %>
-                <%= envelope.name %> — <%= money(envelope.recurring_deposit) %> / <%= t(".per_month") %>
-              <% end %>
-              <% item.with_trailing do %>
-                <%= form_with url: savings_envelope_path(envelope), method: :delete do %>
-                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { "×" } %>
+      <% if @envelopes.any? %>
+        <ul class="divide-y divide-primary text-sm">
+          <% @envelopes.each do |envelope| %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title do %>
+                  <%= envelope.name %> — <%= money(envelope.recurring_deposit) %> / <%= t(".per_month") %>
+                <% end %>
+                <% item.with_trailing do %>
+                  <div class="flex shrink-0 items-center gap-1">
+                    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_savings_envelope_path(envelope),
+                          html_options: { aria: { label: t(".edit_envelope_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                    <%= form_with url: savings_envelope_path(envelope), method: :delete, data: { turbo_confirm: t(".delete_envelope_confirm") } do %>
+                      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
+                            html_options: { aria: { label: t(".delete_envelope_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+                    <% end %>
+                  </div>
                 <% end %>
               <% end %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_envelopes") } } %>
+      <% end %>
     <% end %>
-    <%= form_with model: @envelope, url: savings_envelopes_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+    <%= form_with model: @envelope, url: savings_envelopes_path, class: "flex flex-wrap items-end gap-3" do |form| %>
       <div class="flex-1">
         <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
+          <% field.with_label { t(".envelope_name_label") } %>
           <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".envelope_name_placeholder"), html_options: { id: form.field_id(:name), required: true }) } %>
         <% end %>
       </div>
       <div class="w-28">
         <%= render(Ui::FieldComponent.new(id: form.field_id(:recurring_deposit))) do |field| %>
+          <% field.with_label { t(".envelope_amount_label") } %>
           <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:recurring_deposit), value: form.object.recurring_deposit, placeholder: t(".envelope_amount_placeholder"), html_options: { id: form.field_id(:recurring_deposit), step: :any }) } %>
         <% end %>
       </div>

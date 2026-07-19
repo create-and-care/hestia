@@ -7,6 +7,7 @@ class ServiceProvider < ApplicationRecord
   # `address` (free text) predates this and stays for providers not linked to the household's
   # address book — `linked_address` takes precedence once set (Spec: unify with Addresses).
   belongs_to :linked_address, class_name: "Address", optional: true
+  has_many :documents, as: :documentable, dependent: :nullify
 
   validates :name, presence: true
   validate :linked_address_belongs_to_household

@@ -1,0 +1,10 @@
+<%= render(Ui::DialogComponent.new) do |dialog| %>
+  <% dialog.with_trigger do %>
+    <button type="button" class="text-left hover:underline"><%= document.name %></button>
+  <% end %>
+  <% dialog.with_title { document.name } %>
+  <%= turbo_frame_tag dom_id(document, :preview), src: preview_document_path(document), loading: "lazy",
+        class: "flex min-h-40 items-center justify-center text-sm text-secondary" do %>
+    <%= t("documents.index.preview_loading") %>
+  <% end %>
+<% end %>

@@ -4,6 +4,7 @@ class Pet < ApplicationRecord
   has_many :pet_vaccinations, dependent: :destroy
   has_many :pet_treatments, dependent: :destroy
   has_many :pet_supplies, dependent: :destroy
+  has_many :documents, as: :documentable, dependent: :nullify
   has_one_attached :photo
   belongs_to :service_provider, optional: true
 

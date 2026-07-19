@@ -5,6 +5,7 @@ class Task < ApplicationRecord
   belongs_to :assignee, class_name: "User", optional: true
   belongs_to :trip, optional: true
   has_many :task_reminders, dependent: :destroy
+  has_one :conversation, as: :subject, dependent: :nullify
 
   validates :title, presence: true
 

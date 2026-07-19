@@ -79,6 +79,9 @@ application.register("maintenance-entry-type", MaintenanceEntryTypeController)
 import MenubarController from "./menubar_controller"
 application.register("menubar", MenubarController)
 
+import MessageRoleController from "./message_role_controller"
+application.register("message-role", MessageRoleController)
+
 import MessageScrollerController from "./message_scroller_controller"
 application.register("message-scroller", MessageScrollerController)
 
@@ -96,6 +99,9 @@ application.register("search-palette", SearchPaletteController)
 
 import SelectController from "./select_controller"
 application.register("select", SelectController)
+
+import ShareController from "./share_controller"
+application.register("share", ShareController)
 
 import ShoppingCatalogController from "./shopping_catalog_controller"
 application.register("shopping-catalog", ShoppingCatalogController)

@@ -6,8 +6,17 @@
     <div>
       <h1 class="text-2xl font-semibold"><%= @conversation.name %></h1>
       <p class="text-sm text-secondary"><%= @conversation.participants.map { |u| u.name.presence || u.email_address }.join(", ") %></p>
+      <% if @conversation.subject %>
+        <p class="text-sm text-secondary">
+          <%= t(".about_prefix") %> <%= link_to conversation_subject_label(@conversation.subject), conversation_subject_path(@conversation.subject), class: "hover:underline" %>
+        </p>
+      <% end %>
     </div>
-    <%= link_to t(".settings"), edit_conversation_path(@conversation), class: "text-sm underline" %>
+    <div class="flex items-center gap-3 text-sm">
+      <%= link_to t(".settings"), edit_conversation_path(@conversation), class: "underline" %>
+      <%= button_to t(".delete"), conversation_path(@conversation), method: :delete,
+            form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-destructive underline" %>
+    </div>
   </header>
 
   <%= render "shared/flash" %>
@@ -17,18 +26,12 @@
       "messages" is nested inside the component's viewport so appended messages land inside the
       scrollable area (and are still caught by the controller's subtree MutationObserver). %>
   <%= render(Ui::MessageScrollerComponent.new(class_name: "mb-4 h-[60vh] w-full")) do %>
-    <div id="messages" class="space-y-2">
+    <div id="messages" class="space-y-2" data-controller="message-role" data-message-role-current-user-id-value="<%= Current.user.id %>">
       <%= render @conversation.messages.chronological %>
     </div>
   <% end %>
 
-  <%= tag.div id: "new_message" do %>
-    <%= form_with model: [ @conversation, @message ], url: conversation_messages_path(@conversation), class: "flex gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(name: "message[content]", placeholder: t("conversations.message_placeholder"),
-            html_options: { id: "message_content", required: true, autocomplete: "off", class: "flex-1" }) %>
-      <%= render(Ui::ButtonComponent.new(type: "submit")) { t("conversations.send") } %>
-    <% end %>
-  <% end %>
+  <%= render "messages/form", conversation: @conversation, message: @message %>
 
   <p class="mt-6 text-sm"><%= link_to t(".back_to_conversations"), conversations_path, class: "underline" %></p>
 </div>

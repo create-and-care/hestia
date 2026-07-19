@@ -128,4 +128,10 @@ class CalendarEventsControllerTest < ActionDispatch::IntegrationTest
     delete calendar_event_path(series), params: { scope: "series" }
     assert_not CalendarEvent.exists?(series.id)
   end
+
+  test "edit offers a discuss-this-event shortcut into Messages" do
+    get edit_calendar_event_path(calendar_events(:alpha_meeting))
+    assert_response :success
+    assert_select "form[action^=?]", discuss_conversations_path
+  end
 end

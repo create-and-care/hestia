@@ -16,6 +16,26 @@
 
   <%= render "shared/flash" %>
 
+  <% if Current.household.module_enabled?("budget") %>
+    <section class="mb-6">
+      <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("handshake", css_class: "size-5") %> <%= t(".shared_expenses_heading") %></h2>
+      <%= render(Ui::CardComponent.new) do %>
+        <% if @trip.shared_project %>
+          <p class="text-sm">
+            <%= link_to t(".view_shared_expenses_link"), shared_project_path(@trip.shared_project), class: "underline" %>
+            <span class="text-secondary">— <%= number_to_currency(@trip.shared_project.total_spent, unit: "€", format: "%n %u") %></span>
+          </p>
+        <% else %>
+          <%= form_with url: track_expenses_trip_path(@trip), method: :post do %>
+            <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) do %>
+              <%= lucide_icon("handshake", css_class: "size-4") %> <%= t(".track_expenses_button") %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </section>
+  <% end %>
+
   <%= render(Ui::TabsComponent.new(default: @default_section)) do |tabs| %>
     <% if @trip.section_enabled?("shopping_lists") %>
       <% tabs.with_tab(label: t(".tabs.shopping_lists"), value: "shopping_lists") do %>

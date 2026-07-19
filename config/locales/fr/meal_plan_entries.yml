@@ -1,0 +1,15 @@
+fr:
+  meal_plan_entries:
+    edit:
+      title: "Modifier le repas"
+      on_date_label: "Date"
+      meal_type_label: "Repas"
+      recipe_label: "Recette"
+      recipe_blank: "— recette —"
+      free_name_label: "ou nom libre"
+      save: "Enregistrer"
+      back_to_menu: "← Menu"
+    update:
+      updated: "Repas mis à jour."
+    destroy:
+      deleted: "Repas supprimé."

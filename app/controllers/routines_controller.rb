@@ -1,13 +1,13 @@
 class RoutinesController < ApplicationController
-  before_action :set_routine, only: %i[edit update destroy complete]
+  before_action :set_routine, only: %i[show edit update destroy complete]
 
   def index
-    @lists = Current.household.routines.where.not(list_name: [ nil, "" ]).distinct.pluck(:list_name).sort
-    @list = params[:list].presence
-    routines = Current.household.routines.ordered.includes(:assignee)
-    routines = routines.where(list_name: @list) if @list
-    @routines = routines
+    load_index_collections
     @routine = Current.household.routines.new
+  end
+
+  def show
+    @completions = @routine.routine_completions.recent.includes(:author)
   end
 
   def create
@@ -16,7 +16,11 @@ class RoutinesController < ApplicationController
     if @routine.save
       redirect_to routines_path
     else
-      redirect_to routines_path, alert: @routine.errors.full_messages.to_sentence
+      # Re-render the index (rather than redirect) so the invalid routine's
+      # entered values and validation errors survive, matching #update's
+      # behavior instead of silently discarding what was typed.
+      load_index_collections
+      render :index, status: :unprocessable_entity
     end
   end
 
@@ -44,6 +48,14 @@ class RoutinesController < ApplicationController
   end
 
   private
+    def load_index_collections
+      @lists = Current.household.routines.where.not(list_name: [ nil, "" ]).distinct.pluck(:list_name).sort
+      @list = params[:list].presence
+      routines = Current.household.routines.ordered.includes(:assignee)
+      routines = routines.where(list_name: @list) if @list
+      @routines = routines
+    end
+
     def set_routine
       @routine = Current.household.routines.find(params[:id])
     end

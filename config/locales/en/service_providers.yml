@@ -17,6 +17,9 @@ en:
       title: "New provider"
     edit:
       title: "Edit provider"
+      documents_heading: "Documents"
+      no_documents: "No linked documents."
+      manage_documents_link: "Manage documents →"
     service_provider:
       directions: "Directions"
       call_aria: "Call %{phone}"

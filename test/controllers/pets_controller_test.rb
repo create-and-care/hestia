@@ -22,6 +22,16 @@ class PetsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Rex"
   end
 
+  test "show lists documents linked to the pet" do
+    document = households(:alpha).documents.build(name: "Carnet de santé", documentable: pets(:alpha_dog))
+    document.file.attach(io: File.open(Rails.root.join("test/fixtures/files/sample.pdf")), filename: "sample.pdf", content_type: "application/pdf")
+    document.save!
+
+    get pet_path(pets(:alpha_dog))
+    assert_response :success
+    assert_includes @response.body, "Carnet de santé"
+  end
+
   test "create" do
     assert_difference -> { households(:alpha).pets.count }, 1 do
       post pets_path, params: { pet: { name: "Félix", species: "Chat" } }

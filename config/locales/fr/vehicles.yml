@@ -54,6 +54,9 @@ fr:
       delete_entry_aria: "Supprimer l'entrée « %{type} »"
       delete_entry_confirm: "Supprimer cette entrée d'entretien ?"
       add: "Ajouter"
+      documents_heading: "Documents"
+      no_documents: "Aucun document lié."
+      manage_documents_link: "Gérer les documents →"
       back_to_vehicles: "← Tous les véhicules"
     create:
       created: "Véhicule ajouté."

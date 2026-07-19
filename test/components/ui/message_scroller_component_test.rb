@@ -33,6 +33,12 @@ class Ui::MessageScrollerComponentTest < ViewComponent::TestCase
     assert_selector "[data-message-scroller-target='viewport'][role='log'][aria-live='polite']"
   end
 
+  test "viewport is keyboard-focusable so it can be scrolled without a mouse" do
+    render_inline(Ui::MessageScrollerComponent.new) { "content" }
+
+    assert_selector "[data-message-scroller-target='viewport'][tabindex='0']"
+  end
+
   test "jump-to-bottom button is wrapped so its appearance is announced" do
     render_inline(Ui::MessageScrollerComponent.new) { "content" }
 

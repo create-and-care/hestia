@@ -22,6 +22,16 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "La Clio"
   end
 
+  test "show lists documents linked to the vehicle" do
+    document = households(:alpha).documents.build(name: "Carte grise", documentable: vehicles(:alpha_car))
+    document.file.attach(io: File.open(Rails.root.join("test/fixtures/files/sample.pdf")), filename: "sample.pdf", content_type: "application/pdf")
+    document.save!
+
+    get vehicle_path(vehicles(:alpha_car))
+    assert_response :success
+    assert_includes @response.body, "Carte grise"
+  end
+
   test "create" do
     assert_difference -> { households(:alpha).vehicles.count }, 1 do
       post vehicles_path, params: { vehicle: { name: "Le scooter", vehicle_type: "motorcycle" } }

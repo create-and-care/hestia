@@ -54,6 +54,9 @@ en:
       delete_entry_aria: "Delete the \"%{type}\" entry"
       delete_entry_confirm: "Delete this maintenance entry?"
       add: "Add"
+      documents_heading: "Documents"
+      no_documents: "No linked documents."
+      manage_documents_link: "Manage documents →"
       back_to_vehicles: "← All vehicles"
     create:
       created: "Vehicle added."
