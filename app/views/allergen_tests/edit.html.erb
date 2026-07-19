@@ -1,0 +1,46 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= form_with model: @allergen_test, url: baby_profile_allergen_test_path(@baby, @allergen_test) do %>
+    <% if @allergen_test.errors.any? %>
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
+        <ul class="list-inside list-disc">
+          <% @allergen_test.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <div class="space-y-4">
+      <%= render(Ui::FieldComponent.new(id: "allergen_test_allergen")) do |field| %>
+        <% field.with_label { t(".allergen_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "text", name: "allergen_test[allergen]", value: @allergen_test.allergen,
+                html_options: { id: "allergen_test_allergen", required: true }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "allergen_test_tested_on")) do |field| %>
+        <% field.with_label { t(".tested_on_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "date", name: "allergen_test[tested_on]", value: @allergen_test.tested_on,
+                html_options: { id: "allergen_test_tested_on" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "allergen_test_severity")) do |field| %>
+        <% field.with_label { t(".severity_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "allergen_test[severity]",
+                options: [ [ t("baby_profiles.show.severity_blank"), "" ] ] + t("baby_profiles.show.severity_options").map { |v| [ v, v ] },
+                selected: @allergen_test.severity, html_options: { id: "allergen_test_severity" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".save") } %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_profile"), baby_profile_path(@baby), class: "underline" %></p>
+</div>

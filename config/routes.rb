@@ -210,11 +210,13 @@ Rails.application.routes.draw do
   end
   resource :waste, only: :show, controller: "waste"
   resources :waste_collection_series, only: %i[create destroy]
-  resources :waste_collection_events, only: %i[create destroy]
+  resources :waste_collection_events, only: %i[create edit update destroy]
   resources :baby_profiles do
-    resources :feeding_sessions, only: %i[create destroy]
-    resources :food_introductions, only: %i[create destroy]
-    resources :allergen_tests, only: %i[create destroy]
+    resources :feeding_sessions, only: %i[create edit update destroy] do
+      member { patch :stop }
+    end
+    resources :food_introductions, only: %i[create edit update destroy]
+    resources :allergen_tests, only: %i[create edit update destroy]
   end
   resources :conversations, only: %i[index show new create edit update destroy] do
     resources :messages, only: :create

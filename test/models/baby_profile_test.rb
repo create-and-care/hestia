@@ -34,4 +34,26 @@ class BabyProfileTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test "age_in_months computes whole months since birth" do
+    baby = households(:alpha).baby_profiles.build(name: "Lou", born_on: 5.months.ago.to_date - 3.days)
+    assert_equal 5, baby.age_in_months
+  end
+
+  test "age_in_months is nil without a birth date" do
+    baby = households(:alpha).baby_profiles.build(name: "Lou")
+    assert_nil baby.age_in_months
+  end
+
+  test "rejects a service provider from another household" do
+    baby = baby_profiles(:alpha_baby)
+    baby.service_provider = service_providers(:beta_provider)
+    assert_not baby.valid?
+  end
+
+  test "accepts a service provider from the same household" do
+    baby = baby_profiles(:alpha_baby)
+    baby.service_provider = service_providers(:alpha_plombier)
+    assert baby.valid?
+  end
 end
