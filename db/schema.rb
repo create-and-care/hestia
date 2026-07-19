@@ -226,6 +226,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_211056) do
   create_table "conversation_participants", force: :cascade do |t|
     t.bigint "conversation_id", null: false
     t.datetime "created_at", null: false
+    t.datetime "last_read_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["conversation_id", "user_id"], name: "index_conversation_participants_on_conversation_id_and_user_id", unique: true
@@ -237,8 +238,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_18_211056) do
     t.datetime "created_at", null: false
     t.bigint "household_id", null: false
     t.string "name", null: false
+    t.bigint "subject_id"
+    t.string "subject_type"
     t.datetime "updated_at", null: false
     t.index ["household_id"], name: "index_conversations_on_household_id"
+    t.index ["subject_type", "subject_id"], name: "index_conversations_on_subject"
   end
 
   create_table "document_folders", force: :cascade do |t|

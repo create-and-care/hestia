@@ -218,8 +218,9 @@ Rails.application.routes.draw do
     resources :food_introductions, only: %i[create edit update destroy]
     resources :allergen_tests, only: %i[create edit update destroy]
   end
-  resources :conversations, only: %i[index show new create edit update] do
+  resources :conversations, only: %i[index show new create edit update destroy] do
     resources :messages, only: :create
+    collection { post :discuss }
   end
 
   # Modules with richer business logic (Phase 2.c).

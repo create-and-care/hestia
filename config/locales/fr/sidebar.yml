@@ -1,6 +1,7 @@
 fr:
   sidebar:
     home: "Accueil"
+    unread: "Non lu"
     groups:
       daily: "Quotidien"
       home: "Maison"

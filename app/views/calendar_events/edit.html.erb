@@ -3,8 +3,9 @@
 <div class="mx-auto mt-10 max-w-lg px-4">
   <div class="mb-6 flex items-center justify-between">
     <h1 class="text-2xl font-semibold"><%= t(".heading") %></h1>
-    <% if @event.recurring? && @occurrence %>
-      <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2">
+      <%= render "conversations/discuss_button", subject: @event %>
+      <% if @event.recurring? && @occurrence %>
         <%= form_with url: calendar_event_path(@event), method: :delete,
               data: { turbo_confirm: t(".delete_confirm") } do %>
           <input type="hidden" name="occurrence" value="<%= @occurrence.iso8601 %>">
@@ -16,13 +17,13 @@
           <input type="hidden" name="scope" value="series">
           <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete_series") } %>
         <% end %>
-      </div>
-    <% else %>
-      <%= form_with url: calendar_event_path(@event), method: :delete,
-            data: { turbo_confirm: t(".delete_confirm") } do %>
-        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete") } %>
+      <% else %>
+        <%= form_with url: calendar_event_path(@event), method: :delete,
+              data: { turbo_confirm: t(".delete_confirm") } do %>
+          <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete") } %>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
   <%= render "form", event: @event, url: calendar_event_path(@event), occurrence: @occurrence %>
 

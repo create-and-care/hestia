@@ -120,4 +120,10 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     post sort_tasks_path, params: { by: "nonsense" }
     assert_redirected_to tasks_path
   end
+
+  test "edit offers a discuss-this-task shortcut into Messages" do
+    get edit_task_path(tasks(:alpha_dishes))
+    assert_response :success
+    assert_select "form[action^=?]", discuss_conversations_path
+  end
 end

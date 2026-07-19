@@ -1,10 +1,4 @@
 <%# The message is added to the thread via the real-time stream; we just reset the field. %>
 <%= turbo_stream.replace "new_message" do %>
-  <%= tag.div id: "new_message" do %>
-    <%= form_with model: [ @conversation, @conversation.messages.new ], url: conversation_messages_path(@conversation), class: "flex gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(name: "message[content]", placeholder: t("conversations.message_placeholder"),
-            html_options: { id: "message_content", required: true, autocomplete: "off", autofocus: true, class: "flex-1" }) %>
-      <%= render(Ui::ButtonComponent.new(type: "submit")) { t("conversations.send") } %>
-    <% end %>
-  <% end %>
+  <%= render "messages/form", conversation: @conversation, message: @conversation.messages.new %>
 <% end %>
