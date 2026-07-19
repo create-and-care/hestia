@@ -1,0 +1,15 @@
+en:
+  meal_plan_entries:
+    edit:
+      title: "Edit meal"
+      on_date_label: "Date"
+      meal_type_label: "Meal"
+      recipe_label: "Recipe"
+      recipe_blank: "— recipe —"
+      free_name_label: "or custom name"
+      save: "Save"
+      back_to_menu: "← Menu"
+    update:
+      updated: "Meal updated."
+    destroy:
+      deleted: "Meal deleted."
