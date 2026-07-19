@@ -14,6 +14,7 @@
           <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, type: "submit")) { t(".clear_checked") } %>
         <% end %>
       <% end %>
+      <%= render "conversations/discuss_button", subject: @shopping_list %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: shopping_list_path(@shopping_list, format: :pdf),
             html_options: { target: "_blank" })) { t(".export_pdf") } %>
       <%= form_with url: shopping_list_path(@shopping_list), method: :delete,

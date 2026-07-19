@@ -16,9 +16,9 @@ class CalendarController < ApplicationController
       format.pdf do
         month = parse_month
         range = month.beginning_of_month.beginning_of_day..month.end_of_month.end_of_day
-        # Birthdays are Contact, not CalendarEvent, records — the PDF layout
-        # assumes the CalendarEvent interface, so only real events go in it.
-        event_only_occurrences = occurrences_in(range).reject { |_time, occurrence| occurrence.is_a?(Contact) }
+        # Birthdays (Contact) and waste collections (WasteCollectionEvent) aren't CalendarEvent
+        # records — the PDF layout assumes the CalendarEvent interface, so only real events go in it.
+        event_only_occurrences = occurrences_in(range).reject { |_time, occurrence| occurrence.is_a?(Contact) || occurrence.is_a?(WasteCollectionEvent) }
         send_data Pdf::CalendarMonthDocument.new(month, event_only_occurrences).render,
           filename: "#{t('.pdf_filename_prefix')}-#{month.strftime('%Y-%m')}.pdf", type: "application/pdf", disposition: "inline"
       end
@@ -121,7 +121,17 @@ class CalendarController < ApplicationController
 
     def occurrences_in(range)
       event_occurrences = @events.flat_map { |event| event.occurrences_between(range.begin, range.end).map { |time| [ time, event ] } }
-      (event_occurrences + birthday_occurrences_in(range)).sort_by(&:first)
+      (event_occurrences + birthday_occurrences_in(range) + waste_occurrences_in(range)).sort_by(&:first)
+    end
+
+    # Waste/Calendar interconnection (Spec): surfaces upcoming collections alongside real
+    # events instead of them only ever showing on the Waste module's own page.
+    def waste_occurrences_in(range)
+      return [] if @member_id
+
+      Current.household.waste_collection_events
+        .where(collected_on: range.begin.to_date..range.end.to_date)
+        .map { |event| [ event.collected_on.to_time, event ] }
     end
 
     # Tasks/Calendar interconnection (Spec §9.3): surface overdue tasks

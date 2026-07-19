@@ -29,6 +29,36 @@ class RoutinesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to routines_path
   end
 
+  test "create with a new list name" do
+    assert_difference -> { households(:alpha).routines.count }, 1 do
+      post routines_path, params: { routine: { name: "Ranger le garage", frequency: "monthly", list_name: "Garage" } }
+    end
+    assert_equal "Garage", Routine.order(:id).last.list_name
+  end
+
+  test "create with invalid attributes re-renders the index and preserves the entered name" do
+    assert_no_difference -> { Routine.count } do
+      post routines_path, params: { routine: { name: "Nouvelle routine", frequency: "invalid" } }
+    end
+    assert_response :unprocessable_entity
+    assert_includes @response.body, "Nouvelle routine"
+  end
+
+  test "show renders the completion history" do
+    routine = routines(:alpha_vacuum)
+    routine.complete!(author: users(:one), on: Date.current)
+
+    get routine_path(routine)
+
+    assert_response :success
+    assert_includes @response.body, "Alice"
+  end
+
+  test "cannot view another household's routine history" do
+    get routine_path(routines(:beta_routine))
+    assert_response :not_found
+  end
+
   test "complete advances the due date" do
     routine = routines(:alpha_vacuum)
     assert_difference -> { routine.routine_completions.count }, 1 do

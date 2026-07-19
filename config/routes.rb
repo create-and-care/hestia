@@ -210,25 +210,32 @@ Rails.application.routes.draw do
   end
   resource :waste, only: :show, controller: "waste"
   resources :waste_collection_series, only: %i[create destroy]
-  resources :waste_collection_events, only: %i[create destroy]
+  resources :waste_collection_events, only: %i[create edit update destroy]
   resources :baby_profiles do
-    resources :feeding_sessions, only: %i[create destroy]
-    resources :food_introductions, only: %i[create destroy]
-    resources :allergen_tests, only: %i[create destroy]
+    resources :feeding_sessions, only: %i[create edit update destroy] do
+      member { patch :stop }
+    end
+    resources :food_introductions, only: %i[create edit update destroy]
+    resources :allergen_tests, only: %i[create edit update destroy]
   end
-  resources :conversations, only: %i[index show new create edit update] do
+  resources :conversations, only: %i[index show new create edit update destroy] do
     resources :messages, only: :create
+    collection { post :discuss }
   end
 
   # Modules with richer business logic (Phase 2.c).
   resource :menu, only: :show, controller: "menu"
-  resources :meal_plan_entries, only: %i[create update destroy]
-  resources :routines, only: %i[index create edit update destroy] do
+  post "menu/add_ingredients", to: "menu#add_ingredients", as: :add_ingredients_menu
+  resources :meal_plan_entries, only: %i[create edit update destroy] do
+    collection { patch :reorder }
+  end
+  resources :routines, only: %i[index show create edit update destroy] do
     member { post :complete }
   end
   resource :exterior, only: :show, controller: "exterior"
-  resources :plants, only: %i[create destroy]
-  resources :pools, only: %i[create destroy] do
+  resources :plants, only: %i[create edit update destroy]
+  resources :pools, only: %i[create edit update destroy] do
+    member { get :history }
     resources :pool_readings, only: %i[create destroy]
     resources :pool_actions, only: %i[create destroy]
   end

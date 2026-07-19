@@ -51,4 +51,41 @@ class WasteControllerTest < ActionDispatch::IntegrationTest
     delete waste_collection_series_path(waste_collection_series(:beta_series))
     assert_response :not_found
   end
+
+  test "generating a series with an end date before the start date does not create events and surfaces an error" do
+    assert_no_difference -> { WasteCollectionEvent.count } do
+      post waste_collection_series_index_path, params: { waste_collection_series: {
+        waste_type: "recyclage", weekday: Date.current.wday,
+        starts_on: Date.current, ends_on: Date.current - 1.day
+      } }
+    end
+    assert_redirected_to waste_path
+    assert_equal "Invalid series.", flash[:alert]
+  end
+
+  test "series delete button asks for confirmation" do
+    series = waste_collection_series(:alpha_trash)
+    get waste_path
+    assert_select "form[action=?][data-turbo-confirm]", waste_collection_series_path(series)
+  end
+
+  test "supports navigating the collection window forward and backward" do
+    get waste_path
+    assert_response :success
+
+    get waste_path(from: (Date.current + 4.weeks).iso8601)
+    assert_response :success
+
+    get waste_path(from: (Date.current - 4.weeks).iso8601)
+    assert_response :success
+  end
+
+  test "waste types render as Ui::BadgeComponent variants instead of hard-coded colors" do
+    households(:alpha).waste_collection_events.create!(waste_type: "recyclage", collected_on: Date.current + 2.days)
+
+    get waste_path
+
+    assert_select "span.bg-surface-inset", text: /Household waste/ # ordures -> :secondary
+    assert_select "span.bg-warning\\/10", text: /Recycling/ # recyclage -> :warning
+  end
 end

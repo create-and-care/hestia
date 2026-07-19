@@ -1,4 +1,11 @@
 en:
+  activerecord:
+    errors:
+      models:
+        waste_collection_series:
+          attributes:
+            ends_on:
+              before_starts_on: "must be on or after the start date"
   waste:
     types:
       ordures: "Household waste"
@@ -17,12 +24,27 @@ en:
     show:
       title: "Waste"
       upcoming_title: "Upcoming collections"
+      prev_window: "← Previous"
+      today: "Today"
+      next_window: "Next →"
       no_events: "No collections scheduled."
+      edit_event_aria: "Edit the \"%{type}\" collection"
+      delete_event_aria: "Delete the \"%{type}\" collection"
+      delete_event_confirm: "Delete this collection?"
       add_one_time_title: "Add a one-time collection"
+      waste_type_label: "Waste type"
+      collected_on_label: "Date"
       add: "Add"
       series_title: "Recurring series"
+      no_series: "No recurring series."
       every_n_weeks: "every %{count} week(s)"
+      weekday_label: "Day"
+      interval_weeks_label: "Frequency (weeks)"
+      starts_on_label: "Start"
+      ends_on_label: "End"
       delete_series: "Delete series"
+      delete_series_aria: "Delete the \"%{type}\" series"
+      delete_series_confirm: "Delete this series and all its collections?"
       generate_series: "Generate series"
   waste_collection_series:
     create:
@@ -30,3 +52,16 @@ en:
       invalid: "Invalid series."
     destroy:
       deleted: "Series deleted."
+  waste_collection_events:
+    create:
+      created: "Collection added."
+    edit:
+      title: "Edit collection"
+      waste_type_label: "Waste type"
+      collected_on_label: "Date"
+      save: "Save"
+      back_to_waste: "← Waste"
+    update:
+      updated: "Collection updated."
+    destroy:
+      deleted: "Collection deleted."

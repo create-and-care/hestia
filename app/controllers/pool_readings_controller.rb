@@ -2,8 +2,12 @@ class PoolReadingsController < ApplicationController
   before_action :set_pool
 
   def create
-    @pool.pool_readings.create(reading_params)
-    redirect_to exterior_path
+    reading = @pool.pool_readings.new(reading_params)
+    if reading.save
+      redirect_to exterior_path
+    else
+      redirect_to exterior_path, alert: reading.errors.full_messages.to_sentence
+    end
   end
 
   def destroy
