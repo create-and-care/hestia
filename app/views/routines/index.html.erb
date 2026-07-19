@@ -9,10 +9,17 @@
   <%= render "shared/flash" %>
 
   <% if @lists.any? %>
-    <nav class="mb-4 flex flex-wrap gap-2 text-sm">
-      <%= render(Ui::BadgeComponent.new(variant: @list ? :secondary : :default)) { link_to t(".all"), routines_path } %>
+    <%# Styled like Ui::TabsComponent (same bg-tab-group/bg-tab-item-active tokens) for visual
+        consistency, but kept as real navigation links rather than client-side panels: routines
+        broadcast to a single #routines target, so switching to independently-rendered tab panels
+        without reworking that broadcast would let a routine created in one list silently go out
+        of sync in another already-open panel. %>
+    <nav role="tablist" aria-label="<%= t(".lists_nav_aria") %>" class="mb-4 inline-flex flex-wrap gap-1 rounded-md bg-tab-group p-1 text-sm">
+      <%= link_to t(".all"), routines_path, role: "tab", aria: { selected: @list.nil? },
+            class: "flex h-8 items-center rounded-md px-3 font-medium transition-colors #{@list.nil? ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
       <% @lists.each do |list| %>
-        <%= render(Ui::BadgeComponent.new(variant: @list == list ? :default : :secondary)) { link_to list, routines_path(list: list) } %>
+        <%= link_to list, routines_path(list: list), role: "tab", aria: { selected: @list == list },
+              class: "flex h-8 items-center rounded-md px-3 font-medium transition-colors #{@list == list ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
       <% end %>
     </nav>
   <% end %>
@@ -28,20 +35,69 @@
 
   <%= render(Ui::CardComponent.new(class_name: "mt-6")) do |card| %>
     <% card.with_title { t(".new_routine") } %>
-    <%= form_with model: @routine, url: routines_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(name: "routine[emoji]", value: @routine.emoji, placeholder: "🧹",
-            html_options: { id: "routine_emoji", maxlength: 4, class: "w-14" }) %>
-      <%= render Ui::InputComponent.new(name: "routine[name]", value: @routine.name, placeholder: t(".name_placeholder"),
-            html_options: { id: "routine_name", required: true, class: "flex-1" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: "routine[frequency]", options: routine_frequency_options,
-            selected: @routine.frequency, html_options: { id: "routine_frequency" }) %>
-      <%= render Ui::InputComponent.new(type: "number", name: "routine[interval]", value: 1,
-            html_options: { id: "routine_interval", min: 1, class: "w-16" }) %>
-      <%= render Ui::InputComponent.new(name: "routine[list_name]", value: @routine.list_name, placeholder: t(".list_placeholder"),
-            html_options: { id: "routine_list_name", class: "w-32" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: "routine[assignee_id]",
-            options: [ [ "—", "" ] ] + routine_member_options, selected: @routine.assignee_id,
-            html_options: { id: "routine_assignee_id" }) %>
+
+    <% if @routine.errors.any? %>
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
+        <ul class="list-inside list-disc">
+          <% @routine.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <%= form_with model: @routine, url: routines_path, class: "flex flex-wrap items-end gap-3" do |form| %>
+      <div class="w-20">
+        <%= render(Ui::FieldComponent.new(id: "routine_emoji")) do |field| %>
+          <% field.with_label { t(".emoji_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(name: "routine[emoji]", value: @routine.emoji, placeholder: "🧹", html_options: { id: "routine_emoji", maxlength: 4 }) } %>
+        <% end %>
+      </div>
+
+      <div class="min-w-40 flex-1">
+        <%= render(Ui::FieldComponent.new(id: "routine_name")) do |field| %>
+          <% field.with_label { t(".name_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(name: "routine[name]", value: @routine.name, html_options: { id: "routine_name", required: true }) } %>
+        <% end %>
+      </div>
+
+      <div class="w-36">
+        <%= render(Ui::FieldComponent.new(id: "routine_frequency")) do |field| %>
+          <% field.with_label { t(".frequency_label") } %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: "routine[frequency]", options: routine_frequency_options, selected: @routine.frequency, html_options: { id: "routine_frequency" }) } %>
+        <% end %>
+      </div>
+
+      <div class="w-20">
+        <%= render(Ui::FieldComponent.new(id: "routine_interval")) do |field| %>
+          <% field.with_label { t(".interval_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "number", name: "routine[interval]", value: @routine.interval || 1, html_options: { id: "routine_interval", min: 1 }) } %>
+        <% end %>
+      </div>
+
+      <div class="w-40">
+        <%= render(Ui::FieldComponent.new(id: "routine_next_due_on")) do |field| %>
+          <% field.with_label { t(".next_due_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "date", name: "routine[next_due_on]", value: @routine.next_due_on, html_options: { id: "routine_next_due_on" }) } %>
+        <% end %>
+      </div>
+
+      <div>
+        <%= render(Ui::FieldComponent.new(id: "routine_list_name")) do |field| %>
+          <% field.with_label { t(".list_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::ComboboxComponent.new(name: "routine[list_name]", options: @lists.map { |list| [ list, list ] },
+                  selected: @routine.list_name, placeholder: t(".list_placeholder"),
+                  allow_custom: true, create_label: t(".list_create_label", query: "%{query}")) %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div>
+        <%= render(Ui::FieldComponent.new(id: "routine_assignee_id")) do |field| %>
+          <% field.with_label { t(".assignee_label") } %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: "routine[assignee_id]", options: [ [ "—", "" ] ] + routine_member_options, selected: @routine.assignee_id, html_options: { id: "routine_assignee_id" }) } %>
+        <% end %>
+      </div>
+
       <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".add") } %>
     <% end %>
   <% end %>

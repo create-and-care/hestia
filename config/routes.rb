@@ -229,7 +229,7 @@ Rails.application.routes.draw do
   resources :meal_plan_entries, only: %i[create edit update destroy] do
     collection { patch :reorder }
   end
-  resources :routines, only: %i[index create edit update destroy] do
+  resources :routines, only: %i[index show create edit update destroy] do
     member { post :complete }
   end
   resource :exterior, only: :show, controller: "exterior"
