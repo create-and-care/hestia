@@ -120,6 +120,14 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "create with a blank title re-renders the form with an accessible error" do
+    post recipes_path, params: { recipe: { title: "" } }
+
+    assert_response :unprocessable_entity
+    assert_select "input#recipe_title[aria-describedby=?]", "recipe_title-error"
+    assert_select "#recipe_title-error"
+  end
+
   test "cannot access another household's recipe" do
     get recipe_path(recipes(:beta_soup))
     assert_response :not_found

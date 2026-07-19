@@ -32,7 +32,7 @@
 
   <%= render(Ui::CardComponent.new(class_name: "mb-6")) do |card| %>
     <% card.with_title { t(".members") } %>
-    <div class="divide-y divide-gray-100 dark:divide-gray-800">
+    <div class="divide-y divide-primary">
       <% @circle.circle_memberships.includes(:user).order(:role).each do |membership| %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_leading { render(Ui::AvatarComponent.new(alt: membership.user.name.presence || membership.user.email_address)) } %>

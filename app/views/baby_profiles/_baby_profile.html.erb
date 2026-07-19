@@ -5,7 +5,7 @@
     <% if baby_profile.born_on %>
       <% item.with_description do %>
         <%= t("baby_profiles.born_on", date: baby_profile.born_on.strftime("%d/%m/%Y")) %>
-        <span class="text-gray-400">· <%= t("baby_profiles.age_months", count: baby_profile.age_in_months) %></span>
+        <span class="text-subdued">· <%= t("baby_profiles.age_months", count: baby_profile.age_in_months) %></span>
       <% end %>
     <% end %>
   <% end %>

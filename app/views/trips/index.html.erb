@@ -9,14 +9,14 @@
 
   <% if @trips.any? %>
     <%= render(Ui::CardComponent.new(class_name: "mb-6")) do %>
-      <ul class="divide-y divide-gray-100">
+      <ul class="divide-y divide-primary">
         <% @trips.each do |trip| %>
           <li>
             <%= render(Ui::ItemComponent.new) do |item| %>
               <% item.with_title { link_to trip.name, trip_path(trip), class: "hover:underline" } %>
               <% if trip.starts_on %>
                 <% item.with_trailing do %>
-                  <span class="text-sm text-gray-400"><%= trip.starts_on.strftime("%d/%m/%y") %><%= " → #{trip.ends_on.strftime("%d/%m/%y")}" if trip.ends_on %></span>
+                  <span class="text-sm text-subdued"><%= trip.starts_on.strftime("%d/%m/%y") %><%= " → #{trip.ends_on.strftime("%d/%m/%y")}" if trip.ends_on %></span>
                 <% end %>
               <% end %>
             <% end %>
@@ -52,7 +52,7 @@
       </div>
       <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".create") } %>
     <% end %>
-    <p class="mt-2 text-xs text-gray-400"><%= t(".hint") %></p>
+    <p class="mt-2 text-xs text-subdued"><%= t(".hint") %></p>
   <% end %>
 
 </div>

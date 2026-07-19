@@ -20,7 +20,7 @@
           little visual gain). Left hand-rolled. %>
       <% CirclePostReaction::ALLOWED_EMOJIS.each do |emoji| %>
         <%= button_to emoji, react_circle_post_path(circle_post, emoji: emoji), method: :post,
-              class: "cursor-pointer rounded-full px-1 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 #{"bg-gray-100 dark:bg-gray-800" if my_reaction&.emoji == emoji}",
+              class: "cursor-pointer rounded-full px-1 text-sm hover:bg-surface-hover #{"bg-surface-inset" if my_reaction&.emoji == emoji}",
               form: { class: "inline" },
               aria: { label: t("circles.react_with", emoji: emoji), pressed: my_reaction&.emoji == emoji } %>
       <% end %>

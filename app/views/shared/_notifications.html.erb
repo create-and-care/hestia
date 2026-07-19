@@ -8,12 +8,12 @@
     <% end %>
   <% end %>
 
-  <div class="flex items-center justify-between border-b border-gray-100 pb-2">
+  <div class="flex items-center justify-between border-b border-primary pb-2">
     <h2 class="text-sm font-medium"><%= t(".title") %></h2>
     <%= button_to t(".mark_all_read"), mark_all_read_notifications_path, method: :patch,
-          class: "cursor-pointer text-xs text-gray-500 underline" %>
+          class: "cursor-pointer text-xs text-secondary underline" %>
   </div>
-  <div id="notifications_list" class="max-h-80 divide-y divide-gray-50 overflow-y-auto">
+  <div id="notifications_list" class="max-h-80 divide-y divide-primary overflow-y-auto">
     <% notifications = Current.user.notifications.recent.limit(10) %>
     <% if notifications.none? %>
       <%= render(Ui::EmptyComponent.new) do |empty| %>

@@ -2,19 +2,19 @@
 
 <div class="mx-auto mt-16 max-w-lg px-4">
   <h1 class="mb-2 text-2xl font-semibold"><%= t(".heading") %></h1>
-  <p class="mb-6 text-gray-600"><%= t(".description") %></p>
+  <p class="mb-6 text-secondary"><%= t(".description") %></p>
 
   <%= render "shared/flash" %>
 
   <div class="grid gap-4 sm:grid-cols-2">
-    <div class="rounded-lg border border-gray-200 hover:border-gray-400">
+    <div class="rounded-lg border border-primary">
       <%= render(Ui::ItemComponent.new(href: new_household_path)) do |item| %>
         <% item.with_title { t(".create_household") } %>
         <% item.with_description { t(".create_household_description") } %>
       <% end %>
     </div>
 
-    <div class="rounded-lg border border-gray-200 hover:border-gray-400">
+    <div class="rounded-lg border border-primary">
       <%= render(Ui::ItemComponent.new(href: new_membership_path)) do |item| %>
         <% item.with_title { t(".join_household") } %>
         <% item.with_description { t(".join_household_description") } %>
@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <p class="mt-6 text-sm text-gray-600">
+  <p class="mt-6 text-sm text-secondary">
     <%= button_to t(".sign_out"), session_path, method: :delete, class: "cursor-pointer underline" %>
   </p>
 </div>

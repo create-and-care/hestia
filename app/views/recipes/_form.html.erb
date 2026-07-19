@@ -10,11 +10,13 @@
   <% end %>
 
   <div class="space-y-4">
+    <% title_invalid = recipe.errors[:title].any? %>
     <%= render(Ui::FieldComponent.new(id: "recipe_title")) do |field| %>
       <% field.with_label { t(".title_label") } %>
+      <% field.with_error { recipe.errors.full_messages_for(:title).to_sentence } if title_invalid %>
       <% field.with_control do %>
-        <%= render Ui::InputComponent.new(name: "recipe[title]", value: recipe.title, invalid: recipe.errors[:title].any?,
-              html_options: { id: "recipe_title", required: true }) %>
+        <%= render Ui::InputComponent.new(name: "recipe[title]", value: recipe.title, invalid: title_invalid,
+              html_options: { id: "recipe_title", required: true }.merge(title_invalid ? { aria: { describedby: field.error_id } } : {})) %>
       <% end %>
     <% end %>
 

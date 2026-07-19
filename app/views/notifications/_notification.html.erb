@@ -1,4 +1,4 @@
-<%= tag.div id: dom_id(notification), class: ("rounded-md bg-gray-50" unless notification.read?) do %>
+<%= tag.div id: dom_id(notification), class: ("rounded-md bg-surface" unless notification.read?) do %>
   <%= render(Ui::ItemComponent.new) do |item| %>
     <% item.with_leading { notification_icon(notification) } %>
     <% item.with_title { notification.title } %>
@@ -8,7 +8,7 @@
     <% unless notification.read? %>
       <% item.with_trailing do %>
         <%= button_to mark_read_notification_path(notification), method: :patch,
-              class: "cursor-pointer text-gray-400 hover:text-gray-900", aria: { label: t(".mark_read") } do %><%= lucide_icon("check", css_class: "size-4") %><% end %>
+              class: "cursor-pointer text-subdued hover:text-primary", aria: { label: t(".mark_read") } do %><%= lucide_icon("check", css_class: "size-4") %><% end %>
       <% end %>
     <% end %>
   <% end %>

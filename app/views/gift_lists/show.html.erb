@@ -6,7 +6,7 @@
   <header class="mb-4 flex items-center justify-between">
     <h1 class="flex items-center gap-2 text-2xl font-semibold">
       <%= lucide_icon("gift", css_class: "size-6") %> <%= @list.name %>
-      <span class="text-sm text-gray-400">(<%= perspective_label(@list.perspective) %><%= " · #{@list.theme}" if @list.theme.present? %>)</span>
+      <span class="text-sm text-subdued">(<%= perspective_label(@list.perspective) %><%= " · #{@list.theme}" if @list.theme.present? %>)</span>
       <% if @list.restricted? %><%= render(Ui::BadgeComponent.new(variant: :secondary)) { t(".restricted_badge") } %><% end %>
     </h1>
     <div class="flex items-center gap-3">

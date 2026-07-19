@@ -1,0 +1,17 @@
+en:
+  ui:
+    dialog:
+      close_aria: Close
+    breadcrumb:
+      nav_aria: Breadcrumb
+    pagination:
+      nav_aria: Pagination
+      previous: Previous
+      next: Next
+    spinner:
+      loading_aria: Loading
+    select:
+      placeholder: Select an option
+    alert_dialog:
+      confirm_label: Continue
+      cancel_label: Cancel

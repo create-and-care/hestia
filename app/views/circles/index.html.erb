@@ -11,7 +11,7 @@
   <%= render "shared/flash" %>
 
   <% if @circles.any? %>
-    <div class="mb-6 divide-y divide-gray-100 rounded-lg border border-primary">
+    <div class="mb-6 divide-y divide-primary rounded-lg border border-primary">
       <% @circles.each do |circle| %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_title { link_to circle.name, circle_path(circle), class: "hover:underline" } %>

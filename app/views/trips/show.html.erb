@@ -40,7 +40,7 @@
     <% if @trip.section_enabled?("shopping_lists") %>
       <% tabs.with_tab(label: t(".tabs.shopping_lists"), value: "shopping_lists") do %>
         <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
-          <ul id="<%= dom_id(@trip, :shopping_lists) %>" class="divide-y divide-gray-100 text-sm">
+          <ul id="<%= dom_id(@trip, :shopping_lists) %>" class="divide-y divide-primary text-sm">
             <%= render partial: "trips/shopping_list", collection: @trip.shopping_lists.order(:name), as: :list, locals: { trip: @trip } %>
           </ul>
           <% if @trip.shopping_lists.empty? %>
@@ -61,7 +61,7 @@
     <% if @trip.section_enabled?("notes") %>
       <% tabs.with_tab(label: t(".tabs.notes"), value: "notes") do %>
         <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
-          <ul id="<%= dom_id(@trip, :notes) %>" class="divide-y divide-gray-100 text-sm">
+          <ul id="<%= dom_id(@trip, :notes) %>" class="divide-y divide-primary text-sm">
             <%= render partial: "trips/note", collection: @trip.notes.order(created_at: :desc), as: :note, locals: { trip: @trip } %>
           </ul>
           <% if @trip.notes.empty? %>
@@ -87,7 +87,7 @@
     <% if @trip.section_enabled?("tasks") %>
       <% tabs.with_tab(label: t(".tabs.tasks"), value: "tasks") do %>
         <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
-          <ul id="<%= dom_id(@trip, :tasks) %>" class="divide-y divide-gray-100 text-sm">
+          <ul id="<%= dom_id(@trip, :tasks) %>" class="divide-y divide-primary text-sm">
             <%= render partial: "trips/task", collection: @trip.tasks.order(:due_on), as: :task, locals: { trip: @trip } %>
           </ul>
           <% if @trip.tasks.empty? %>
@@ -113,7 +113,7 @@
     <% if @trip.section_enabled?("addresses") %>
       <% tabs.with_tab(label: t(".tabs.addresses"), value: "addresses") do %>
         <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
-          <ul id="<%= dom_id(@trip, :addresses) %>" class="divide-y divide-gray-100 text-sm">
+          <ul id="<%= dom_id(@trip, :addresses) %>" class="divide-y divide-primary text-sm">
             <%= render partial: "trips/address", collection: @trip.addresses.order(:name), as: :address, locals: { trip: @trip } %>
           </ul>
           <% if @trip.addresses.empty? %>
@@ -164,7 +164,7 @@
     <% if @trip.section_enabled?("menu") %>
       <% tabs.with_tab(label: t(".tabs.menu"), value: "menu") do %>
         <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
-          <ul id="<%= dom_id(@trip, :meal_plan_entries) %>" class="divide-y divide-gray-100 text-sm">
+          <ul id="<%= dom_id(@trip, :meal_plan_entries) %>" class="divide-y divide-primary text-sm">
             <%= render partial: "trips/meal_plan_entry", collection: @trip.meal_plan_entries.ordered, as: :meal_plan_entry, locals: { trip: @trip } %>
           </ul>
           <% if @trip.meal_plan_entries.empty? %>
