@@ -21,4 +21,17 @@ class PoolReadingTest < ActiveSupport::TestCase
 
     assert_equal [ newer, older ], pool.pool_readings.recent.to_a
   end
+
+  test "measure_type must be relevant to the pool's treatment_type" do
+    pool = pools(:alpha_pool) # sel
+    reading = pool.pool_readings.new(measure_type: "chlore_libre", value: 1, measured_on: Date.current)
+    assert_not reading.valid?
+    assert_includes reading.errors[:measure_type], "is not included in the list"
+  end
+
+  test "accepts a measure_type relevant to the pool's treatment_type" do
+    pool = pools(:alpha_pool) # sel
+    reading = pool.pool_readings.new(measure_type: "taux_sel", value: 3, measured_on: Date.current)
+    assert reading.valid?
+  end
 end

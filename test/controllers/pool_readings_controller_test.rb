@@ -25,6 +25,15 @@ class PoolReadingsControllerTest < ActionDispatch::IntegrationTest
     assert_not PoolReading.exists?(reading.id)
   end
 
+  test "create with a measure_type unrelated to the pool's treatment redirects with an error" do
+    pool = pools(:alpha_pool) # sel
+    assert_no_difference -> { PoolReading.count } do
+      post pool_pool_readings_path(pool), params: { pool_reading: { measure_type: "chlore_libre", value: 1, measured_on: Date.current } }
+    end
+    assert_redirected_to exterior_path
+    assert_not_nil flash[:alert]
+  end
+
   test "cannot add a reading to another household's pool" do
     assert_no_difference -> { PoolReading.count } do
       post pool_pool_readings_path(pools(:beta_pool)), params: { pool_reading: { measure_type: "pH", value: 7 } }

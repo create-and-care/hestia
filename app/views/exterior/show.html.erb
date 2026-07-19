@@ -14,46 +14,67 @@
   <section class="mb-10">
     <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("sprout", css_class: "size-5") %> <%= t(".garden_heading") %></h2>
     <%= render(Ui::CardComponent.new) do %>
-      <ul class="mb-3 divide-y divide-gray-100">
-        <% @plants.each do |plant| %>
-          <li>
-            <%= render(Ui::ItemComponent.new) do |item| %>
-              <% item.with_title do %>
-                <%= plant.name %><% if plant.location.present? %> · <%= plant.location %><% end %><% if plant.plant_reference %> · <%= plant.plant_reference.common_name %><% end %>
-              <% end %>
-              <% if plant.notes.present? || plant.plant_reference %>
-                <% item.with_description do %>
-                  <%= plant.notes if plant.notes.present? %><% if plant.plant_reference %><%= " · " if plant.notes.present? %><%= lucide_icon("droplet", css_class: "inline size-3") %> <%= plant.plant_reference.water_needs %> · <%= lucide_icon("sun", css_class: "inline size-3") %> <%= plant.plant_reference.sunlight %><% end %>
+      <% if @plants.any? %>
+        <ul class="mb-3 divide-y divide-primary">
+          <% @plants.each do |plant| %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% if plant.photo.attached? %>
+                  <% item.with_leading do %>
+                    <%= render Ui::AvatarComponent.new(src: plant.photo.variant(resize_to_fill: [ 64, 64 ]), alt: plant.name) %>
+                  <% end %>
+                <% end %>
+                <% item.with_title do %>
+                  <%= plant.name %><% if plant.location.present? %> · <%= plant.location %><% end %><% if plant.plant_reference %> · <%= plant.plant_reference.common_name %><% end %>
+                <% end %>
+                <% if plant.notes.present? || plant.plant_reference %>
+                  <% item.with_description do %>
+                    <%= plant.notes if plant.notes.present? %><% if plant.plant_reference %><%= " · " if plant.notes.present? %><%= lucide_icon("droplet", css_class: "inline size-3") %> <%= plant.plant_reference.water_needs %> · <%= lucide_icon("sun", css_class: "inline size-3") %> <%= plant.plant_reference.sunlight %><% if plant.plant_reference.fertilizing.present? %> · <%= t(".fertilizing_prefix") %> <%= plant.plant_reference.fertilizing %><% end %><% end %>
+                  <% end %>
+                <% end %>
+                <% item.with_trailing do %>
+                  <div class="flex shrink-0 items-center gap-1">
+                    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_plant_path(plant),
+                          html_options: { aria: { label: t(".edit_plant_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                    <%= form_with url: plant_path(plant), method: :delete, data: { turbo_confirm: t(".delete_plant_confirm") } do %>
+                      <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :icon,
+                            html_options: { aria: { label: t(".delete_plant_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+                    <% end %>
+                  </div>
                 <% end %>
               <% end %>
-              <% item.with_trailing do %>
-                <%= form_with url: plant_path(plant), method: :delete do %>
-                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
-                <% end %>
-              <% end %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
-      <%= form_with model: @plant, url: plants_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="mb-3">
+          <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_plants") } } %>
+        </div>
+      <% end %>
+
+      <%= form_with model: @plant, url: plants_path, class: "flex flex-wrap items-end gap-3" do |form| %>
         <div class="flex-1">
           <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
-            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".plant_placeholder"), html_options: { id: form.field_id(:name), required: true }) } %>
+            <% field.with_label { t(".plant_label") } %>
+            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, html_options: { id: form.field_id(:name), required: true }) } %>
           <% end %>
         </div>
         <div class="w-32">
           <%= render(Ui::FieldComponent.new(id: form.field_id(:location))) do |field| %>
-            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:location), value: form.object.location, placeholder: t(".location_placeholder"), html_options: { id: form.field_id(:location) }) } %>
+            <% field.with_label { t(".location_label") } %>
+            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:location), value: form.object.location, html_options: { id: form.field_id(:location) }) } %>
           <% end %>
         </div>
         <div class="w-48">
           <%= render(Ui::FieldComponent.new(id: form.field_id(:plant_reference_id))) do |field| %>
+            <% field.with_label { t(".reference_label") } %>
             <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:plant_reference_id), options: [ [ t(".reference_blank"), "" ] ] + PlantReference.ordered.map { |r| [ r.common_name, r.id ] }, selected: form.object.plant_reference_id, html_options: { id: form.field_id(:plant_reference_id) }) } %>
           <% end %>
         </div>
         <div class="w-40">
           <%= render(Ui::FieldComponent.new(id: form.field_id(:notes))) do |field| %>
-            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:notes), value: form.object.notes, placeholder: t(".notes_placeholder"), html_options: { id: form.field_id(:notes) }) } %>
+            <% field.with_label { t(".notes_label") } %>
+            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:notes), value: form.object.notes, html_options: { id: form.field_id(:notes) }) } %>
           <% end %>
         </div>
         <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
@@ -63,70 +84,110 @@
 
   <section class="mb-8">
     <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("waves", css_class: "size-5") %> <%= t(".pool_heading") %></h2>
+
+    <% if @pools.empty? %>
+      <%= render(Ui::CardComponent.new(class_name: "mb-4")) do %>
+        <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_pools") } } %>
+      <% end %>
+    <% end %>
+
     <% @pools.each do |pool| %>
       <%= render(Ui::CardComponent.new(class_name: "mb-4")) do %>
         <div class="mb-2 flex items-center justify-between">
-          <h3 class="font-medium"><%= pool.name %> <span class="text-xs text-gray-400">(<%= treatment_label(pool.treatment_type) %>)</span></h3>
-          <%= button_to t(".delete"), pool_path(pool), method: :delete, class: "cursor-pointer text-xs text-red-600 hover:underline" %>
+          <h3 class="flex items-center gap-2 font-medium">
+            <%= pool.name %>
+            <%= render(Ui::BadgeComponent.new(variant: :secondary)) { treatment_label(pool.treatment_type) } %>
+          </h3>
+          <div class="flex shrink-0 items-center gap-1">
+            <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, href: history_pool_path(pool))) do %>
+              <%= lucide_icon("clock", css_class: "size-4") %> <%= t(".history_link") %>
+            <% end %>
+            <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_pool_path(pool),
+                  html_options: { aria: { label: t(".edit_pool_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
+            <%= form_with url: pool_path(pool), method: :delete, data: { turbo_confirm: t(".delete_pool_confirm") } do %>
+              <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :icon,
+                    html_options: { aria: { label: t(".delete_pool_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+            <% end %>
+          </div>
         </div>
+        <% if pool.service_provider %>
+          <p class="mb-2 text-xs text-secondary"><%= t(".service_provider_prefix") %> <%= link_to pool.service_provider.name, edit_service_provider_path(pool.service_provider), class: "underline" %></p>
+        <% end %>
 
-        <p class="text-xs font-medium text-gray-500"><%= t(".readings_heading") %></p>
-        <ul class="mb-2 divide-y divide-gray-100 text-sm">
-          <% pool.pool_readings.recent.first(5).each do |reading| %>
-            <li>
-              <%= render(Ui::ItemComponent.new) do |item| %>
-                <% item.with_title { "#{reading.measured_on.strftime('%d/%m')} · #{reading.measure_type} : #{reading.value}" } %>
-                <% item.with_trailing do %>
-                  <%= form_with url: pool_pool_reading_path(pool, reading), method: :delete do %>
-                    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
+        <p class="text-xs font-medium text-secondary"><%= t(".readings_heading") %></p>
+        <% if pool.pool_readings.recent.first(5).any? %>
+          <ul class="mb-2 divide-y divide-primary text-sm">
+            <% pool.pool_readings.recent.first(5).each do |reading| %>
+              <li>
+                <%= render(Ui::ItemComponent.new) do |item| %>
+                  <% item.with_title { "#{reading.measured_on.strftime('%d/%m')} · #{measure_type_label(reading.measure_type)} : #{reading.value.to_s.sub(/\.0+\z/, "")}" } %>
+                  <% item.with_trailing do %>
+                    <%= form_with url: pool_pool_reading_path(pool, reading), method: :delete, data: { turbo_confirm: t(".delete_reading_confirm") } do %>
+                      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
+                            html_options: { aria: { label: t(".delete_reading_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+                    <% end %>
                   <% end %>
                 <% end %>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-        <%= form_with model: [ pool, PoolReading.new ], url: pool_pool_readings_path(pool), class: "mb-3 flex flex-wrap items-end gap-2" do |form| %>
-          <div class="w-24">
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+        <% if pool.pool_readings.count > 5 %>
+          <p class="mb-2 text-xs"><%= link_to t(".see_all_readings"), history_pool_path(pool), class: "underline" %></p>
+        <% end %>
+        <%= form_with model: [ pool, PoolReading.new ], url: pool_pool_readings_path(pool), class: "mb-3 flex flex-wrap items-end gap-3" do |form| %>
+          <div class="w-32">
             <%= render(Ui::FieldComponent.new(id: form.field_id(:measure_type))) do |field| %>
-              <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:measure_type), value: form.object.measure_type, placeholder: t(".measure_type_placeholder"), html_options: { id: form.field_id(:measure_type) }) } %>
+              <% field.with_label { t(".measure_type_label") } %>
+              <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:measure_type), options: measure_type_options(pool), html_options: { id: form.field_id(:measure_type) }) } %>
             <% end %>
           </div>
           <div class="w-24">
             <%= render(Ui::FieldComponent.new(id: form.field_id(:value))) do |field| %>
-              <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:value), value: form.object.value, placeholder: t(".value_placeholder"), html_options: { id: form.field_id(:value), step: :any }) } %>
+              <% field.with_label { t(".value_label") } %>
+              <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:value), value: form.object.value, html_options: { id: form.field_id(:value), step: :any }) } %>
             <% end %>
           </div>
           <div>
             <%= render(Ui::FieldComponent.new(id: form.field_id(:measured_on))) do |field| %>
+              <% field.with_label { t(".measured_on_label") } %>
               <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:measured_on), value: Date.current, html_options: { id: form.field_id(:measured_on) }) } %>
             <% end %>
           </div>
           <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".reading_submit") } %>
         <% end %>
 
-        <p class="text-xs font-medium text-gray-500"><%= t(".actions_heading") %></p>
-        <ul class="mb-2 divide-y divide-gray-100 text-sm">
-          <% pool.pool_actions.recent.first(5).each do |action| %>
-            <li>
-              <%= render(Ui::ItemComponent.new) do |item| %>
-                <% item.with_title { "#{action.done_on.strftime('%d/%m')} · #{pool_action_label(action.action_type)}" } %>
-                <% item.with_trailing do %>
-                  <%= form_with url: pool_pool_action_path(pool, action), method: :delete do %>
-                    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
+        <p class="text-xs font-medium text-secondary"><%= t(".actions_heading") %></p>
+        <% if pool.pool_actions.recent.first(5).any? %>
+          <ul class="mb-2 divide-y divide-primary text-sm">
+            <% pool.pool_actions.recent.first(5).each do |action| %>
+              <li>
+                <%= render(Ui::ItemComponent.new) do |item| %>
+                  <% item.with_title { "#{action.done_on.strftime('%d/%m')} · #{pool_action_label(action.action_type)}" } %>
+                  <% item.with_trailing do %>
+                    <%= form_with url: pool_pool_action_path(pool, action), method: :delete, data: { turbo_confirm: t(".delete_action_confirm") } do %>
+                      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
+                            html_options: { aria: { label: t(".delete_action_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+                    <% end %>
                   <% end %>
                 <% end %>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-        <%= form_with model: [ pool, PoolAction.new ], url: pool_pool_actions_path(pool), class: "flex flex-wrap items-end gap-2" do |form| %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+        <% if pool.pool_actions.count > 5 %>
+          <p class="mb-2 text-xs"><%= link_to t(".see_all_actions"), history_pool_path(pool), class: "underline" %></p>
+        <% end %>
+        <%= form_with model: [ pool, PoolAction.new ], url: pool_pool_actions_path(pool), class: "flex flex-wrap items-end gap-3" do |form| %>
           <div>
             <%= render(Ui::FieldComponent.new(id: form.field_id(:action_type))) do |field| %>
+              <% field.with_label { t(".action_type_label") } %>
               <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:action_type), options: pool_action_options, selected: form.object.action_type, html_options: { id: form.field_id(:action_type) }) } %>
             <% end %>
           </div>
           <div>
             <%= render(Ui::FieldComponent.new(id: form.field_id(:done_on))) do |field| %>
+              <% field.with_label { t(".done_on_label") } %>
               <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:done_on), value: Date.current, html_options: { id: form.field_id(:done_on) }) } %>
             <% end %>
           </div>
@@ -136,14 +197,16 @@
     <% end %>
 
     <%= render(Ui::CardComponent.new) do %>
-      <%= form_with model: @pool, url: pools_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+      <%= form_with model: @pool, url: pools_path, class: "flex flex-wrap items-end gap-3" do |form| %>
         <div class="flex-1">
           <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
-            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".new_pool_placeholder"), html_options: { id: form.field_id(:name), required: true }) } %>
+            <% field.with_label { t(".new_pool_label") } %>
+            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, html_options: { id: form.field_id(:name), required: true }) } %>
           <% end %>
         </div>
         <div>
           <%= render(Ui::FieldComponent.new(id: form.field_id(:treatment_type))) do |field| %>
+            <% field.with_label { t(".treatment_type_label") } %>
             <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:treatment_type), options: treatment_options, selected: form.object.treatment_type, html_options: { id: form.field_id(:treatment_type) }) } %>
           <% end %>
         </div>

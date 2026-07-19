@@ -1,0 +1,62 @@
+<% content_for :title, t(".title", name: @pool.name) %>
+
+<div class="mx-auto mt-10 max-w-3xl px-4">
+  <h1 class="mb-6 flex items-center gap-2 text-2xl font-semibold">
+    <%= lucide_icon("waves", css_class: "size-6") %> <%= @pool.name %>
+  </h1>
+
+  <%= render "shared/flash" %>
+
+  <% trends = @readings_by_type.select { |_type, readings| readings.size >= 2 } %>
+  <% if trends.any? %>
+    <section class="mb-8 space-y-6">
+      <h2 class="font-medium"><%= t(".trends_heading") %></h2>
+      <% trends.each do |measure_type, readings| %>
+        <div>
+          <p class="mb-2 text-sm text-secondary"><%= measure_type_label(measure_type) %></p>
+          <%= render Ui::ChartComponent.new(data: readings.map { |reading| [ reading.measured_on.strftime("%d/%m"), reading.value.to_f ] }) %>
+        </div>
+      <% end %>
+    </section>
+  <% end %>
+
+  <section class="mb-8">
+    <h2 class="mb-3 font-medium"><%= t(".readings_heading") %></h2>
+    <% if @readings.any? %>
+      <ul class="mb-4 divide-y divide-primary text-sm">
+        <% @readings.each do |reading| %>
+          <li class="py-2"><%= reading.measured_on.strftime("%d/%m/%Y") %> · <%= measure_type_label(reading.measure_type) %> : <%= reading.value.to_s.sub(/\.0+\z/, "") %></li>
+        <% end %>
+      </ul>
+      <% if @readings_total_pages > 1 %>
+        <div class="flex justify-center">
+          <%= render Ui::PaginationComponent.new(current: @readings_page, total: @readings_total_pages,
+                path: ->(page) { history_pool_path(@pool, readings_page: page, actions_page: @actions_page) }) %>
+        </div>
+      <% end %>
+    <% else %>
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_readings") } } %>
+    <% end %>
+  </section>
+
+  <section>
+    <h2 class="mb-3 font-medium"><%= t(".actions_heading") %></h2>
+    <% if @actions.any? %>
+      <ul class="mb-4 divide-y divide-primary text-sm">
+        <% @actions.each do |action| %>
+          <li class="py-2"><%= action.done_on.strftime("%d/%m/%Y") %> · <%= pool_action_label(action.action_type) %><%= " · #{action.note}" if action.note.present? %></li>
+        <% end %>
+      </ul>
+      <% if @actions_total_pages > 1 %>
+        <div class="flex justify-center">
+          <%= render Ui::PaginationComponent.new(current: @actions_page, total: @actions_total_pages,
+                path: ->(page) { history_pool_path(@pool, actions_page: page, readings_page: @readings_page) }) %>
+        </div>
+      <% end %>
+    <% else %>
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_actions") } } %>
+    <% end %>
+  </section>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_outdoor"), exterior_path, class: "underline" %></p>
+</div>

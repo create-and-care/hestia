@@ -24,22 +24,22 @@ end
 [
   { common_name: "Basil", scientific_name: "Ocimum basilicum", water_needs: "Frequent (soil always moist)",
     sunlight: "Full sun", pruning: "Pinch off flowers to prolong the harvest",
-    common_diseases: "Damping-off, aphids" },
+    common_diseases: "Damping-off, aphids", fertilizing: "Balanced liquid fertilizer every 2 weeks in growing season" },
   { common_name: "Tomato", scientific_name: "Solanum lycopersicum", water_needs: "Regular, avoid wetting the foliage",
     sunlight: "Full sun", pruning: "Remove suckers",
-    common_diseases: "Blight, powdery mildew" },
+    common_diseases: "Blight, powdery mildew", fertilizing: "Potassium-rich fertilizer every 2 weeks once fruiting starts" },
   { common_name: "Lavender", scientific_name: "Lavandula", water_needs: "Low, well-drained soil",
     sunlight: "Full sun", pruning: "Prune after flowering",
-    common_diseases: "Root rot if overwatered" },
+    common_diseases: "Root rot if overwatered", fertilizing: "None needed; overfeeding reduces fragrance" },
   { common_name: "Monstera", scientific_name: "Monstera deliciosa", water_needs: "Moderate, let dry between waterings",
     sunlight: "Indirect light", pruning: "Remove yellowed leaves",
-    common_diseases: "Mealybugs, spider mites" },
+    common_diseases: "Mealybugs, spider mites", fertilizing: "Diluted houseplant fertilizer monthly in spring/summer" },
   { common_name: "Rose bush", scientific_name: "Rosa", water_needs: "Regular, at the base",
     sunlight: "Full sun to partial shade", pruning: "Prune in late winter",
-    common_diseases: "Powdery mildew, black spot, aphids" },
+    common_diseases: "Powdery mildew, black spot, aphids", fertilizing: "Rose fertilizer in spring and after first bloom" },
   { common_name: "Orchid", scientific_name: "Phalaenopsis", water_needs: "Low, weekly soaking",
     sunlight: "Bright indirect light", pruning: "Cut the faded flower spike",
-    common_diseases: "Root rot if overwatered" }
+    common_diseases: "Root rot if overwatered", fertilizing: "Weak orchid fertilizer every 2-4 weeks while blooming" }
 ].each do |attributes|
   PlantReference.find_or_create_by!(common_name: attributes[:common_name]) { |reference| reference.assign_attributes(attributes) }
 end
