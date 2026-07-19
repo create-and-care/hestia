@@ -33,6 +33,65 @@ class WellbeingControllerTest < ActionDispatch::IntegrationTest
     assert_equal 175, users(:one).reload.wellbeing_profile.height
   end
 
+  test "profile update with an invalid sex flashes an alert instead of failing silently" do
+    sign_in_as(users(:one))
+    patch wellbeing_profile_path, params: { wellbeing_profile: { sex: "bogus" } }
+    assert_redirected_to wellbeing_path
+    assert_not_nil flash[:alert]
+  end
+
+  test "shows an empty state when there are no weigh-ins or workouts yet" do
+    sign_in_as(users(:one))
+    get wellbeing_path
+    assert_response :success
+    assert_includes @response.body, I18n.t("wellbeing.show.weight_empty")
+    assert_includes @response.body, I18n.t("wellbeing.show.workouts_empty")
+  end
+
+  test "does not render the weight chart with fewer than 2 weigh-ins" do
+    sign_in_as(users(:one))
+    users(:one).weight_entries.create!(recorded_on: Date.current, weight: 70)
+    get wellbeing_path
+    assert_response :success
+    assert_not_includes @response.body, I18n.t("wellbeing.show.chart_heading")
+  end
+
+  test "renders the weight chart from 2 weigh-ins" do
+    sign_in_as(users(:one))
+    users(:one).weight_entries.create!(recorded_on: Date.current - 1.day, weight: 71)
+    users(:one).weight_entries.create!(recorded_on: Date.current, weight: 70)
+    get wellbeing_path
+    assert_response :success
+    assert_includes @response.body, I18n.t("wellbeing.show.chart_heading")
+  end
+
+  test "delete forms for entries have a turbo_confirm" do
+    sign_in_as(users(:one))
+    users(:one).weight_entries.create!(recorded_on: Date.current, weight: 70)
+    users(:one).workout_entries.create!(done_on: Date.current, exercise: "Vélo")
+    get wellbeing_path
+    assert_response :success
+    assert_select "form[action=?][data-turbo-confirm]", weight_entry_path(users(:one).weight_entries.first)
+    assert_select "form[action=?][data-turbo-confirm]", workout_entry_path(users(:one).workout_entries.first)
+  end
+
+  test "history shows the full weigh-in and workout history, paginated" do
+    sign_in_as(users(:one))
+    20.times { |i| users(:one).weight_entries.create!(recorded_on: Date.current - i.days, weight: 70 + i) }
+
+    get history_wellbeing_path
+    assert_response :success
+    assert_select "a[href=?]", history_wellbeing_path(weight_page: 2, workout_page: 1)
+  end
+
+  test "history is scoped to the current user" do
+    users(:two).weight_entries.create!(recorded_on: Date.current, weight: 123.7)
+    sign_in_as(users(:one))
+    get history_wellbeing_path
+    assert_response :success
+    assert_includes @response.body, I18n.t("wellbeing.history.weight_empty")
+  end
+
   # --- Strict privacy (Spec §5, point 4) ---
 
   test "a user cannot delete another user's weight entry" do

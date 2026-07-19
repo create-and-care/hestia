@@ -1,0 +1,49 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-3xl px-4">
+  <h1 class="mb-6 flex items-center gap-2 text-2xl font-semibold">
+    <%= lucide_icon("heart-pulse", css_class: "size-6") %> <%= t(".title") %>
+  </h1>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-8">
+    <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("scale", css_class: "size-5") %> <%= t(".weight_heading") %></h2>
+    <% if @weight_entries.any? %>
+      <ul class="mb-4 divide-y divide-primary text-sm">
+        <% @weight_entries.each do |entry| %>
+          <li class="py-2"><%= entry.recorded_on.strftime("%d/%m/%Y") %> — <%= entry.weight %> kg</li>
+        <% end %>
+      </ul>
+      <% if @weight_total_pages > 1 %>
+        <div class="flex justify-center">
+          <%= render Ui::PaginationComponent.new(current: @weight_page, total: @weight_total_pages,
+                path: ->(page) { history_wellbeing_path(weight_page: page, workout_page: @workout_page) }) %>
+        </div>
+      <% end %>
+    <% else %>
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".weight_empty") } } %>
+    <% end %>
+  </section>
+
+  <section>
+    <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("dumbbell", css_class: "size-5") %> <%= t(".workouts_heading") %></h2>
+    <% if @workout_entries.any? %>
+      <ul class="mb-4 divide-y divide-primary text-sm">
+        <% @workout_entries.each do |entry| %>
+          <li class="py-2"><%= entry.done_on.strftime("%d/%m/%Y") %> — <%= entry.exercise %><% if entry.duration_minutes %> (<%= entry.duration_minutes %> min)<% end %></li>
+        <% end %>
+      </ul>
+      <% if @workout_total_pages > 1 %>
+        <div class="flex justify-center">
+          <%= render Ui::PaginationComponent.new(current: @workout_page, total: @workout_total_pages,
+                path: ->(page) { history_wellbeing_path(workout_page: page, weight_page: @weight_page) }) %>
+        </div>
+      <% end %>
+    <% else %>
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".workouts_empty") } } %>
+    <% end %>
+  </section>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_wellbeing"), wellbeing_path, class: "underline" %></p>
+</div>

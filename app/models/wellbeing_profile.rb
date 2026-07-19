@@ -6,6 +6,9 @@ class WellbeingProfile < ApplicationRecord
 
   belongs_to :user
 
+  validates :sex, inclusion: { in: SEXES }, allow_blank: true
+  validates :activity_level, inclusion: { in: ACTIVITY_LEVELS }, allow_blank: true
+
   def bmi(weight)
     return if height.to_i.zero? || weight.blank?
 

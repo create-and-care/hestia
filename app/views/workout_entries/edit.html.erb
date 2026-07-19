@@ -1,0 +1,45 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= form_with model: @entry, url: workout_entry_path(@entry) do |form| %>
+    <% if @entry.errors.any? %>
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
+        <ul class="list-inside list-disc">
+          <% @entry.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <div class="space-y-4">
+      <%= render(Ui::FieldComponent.new(id: form.field_id(:exercise))) do |field| %>
+        <% field.with_label { t(".exercise_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: form.field_name(:exercise), value: form.object.exercise,
+                html_options: { id: form.field_id(:exercise), required: true }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: form.field_id(:duration_minutes))) do |field| %>
+        <% field.with_label { t(".duration_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "number", name: form.field_name(:duration_minutes), value: form.object.duration_minutes,
+                html_options: { id: form.field_id(:duration_minutes) }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: form.field_id(:done_on))) do |field| %>
+        <% field.with_label { t(".done_on_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "date", name: form.field_name(:done_on), value: form.object.done_on,
+                html_options: { id: form.field_id(:done_on), required: true }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".save") } %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_wellbeing"), wellbeing_path, class: "underline" %></p>
+</div>

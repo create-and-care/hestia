@@ -44,23 +44,45 @@
     <% end %>
   </section>
 
+  <% if @weight_chart_data.size >= 2 %>
+    <section class="mb-8">
+      <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("trending-up", css_class: "size-5") %> <%= t(".chart_heading") %></h2>
+      <%= render(Ui::CardComponent.new) do %>
+        <%= render Ui::ChartComponent.new(data: @weight_chart_data) %>
+      <% end %>
+    </section>
+  <% end %>
+
   <section class="mb-8">
-    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("scale", css_class: "size-5") %> <%= t(".weight") %></h2>
+    <div class="mb-2 flex items-center justify-between">
+      <h2 class="flex items-center gap-1.5 font-medium"><%= lucide_icon("scale", css_class: "size-5") %> <%= t(".weight") %></h2>
+      <%= link_to t(".see_full_history"), history_wellbeing_path, class: "text-sm underline" %>
+    </div>
     <%= render(Ui::CardComponent.new) do %>
-      <ul class="mb-2 divide-y divide-gray-100 text-sm">
-        <% @weight_entries.reverse.first(15).each do |entry| %>
-          <li>
-            <%= render(Ui::ItemComponent.new) do |item| %>
-              <% item.with_title { "#{entry.recorded_on.strftime('%d/%m/%Y')} — #{entry.weight} kg" } %>
-              <% item.with_trailing do %>
-                <%= form_with url: weight_entry_path(entry), method: :delete do %>
-                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { "×" } %>
+      <% if @weight_entries.any? %>
+        <ul class="mb-2 divide-y divide-primary text-sm">
+          <% @weight_entries.each do |entry| %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title { "#{entry.recorded_on.strftime('%d/%m/%Y')} — #{entry.weight} kg" } %>
+                <% item.with_trailing do %>
+                  <div class="flex shrink-0 items-center gap-1">
+                    <%= link_to edit_weight_entry_path(entry), "aria-label": t(".edit_weight_entry_aria", date: entry.recorded_on.strftime("%d/%m/%Y")), class: "text-subdued hover:text-primary" do %>
+                      <%= lucide_icon("pencil", css_class: "size-3.5") %>
+                    <% end %>
+                    <%= form_with url: weight_entry_path(entry), method: :delete, data: { turbo_confirm: t(".delete_weight_entry_confirm") } do %>
+                      <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :icon, type: "submit",
+                            html_options: { aria: { label: t(".delete_weight_entry_aria", date: entry.recorded_on.strftime("%d/%m/%Y")) } })) { lucide_icon("x", css_class: "size-4") } %>
+                    <% end %>
+                  </div>
                 <% end %>
               <% end %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".weight_empty") } } %>
+      <% end %>
       <%= form_with model: @weight_entry, url: weight_entries_path, class: "flex flex-wrap items-end gap-2" do |form| %>
         <div class="w-24">
           <%= render(Ui::FieldComponent.new(id: form.field_id(:weight))) do |field| %>
@@ -78,24 +100,37 @@
   </section>
 
   <section class="mb-8">
-    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("dumbbell", css_class: "size-5") %> <%= t(".workouts") %></h2>
+    <div class="mb-2 flex items-center justify-between">
+      <h2 class="flex items-center gap-1.5 font-medium"><%= lucide_icon("dumbbell", css_class: "size-5") %> <%= t(".workouts") %></h2>
+      <%= link_to t(".see_full_history"), history_wellbeing_path, class: "text-sm underline" %>
+    </div>
     <%= render(Ui::CardComponent.new) do %>
-      <ul class="mb-2 divide-y divide-gray-100 text-sm">
-        <% @workout_entries.first(15).each do |entry| %>
-          <li>
-            <%= render(Ui::ItemComponent.new) do |item| %>
-              <% item.with_title do %>
-                <%= entry.done_on.strftime("%d/%m") %> — <%= entry.exercise %><% if entry.duration_minutes %> (<%= entry.duration_minutes %> min)<% end %>
-              <% end %>
-              <% item.with_trailing do %>
-                <%= form_with url: workout_entry_path(entry), method: :delete do %>
-                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { "×" } %>
+      <% if @workout_entries.any? %>
+        <ul class="mb-2 divide-y divide-primary text-sm">
+          <% @workout_entries.each do |entry| %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title do %>
+                  <%= entry.done_on.strftime("%d/%m") %> — <%= entry.exercise %><% if entry.duration_minutes %> (<%= entry.duration_minutes %> min)<% end %>
+                <% end %>
+                <% item.with_trailing do %>
+                  <div class="flex shrink-0 items-center gap-1">
+                    <%= link_to edit_workout_entry_path(entry), "aria-label": t(".edit_workout_entry_aria", exercise: entry.exercise), class: "text-subdued hover:text-primary" do %>
+                      <%= lucide_icon("pencil", css_class: "size-3.5") %>
+                    <% end %>
+                    <%= form_with url: workout_entry_path(entry), method: :delete, data: { turbo_confirm: t(".delete_workout_entry_confirm") } do %>
+                      <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :icon, type: "submit",
+                            html_options: { aria: { label: t(".delete_workout_entry_aria", exercise: entry.exercise) } })) { lucide_icon("x", css_class: "size-4") } %>
+                    <% end %>
+                  </div>
                 <% end %>
               <% end %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".workouts_empty") } } %>
+      <% end %>
       <%= form_with model: @workout_entry, url: workout_entries_path, class: "flex flex-wrap items-end gap-2" do |form| %>
         <div class="flex-1">
           <%= render(Ui::FieldComponent.new(id: form.field_id(:exercise))) do |field| %>

@@ -13,12 +13,29 @@ fr:
       save_profile: "Enregistrer le profil"
       bmi_prefix: "IMC actuel :"
       bmi_suffix: "(poids %{weight} kg)"
+      chart_heading: "Évolution du poids"
+      see_full_history: "Voir l'historique complet"
       weight: "Poids"
       weight_placeholder: "kg"
+      weight_empty: "Aucune pesée pour l'instant."
+      edit_weight_entry_aria: "Modifier la pesée du %{date}"
+      delete_weight_entry_aria: "Supprimer la pesée du %{date}"
+      delete_weight_entry_confirm: "Supprimer cette pesée ?"
       add: "Ajouter"
       workouts: "Séances de sport"
+      workouts_empty: "Aucune séance de sport pour l'instant."
       exercise_placeholder: "Exercice"
       duration_placeholder: "min"
+      edit_workout_entry_aria: "Modifier la séance %{exercise}"
+      delete_workout_entry_aria: "Supprimer la séance %{exercise}"
+      delete_workout_entry_confirm: "Supprimer cette séance ?"
+    history:
+      title: "Historique bien-être"
+      weight_heading: "Historique des pesées"
+      weight_empty: "Aucune pesée pour l'instant."
+      workouts_heading: "Historique des séances"
+      workouts_empty: "Aucune séance de sport pour l'instant."
+      back_to_wellbeing: "Retour au bien-être"
     sexes:
       female: "Femme"
       male: "Homme"
@@ -32,3 +49,30 @@ fr:
   wellbeing_profiles:
     update:
       updated: "Profil mis à jour."
+  weight_entries:
+    create:
+      added: "Pesée ajoutée."
+    edit:
+      title: "Modifier la pesée"
+      weight_label: "Poids (kg)"
+      recorded_on_label: "Date"
+      save: "Enregistrer"
+      back_to_wellbeing: "Retour au bien-être"
+    update:
+      updated: "Pesée mise à jour."
+    destroy:
+      deleted: "Pesée supprimée."
+  workout_entries:
+    create:
+      added: "Séance ajoutée."
+    edit:
+      title: "Modifier la séance"
+      exercise_label: "Exercice"
+      duration_label: "Durée (min)"
+      done_on_label: "Date"
+      save: "Enregistrer"
+      back_to_wellbeing: "Retour au bien-être"
+    update:
+      updated: "Séance mise à jour."
+    destroy:
+      deleted: "Séance supprimée."
