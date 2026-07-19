@@ -1,0 +1,9 @@
+<% content_for :title, t("roadmap.show.title") %>
+
+<div class="mt-10 max-w-3xl mx-auto px-4">
+  <header class="mb-6">
+    <h1 class="text-2xl font-semibold"><%= t("roadmap.show.title") %></h1>
+  </header>
+
+  <%= render "roadmap/content", phases: @phases, improvements: @improvements %>
+</div>

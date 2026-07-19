@@ -1,0 +1,8 @@
+<% @notifications.each do |notification| %>
+  <%= turbo_stream.replace(notification) do %>
+    <%= render "notifications/notification", notification: notification %>
+  <% end %>
+<% end %>
+<%= turbo_stream.replace("notifications_badge") do %>
+  <%= render "notifications/badge", count: Current.user.notifications.unread.count %>
+<% end %>

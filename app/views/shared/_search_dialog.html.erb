@@ -12,11 +12,12 @@
       <div class="[&_input]:focus-visible:ring-0">
         <%= render Ui::InputComponent.new(type: "search", name: "q", placeholder: t("search.placeholder"),
               html_options: { autocomplete: "off", autofocus: true, data: { search_palette_target: "input" },
+                              role: "combobox", "aria-expanded": "true", "aria-controls": "global_search_results", "aria-activedescendant": "",
                               class: "border-0 border-b rounded-none" }) %>
       </div>
     <% end %>
     <div class="max-h-80 overflow-auto p-2">
-      <%= turbo_frame_tag "global_search_results", data: { action: "turbo:frame-load->search-palette#onFrameLoad" } %>
+      <%= turbo_frame_tag "global_search_results", role: "listbox", data: { action: "turbo:frame-load->search-palette#onFrameLoad" } %>
     </div>
   </div>
 <% end %>

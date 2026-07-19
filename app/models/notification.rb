@@ -15,7 +15,7 @@ class Notification < ApplicationRecord
   scope :recent, -> { order(created_at: :desc) }
 
   after_create_commit :broadcast_created
-  after_update_commit :broadcast_badge
+  after_update_commit :broadcast_updated
 
   def read? = read_at.present?
 
@@ -27,6 +27,16 @@ class Notification < ApplicationRecord
     def broadcast_created
       broadcast_prepend_to user, :notifications,
         target: "notifications_list", partial: "notifications/notification", locals: { notification: self }
+      broadcast_badge
+    end
+
+    # Keeps every other open tab/device (popover and the full /notifications
+    # page alike) in sync when this notification is marked read elsewhere —
+    # the response to the request that triggered the change updates its own
+    # view directly (see NotificationsController), this is for everyone else.
+    def broadcast_updated
+      broadcast_replace_to user, :notifications,
+        target: self, partial: "notifications/notification", locals: { notification: self }
       broadcast_badge
     end
 

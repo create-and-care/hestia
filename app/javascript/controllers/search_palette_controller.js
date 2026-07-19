@@ -39,9 +39,19 @@ export default class extends Controller {
   }
 
   setActive(item) {
-    this.itemTargets.forEach((i) => i.classList.remove("bg-surface-hover"))
+    this.itemTargets.forEach((i) => {
+      i.setAttribute("aria-selected", "false")
+      i.classList.remove("bg-surface-hover")
+    })
+
     this.activeItem = item || null
-    this.activeItem?.classList.add("bg-surface-hover")
+
+    if (item) {
+      item.setAttribute("aria-selected", "true")
+      item.classList.add("bg-surface-hover")
+    }
+
+    this.inputTarget.setAttribute("aria-activedescendant", item?.id || "")
   }
 
   // Highlight the first result whenever the turbo-frame reloads (Turbo swaps

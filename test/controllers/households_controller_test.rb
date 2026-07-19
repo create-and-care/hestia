@@ -72,6 +72,24 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Progress by area"
   end
 
+  test "show deep-links to a specific tab via ?tab=" do
+    sign_in_as(users(:one))
+
+    get household_path(households(:alpha), tab: "roadmap")
+
+    assert_response :success
+    assert_select "div[role=tabpanel][data-value=roadmap]:not([hidden])"
+  end
+
+  test "show ignores an unknown ?tab= value and falls back to general" do
+    sign_in_as(users(:one))
+
+    get household_path(households(:alpha), tab: "not-a-real-tab")
+
+    assert_response :success
+    assert_select "div[role=tabpanel][data-value=general]:not([hidden])"
+  end
+
   test "update sets the household's time zone" do
     sign_in_as(users(:one))
 

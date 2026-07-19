@@ -127,7 +127,46 @@ class GlobalSearch
     Definition.new(model: WineCellar, module_key: "wine_cellar", icon: "wine",
       label: ->(r) { r.name },
       scope: ->(household, q) { WineCellar.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
-      url: ->(r) { wine_cellars_path(q: r.name) })
+      url: ->(r) { wine_cellars_path(q: r.name) }),
+
+    Definition.new(model: FridgeItem, module_key: "fridge", icon: "refrigerator",
+      label: ->(r) { r.name },
+      scope: ->(household, q) { FridgeItem.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
+      url: ->(r) { fridge_path }),
+
+    # Only free_name entries (no recipe attached) are worth surfacing here —
+    # recipe-backed entries are already found via the Recipe definition above,
+    # and .general excludes Trip meal plans (searched separately, if at all).
+    Definition.new(model: MealPlanEntry, module_key: "menu", icon: "utensils",
+      label: ->(r) { r.display_name },
+      scope: ->(household, q) { MealPlanEntry.for_household(household).general.where("free_name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
+      url: ->(r) { menu_path(week: r.on_date.beginning_of_week) }),
+
+    # No per-series page exists (series are only created/destroyed inline on
+    # the Waste tab), so every match links back to the module's own page.
+    Definition.new(model: WasteCollectionSeries, module_key: "waste", icon: "trash-2",
+      label: ->(r) { I18n.t("waste.types.#{r.waste_type}", default: r.waste_type) },
+      scope: ->(household, q) { WasteCollectionSeries.for_household(household).where("waste_type ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
+      url: ->(r) { waste_path }),
+
+    Definition.new(model: Plant, module_key: "outdoor", icon: "trees",
+      label: ->(r) { r.name },
+      scope: ->(household, q) { Plant.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
+      url: ->(r) { edit_plant_path(r) }),
+
+    Definition.new(model: Pool, module_key: "outdoor", icon: "trees",
+      label: ->(r) { r.name },
+      scope: ->(household, q) { Pool.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
+      url: ->(r) { edit_pool_path(r) }),
+
+    # Wellbeing entries are strictly private (Spec §5.4 — never shared with
+    # the rest of the household), so this is scoped_by: :user like Circle and
+    # Conversation, never :household — a match only ever surfaces the
+    # searching user's own workouts.
+    Definition.new(model: WorkoutEntry, module_key: "wellbeing", icon: "heart-pulse", scoped_by: :user,
+      label: ->(r) { r.exercise },
+      scope: ->(user, q) { user.workout_entries.where("exercise ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
+      url: ->(r) { edit_workout_entry_path(r) })
   ].freeze
 
   def self.call(query:, household:, user:)

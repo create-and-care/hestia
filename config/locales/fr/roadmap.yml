@@ -1,0 +1,103 @@
+fr:
+  roadmap:
+    show:
+      title: Feuille de route
+      description: >-
+        Avancement du projet et améliorations prévues. Détail complet dans la Spécification et le
+        Plan d'implémentation versionnés avec le code ; historique précis des versions dans CHANGELOG.md.
+      progress_heading: Avancement par domaine
+      improvements_heading: Améliorations prévues
+      improvements_description: >-
+        Une liste issue de l'analyse du code existant (tests, sécurité, cohérence de l'interface,
+        couverture fonctionnelle) — pas seulement les manques déjà connus du Plan d'implémentation.
+      status:
+        done: Fait
+        partial: Partiel
+        todo: À faire
+    phases:
+      foundation:
+        name: "Phase 1 — Fondations"
+        detail: "Utilisateur, Session, Foyer, Membership, cloisonnement multi-foyer"
+      priority_modules:
+        name: "2.a — Modules prioritaires"
+        detail: "Courses, Calendrier, Tâches, Frigo, Recettes"
+      satellite_modules:
+        name: "2.b — Modules satellites"
+        detail: "Notes, Anniversaires, Adresses, Prestataires, Fidélité, Animaux, Véhicules, Cave à vin, Déchets, Bébé, Messages"
+      richer_logic:
+        name: "2.c — Logique métier plus riche"
+        detail: "Menu, Routines, Extérieur, Budget, Documents"
+      architecture_deviations:
+        name: "2.d — Déviations d'architecture"
+        detail: "Cadeaux, Cercles, Voyage, Bien-être"
+      reminders:
+        name: "Rappels & notifications"
+        detail: "Tâches, Calendrier, Frigo, et la notification du jour des anniversaires sont tous câblés à Reminders::DailyDigest / DeliverDue"
+      external_integrations:
+        name: "Intégrations externes"
+        detail: "Open Food Facts, Nominatim, jours fériés publics, catalogues Fidélité/Extérieur, et une vraie synchronisation de calendrier OAuth Google/Microsoft + CalDAV"
+      api:
+        name: "API api/v1"
+        detail: "Les 25 modules exposés"
+      mobile:
+        name: "Application mobile"
+        detail: "Squelette Flutter — connexion + Courses en lecture seule"
+      governance:
+        name: "Gouvernance & documentation"
+        detail: "LICENSE, README, CONTRIBUTING, CHANGELOG, page Feuille de route"
+      marketing_site:
+        name: "Site vitrine & documentation utilisateur"
+        detail: "Non commencé"
+      hestai:
+        name: "Hest.AI (Phase 3)"
+        detail: "Non commencé — nécessite de consolider d'abord le travail ci-dessus"
+    improvements:
+      dashboard:
+        category: "Tableau de bord & expérience transverse"
+        items:
+          - "Ajouter un fil d'activité du foyer (qui a fait quoi, quand) — utile pour la confiance en usage multi-membres, et réutilisable comme brique de journalisation pour Hest.AI (Spec §13)."
+          - "Permettre d'exporter les données du foyer (JSON/CSV) : aucune fonctionnalité de portabilité des données personnelles n'existe à ce stade."
+      security:
+        category: "Sécurité & gestion du compte"
+        items:
+          - "Ajouter la suppression du compte utilisateur et un export des données personnelles, pour la portabilité même en auto-hébergement (voir la recommandation sur la politique de confidentialité, Spec §8)."
+          - "Ajouter une limitation de débit sur la route publique et non authentifiée de réservation de cadeau (g/:token/reserve/:idea_id), qui n'en a aucune contrairement à la connexion, au mot de passe oublié, et (désormais) à l'inscription."
+      reliability:
+        category: "Fiabilité, qualité & observabilité"
+        items:
+          - "Étendre la couverture de tests système (Capybara) : quelques parcours existent à ce jour (connexion/déconnexion, Courses, Tâches, Catalogue de recettes, recherche globale, notifications) mais les parcours multi-étapes en Turbo se sont montrés plus instables à écrire de façon fiable dans cet environnement (interaction suspectée entre Puma/ActionCable sous le serveur de test de Capybara) — mérite une investigation dédiée avant d'en écrire beaucoup d'autres."
+          - "Ajouter https://github.com/SigNoz/signoz pour apporter métriques et logs au projet."
+      functional_gaps:
+        category: "Modules fonctionnels — manques identifiés"
+        items:
+          - "Étendre le catalogue de référence des plantes au-delà des 6 fiches de départ (PlantReference)."
+          - "Étendre le catalogue des enseignes de fidélité au-delà de la douzaine de départ (LoyaltyBrand)."
+          - "Importer les contacts depuis le carnet d'adresses du téléphone (Anniversaires, Prestataires) une fois le mobile suffisamment avancé."
+          - "Ajouter une fusion intelligente des ingrédients (doublons, conversion d'unités) lors de l'ajout d'une recette aux courses — actuellement un ajout brut sans fusion (une capacité visée pour Hest.AI)."
+          - "Étudier la communauté de recettes inter-foyers évoquée comme hors périmètre pour la V1 (Spec §19), une fois une masse critique de foyers actifs atteinte."
+      api_mobile:
+        category: "API & Mobile"
+        items:
+          - "Ouvrir un canal temps réel pour les clients externes (WebSocket vers Solid Cable) : le mobile ne fait actuellement que du HTTP ponctuel, sans mise à jour en direct."
+          - "Construire la parité fonctionnelle du client mobile sur les 24 modules restants : seul un écran Courses en lecture seule existe."
+          - "Ajouter l'accès natif à la caméra sur mobile (scan de code-barres Courses/Frigo, capture de documents)."
+          - "Ajouter la dictée vocale native sur mobile (Notes, Tâches)."
+          - "Ajouter les notifications push natives sur mobile, en s'appuyant sur l'infrastructure Notification/NotificationPreference déjà en place côté web."
+          - "Ajouter un mode hors ligne en lecture seule sur mobile pour les données déjà synchronisées."
+          - "Ajouter le renouvellement transparent du jeton API sur mobile : actuellement un jeton statique, sans expiration ni flux de renouvellement."
+      i18n_a11y:
+        category: "Internationalisation & accessibilité"
+        items:
+          - "Activer la PWA : le manifeste et le service worker existent sous app/views/pwa/ mais restent commentés dans config/routes.rb et le layout, alors qu'ils permettraient d'installer l'application web sur mobile/bureau en attendant la parité complète du client Flutter."
+          - "Auditer l'accessibilité clavier et lecteur d'écran des composants Stimulus personnalisés (combobox, dialog, dropdown, command…) : aucun test d'accessibilité automatisé n'existe à ce stade."
+      governance_docs:
+        category: "Site, documentation & gouvernance"
+        items:
+          - "Construire un site vitrine public (une page d'accueil, une page par module, une page de présentation de Hest.AI, en mettant en avant la nature libre et open-source du projet) : non commencé, distinct de cette page Feuille de route."
+          - "Construire un centre de documentation utilisateur par module (guides d'usage), au-delà des fichiers de gouvernance déjà en place."
+          - "Rédiger une politique de confidentialité adaptée au contexte auto-hébergé, recommandée dès qu'un foyer héberge des données tierces (liens Cadeaux publics, Cercles)."
+      hestai:
+        category: "Hest.AI (Phase 3)"
+        items:
+          - "Ne démarrer Hest.AI qu'une fois les manques de fiabilité ci-dessus résolus : sinon l'assistant hériterait des mêmes manques (Spec §13, Plan §7)."
+          - "Généraliser la couche de services par domaine aux modules qui n'en ont pas encore, une condition posée par la section 5 de la Spec pour que Hest.AI puisse les invoquer comme des outils."

@@ -1,5 +1,7 @@
 <% content_for :title, t(".title") %>
 
+<%= turbo_stream_from Current.user, :notifications %>
+
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <header class="mb-6 flex items-center justify-between">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("bell", css_class: "size-6") %> <%= t(".title") %></h1>
@@ -13,16 +15,16 @@
 
   <%= render "shared/flash" %>
 
-  <% if @notifications.none? %>
-    <%= render(Ui::EmptyComponent.new) do |empty| %>
-      <% empty.with_icon { lucide_icon("bell", css_class: "size-8") } %>
-      <% empty.with_description { t(".none") } %>
-    <% end %>
-  <% else %>
-    <div class="divide-y divide-primary rounded-lg border border-primary">
+  <div id="notifications_list" class="<%= "divide-y divide-primary rounded-lg border border-primary" if @notifications.any? %>">
+    <% if @notifications.none? %>
+      <%= render(Ui::EmptyComponent.new) do |empty| %>
+        <% empty.with_icon { lucide_icon("bell", css_class: "size-8") } %>
+        <% empty.with_description { t(".none") } %>
+      <% end %>
+    <% else %>
       <% @notifications.each do |notification| %>
         <%= render "notifications/notification", notification: notification %>
       <% end %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>
