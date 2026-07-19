@@ -1,6 +1,9 @@
 en:
   baby_profiles:
     born_on: "Born on %{date}"
+    age_months:
+      one: "%{count} month old"
+      other: "%{count} months old"
     feeding_kinds:
       bottle: "Bottle"
       breast: "Breastfeeding"
@@ -11,6 +14,8 @@ en:
     form:
       name_label: "First name"
       born_on_label: "Date of birth"
+      service_provider_label: "Pediatrician"
+      no_service_provider: "None"
       submit: "Save"
     edit:
       title: "Edit profile"
@@ -19,15 +24,32 @@ en:
       title: "New baby profile"
       back_to_babies: "← Baby"
     show:
+      pediatrician_prefix: "Pediatrician:"
       edit: "Edit"
       delete: "Delete"
       delete_confirm: "Delete this profile?"
       disclaimer: "Organizational aid only — does not replace pediatric medical follow-up."
       feedings_title: "Feedings"
       duration_minutes: "%{count} min"
+      no_feedings: "No feedings recorded."
+      in_progress: "In progress"
+      feeding_in_progress: "%{kind} in progress since %{time}"
+      kind_label: "Type"
+      start: "Start"
+      stop: "Stop"
+      edit_feeding_aria: "Edit this feeding"
+      delete_feeding_aria: "Delete this feeding"
+      delete_feeding_confirm: "Delete this feeding?"
       add: "Add"
       food_introductions_title: "Food introduction"
       food_placeholder: "Food"
+      food_label: "Food"
+      introduced_on_label: "Date"
+      acceptance_label: "Reaction"
+      no_food_introductions: "No food introductions recorded."
+      edit_food_aria: "Edit \"%{food}\""
+      delete_food_aria: "Delete \"%{food}\""
+      delete_food_confirm: "Delete \"%{food}\"?"
       acceptance_options:
         - "Liked"
         - "Neutral"
@@ -35,6 +57,13 @@ en:
       acceptance_blank: "Reaction"
       allergen_tests_title: "Allergens tested"
       allergen_placeholder: "Allergen"
+      allergen_label: "Allergen"
+      tested_on_label: "Date"
+      severity_label: "Severity"
+      no_allergen_tests: "No allergen tests recorded."
+      edit_allergen_aria: "Edit \"%{allergen}\""
+      delete_allergen_aria: "Delete \"%{allergen}\""
+      delete_allergen_confirm: "Delete \"%{allergen}\"?"
       severity_options:
         - "None"
         - "Mild"
@@ -47,3 +76,47 @@ en:
       updated: "Profile updated."
     destroy:
       deleted: "Profile deleted."
+  feeding_sessions:
+    create:
+      created: "Feeding added."
+    edit:
+      title: "Edit feeding"
+      kind_label: "Type"
+      started_at_label: "Start"
+      ended_at_label: "End"
+      save: "Save"
+      back_to_profile: "← Profile"
+    update:
+      updated: "Feeding updated."
+    stop:
+      stopped: "Feeding ended."
+    destroy:
+      deleted: "Feeding deleted."
+  food_introductions:
+    create:
+      created: "Food introduction added."
+    edit:
+      title: "Edit food introduction"
+      food_label: "Food"
+      introduced_on_label: "Date"
+      acceptance_label: "Reaction"
+      save: "Save"
+      back_to_profile: "← Profile"
+    update:
+      updated: "Food introduction updated."
+    destroy:
+      deleted: "Food introduction deleted."
+  allergen_tests:
+    create:
+      created: "Allergen test added."
+    edit:
+      title: "Edit allergen test"
+      allergen_label: "Allergen"
+      tested_on_label: "Date"
+      severity_label: "Severity"
+      save: "Save"
+      back_to_profile: "← Profile"
+    update:
+      updated: "Allergen test updated."
+    destroy:
+      deleted: "Allergen test deleted."

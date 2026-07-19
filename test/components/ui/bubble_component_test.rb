@@ -20,4 +20,10 @@ class Ui::BubbleComponentTest < ViewComponent::TestCase
       render_inline(Ui::BubbleComponent.new(variant: :system)) { "?" }
     end
   end
+
+  test "breaks long unbroken tokens instead of overflowing the bubble" do
+    render_inline(Ui::BubbleComponent.new) { "https://example.com/a-very-long-url-that-would-otherwise-overflow" }
+
+    assert_selector "div.break-words"
+  end
 end

@@ -23,7 +23,7 @@
           <div class="flex items-center gap-2 text-sm">
             <%= render Ui::CheckboxComponent.new(name: "participant_ids[]", id: "conversation_participant_#{user.id}",
                   checked: conversation.participant_ids.include?(user.id) || user == Current.user,
-                  disabled: (user == Current.user), html_options: { value: user.id }) %>
+                  disabled: (user == Current.user && !conversation.persisted?), html_options: { value: user.id }) %>
             <%= render(Ui::LabelComponent.new(for_id: "conversation_participant_#{user.id}")) do %>
               <%= user.name.presence || user.email_address %><%= t(".you_suffix") if user == Current.user %>
             <% end %>

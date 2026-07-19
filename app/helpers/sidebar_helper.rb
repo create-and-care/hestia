@@ -46,7 +46,8 @@ module SidebarHelper
         next unless current_household.nil? || current_household.module_enabled?(nav_key)
 
         resolved_path = instance_exec(&path)
-        { icon: icon, label: t("dashboard.show.nav.#{nav_key}"), path: resolved_path, active: sidebar_item_active?(resolved_path) }
+        { icon: icon, label: t("dashboard.show.nav.#{nav_key}"), path: resolved_path, active: sidebar_item_active?(resolved_path),
+          unread: nav_key == :messages && unread_conversations? }
       }
 
       next if items.empty?
@@ -68,5 +69,11 @@ module SidebarHelper
     # as being on the Messages item), so the parent group stays expanded.
     def sidebar_item_active?(path)
       request.path == path || request.path.start_with?("#{path}/")
+    end
+
+    def unread_conversations?
+      return false unless Current.user && current_household
+
+      Conversation.for_household(current_household).unread_for(Current.user).exists?
     end
 end

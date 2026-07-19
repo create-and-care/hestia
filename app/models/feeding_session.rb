@@ -6,6 +6,9 @@ class FeedingSession < ApplicationRecord
   validates :kind, inclusion: { in: KINDS }
 
   scope :recent, -> { order(started_at: :desc, created_at: :desc) }
+  scope :in_progress, -> { where(ended_at: nil) }
+
+  broadcasts_refreshes_to ->(session) { [ session.baby_profile.household, "baby" ] }
 
   def duration_minutes
     return unless started_at && ended_at

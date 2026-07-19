@@ -2,10 +2,12 @@ en:
   conversations:
     message_placeholder: "Your message…"
     send: "Send"
+    discuss_button: "Discuss this"
     index:
       title: "Messages"
       new_conversation: "New conversation"
       empty: "No conversations."
+      unread: "Unread"
     form:
       name_label: "Conversation name"
       participants_label: "Participants"
@@ -19,6 +21,12 @@ en:
       back_to_messages: "← Messages"
     show:
       settings: "Settings"
+      delete: "Delete"
+      delete_confirm: "Delete this conversation and all its messages?"
+      about_prefix: "About:"
       back_to_conversations: "← Conversations"
     update:
       updated: "Conversation updated."
+      left: "You left the conversation."
+    destroy:
+      deleted: "Conversation deleted."

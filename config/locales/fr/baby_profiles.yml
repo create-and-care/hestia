@@ -1,6 +1,9 @@
 fr:
   baby_profiles:
     born_on: "Né(e) le %{date}"
+    age_months:
+      one: "%{count} mois"
+      other: "%{count} mois"
     feeding_kinds:
       bottle: "Biberon"
       breast: "Allaitement"
@@ -11,6 +14,8 @@ fr:
     form:
       name_label: "Prénom"
       born_on_label: "Date de naissance"
+      service_provider_label: "Pédiatre"
+      no_service_provider: "Aucun"
       submit: "Enregistrer"
     edit:
       title: "Modifier le profil"
@@ -19,15 +24,32 @@ fr:
       title: "Nouveau profil bébé"
       back_to_babies: "← Bébé"
     show:
+      pediatrician_prefix: "Pédiatre :"
       edit: "Modifier"
       delete: "Supprimer"
       delete_confirm: "Supprimer ce profil ?"
       disclaimer: "Aide à l'organisation — ne remplace pas le suivi médical pédiatrique."
       feedings_title: "Tétées"
       duration_minutes: "%{count} min"
+      no_feedings: "Aucune tétée enregistrée."
+      in_progress: "En cours"
+      feeding_in_progress: "%{kind} en cours depuis %{time}"
+      kind_label: "Type"
+      start: "Démarrer"
+      stop: "Arrêter"
+      edit_feeding_aria: "Modifier cette tétée"
+      delete_feeding_aria: "Supprimer cette tétée"
+      delete_feeding_confirm: "Supprimer cette tétée ?"
       add: "Ajouter"
       food_introductions_title: "Diversification"
       food_placeholder: "Aliment"
+      food_label: "Aliment"
+      introduced_on_label: "Date"
+      acceptance_label: "Réaction"
+      no_food_introductions: "Aucune diversification enregistrée."
+      edit_food_aria: "Modifier « %{food} »"
+      delete_food_aria: "Supprimer « %{food} »"
+      delete_food_confirm: "Supprimer « %{food} » ?"
       acceptance_options:
         - "Aimé"
         - "Neutre"
@@ -35,6 +57,13 @@ fr:
       acceptance_blank: "Réaction"
       allergen_tests_title: "Allergènes testés"
       allergen_placeholder: "Allergène"
+      allergen_label: "Allergène"
+      tested_on_label: "Date"
+      severity_label: "Sévérité"
+      no_allergen_tests: "Aucun allergène testé."
+      edit_allergen_aria: "Modifier « %{allergen} »"
+      delete_allergen_aria: "Supprimer « %{allergen} »"
+      delete_allergen_confirm: "Supprimer « %{allergen} » ?"
       severity_options:
         - "Aucune"
         - "Légère"
@@ -47,3 +76,47 @@ fr:
       updated: "Profil mis à jour."
     destroy:
       deleted: "Profil supprimé."
+  feeding_sessions:
+    create:
+      created: "Tétée ajoutée."
+    edit:
+      title: "Modifier la tétée"
+      kind_label: "Type"
+      started_at_label: "Début"
+      ended_at_label: "Fin"
+      save: "Enregistrer"
+      back_to_profile: "← Fiche"
+    update:
+      updated: "Tétée mise à jour."
+    stop:
+      stopped: "Tétée terminée."
+    destroy:
+      deleted: "Tétée supprimée."
+  food_introductions:
+    create:
+      created: "Aliment ajouté."
+    edit:
+      title: "Modifier l'aliment"
+      food_label: "Aliment"
+      introduced_on_label: "Date"
+      acceptance_label: "Réaction"
+      save: "Enregistrer"
+      back_to_profile: "← Fiche"
+    update:
+      updated: "Aliment mis à jour."
+    destroy:
+      deleted: "Aliment supprimé."
+  allergen_tests:
+    create:
+      created: "Allergène ajouté."
+    edit:
+      title: "Modifier l'allergène"
+      allergen_label: "Allergène"
+      tested_on_label: "Date"
+      severity_label: "Sévérité"
+      save: "Enregistrer"
+      back_to_profile: "← Fiche"
+    update:
+      updated: "Allergène mis à jour."
+    destroy:
+      deleted: "Allergène supprimé."

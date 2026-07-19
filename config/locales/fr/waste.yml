@@ -1,4 +1,11 @@
 fr:
+  activerecord:
+    errors:
+      models:
+        waste_collection_series:
+          attributes:
+            ends_on:
+              before_starts_on: "doit être postérieure ou égale à la date de début"
   waste:
     types:
       ordures: "Ordures ménagères"
@@ -17,12 +24,27 @@ fr:
     show:
       title: "Déchets"
       upcoming_title: "Prochaines collectes"
+      prev_window: "← Précédent"
+      today: "Aujourd'hui"
+      next_window: "Suivant →"
       no_events: "Aucune collecte planifiée."
+      edit_event_aria: "Modifier la collecte « %{type} »"
+      delete_event_aria: "Supprimer la collecte « %{type} »"
+      delete_event_confirm: "Supprimer cette collecte ?"
       add_one_time_title: "Ajouter une collecte ponctuelle"
+      waste_type_label: "Type de déchet"
+      collected_on_label: "Date"
       add: "Ajouter"
       series_title: "Séries récurrentes"
+      no_series: "Aucune série récurrente."
       every_n_weeks: "toutes les %{count} semaine(s)"
+      weekday_label: "Jour"
+      interval_weeks_label: "Fréquence (semaines)"
+      starts_on_label: "Début"
+      ends_on_label: "Fin"
       delete_series: "Supprimer la série"
+      delete_series_aria: "Supprimer la série « %{type} »"
+      delete_series_confirm: "Supprimer cette série et toutes ses collectes ?"
       generate_series: "Générer la série"
   waste_collection_series:
     create:
@@ -30,3 +52,16 @@ fr:
       invalid: "Série invalide."
     destroy:
       deleted: "Série supprimée."
+  waste_collection_events:
+    create:
+      created: "Collecte ajoutée."
+    edit:
+      title: "Modifier la collecte"
+      waste_type_label: "Type de déchet"
+      collected_on_label: "Date"
+      save: "Enregistrer"
+      back_to_waste: "← Déchets"
+    update:
+      updated: "Collecte mise à jour."
+    destroy:
+      deleted: "Collecte supprimée."

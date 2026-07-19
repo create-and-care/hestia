@@ -80,6 +80,18 @@ class CalendarControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Milo"
   end
 
+  test "surfaces an upcoming waste collection in the list view" do
+    households(:alpha).waste_collection_events.create!(waste_type: "recyclage", collected_on: 2.days.from_now.to_date)
+    get calendar_path(view: :list)
+    assert_includes @response.body, "Recycling"
+  end
+
+  test "PDF export excludes waste collections (they aren't CalendarEvent records)" do
+    households(:alpha).waste_collection_events.create!(waste_type: "recyclage", collected_on: Date.current + 2.days)
+    get calendar_path(format: :pdf)
+    assert_response :success
+  end
+
   test "PDF export does not crash when a birthday falls within the month" do
     households(:alpha).contacts.create!(name: "Papi", born_on: Date.current.change(year: 1945))
     get calendar_path(format: :pdf)

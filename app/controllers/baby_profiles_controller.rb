@@ -6,13 +6,14 @@ class BabyProfilesController < ApplicationController
   end
 
   def show
-    @feeding_session = @baby.feeding_sessions.new(started_at: Time.current)
+    @feeding_session = @baby.feeding_sessions.new
     @food_introduction = @baby.food_introductions.new(introduced_on: Date.current)
     @allergen_test = @baby.allergen_tests.new(tested_on: Date.current)
   end
 
   def new
     @baby = Current.household.baby_profiles.new
+    @service_providers = Current.household.service_providers.order(:name)
   end
 
   def create
@@ -20,17 +21,20 @@ class BabyProfilesController < ApplicationController
     if @baby.save
       redirect_to @baby, notice: t(".created")
     else
+      @service_providers = Current.household.service_providers.order(:name)
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    @service_providers = Current.household.service_providers.order(:name)
   end
 
   def update
     if @baby.update(baby_params)
       redirect_to @baby, notice: t(".updated")
     else
+      @service_providers = Current.household.service_providers.order(:name)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -46,6 +50,6 @@ class BabyProfilesController < ApplicationController
     end
 
     def baby_params
-      params.require(:baby_profile).permit(:name, :born_on)
+      params.require(:baby_profile).permit(:name, :born_on, :service_provider_id)
     end
 end

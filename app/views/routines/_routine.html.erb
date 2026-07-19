@@ -1,4 +1,4 @@
-<%= tag.div id: dom_id(routine), class: "rounded-lg border #{routine.overdue? ? "border-destructive bg-red-50" : "border-primary"}" do %>
+<%= tag.div id: dom_id(routine), class: "rounded-lg border #{routine.overdue? ? "border-destructive bg-destructive/10" : "border-primary"}" do %>
   <%= render(Ui::ItemComponent.new) do |item| %>
     <% item.with_title do %><%= "#{routine.emoji} " if routine.emoji.present? %><%= routine.name %><% end %>
     <% item.with_description do %>
@@ -12,8 +12,14 @@
       <div class="flex items-center gap-2">
         <%= render(Ui::ButtonToComponent.new(complete_routine_path(routine), method: :post)) {
               safe_join([ lucide_icon("check", css_class: "size-4"), t(".done") ], " ") } %>
-        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_routine_path(routine))) { lucide_icon("pencil", css_class: "size-4") } %>
-        <%= button_to routine_path(routine), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: routine_path(routine),
+              html_options: { aria: { label: t(".history_aria") } })) { lucide_icon("clock", css_class: "size-4") } %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_routine_path(routine),
+              html_options: { aria: { label: t(".edit_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
+        <%= form_with url: routine_path(routine), method: :delete, data: { turbo_confirm: t(".delete_confirm") } do %>
+          <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :icon,
+                html_options: { class: "text-subdued hover:text-destructive", aria: { label: t(".delete_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+        <% end %>
       </div>
     <% end %>
   <% end %>

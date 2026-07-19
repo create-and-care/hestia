@@ -1,101 +1,185 @@
 <% content_for :title, @baby.name %>
+<%= turbo_stream_from Current.household, "baby" %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <header class="mb-2 flex items-start justify-between">
     <div>
       <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("baby", css_class: "size-6") %> <%= @baby.name %></h1>
-      <% if @baby.born_on %><p class="text-sm text-gray-500"><%= t("baby_profiles.born_on", date: @baby.born_on.strftime("%d/%m/%Y")) %></p><% end %>
+      <% if @baby.born_on %>
+        <p class="text-sm text-secondary">
+          <%= t("baby_profiles.born_on", date: @baby.born_on.strftime("%d/%m/%Y")) %>
+          · <%= t("baby_profiles.age_months", count: @baby.age_in_months) %>
+        </p>
+      <% end %>
+      <% if @baby.service_provider %>
+        <p class="text-sm text-secondary">
+          <%= t(".pediatrician_prefix") %> <%= link_to @baby.service_provider.name, edit_service_provider_path(@baby.service_provider), class: "hover:underline" %>
+        </p>
+      <% end %>
     </div>
     <div class="flex gap-2 text-sm">
       <%= link_to t(".edit"), edit_baby_profile_path(@baby), class: "underline" %>
       <%= button_to t(".delete"), baby_profile_path(@baby), method: :delete,
-            form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-red-600 underline" %>
+            form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-destructive underline" %>
     </div>
   </header>
 
-  <p class="mb-6 text-xs text-gray-400"><%= t(".disclaimer") %></p>
+  <p class="mb-6 text-xs text-subdued"><%= t(".disclaimer") %></p>
 
   <%= render "shared/flash" %>
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("milk", css_class: "size-5") %> <%= t(".feedings_title") %></h2>
-    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
-      <% @baby.feeding_sessions.recent.limit(20).each do |session| %>
-        <%= render(Ui::ItemComponent.new) do |item| %>
-          <% item.with_title do %>
-            <%= feeding_kind_label(session.kind) %>
-            <% if session.started_at %><span class="text-gray-400">· <%= session.started_at.strftime("%d/%m %H:%M") %></span><% end %>
-            <% if session.duration_minutes %><span class="text-gray-400">· <%= t(".duration_minutes", count: session.duration_minutes) %></span><% end %>
-          <% end %>
-          <% item.with_trailing do %>
-            <%= button_to baby_profile_feeding_session_path(@baby, session), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+    <% if @baby.feeding_sessions.recent.limit(20).any? %>
+      <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
+        <% @baby.feeding_sessions.recent.limit(20).each do |session| %>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title do %>
+              <%= feeding_kind_label(session.kind) %>
+              <% if session.started_at %><span class="text-subdued">· <%= session.started_at.strftime("%d/%m %H:%M") %></span><% end %>
+              <% if session.ended_at.nil? %>
+                <%= render(Ui::BadgeComponent.new(variant: :warning)) { t(".in_progress") } %>
+              <% elsif session.duration_minutes %>
+                <span class="text-subdued">· <%= t(".duration_minutes", count: session.duration_minutes) %></span>
+              <% end %>
+            <% end %>
+            <% item.with_trailing do %>
+              <div class="flex items-center gap-1">
+                <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_baby_profile_feeding_session_path(@baby, session),
+                      html_options: { aria: { label: t(".edit_feeding_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                <%= render(Ui::ButtonToComponent.new(baby_profile_feeding_session_path(@baby, session), method: :delete, variant: :ghost, size: :icon,
+                      html_options: { aria: { label: t(".delete_feeding_aria") },
+                                      form: { data: { turbo_confirm: t(".delete_feeding_confirm") } } })) { lucide_icon("x", css_class: "size-4") } %>
+              </div>
+            <% end %>
           <% end %>
         <% end %>
+      </div>
+    <% else %>
+      <div class="mb-3"><%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_feedings") } } %></div>
+    <% end %>
+
+    <% if (ongoing = @baby.feeding_sessions.in_progress.first) %>
+      <div class="flex flex-wrap items-center gap-2">
+        <p class="text-sm text-secondary"><%= t(".feeding_in_progress", kind: feeding_kind_label(ongoing.kind), time: ongoing.started_at.strftime("%H:%M")) %></p>
+        <%= render(Ui::ButtonToComponent.new(stop_baby_profile_feeding_session_path(@baby, ongoing), method: :patch, variant: :default, size: :sm)) { t(".stop") } %>
+      </div>
+    <% else %>
+      <%= form_with model: @feeding_session, url: baby_profile_feeding_sessions_path(@baby), class: "flex flex-wrap items-end gap-2" do |form| %>
+        <%= render(Ui::FieldComponent.new(id: "feeding_session_kind")) do |field| %>
+          <% field.with_label { t(".kind_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::NativeSelectComponent.new(name: "feeding_session[kind]", options: feeding_kind_options, selected: @feeding_session.kind,
+                  html_options: { id: "feeding_session_kind" }) %>
+          <% end %>
+        <% end %>
+        <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".start") } %>
       <% end %>
-    </div>
-    <%= form_with model: @feeding_session, url: baby_profile_feeding_sessions_path(@baby), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= render Ui::NativeSelectComponent.new(name: "feeding_session[kind]", options: feeding_kind_options, selected: @feeding_session.kind,
-            html_options: { id: "feeding_session_kind" }) %>
-      <%= render Ui::InputComponent.new(type: "datetime-local", name: "feeding_session[started_at]",
-            value: @feeding_session.started_at&.strftime("%Y-%m-%dT%H:%M"), html_options: { id: "feeding_session_started_at" }) %>
-      <%= render Ui::InputComponent.new(type: "datetime-local", name: "feeding_session[ended_at]",
-            value: @feeding_session.ended_at&.strftime("%Y-%m-%dT%H:%M"), html_options: { id: "feeding_session_ended_at" }) %>
-      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("carrot", css_class: "size-5") %> <%= t(".food_introductions_title") %></h2>
-    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
-      <% @baby.food_introductions.recent.each do |introduction| %>
-        <%= render(Ui::ItemComponent.new) do |item| %>
-          <% item.with_title do %>
-            <%= introduction.food %>
-            <% if introduction.introduced_on %><span class="text-gray-400">· <%= introduction.introduced_on.strftime("%d/%m/%Y") %></span><% end %>
-            <% if introduction.acceptance.present? %><span class="text-gray-400">· <%= introduction.acceptance %></span><% end %>
-          <% end %>
-          <% item.with_trailing do %>
-            <%= button_to baby_profile_food_introduction_path(@baby, introduction), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+    <% if @baby.food_introductions.recent.limit(20).any? %>
+      <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
+        <% @baby.food_introductions.recent.limit(20).each do |introduction| %>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title do %>
+              <%= introduction.food %>
+              <% if introduction.introduced_on %><span class="text-subdued">· <%= introduction.introduced_on.strftime("%d/%m/%Y") %></span><% end %>
+              <% if introduction.acceptance.present? %><span class="text-subdued">· <%= introduction.acceptance %></span><% end %>
+            <% end %>
+            <% item.with_trailing do %>
+              <div class="flex items-center gap-1">
+                <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_baby_profile_food_introduction_path(@baby, introduction),
+                      html_options: { aria: { label: t(".edit_food_aria", food: introduction.food) } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                <%= render(Ui::ButtonToComponent.new(baby_profile_food_introduction_path(@baby, introduction), method: :delete, variant: :ghost, size: :icon,
+                      html_options: { aria: { label: t(".delete_food_aria", food: introduction.food) },
+                                      form: { data: { turbo_confirm: t(".delete_food_confirm", food: introduction.food) } } })) { lucide_icon("x", css_class: "size-4") } %>
+              </div>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <div class="mb-3"><%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_food_introductions") } } %></div>
+    <% end %>
     <%= form_with model: @food_introduction, url: baby_profile_food_introductions_path(@baby), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(type: "text", name: "food_introduction[food]", value: @food_introduction.food, placeholder: t(".food_placeholder"),
-            html_options: { id: "food_introduction_food", required: true, class: "flex-1" }) %>
-      <%= render Ui::InputComponent.new(type: "date", name: "food_introduction[introduced_on]", value: @food_introduction.introduced_on,
-            html_options: { id: "food_introduction_introduced_on" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: "food_introduction[acceptance]",
-            options: [ [ t(".acceptance_blank"), "" ] ] + t(".acceptance_options").map { |v| [ v, v ] },
-            selected: @food_introduction.acceptance, html_options: { id: "food_introduction_acceptance" }) %>
+      <%= render(Ui::FieldComponent.new(id: "food_introduction_food")) do |field| %>
+        <% field.with_label { t(".food_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "text", name: "food_introduction[food]", value: @food_introduction.food, placeholder: t(".food_placeholder"),
+                html_options: { id: "food_introduction_food", required: true, class: "flex-1" }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::FieldComponent.new(id: "food_introduction_introduced_on")) do |field| %>
+        <% field.with_label { t(".introduced_on_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "date", name: "food_introduction[introduced_on]", value: @food_introduction.introduced_on,
+                html_options: { id: "food_introduction_introduced_on" }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::FieldComponent.new(id: "food_introduction_acceptance")) do |field| %>
+        <% field.with_label { t(".acceptance_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "food_introduction[acceptance]",
+                options: [ [ t(".acceptance_blank"), "" ] ] + t(".acceptance_options").map { |v| [ v, v ] },
+                selected: @food_introduction.acceptance, html_options: { id: "food_introduction_acceptance" }) %>
+        <% end %>
+      <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("triangle-alert", css_class: "size-5") %> <%= t(".allergen_tests_title") %></h2>
-    <div class="mb-3 divide-y divide-gray-100 rounded-lg border border-gray-200">
-      <% @baby.allergen_tests.recent.each do |test| %>
-        <%= render(Ui::ItemComponent.new) do |item| %>
-          <% item.with_title do %>
-            <%= test.allergen %>
-            <% if test.tested_on %><span class="text-gray-400">· <%= test.tested_on.strftime("%d/%m/%Y") %></span><% end %>
-            <% if test.severity.present? %><span class="text-gray-400">· <%= test.severity %></span><% end %>
-          <% end %>
-          <% item.with_trailing do %>
-            <%= button_to baby_profile_allergen_test_path(@baby, test), method: :delete, class: "cursor-pointer text-gray-400 hover:text-red-600" do %><%= lucide_icon("x", css_class: "size-4") %><% end %>
+    <% if @baby.allergen_tests.recent.limit(20).any? %>
+      <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
+        <% @baby.allergen_tests.recent.limit(20).each do |test| %>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title do %>
+              <%= test.allergen %>
+              <% if test.tested_on %><span class="text-subdued">· <%= test.tested_on.strftime("%d/%m/%Y") %></span><% end %>
+              <% if test.severity.present? %><span class="text-subdued">· <%= test.severity %></span><% end %>
+            <% end %>
+            <% item.with_trailing do %>
+              <div class="flex items-center gap-1">
+                <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_baby_profile_allergen_test_path(@baby, test),
+                      html_options: { aria: { label: t(".edit_allergen_aria", allergen: test.allergen) } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                <%= render(Ui::ButtonToComponent.new(baby_profile_allergen_test_path(@baby, test), method: :delete, variant: :ghost, size: :icon,
+                      html_options: { aria: { label: t(".delete_allergen_aria", allergen: test.allergen) },
+                                      form: { data: { turbo_confirm: t(".delete_allergen_confirm", allergen: test.allergen) } } })) { lucide_icon("x", css_class: "size-4") } %>
+              </div>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <div class="mb-3"><%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_allergen_tests") } } %></div>
+    <% end %>
     <%= form_with model: @allergen_test, url: baby_profile_allergen_tests_path(@baby), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(type: "text", name: "allergen_test[allergen]", value: @allergen_test.allergen, placeholder: t(".allergen_placeholder"),
-            html_options: { id: "allergen_test_allergen", required: true, class: "flex-1" }) %>
-      <%= render Ui::InputComponent.new(type: "date", name: "allergen_test[tested_on]", value: @allergen_test.tested_on,
-            html_options: { id: "allergen_test_tested_on" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: "allergen_test[severity]",
-            options: [ [ t(".severity_blank"), "" ] ] + t(".severity_options").map { |v| [ v, v ] },
-            selected: @allergen_test.severity, html_options: { id: "allergen_test_severity" }) %>
+      <%= render(Ui::FieldComponent.new(id: "allergen_test_allergen")) do |field| %>
+        <% field.with_label { t(".allergen_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "text", name: "allergen_test[allergen]", value: @allergen_test.allergen, placeholder: t(".allergen_placeholder"),
+                html_options: { id: "allergen_test_allergen", required: true, class: "flex-1" }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::FieldComponent.new(id: "allergen_test_tested_on")) do |field| %>
+        <% field.with_label { t(".tested_on_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "date", name: "allergen_test[tested_on]", value: @allergen_test.tested_on,
+                html_options: { id: "allergen_test_tested_on" }) %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::FieldComponent.new(id: "allergen_test_severity")) do |field| %>
+        <% field.with_label { t(".severity_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "allergen_test[severity]",
+                options: [ [ t(".severity_blank"), "" ] ] + t(".severity_options").map { |v| [ v, v ] },
+                selected: @allergen_test.severity, html_options: { id: "allergen_test_severity" }) %>
+        <% end %>
+      <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>

@@ -3,6 +3,7 @@ class ShoppingList < ApplicationRecord
 
   belongs_to :trip, optional: true
   has_many :items, -> { ordered }, class_name: "ShoppingListItem", dependent: :destroy
+  has_one :conversation, as: :subject, dependent: :nullify
 
   validates :name, presence: true
 
