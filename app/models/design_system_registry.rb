@@ -96,6 +96,9 @@ module DesignSystemRegistry
       description: "Bouton à deux états (actif/inactif), pour une action de mise en forme (gras, favori…)."),
     Entry.new(slug: "toggle-group", name: "Toggle Group", category: CATEGORIES[0], component_class: Ui::ToggleGroupComponent,
       description: "Ensemble de Toggle liés, sélection unique ou multiple (ex. alignement de texte)."),
+    Entry.new(slug: "theme-toggle", name: "Theme Toggle", category: CATEGORIES[0], component_class: Ui::ThemeToggleComponent,
+      description: "Bascule clair / sombre / système en un clic, mémorisée d'une visite à l'autre. Utilisé dans la barre latérale de l'app.",
+      related: %w[toggle]),
     Entry.new(slug: "slider", name: "Slider", category: CATEGORIES[0], component_class: Ui::SliderComponent,
       description: "Curseur pour choisir une valeur numérique dans une plage."),
     Entry.new(slug: "input-otp", name: "Input OTP", category: CATEGORIES[0], component_class: Ui::InputOtpComponent,
@@ -103,15 +106,17 @@ module DesignSystemRegistry
     Entry.new(slug: "label", name: "Label", category: CATEGORIES[0], component_class: Ui::LabelComponent,
       description: "Libellé accessible associé à un contrôle via for_id."),
     Entry.new(slug: "date-picker", name: "Date Picker", category: CATEGORIES[0], component_class: defined?(Ui::DatePickerComponent) ? Ui::DatePickerComponent : nil,
-      description: "Compose Popover et Calendar pour sélectionner une date depuis un champ déclencheur."),
+      description: "Compose Popover et Calendar pour sélectionner une date depuis un champ déclencheur. " \
+        "Composant de catalogue (parité shadcn) : aucun formulaire de l'app ne l'utilise, qui préfèrent tous l'<input type=\"date\"> natif via Input."),
 
     # ── Overlays & menus ──────────────────────────────────────────────
     Entry.new(slug: "dialog", name: "Dialog", category: CATEGORIES[1], component_class: Ui::DialogComponent,
       description: "Fenêtre modale générique pour une action ponctuelle.", usage: OVERLAY_USAGE,
       related: %w[alert-dialog sheet drawer]),
     Entry.new(slug: "alert-dialog", name: "Alert Dialog", category: CATEGORIES[1], component_class: Ui::AlertDialogComponent,
-      description: "Modale de confirmation réservée aux actions destructives ou irréversibles.", usage: OVERLAY_USAGE,
-      related: %w[dialog sheet drawer]),
+      description: "Modale de confirmation réservée aux actions destructives ou irréversibles. " \
+        "Composant de catalogue (parité shadcn) : les suppressions de l'app utilisent toutes le data-turbo-confirm natif de Turbo, plus léger pour une simple confirmation textuelle.",
+      usage: OVERLAY_USAGE, related: %w[dialog sheet drawer]),
     Entry.new(slug: "sheet", name: "Sheet", category: CATEGORIES[1], component_class: Ui::SheetComponent,
       description: "Panneau qui glisse depuis un bord de l'écran, garde le contexte de la page visible.", usage: OVERLAY_USAGE,
       related: %w[dialog alert-dialog drawer]),
@@ -141,6 +146,10 @@ module DesignSystemRegistry
     Entry.new(slug: "command", name: "Command", category: CATEGORIES[1], component_class: Ui::CommandComponent,
       description: "Palette de commandes cherchable au clavier (⌘K).", usage: MENU_USAGE,
       related: %w[dropdown-menu menubar]),
+    Entry.new(slug: "code-block", name: "Code Block", category: CATEGORIES[1], component_class: Ui::CodeBlockComponent,
+      description: "Encadre un aperçu avec un onglet Code affichant l'extrait ERB exact utilisé pour le générer, plus un bouton de copie — " \
+        "c'est le moteur d'affichage de ce catalogue lui-même : chaque page de composant en imbrique un.",
+      related: %w[tabs]),
     Entry.new(slug: "sonner", name: "Sonner", category: CATEGORIES[1], component_class: Ui::SonnerComponent,
       description: "File de notifications toast, déclenchée via l'évènement toast:show."),
 
@@ -172,7 +181,9 @@ module DesignSystemRegistry
       related: %w[data-table]),
     Entry.new(slug: "data-table", name: "Data Table", category: CATEGORIES[3],
       component_class: defined?(Ui::DataTableComponent) ? Ui::DataTableComponent : nil,
-      description: "Table interactive : tri au clic sur l'en-tête, filtre texte, pagination.", related: %w[table]),
+      description: "Table interactive : tri au clic sur l'en-tête, filtre texte, pagination. " \
+        "Composant de catalogue (parité shadcn) : aucune liste de l'app n'a encore ce besoin (tri/filtre/pagination combinés) — les listes longues existantes utilisent Item + Pagination.",
+      related: %w[table]),
     Entry.new(slug: "chart", name: "Chart", category: CATEGORIES[3], component_class: Ui::ChartComponent,
       description: "Graphique en barres minimal pour une série de valeurs.", related: %w[marker]),
     Entry.new(slug: "calendar", name: "Calendar", category: CATEGORIES[3], component_class: Ui::CalendarComponent,

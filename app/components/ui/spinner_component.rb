@@ -7,7 +7,7 @@ module Ui
     end
 
     def call
-      content_tag :svg, viewBox: "0 0 24 24", fill: "none", class: cn("animate-spin text-secondary", SIZES.fetch(@size)), role: "status", "aria-label": "Loading" do
+      content_tag :svg, viewBox: "0 0 24 24", fill: "none", class: cn("animate-spin text-secondary", SIZES.fetch(@size)), role: "status", "aria-label": I18n.t("ui.spinner.loading_aria") do
         tag.circle(cx: "12", cy: "12", r: "10", stroke: "currentColor", "stroke-width": "3", "stroke-opacity": "0.25", fill: "none") +
         tag.path(d: "M22 12a10 10 0 0 0-10-10", stroke: "currentColor", "stroke-width": "3", "stroke-linecap": "round", fill: "none")
       end

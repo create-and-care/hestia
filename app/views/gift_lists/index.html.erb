@@ -9,13 +9,13 @@
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("package", css_class: "size-5") %> <%= t(".receive") %></h2>
-    <div class="mb-2 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="mb-2 divide-y divide-primary rounded-lg border border-primary">
       <% @receive_lists.each do |list| %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_title { link_to list.name, gift_list_path(list), class: "hover:underline" } %>
           <% if list.shared? %>
             <% item.with_trailing do %>
-              <span class="inline-flex items-center gap-1 text-xs text-gray-400"><%= lucide_icon("link", css_class: "size-3.5") %> <%= t(".shared_badge") %></span>
+              <span class="inline-flex items-center gap-1 text-xs text-subdued"><%= lucide_icon("link", css_class: "size-3.5") %> <%= t(".shared_badge") %></span>
             <% end %>
           <% end %>
         <% end %>
@@ -28,13 +28,13 @@
 
   <section class="mb-8">
     <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("gift", css_class: "size-5") %> <%= t(".give") %></h2>
-    <div class="mb-2 divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="mb-2 divide-y divide-primary rounded-lg border border-primary">
       <% @give_lists.each do |list| %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_title { link_to list.name, gift_list_path(list), class: "hover:underline" } %>
           <% if list.contact %>
             <% item.with_trailing do %>
-              <span class="text-xs text-gray-400"><%= t(".for_contact") %> <%= list.contact.name %></span>
+              <span class="text-xs text-subdued"><%= t(".for_contact") %> <%= list.contact.name %></span>
             <% end %>
           <% end %>
         <% end %>

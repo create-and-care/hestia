@@ -25,7 +25,7 @@
 
   <%= render "shared/flash" %>
 
-  <div id="recipe_catalog_entries" class="<%= @view_mode == "list" ? "divide-y divide-gray-100 rounded-lg border border-gray-200" : "grid gap-3 sm:grid-cols-2" %>">
+  <div id="recipe_catalog_entries" class="<%= @view_mode == "list" ? "divide-y divide-primary rounded-lg border border-primary" : "grid gap-3 sm:grid-cols-2" %>">
     <%= render partial: "entry", collection: @entries, locals: { view_mode: @view_mode } %>
   </div>
   <% if @entries.empty? %>

@@ -1,0 +1,17 @@
+fr:
+  ui:
+    dialog:
+      close_aria: Fermer
+    breadcrumb:
+      nav_aria: "Fil d'Ariane"
+    pagination:
+      nav_aria: Pagination
+      previous: Précédent
+      next: Suivant
+    spinner:
+      loading_aria: Chargement
+    select:
+      placeholder: Sélectionner une option
+    alert_dialog:
+      confirm_label: Continuer
+      cancel_label: Annuler

@@ -19,7 +19,7 @@
       <% empty.with_description { t(".none") } %>
     <% end %>
   <% else %>
-    <div class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+    <div class="divide-y divide-primary rounded-lg border border-primary">
       <% @notifications.each do |notification| %>
         <%= render "notifications/notification", notification: notification %>
       <% end %>

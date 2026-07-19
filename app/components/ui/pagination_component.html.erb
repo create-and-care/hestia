@@ -1,13 +1,13 @@
-<nav aria-label="Pagination" class="flex items-center gap-1">
+<nav aria-label="<%= t("ui.pagination.nav_aria") %>" class="flex items-center gap-1">
   <% if @current <= 1 %>
     <span aria-disabled="true"
       class="inline-flex h-9 items-center rounded-md px-3 text-sm text-primary pointer-events-none opacity-50">
-      &larr; <span class="sr-only">Previous</span>
+      &larr; <span class="sr-only"><%= t("ui.pagination.previous") %></span>
     </span>
   <% else %>
     <%= link_to page_href(@current - 1), rel: "prev",
       class: "inline-flex h-9 items-center rounded-md px-3 text-sm text-primary hover:bg-surface-hover" do %>
-      &larr; <span class="sr-only">Previous</span>
+      &larr; <span class="sr-only"><%= t("ui.pagination.previous") %></span>
     <% end %>
   <% end %>
 
@@ -20,12 +20,12 @@
   <% if @current >= @total %>
     <span aria-disabled="true"
       class="inline-flex h-9 items-center rounded-md px-3 text-sm text-primary pointer-events-none opacity-50">
-      <span class="sr-only">Next</span> &rarr;
+      <span class="sr-only"><%= t("ui.pagination.next") %></span> &rarr;
     </span>
   <% else %>
     <%= link_to page_href(@current + 1), rel: "next",
       class: "inline-flex h-9 items-center rounded-md px-3 text-sm text-primary hover:bg-surface-hover" do %>
-      <span class="sr-only">Next</span> &rarr;
+      <span class="sr-only"><%= t("ui.pagination.next") %></span> &rarr;
     <% end %>
   <% end %>
 </nav>

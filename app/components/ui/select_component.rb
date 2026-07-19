@@ -1,7 +1,7 @@
 module Ui
   class SelectComponent < ApplicationComponent
     # options: [["Label", "value"], ...]
-    def initialize(name:, options: [], selected: nil, placeholder: "Select an option", data: {})
+    def initialize(name:, options: [], selected: nil, placeholder: I18n.t("ui.select.placeholder"), data: {})
       @name = name
       @options = options
       @selected = selected
