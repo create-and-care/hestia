@@ -1,0 +1,14 @@
+<%= tag.li id: dom_id(note) do %>
+  <%= render(Ui::ItemComponent.new) do |item| %>
+    <% item.with_title { note.title } %>
+    <% item.with_description { truncate(note.content, length: 60) } %>
+    <% item.with_trailing do %>
+      <%= link_to edit_trip_note_path(trip, note), "aria-label": t("trips.show.edit_note_aria", title: note.title), class: "text-subdued hover:text-primary" do %>
+        <%= lucide_icon("pencil", css_class: "size-3.5") %>
+      <% end %>
+      <%= form_with url: trip_note_path(trip, note), method: :delete, data: { turbo_confirm: t("trips.show.delete_note_confirm") } do %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

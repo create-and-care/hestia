@@ -8,21 +8,99 @@ fr:
       create: "Créer"
       hint: "Un voyage isole ses courses, notes, tâches et adresses des listes générales du foyer."
     show:
+      edit_trip: "Modifier"
       delete_trip: "Supprimer le voyage"
       delete_trip_confirm: "Supprimer ce voyage et toutes ses données ? Action irréversible."
       delete_shopping_list_confirm: "Supprimer cette liste de courses ?"
-      shopping_lists: "Courses du voyage"
+      tabs:
+        shopping_lists: "Courses"
+        notes: "Notes"
+        tasks: "Préparatifs"
+        addresses: "Carnet d'adresses"
+        menu: "Menu"
+        settings: "Réglages"
+      shopping_lists_empty: "Aucune liste de courses pour l'instant."
       shopping_list_placeholder: "Liste (ex. « chalet »)"
       add: "Ajouter"
-      notes: "Notes"
+      notes_empty: "Aucune note pour l'instant."
       note_title_placeholder: "Titre"
       note_content_placeholder: "Contenu"
-      tasks: "Préparatifs"
+      edit_note_aria: "Modifier la note %{title}"
+      delete_note_confirm: "Supprimer cette note ?"
+      tasks_empty: "Aucun préparatif pour l'instant."
       task_placeholder: "Préparatif"
-      addresses: "Carnet d'adresses"
+      edit_task_aria: "Modifier le préparatif %{title}"
+      reopen_task_aria: "Marquer à faire"
+      complete_task_aria: "Marquer comme fait"
+      addresses_empty: "Aucune adresse pour l'instant."
       address_name_placeholder: "Lieu"
       address_full_placeholder: "Adresse"
       address_phone_placeholder: "Téléphone"
+      edit_address_aria: "Modifier l'adresse %{name}"
+      menu_empty: "Aucun repas planifié pour ce voyage."
+      free_name_placeholder: "Repas (ex. « soirée pizza »)"
+      sections_hint: "Choisissez les sections affichées pour ce voyage."
+      sections:
+        shopping_lists: "Courses"
+        notes: "Notes"
+        tasks: "Préparatifs"
+        addresses: "Carnet d'adresses"
+        menu: "Menu"
+      sections_submit: "Enregistrer"
       back_to_trips: "← Voyages"
     destroy:
       deleted: "Voyage supprimé (et toutes ses données)."
+    edit:
+      title: "Modifier le voyage"
+      name_label: "Nom"
+      starts_on_label: "Date de début"
+      ends_on_label: "Date de fin"
+      submit: "Enregistrer"
+      back_to_trip: "← Retour au voyage"
+    update:
+      updated: "Voyage mis à jour."
+    update_sections:
+      updated: "Sections mises à jour."
+      failed: "Impossible de mettre à jour les sections."
+    notes:
+      create:
+        alert: "Impossible de créer la note."
+      update:
+        updated: "Note mise à jour."
+      edit:
+        title: "Modifier la note"
+        title_label: "Titre"
+        content_label: "Contenu"
+        submit: "Enregistrer"
+        back_to_trip: "← Retour au voyage"
+    tasks:
+      create:
+        alert: "Impossible de créer le préparatif."
+      update:
+        updated: "Préparatif mis à jour."
+      edit:
+        title: "Modifier le préparatif"
+        title_label: "Titre"
+        emoji_label: "Emoji"
+        due_on_label: "Date limite"
+        submit: "Enregistrer"
+        back_to_trip: "← Retour au voyage"
+    addresses:
+      create:
+        alert: "Impossible de créer l'adresse."
+      update:
+        updated: "Adresse mise à jour."
+      edit:
+        title: "Modifier l'adresse"
+        name_label: "Lieu"
+        type_label: "Type"
+        full_address_label: "Adresse"
+        phone_label: "Téléphone"
+        submit: "Enregistrer"
+        back_to_trip: "← Retour au voyage"
+    shopping_lists:
+      create:
+        alert: "Impossible de créer la liste de courses."
+    meal_plan_entries:
+      create:
+        alert: "Impossible de créer le repas."

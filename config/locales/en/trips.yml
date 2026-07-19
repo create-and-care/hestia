@@ -8,21 +8,99 @@ en:
       create: "Create"
       hint: "A trip isolates its groceries, notes, tasks, and addresses from the household's general lists."
     show:
+      edit_trip: "Edit"
       delete_trip: "Delete the trip"
       delete_trip_confirm: "Delete this trip and all its data? This action cannot be undone."
       delete_shopping_list_confirm: "Delete this shopping list?"
-      shopping_lists: "Trip groceries"
+      tabs:
+        shopping_lists: "Groceries"
+        notes: "Notes"
+        tasks: "To-do"
+        addresses: "Address book"
+        menu: "Menu"
+        settings: "Settings"
+      shopping_lists_empty: "No shopping lists yet."
       shopping_list_placeholder: "List (e.g. « cabin »)"
       add: "Add"
-      notes: "Notes"
+      notes_empty: "No notes yet."
       note_title_placeholder: "Title"
       note_content_placeholder: "Content"
-      tasks: "To-do"
+      edit_note_aria: "Edit note %{title}"
+      delete_note_confirm: "Delete this note?"
+      tasks_empty: "No to-do items yet."
       task_placeholder: "To-do item"
-      addresses: "Address book"
+      edit_task_aria: "Edit to-do %{title}"
+      reopen_task_aria: "Mark as to-do"
+      complete_task_aria: "Mark as done"
+      addresses_empty: "No addresses yet."
       address_name_placeholder: "Place"
       address_full_placeholder: "Address"
       address_phone_placeholder: "Phone"
+      edit_address_aria: "Edit address %{name}"
+      menu_empty: "No meals planned for this trip yet."
+      free_name_placeholder: "Meal (e.g. « pizza night »)"
+      sections_hint: "Choose which sections appear for this trip."
+      sections:
+        shopping_lists: "Groceries"
+        notes: "Notes"
+        tasks: "To-do"
+        addresses: "Address book"
+        menu: "Menu"
+      sections_submit: "Save"
       back_to_trips: "← Trips"
     destroy:
       deleted: "Trip deleted (and all its data)."
+    edit:
+      title: "Edit trip"
+      name_label: "Name"
+      starts_on_label: "Start date"
+      ends_on_label: "End date"
+      submit: "Save"
+      back_to_trip: "← Back to the trip"
+    update:
+      updated: "Trip updated."
+    update_sections:
+      updated: "Sections updated."
+      failed: "Could not update the sections."
+    notes:
+      create:
+        alert: "Could not create the note."
+      update:
+        updated: "Note updated."
+      edit:
+        title: "Edit note"
+        title_label: "Title"
+        content_label: "Content"
+        submit: "Save"
+        back_to_trip: "← Back to the trip"
+    tasks:
+      create:
+        alert: "Could not create the to-do item."
+      update:
+        updated: "To-do item updated."
+      edit:
+        title: "Edit to-do item"
+        title_label: "Title"
+        emoji_label: "Emoji"
+        due_on_label: "Due date"
+        submit: "Save"
+        back_to_trip: "← Back to the trip"
+    addresses:
+      create:
+        alert: "Could not create the address."
+      update:
+        updated: "Address updated."
+      edit:
+        title: "Edit address"
+        name_label: "Place"
+        type_label: "Type"
+        full_address_label: "Address"
+        phone_label: "Phone"
+        submit: "Save"
+        back_to_trip: "← Back to the trip"
+    shopping_lists:
+      create:
+        alert: "Could not create the shopping list."
+    meal_plan_entries:
+      create:
+        alert: "Could not create the meal."

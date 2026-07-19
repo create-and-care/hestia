@@ -1,0 +1,11 @@
+<%= tag.li id: dom_id(meal_plan_entry) do %>
+  <%= render(Ui::ItemComponent.new) do |item| %>
+    <% item.with_title { meal_plan_entry.display_name } %>
+    <% item.with_description { "#{meal_plan_entry.on_date.strftime('%d/%m/%y')} — #{meal_type_label(meal_plan_entry.meal_type)}" } %>
+    <% item.with_trailing do %>
+      <%= form_with url: trip_meal_plan_entry_path(trip, meal_plan_entry), method: :delete do %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -4,6 +4,7 @@ class MenuController < ApplicationController
     @week_start = parse_monday
     @days = (@week_start..(@week_start + 6.days)).to_a
     @entries = Current.household.meal_plan_entries
+      .general
       .where(on_date: @week_start..(@week_start + 6.days))
       .includes(:recipe)
       .ordered

@@ -26,4 +26,10 @@ class MealPlanEntryTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).meal_plan_entries, meal_plan_entries(:beta_lunch)
   end
+
+  test "general scope excludes trip-scoped entries" do
+    trip_entry = households(:alpha).meal_plan_entries.create!(on_date: Date.current, meal_type: "dinner", free_name: "Pique-nique", trip: trips(:alpha_trip))
+    assert_not_includes MealPlanEntry.general, trip_entry
+    assert_includes MealPlanEntry.general, meal_plan_entries(:alpha_dinner)
+  end
 end

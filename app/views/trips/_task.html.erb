@@ -1,0 +1,23 @@
+<%= tag.li id: dom_id(task) do %>
+  <%= render(Ui::ItemComponent.new) do |item| %>
+    <% item.with_leading do %>
+      <%= button_to toggle_trip_task_path(trip, task), method: :patch, class: "cursor-pointer",
+            aria: { label: task.done ? t("trips.show.reopen_task_aria") : t("trips.show.complete_task_aria") } do %>
+        <span class="flex size-5 items-center justify-center rounded border <%= task.done ? "border-button-primary bg-button-primary text-inverse" : "border-primary" %>">
+          <%= lucide_icon("check", css_class: "size-3.5") if task.done %>
+        </span>
+      <% end %>
+    <% end %>
+    <% item.with_title do %>
+      <span class="<%= "text-subdued line-through" if task.done %>"><%= "#{task.emoji} " if task.emoji.present? %><%= task.title %></span>
+    <% end %>
+    <% item.with_trailing do %>
+      <%= link_to edit_trip_task_path(trip, task), "aria-label": t("trips.show.edit_task_aria", title: task.title), class: "text-subdued hover:text-primary" do %>
+        <%= lucide_icon("pencil", css_class: "size-3.5") %>
+      <% end %>
+      <%= form_with url: trip_task_path(trip, task), method: :delete do %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

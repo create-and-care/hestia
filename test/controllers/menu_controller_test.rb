@@ -66,4 +66,15 @@ class MenuControllerTest < ActionDispatch::IntegrationTest
     delete meal_plan_entry_path(meal_plan_entries(:beta_lunch))
     assert_response :not_found
   end
+
+  test "does not show trip-scoped meals in the general weekly view" do
+    trip = trips(:alpha_trip)
+    monday = Date.current.beginning_of_week
+    households(:alpha).meal_plan_entries.create!(on_date: monday, meal_type: "lunch", free_name: "Pique-nique voyage", trip: trip)
+
+    get menu_path(week: monday)
+
+    assert_response :success
+    assert_not_includes @response.body, "Pique-nique voyage"
+  end
 end

@@ -4,171 +4,195 @@
   <header class="mb-6 flex items-start justify-between">
     <div>
       <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("luggage", css_class: "size-6") %> <%= @trip.name %></h1>
-      <% if @trip.starts_on %><p class="text-sm text-gray-500"><%= @trip.starts_on.strftime("%d/%m/%Y") %><%= " → #{@trip.ends_on.strftime('%d/%m/%Y')}" if @trip.ends_on %></p><% end %>
+      <% if @trip.starts_on %><p class="text-sm text-secondary"><%= @trip.starts_on.strftime("%d/%m/%Y") %><%= " → #{@trip.ends_on.strftime('%d/%m/%Y')}" if @trip.ends_on %></p><% end %>
     </div>
-    <%= button_to t(".delete_trip"), trip_path(@trip), method: :delete,
-          form: { data: { turbo_confirm: t(".delete_trip_confirm") } },
-          class: "cursor-pointer text-sm text-red-600 underline" %>
+    <div class="flex items-center gap-2">
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_trip_path(@trip))) { t(".edit_trip") } %>
+      <%= form_with url: trip_path(@trip), method: :delete, data: { turbo_confirm: t(".delete_trip_confirm") } do %>
+        <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm, type: "submit")) { t(".delete_trip") } %>
+      <% end %>
+    </div>
   </header>
 
   <%= render "shared/flash" %>
 
-  <section class="mb-6">
-    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("shopping-cart", css_class: "size-5") %> <%= t(".shopping_lists") %></h2>
-    <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
-      <ul class="divide-y divide-gray-100 text-sm">
-        <% @trip.shopping_lists.order(:name).each do |list| %>
-          <li>
-            <%= render(Ui::ItemComponent.new) do |item| %>
-              <% item.with_title do %>
-                <%= link_to shopping_list_path(list), class: "inline-flex items-center gap-1.5 hover:underline" do %><%= list.icon.presence || lucide_icon("shopping-cart", css_class: "size-4") %> <%= list.name %><% end %>
-              <% end %>
-              <% item.with_trailing do %>
-                <%= form_with url: trip_shopping_list_path(@trip, list), method: :delete,
-                      data: { turbo_confirm: t(".delete_shopping_list_confirm") } do %>
-                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
-                <% end %>
-              <% end %>
+  <%= render(Ui::TabsComponent.new(default: @default_section)) do |tabs| %>
+    <% if @trip.section_enabled?("shopping_lists") %>
+      <% tabs.with_tab(label: t(".tabs.shopping_lists"), value: "shopping_lists") do %>
+        <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
+          <ul id="<%= dom_id(@trip, :shopping_lists) %>" class="divide-y divide-gray-100 text-sm">
+            <%= render partial: "trips/shopping_list", collection: @trip.shopping_lists.order(:name), as: :list, locals: { trip: @trip } %>
+          </ul>
+          <% if @trip.shopping_lists.empty? %>
+            <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".shopping_lists_empty") } } %>
+          <% end %>
+        <% end %>
+        <%= form_with model: @shopping_list, url: trip_shopping_lists_path(@trip), class: "flex gap-2" do |form| %>
+          <div class="flex-1">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".shopping_list_placeholder"), html_options: { id: form.field_id(:name), required: true }) } %>
             <% end %>
-          </li>
+          </div>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
         <% end %>
-      </ul>
+      <% end %>
     <% end %>
-    <%= form_with model: @shopping_list, url: trip_shopping_lists_path(@trip), class: "flex gap-2" do |form| %>
-      <div class="flex-1">
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
-          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".shopping_list_placeholder"), html_options: { id: form.field_id(:name), required: true }) } %>
-        <% end %>
-      </div>
-      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
-    <% end %>
-  </section>
 
-  <section class="mb-6">
-    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("notebook-pen", css_class: "size-5") %> <%= t(".notes") %></h2>
-    <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
-      <ul class="divide-y divide-gray-100 text-sm">
-        <% @trip.notes.order(created_at: :desc).each do |note| %>
-          <li>
-            <%= render(Ui::ItemComponent.new) do |item| %>
-              <% item.with_title { note.title } %>
-              <% item.with_description { truncate(note.content, length: 60) } %>
-              <% item.with_trailing do %>
-                <%= form_with url: trip_note_path(@trip, note), method: :delete do %>
-                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
-                <% end %>
-              <% end %>
+    <% if @trip.section_enabled?("notes") %>
+      <% tabs.with_tab(label: t(".tabs.notes"), value: "notes") do %>
+        <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
+          <ul id="<%= dom_id(@trip, :notes) %>" class="divide-y divide-gray-100 text-sm">
+            <%= render partial: "trips/note", collection: @trip.notes.order(created_at: :desc), as: :note, locals: { trip: @trip } %>
+          </ul>
+          <% if @trip.notes.empty? %>
+            <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".notes_empty") } } %>
+          <% end %>
+        <% end %>
+        <%= form_with model: @note, url: trip_notes_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
+          <div class="w-32">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:title))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:title), value: form.object.title, placeholder: t(".note_title_placeholder"), html_options: { id: form.field_id(:title), required: true }) } %>
             <% end %>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
-    <%= form_with model: @note, url: trip_notes_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
-      <div class="w-32">
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:title))) do |field| %>
-          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:title), value: form.object.title, placeholder: t(".note_title_placeholder"), html_options: { id: form.field_id(:title), required: true }) } %>
-        <% end %>
-      </div>
-      <div class="flex-1">
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:content))) do |field| %>
-          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:content), value: form.object.content, placeholder: t(".note_content_placeholder"), html_options: { id: form.field_id(:content) }) } %>
-        <% end %>
-      </div>
-      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
-    <% end %>
-  </section>
-
-  <section class="mb-6">
-    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("square-check", css_class: "size-5") %> <%= t(".tasks") %></h2>
-    <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
-      <ul class="divide-y divide-gray-100 text-sm">
-        <% @trip.tasks.order(:due_on).each do |task| %>
-          <li>
-            <%= render(Ui::ItemComponent.new) do |item| %>
-              <% item.with_title do %><%= "#{task.emoji} " if task.emoji.present? %><%= task.title %><% end %>
-              <% item.with_trailing do %>
-                <%= form_with url: trip_task_path(@trip, task), method: :delete do %>
-                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
-                <% end %>
-              <% end %>
+          </div>
+          <div class="flex-1">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:content))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:content), value: form.object.content, placeholder: t(".note_content_placeholder"), html_options: { id: form.field_id(:content) }) } %>
             <% end %>
-          </li>
+          </div>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
         <% end %>
-      </ul>
+      <% end %>
     <% end %>
-    <%= form_with model: @task, url: trip_tasks_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
-      <div class="flex-1">
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:title))) do |field| %>
-          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:title), value: form.object.title, placeholder: t(".task_placeholder"), html_options: { id: form.field_id(:title), required: true }) } %>
-        <% end %>
-      </div>
-      <div>
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:due_on))) do |field| %>
-          <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:due_on), value: form.object.due_on, html_options: { id: form.field_id(:due_on) }) } %>
-        <% end %>
-      </div>
-      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
-    <% end %>
-  </section>
 
-  <section class="mb-6">
-    <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("map-pin", css_class: "size-5") %> <%= t(".addresses") %></h2>
-    <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
-      <ul class="divide-y divide-gray-100 text-sm">
-        <% @trip.addresses.order(:name).each do |address| %>
-          <li>
-            <%= render(Ui::ItemComponent.new) do |item| %>
-              <% item.with_title { address.name } %>
-              <% item.with_description { address.full_address } %>
-              <% item.with_trailing do %>
-                <%= form_with url: trip_address_path(@trip, address), method: :delete do %>
-                  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
-                <% end %>
-              <% end %>
+    <% if @trip.section_enabled?("tasks") %>
+      <% tabs.with_tab(label: t(".tabs.tasks"), value: "tasks") do %>
+        <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
+          <ul id="<%= dom_id(@trip, :tasks) %>" class="divide-y divide-gray-100 text-sm">
+            <%= render partial: "trips/task", collection: @trip.tasks.order(:due_on), as: :task, locals: { trip: @trip } %>
+          </ul>
+          <% if @trip.tasks.empty? %>
+            <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".tasks_empty") } } %>
+          <% end %>
+        <% end %>
+        <%= form_with model: @task, url: trip_tasks_path(@trip), class: "flex flex-wrap gap-2" do |form| %>
+          <div class="flex-1">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:title))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:title), value: form.object.title, placeholder: t(".task_placeholder"), html_options: { id: form.field_id(:title), required: true }) } %>
             <% end %>
-          </li>
+          </div>
+          <div>
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:due_on))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:due_on), value: form.object.due_on, html_options: { id: form.field_id(:due_on) }) } %>
+            <% end %>
+          </div>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
         <% end %>
-      </ul>
+      <% end %>
     <% end %>
-    <%= form_with model: @address, url: trip_addresses_path(@trip), class: "flex flex-wrap items-end gap-2",
-          data: { controller: "geocode-lookup", geocode_lookup_url_value: search_addresses_path,
-                  geocode_lookup_searching_text_value: t("addresses.form.searching"),
-                  geocode_lookup_no_results_text_value: t("addresses.form.no_results"),
-                  geocode_lookup_unavailable_text_value: t("addresses.form.unavailable") } do |form| %>
-      <div class="w-full">
-        <label for="trip_address_online_search" class="mb-1 block text-xs font-medium text-secondary"><%= t("addresses.form.online_search_label") %></label>
-        <div class="flex gap-1">
-          <%= render Ui::InputComponent.new(type: "text", placeholder: t("addresses.form.place_name_placeholder"),
-                html_options: { id: "trip_address_online_search", autocomplete: "off",
-                                data: { geocode_lookup_target: "query", action: "keydown.enter->geocode-lookup#onKeydown" } }) %>
-          <%= render(Ui::ButtonComponent.new(variant: :outline, type: "button",
-                html_options: { data: { action: "click->geocode-lookup#search" } })) { lucide_icon("search", css_class: "size-4") } %>
-        </div>
-        <div data-geocode-lookup-target="results" role="listbox" aria-live="polite" class="mt-1"></div>
-      </div>
-      <div class="w-32">
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
-          <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".address_name_placeholder"), html_options: { id: form.field_id(:name), required: true, data: { geocode_lookup_target: "name" } }) } %>
-        <% end %>
-      </div>
-      <div class="flex-1">
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:full_address))) do |field| %>
-          <% field.with_control { render Ui::TextareaComponent.new(name: form.field_name(:full_address), rows: 1, html_options: { id: form.field_id(:full_address), data: { geocode_lookup_target: "fullAddress" } }) { form.object.full_address } } %>
-        <% end %>
-      </div>
-      <div class="w-36">
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:address_type))) do |field| %>
-          <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:address_type), options: address_type_options, selected: form.object.address_type, html_options: { id: form.field_id(:address_type) }) } %>
-        <% end %>
-      </div>
-      <div class="w-32">
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:phone))) do |field| %>
-          <% field.with_control { render Ui::InputComponent.new(type: "tel", name: form.field_name(:phone), value: form.object.phone, placeholder: t(".address_phone_placeholder"), html_options: { id: form.field_id(:phone) }) } %>
-        <% end %>
-      </div>
-      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
-    <% end %>
-  </section>
 
-  <p class="text-sm"><%= link_to t(".back_to_trips"), trips_path, class: "underline" %></p>
+    <% if @trip.section_enabled?("addresses") %>
+      <% tabs.with_tab(label: t(".tabs.addresses"), value: "addresses") do %>
+        <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
+          <ul id="<%= dom_id(@trip, :addresses) %>" class="divide-y divide-gray-100 text-sm">
+            <%= render partial: "trips/address", collection: @trip.addresses.order(:name), as: :address, locals: { trip: @trip } %>
+          </ul>
+          <% if @trip.addresses.empty? %>
+            <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".addresses_empty") } } %>
+          <% end %>
+        <% end %>
+        <%= form_with model: @address, url: trip_addresses_path(@trip), class: "flex flex-wrap items-end gap-2",
+              data: { controller: "geocode-lookup", geocode_lookup_url_value: search_addresses_path,
+                      geocode_lookup_searching_text_value: t("addresses.form.searching"),
+                      geocode_lookup_no_results_text_value: t("addresses.form.no_results"),
+                      geocode_lookup_unavailable_text_value: t("addresses.form.unavailable") } do |form| %>
+          <div class="w-full">
+            <label for="trip_address_online_search" class="mb-1 block text-xs font-medium text-secondary"><%= t("addresses.form.online_search_label") %></label>
+            <div class="flex gap-1">
+              <%= render Ui::InputComponent.new(type: "text", placeholder: t("addresses.form.place_name_placeholder"),
+                    html_options: { id: "trip_address_online_search", autocomplete: "off",
+                                    data: { geocode_lookup_target: "query", action: "keydown.enter->geocode-lookup#onKeydown" } }) %>
+              <%= render(Ui::ButtonComponent.new(variant: :outline, type: "button",
+                    html_options: { data: { action: "click->geocode-lookup#search" } })) { lucide_icon("search", css_class: "size-4") } %>
+            </div>
+            <div data-geocode-lookup-target="results" role="listbox" aria-live="polite" class="mt-1"></div>
+          </div>
+          <div class="w-32">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, placeholder: t(".address_name_placeholder"), html_options: { id: form.field_id(:name), required: true, data: { geocode_lookup_target: "name" } }) } %>
+            <% end %>
+          </div>
+          <div class="flex-1">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:full_address))) do |field| %>
+              <% field.with_control { render Ui::TextareaComponent.new(name: form.field_name(:full_address), rows: 1, html_options: { id: form.field_id(:full_address), data: { geocode_lookup_target: "fullAddress" } }) { form.object.full_address } } %>
+            <% end %>
+          </div>
+          <div class="w-36">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:address_type))) do |field| %>
+              <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:address_type), options: address_type_options, selected: form.object.address_type, html_options: { id: form.field_id(:address_type) }) } %>
+            <% end %>
+          </div>
+          <div class="w-32">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:phone))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(type: "tel", name: form.field_name(:phone), value: form.object.phone, placeholder: t(".address_phone_placeholder"), html_options: { id: form.field_id(:phone) }) } %>
+            <% end %>
+          </div>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if @trip.section_enabled?("menu") %>
+      <% tabs.with_tab(label: t(".tabs.menu"), value: "menu") do %>
+        <%= render(Ui::CardComponent.new(class_name: "mb-2")) do %>
+          <ul id="<%= dom_id(@trip, :meal_plan_entries) %>" class="divide-y divide-gray-100 text-sm">
+            <%= render partial: "trips/meal_plan_entry", collection: @trip.meal_plan_entries.ordered, as: :meal_plan_entry, locals: { trip: @trip } %>
+          </ul>
+          <% if @trip.meal_plan_entries.empty? %>
+            <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".menu_empty") } } %>
+          <% end %>
+        <% end %>
+        <%= form_with model: @meal_plan_entry, url: trip_meal_plan_entries_path(@trip), class: "flex flex-wrap items-end gap-2" do |form| %>
+          <div>
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:on_date))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:on_date), value: form.object.on_date, html_options: { id: form.field_id(:on_date) }) } %>
+            <% end %>
+          </div>
+          <div>
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:meal_type))) do |field| %>
+              <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:meal_type), options: meal_type_options, selected: form.object.meal_type, html_options: { id: form.field_id(:meal_type) }) } %>
+            <% end %>
+          </div>
+          <div class="flex-1">
+            <%= render(Ui::FieldComponent.new(id: form.field_id(:free_name))) do |field| %>
+              <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:free_name), value: form.object.free_name, placeholder: t(".free_name_placeholder"), html_options: { id: form.field_id(:free_name), required: true }) } %>
+            <% end %>
+          </div>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% tabs.with_tab(label: t(".tabs.settings"), value: "settings") do %>
+      <%= render(Ui::CardComponent.new) do %>
+        <p class="mb-3 text-sm text-secondary"><%= t(".sections_hint") %></p>
+        <%= form_with model: @trip, url: update_sections_trip_path(@trip), method: :patch, class: "space-y-4" do %>
+          <ul class="divide-y divide-gray-100 rounded-lg border border-primary">
+            <% Trip::SECTIONS.each do |key| %>
+              <li>
+                <%= render(Ui::ItemComponent.new) do |item| %>
+                  <% item.with_title { t(".sections.#{key}") } %>
+                  <% item.with_trailing do %>
+                    <%= render Ui::SwitchComponent.new(name: "trip[enabled_sections][]", checked: @trip.section_enabled?(key), html_options: { value: key }) %>
+                  <% end %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+          <%= render(Ui::ButtonComponent.new(type: "submit", size: :sm)) { t(".sections_submit") } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_trips"), trips_path, class: "underline" %></p>
 </div>

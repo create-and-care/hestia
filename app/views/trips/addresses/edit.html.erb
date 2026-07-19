@@ -1,0 +1,33 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-xl px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= render "shared/flash" %>
+
+  <%= form_with model: @address, url: trip_address_path(@trip, @address), class: "flex flex-col gap-4" do |form| %>
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
+      <% field.with_label { t(".name_label") } %>
+      <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, html_options: { id: form.field_id(:name), required: true }) } %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:address_type))) do |field| %>
+      <% field.with_label { t(".type_label") } %>
+      <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:address_type), options: address_type_options, selected: form.object.address_type, html_options: { id: form.field_id(:address_type) }) } %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:full_address))) do |field| %>
+      <% field.with_label { t(".full_address_label") } %>
+      <% field.with_control { render Ui::TextareaComponent.new(name: form.field_name(:full_address), rows: 2, html_options: { id: form.field_id(:full_address) }) { form.object.full_address } } %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:phone))) do |field| %>
+      <% field.with_label { t(".phone_label") } %>
+      <% field.with_control { render Ui::InputComponent.new(type: "tel", name: form.field_name(:phone), value: form.object.phone, html_options: { id: form.field_id(:phone) }) } %>
+    <% end %>
+
+    <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_trip"), trip_path(@trip), class: "underline" %></p>
+</div>

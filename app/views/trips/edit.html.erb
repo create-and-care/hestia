@@ -1,0 +1,28 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-xl px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= render "shared/flash" %>
+
+  <%= form_with model: @trip, url: trip_path(@trip), class: "flex flex-col gap-4" do |form| %>
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:name))) do |field| %>
+      <% field.with_label { t(".name_label") } %>
+      <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:name), value: form.object.name, html_options: { id: form.field_id(:name), required: true }) } %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:starts_on))) do |field| %>
+      <% field.with_label { t(".starts_on_label") } %>
+      <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:starts_on), value: form.object.starts_on, html_options: { id: form.field_id(:starts_on) }) } %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:ends_on))) do |field| %>
+      <% field.with_label { t(".ends_on_label") } %>
+      <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:ends_on), value: form.object.ends_on, html_options: { id: form.field_id(:ends_on) }) } %>
+    <% end %>
+
+    <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_trip"), trip_path(@trip), class: "underline" %></p>
+</div>
