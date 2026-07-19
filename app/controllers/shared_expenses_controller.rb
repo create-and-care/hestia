@@ -1,19 +1,39 @@
 class SharedExpensesController < ApplicationController
   before_action :set_project
+  before_action :set_expense, only: %i[edit update destroy]
 
   def create
-    @project.shared_expenses.create(expense_params)
-    redirect_to @project
+    expense = @project.shared_expenses.new(expense_params)
+    if expense.save
+      redirect_to @project
+    else
+      redirect_to @project, alert: expense.errors.full_messages.to_sentence
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @expense.update(expense_params)
+      redirect_to @project, notice: t(".updated")
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
-    @project.shared_expenses.find(params[:id]).destroy
-    redirect_to @project
+    @expense.destroy
+    redirect_to @project, notice: t(".deleted")
   end
 
   private
     def set_project
       @project = Current.household.shared_projects.find(params[:shared_project_id])
+    end
+
+    def set_expense
+      @expense = @project.shared_expenses.find(params[:id])
     end
 
     def expense_params

@@ -218,29 +218,34 @@ Rails.application.routes.draw do
     resources :food_introductions, only: %i[create edit update destroy]
     resources :allergen_tests, only: %i[create edit update destroy]
   end
-  resources :conversations, only: %i[index show new create edit update] do
+  resources :conversations, only: %i[index show new create edit update destroy] do
     resources :messages, only: :create
+    collection { post :discuss }
   end
 
   # Modules with richer business logic (Phase 2.c).
   resource :menu, only: :show, controller: "menu"
-  resources :meal_plan_entries, only: %i[create update destroy]
-  resources :routines, only: %i[index create edit update destroy] do
+  post "menu/add_ingredients", to: "menu#add_ingredients", as: :add_ingredients_menu
+  resources :meal_plan_entries, only: %i[create edit update destroy] do
+    collection { patch :reorder }
+  end
+  resources :routines, only: %i[index show create edit update destroy] do
     member { post :complete }
   end
   resource :exterior, only: :show, controller: "exterior"
-  resources :plants, only: %i[create destroy]
-  resources :pools, only: %i[create destroy] do
+  resources :plants, only: %i[create edit update destroy]
+  resources :pools, only: %i[create edit update destroy] do
+    member { get :history }
     resources :pool_readings, only: %i[create destroy]
     resources :pool_actions, only: %i[create destroy]
   end
   resource :budget, only: :show, controller: "budget"
-  resources :budget_categories, only: %i[create destroy]
-  resources :budget_entries, only: %i[create destroy]
-  resources :savings_envelopes, only: %i[create destroy]
+  resources :budget_categories, only: %i[create edit update destroy]
+  resources :budget_entries, only: %i[create edit update destroy]
+  resources :savings_envelopes, only: %i[create edit update destroy]
   resources :shared_projects, only: %i[index show create destroy] do
     resources :shared_project_participants, only: %i[create destroy]
-    resources :shared_expenses, only: %i[create destroy]
+    resources :shared_expenses, only: %i[create edit update destroy]
   end
   resources :documents, only: %i[index show edit update create destroy] do
     member { get :preview }
@@ -273,6 +278,7 @@ Rails.application.routes.draw do
     resources :tasks, only: %i[create destroy], module: :trips
     resources :addresses, only: %i[create destroy], module: :trips
     resources :shopping_lists, only: %i[create destroy], module: :trips
+    member { post :track_expenses }
   end
 
   # Wellbeing: data strictly private to the user (Spec §5, point 4).

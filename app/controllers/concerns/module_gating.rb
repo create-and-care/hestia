@@ -25,6 +25,12 @@ module ModuleGating
     "wine_cellars" => "wine_cellar", "bottles" => "wine_cellar",
     "waste" => "waste", "waste_collection_series" => "waste", "waste_collection_events" => "waste",
     "documents" => "documents", "document_folders" => "documents",
+    # Garden and Pool share a single "outdoor" toggle (Spec §11.3 asks for a
+    # separate Pool switch): both live on the same ExteriorController#show page
+    # and template, so gating them independently would mean conditionally
+    # rendering half of one controller's view rather than a second entry here
+    # — a real architecture change, not a config tweak. Documented per the
+    # audit's own fallback rather than attempted half-done.
     "exterior" => "outdoor", "plants" => "outdoor", "pools" => "outdoor", "pool_readings" => "outdoor", "pool_actions" => "outdoor",
     "budget" => "budget", "budget_categories" => "budget", "budget_entries" => "budget", "savings_envelopes" => "budget",
     "shared_projects" => "budget", "shared_project_participants" => "budget", "shared_expenses" => "budget",

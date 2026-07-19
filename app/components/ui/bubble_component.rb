@@ -12,7 +12,7 @@ module Ui
     end
 
     def call
-      tag.div(content, class: cn("max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed", VARIANTS.fetch(@variant)))
+      tag.div(content, class: cn("max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed break-words", VARIANTS.fetch(@variant)))
     end
   end
 end

@@ -79,6 +79,9 @@ application.register("maintenance-entry-type", MaintenanceEntryTypeController)
 import MenubarController from "./menubar_controller"
 application.register("menubar", MenubarController)
 
+import MessageRoleController from "./message_role_controller"
+application.register("message-role", MessageRoleController)
+
 import MessageScrollerController from "./message_scroller_controller"
 application.register("message-scroller", MessageScrollerController)
 

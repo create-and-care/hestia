@@ -23,4 +23,11 @@ class PlantTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).plants, plants(:beta_plant)
   end
+
+  test "accepts an optional photo attachment" do
+    plant = plants(:alpha_rose)
+    assert_not plant.photo.attached?
+    plant.photo.attach(io: File.open(file_fixture("sample.png")), filename: "sample.png", content_type: "image/png")
+    assert plant.photo.attached?
+  end
 end

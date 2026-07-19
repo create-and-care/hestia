@@ -12,4 +12,9 @@ class PlantReferenceTest < ActiveSupport::TestCase
     assert plant.valid?
     assert_nil plant.plant_reference
   end
+
+  test "accepts an optional fertilizing note" do
+    reference = PlantReference.create!(common_name: "Fougère", fertilizing: "Monthly in summer")
+    assert_equal "Monthly in summer", reference.reload.fertilizing
+  end
 end

@@ -19,6 +19,15 @@ class TripTest < ActiveSupport::TestCase
     end
   end
 
+  test "deleting a trip destroys its linked shared expenses project" do
+    trip = trips(:alpha_trip)
+    households(:alpha).shared_projects.create!(name: trip.name, trip: trip)
+
+    assert_difference -> { SharedProject.count }, -1 do
+      trip.destroy
+    end
+  end
+
   test "is scoped to its household" do
     assert_not_includes households(:alpha).trips, trips(:beta_trip)
   end

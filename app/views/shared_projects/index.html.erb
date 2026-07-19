@@ -1,18 +1,25 @@
 <% content_for :title, t(".title") %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
-  <header class="mb-6 flex items-center justify-between">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("handshake", css_class: "size-6") %> <%= t(".title") %></h1>
-    <%= form_with model: SharedProject.new, url: shared_projects_path, class: "flex gap-2" do |form| %>
-      <%= form.text_field :name, required: true, placeholder: t(".name_placeholder"), class: "rounded-md border border-gray-300 px-3 py-1.5 text-sm" %>
-      <%= form.submit t(".create"), class: "cursor-pointer rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700" %>
+
+    <%= form_with model: @project, url: shared_projects_path, class: "flex items-start gap-2" do |form| %>
+      <div>
+        <%= render Ui::InputComponent.new(name: "shared_project[name]", value: @project.name, placeholder: t(".name_placeholder"),
+              invalid: @project.errors.any?, html_options: { id: "shared_project_name", required: true }) %>
+        <% if @project.errors[:name].any? %>
+          <p class="mt-1 text-xs text-destructive"><%= @project.errors[:name].to_sentence %></p>
+        <% end %>
+      </div>
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".create") } %>
     <% end %>
   </header>
 
   <%= render "shared/flash" %>
 
   <% if @projects.any? %>
-    <div class="divide-y divide-gray-100 rounded-lg border border-primary">
+    <div class="divide-y divide-primary rounded-lg border border-primary">
       <% @projects.each do |project| %>
         <%= render Ui::ItemComponent.new(href: shared_project_path(project)) do |item| %>
           <% item.with_title { project.name } %>

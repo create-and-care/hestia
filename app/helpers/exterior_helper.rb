@@ -5,4 +5,6 @@ module ExteriorHelper
   def treatment_options = Pool::TREATMENT_TYPES.map { |type| [ treatment_label(type), type ] }
   def pool_action_label(type) = t("exterior.action_types.#{type}", default: type)
   def pool_action_options = ACTION_TYPES.map { |type| [ pool_action_label(type), type ] }
+  def measure_type_label(type) = t("exterior.measure_types.#{type}", default: type)
+  def measure_type_options(pool) = pool.measure_types.map { |type| [ measure_type_label(type), type ] }
 end

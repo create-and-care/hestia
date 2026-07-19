@@ -2,8 +2,12 @@ class SharedProjectParticipantsController < ApplicationController
   before_action :set_project
 
   def create
-    @project.shared_project_participants.create(participant_params)
-    redirect_to @project
+    participant = @project.shared_project_participants.new(participant_params)
+    if participant.save
+      redirect_to @project
+    else
+      redirect_to @project, alert: participant.errors.full_messages.to_sentence
+    end
   end
 
   def destroy
