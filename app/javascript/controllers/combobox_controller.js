@@ -3,7 +3,8 @@ import { positionFloating, onClickOutside } from "../utils/floating"
 import { openPanel, closePanel } from "../utils/transition"
 
 export default class extends Controller {
-  static targets = [ "trigger", "panel", "search", "item", "empty", "input", "label" ]
+  static targets = [ "trigger", "panel", "search", "item", "empty", "input", "label", "createOption" ]
+  static values = { allowCustom: Boolean, createTemplate: String }
 
   toggle() {
     this.panelTarget.hidden ? this.open() : this.close()
@@ -27,14 +28,24 @@ export default class extends Controller {
   }
 
   filter() {
-    const query = this.searchTarget.value.trim().toLowerCase()
+    const query = this.searchTarget.value.trim()
+    const lowerQuery = query.toLowerCase()
     let visibleCount = 0
     this.itemTargets.forEach((item) => {
-      const matches = item.textContent.trim().toLowerCase().includes(query)
+      const matches = item.textContent.trim().toLowerCase().includes(lowerQuery)
       item.hidden = !matches
       if (matches) visibleCount++
     })
-    if (this.hasEmptyTarget) this.emptyTarget.hidden = visibleCount > 0
+
+    const showCreate = this.allowCustomValue && query.length > 0 && visibleCount === 0
+    if (this.hasCreateOptionTarget) {
+      this.createOptionTarget.hidden = !showCreate
+      if (showCreate) {
+        this.createOptionTarget.textContent = this.createTemplateValue.replace("%{query}", query)
+        this.createOptionTarget.dataset.value = query
+      }
+    }
+    if (this.hasEmptyTarget) this.emptyTarget.hidden = visibleCount > 0 || showCreate
     this.searchTarget.removeAttribute("aria-activedescendant")
   }
 
@@ -57,7 +68,9 @@ export default class extends Controller {
     if (event.key === "Enter") {
       event.preventDefault()
       const activeItem = items.find((item) => item.id === this.searchTarget.getAttribute("aria-activedescendant"))
-      ;(activeItem || items[0])?.click()
+      if (activeItem) { activeItem.click(); return }
+      if (this.hasCreateOptionTarget && !this.createOptionTarget.hidden) { this.createOptionTarget.click(); return }
+      items[0]?.click()
     }
   }
 
@@ -65,6 +78,14 @@ export default class extends Controller {
     const { value, label } = event.currentTarget.dataset
     if (this.hasInputTarget) this.inputTarget.value = value
     this.labelTarget.textContent = label || event.currentTarget.textContent.trim()
+    this.dispatch("select", { detail: { value } })
+    this.close()
+  }
+
+  selectCustom() {
+    const value = this.createOptionTarget.dataset.value
+    if (this.hasInputTarget) this.inputTarget.value = value
+    this.labelTarget.textContent = value
     this.dispatch("select", { detail: { value } })
     this.close()
   }

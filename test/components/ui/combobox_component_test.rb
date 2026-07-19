@@ -60,4 +60,23 @@ class Ui::ComboboxComponentTest < ViewComponent::TestCase
 
     assert_selector "button[role='option'][tabindex='-1'][data-combobox-target='item']", count: 3, visible: :all
   end
+
+  test "does not render a create-option button when allow_custom is not set" do
+    render_inline(Ui::ComboboxComponent.new(name: "fruit", options: OPTIONS))
+
+    assert_no_selector "[data-combobox-target='createOption']", visible: :all
+  end
+
+  test "renders a hidden create-option button and wiring when allow_custom is set" do
+    render_inline(Ui::ComboboxComponent.new(name: "fruit", options: OPTIONS, allow_custom: true, create_label: "Use “%{query}”"))
+
+    assert_selector "div[data-controller='combobox'][data-combobox-allow-custom-value='true'][data-combobox-create-template-value='Use “%{query}”']", visible: :all
+    assert_selector "button[data-combobox-target='createOption'][hidden]", visible: :all
+  end
+
+  test "shows a selected value with no matching option as-is when allow_custom is set" do
+    render_inline(Ui::ComboboxComponent.new(name: "fruit", options: OPTIONS, selected: "Dragonfruit", allow_custom: true))
+
+    assert_selector "span[data-combobox-target='label']", text: "Dragonfruit"
+  end
 end

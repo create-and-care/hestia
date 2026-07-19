@@ -1,0 +1,33 @@
+<% content_for :title, t(".title", name: @routine.name) %>
+
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <div class="mb-4"><%= module_breadcrumb(:routines) %></div>
+
+  <header class="mb-6">
+    <h1 class="flex items-center gap-2 text-2xl font-semibold">
+      <%= "#{@routine.emoji} " if @routine.emoji.present? %><%= @routine.name %>
+    </h1>
+    <p class="mt-1 text-sm text-secondary">
+      <%= routine_frequency_label(@routine.frequency) %><%= " ×#{@routine.interval}" if @routine.interval.to_i > 1 %>
+      <% if @routine.next_due_on %>· <%= t(".next_due") %> : <%= @routine.next_due_on.strftime("%d/%m/%Y") %><% end %>
+    </p>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <h2 class="mb-3 font-medium"><%= t(".history_heading") %></h2>
+  <% if @completions.any? %>
+    <ul class="divide-y divide-primary">
+      <% @completions.each do |completion| %>
+        <li class="flex items-center justify-between py-2 text-sm">
+          <span><%= completion.completed_on.strftime("%d/%m/%Y") %></span>
+          <span class="text-secondary"><%= completion.author&.name.presence || completion.author&.email_address || t(".unknown_author") %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty_history") } } %>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_routines"), routines_path, class: "underline" %></p>
+</div>
