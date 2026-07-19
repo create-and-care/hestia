@@ -41,6 +41,37 @@ class DocumentTest < ActiveSupport::TestCase
     assert_not_includes households(:alpha).documents, documents(:beta_doc)
   end
 
+  test "documentable is optional" do
+    document = households(:alpha).documents.build(name: "Contrat")
+    attach_sample_file(document)
+    assert document.valid?
+    assert_nil document.documentable
+  end
+
+  test "accepts a documentable from the same household" do
+    document = households(:alpha).documents.build(name: "Carte grise", documentable: vehicles(:alpha_car))
+    attach_sample_file(document)
+    assert document.valid?
+  end
+
+  test "rejects a documentable from another household" do
+    document = households(:alpha).documents.build(name: "Carte grise", documentable: vehicles(:beta_car))
+    attach_sample_file(document)
+    assert_not document.valid?
+    assert_includes document.errors[:documentable], "is invalid"
+  end
+
+  test "destroying the linked vehicle nullifies the document rather than destroying it" do
+    document = households(:alpha).documents.build(name: "Carte grise", documentable: vehicles(:alpha_car))
+    attach_sample_file(document)
+    document.save!
+
+    assert_no_difference -> { Document.count } do
+      vehicles(:alpha_car).destroy
+    end
+    assert_nil document.reload.documentable
+  end
+
   private
     def attach_sample_file(document)
       document.file.attach(

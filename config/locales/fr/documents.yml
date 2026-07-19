@@ -1,21 +1,64 @@
 fr:
   documents:
+    back_to_documents: "← Tous les documents"
+    colors:
+      blue: "Bleu"
+      green: "Vert"
+      red: "Rouge"
+      purple: "Violet"
+      orange: "Orange"
+      gray: "Gris"
     index:
       title: "Documents"
       search_placeholder: "Rechercher…"
+      search_label: "Rechercher un document"
       disclaimer: "Pour vos papiers courants — pas un coffre-fort certifié ni un dossier médical."
       all: "Tous"
       new_folder_placeholder: "Nouveau dossier"
+      no_color_option: "Sans couleur"
       add: "Ajouter"
       add_document_heading: "Ajouter un document"
       name_placeholder: "Nom"
       folder_blank: "Dossier"
+      documentable_label: "Lier à"
+      documentable_none: "Ne pas lier"
+      documentable_groups:
+        vehicle: "Véhicule"
+        pet: "Animal"
+        service_provider: "Prestataire"
+        budget_category: "Budget"
       upload: "Téléverser"
       empty: "Aucun document."
+      preview_loading: "Chargement de l'aperçu…"
+      edit_folder_aria: "Modifier le dossier « %{name} »"
+      delete_folder_aria: "Supprimer le dossier « %{name} »"
+      delete_folder_confirm: "Supprimer ce dossier ? Les documents qu'il contient ne seront pas supprimés."
+      share_aria: "Partager « %{name} »"
+      edit_document_aria: "Modifier « %{name} »"
+      delete_document_aria: "Supprimer « %{name} »"
+      delete_confirm: "Supprimer ce document ? Cette action est irréversible."
     create:
       created: "Document ajouté."
+    edit:
+      title: "Modifier le document"
+      name_label: "Nom"
+      folder_label: "Dossier"
+      submit: "Enregistrer"
+    update:
+      updated: "Document modifié."
     destroy:
       deleted: "Document supprimé."
+    preview:
+      download: "Télécharger"
   document_folders:
+    create:
+      created: "Dossier ajouté."
+    edit:
+      title: "Modifier le dossier"
+      name_label: "Nom"
+      color_label: "Couleur"
+      submit: "Enregistrer"
+    update:
+      updated: "Dossier modifié."
     destroy:
       deleted: "Dossier supprimé."

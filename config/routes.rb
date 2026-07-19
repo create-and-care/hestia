@@ -247,8 +247,10 @@ Rails.application.routes.draw do
     resources :shared_project_participants, only: %i[create destroy]
     resources :shared_expenses, only: %i[create edit update destroy]
   end
-  resources :documents, only: %i[index show create destroy]
-  resources :document_folders, only: %i[create destroy]
+  resources :documents, only: %i[index show edit update create destroy] do
+    member { get :preview }
+  end
+  resources :document_folders, only: %i[create edit update destroy]
 
   # Modules with an architecture deviation (Phase 2.d).
   resources :gift_lists, only: %i[index show create edit update destroy] do

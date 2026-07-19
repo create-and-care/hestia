@@ -1,0 +1,38 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-xl px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= render "shared/flash" %>
+
+  <%= form_with model: @document, url: document_path(@document), class: "flex flex-col gap-4" do |form| %>
+    <%= render(Ui::FieldComponent.new(id: "document_name")) do |field| %>
+      <% field.with_label { t(".name_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::InputComponent.new(name: "document[name]", value: @document.name, html_options: { id: "document_name", required: true }) %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: "document_document_folder_id")) do |field| %>
+      <% field.with_label { t(".folder_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::NativeSelectComponent.new(name: "document[document_folder_id]",
+              options: [ [ t("documents.index.folder_blank"), "" ] ] + Current.household.document_folders.ordered.map { |folder| [ folder.name, folder.id ] },
+              selected: @document.document_folder_id, html_options: { id: "document_document_folder_id" }) %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: "document_documentable_key")) do |field| %>
+      <% field.with_label { t("documents.index.documentable_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::NativeSelectComponent.new(name: "document[documentable_key]", options: @documentable_options,
+              selected: (@document.documentable ? "#{@document.documentable_type}-#{@document.documentable_id}" : ""),
+              html_options: { id: "document_documentable_key" }) %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t("documents.back_to_documents"), documents_path, class: "underline" %></p>
+</div>

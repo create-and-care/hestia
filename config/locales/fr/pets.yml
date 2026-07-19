@@ -58,6 +58,9 @@ fr:
       edit_supply_aria: "Modifier « %{name} »"
       delete_supply_aria: "Supprimer « %{name} »"
       delete_supply_confirm: "Supprimer « %{name} » ?"
+      documents_heading: "Documents"
+      no_documents: "Aucun document lié."
+      manage_documents_link: "Gérer les documents →"
       back_to_pets: "← Tous les animaux"
     create:
       created: "Animal ajouté."

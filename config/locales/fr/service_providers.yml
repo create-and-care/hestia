@@ -17,6 +17,9 @@ fr:
       title: "Nouveau prestataire"
     edit:
       title: "Modifier le prestataire"
+      documents_heading: "Documents"
+      no_documents: "Aucun document lié."
+      manage_documents_link: "Gérer les documents →"
     service_provider:
       directions: "Itinéraire"
       call_aria: "Appeler le %{phone}"

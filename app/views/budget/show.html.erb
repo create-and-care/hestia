@@ -66,6 +66,12 @@
               <% end %>
             </div>
           </div>
+          <% if category.documents.any? %>
+            <p class="mb-2 text-xs text-subdued">
+              <%= lucide_icon("paperclip", css_class: "inline size-3") %>
+              <%= link_to t(".documents_count", count: category.documents.count), documents_path, class: "hover:underline" %>
+            </p>
+          <% end %>
           <ul class="mb-2 divide-y divide-primary text-sm">
             <% category.budget_entries.each do |entry| %>
               <li>

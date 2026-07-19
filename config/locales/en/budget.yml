@@ -37,6 +37,9 @@ en:
       envelope_name_placeholder: "Name (holidays…)"
       envelope_amount_label: "Monthly deposit"
       envelope_amount_placeholder: "€ / month"
+      documents_count:
+        one: "1 linked document"
+        other: "%{count} linked documents"
       edit_envelope_aria: "Edit envelope"
       delete_envelope_aria: "Delete envelope"
       delete_envelope_confirm: "Delete this envelope?"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_19_102557) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_19_110013) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -257,10 +257,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_102557) do
   create_table "documents", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "document_folder_id"
+    t.bigint "documentable_id"
+    t.string "documentable_type"
     t.bigint "household_id", null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["document_folder_id"], name: "index_documents_on_document_folder_id"
+    t.index ["documentable_type", "documentable_id"], name: "index_documents_on_documentable"
     t.index ["household_id"], name: "index_documents_on_household_id"
   end
 

@@ -15,6 +15,16 @@ class BudgetControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Salaire"
   end
 
+  test "show renders a document count for a category with linked documents" do
+    document = households(:alpha).documents.build(name: "Bail", documentable: budget_categories(:alpha_rent))
+    document.file.attach(io: File.open(Rails.root.join("test/fixtures/files/sample.pdf")), filename: "sample.pdf", content_type: "application/pdf")
+    document.save!
+
+    get budget_path
+    assert_response :success
+    assert_includes @response.body, "1 linked document"
+  end
+
   test "create a category" do
     assert_difference -> { households(:alpha).budget_categories.count }, 1 do
       post budget_categories_path, params: { budget_category: { kind: "expense", name: "Courses" } }

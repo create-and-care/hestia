@@ -1,21 +1,64 @@
 en:
   documents:
+    back_to_documents: "← All documents"
+    colors:
+      blue: "Blue"
+      green: "Green"
+      red: "Red"
+      purple: "Purple"
+      orange: "Orange"
+      gray: "Gray"
     index:
       title: "Documents"
       search_placeholder: "Search…"
+      search_label: "Search documents"
       disclaimer: "For your everyday paperwork — not a certified vault or a medical record."
       all: "All"
       new_folder_placeholder: "New folder"
+      no_color_option: "No color"
       add: "Add"
       add_document_heading: "Add a document"
       name_placeholder: "Name"
       folder_blank: "Folder"
+      documentable_label: "Link to"
+      documentable_none: "Don't link"
+      documentable_groups:
+        vehicle: "Vehicle"
+        pet: "Pet"
+        service_provider: "Provider"
+        budget_category: "Budget"
       upload: "Upload"
       empty: "No documents."
+      preview_loading: "Loading preview…"
+      edit_folder_aria: "Edit the \"%{name}\" folder"
+      delete_folder_aria: "Delete the \"%{name}\" folder"
+      delete_folder_confirm: "Delete this folder? Its documents will not be deleted."
+      share_aria: "Share \"%{name}\""
+      edit_document_aria: "Edit \"%{name}\""
+      delete_document_aria: "Delete \"%{name}\""
+      delete_confirm: "Delete this document? This action cannot be undone."
     create:
       created: "Document added."
+    edit:
+      title: "Edit document"
+      name_label: "Name"
+      folder_label: "Folder"
+      submit: "Save"
+    update:
+      updated: "Document updated."
     destroy:
       deleted: "Document deleted."
+    preview:
+      download: "Download"
   document_folders:
+    create:
+      created: "Folder added."
+    edit:
+      title: "Edit folder"
+      name_label: "Name"
+      color_label: "Color"
+      submit: "Save"
+    update:
+      updated: "Folder updated."
     destroy:
       deleted: "Folder deleted."

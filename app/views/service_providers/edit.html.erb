@@ -3,5 +3,22 @@
 <div class="mx-auto mt-10 max-w-xl px-4">
   <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
   <%= render "form", service_provider: @provider, url: service_provider_path(@provider) %>
+
+  <section class="mt-8">
+    <h2 class="mb-2 font-medium"><%= t(".documents_heading") %></h2>
+    <% if @provider.documents.ordered.any? %>
+      <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
+        <% @provider.documents.ordered.with_attached_file.each do |document| %>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title { render "documents/preview_trigger", document: document } %>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_documents") } } %>
+    <% end %>
+    <p class="text-sm"><%= link_to t(".manage_documents_link"), documents_path, class: "underline" %></p>
+  </section>
+
   <p class="mt-6 text-sm"><%= link_to t("service_providers.back_to_providers"), service_providers_path, class: "underline" %></p>
 </div>

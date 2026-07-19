@@ -37,6 +37,9 @@ fr:
       envelope_name_placeholder: "Nom (vacances…)"
       envelope_amount_label: "Versement mensuel"
       envelope_amount_placeholder: "€ / mois"
+      documents_count:
+        one: "1 document lié"
+        other: "%{count} documents liés"
       edit_envelope_aria: "Modifier l'enveloppe"
       delete_envelope_aria: "Supprimer l'enveloppe"
       delete_envelope_confirm: "Supprimer cette enveloppe ?"
