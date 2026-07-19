@@ -33,4 +33,38 @@ class FoodIntroductionsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "create gives a success flash notice" do
+    baby = baby_profiles(:alpha_baby)
+    post baby_profile_food_introductions_path(baby), params: { food_introduction: { food: "Carotte" } }
+    follow_redirect!
+    assert_includes @response.body, "Food introduction added."
+  end
+
+  test "create with a blank food does not persist and surfaces an error" do
+    baby = baby_profiles(:alpha_baby)
+    assert_no_difference -> { FoodIntroduction.count } do
+      post baby_profile_food_introductions_path(baby), params: { food_introduction: { food: "" } }
+    end
+    assert_redirected_to baby
+    assert_equal "Food can't be blank", flash[:alert]
+  end
+
+  test "edit and update a food introduction" do
+    baby = baby_profiles(:alpha_baby)
+    introduction = baby.food_introductions.create!(food: "Carotte")
+
+    get edit_baby_profile_food_introduction_path(baby, introduction)
+    assert_response :success
+
+    patch baby_profile_food_introduction_path(baby, introduction), params: { food_introduction: { acceptance: "Aimé" } }
+    assert_redirected_to baby
+    assert_equal "Aimé", introduction.reload.acceptance
+  end
+
+  test "cannot edit another household's food introduction" do
+    introduction = baby_profiles(:beta_baby).food_introductions.create!(food: "Pomme Beta")
+    get edit_baby_profile_food_introduction_path(baby_profiles(:beta_baby), introduction)
+    assert_response :not_found
+  end
 end

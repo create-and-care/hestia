@@ -1,0 +1,45 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= form_with model: @session, url: baby_profile_feeding_session_path(@baby, @session) do %>
+    <% if @session.errors.any? %>
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
+        <ul class="list-inside list-disc">
+          <% @session.errors.full_messages.each { |message| %><li><%= message %></li><% } %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <div class="space-y-4">
+      <%= render(Ui::FieldComponent.new(id: "feeding_session_kind")) do |field| %>
+        <% field.with_label { t(".kind_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "feeding_session[kind]", options: feeding_kind_options, selected: @session.kind,
+                html_options: { id: "feeding_session_kind" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "feeding_session_started_at")) do |field| %>
+        <% field.with_label { t(".started_at_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "datetime-local", name: "feeding_session[started_at]",
+                value: @session.started_at&.strftime("%Y-%m-%dT%H:%M"), html_options: { id: "feeding_session_started_at" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "feeding_session_ended_at")) do |field| %>
+        <% field.with_label { t(".ended_at_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "datetime-local", name: "feeding_session[ended_at]",
+                value: @session.ended_at&.strftime("%Y-%m-%dT%H:%M"), html_options: { id: "feeding_session_ended_at" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".save") } %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_profile"), baby_profile_path(@baby), class: "underline" %></p>
+</div>

@@ -3,7 +3,10 @@
     <% item.with_leading { lucide_icon("baby", css_class: "size-4") } %>
     <% item.with_title { baby_profile.name } %>
     <% if baby_profile.born_on %>
-      <% item.with_description { t("baby_profiles.born_on", date: baby_profile.born_on.strftime("%d/%m/%Y")) } %>
+      <% item.with_description do %>
+        <%= t("baby_profiles.born_on", date: baby_profile.born_on.strftime("%d/%m/%Y")) %>
+        <span class="text-gray-400">· <%= t("baby_profiles.age_months", count: baby_profile.age_in_months) %></span>
+      <% end %>
     <% end %>
   <% end %>
 </div>

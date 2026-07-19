@@ -26,6 +26,16 @@
         <% end %>
       <% end %>
     </div>
+    <div>
+      <%= render(Ui::FieldComponent.new(id: "baby_profile_service_provider_id")) do |field| %>
+        <% field.with_label { t(".service_provider_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "baby_profile[service_provider_id]",
+                options: [ [ t(".no_service_provider"), "" ] ] + @service_providers.map { |provider| [ provider.name, provider.id ] },
+                selected: baby.service_provider_id, html_options: { id: "baby_profile_service_provider_id" }) %>
+        <% end %>
+      <% end %>
+    </div>
     <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".submit") } %>
   </div>
 <% end %>
