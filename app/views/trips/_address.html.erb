@@ -1,0 +1,15 @@
+<%= tag.li id: dom_id(address) do %>
+  <%= render(Ui::ItemComponent.new) do |item| %>
+    <% item.with_title { address.name } %>
+    <% item.with_description { address.full_address } %>
+    <% item.with_trailing do %>
+      <%= render(Ui::BadgeComponent.new(variant: :secondary)) { address_type_label(address.address_type) } %>
+      <%= link_to edit_trip_address_path(trip, address), "aria-label": t("trips.show.edit_address_aria", name: address.name), class: "text-subdued hover:text-primary" do %>
+        <%= lucide_icon("pencil", css_class: "size-3.5") %>
+      <% end %>
+      <%= form_with url: trip_address_path(trip, address), method: :delete do %>
+        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit")) { lucide_icon("x", css_class: "size-4") } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -273,11 +273,15 @@ Rails.application.routes.draw do
   delete "circle_posts/:id/react", to: "circle_post_reactions#destroy", as: :unreact_circle_post
 
   # Trip: cross-cutting context (Spec §5, point 3 / §12.3).
-  resources :trips, only: %i[index show create destroy] do
-    resources :notes, only: %i[create destroy], module: :trips
-    resources :tasks, only: %i[create destroy], module: :trips
-    resources :addresses, only: %i[create destroy], module: :trips
+  resources :trips, only: %i[index show create edit update destroy] do
+    member { patch :update_sections }
+    resources :notes, only: %i[create edit update destroy], module: :trips
+    resources :tasks, only: %i[create edit update destroy], module: :trips do
+      patch :toggle, on: :member
+    end
+    resources :addresses, only: %i[create edit update destroy], module: :trips
     resources :shopping_lists, only: %i[create destroy], module: :trips
+    resources :meal_plan_entries, only: %i[create destroy], module: :trips
     member { post :track_expenses }
   end
 

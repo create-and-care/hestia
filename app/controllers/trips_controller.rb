@@ -1,5 +1,5 @@
 class TripsController < ApplicationController
-  before_action :set_trip, only: %i[show destroy track_expenses]
+  before_action :set_trip, only: %i[show edit update destroy update_sections track_expenses]
 
   def index
     @trips = Current.household.trips.ordered
@@ -11,6 +11,11 @@ class TripsController < ApplicationController
     @task = Task.new
     @address = Address.new
     @shopping_list = ShoppingList.new
+    @meal_plan_entry = @trip.meal_plan_entries.new(on_date: Date.current, meal_type: "dinner")
+    @default_section = Trip::SECTIONS.find { |key| @trip.section_enabled?(key) } || "settings"
+  end
+
+  def edit
   end
 
   def create
@@ -19,6 +24,23 @@ class TripsController < ApplicationController
       redirect_to @trip
     else
       redirect_to trips_path, alert: @trip.errors.full_messages.to_sentence
+    end
+  end
+
+  def update
+    if @trip.update(trip_params)
+      redirect_to @trip, notice: t(".updated")
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def update_sections
+    enabled_sections = Array(params.dig(:trip, :enabled_sections))
+    if @trip.update(disabled_sections: Trip::SECTIONS - enabled_sections)
+      redirect_to @trip, notice: t(".updated")
+    else
+      redirect_to @trip, alert: t(".failed")
     end
   end
 

@@ -13,8 +13,9 @@ class TripTest < ActiveSupport::TestCase
     trip.tasks.create!(household: households(:alpha), title: "T")
     trip.shopping_lists.create!(household: households(:alpha), name: "L")
     trip.addresses.create!(household: households(:alpha), name: "A", address_type: "autre")
+    trip.meal_plan_entries.create!(household: households(:alpha), on_date: Date.current, meal_type: "dinner", free_name: "M")
 
-    assert_difference [ "Note.count", "Task.count", "ShoppingList.count", "Address.count" ], -1 do
+    assert_difference [ "Note.count", "Task.count", "ShoppingList.count", "Address.count", "MealPlanEntry.count" ], -1 do
       trip.destroy
     end
   end
@@ -30,5 +31,23 @@ class TripTest < ActiveSupport::TestCase
 
   test "is scoped to its household" do
     assert_not_includes households(:alpha).trips, trips(:beta_trip)
+  end
+
+  test "all sections are enabled by default" do
+    trip = trips(:alpha_trip)
+    Trip::SECTIONS.each { |key| assert trip.section_enabled?(key) }
+  end
+
+  test "a disabled section is no longer enabled" do
+    trip = trips(:alpha_trip)
+    trip.update!(disabled_sections: [ "menu" ])
+    assert_not trip.section_enabled?("menu")
+    assert trip.section_enabled?("notes")
+  end
+
+  test "rejects an unknown section key" do
+    trip = trips(:alpha_trip)
+    trip.disabled_sections = [ "unknown_section" ]
+    assert_not trip.valid?
   end
 end
