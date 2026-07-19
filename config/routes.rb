@@ -225,7 +225,10 @@ Rails.application.routes.draw do
 
   # Modules with richer business logic (Phase 2.c).
   resource :menu, only: :show, controller: "menu"
-  resources :meal_plan_entries, only: %i[create update destroy]
+  post "menu/add_ingredients", to: "menu#add_ingredients", as: :add_ingredients_menu
+  resources :meal_plan_entries, only: %i[create edit update destroy] do
+    collection { patch :reorder }
+  end
   resources :routines, only: %i[index create edit update destroy] do
     member { post :complete }
   end

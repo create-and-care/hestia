@@ -66,4 +66,28 @@ class MenuControllerTest < ActionDispatch::IntegrationTest
     delete meal_plan_entry_path(meal_plan_entries(:beta_lunch))
     assert_response :not_found
   end
+
+  test "add_ingredients exports this week's planned recipes to the shopping list" do
+    monday = Date.current.beginning_of_week
+    meal_plan_entries(:alpha_dinner).update!(on_date: monday + 1.day)
+
+    assert_difference -> { shopping_lists(:alpha_groceries).items.count }, recipes(:alpha_pancakes).recipe_ingredients.count do
+      post add_ingredients_menu_path(week: monday)
+    end
+
+    assert_redirected_to menu_path(week: monday)
+    assert_equal shopping_lists(:alpha_groceries).id, flash[:shopping_list_id]
+  end
+
+  test "add_ingredients does not duplicate a recipe already exported" do
+    monday = Date.current.beginning_of_week
+    meal_plan_entries(:alpha_dinner).update!(on_date: monday + 1.day)
+    Recipes::AddIngredientsToShoppingList.call(recipe: recipes(:alpha_pancakes), shopping_list: shopping_lists(:alpha_groceries))
+
+    assert_no_difference -> { shopping_lists(:alpha_groceries).items.count } do
+      post add_ingredients_menu_path(week: monday)
+    end
+
+    assert_equal I18n.t("menu.add_ingredients.already_notice"), flash[:notice]
+  end
 end
