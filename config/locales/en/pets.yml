@@ -58,6 +58,9 @@ en:
       edit_supply_aria: "Edit \"%{name}\""
       delete_supply_aria: "Delete \"%{name}\""
       delete_supply_confirm: "Delete \"%{name}\"?"
+      documents_heading: "Documents"
+      no_documents: "No linked documents."
+      manage_documents_link: "Manage documents →"
       back_to_pets: "← All pets"
     create:
       created: "Pet added."

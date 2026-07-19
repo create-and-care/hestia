@@ -97,6 +97,9 @@ application.register("search-palette", SearchPaletteController)
 import SelectController from "./select_controller"
 application.register("select", SelectController)
 
+import ShareController from "./share_controller"
+application.register("share", ShareController)
+
 import ShoppingCatalogController from "./shopping_catalog_controller"
 application.register("shopping-catalog", ShoppingCatalogController)
 

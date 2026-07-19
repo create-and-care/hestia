@@ -24,6 +24,9 @@ en:
       envelopes_heading: "Savings envelopes"
       envelope_name_placeholder: "Name (holidays…)"
       envelope_amount_placeholder: "€ / month"
+      documents_count:
+        one: "1 linked document"
+        other: "%{count} linked documents"
   budget_categories:
     destroy:
       deleted: "Category deleted."

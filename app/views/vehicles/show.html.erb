@@ -82,5 +82,21 @@
     <% end %>
   </section>
 
+  <section class="mt-6">
+    <h2 class="mb-2 font-medium"><%= t(".documents_heading") %></h2>
+    <% if @vehicle.documents.ordered.any? %>
+      <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
+        <% @vehicle.documents.ordered.with_attached_file.each do |document| %>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title { render "documents/preview_trigger", document: document } %>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_documents") } } %>
+    <% end %>
+    <p class="text-sm"><%= link_to t(".manage_documents_link"), documents_path, class: "underline" %></p>
+  </section>
+
   <p class="mt-6 text-sm"><%= link_to t(".back_to_vehicles"), vehicles_path, class: "underline" %></p>
 </div>

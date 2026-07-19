@@ -30,4 +30,15 @@ class DocumentFolderTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).document_folders, document_folders(:beta_folder)
   end
+
+  test "color is optional but must be one of the known colors" do
+    folder = households(:alpha).document_folders.build(name: "Voiture")
+    assert folder.valid?
+
+    folder.color = "blue"
+    assert folder.valid?
+
+    folder.color = "chartreuse"
+    assert_not folder.valid?
+  end
 end

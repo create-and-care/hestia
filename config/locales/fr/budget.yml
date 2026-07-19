@@ -24,6 +24,9 @@ fr:
       envelopes_heading: "Enveloppes d'épargne"
       envelope_name_placeholder: "Nom (vacances…)"
       envelope_amount_placeholder: "€ / mois"
+      documents_count:
+        one: "1 document lié"
+        other: "%{count} documents liés"
   budget_categories:
     destroy:
       deleted: "Catégorie supprimée."
