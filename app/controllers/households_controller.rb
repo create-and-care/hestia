@@ -31,8 +31,7 @@ class HouseholdsController < ApplicationController
     @api_tokens = Current.user.api_tokens.order(created_at: :desc)
     @api_token = ApiToken.new
     @sessions = Current.user.sessions.order(created_at: :desc)
-    @phases = Roadmap.phases
-    @improvements = Roadmap.improvements
+    @milestones = Roadmap.milestones
     @default_tab = TABS.include?(params[:tab]) ? params[:tab] : "general"
   end
 

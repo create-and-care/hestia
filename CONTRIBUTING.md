@@ -9,13 +9,15 @@ open-source, no paid tier hiding behind a rejected contribution.
 
 - For a minor change (typo, small bug), a direct pull request is enough.
 - For a new feature or a behavior change, open an issue first describing
-  the need, linking it if possible to the relevant module in the
-  [Specification](<Specification — Hestia.md>) and the
-  [Implementation Plan](<Implementation Plan — Hestia.md>).
-- The architecture decisions settled in the Spec (section 4) and the four
-  documented deviations (section 5: Circles, Gifts, Trip, Wellbeing) are
-  settled choices: any proposal that departs from them should be discussed
-  in an issue before implementation.
+  the need — check the in-app [Roadmap](/roadmap) first to see whether
+  it's already shipped or planned.
+- The technical architecture (Rails 8, Hotwire, Solid Queue/Cable/Cache,
+  systematic per-household scoping) and the four documented deviations from
+  it — `Circle` independent of any household, unauthenticated public
+  sharing for Gifts, a cross-cutting `trip_id` for Trip, strict per-user
+  (not per-household) scoping for Wellbeing — are settled choices: any
+  proposal that departs from them should be discussed in an issue before
+  implementation.
 
 ## Development environment
 
@@ -28,7 +30,9 @@ bin/setup     # install dependencies, prepare the DB
 bin/dev       # Rails server + esbuild/Tailwind watchers
 ```
 
-On Windows, use WSL2 (Ubuntu) rather than native Ruby — see Spec §4.
+On Windows, use WSL2 (Ubuntu) rather than native Ruby, to avoid native gem
+compilation issues and stay consistent with the production Linux
+environment.
 
 ## Code conventions
 
@@ -41,7 +45,7 @@ On Windows, use WSL2 (Ubuntu) rather than native Ruby — see Spec §4.
 - **Household scoping**: any new data must be scoped via the
   `HouseholdScoped` concern and filtered by `Current.household`, never by
   a client parameter — except for the four modules with an architecture
-  deviation documented in Spec §5.
+  deviation (Circles, Gifts, Trip, Wellbeing — see above).
 - **Business logic**: prefer a per-domain service object
   (`app/services/<Module>::<Action>`, e.g. `Courses::AddItem`) over a dense
   controller or model. This is what will let Hest.AI (Phase 3) invoke this
@@ -64,8 +68,8 @@ bin/bundler-audit           # dependency vulnerabilities
 ```
 
 A new module or feature should ship with model + controller tests (+ a
-service test where relevant), following the 83+ test files already present
-under `test/`.
+service test where relevant), following the 300+ test files already
+present under `test/`.
 
 ## Pull requests
 
@@ -73,9 +77,10 @@ under `test/`.
   refactor.
 - Describe the *why* of the change, not just the *what* (the diff already
   speaks for the *what*).
-- Explicitly flag any deliberate deviation from the Spec or the
-  Implementation Plan, and propose the matching update to both documents in
-  the same pull request.
+- Explicitly flag any deliberate deviation from the conventions above, and
+  propose the matching update to the in-app Roadmap
+  (`app/models/roadmap.rb` + `config/locales/{en,fr}/roadmap.yml`) in the
+  same pull request.
 
 ## License of contributions
 

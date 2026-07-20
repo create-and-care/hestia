@@ -16,9 +16,11 @@ subscription: the code is public under the [AGPLv3](LICENSE) license, and
 anyone can host their own instance without depending on a third-party
 service or paying anything.
 
-For the functional detail of each module, see the
-[Specification](<Specification — Hestia.md>); for development progress,
-see the [Implementation Plan](<Implementation Plan — Hestia.md>).
+For each module's functional detail and the project's shipped/planned
+work, see the in-app **Roadmap** (`/roadmap`, reachable without an
+account) — a chronological timeline kept current with every release,
+superseding the separate Specification/Implementation Plan documents
+this project started from.
 
 ## Contents
 

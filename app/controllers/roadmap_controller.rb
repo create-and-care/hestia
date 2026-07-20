@@ -5,7 +5,6 @@ class RoadmapController < ApplicationController
   allow_without_household
 
   def show
-    @phases = Roadmap.phases
-    @improvements = Roadmap.improvements
+    @milestones = Roadmap.milestones
   end
 end

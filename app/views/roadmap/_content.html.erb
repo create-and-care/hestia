@@ -1,53 +1,84 @@
+<%# Vertical timeline: past waves first (oldest to newest), an "Aujourd'hui"/"Today"
+    divider, then upcoming work in intent order (no committed date yet). Two independent
+    <ol>s (rather than one) so each gets its own connecting line — the divider sits
+    between them undisturbed instead of a single line running behind it. %>
+<% done_milestones, upcoming_milestones = milestones.partition { |milestone| milestone[:status] == :done } %>
+
 <div class="space-y-8">
-  <p class="text-sm text-secondary">
-    <%= t("roadmap.show.description") %>
-  </p>
+  <p class="text-sm text-secondary"><%= t("roadmap.show.description") %></p>
 
-  <section>
-    <h2 class="mb-3 font-medium"><%= t("roadmap.show.progress_heading") %></h2>
-    <ul class="divide-y divide-primary rounded-lg border border-primary">
-      <% phases.each do |phase| %>
-        <% badge_variant, badge_label = case phase[:status]
-           when :done then [ :success, t("roadmap.show.status.done") ]
-           when :partial then [ :warning, t("roadmap.show.status.partial") ]
-           else [ :secondary, t("roadmap.show.status.todo") ]
-           end %>
-        <li class="flex items-start justify-between gap-4 px-4 py-3">
-          <div>
-            <p class="font-medium"><%= phase[:name] %></p>
-            <p class="text-sm text-secondary"><%= phase[:detail] %></p>
-          </div>
-          <%= render(Ui::BadgeComponent.new(variant: badge_variant, html_options: { class: "mt-0.5 shrink-0" })) { badge_label } %>
-        </li>
-      <% end %>
-    </ul>
-  </section>
+  <% if done_milestones.any? %>
+    <div class="relative">
+      <div class="absolute left-5 top-5 bottom-5 w-px bg-border-primary" aria-hidden="true"></div>
 
-  <section>
-    <h2 class="mb-1 font-medium"><%= t("roadmap.show.improvements_heading") %></h2>
-    <p class="mb-3 text-sm text-secondary">
-      <%= t("roadmap.show.improvements_description") %>
-    </p>
+      <ol class="relative space-y-10">
+        <% done_milestones.each do |milestone| %>
+          <li class="relative pl-14">
+            <span class="absolute left-0 top-0 flex size-10 items-center justify-center rounded-full border border-success/30 bg-success/10 text-success">
+              <%= lucide_icon(milestone[:icon], css_class: "size-5") %>
+            </span>
 
-    <%= render(Ui::AccordionComponent.new(multiple: true)) do |accordion| %>
-      <% improvements.each do |group| %>
-        <% group_title = capture do %>
-          <span class="flex flex-1 items-center justify-between pr-2">
-            <span><span class="mr-1"><%= group[:emoji] %></span><%= group[:category] %></span>
-            <span class="text-sm text-secondary"><%= pluralize(group[:items].size, "item") %></span>
-          </span>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 pt-2">
+              <% if milestone[:date] %>
+                <time datetime="<%= milestone[:date].iso8601 %>" class="text-xs font-medium uppercase tracking-wide text-subdued">
+                  <%= l(milestone[:date], format: :long) %>
+                </time>
+              <% end %>
+              <%= render(Ui::BadgeComponent.new(variant: :success)) { t("roadmap.show.status.done") } %>
+            </div>
+
+            <h3 class="mt-1 font-medium"><%= milestone[:title] %></h3>
+
+            <ul class="mt-2 space-y-1.5 text-sm text-secondary">
+              <% milestone[:items].each do |item| %>
+                <li class="flex gap-2">
+                  <span class="mt-[7px] size-1 shrink-0 rounded-full bg-subdued" aria-hidden="true"></span>
+                  <span><%= item %></span>
+                </li>
+              <% end %>
+            </ul>
+          </li>
         <% end %>
-        <% accordion.with_item(title: group_title, key: group[:category].parameterize) do %>
-          <ul class="space-y-2 px-4 text-sm text-secondary">
-            <% group[:items].each do |item| %>
-              <li class="flex gap-2">
-                <span class="text-subdued">—</span>
-                <span><%= item %></span>
-              </li>
-            <% end %>
-          </ul>
+      </ol>
+    </div>
+  <% end %>
+
+  <% if done_milestones.any? && upcoming_milestones.any? %>
+    <div class="flex items-center gap-3" role="separator">
+      <span class="h-px flex-1 bg-border-primary"></span>
+      <span class="text-xs font-medium uppercase tracking-wide text-subdued"><%= t("roadmap.show.today") %></span>
+      <span class="h-px flex-1 bg-border-primary"></span>
+    </div>
+  <% end %>
+
+  <% if upcoming_milestones.any? %>
+    <div class="relative">
+      <div class="absolute left-5 top-5 bottom-5 w-px border-l border-dashed border-primary" aria-hidden="true"></div>
+
+      <ol class="relative space-y-10">
+        <% upcoming_milestones.each do |milestone| %>
+          <li class="relative pl-14">
+            <span class="absolute left-0 top-0 flex size-10 items-center justify-center rounded-full border border-primary bg-surface-inset text-subdued">
+              <%= lucide_icon(milestone[:icon], css_class: "size-5") %>
+            </span>
+
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 pt-2">
+              <%= render(Ui::BadgeComponent.new(variant: :secondary)) { t("roadmap.show.status.upcoming") } %>
+            </div>
+
+            <h3 class="mt-1 font-medium"><%= milestone[:title] %></h3>
+
+            <ul class="mt-2 space-y-1.5 text-sm text-secondary">
+              <% milestone[:items].each do |item| %>
+                <li class="flex gap-2">
+                  <span class="mt-[7px] size-1 shrink-0 rounded-full bg-subdued" aria-hidden="true"></span>
+                  <span><%= item %></span>
+                </li>
+              <% end %>
+            </ul>
+          </li>
         <% end %>
-      <% end %>
-    <% end %>
-  </section>
+      </ol>
+    </div>
+  <% end %>
 </div>

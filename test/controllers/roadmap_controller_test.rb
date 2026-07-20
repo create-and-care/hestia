@@ -12,7 +12,8 @@ class RoadmapControllerTest < ActionDispatch::IntegrationTest
 
     get roadmap_path
     assert_response :success
-    assert_includes @response.body, "Progress by area"
+    assert_includes @response.body, "Phase 1 — Foundation"
+    assert_includes @response.body, "Hest.AI (Phase 3)"
   end
 
   test "is reachable from onboarding" do

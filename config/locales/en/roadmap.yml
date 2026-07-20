@@ -3,101 +3,216 @@ en:
     show:
       title: Roadmap
       description: >-
-        Project progress and planned improvements. Full detail in the Specification and the
-        Implementation Plan versioned with the code; precise version history in CHANGELOG.md.
-      progress_heading: Progress by area
-      improvements_heading: Planned improvements
-      improvements_description: >-
-        A list drawn from analyzing the existing code (tests, security, UI consistency,
-        functional coverage) — not just the gaps already known from the Implementation Plan.
+        The project's timeline, from Phase 1 to the latest shipped work — and what's next. This
+        page is now the single source of truth on Hestia's progress; it replaces the original
+        Specification and Implementation Plan documents, whose content has been fully folded in
+        here. Precise version history lives in CHANGELOG.md.
       status:
         done: Done
-        partial: Partial
-        todo: To do
-    phases:
+        upcoming: Upcoming
+      today: Today
+    milestones:
       foundation:
-        name: "Phase 1 — Foundation"
-        detail: "User, Session, Household, Membership, multi-household scoping"
-      priority_modules:
-        name: "2.a — Priority modules"
-        detail: "Shopping, Calendar, Tasks, Fridge, Recipes"
-      satellite_modules:
-        name: "2.b — Satellite modules"
-        detail: "Notes, Birthdays, Addresses, Service Providers, Loyalty, Pets, Vehicles, Wine Cellar, Waste, Baby, Messages"
-      richer_logic:
-        name: "2.c — Richer business logic"
-        detail: "Menu, Routines, Outdoor, Budget, Documents"
-      architecture_deviations:
-        name: "2.d — Architecture deviations"
-        detail: "Gifts, Circles, Trip, Wellbeing"
-      reminders:
-        name: "Reminders & notifications"
-        detail: "Tasks, Calendar, Fridge, and the Birthdays same-day notification are all wired to Reminders::DailyDigest / DeliverDue"
-      external_integrations:
-        name: "External integrations"
-        detail: "Open Food Facts, Nominatim, public holidays, Loyalty/Outdoor catalogs, and a real Google/Microsoft OAuth + CalDAV calendar sync"
-      api:
-        name: "API api/v1"
-        detail: "All 25 modules exposed"
-      mobile:
-        name: "Mobile application"
-        detail: "Flutter skeleton — login + read-only Shopping"
+        title: "Phase 1 — Foundation"
+        items:
+          - "User, Session, Household, Membership (member/admin roles, unique invite code)"
+          - "Multi-household scoping (Current.household, the HouseholdScoped concern)"
+          - "Sign-up, onboarding (create or join a household via code), dashboard"
+      design_system:
+        title: "Ui:: component library"
+        items:
+          - "About fifty shadcn/ui-style ViewComponents (buttons, dialogs, calendar, charts, combobox...) exposed on /design-system"
+          - "Tailwind v4 foundation and design tokens (semantic colors, dark mode)"
+      wave_2a:
+        title: "Wave 2.a — Priority modules"
+        items:
+          - "Shopping, Fridge, Recipes, Tasks, Calendar: model, controller, views, real-time"
+          - "Per-domain services (Courses::AddItem, Frigo::AddItem, Tasks::CreateTask, Calendar::CreateEvent...)"
+      wave_2b:
+        title: "Wave 2.b — Satellite modules"
+        items:
+          - "11 modules: Notes, Birthdays, Addresses, Service Providers, Loyalty, Pets, Vehicles, Wine Cellar, Waste, Baby, Messages"
+      wave_2c:
+        title: "Wave 2.c — Richer business logic"
+        items:
+          - "Menu (meal planning), Routines (recurrence engine shared with Calendar)"
+          - "Outdoor (garden and pools), Budget (automatic split calculation), Documents (storage via Active Storage)"
+      wave_2d:
+        title: "Wave 2.d — Architecture deviations"
+        items:
+          - "Gifts: unauthenticated public sharing via token (g/:token)"
+          - "Circles: independent of the household, group users beyond it"
+          - "Trip: cross-cutting sub-context (trip_id) on Addresses, Notes, Tasks, Shopping"
+          - "Wellbeing: strict per-user scoping, never per household — not even an admin can access it"
+      pdf_export_reordering:
+        title: "PDF export & reordering"
+        items:
+          - "PDF export of the shopping list and the displayed calendar month (Prawn)"
+          - "Drag-and-drop reordering on shopping items, tasks, and loyalty cards"
+      reminders_notifications:
+        title: "Reminders & notifications"
+        items:
+          - "Notification, NotificationPreference, TaskReminder, EventReminder"
+          - "Solid Queue jobs: Reminders::DeliverDue (due dates) and Reminders::DailyDigest (daily recap, including today's birthdays)"
+          - "Unread-notifications badge and a per-user preferences page"
+      external_integrations_v1:
+        title: "External integrations"
+        items:
+          - "Open Food Facts for barcode scanning (Shopping, Fridge)"
+          - "Nominatim geocoding for address search"
+          - "France / Belgium / Switzerland public holidays on Calendar, country configurable per household"
+      reference_catalogs:
+        title: "Reference catalogs"
+        items:
+          - "Loyalty brand catalog (about ten to start, Loyalty)"
+          - "Plant care-sheet catalog (6 sheets to start, Outdoor)"
+      api_and_mobile_skeleton:
+        title: "API api/v1 & mobile skeleton"
+        items:
+          - "ApiToken, Api::V1::BaseController, REST endpoints for Shopping, Fridge, Recipes, Tasks, Calendar"
+          - "Flutter client skeleton: login screen, read-only Shopping"
+          - "External calendar sync: first scaffold (Google/Microsoft/CalDAV), the real flow not yet wired up"
       governance:
-        name: "Governance & documentation"
-        detail: "LICENSE, README, CONTRIBUTING, CHANGELOG, Roadmap page"
-      marketing_site:
-        name: "Marketing site & user docs"
-        detail: "Not started"
+        title: "Governance & documentation"
+        items:
+          - "LICENSE (AGPLv3), README, CONTRIBUTING, CHANGELOG"
+          - "First version of the in-app Roadmap page"
+      i18n:
+        title: "Full internationalization"
+        items:
+          - "English by default, per-user language preference (French available)"
+          - "All 25 modules migrated to I18n"
+      reliability_quality:
+        title: "Reliability & quality"
+        items:
+          - "SimpleCov (test coverage), Bullet (N+1 query detection), Sentry (production error tracking)"
+          - "mission_control-jobs: Solid Queue admin UI at /jobs, closed by default"
+          - "Explicit per-household time zone for day-sensitive calculations (due dates, expiry, birthdays)"
+          - "Real Capybara system tests and 77 new test files closing the coverage gap"
+      external_calendar_sync_real:
+        title: "Real external calendar sync"
+        items:
+          - "Full OAuth2 flow for Google and Microsoft, with automatic refresh of an expired token"
+          - "CalDAV (Apple, Nextcloud, Fastmail...) via a genuine REPORT calendar-query request"
+          - "Access tokens encrypted at rest (Active Record Encryption)"
+      api_v1_full:
+        title: "API api/v1 extended to all 25 modules"
+        items:
+          - "The 20 remaining modules exposed: Notes, Birthdays, Addresses, Service Providers, Loyalty, Pets, Vehicles, Wine Cellar, Waste, Baby, Messages, Menu, Routines, Outdoor, Budget, Documents, Gifts, Circles, Trip, Wellbeing"
+          - "Scoping honored for the special cases: Circles by membership (not household), Wellbeing by user, Messages by conversation participant"
+      navigation_settings:
+        title: "Navigation & household settings"
+        items:
+          - "Collapsible sidebar, grouped by theme"
+          - "Household settings consolidated into tabs: general, members, notifications, API, sessions, modules, roadmap"
+      recipe_catalog:
+        title: "Recipe catalog & discovery"
+        items:
+          - "Shared recipe catalog ready to clone into your own book (up to 95 hand-authored recipes)"
+          - "Recipe suggestions based on the fridge's contents"
+      visual_polish_icons:
+        title: "Cross-cutting visual polish"
+        items:
+          - "Replaced emoji icons with the Lucide icon library throughout the app"
+          - "Consistent breadcrumb and pagination on every module page"
+      ui_migration_a11y:
+        title: "Full Ui:: migration & accessibility"
+        items:
+          - "Every view in the app migrated to Ui:: components, with dedicated tests"
+          - "First accessibility fixes and a locale-switcher correction"
+      global_search:
+        title: "⌘K global search"
+        items:
+          - "⌘K command palette replacing the sidebar's nav filter"
+          - "Covers every module enabled for the household"
+      refinement_wave_day1:
+        title: "Refinement wave — day 1: Shopping, Calendar, Tasks, Gifts, Circles"
+        items:
+          - "Shopping: sorting by real aisle order, catalog management tools"
+          - "Calendar: Day/Week views, single-occurrence vs series editing, birthdays shown"
+          - "Tasks: delete confirmations, keyboard reordering, auto-sort"
+          - "Gifts: secured public reservation cancellation, list ownership and visibility"
+          - "Circles: photo posts, correctness bug fixes"
+      refinement_wave_day2a:
+        title: "Refinement wave — day 2: Fridge, Recipes, Notes, Birthdays, Addresses, Service Providers"
+        items:
+          - "Fridge: prepared-dish photos, location tabs, delete confirmations"
+          - "Recipes: real cook mode (keeps the screen awake), photos, category filtering"
+          - "Notes: filters, richer formatting, links"
+          - "Birthdays: calendar view, hardening, accessibility"
+          - "Addresses: photo, accessibility, interconnections with other modules"
+          - "Service Providers: customizable types, accessibility, import"
+      refinement_wave_day2b:
+        title: "Refinement wave — day 2: Loyalty, Pets, Vehicles, Wine Cellar, Waste, Baby, Messages"
+        items:
+          - "Loyalty: real detected barcodes/QR codes, full-screen kiosk mode at checkout"
+          - "Pets, Vehicles, Wine Cellar: editing, photo, real-time, an N+1 query fix"
+          - "Waste: editing, a Calendar link, visual badges"
+          - "Baby: a real feeding timer, editing, interconnections"
+          - "Messages: a real-time fix, privacy, interconnections"
+      refinement_wave_day3a:
+        title: "Refinement wave — day 3: Menu, Routines, Outdoor, Budget, Documents, Trip, Wellbeing"
+        items:
+          - "Menu: reordering, editing, direct export to Shopping"
+          - "Routines: completion history, accessibility, dark mode"
+          - "Outdoor: editing, history, accessibility, dark mode"
+          - "Budget: editing, a Trip link, accessibility, dark mode"
+          - "Documents: a built-in PDF viewer, sharing, interconnections"
+          - "Trip: à-la-carte tabs, per-stay Menu isolation, editing"
+          - "Wellbeing: a weight chart, editing, full history, accessibility"
+      refinement_wave_day3b:
+        title: "Refinement wave — day 3: Foundation, Design system, Navigation"
+        items:
+          - "Foundation: dashboard widgets, member/household management (leave, remove, promote, delete), revocable active sessions"
+          - "Foundation: hardening — an 8-character minimum password, configurable API token expiration"
+          - "Design system: dark-mode tokens applied app-wide, the last hardcoded strings translated"
+          - "Navigation: extended search coverage, notifications clickable to their source, the Roadmap page rebuilt as a timeline"
+      account_privacy:
+        title: "User account & privacy"
+        items:
+          - "User account deletion"
+          - "Personal-data export, for portability even when self-hosted"
+      household_activity_export:
+        title: "Dashboard: activity & export"
+        items:
+          - "A household activity feed (who did what, when)"
+          - "Household data export in JSON/CSV"
+      public_route_hardening:
+        title: "Public route hardening"
+        items:
+          - "Rate limiting on the public gift-reservation route (g/:token/reserve/:idea_id), the only sensitive route with none today"
+          - "Automated accessibility auditing — no a11y test tooling in place despite the manual fixes already shipped module by module"
+      reference_catalog_growth:
+        title: "Grow the catalogs & the automation"
+        items:
+          - "Expand the Outdoor plant reference catalog beyond the 6 starter sheets"
+          - "Expand the Loyalty brand catalog beyond the starter dozen"
+          - "Smart ingredient merging (duplicates, unit conversion) when adding a recipe to shopping"
+      pwa:
+        title: "Enable the PWA"
+        items:
+          - "The manifest and service worker already exist under app/views/pwa/, still commented out in routes and the layout"
+          - "Would let the app be installed on mobile/desktop while waiting for full Flutter client parity"
+      marketing_docs:
+        title: "Marketing site & user documentation"
+        items:
+          - "A public marketing site (home page, one page per module, a Hest.AI presentation page)"
+          - "A per-module user documentation hub"
+          - "A privacy policy suited to the self-hosted context"
+      mobile_parity:
+        title: "Mobile functional parity"
+        items:
+          - "Screens for the 24 remaining modules, beyond read-only Shopping"
+          - "Native camera (barcode scanning, document capture), voice dictation, push notifications"
+          - "Phone contact import, offline mode"
+          - "A real-time channel (WebSocket to Solid Cable) and transparent API token renewal"
+      cross_household_recipes:
+        title: "Cross-household recipe community"
+        items:
+          - "Publish and draw from recipes across distinct Hestia households, beyond today's private book"
+          - "Explicitly out of V1 scope — to reassess once a critical mass of active households is reached"
       hestai:
-        name: "Hest.AI (Phase 3)"
-        detail: "Not started — needs the work above consolidated first"
-    improvements:
-      dashboard:
-        category: "Dashboard & cross-cutting experience"
+        title: "Hest.AI (Phase 3)"
         items:
-          - "Add a household activity feed (who did what, when) — useful for trust in multi-member use and reusable as a logging building block for Hest.AI (Spec §13)."
-          - "Allow exporting household data (JSON/CSV): no personal-data portability feature exists at this stage."
-      security:
-        category: "Security & account management"
-        items:
-          - "Add user account deletion and a personal-data export, for portability even when self-hosted (see the privacy-policy recommendation, Spec §8)."
-          - "Add rate limiting to the public, unauthenticated gift-reservation route (g/:token/reserve/:idea_id), which has none unlike login, forgot-password, and (now) registration."
-      reliability:
-        category: "Reliability, quality & observability"
-        items:
-          - "Extend system test (Capybara) coverage: a handful of flows exist so far (sign-in/out, Shopping, Tasks, Recipe catalog, global search, notifications) but multi-step Turbo-navigation flows proved flakier to write reliably in this environment (suspected Puma/ActionCable interaction under Capybara's test server) — worth a dedicated investigation before writing many more of them."
-          - "Add https://github.com/SigNoz/signoz to bring metrics and logs to the project."
-      functional_gaps:
-        category: "Functional modules — identified gaps"
-        items:
-          - "Expand the plant reference catalog beyond the 6 starter sheets (PlantReference)."
-          - "Expand the loyalty brand catalog beyond the starter dozen (LoyaltyBrand)."
-          - "Import contacts from the phone's address book (Birthdays, Service Providers) once mobile is far enough along."
-          - "Add smart ingredient merging (duplicates, unit conversion) when adding a recipe to shopping — currently a raw add with no merging (a target Hest.AI capability)."
-          - "Look into the cross-household recipe community floated as out-of-scope for V1 (Spec §19), once a critical mass of active households is reached."
-      api_mobile:
-        category: "API & Mobile"
-        items:
-          - "Open a real-time channel for external clients (WebSocket to Solid Cable): mobile currently only does one-off HTTP, no live updates."
-          - "Build the mobile client's functional parity across the 24 remaining modules: only a read-only Shopping screen exists."
-          - "Add native camera access on mobile (Shopping/Fridge barcode scanning, document capture)."
-          - "Add native voice dictation on mobile (Notes, Tasks)."
-          - "Add native push notifications on mobile, building on the Notification/NotificationPreference infrastructure already in place on the web."
-          - "Add a read-only offline mode on mobile for already-synced data."
-          - "Add transparent API token renewal on mobile: currently a static token, with no expiration or refresh flow."
-      i18n_a11y:
-        category: "Internationalization & accessibility"
-        items:
-          - "Enable the PWA: the manifest and service worker exist under app/views/pwa/ but stay commented out in config/routes.rb and the layout, even though they'd let the web app be installed on mobile/desktop while waiting for full Flutter client parity."
-          - "Audit keyboard and screen-reader accessibility for the custom Stimulus components (combobox, dialog, dropdown, command…): no automated accessibility test exists at this stage."
-      governance_docs:
-        category: "Site, documentation & governance"
-        items:
-          - "Build a public marketing site (a home page, one page per module, a Hest.AI presentation page, emphasizing the free/open-source nature of the project): not started, distinct from this Roadmap page."
-          - "Build a per-module user documentation hub (usage guides), beyond the governance files already in place."
-          - "Write a privacy policy suited to the self-hosted context, recommended as soon as a household hosts third-party data (public Gift links, Circles)."
-      hestai:
-        category: "Hest.AI (Phase 3)"
-        items:
-          - "Start Hest.AI only once the remaining reliability gaps above are closed: otherwise the assistant would inherit the same gaps (Spec §13, Plan §7)."
-          - "Generalize the per-domain service-object layer to the modules that don't have one yet, a condition set out in Spec section 5 so Hest.AI can invoke them as tools."
+          - "Generalize the per-domain service layer to the modules that don't have one yet, so the assistant can invoke them as tools"
+          - "A conversational assistant acting inside the app under the user's explicit approval, never on another member's Wellbeing data"

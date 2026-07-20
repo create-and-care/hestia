@@ -1,33 +1,42 @@
 require "test_helper"
 
 class RoadmapTest < ActiveSupport::TestCase
-  test "phases returns a name, detail and status for every phase" do
-    phases = Roadmap.phases
+  test "milestones returns a date-or-nil, status, icon, title and items for every entry" do
+    milestones = Roadmap.milestones
 
-    assert_equal Roadmap::PHASE_SLUGS.size, phases.size
-    phases.each do |phase|
-      assert phase[:name].present?
-      assert phase[:detail].present?
-      assert_includes %i[done partial todo], phase[:status]
+    assert_equal Roadmap::MILESTONE_SLUGS.size, milestones.size
+    milestones.each do |milestone|
+      assert milestone[:date].is_a?(Date) || milestone[:date].nil?
+      assert_includes %i[done upcoming], milestone[:status]
+      assert milestone[:icon].present?
+      assert milestone[:title].present?
+      assert milestone[:items].is_a?(Array)
+      assert milestone[:items].all?(&:present?)
     end
   end
 
-  test "improvements returns a category, emoji and items for every group" do
-    improvements = Roadmap.improvements
-
-    assert_equal Roadmap::IMPROVEMENT_SLUGS_AND_EMOJIS.size, improvements.size
-    improvements.each do |group|
-      assert group[:category].present?
-      assert group[:emoji].present?
-      assert group[:items].is_a?(Array)
-      assert group[:items].all?(&:present?)
+  test "a milestone is done only when it carries a shipped date, upcoming otherwise" do
+    Roadmap.milestones.each do |milestone|
+      if milestone[:date]
+        assert_equal :done, milestone[:status]
+      else
+        assert_equal :upcoming, milestone[:status]
+      end
     end
   end
 
-  test "phases and improvements are translated when the locale is French" do
+  test "milestones stay in chronological order, done entries before upcoming ones" do
+    dates = Roadmap.milestones.map { |milestone| milestone[:date] }.compact
+    assert_equal dates.sort, dates
+
+    statuses = Roadmap.milestones.map { |milestone| milestone[:status] }
+    assert_equal statuses.sort_by { |status| status == :done ? 0 : 1 }, statuses
+  end
+
+  test "milestones are translated when the locale is French" do
     I18n.with_locale(:fr) do
-      assert_equal "Phase 1 — Fondations", Roadmap.phases.first[:name]
-      assert_equal "Tableau de bord & expérience transverse", Roadmap.improvements.first[:category]
+      assert_equal "Phase 1 — Fondations", Roadmap.milestones.first[:title]
+      assert_equal "Hest.AI (Phase 3)", Roadmap.milestones.last[:title]
     end
   end
 end
