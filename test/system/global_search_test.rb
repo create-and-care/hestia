@@ -25,6 +25,8 @@ class GlobalSearchTest < ApplicationSystemTestCase
     assert_text households(:alpha).name
 
     click_on "Search…"
+    assert_selector "[role=combobox]"
+
     fill_in placeholder: "Search across the household…", with: "zzzznomatchzzzz"
 
     assert_text "No results found."
