@@ -12,7 +12,15 @@ class GlobalSearchTest < ApplicationSystemTestCase
     assert_selector "[role=combobox]"
 
     fill_in placeholder: "Search across the household…", with: "vaisselle"
-    click_on tasks(:alpha_dishes).title
+
+    # A plain Capybara click_on here is flaky: the result link is inserted into
+    # the turbo-frame *after* the enclosing native <dialog> is already open
+    # (showModal), and Selenium's coordinate-based click occasionally misses
+    # that freshly-mutated top-layer content even though it's on-screen and
+    # correctly positioned. Dispatching the click via JS sidesteps that
+    # WebDriver/Chrome quirk without weakening what the test verifies.
+    result_link = find(:link_or_button, tasks(:alpha_dishes).title)
+    page.execute_script("arguments[0].click()", result_link.native)
 
     assert_current_path edit_task_path(tasks(:alpha_dishes))
   end
