@@ -1,12 +1,16 @@
 <div id="<%= dom_id(baby_profile) %>">
-  <%= render(Ui::ItemComponent.new(href: baby_profile_path(baby_profile))) do |item| %>
-    <% item.with_leading { lucide_icon("baby", css_class: "size-4") } %>
-    <% item.with_title { baby_profile.name } %>
-    <% if baby_profile.born_on %>
-      <% item.with_description do %>
-        <%= t("baby_profiles.born_on", date: baby_profile.born_on.strftime("%d/%m/%Y")) %>
-        <span class="text-subdued">· <%= t("baby_profiles.age_months", count: baby_profile.age_in_months) %></span>
-      <% end %>
+  <%= render(Ui::CardComponent.new) do %>
+    <%= link_to baby_profile_path(baby_profile), class: "flex items-center gap-3" do %>
+      <%= lucide_icon("baby", css_class: "size-6 shrink-0 text-subdued") %>
+      <div class="min-w-0 flex-1">
+        <p class="font-medium text-primary truncate"><%= baby_profile.name %></p>
+        <% if baby_profile.born_on %>
+          <p class="text-xs text-secondary truncate">
+            <%= t("baby_profiles.born_on", date: baby_profile.born_on.strftime("%d/%m/%Y")) %>
+            · <%= t("baby_profiles.age_months", count: baby_profile.age_in_months) %>
+          </p>
+        <% end %>
+      </div>
     <% end %>
   <% end %>
 </div>

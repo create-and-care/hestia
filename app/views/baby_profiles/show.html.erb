@@ -2,6 +2,8 @@
 <%= turbo_stream_from Current.household, "baby" %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:baby, [ @baby.name, nil ], module_path: baby_profiles_path) %></div>
+
   <header class="mb-2 flex items-start justify-between">
     <div>
       <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("baby", css_class: "size-6") %> <%= @baby.name %></h1>
@@ -17,10 +19,10 @@
         </p>
       <% end %>
     </div>
-    <div class="flex gap-2 text-sm">
-      <%= link_to t(".edit"), edit_baby_profile_path(@baby), class: "underline" %>
-      <%= button_to t(".delete"), baby_profile_path(@baby), method: :delete,
-            form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-destructive underline" %>
+    <div class="flex items-center gap-2">
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_baby_profile_path(@baby))) { t(".edit") } %>
+      <%= render(Ui::ButtonToComponent.new(baby_profile_path(@baby), method: :delete, variant: :destructive, size: :sm,
+            html_options: { form: { data: { turbo_confirm: t(".delete_confirm") } } })) { t(".delete") } %>
     </div>
   </header>
 
@@ -73,7 +75,7 @@
                   html_options: { id: "feeding_session_kind" }) %>
           <% end %>
         <% end %>
-        <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".start") } %>
+        <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".start") } %>
       <% end %>
     <% end %>
   </section>
@@ -105,13 +107,15 @@
       <div class="mb-3"><%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_food_introductions") } } %></div>
     <% end %>
     <%= form_with model: @food_introduction, url: baby_profile_food_introductions_path(@baby), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= render(Ui::FieldComponent.new(id: "food_introduction_food")) do |field| %>
-        <% field.with_label { t(".food_label") } %>
-        <% field.with_control do %>
-          <%= render Ui::InputComponent.new(type: "text", name: "food_introduction[food]", value: @food_introduction.food, placeholder: t(".food_placeholder"),
-                html_options: { id: "food_introduction_food", required: true, class: "flex-1" }) %>
+      <div class="flex-1">
+        <%= render(Ui::FieldComponent.new(id: "food_introduction_food")) do |field| %>
+          <% field.with_label { t(".food_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "text", name: "food_introduction[food]", value: @food_introduction.food, placeholder: t(".food_placeholder"),
+                  html_options: { id: "food_introduction_food", required: true }) %>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
       <%= render(Ui::FieldComponent.new(id: "food_introduction_introduced_on")) do |field| %>
         <% field.with_label { t(".introduced_on_label") } %>
         <% field.with_control do %>
@@ -158,13 +162,15 @@
       <div class="mb-3"><%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_allergen_tests") } } %></div>
     <% end %>
     <%= form_with model: @allergen_test, url: baby_profile_allergen_tests_path(@baby), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= render(Ui::FieldComponent.new(id: "allergen_test_allergen")) do |field| %>
-        <% field.with_label { t(".allergen_label") } %>
-        <% field.with_control do %>
-          <%= render Ui::InputComponent.new(type: "text", name: "allergen_test[allergen]", value: @allergen_test.allergen, placeholder: t(".allergen_placeholder"),
-                html_options: { id: "allergen_test_allergen", required: true, class: "flex-1" }) %>
+      <div class="flex-1">
+        <%= render(Ui::FieldComponent.new(id: "allergen_test_allergen")) do |field| %>
+          <% field.with_label { t(".allergen_label") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "text", name: "allergen_test[allergen]", value: @allergen_test.allergen, placeholder: t(".allergen_placeholder"),
+                  html_options: { id: "allergen_test_allergen", required: true }) %>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
       <%= render(Ui::FieldComponent.new(id: "allergen_test_tested_on")) do |field| %>
         <% field.with_label { t(".tested_on_label") } %>
         <% field.with_control do %>
@@ -184,5 +190,4 @@
     <% end %>
   </section>
 
-  <p class="text-sm"><%= link_to t(".back_to_profiles"), baby_profiles_path, class: "underline" %></p>
 </div>

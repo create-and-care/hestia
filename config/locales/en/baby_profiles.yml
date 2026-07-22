@@ -69,7 +69,6 @@ en:
         - "Mild"
         - "Severe"
       severity_blank: "Severity"
-      back_to_profiles: "← All profiles"
     create:
       created: "Profile created."
     update:

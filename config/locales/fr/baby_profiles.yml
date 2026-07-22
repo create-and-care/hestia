@@ -69,7 +69,6 @@ fr:
         - "Légère"
         - "Sévère"
       severity_blank: "Sévérité"
-      back_to_profiles: "← Tous les profils"
     create:
       created: "Profil créé."
     update:

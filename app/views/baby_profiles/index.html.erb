@@ -16,7 +16,7 @@
   </div>
   <% if @babies.empty? %>
     <div class="mt-4">
-      <%= render(Ui::EmptyComponent.new) do |empty| %>
+      <%= render(Ui::CardComponent.new) do |empty| %>
         <% empty.with_description { t(".empty") } %>
       <% end %>
     </div>
