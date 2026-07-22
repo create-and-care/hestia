@@ -9,7 +9,7 @@ class Household < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
 
-  # Modules (Phase 2)
+  # Modules
   has_many :shopping_lists, dependent: :destroy
   has_many :products, dependent: :destroy
   has_many :fridge_items, dependent: :destroy
@@ -19,7 +19,7 @@ class Household < ApplicationRecord
   has_many :tasks, dependent: :destroy
   has_many :calendar_events, dependent: :destroy
 
-  # Satellite modules (Phase 2.b)
+  # Satellite modules
   has_many :notes, dependent: :destroy
   has_many :contacts, dependent: :destroy
   has_many :contact_tags, dependent: :destroy
@@ -36,7 +36,7 @@ class Household < ApplicationRecord
   has_many :baby_profiles, dependent: :destroy
   has_many :conversations, dependent: :destroy
 
-  # Modules with rich business logic (Phase 2.c)
+  # Modules with rich business logic
   has_many :meal_plan_entries, dependent: :destroy
   has_many :routines, dependent: :destroy
   has_many :plants, dependent: :destroy
@@ -47,7 +47,7 @@ class Household < ApplicationRecord
   has_many :document_folders, dependent: :destroy
   has_many :documents, dependent: :destroy
 
-  # Modules with architectural deviation (Phase 2.d)
+  # Modules with architectural deviation
   has_many :gift_lists, dependent: :destroy
   has_many :trips, dependent: :destroy
 

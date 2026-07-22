@@ -261,7 +261,7 @@ shipped in this session:
 
 ### Added
 
-- **Phase 1 — Application foundation**: `Household`, `Membership` (roles,
+- **Application foundation**: `Household`, `Membership` (roles,
   invite codes), multi-household scoping (`HouseholdScoped`,
   `Current.household`), sign-up, onboarding, dashboard.
 - First versions of the Specification and the Implementation Plan.

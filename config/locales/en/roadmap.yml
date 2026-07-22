@@ -3,7 +3,7 @@ en:
     show:
       title: Roadmap
       description: >-
-        The project's timeline, from Phase 1 to the latest shipped work — and what's next. This
+        The project's timeline, from v0 to the latest shipped work — and what's next. This
         page is now the single source of truth on Hestia's progress; it replaces the original
         Specification and Implementation Plan documents, whose content has been fully folded in
         here. Precise version history lives in CHANGELOG.md.
@@ -13,7 +13,7 @@ en:
       today: Today
     milestones:
       foundation:
-        title: "Phase 1 — Foundation"
+        title: "Foundation"
         items:
           - "User, Session, Household, Membership (member/admin roles, unique invite code)"
           - "Multi-household scoping (Current.household, the HouseholdScoped concern)"
@@ -212,7 +212,7 @@ en:
           - "Publish and draw from recipes across distinct Hestia households, beyond today's private book"
           - "Explicitly out of V1 scope — to reassess once a critical mass of active households is reached"
       hestai:
-        title: "Hest.AI (Phase 3)"
+        title: "Hest.AI"
         items:
           - "Generalize the per-domain service layer to the modules that don't have one yet, so the assistant can invoke them as tools"
           - "A conversational assistant acting inside the app under the user's explicit approval, never on another member's Wellbeing data"

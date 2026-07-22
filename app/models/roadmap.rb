@@ -1,4 +1,4 @@
-# A chronological timeline of the project, from Phase 1 (2026-06-25) to
+# A chronological timeline of the project, from 2026-06-25 to
 # today, plus what's next. Static data versioned with the code — the
 # project's single source of truth for progress, replacing the separate
 # Specification/Implementation Plan documents this project started from

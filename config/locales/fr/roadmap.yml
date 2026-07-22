@@ -3,7 +3,7 @@ fr:
     show:
       title: Feuille de route
       description: >-
-        La chronologie du projet, de la Phase 1 au dernier chantier livré — et ce qui vient
+        La chronologie du projet, de la v0 au dernier chantier livré — et ce qui vient
         ensuite. Cette page est désormais l'unique source de vérité sur l'avancement de Hestia ;
         elle remplace la Spécification et le Plan d'implémentation d'origine, dont le contenu a
         été entièrement repris ici. Historique précis des versions dans CHANGELOG.md.
@@ -13,7 +13,7 @@ fr:
       today: Aujourd'hui
     milestones:
       foundation:
-        title: "Phase 1 — Fondations"
+        title: "Fondations"
         items:
           - "Utilisateur, Session, Foyer, Membership (rôles membre/admin, code d'invitation unique)"
           - "Cloisonnement multi-foyer (Current.household, concern HouseholdScoped)"
@@ -212,7 +212,7 @@ fr:
           - "Publier et emprunter des recettes entre foyers Hestia distincts, au-delà du livre privé actuel"
           - "Explicitement hors périmètre V1 — à réévaluer une fois une masse critique de foyers actifs atteinte"
       hestai:
-        title: "Hest.AI (Phase 3)"
+        title: "Hest.AI"
         items:
           - "Généraliser la couche de services par domaine aux modules qui n'en ont pas encore, pour que l'assistant puisse les invoquer comme des outils"
           - "Assistant conversationnel agissant dans l'application sous validation explicite de l'utilisateur, jamais sur les données Bien-être d'un autre membre"

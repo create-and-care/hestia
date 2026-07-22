@@ -9,7 +9,7 @@ class PreparedDish < ApplicationRecord
 
   scope :ordered, -> { order(:expires_on, :name) }
 
-  # In Phase 2, `expires_on` is entered manually; automatic calculation from
-  # the ingredients falls under Hest.AI (Phase 3).
+  # `expires_on` is entered manually; automatic calculation from
+  # the ingredients falls under Hest.AI.
   broadcasts_to ->(dish) { dish.household }
 end

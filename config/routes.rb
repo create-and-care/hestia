@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   patch "locale", to: "locales#update", as: :locale
 
   # Versioned REST/JSON API, consumed by the Flutter mobile client and,
-  # eventually, by Hest.AI (Phase 3). Token authentication (ApiToken), household
+  # eventually, by Hest.AI. Token authentication (ApiToken), household
   # scoping always server-side. Now covers all 25 modules.
   namespace :api do
     namespace :v1 do
@@ -110,7 +110,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # Shopping module (Phase 2.a).
+  # Shopping module.
   resources :shopping_lists, only: %i[index show new create destroy] do
     resources :items, only: %i[create update destroy], controller: "shopping_list_items" do
       member do
@@ -130,7 +130,7 @@ Rails.application.routes.draw do
     member { post :add_to_list }
   end
 
-  # Fridge module (Phase 2.a).
+  # Fridge module.
   resource :fridge, only: :show, controller: "fridge"
   resources :fridge_items, only: %i[create edit update destroy] do
     member { post :move_to_shopping_list }
@@ -144,7 +144,7 @@ Rails.application.routes.draw do
   get "recipes/catalog", to: "recipe_catalog#index", as: :recipe_catalog
   post "recipes/catalog/:id/add_to_household", to: "recipe_catalog#add_to_household", as: :add_to_household_recipe_catalog
 
-  # Recipes module (Phase 2.a).
+  # Recipes module.
   resources :recipes do
     member do
       get :cook
@@ -158,7 +158,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # Tasks module (Phase 2.a).
+  # Tasks module.
   resources :tasks, only: %i[index create edit update destroy] do
     member do
       patch :toggle
@@ -173,13 +173,13 @@ Rails.application.routes.draw do
   end
   resources :task_categories, only: %i[create destroy]
 
-  # Calendar module (Phase 2.a).
+  # Calendar module.
   resource :calendar, only: :show, controller: "calendar"
   resources :calendar_events, only: %i[new create edit update destroy] do
     resources :event_reminders, only: %i[create destroy]
   end
 
-  # Satellite modules (Phase 2.b).
+  # Satellite modules.
   resources :notes, only: %i[index create edit update destroy] do
     member do
       patch :toggle_favorite
@@ -233,7 +233,7 @@ Rails.application.routes.draw do
     collection { post :discuss }
   end
 
-  # Modules with richer business logic (Phase 2.c).
+  # Modules with richer business logic.
   resource :menu, only: :show, controller: "menu"
   post "menu/add_ingredients", to: "menu#add_ingredients", as: :add_ingredients_menu
   resources :meal_plan_entries, only: %i[create edit update destroy] do
@@ -266,7 +266,7 @@ Rails.application.routes.draw do
   end
   resources :document_folders, only: %i[create edit update destroy]
 
-  # Modules with an architecture deviation (Phase 2.d).
+  # Modules with an architecture deviation.
   resources :gift_lists, only: %i[index show create edit update destroy] do
     resource :share, only: %i[create destroy], controller: "gift_list_shares"
     resources :gift_ideas, only: %i[create update destroy]

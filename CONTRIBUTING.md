@@ -48,7 +48,7 @@ environment.
   deviation (Circles, Gifts, Trip, Wellbeing — see above).
 - **Business logic**: prefer a per-domain service object
   (`app/services/<Module>::<Action>`, e.g. `Courses::AddItem`) over a dense
-  controller or model. This is what will let Hest.AI (Phase 3) invoke this
+  controller or model. This is what will let Hest.AI invoke this
   same logic as a tool, without duplicating business code.
 - **Real-time**: any create/update/delete visible in a list should
   broadcast via `broadcasts_to` / `broadcasts_refreshes_to` (Solid Cable),

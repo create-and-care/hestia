@@ -1,7 +1,7 @@
 class Contact < ApplicationRecord
   include HouseholdScoped
 
-  # Entity shared with the Gifts module (Phase 2.d).
+  # Entity shared with the Gifts module.
   has_many :contact_taggings, dependent: :destroy
   has_many :contact_tags, through: :contact_taggings
   has_many :gift_lists, dependent: :nullify

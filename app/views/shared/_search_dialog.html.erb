@@ -13,7 +13,7 @@
         <%= render Ui::InputComponent.new(type: "search", name: "q", placeholder: t("search.placeholder"),
               html_options: { autocomplete: "off", autofocus: true, data: { search_palette_target: "input" },
                               role: "combobox", "aria-expanded": "true", "aria-controls": "global_search_results", "aria-activedescendant": "",
-                              class: "border-0 border-b rounded-none" }) %>
+                              class: "border-0 rounded-none" }) %>
       </div>
     <% end %>
     <div class="max-h-80 overflow-auto p-2">

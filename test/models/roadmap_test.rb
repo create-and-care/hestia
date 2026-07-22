@@ -35,8 +35,8 @@ class RoadmapTest < ActiveSupport::TestCase
 
   test "milestones are translated when the locale is French" do
     I18n.with_locale(:fr) do
-      assert_equal "Phase 1 — Fondations", Roadmap.milestones.first[:title]
-      assert_equal "Hest.AI (Phase 3)", Roadmap.milestones.last[:title]
+      assert_equal "Fondations", Roadmap.milestones.first[:title]
+      assert_equal "Hest.AI", Roadmap.milestones.last[:title]
     end
   end
 end

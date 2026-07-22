@@ -1,6 +1,6 @@
 module Recipes
-  # Exports a recipe's ingredients to a shopping list. In Phase 2, without
-  # duplicate merging or unit conversion (a Hest.AI capability, Phase 3).
+  # Exports a recipe's ingredients to a shopping list. Without
+  # duplicate merging or unit conversion (a Hest.AI capability).
   #
   # Ingredients are always entered/imported as a single free-text line (e.g.
   # "200 g de farine") — RecipeIngredient#quantity/#unit are never populated
