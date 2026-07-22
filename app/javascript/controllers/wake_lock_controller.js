@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Keeps the screen on for as long as cook mode is open (Spec §9.5) — the
+// Keeps the screen on for as long as cook mode is open — the
 // Wake Lock API silently releases itself whenever the tab is hidden, so we
 // re-acquire it on visibilitychange rather than only once on connect.
 export default class extends Controller {

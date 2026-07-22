@@ -1,8 +1,7 @@
 module Courses
   # Adds an item to a shopping list, feeding the household's product catalog
   # along the way and inferring the aisle. Exposed as an application service
-  # (rather than controller logic) so it can be invoked by Hest.AI in
-  # Phase 3 (Spec §5, point 5).
+  # (rather than controller logic) so it can be invoked by Hest.AI in Phase 3.
   class AddItem
     def self.call(...) = new(...).call
 

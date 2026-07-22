@@ -4,7 +4,7 @@ class Pool < ApplicationRecord
   TREATMENT_TYPES = %w[chlore sel brome oxygene_actif uv].freeze
 
   # Which measure_types are relevant to log depends on the pool's treatment
-  # (Spec §11.3): pH and temperature always matter, plus one treatment-specific
+  # pH and temperature always matter, plus one treatment-specific
   # reading. Keeps PoolReading#measure_type from accepting an arbitrary string
   # unrelated to how this particular pool is actually treated.
   MEASURE_TYPES_BY_TREATMENT = {

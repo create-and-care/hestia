@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-/// HTTP client for Hestia's `api/v1` API (Spec §15). No business logic
+/// HTTP client for Hestia's `api/v1` API. No business logic
 /// here: the mobile client only relays calls, every business rule lives
-/// server-side (Spec §14) to guarantee identical behavior with the web.
+/// server-side to guarantee identical behavior with the web.
 class ApiClient {
   ApiClient({required this.baseUrl, this.token});
 

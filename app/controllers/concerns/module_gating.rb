@@ -25,7 +25,7 @@ module ModuleGating
     "wine_cellars" => "wine_cellar", "bottles" => "wine_cellar",
     "waste" => "waste", "waste_collection_series" => "waste", "waste_collection_events" => "waste",
     "documents" => "documents", "document_folders" => "documents",
-    # Garden and Pool share a single "outdoor" toggle (Spec §11.3 asks for a
+    # Garden and Pool share a single "outdoor" toggle (Asks for a
     # separate Pool switch): both live on the same ExteriorController#show page
     # and template, so gating them independently would mean conditionally
     # rendering half of one controller's view rather than a second entry here
@@ -43,7 +43,7 @@ module ModuleGating
     "conversations" => "messages", "messages" => "messages",
     "loyalty_cards" => "loyalty",
     "gift_lists" => "gifts", "gift_ideas" => "gifts", "gift_list_shares" => "gifts",
-    # Circle data is cross-household (Spec §5, point 1), but access is still
+    # Circle data is cross-household, but access is still
     # gated on the *current* household's module toggle: this is the household
     # admin's control over which features their own members can use, not a
     # claim of ownership over the Circle itself — a member could belong to

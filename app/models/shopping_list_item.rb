@@ -17,6 +17,6 @@ class ShoppingListItem < ApplicationRecord
   scope :ordered, -> { order(:checked).order(Arel.sql(RAYON_ORDER_SQL)).order(:position, :id) }
 
   # Real-time: any creation/update/deletion is broadcast to connected household
-  # members subscribed to the list's stream (Solid Cable). Cf. Spec §6.
+  # members subscribed to the list's stream (Solid Cable).
   broadcasts_to ->(item) { item.shopping_list }
 end

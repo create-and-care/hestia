@@ -14,7 +14,7 @@ module Api
 
       private
         # Access by circle membership, never by household — Circle is an
-        # architectural deviation from the standard household scoping (Spec §5, point 1).
+        # architectural deviation from the standard household scoping.
         def set_circle
           @circle = Current.user.circles.find(params[:circle_id])
         end

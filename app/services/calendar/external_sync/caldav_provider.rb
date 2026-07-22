@@ -11,7 +11,7 @@ end
 
 module Calendar
   module ExternalSync
-    # Generic CalDAV client (Apple/Nextcloud/Fastmail... — Spec §9.2, §16):
+    # Generic CalDAV client (Apple/Nextcloud/Fastmail...):
     # HTTP Basic Auth (no OAuth application needed, unlike Google/Microsoft),
     # a REPORT calendar-query request for VEVENTs in a time range (RFC 4791),
     # parsed via the `icalendar` gem.
@@ -24,7 +24,7 @@ module Calendar
         @password = password
       end
 
-      # Normalized event hashes (Spec §9.2, §16): uid/title/starts_at/ends_at/all_day/location.
+      # Normalized event hashes: uid/title/starts_at/ends_at/all_day/location.
       def fetch_events(from:, to:)
         response = report(from, to)
         raise Error, "CalDAV request failed (#{response.code})" unless response.code.to_i.between?(200, 299)

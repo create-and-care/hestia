@@ -1,17 +1,17 @@
 Rails.application.routes.draw do
-  # Solid Queue admin UI (Spec §18 — reliability): closed by default behind HTTP
+  # Solid Queue admin UI (reliability): closed by default behind HTTP
   # Basic Auth until the host configures `mission_control.http_basic_auth_user`/
   # `http_basic_auth_password` via `bin/rails credentials:edit` (see README) —
   # not app-role-gated since it's a whole-instance operator tool, not a
   # per-household feature.
   mount MissionControl::Jobs::Engine, at: "/jobs"
 
-  # UI language preference (English default, French available — Spec §8).
+  # UI language preference (English default, French available).
   patch "locale", to: "locales#update", as: :locale
 
-  # Versioned REST/JSON API (Spec §15), consumed by the Flutter mobile client and,
+  # Versioned REST/JSON API, consumed by the Flutter mobile client and,
   # eventually, by Hest.AI (Phase 3). Token authentication (ApiToken), household
-  # scoping always server-side. Now covers all 25 modules (see Implementation Plan §6).
+  # scoping always server-side. Now covers all 25 modules.
   namespace :api do
     namespace :v1 do
       resources :shopping_lists, only: %i[index show] do
@@ -85,12 +85,12 @@ Rails.application.routes.draw do
   # Joining a household via an invite code.
   resource :membership, only: %i[new create]
 
-  # Active session management (Spec §5): revoke a device signed into this
+  # Active session management: revoke a device signed into this
   # account, distinct from the singular `resource :session` above (the
   # current one). Listed as a tab in household settings, not a page of its own.
   resources :active_sessions, only: :destroy
 
-  # Reminders & notifications (Spec §9.2, §9.3, §9.4, §10.2).
+  # Reminders & notifications.
   resources :notifications, only: :index do
     collection { patch :mark_all_read }
     member { patch :mark_read }
@@ -98,11 +98,11 @@ Rails.application.routes.draw do
   # Rendered as a section of household settings (households#show), not a page of its own.
   resource :notification_preference, only: %i[update]
 
-  # API tokens for the mobile client (Spec §15). Also rendered as a section of
+  # API tokens for the mobile client. Also rendered as a section of
   # household settings (households#show), not a page of its own.
   resources :api_tokens, only: %i[create destroy]
 
-  # External calendar sync: real Google/Microsoft OAuth + CalDAV (Spec §9.2, §16).
+  # External calendar sync: real Google/Microsoft OAuth + CalDAV.
   resources :external_calendar_connections, only: %i[index create destroy] do
     collection do
       get ":provider/connect", to: "external_calendar_connections#connect", as: :connect
@@ -267,12 +267,12 @@ Rails.application.routes.draw do
     resource :share, only: %i[create destroy], controller: "gift_list_shares"
     resources :gift_ideas, only: %i[create update destroy]
   end
-  # Unauthenticated public sharing of wish lists (Spec §5).
+  # Unauthenticated public sharing of wish lists.
   get    "g/:token",              to: "public_gift_lists#show",      as: :public_gift_list
   post   "g/:token/reserve/:idea_id", to: "public_gift_lists#reserve",   as: :reserve_public_gift
   delete "g/:token/reserve/:idea_id", to: "public_gift_lists#unreserve", as: :unreserve_public_gift
 
-  # Circles (independent of the household, Spec §5, point 1).
+  # Circles (independent of the household).
   resources :circles, only: %i[index show create edit update destroy] do
     resources :posts, only: %i[create destroy], controller: "circle_posts"
     resources :members, only: %i[update destroy], controller: "circle_memberships"
@@ -282,7 +282,7 @@ Rails.application.routes.draw do
   post   "circle_posts/:id/react", to: "circle_post_reactions#create",  as: :react_circle_post
   delete "circle_posts/:id/react", to: "circle_post_reactions#destroy", as: :unreact_circle_post
 
-  # Trip: cross-cutting context (Spec §5, point 3 / §12.3).
+  # Trip: cross-cutting context.
   resources :trips, only: %i[index show create edit update destroy] do
     member { patch :update_sections }
     resources :notes, only: %i[create edit update destroy], module: :trips
@@ -295,7 +295,7 @@ Rails.application.routes.draw do
     member { post :track_expenses }
   end
 
-  # Wellbeing: data strictly private to the user (Spec §5, point 4).
+  # Wellbeing: data strictly private to the user.
   resource :wellbeing, only: :show, controller: "wellbeing" do
     get :history
   end
@@ -321,6 +321,6 @@ Rails.application.routes.draw do
   # modules at once (Household improvements backlog item).
   resource :search, only: :show
 
-  # Household dashboard (Spec §7).
+  # Household dashboard.
   root "dashboard#show"
 end

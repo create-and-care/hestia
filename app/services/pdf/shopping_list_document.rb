@@ -1,5 +1,5 @@
 module Pdf
-  # Generates the PDF for a shopping list, grouped by aisle (Spec §9.1).
+  # Generates the PDF for a shopping list, grouped by aisle.
   class ShoppingListDocument
     def initialize(shopping_list)
       @shopping_list = shopping_list

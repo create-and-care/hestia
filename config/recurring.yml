@@ -14,19 +14,19 @@ production:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
 
-  # One-off Task/Calendar reminders (Spec §9.2, §9.3): delivered once due.
+  # One-off Task/Calendar reminders: delivered once due.
   deliver_due_reminders:
     class: Reminders::DeliverDueJob
     queue: default
     schedule: every 5 minutes
 
-  # Recurring Fridge/Birthday notifications (Spec §9.4, §10.2).
+  # Recurring Fridge/Birthday notifications.
   daily_notifications_digest:
     class: Reminders::DailyDigestJob
     queue: default
     schedule: every day at 7:00am
 
-  # External calendar sync (Spec §9.2, §16): pulls events from every active
+  # External calendar sync: pulls events from every active
   # Google/Microsoft/CalDAV connection into the local calendar.
   external_calendar_sync:
     class: Calendar::ExternalSync::SyncAllJob

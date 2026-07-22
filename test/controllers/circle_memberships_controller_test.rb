@@ -14,7 +14,7 @@ class CircleMembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # Joining is by invite code, across households (architecture deviation, Spec §5, point 1).
+  # Joining is by invite code, across households (architecture deviation).
   test "create joins a circle by invite code" do
     assert_difference -> { circles(:other).members.count }, 1 do
       post circle_membership_path, params: { invite_code: circles(:other).invite_code }

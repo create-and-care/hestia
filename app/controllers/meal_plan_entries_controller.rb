@@ -18,7 +18,7 @@ class MealPlanEntriesController < ApplicationController
     @entry.assign_attributes(entry_params)
     # Only touch the recipe association when the client actually submitted a
     # recipe_id: otherwise a partial update (e.g. just meal_type) would wipe
-    # out an existing recipe and silently fail validation (Spec §11.1).
+    # out an existing recipe and silently fail validation.
     @entry.recipe = scoped_recipe if params[:meal_plan_entry].key?(:recipe_id)
     if @entry.save
       redirect_to menu_path(week: @entry.on_date), notice: t(".updated")

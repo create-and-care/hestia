@@ -91,7 +91,7 @@ class TasksController < ApplicationController
     redirect_to tasks_path
   end
 
-  # One-off auto-sort by due date or by assignee (Spec §9.3) — rewrites
+  # One-off auto-sort by due date or by assignee — rewrites
   # position within each column without locking out manual drag-and-drop
   # reordering afterward, since it's just a regular position update.
   def sort

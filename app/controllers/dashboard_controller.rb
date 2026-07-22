@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
-  # Household dashboard (Spec §7): the active household, its members, the
+  # Household dashboard: the active household, its members, the
   # invite code, and cross-module widgets built from modules already enabled
   # for the household — each widget stays read-only here, consuming the
   # owning module's own models/services rather than duplicating their logic.

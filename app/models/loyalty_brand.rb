@@ -1,4 +1,4 @@
-# Catalog of pre-configured loyalty brands (Spec §10.5), built up
+# Catalog of pre-configured loyalty brands, built up
 # progressively (cf. seed in db/seeds.rb). A card outside the catalog remains
 # possible: LoyaltyCard#loyalty_brand is optional.
 class LoyaltyBrand < ApplicationRecord

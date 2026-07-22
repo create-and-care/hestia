@@ -31,7 +31,7 @@ class Contact < ApplicationRecord
   end
 
   # Every birthday date landing within [from, to] — used to surface birthdays
-  # on the Calendar (month/week/day/list views, Spec §9.2 interconnection).
+  # on the Calendar (month/week/day/list views).
   def birthdays_between(from, to)
     return [] if born_on.blank?
 
@@ -41,7 +41,7 @@ class Contact < ApplicationRecord
     end
   end
 
-  # today / week / month / later / none — recalculated every day (Spec §10.2).
+  # today / week / month / later / none — recalculated every day.
   def proximity_status(from = Date.current)
     days = days_until_birthday(from)
     return :none if days.nil?

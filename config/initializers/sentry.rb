@@ -1,4 +1,4 @@
-# Production error tracking (Spec §18). Wire-compatible with both hosted
+# Production error tracking. Wire-compatible with both hosted
 # Sentry and self-hostable GlitchTip — set SENTRY_DSN (or
 # `bin/rails credentials:edit` -> sentry: dsn:) to the target's DSN. Left
 # unconfigured, Sentry.init no-ops: nothing is sent anywhere.

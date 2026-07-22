@@ -1,4 +1,4 @@
-# Catalog of plant care sheets (Spec §11.3), built up progressively
+# Catalog of plant care sheets, built up progressively
 # (cf. seed in db/seeds.rb). A Plant without an associated reference remains
 # functional, simply without the care-help value.
 class PlantReference < ApplicationRecord

@@ -1,7 +1,7 @@
 name: hestia
 description: >
   Client mobile léger d'Hestia (Flutter/Dart) — consomme l'API Rails `api/v1`,
-  sans logique métier propre (CDC §14). Squelette minimal : structure de projet
+  sans logique métier propre. Squelette minimal : structure de projet
   et un premier écran de connexion, pas encore de parité fonctionnelle.
 publish_to: "none"
 version: 0.1.0

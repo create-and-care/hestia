@@ -90,14 +90,14 @@ shipped in this session:
 
 ### Added
 
-- **Wellbeing module** (architecture deviation §5.4): `WellbeingProfile`,
+- **Wellbeing module** (architecture deviation): `WellbeingProfile`,
   `WeightEntry`, `WorkoutEntry`, scoped per user (not per household).
 
 ## [1.0.0-beta30] — 2026-07-02
 
 ### Added
 
-- **Trip module** (architecture deviation §5.3): `Trip`, a `trip_id`
+- **Trip module** (architecture deviation): `Trip`, a `trip_id`
   column on Addresses/Notes/Tasks/Shopping, a `Trips::` namespace for
   trip-dedicated sub-resources.
 
@@ -105,14 +105,14 @@ shipped in this session:
 
 ### Added
 
-- **Circles module** (architecture deviation §5.1): `Circle` independent
+- **Circles module** (architecture deviation): `Circle` independent
   of the household, `CircleMembership`, `CirclePost`, `CirclePostReaction`.
 
 ## [1.0.0-beta28] — 2026-07-02
 
 ### Added
 
-- **Gifts module** (architecture deviation §5.2): `GiftList`, `GiftIdea`,
+- **Gifts module** (architecture deviation): `GiftList`, `GiftIdea`,
   `GiftListShare` (public token-based sharing), `GiftReservation`, an
   unauthenticated public `public_gift_lists` route.
 

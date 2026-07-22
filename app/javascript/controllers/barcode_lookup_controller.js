@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 // Looks up a product by barcode (household catalog, then Open Food Facts)
-// and pre-fills the form fields (Spec §9.1, §9.4, §16). Manual entry is
+// and pre-fills the form fields. Manual entry is
 // always still possible if nothing is found.
 export default class extends Controller {
   static targets = ["barcode", "name", "rayon", "status"]

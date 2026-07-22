@@ -23,7 +23,7 @@ class CirclePostsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to circle
   end
 
-  # Access is by circle membership, never by household (Spec §5, point 1).
+  # Access is by circle membership, never by household.
   test "cannot post to a circle the user is not a member of" do
     assert_no_difference -> { CirclePost.count } do
       post circle_posts_path(circles(:other)), params: { circle_post: { body: "Hack" } }, as: :turbo_stream

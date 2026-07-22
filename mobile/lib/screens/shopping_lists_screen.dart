@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../models/shopping_list.dart';
 import '../services/api_client.dart';
 
-/// First functional-parity screen (Shopping, Spec §9.1) — deliberately
+/// First functional-parity screen (Shopping) — deliberately
 /// minimal: list + checkbox, no product catalog or barcode scanning for
-/// now (native camera to be wired up in a later effort, see Spec §14).
+/// now (native camera to be wired up in a later effort).
 class ShoppingListsScreen extends StatefulWidget {
   const ShoppingListsScreen({super.key, required this.client});
 

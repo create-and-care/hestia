@@ -49,7 +49,7 @@ class TripsController < ApplicationController
     redirect_to trips_path, notice: t(".deleted")
   end
 
-  # Trip -> Budget interconnection (Spec §11.4/§12.3): find-or-create the
+  # Trip -> Budget interconnection: find-or-create the
   # trip's shared-expenses project, reusing SharedProjectsController's own
   # participant/expense/settlement UI as-is rather than duplicating it.
   def track_expenses

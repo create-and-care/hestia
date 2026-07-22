@@ -1,6 +1,6 @@
 # Expiration status of a record with an `expires_on` column.
 # Computed server-side from the current date (never fixed at creation time),
-# to stay correct without any action from the user — Spec §9.4.
+# to stay correct without any action from the user.
 module Perishable
   extend ActiveSupport::Concern
 

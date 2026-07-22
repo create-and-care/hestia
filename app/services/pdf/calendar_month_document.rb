@@ -1,5 +1,5 @@
 module Pdf
-  # Generates the PDF for the calendar's displayed month (Spec §9.2).
+  # Generates the PDF for the calendar's displayed month.
   class CalendarMonthDocument
     def initialize(month, occurrences)
       @month = month

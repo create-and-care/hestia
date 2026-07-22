@@ -1,5 +1,5 @@
 class ExteriorController < ApplicationController
-  # Household garden (plants) and pool(s) (Spec §11.3).
+  # Household garden (plants) and pool(s).
   def show
     @plants = Current.household.plants.ordered.includes(:plant_reference, photo_attachment: :blob)
     @pools = Current.household.pools.ordered.includes(:pool_readings, :pool_actions, :service_provider)

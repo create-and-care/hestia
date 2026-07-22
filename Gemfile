@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.3"
-# French translations for Rails/ActiveRecord/ActiveModel's built-in messages (Spec §8: English default, French available)
+# French translations for Rails/ActiveRecord/ActiveModel's built-in messages
 gem "rails-i18n"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
@@ -47,7 +47,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 2.0"
 gem "ruby-vips", "~> 2.0"
 
-# Production error tracking (Spec §18 — reliability). Wire-compatible with both
+# Production error tracking. Wire-compatible with both
 # hosted Sentry and self-hostable GlitchTip; no-ops if no DSN is configured.
 gem "sentry-ruby"
 gem "sentry-rails"
@@ -57,10 +57,10 @@ gem "sentry-rails"
 gem "mission_control-jobs"
 
 # Generic OAuth2 authorization-code client, used for the real Google/Microsoft
-# external calendar sync flow (Spec §9.2, §16) — one gem for both providers
+# external calendar sync flow — one gem for both providers
 # rather than two heavy provider-specific SDKs.
 gem "oauth2"
-# Parses the VEVENT feed returned by a CalDAV server (Spec §9.2, §16).
+# Parses the VEVENT feed returned by a CalDAV server.
 gem "icalendar"
 
 group :development, :test do

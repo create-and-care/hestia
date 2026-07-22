@@ -21,14 +21,14 @@ module Hestia
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # Application-wide fallback (Spec §9.2, §9.3): "today"-sensitive calculations
+    # Application-wide fallback: "today"-sensitive calculations
     # (Fridge expiry, Task due dates, the daily digest) actually run against
     # each household's own time zone (Household#time_zone), switched per-request
     # by ApplicationController#switch_time_zone and per-job by Household#in_time_zone.
     config.time_zone = "UTC"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    # I18n (Spec §8): English is the default UI language; French is offered as a
+    # I18n: English is the default UI language; French is offered as a
     # per-user preference (User#locale). Locale files are split one per module
     # under config/locales/{en,fr}/ rather than two giant flat files.
     config.i18n.default_locale = :en

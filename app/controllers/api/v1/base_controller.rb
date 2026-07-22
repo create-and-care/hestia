@@ -1,4 +1,4 @@
-# Foundation of the `api/v1` API (Spec §15), consumed by the Flutter mobile client.
+# Foundation of the `api/v1` API, consumed by the Flutter mobile client.
 # Authentication via opaque token (ApiToken) rather than cookie session;
 # household scoping always happens server-side, never via a client parameter.
 module Api
@@ -14,7 +14,7 @@ module Api
         render json: { error: exception.record.errors.full_messages.to_sentence }, status: :unprocessable_entity
       end
 
-      # Standardized pagination (Spec §15): `?page=` and `?per_page=` (max 100, default 25).
+      # Standardized pagination: `?page=` and `?per_page=` (max 100, default 25).
       def paginate(scope)
         page = (params[:page].presence || 1).to_i
         page = 1 if page < 1

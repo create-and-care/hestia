@@ -30,7 +30,7 @@ class PoolsController < ApplicationController
     redirect_to exterior_path, notice: t(".deleted")
   end
 
-  # Full, paginated reading/action history (Spec §11.3), replacing the
+  # Full, paginated reading/action history, replacing the
   # hardcoded first(5) on the main Outdoor page. Also groups all readings by
   # measure_type (unpaginated) to feed a trend chart per measured quantity.
   def history

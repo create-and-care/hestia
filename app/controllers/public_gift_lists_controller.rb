@@ -1,5 +1,5 @@
 class PublicGiftListsController < ApplicationController
-  # Public unauthenticated access via token (Spec §5, point 2 / §12.1).
+  # Public unauthenticated access via token.
   allow_unauthenticated_access
   allow_without_household
   before_action :set_shared_list

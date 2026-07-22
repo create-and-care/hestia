@@ -1,7 +1,7 @@
 module Budget
   # Computes, for a shared expenses project, each participant's balance
   # (positive = should be reimbursed, negative = owes money), by splitting the
-  # total equally (Spec §11.4).
+  # total equally.
   class SettleProject
     Balance = Struct.new(:participant, :amount)
     Transfer = Struct.new(:from, :to, :amount)
@@ -21,7 +21,7 @@ module Budget
       participants.map { |participant| Balance.new(participant, (paid[participant.id] - share).round(2)) }
     end
 
-    # A minimal set of payments that settles every balance (Spec §11.4: "who
+    # A minimal set of payments that settles every balance ("who
     # pays whom"), beyond the plain net-balance-per-participant view: greedily
     # matches the largest debtor against the largest creditor each round,
     # which yields at most participants.size - 1 transfers.

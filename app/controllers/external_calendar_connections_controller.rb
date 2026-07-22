@@ -1,5 +1,5 @@
-# Real OAuth (Google/Microsoft) and CalDAV external calendar sync (Spec §9.2,
-# §16). Google/Microsoft require the host to register an OAuth application
+# Real OAuth (Google/Microsoft) and CalDAV external calendar sync
+# Google/Microsoft require the host to register an OAuth application
 # and configure its client_id/client_secret via `bin/rails credentials:edit`
 # (see README) — until then, #connect informs the user rather than failing
 # silently. CalDAV needs no such app-level credential, only the per-connection
@@ -37,7 +37,7 @@ class ExternalCalendarConnectionsController < ApplicationController
     redirect_with(alert: t(".exchange_failed", provider: provider.capitalize))
   end
 
-  # CalDAV manual entry (no OAuth redirect flow — Spec §9.2, §16).
+  # CalDAV manual entry (no OAuth redirect flow).
   def create
     connection = Current.user.external_calendar_connections.new(
       provider: "caldav", caldav_url: caldav_params[:caldav_url],

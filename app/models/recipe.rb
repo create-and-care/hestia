@@ -9,9 +9,9 @@ class Recipe < ApplicationRecord
 
   has_many :recipe_ingredients, -> { order(:position) }, inverse_of: :recipe, dependent: :destroy
   has_many :recipe_steps, -> { order(:position) }, inverse_of: :recipe, dependent: :destroy
-  # A planned meal linked to a deleted recipe switches to a "free name" (Spec §11.1).
+  # A planned meal linked to a deleted recipe switches to a "free name".
   has_many :meal_plan_entries, dependent: :nullify
-  # Notes/Wine Cellar interconnections (Spec §9.5): a note or a bottle can
+  # Notes/Wine Cellar interconnections: a note or a bottle can
   # reference the recipe it's about (a wine pairing, a tasting note…);
   # deleting the recipe just unlinks them, it never takes the note/bottle with it.
   has_many :notes, dependent: :nullify

@@ -2,7 +2,7 @@
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
-# Loyalty brand catalog (Spec §10.5, §16) — built up progressively; an
+# Loyalty brand catalog — built up progressively; an
 # "out of catalog" card is always available for brands not yet listed.
 [
   { name: "Carrefour", logo_emoji: "🛒", code_format: "barcode" },
@@ -19,7 +19,7 @@
   LoyaltyBrand.find_or_create_by!(name: attributes[:name]) { |brand| brand.assign_attributes(attributes) }
 end
 
-# Plant care-sheet catalog (Spec §11.3, §16) — built up progressively; a
+# Plant care-sheet catalog — built up progressively; a
 # Plant with no reference attached stays fully functional.
 [
   { common_name: "Basil", scientific_name: "Ocimum basilicum", water_needs: "Frequent (soil always moist)",

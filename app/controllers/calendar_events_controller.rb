@@ -30,7 +30,7 @@ class CalendarEventsController < ApplicationController
   # A recurring event's edit form can target either "this occurrence only"
   # (splits it off into its own standalone event and excludes the date from
   # the series) or "the whole series" (the plain update, as before) — the
-  # business rule from Spec §9.2 that was previously entirely unimplemented.
+  # business rule that was previously entirely unimplemented.
   def update
     if editing_single_occurrence?
       detach_occurrence

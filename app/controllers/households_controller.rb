@@ -35,8 +35,8 @@ class HouseholdsController < ApplicationController
     @default_tab = TABS.include?(params[:tab]) ? params[:tab] : "general"
   end
 
-  # Used in particular to enable/change the public holiday reference (Spec §9.2)
-  # and the household's time zone (Spec §9.2, §9.3 — day-boundary calculations).
+  # Used in particular to enable/change the public holiday reference
+  # and the household's time zone (day-boundary calculations).
   def update
     if Current.household.update(household_update_params)
       redirect_back fallback_location: household_path(Current.household), notice: t(".updated")

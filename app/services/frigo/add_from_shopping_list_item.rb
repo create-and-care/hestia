@@ -1,6 +1,6 @@
 module Frigo
   # Purchased item → product stored in the fridge then removed from the shopping list
-  # (bidirectional bridge Shopping ↔ Fridge, Spec §9.1 / §9.4).
+  # (bidirectional bridge Shopping ↔ Fridge).
   class AddFromShoppingListItem
     def self.call(shopping_list_item:, location: "refrigerateur", expires_on: nil)
       fridge_item = Frigo::AddItem.call(

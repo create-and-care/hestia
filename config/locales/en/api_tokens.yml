@@ -2,7 +2,7 @@ en:
   api_tokens:
     index:
       title: "API tokens"
-      description: "Used by the mobile client (Spec §15) to authenticate with the API without sharing your password. The token is shown only once, right after it is created — write it down immediately."
+      description: "Used by the mobile client to authenticate with the API without sharing your password. The token is shown only once, right after it is created — write it down immediately."
       empty: "No tokens yet."
       created_on: "created on"
       last_used_on: "used on"

@@ -24,7 +24,7 @@ class Task < ApplicationRecord
     task_category_id ? "tasks_category_#{task_category_id}" : "tasks_uncategorized"
   end
 
-  # Color code that evolves as the due date approaches (Spec §9.3), computed server-side.
+  # Color code that evolves as the due date approaches, computed server-side.
   def due_status
     return :none if due_on.blank?
 

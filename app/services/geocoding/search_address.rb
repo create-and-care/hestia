@@ -1,10 +1,10 @@
 require "net/http"
 require "json"
 
-# Looks up places via Nominatim/OpenStreetMap (Spec §10.3, §16), to pre-fill
+# Looks up places via Nominatim/OpenStreetMap, to pre-fill
 # an Address (name, address, GPS coordinates) on creation. Fails silently
 # (returns []) in case of network failure: manual entry always remains possible,
-# notably for addresses deliberately kept confidential (Spec §10.3).
+# notably for addresses deliberately kept confidential.
 #
 # Complies with Nominatim's usage policy: User-Agent identifying the application,
 # no more than one request at a time (interactive usage, no bulk processing).

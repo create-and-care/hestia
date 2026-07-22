@@ -1,5 +1,5 @@
 class MenuController < ApplicationController
-  # Weekly meal plan (Spec §11.1).
+  # Weekly meal plan.
   def show
     @week_start = parse_monday
     @days = (@week_start..(@week_start + 6.days)).to_a
@@ -11,7 +11,7 @@ class MenuController < ApplicationController
       .group_by(&:on_date)
   end
 
-  # Menu → Shopping interconnection (Spec §11.1): exports the ingredients of
+  # Menu → Shopping interconnection: exports the ingredients of
   # every recipe planned this week to the household's shopping list. Reuses
   # Recipes::AddIngredientsToShoppingList (already Recipes' own "add to
   # shopping list" action) rather than duplicating the export logic, and

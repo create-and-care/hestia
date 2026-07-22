@@ -1,6 +1,6 @@
 class Circle < ApplicationRecord
   # Architectural deviation: a Circle is NOT tied to a household; it groups
-  # users (potentially from different households) via CircleMembership (Spec §5, point 1).
+  # users (potentially from different households) via CircleMembership.
   INVITE_CODE_ALPHABET = (("A".."Z").to_a - %w[I O]) + ("2".."9").to_a
   INVITE_CODE_LENGTH = 8
 

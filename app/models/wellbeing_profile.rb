@@ -1,6 +1,6 @@
 class WellbeingProfile < ApplicationRecord
   # Architectural deviation: scoped by USER, never by household. No data
-  # from this module is visible to other members, even administrators (Spec §5, point 4).
+  # from this module is visible to other members, even administrators.
   SEXES = %w[female male other].freeze
   ACTIVITY_LEVELS = %w[sedentary light moderate active very_active].freeze
 

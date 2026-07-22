@@ -1,9 +1,9 @@
 require "net/http"
 require "json"
 
-# Looks up a product by barcode from Open Food Facts (Spec §16), an open
+# Looks up a product by barcode from Open Food Facts, an open
 # database chosen over a proprietary reference for the Shopping/Fridge
-# scan (Spec §9.1, §9.4). Fails silently (returns nil) in case of
+# scan. Fails silently (returns nil) in case of
 # network failure or unknown product: scanning remains a convenience, never a blocker —
 # manual entry always remains possible.
 module OpenFoodFacts

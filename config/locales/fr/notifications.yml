@@ -16,7 +16,7 @@ fr:
   notification_preferences:
     show:
       title: "Préférences de notification"
-      description: "Notifications récurrentes du Frigo et des Anniversaires (Spec §9.4, §10.2)."
+      description: "Notifications récurrentes du Frigo et des Anniversaires."
       fridge_expiry_enabled: "Me notifier des produits du Frigo bientôt périmés"
       fridge_expiry_threshold_days: "Délai d'anticipation (jours)"
       birthday_notifications_enabled: "Me notifier des anniversaires le jour J"

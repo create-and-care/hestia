@@ -5,7 +5,7 @@ import '../services/api_client.dart';
 import 'shopping_lists_screen.dart';
 
 /// Login screen: the user pastes their Hestia instance's URL and an API
-/// token generated from the web (Dashboard → API Tokens, Spec §15).
+/// token generated from the web (Dashboard → API Tokens).
 /// No email/password flow here — API-token authentication avoids ever
 /// sending the account password through the mobile client.
 class LoginScreen extends StatefulWidget {

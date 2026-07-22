@@ -1,4 +1,4 @@
-# Custom reminder on a task (Spec §9.3): date/time + recipient.
+# Custom reminder on a task: date/time + recipient.
 class TaskReminder < ApplicationRecord
   belongs_to :task
   belongs_to :user

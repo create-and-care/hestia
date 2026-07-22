@@ -1,4 +1,4 @@
-# Connection to an external calendar (Spec §9.2, §16): Google (OAuth), Microsoft
+# Connection to an external calendar: Google (OAuth), Microsoft
 # (OAuth), or a generic CalDAV server (Apple/Nextcloud/Fastmail...). The actual
 # OAuth/CalDAV sync (Calendar::ExternalSync::*) requires application credentials
 # (client_id/client_secret for Google/Microsoft) provided by the host via

@@ -1,4 +1,4 @@
-# Delivers one-off reminders that have come due (Spec §9.2, §9.3) as
+# Delivers one-off reminders that have come due as
 # real-time in-app Notifications. Called periodically by Reminders::DeliverDueJob
 # (see config/recurring.yml).
 module Reminders

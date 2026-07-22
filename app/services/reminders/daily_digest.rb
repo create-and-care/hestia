@@ -1,4 +1,4 @@
-# Recurring daily notifications (Spec §9.4, §10.2): Fridge products soon to
+# Recurring daily notifications: Fridge products soon to
 # expire, today's birthdays. A single Notification per user and per day and
 # per type, to avoid noise in case of re-execution. Called once a day by
 # Reminders::DailyDigestJob (see config/recurring.yml).

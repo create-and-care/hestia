@@ -1,6 +1,6 @@
 module Waste
   # Generates a recurring series of collections (weekday + frequency in weeks
-  # + period) in a single action (Spec §10.9). Service invocable by the web and Hest.AI.
+  # + period) in a single action. Service invocable by the web and Hest.AI.
   class GenerateSeries
     def self.call(household:, waste_type:, weekday:, starts_on:, ends_on:, interval_weeks: 1)
       series = household.waste_collection_series.create!(

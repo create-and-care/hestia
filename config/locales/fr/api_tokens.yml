@@ -2,7 +2,7 @@ fr:
   api_tokens:
     index:
       title: "Jetons API"
-      description: "Utilisés par le client mobile (CDC §15) pour s'authentifier auprès de l'API sans partager votre mot de passe. Le jeton n'est affiché qu'une seule fois, juste après sa création — notez-le immédiatement."
+      description: "Utilisés par le client mobile pour s'authentifier auprès de l'API sans partager votre mot de passe. Le jeton n'est affiché qu'une seule fois, juste après sa création — notez-le immédiatement."
       empty: "Aucun jeton pour l'instant."
       created_on: "créé le"
       last_used_on: "utilisé le"

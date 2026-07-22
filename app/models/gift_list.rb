@@ -17,7 +17,7 @@ class GiftList < ApplicationRecord
 
   def shared? = gift_list_share.present?
 
-  # Private lists ("preparing a surprise", Spec §12.1) are visible only to
+  # Private lists ("preparing a surprise") are visible only to
   # the creator and whoever they explicitly included — everyone else in the
   # household is excluded, unlike every other household-scoped resource.
   def visible_to?(user)
@@ -27,7 +27,7 @@ class GiftList < ApplicationRecord
 
   private
     # The creator can never accidentally lock themselves out of a list they
-    # made private (Spec §12.1 business rule).
+    # made private.
     def ensure_creator_visible
       return if created_by_id.nil?
       self.visible_to_ids = (visible_to_ids + [ created_by_id ]).uniq

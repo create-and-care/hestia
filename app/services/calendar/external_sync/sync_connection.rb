@@ -1,6 +1,6 @@
 module Calendar
   module ExternalSync
-    # Syncs one ExternalCalendarConnection (Spec §9.2, §16): refreshes an
+    # Syncs one ExternalCalendarConnection: refreshes an
     # expired OAuth token first if needed, fetches events over a rolling
     # window, and imports them. On an unrecoverable auth failure (e.g. a
     # revoked refresh token), deactivates the connection and notifies the

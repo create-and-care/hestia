@@ -159,7 +159,7 @@ class GlobalSearch
       scope: ->(household, q) { Pool.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
       url: ->(r) { edit_pool_path(r) }),
 
-    # Wellbeing entries are strictly private (Spec §5.4 — never shared with
+    # Wellbeing entries are strictly private (Never shared with
     # the rest of the household), so this is scoped_by: :user like Circle and
     # Conversation, never :household — a match only ever surfaces the
     # searching user's own workouts.

@@ -13,16 +13,16 @@ class User < ApplicationRecord
   has_many :weight_entries, dependent: :destroy
   has_many :workout_entries, dependent: :destroy
 
-  # Reminders & notifications (Spec §9.2, §9.3, §9.4, §10.2).
+  # Reminders & notifications.
   has_many :notifications, dependent: :destroy
   has_many :task_reminders, dependent: :destroy
   has_many :event_reminders, dependent: :destroy
   has_one :notification_preference, dependent: :destroy
 
-  # External calendar synchronization (Spec §9.2, §16).
+  # External calendar synchronization.
   has_many :external_calendar_connections, dependent: :destroy
 
-  # Mobile API (Spec §15).
+  # Mobile API.
   has_many :api_tokens, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }

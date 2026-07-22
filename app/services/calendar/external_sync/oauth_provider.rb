@@ -1,7 +1,7 @@
 module Calendar
   module ExternalSync
     # Google and Microsoft are both standard OAuth2 authorization-code flows
-    # returning JSON REST events (Spec §9.2, §16) — one class handles both,
+    # returning JSON REST events — one class handles both,
     # differing only in endpoint URLs and response shape.
     class OauthProvider
       def initialize(provider)
@@ -26,7 +26,7 @@ module Calendar
         normalize_token(token.refresh!)
       end
 
-      # Normalized event hashes (Spec §9.2, §16): uid/title/starts_at/ends_at/all_day/location.
+      # Normalized event hashes: uid/title/starts_at/ends_at/all_day/location.
       def fetch_events(access_token:, from:, to:)
         response = access_token_for(access_token).get(@endpoint[:events_url], params: query_params(from, to))
         items(JSON.parse(response.body)).map { |item| normalize_event(item) }

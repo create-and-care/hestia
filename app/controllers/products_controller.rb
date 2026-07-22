@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  # Household product catalog, automatically populated as items are added (Spec §9.1).
+  # Household product catalog, automatically populated as items are added.
   def index
     @query = params[:q].to_s.strip
     products = Current.household.products.order(:rayon, :name)
@@ -9,7 +9,7 @@ class ProductsController < ApplicationController
   end
 
   # Adds a catalog product to one of the household's shopping lists, so the
-  # catalog page is more than a read-only reference (Spec §9.1).
+  # catalog page is more than a read-only reference.
   def add_to_list
     product = Current.household.products.find(params[:id])
     list = Current.household.shopping_lists.general.find(params[:shopping_list_id])
@@ -17,7 +17,7 @@ class ProductsController < ApplicationController
     redirect_to products_path, notice: t(".added", name: product.name, list: list.name)
   end
 
-  # Barcode lookup (Shopping/Fridge, Spec §9.1, §9.4, §16): first in the
+  # Barcode lookup (Shopping/Fridge): first in the
   # household catalog (already-known scan), then via Open Food Facts.
   def lookup
     barcode = params[:barcode].to_s

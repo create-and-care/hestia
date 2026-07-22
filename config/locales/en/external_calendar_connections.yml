@@ -3,7 +3,7 @@ en:
     index:
       title: "Calendar sync"
       heading: "External calendar sync"
-      description: "Connect your Google, Microsoft, or Apple (CalDAV) calendar to show your external events in Hestia (Spec §9.2). Requires that this instance's host has configured the corresponding application credentials — otherwise a message will let you know."
+      description: "Connect your Google, Microsoft, or Apple (CalDAV) calendar to show your external events in Hestia. Requires that this instance's host has configured the corresponding application credentials — otherwise a message will let you know."
       empty: "No connections yet."
       active: "active"
       inactive: "inactive"

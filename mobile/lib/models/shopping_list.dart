@@ -1,5 +1,5 @@
 /// Client-side data model — only mirrors the JSON shape exposed by
-/// `api/v1` (no business rules here, see Spec §14).
+/// `api/v1` (no business rules here.
 class ShoppingListItem {
   ShoppingListItem({
     required this.id,

@@ -22,7 +22,7 @@ class WellbeingProfilesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 182, users(:one).reload.wellbeing_profile.height
   end
 
-  # --- Strict privacy (Spec §5, point 4): scoped by Current.user, not household ---
+  # --- Strict privacy: scoped by Current.user, not household ---
 
   test "another member of the same household cannot edit this user's profile" do
     same_household_user = User.create!(name: "Coloc", email_address: "coloc@example.com", password: "secret123")

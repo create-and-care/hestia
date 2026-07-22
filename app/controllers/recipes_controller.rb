@@ -87,7 +87,7 @@ class RecipesController < ApplicationController
     redirect_to @recipe
   end
 
-  # Notes/Wine Cellar interconnections (Spec §9.5): link an existing note
+  # Notes/Wine Cellar interconnections: link an existing note
   # or bottle to this recipe (a tasting note, a wine pairing…).
   def link_note
     note = Current.household.notes.general.find(params[:note_id])

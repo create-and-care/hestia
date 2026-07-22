@@ -1,7 +1,7 @@
 class WellbeingController < ApplicationController
   PER_PAGE = 15
 
-  # All requests go through Current.user — never Current.household (Spec §5.4).
+  # All requests go through Current.user — never Current.household.
   def show
     @profile = Current.user.wellbeing_profile || Current.user.build_wellbeing_profile
     @weight_entries = Current.user.weight_entries.order(recorded_on: :desc).limit(PER_PAGE)
@@ -14,7 +14,7 @@ class WellbeingController < ApplicationController
   end
 
   # Full, paginated weight/workout history, replacing the show page's silent
-  # 15-entry cap so older entries stay reachable (Spec §5.4: "historique complet").
+  # 15-entry cap so older entries stay reachable.
   def history
     @weight_total = Current.user.weight_entries.count
     @weight_total_pages = [ (@weight_total / PER_PAGE.to_f).ceil, 1 ].max

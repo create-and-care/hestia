@@ -22,7 +22,7 @@ class EventRemindersController < ApplicationController
     end
 
     # The recipient must always be a member of the current household (never an
-    # id supplied as-is by the client) — see Spec §15.
+    # id supplied as-is by the client).
     def recipient
       Current.household.users.find_by(id: reminder_params[:user_id]) || Current.user
     end

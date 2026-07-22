@@ -38,7 +38,7 @@ class CirclePostReactionsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # Access is by circle membership, never by household (Spec §5, point 1).
+  # Access is by circle membership, never by household.
   test "cannot react to a post in a circle the user is not a member of" do
     other_post = circles(:other).circle_posts.create!(author: users(:two), body: "Post Beta")
     assert_no_difference -> { CirclePostReaction.count } do

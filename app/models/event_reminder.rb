@@ -1,4 +1,4 @@
-# Custom reminder on a calendar event (Spec §9.2): delay before
+# Custom reminder on a calendar event: delay before
 # the occurrence + recipient. `last_notified_occurrence_at` stores the last
 # notified occurrence so the same one isn't notified twice on a recurring series.
 class EventReminder < ApplicationRecord

@@ -1,7 +1,7 @@
 require "test_helper"
 
 class PublicGiftListsControllerTest < ActionDispatch::IntegrationTest
-  # These tests verify the NON-authenticated public access (architecture deviation, Spec §5).
+  # These tests verify the NON-authenticated public access (architecture deviation).
 
   test "shows a shared list without any authentication" do
     get public_gift_list_path(gift_list_shares(:alpha_share).token)

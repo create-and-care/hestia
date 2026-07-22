@@ -20,7 +20,7 @@ class AddressesController < ApplicationController
     @address = Current.household.addresses.new
   end
 
-  # Online search to pre-fill the form (Spec §10.3, §16) — manual entry
+  # Online search to pre-fill the form — manual entry
   # always remains possible for addresses that are intentionally kept confidential.
   def search
     render json: Geocoding::SearchAddress.call(query: params[:q])

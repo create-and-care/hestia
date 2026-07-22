@@ -3,7 +3,7 @@ class Household < ApplicationRecord
   INVITE_CODE_ALPHABET = (("A".."Z").to_a - %w[I O]) + ("2".."9").to_a
   INVITE_CODE_LENGTH = 8
 
-  # Public holidays displayable in the Calendar, optionally enabled (Spec §9.2).
+  # Public holidays displayable in the Calendar, optionally enabled.
   HOLIDAY_COUNTRIES = %w[FR BE CH].freeze
 
   has_many :memberships, dependent: :destroy

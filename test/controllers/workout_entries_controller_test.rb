@@ -55,7 +55,7 @@ class WorkoutEntriesControllerTest < ActionDispatch::IntegrationTest
     assert_not WorkoutEntry.exists?(entry.id)
   end
 
-  # --- Strict privacy (Spec §5, point 4): scoped by Current.user, not household ---
+  # --- Strict privacy: scoped by Current.user, not household ---
 
   test "a user cannot delete another user's workout entry" do
     entry = users(:one).workout_entries.create!(done_on: Date.current, exercise: "Vélo", duration_minutes: 45)

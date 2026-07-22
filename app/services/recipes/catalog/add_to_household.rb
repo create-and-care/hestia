@@ -1,7 +1,7 @@
 module Recipes
   module Catalog
     # Clones a read-only RecipeCatalogEntry into the household's own editable
-    # recipe book (Spec §9.5) — mirrors Recipes::ImportFromUrl#build_recipe.
+    # recipe book — mirrors Recipes::ImportFromUrl#build_recipe.
     # The catalog entry's source_url is intentionally not copied onto the
     # cloned Recipe: that field is reserved for the existing user-driven
     # "import from a URL you provide" flow.

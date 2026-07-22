@@ -1,6 +1,6 @@
 module Calendar
   module ExternalSync
-    # Upserts normalized external events (Spec §9.2, §16) into CalendarEvent,
+    # Upserts normalized external events into CalendarEvent,
     # keyed by [connection, external_uid] so a re-sync updates in place rather
     # than duplicating. Imported events are read-only from the source's point
     # of view but remain regular, editable CalendarEvent rows locally.
@@ -31,7 +31,7 @@ module Calendar
             ends_at: event[:ends_at],
             all_day: event[:all_day] || false,
             # A consistent, distinct color so an imported event is visually
-            # recognizable as coming from an external calendar (Spec §9.2
+            # recognizable as coming from an external calendar (
             # business rule) — the source's own color isn't otherwise
             # representable in Hestia's fixed 6-color set. Only set on first
             # import: a color the user changed afterward must survive re-syncs.

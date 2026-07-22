@@ -92,7 +92,7 @@ class WellbeingControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, I18n.t("wellbeing.history.weight_empty")
   end
 
-  # --- Strict privacy (Spec §5, point 4) ---
+  # --- Strict privacy ---
 
   test "a user cannot delete another user's weight entry" do
     entry = users(:one).weight_entries.create!(recorded_on: Date.current, weight: 70)

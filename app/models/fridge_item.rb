@@ -11,6 +11,6 @@ class FridgeItem < ApplicationRecord
 
   scope :ordered, -> { order(:location, :expires_on, :name) }
 
-  # Real-time: broadcast to connected household members (Solid Cable) — Spec §6.
+  # Real-time: broadcast to connected household members (Solid Cable).
   broadcasts_to ->(item) { item.household }
 end

@@ -4,7 +4,7 @@ class RecipeCatalogController < ApplicationController
   PER_PAGE = 24
 
   # "Découvrir" tab of the Recipes module: browse the read-only recipe
-  # catalog and clone entries into the household's own book (Spec §9.5).
+  # catalog and clone entries into the household's own book.
   def index
     @query = params[:q].to_s.strip
     @tag = params[:tag].to_s.strip

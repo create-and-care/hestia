@@ -46,7 +46,7 @@
 /.kamal/
 .claude
 
-# SimpleCov output (Spec §18 — reliability).
+# SimpleCov output.
 /coverage/
 # design-sync build output (see .design-sync/NOTES.md)
 /ds-bundle/

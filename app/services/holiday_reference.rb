@@ -1,5 +1,5 @@
-# Reference table of public holidays for France / Belgium / Switzerland for the Calendar
-# (Spec §9.2, §16). Computed (computus algorithm for Easter), with no external
+# Reference table of public holidays for France / Belgium / Switzerland for the Calendar.
+# Computed (computus algorithm for Easter), with no external
 # dependency or content to maintain. Switzerland is simplified to the common
 # federal base: several public holidays vary by canton and are not covered here.
 class HolidayReference

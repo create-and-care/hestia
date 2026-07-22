@@ -1,4 +1,4 @@
-# Authentication token for the `api/v1` API (Spec §15), intended for the mobile client.
+# Authentication token for the `api/v1` API, intended for the mobile client.
 # The plaintext token is never stored: only its HMAC-SHA256 fingerprint (indexed,
 # O(1) lookup) is kept, in the manner of a GitHub personal access token.
 class ApiToken < ApplicationRecord

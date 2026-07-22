@@ -1,6 +1,6 @@
 # Hestia — mobile client (skeleton)
 
-Hestia's Flutter/Dart mobile client (Spec §14): a thin client consuming the
+Hestia's Flutter/Dart mobile client: a thin client consuming the
 Rails `api/v1` API, with no business logic of its own — every business rule
 lives server-side, for identical behavior with the web client.
 
@@ -12,7 +12,7 @@ client (`ApiClient`), an API-token login screen, and a first read-only
 
 **Still to build**, before any real functional parity:
 
-- Screens for the other 24 modules (Spec §9 to §12).
+- Screens for the other 24 modules.
 - Native camera access (barcode scanning, document capture).
 - Voice dictation, push notifications, contact import.
 - Offline mode (reading already-synced data).

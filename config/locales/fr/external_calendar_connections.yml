@@ -3,7 +3,7 @@ fr:
     index:
       title: "Synchronisation calendrier"
       heading: "Synchronisation calendrier externe"
-      description: "Connectez votre calendrier Google, Microsoft ou Apple (CalDAV) pour faire apparaître vos événements externes dans Hestia (CDC §9.2). Nécessite que l'hébergeur de cette instance ait configuré les identifiants d'application correspondants — sinon un message vous l'indique."
+      description: "Connectez votre calendrier Google, Microsoft ou Apple (CalDAV) pour faire apparaître vos événements externes dans Hestia. Nécessite que l'hébergeur de cette instance ait configuré les identifiants d'application correspondants — sinon un message vous l'indique."
       empty: "Aucune connexion pour l'instant."
       active: "actif"
       inactive: "inactif"

@@ -16,7 +16,7 @@ en:
   notification_preferences:
     show:
       title: "Notification preferences"
-      description: "Recurring notifications for Fridge and Birthdays (Spec §9.4, §10.2)."
+      description: "Recurring notifications for Fridge and Birthdays."
       fridge_expiry_enabled: "Notify me about Fridge items expiring soon"
       fridge_expiry_threshold_days: "Lead time (days)"
       birthday_notifications_enabled: "Notify me about birthdays on the day"

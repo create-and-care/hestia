@@ -3,7 +3,7 @@ class CalendarController < ApplicationController
 
   # Month, week, day, or list view, with filter by member. Recurring event
   # occurrences are expanded server-side over the displayed range. The
-  # chosen view is remembered per user (Spec §9.2) so returning to the
+  # chosen view is remembered per user so returning to the
   # calendar defaults to whatever was last used, not always month.
   def show
     @view = resolve_view
@@ -79,7 +79,7 @@ class CalendarController < ApplicationController
       end
     end
 
-    # France/Belgium/Switzerland public holidays (Spec §9.2, §16), optionally enabled per
+    # France/Belgium/Switzerland public holidays, optionally enabled per
     # household (Household#holiday_country) — indexed by date for a direct lookup in the view.
     def holidays_by_date(from, to)
       return {} if Current.household.holiday_country.blank?
@@ -96,8 +96,8 @@ class CalendarController < ApplicationController
       scope.to_a
     end
 
-    # Birthdays (Contact#born_on) surfaced alongside real events (Spec §9.2
-    # interconnection with Birthdays) — represented as [date, contact] pairs
+    # Birthdays (Contact#born_on) surfaced alongside real events
+    # (interconnection with Birthdays) — represented as [date, contact] pairs
     # so the view can tell them apart from [time, CalendarEvent] pairs.
     def birthday_occurrences_in(range)
       return [] if @member_id
@@ -134,7 +134,7 @@ class CalendarController < ApplicationController
         .map { |event| [ event.collected_on.to_time, event ] }
     end
 
-    # Tasks/Calendar interconnection (Spec §9.3): surface overdue tasks
+    # Tasks/Calendar interconnection : surface overdue tasks
     # alongside events instead of them only ever showing on the Tasks board.
     def overdue_tasks
       Current.household.tasks.general.where(done: false).where("due_on < ?", Date.current).order(:due_on)

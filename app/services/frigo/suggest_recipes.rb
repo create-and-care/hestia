@@ -1,8 +1,8 @@
 module Frigo
   # "What can I cook with what's on hand?" — a simple text-overlap match
-  # between FridgeItem names and a recipe's ingredient lines, no NLP (Spec
-  # §9.4 interconnection with Recipes/Menu; smarter ingredient matching is a
-  # Hest.AI Phase 3 capability — Spec §9.5/§13).
+  # between FridgeItem names and a recipe's ingredient lines, no NLP
+  # interconnection with Recipes/Menu; smarter ingredient matching is a
+  # Hest.AI Phase 3 capability).
   class SuggestRecipes
     def self.call(household:, limit: 5) = new(household: household, limit: limit).call
 

@@ -1,4 +1,4 @@
-# Management of the `api/v1` API authentication tokens (Spec §15), intended for the
+# Management of the `api/v1` API authentication tokens, intended for the
 # mobile client. The plaintext token is shown only once, right after it is
 # created (see ApiToken).
 class ApiTokensController < ApplicationController

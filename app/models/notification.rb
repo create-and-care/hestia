@@ -1,4 +1,4 @@
-# In-app notification center (real-time, Spec §6). Serves as common support for
+# In-app notification center (real-time). Serves as common support for
 # Tasks/Calendar reminders and recurring notifications (Fridge expiration,
 # birthday of the day) — rather than four separate notification mechanisms.
 class Notification < ApplicationRecord

@@ -1,4 +1,4 @@
-# Lets a user revoke one of their own signed-in devices (Spec §5), listed as
+# Lets a user revoke one of their own signed-in devices, listed as
 # a "Sessions" tab in household settings (households#show) — not a page of
 # its own, mirroring how API tokens and notification preferences already work.
 class ActiveSessionsController < ApplicationController

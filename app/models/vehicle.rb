@@ -13,7 +13,7 @@ class Vehicle < ApplicationRecord
 
   broadcasts_to ->(vehicle) { vehicle.household }
 
-  # Technical inspection color code — fixed thresholds (Spec §10.7), computed server-side.
+  # Technical inspection color code — fixed thresholds, computed server-side.
   def inspection_status
     return :none if inspection_expires_on.blank?
 

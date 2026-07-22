@@ -1,5 +1,5 @@
 # A user's recurring notification preferences (Fridge expiration,
-# birthdays) — Spec §9.4 and §10.2. Distinct from one-off reminders
+# birthdays). Distinct from one-off reminders
 # (TaskReminder/EventReminder) which are created case by case on a specific record.
 class NotificationPreference < ApplicationRecord
   belongs_to :user

@@ -54,7 +54,7 @@ class WeightEntriesControllerTest < ActionDispatch::IntegrationTest
     assert_not WeightEntry.exists?(entry.id)
   end
 
-  # --- Strict privacy (Spec §5, point 4): scoped by Current.user, not household ---
+  # --- Strict privacy: scoped by Current.user, not household ---
 
   test "a user cannot delete another user's weight entry" do
     entry = users(:one).weight_entries.create!(recorded_on: Date.current, weight: 70)

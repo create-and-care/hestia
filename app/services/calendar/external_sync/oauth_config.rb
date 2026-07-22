@@ -1,7 +1,7 @@
 module Calendar
   module ExternalSync
     # Per-provider OAuth2 endpoints and the host-configured application
-    # credentials (Spec §9.2, §16). A host must register their own OAuth
+    # credentials. A host must register their own OAuth
     # application with each provider (redirect URI:
     # https://<host>/external_calendar_connections/<provider>/callback) — this
     # cannot ship with the repository, the same reasoning already documented on

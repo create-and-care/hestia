@@ -5,13 +5,13 @@ class Trip < ApplicationRecord
   # can hide the sections it doesn't need instead of showing all of them.
   SECTIONS = %w[shopping_lists notes tasks addresses menu].freeze
 
-  # Deleting the trip = deleting all attached data (Spec §12.3).
+  # Deleting the trip = deleting all attached data.
   has_many :notes, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :shopping_lists, dependent: :destroy
   has_many :addresses, dependent: :destroy
   has_many :meal_plan_entries, dependent: :destroy
-  # Trip expenses reuse Budget's own split engine (Spec §11.4/§12.3: "Trip
+  # Trip expenses reuse Budget's own split engine ("Trip
   # (same split engine)") rather than duplicating shared-expense tracking.
   has_one :shared_project, dependent: :destroy
 
