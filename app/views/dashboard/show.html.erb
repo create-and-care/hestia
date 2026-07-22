@@ -29,6 +29,20 @@
     </section>
   <% end %>
 
+  <% if @plants_needing_attention&.any? %>
+    <section class="mb-8">
+      <h2 class="mb-3 flex items-center gap-1.5 font-medium text-destructive"><%= lucide_icon("sprout", css_class: "size-4") %> <%= t(".plants_needing_attention") %></h2>
+      <div class="divide-y divide-primary rounded-lg border border-primary">
+        <% @plants_needing_attention.each do |plant| %>
+          <%= render Ui::ItemComponent.new do |item| %>
+            <% item.with_title { link_to plant.name, plant_path(plant), class: "hover:underline" } %>
+            <% item.with_trailing { render(Ui::BadgeComponent.new(variant: care_status_badge_variant(plant.care_status))) { care_status_label(plant.care_status) } } %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
   <% if @overdue_tasks&.any? %>
     <section class="mb-8">
       <h2 class="mb-3 flex items-center gap-1.5 font-medium text-destructive"><%= lucide_icon("square-check", css_class: "size-4") %> <%= t(".overdue_tasks") %></h2>

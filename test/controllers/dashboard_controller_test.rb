@@ -48,6 +48,36 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Fine Car"
   end
 
+  test "surfaces a plant with overdue or soon-due care" do
+    sign_in_as(users(:one))
+
+    get root_path
+
+    assert_response :success
+    assert_includes @response.body, "Rosier"
+  end
+
+  test "does not surface a plant with up-to-date care" do
+    sign_in_as(users(:one))
+    plant = households(:alpha).plants.create!(name: "Bien entretenue")
+    plant.plant_care_tasks.create!(care_type: "watering", frequency: "weekly", next_due_on: 3.weeks.from_now.to_date)
+
+    get root_path
+
+    assert_response :success
+    assert_not_includes @response.body, "Bien entretenue"
+  end
+
+  test "hides plants needing attention when the outdoor module is disabled" do
+    households(:alpha).update!(disabled_modules: [ "outdoor" ])
+    sign_in_as(users(:one))
+
+    get root_path
+
+    assert_response :success
+    assert_not_includes @response.body, "Rosier"
+  end
+
   test "the sidebar hides a module the household has disabled" do
     households(:alpha).update!(disabled_modules: [ "shopping" ])
     sign_in_as(users(:one))

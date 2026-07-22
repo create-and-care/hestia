@@ -1,5 +1,12 @@
 class PlantsController < ApplicationController
-  before_action :set_plant, only: %i[edit update destroy]
+  before_action :set_plant, only: %i[show edit update destroy]
+
+  def show
+    @care_tasks = @plant.plant_care_tasks.ordered.includes(plant_care_completions: :author)
+    @plant_care_task = @plant.plant_care_tasks.new(care_type: "watering", frequency: "daily")
+    default_interval = @plant.plant_reference&.default_watering_interval_days
+    @plant_care_task.interval = default_interval if default_interval.present? && @care_tasks.none? { |task| task.care_type == "watering" }
+  end
 
   def create
     plant = Current.household.plants.new(plant_params)

@@ -1,4 +1,17 @@
 en:
+  plant_care_tasks:
+    types:
+      watering: "Watering"
+      repotting: "Repotting"
+      fertilizing: "Fertilizing"
+      pruning: "Pruning"
+      misting: "Misting"
+      other: "Other"
+    frequencies:
+      daily: "Daily"
+      weekly: "Weekly"
+      monthly: "Monthly"
+      yearly: "Yearly"
   exterior:
     treatments:
       chlore: "Chlorine"
@@ -29,6 +42,7 @@ en:
       fertilizing_prefix: "Fertilizing:"
       no_plants: "No plants yet."
       add: "Add"
+      plant_care_aria: "Plant care"
       edit_plant_aria: "Edit plant"
       delete_plant_aria: "Delete plant"
       delete_plant_confirm: "Delete this plant?"
@@ -57,6 +71,26 @@ en:
       new_pool_label: "New pool"
       treatment_type_label: "Treatment"
   plants:
+    care_statuses:
+      overdue: "Overdue"
+      soon: "Soon"
+      ok: "Up to date"
+      none: "No care tasks"
+    show:
+      title: "%{name} — Care"
+      tasks_heading: "Care tasks"
+      no_tasks: "No care tasks for this plant yet."
+      next_due: "next due"
+      done: "Done"
+      delete_task_aria: "Delete task"
+      delete_task_confirm: "Delete this care task?"
+      unknown_author: "Unknown"
+      care_type_label: "Type"
+      care_type_custom_placeholder: "Specify the type"
+      frequency_label: "Frequency"
+      interval_label: "Every"
+      add_task: "Add"
+      back_to_outdoor: "← Outdoor"
     edit:
       title: "Edit plant"
       name_label: "Name"

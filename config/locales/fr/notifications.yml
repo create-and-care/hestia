@@ -16,10 +16,12 @@ fr:
   notification_preferences:
     show:
       title: "Préférences de notification"
-      description: "Notifications récurrentes du Frigo et des Anniversaires."
+      description: "Notifications récurrentes du Frigo, des Anniversaires et de l'entretien des plantes."
       fridge_expiry_enabled: "Me notifier des produits du Frigo bientôt périmés"
       fridge_expiry_threshold_days: "Délai d'anticipation (jours)"
       birthday_notifications_enabled: "Me notifier des anniversaires le jour J"
+      plant_care_enabled: "Me notifier de l'entretien des plantes à venir"
+      plant_care_threshold_days: "Délai d'anticipation (jours)"
       save: "Enregistrer"
     update:
       updated: "Préférences mises à jour."

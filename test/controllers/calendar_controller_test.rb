@@ -80,6 +80,18 @@ class CalendarControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Milo"
   end
 
+  test "surfaces an overdue plant care task in the list view" do
+    get calendar_path(view: :list)
+    assert_includes @response.body, "Rosier"
+  end
+
+  test "does not surface a plant care task that is not overdue" do
+    plant = households(:alpha).plants.create!(name: "Pas en retard")
+    plant.plant_care_tasks.create!(care_type: "watering", frequency: "weekly", next_due_on: 3.days.from_now.to_date)
+    get calendar_path(view: :list)
+    assert_not_includes @response.body, "Pas en retard"
+  end
+
   test "surfaces an upcoming waste collection in the list view" do
     households(:alpha).waste_collection_events.create!(waste_type: "recyclage", collected_on: 2.days.from_now.to_date)
     get calendar_path(view: :list)

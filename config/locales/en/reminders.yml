@@ -13,3 +13,6 @@ en:
       birthday:
         one: "Birthday today 🎂"
         other: "Birthdays today 🎂"
+      plant_care_due:
+        one: "%{count} plant needs care"
+        other: "%{count} plants need care"

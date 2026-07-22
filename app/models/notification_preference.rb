@@ -6,6 +6,7 @@ class NotificationPreference < ApplicationRecord
 
   validates :user_id, uniqueness: true
   validates :fridge_expiry_threshold_days, numericality: { greater_than_or_equal_to: 0 }
+  validates :plant_care_threshold_days, numericality: { greater_than_or_equal_to: 0 }
 
   def self.for_user(user)
     user.notification_preference || user.build_notification_preference

@@ -16,10 +16,12 @@ en:
   notification_preferences:
     show:
       title: "Notification preferences"
-      description: "Recurring notifications for Fridge and Birthdays."
+      description: "Recurring notifications for Fridge, Birthdays and plant care."
       fridge_expiry_enabled: "Notify me about Fridge items expiring soon"
       fridge_expiry_threshold_days: "Lead time (days)"
       birthday_notifications_enabled: "Notify me about birthdays on the day"
+      plant_care_enabled: "Notify me about upcoming plant care"
+      plant_care_threshold_days: "Lead time (days)"
       save: "Save"
     update:
       updated: "Preferences updated."

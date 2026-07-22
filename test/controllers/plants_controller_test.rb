@@ -24,6 +24,17 @@ class PlantsControllerTest < ActionDispatch::IntegrationTest
     assert_not_nil flash[:alert]
   end
 
+  test "show renders the plant's care tasks" do
+    get plant_path(plants(:alpha_rose))
+    assert_response :success
+    assert_includes @response.body, "Rosier"
+  end
+
+  test "cannot view another household's plant care page" do
+    get plant_path(plants(:beta_plant))
+    assert_response :not_found
+  end
+
   test "edit" do
     get edit_plant_path(plants(:alpha_rose))
     assert_response :success

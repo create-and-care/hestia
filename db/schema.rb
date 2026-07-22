@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_22_145909) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_22_160003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -485,6 +485,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_22_145909) do
     t.datetime "created_at", null: false
     t.boolean "fridge_expiry_enabled", default: true, null: false
     t.integer "fridge_expiry_threshold_days", default: 2, null: false
+    t.boolean "plant_care_enabled", default: true, null: false
+    t.integer "plant_care_threshold_days", default: 2, null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_notification_preferences_on_user_id", unique: true
@@ -555,10 +557,33 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_22_145909) do
     t.index ["service_provider_id"], name: "index_pets_on_service_provider_id"
   end
 
+  create_table "plant_care_completions", force: :cascade do |t|
+    t.bigint "author_id"
+    t.date "completed_on", null: false
+    t.datetime "created_at", null: false
+    t.text "note"
+    t.bigint "plant_care_task_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_plant_care_completions_on_author_id"
+    t.index ["plant_care_task_id"], name: "index_plant_care_completions_on_plant_care_task_id"
+  end
+
+  create_table "plant_care_tasks", force: :cascade do |t|
+    t.string "care_type", null: false
+    t.datetime "created_at", null: false
+    t.string "frequency", default: "weekly", null: false
+    t.integer "interval", default: 1, null: false
+    t.date "next_due_on"
+    t.bigint "plant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plant_id"], name: "index_plant_care_tasks_on_plant_id"
+  end
+
   create_table "plant_references", force: :cascade do |t|
     t.text "common_diseases"
     t.string "common_name", null: false
     t.datetime "created_at", null: false
+    t.integer "default_watering_interval_days"
     t.text "fertilizing"
     t.text "pruning"
     t.string "scientific_name"
@@ -1038,6 +1063,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_22_145909) do
   add_foreign_key "pet_vaccinations", "pets"
   add_foreign_key "pets", "households"
   add_foreign_key "pets", "service_providers"
+  add_foreign_key "plant_care_completions", "plant_care_tasks"
+  add_foreign_key "plant_care_completions", "users", column: "author_id"
+  add_foreign_key "plant_care_tasks", "plants"
   add_foreign_key "plants", "households"
   add_foreign_key "plants", "plant_references"
   add_foreign_key "pool_actions", "pools"

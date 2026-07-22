@@ -1,4 +1,17 @@
 fr:
+  plant_care_tasks:
+    types:
+      watering: "Arrosage"
+      repotting: "Rempotage"
+      fertilizing: "Fertilisation"
+      pruning: "Taille"
+      misting: "Brumisation"
+      other: "Autre"
+    frequencies:
+      daily: "Quotidien"
+      weekly: "Hebdomadaire"
+      monthly: "Mensuel"
+      yearly: "Annuel"
   exterior:
     treatments:
       chlore: "Chlore"
@@ -29,6 +42,7 @@ fr:
       fertilizing_prefix: "Fertilisation :"
       no_plants: "Aucune plante pour l'instant."
       add: "Ajouter"
+      plant_care_aria: "Entretien de la plante"
       edit_plant_aria: "Modifier la plante"
       delete_plant_aria: "Supprimer la plante"
       delete_plant_confirm: "Supprimer cette plante ?"
@@ -57,6 +71,26 @@ fr:
       new_pool_label: "Nouvelle piscine"
       treatment_type_label: "Traitement"
   plants:
+    care_statuses:
+      overdue: "En retard"
+      soon: "Bientôt"
+      ok: "À jour"
+      none: "Aucun entretien"
+    show:
+      title: "%{name} — Entretien"
+      tasks_heading: "Tâches d'entretien"
+      no_tasks: "Aucune tâche d'entretien pour cette plante."
+      next_due: "prochaine"
+      done: "Fait"
+      delete_task_aria: "Supprimer la tâche"
+      delete_task_confirm: "Supprimer cette tâche d'entretien ?"
+      unknown_author: "Inconnu"
+      care_type_label: "Type"
+      care_type_custom_placeholder: "Préciser le type"
+      frequency_label: "Fréquence"
+      interval_label: "Tous les"
+      add_task: "Ajouter"
+      back_to_outdoor: "← Extérieur"
     edit:
       title: "Modifier la plante"
       name_label: "Nom"

@@ -30,6 +30,22 @@
   </div>
 <% end %>
 
+<% if local_assigns[:overdue_plant_care] && overdue_plant_care.any? %>
+  <div class="mb-4 rounded-lg border border-destructive/30 bg-destructive-subtle/40 p-3">
+    <h2 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-destructive"><%= lucide_icon("sprout", css_class: "size-4") %> <%= t("calendar.show.overdue_plant_care_heading") %></h2>
+    <ul class="space-y-1 text-sm">
+      <% overdue_plant_care.each do |task| %>
+        <li>
+          <%= link_to plant_path(task.plant), class: "hover:underline" do %>
+            <%= task.plant.name %> — <%= care_type_label(task.care_type) %>
+            <span class="text-destructive/70">— <%= t("calendar.show.overdue_since", date: l(task.next_due_on, format: :short)) %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <% if occurrences.any? %>
   <div class="divide-y divide-primary rounded-lg border border-primary">
     <% occurrences.each do |time, occurrence| %>

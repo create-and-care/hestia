@@ -48,6 +48,7 @@ class CalendarController < ApplicationController
       @occurrences = occurrences_in(range)
       @overdue_tasks = overdue_tasks
       @overdue_vaccinations = overdue_vaccinations
+      @overdue_plant_care = overdue_plant_care
     end
 
     def load_month_view
@@ -76,6 +77,7 @@ class CalendarController < ApplicationController
       if @date == Date.current
         @overdue_tasks = overdue_tasks
         @overdue_vaccinations = overdue_vaccinations
+        @overdue_plant_care = overdue_plant_care
       end
     end
 
@@ -144,5 +146,12 @@ class CalendarController < ApplicationController
     # household in one place, instead of requiring each pet's page to be opened individually.
     def overdue_vaccinations
       PetVaccination.where(pet_id: Current.household.pet_ids).where("booster_on < ?", Date.current).order(:booster_on)
+    end
+
+    # Plants/Calendar interconnection: surfaces overdue plant care tasks across every plant in the
+    # household in one place, instead of requiring the Exterior page to be opened individually.
+    def overdue_plant_care
+      PlantCareTask.joins(:plant).where(plants: { household_id: Current.household.id })
+                    .where("next_due_on < ?", Date.current).order(:next_due_on).includes(:plant)
     end
 end

@@ -2,7 +2,7 @@
 # Tasks/Calendar reminders and recurring notifications (Fridge expiration,
 # birthday of the day) — rather than four separate notification mechanisms.
 class Notification < ApplicationRecord
-  KINDS = %w[task_reminder event_reminder fridge_expiry birthday external_calendar_sync_failed].freeze
+  KINDS = %w[task_reminder event_reminder fridge_expiry birthday external_calendar_sync_failed plant_care_due].freeze
 
   belongs_to :user
   belongs_to :household

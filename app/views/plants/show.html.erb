@@ -1,0 +1,94 @@
+<% content_for :title, t(".title", name: @plant.name) %>
+<%= turbo_stream_from Current.household, "exterior" %>
+
+<div class="mt-10 max-w-3xl mx-auto px-4">
+  <header class="mb-6 flex items-start gap-4">
+    <% if @plant.photo.attached? %>
+      <%= render Ui::AvatarComponent.new(src: @plant.photo.variant(resize_to_fill: [ 64, 64 ]), alt: @plant.name) %>
+    <% end %>
+    <div>
+      <h1 class="flex items-center gap-2 text-2xl font-semibold">
+        <% unless @plant.photo.attached? %><%= lucide_icon("sprout", css_class: "size-6") %><% end %>
+        <%= @plant.name %>
+      </h1>
+      <p class="text-sm text-secondary"><%= [ @plant.location, @plant.plant_reference&.common_name ].reject(&:blank?).join(" · ") %></p>
+    </div>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <section class="mb-8">
+    <h2 class="mb-3 font-medium"><%= t(".tasks_heading") %></h2>
+
+    <% if @care_tasks.any? %>
+      <div class="mb-6 space-y-3">
+        <% @care_tasks.each do |task| %>
+          <%= tag.div class: "rounded-lg border p-3 #{task.overdue? ? "border-destructive bg-destructive/10" : "border-primary"}" do %>
+            <%= render(Ui::ItemComponent.new) do |item| %>
+              <% item.with_title { care_type_label(task.care_type) } %>
+              <% item.with_description do %>
+                <%= care_frequency_label(task.frequency) %><%= " ×#{task.interval}" if task.interval.to_i > 1 %>
+                <% if task.next_due_on %> · <%= t(".next_due") %> : <%= task.next_due_on.strftime("%d/%m/%Y") %><% end %>
+              <% end %>
+              <% item.with_trailing do %>
+                <div class="flex items-center gap-2">
+                  <%= render(Ui::BadgeComponent.new(variant: care_status_badge_variant(task.status))) { care_status_label(task.status) } %>
+                  <%= render(Ui::ButtonToComponent.new(complete_plant_plant_care_task_path(@plant, task), method: :post)) {
+                        safe_join([ lucide_icon("check", css_class: "size-4"), t(".done") ], " ") } %>
+                  <%= form_with url: plant_plant_care_task_path(@plant, task), method: :delete, data: { turbo_confirm: t(".delete_task_confirm") } do %>
+                    <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :icon,
+                          html_options: { aria: { label: t(".delete_task_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+
+            <% completions = task.plant_care_completions.sort_by(&:completed_on).reverse.first(5) %>
+            <% if completions.any? %>
+              <ul class="mt-2 divide-y divide-primary text-xs text-secondary">
+                <% completions.each do |completion| %>
+                  <li class="flex items-center justify-between py-1">
+                    <span><%= completion.completed_on.strftime("%d/%m/%Y") %><%= " · #{completion.note}" if completion.note.present? %></span>
+                    <span><%= completion.author&.name.presence || completion.author&.email_address || t(".unknown_author") %></span>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="mb-6">
+        <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_tasks") } } %>
+      </div>
+    <% end %>
+
+    <%= form_with model: @plant_care_task, url: plant_plant_care_tasks_path(@plant), class: "flex flex-wrap items-end gap-3",
+          data: { controller: "maintenance-entry-type", action: "submit->maintenance-entry-type#beforeSubmit" } do |form| %>
+      <div>
+        <%= render(Ui::FieldComponent.new(id: "plant_care_task_care_type")) do |field| %>
+          <% field.with_label { t(".care_type_label") } %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: "plant_care_task[care_type]", options: care_type_options, selected: @plant_care_task.care_type,
+                html_options: { id: "plant_care_task_care_type", data: { maintenance_entry_type_target: "select", action: "change->maintenance-entry-type#sync" } }) } %>
+        <% end %>
+      </div>
+      <%= render Ui::InputComponent.new(type: "text", name: "plant_care_task[care_type]", placeholder: t(".care_type_custom_placeholder"),
+            html_options: { id: "plant_care_task_care_type_custom", class: "hidden", data: { maintenance_entry_type_target: "custom" } }) %>
+      <div class="w-36">
+        <%= render(Ui::FieldComponent.new(id: "plant_care_task_frequency")) do |field| %>
+          <% field.with_label { t(".frequency_label") } %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: "plant_care_task[frequency]", options: care_frequency_options, selected: @plant_care_task.frequency, html_options: { id: "plant_care_task_frequency" }) } %>
+        <% end %>
+      </div>
+      <div class="w-20">
+        <%= render(Ui::FieldComponent.new(id: "plant_care_task_interval")) do |field| %>
+          <% field.with_label { t(".interval_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "number", name: "plant_care_task[interval]", value: @plant_care_task.interval || 1, html_options: { id: "plant_care_task_interval", min: 1 }) } %>
+        <% end %>
+      </div>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add_task") } %>
+    <% end %>
+  </section>
+
+  <p class="mt-6 text-sm"><%= link_to t(".back_to_outdoor"), exterior_path, class: "underline" %></p>
+</div>

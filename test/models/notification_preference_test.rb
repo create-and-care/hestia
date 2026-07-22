@@ -1,11 +1,13 @@
 require "test_helper"
 
 class NotificationPreferenceTest < ActiveSupport::TestCase
-  test "defaults enable fridge and birthday notifications" do
+  test "defaults enable fridge, birthday, and plant care notifications" do
     preference = NotificationPreference.create!(user: users(:one))
     assert preference.fridge_expiry_enabled
     assert preference.birthday_notifications_enabled
+    assert preference.plant_care_enabled
     assert_equal 2, preference.fridge_expiry_threshold_days
+    assert_equal 2, preference.plant_care_threshold_days
   end
 
   test "one preference per user" do

@@ -168,6 +168,21 @@
             <%= render(Ui::LabelComponent.new(for_id: "notification_preference_birthday_notifications_enabled")) { t("notification_preferences.show.birthday_notifications_enabled") } %>
           </div>
 
+          <div class="flex items-center gap-2">
+            <%= render Ui::CheckboxComponent.new(name: "notification_preference[plant_care_enabled]",
+                  checked: @notification_preference.plant_care_enabled, id: "notification_preference_plant_care_enabled") %>
+            <%= render(Ui::LabelComponent.new(for_id: "notification_preference_plant_care_enabled")) { t("notification_preferences.show.plant_care_enabled") } %>
+          </div>
+
+          <%= render(Ui::FieldComponent.new(id: "notification_preference_plant_care_threshold_days")) do |field| %>
+            <% field.with_label { t("notification_preferences.show.plant_care_threshold_days") } %>
+            <% field.with_control do %>
+              <%= render Ui::InputComponent.new(type: "number", name: "notification_preference[plant_care_threshold_days]",
+                    value: @notification_preference.plant_care_threshold_days,
+                    html_options: { id: "notification_preference_plant_care_threshold_days", min: 0, max: 14, class: "w-24" }) %>
+            <% end %>
+          <% end %>
+
           <%= render(Ui::ButtonComponent.new(type: "submit")) { t("notification_preferences.show.save") } %>
         <% end %>
       <% end %>

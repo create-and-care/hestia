@@ -26,6 +26,9 @@
                 <% end %>
                 <% item.with_title do %>
                   <%= plant.name %><% if plant.location.present? %> · <%= plant.location %><% end %><% if plant.plant_reference %> · <%= plant.plant_reference.common_name %><% end %>
+                  <% if plant.care_status != :none %>
+                    <%= render(Ui::BadgeComponent.new(variant: care_status_badge_variant(plant.care_status))) { care_status_label(plant.care_status) } %>
+                  <% end %>
                 <% end %>
                 <% if plant.notes.present? || plant.plant_reference %>
                   <% item.with_description do %>
@@ -34,6 +37,8 @@
                 <% end %>
                 <% item.with_trailing do %>
                   <div class="flex shrink-0 items-center gap-1">
+                    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: plant_path(plant),
+                          html_options: { aria: { label: t(".plant_care_aria") } })) { lucide_icon("clock", css_class: "size-4") } %>
                     <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_plant_path(plant),
                           html_options: { aria: { label: t(".edit_plant_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
                     <%= form_with url: plant_path(plant), method: :delete, data: { turbo_confirm: t(".delete_plant_confirm") } do %>

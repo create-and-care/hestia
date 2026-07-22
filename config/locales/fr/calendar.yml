@@ -25,6 +25,7 @@ fr:
       no_events: "Aucun événement à venir."
       overdue_tasks_heading: "Tâches en retard"
       overdue_vaccinations_heading: "Rappels de vaccin en retard"
+      overdue_plant_care_heading: "Entretien des plantes en retard"
       overdue_since: "échéance dépassée le %{date}"
       pdf_filename_prefix: "calendrier"
       pdf:

@@ -11,7 +11,8 @@ class NotificationPreferencesControllerTest < ActionDispatch::IntegrationTest
 
   test "update persists the preferences and redirects to household settings" do
     patch notification_preference_path, params: {
-      notification_preference: { fridge_expiry_enabled: false, fridge_expiry_threshold_days: 5, birthday_notifications_enabled: false }
+      notification_preference: { fridge_expiry_enabled: false, fridge_expiry_threshold_days: 5, birthday_notifications_enabled: false,
+                                   plant_care_enabled: false, plant_care_threshold_days: 3 }
     }
     assert_redirected_to household_path(households(:alpha))
 
@@ -19,6 +20,8 @@ class NotificationPreferencesControllerTest < ActionDispatch::IntegrationTest
     assert_not preference.fridge_expiry_enabled
     assert_equal 5, preference.fridge_expiry_threshold_days
     assert_not preference.birthday_notifications_enabled
+    assert_not preference.plant_care_enabled
+    assert_equal 3, preference.plant_care_threshold_days
   end
 
   test "update rejects an invalid threshold" do

@@ -13,3 +13,6 @@ fr:
       birthday:
         one: "Anniversaire aujourd'hui 🎂"
         other: "Anniversaires aujourd'hui 🎂"
+      plant_care_due:
+        one: "%{count} plante a besoin d'entretien"
+        other: "%{count} plantes ont besoin d'entretien"

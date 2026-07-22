@@ -12,6 +12,12 @@ class DashboardController < ApplicationController
     # technical inspection deadlines) somewhere other than each vehicle's own page.
     @vehicles_needing_attention = @household.vehicles.select { |vehicle| vehicle.inspection_status.in?(%i[urgent expired]) }
 
+    if @household.module_enabled?("outdoor")
+      # Plants/Dashboard interconnection: surfaces plants whose care is overdue or due soon,
+      # instead of requiring the Exterior page to be opened for each plant individually.
+      @plants_needing_attention = @household.plants.includes(:plant_care_tasks).select { |plant| plant.care_status.in?(%i[overdue soon]) }.first(5)
+    end
+
     if @household.module_enabled?("fridge")
       # expires_on is always present here: expiration_status only returns
       # :expired/:urgent/:soon when it is (see Perishable#expiration_status).

@@ -1,0 +1,20 @@
+alpha_rose_watering_overdue:
+  plant: alpha_rose
+  care_type: watering
+  frequency: daily
+  interval: 1
+  next_due_on: <%= 2.days.ago.to_date %>
+
+alpha_rose_repotting:
+  plant: alpha_rose
+  care_type: repotting
+  frequency: yearly
+  interval: 2
+  next_due_on: <%= 6.months.from_now.to_date %>
+
+beta_plant_watering:
+  plant: beta_plant
+  care_type: watering
+  frequency: weekly
+  interval: 1
+  next_due_on: <%= 1.day.from_now.to_date %>

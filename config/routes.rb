@@ -243,7 +243,11 @@ Rails.application.routes.draw do
     member { post :complete }
   end
   resource :exterior, only: :show, controller: "exterior"
-  resources :plants, only: %i[create edit update destroy]
+  resources :plants, only: %i[show create edit update destroy] do
+    resources :plant_care_tasks, only: %i[create update destroy] do
+      member { post :complete }
+    end
+  end
   resources :pools, only: %i[create edit update destroy] do
     member { get :history }
     resources :pool_readings, only: %i[create destroy]
