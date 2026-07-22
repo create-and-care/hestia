@@ -39,6 +39,10 @@
 
 /node_modules
 
+# This project standardizes on yarn (see package.json's packageManager field);
+# bun.lock can appear if npx resolves through a locally installed Bun shim.
+/bun.lock
+
 /.kamal/
 .claude
 
