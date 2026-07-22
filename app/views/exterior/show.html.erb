@@ -82,6 +82,7 @@
     <% end %>
   </section>
 
+  <% if Current.household.pool_enabled? %>
   <section class="mb-8">
     <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= lucide_icon("waves", css_class: "size-5") %> <%= t(".pool_heading") %></h2>
 
@@ -214,5 +215,6 @@
       <% end %>
     <% end %>
   </section>
+  <% end %>
 
 </div>

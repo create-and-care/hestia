@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_19_165506) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_22_145909) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -391,6 +391,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_165506) do
     t.string "holiday_country"
     t.string "invite_code", null: false
     t.string "name", null: false
+    t.boolean "pool_enabled", default: true, null: false
     t.string "required_meal_types", default: [], null: false, array: true
     t.string "time_zone", default: "UTC", null: false
     t.datetime "updated_at", null: false

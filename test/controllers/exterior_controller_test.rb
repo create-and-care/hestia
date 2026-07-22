@@ -49,4 +49,14 @@ class ExteriorControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
   end
+
+  test "show hides the pool section when the household has turned the Pool switch off" do
+    households(:alpha).update!(pool_enabled: false)
+
+    get exterior_path
+
+    assert_response :success
+    assert_includes @response.body, "Rosier"
+    assert_not_includes @response.body, "Piscine principale"
+  end
 end

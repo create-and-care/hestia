@@ -40,4 +40,24 @@ class ModuleGatingTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test "disabling the Pool switch redirects away from pool controllers but not the garden" do
+    households(:alpha).update!(pool_enabled: false)
+    sign_in_as(users(:one))
+
+    post pools_path, params: { pool: { name: "Spa", treatment_type: "brome" } }
+    assert_redirected_to root_path
+
+    post plants_path, params: { plant: { name: "Basilic" } }
+    assert_redirected_to exterior_path
+  end
+
+  test "the Pool switch does not affect other households' access to pools" do
+    households(:beta).update!(pool_enabled: false)
+    sign_in_as(users(:one)) # member of :alpha, whose pool_enabled defaults to true
+
+    post pools_path, params: { pool: { name: "Spa", treatment_type: "brome" } }
+
+    assert_redirected_to exterior_path
+  end
 end

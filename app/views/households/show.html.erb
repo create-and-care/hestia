@@ -295,6 +295,28 @@
             </div>
           <% end %>
 
+          <div>
+            <h3 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-secondary"><%= lucide_icon("waves", css_class: "size-4") %> <%= t(".pool_heading") %></h3>
+            <ul class="divide-y divide-primary rounded-lg border border-primary">
+              <li>
+                <%= render(Ui::ItemComponent.new) do |item| %>
+                  <% item.with_leading { lucide_icon("waves", css_class: "size-4") } %>
+                  <% item.with_title { tag.span(t(".pool_label"), id: "module_label_pool") } %>
+                  <% item.with_trailing do %>
+                    <%= hidden_field_tag "household[pool_enabled]", "0" %>
+                    <%= render Ui::SwitchComponent.new(
+                          name: "household[pool_enabled]",
+                          checked: @household.pool_enabled,
+                          disabled: !current_membership&.admin?,
+                          html_options: { value: "1", aria: { labelledby: "module_label_pool" } }
+                        ) %>
+                  <% end %>
+                <% end %>
+              </li>
+            </ul>
+            <p class="mt-2 text-xs text-secondary"><%= t(".pool_description") %></p>
+          </div>
+
           <% if current_membership&.admin? %>
             <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".modules_submit") } %>
           <% end %>

@@ -8,8 +8,9 @@ class GlobalSearch
 
   RESULT_LIMIT_PER_MODEL = 5
 
-  Definition = Struct.new(:model, :module_key, :icon, :label, :scope, :url, :scoped_by, keyword_init: true) do
+  Definition = Struct.new(:model, :module_key, :icon, :label, :scope, :url, :scoped_by, :enabled, keyword_init: true) do
     def scoped_by = self[:scoped_by] || :household
+    def enabled?(household) = self[:enabled].nil? || self[:enabled].call(household)
   end
 
   DEFINITIONS = [
@@ -154,10 +155,13 @@ class GlobalSearch
       scope: ->(household, q) { Plant.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
       url: ->(r) { edit_plant_path(r) }),
 
+    # Also gated on Household#pool_enabled? — the finer-grained Pool switch
+    # sitting below the "outdoor" module toggle (see ModuleGating).
     Definition.new(model: Pool, module_key: "outdoor", icon: "trees",
       label: ->(r) { r.name },
       scope: ->(household, q) { Pool.for_household(household).where("name ILIKE :q", q: q).limit(RESULT_LIMIT_PER_MODEL) },
-      url: ->(r) { edit_pool_path(r) }),
+      url: ->(r) { edit_pool_path(r) },
+      enabled: ->(household) { household.pool_enabled? }),
 
     # Wellbeing entries are strictly private (Never shared with
     # the rest of the household), so this is scoped_by: :user like Circle and
@@ -185,7 +189,7 @@ class GlobalSearch
     wildcard = "%#{ActiveRecord::Base.sanitize_sql_like(@query)}%"
 
     DEFINITIONS.filter_map do |definition|
-      next unless @household.module_enabled?(definition.module_key)
+      next unless @household.module_enabled?(definition.module_key) && definition.enabled?(@household)
 
       subject = definition.scoped_by == :user ? @user : @household
       # instance_exec (not .call) so a scope lambda can reach @household even

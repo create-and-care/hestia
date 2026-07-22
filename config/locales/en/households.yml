@@ -57,6 +57,9 @@ en:
       modules_heading: "Modules"
       modules_description: "Choose which modules appear in the sidebar for your household."
       modules_admin_only: "Only administrators can change these settings."
+      pool_heading: "Pool"
+      pool_label: "Pool"
+      pool_description: "Don't have a pool? Turn this off to hide the Pool section, without touching the rest of the Outdoor module (garden)."
       modules_submit: "Save modules"
     create:
       created: "Household “%{name}” created."

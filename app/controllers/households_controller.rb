@@ -45,7 +45,8 @@ class HouseholdsController < ApplicationController
     end
   end
 
-  # Enables/disables sidebar modules for the household (admins only, Household#module_enabled?).
+  # Enables/disables sidebar modules for the household (admins only, Household#module_enabled?),
+  # plus the finer-grained Pool switch (Household#pool_enabled?) shown on the same tab.
   def update_modules
     unless current_membership&.admin?
       return redirect_to household_path(Current.household), alert: t(".not_authorized")
@@ -53,8 +54,18 @@ class HouseholdsController < ApplicationController
 
     enabled_modules = Array(params.dig(:household, :enabled_modules))
     disabled_modules = Household::MODULE_KEYS - enabled_modules
+    # The settings form always submits a hidden "0" fallback alongside the
+    # switch (like required_meal_types above), so the key is present whenever
+    # a real submission happens; a caller that omits it entirely (e.g. an
+    # older client) leaves the current value untouched rather than nulling
+    # out this NOT NULL column.
+    pool_enabled = if params[:household]&.key?(:pool_enabled)
+      ActiveModel::Type::Boolean.new.cast(params.dig(:household, :pool_enabled))
+    else
+      Current.household.pool_enabled
+    end
 
-    if Current.household.update(disabled_modules: disabled_modules)
+    if Current.household.update(disabled_modules: disabled_modules, pool_enabled: pool_enabled)
       redirect_to household_path(Current.household), notice: t("households.update.updated")
     else
       redirect_to household_path(Current.household), alert: t("households.update.failed")

@@ -141,6 +141,29 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_empty households(:alpha).reload.required_meal_types
   end
 
+  test "update_modules lets an admin turn the Pool switch off" do
+    sign_in_as(users(:one)) # admin of :alpha
+
+    patch update_modules_household_path(households(:alpha)), params: {
+      household: { enabled_modules: Household::MODULE_KEYS, pool_enabled: "0" }
+    }
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_equal false, households(:alpha).reload.pool_enabled
+  end
+
+  test "update_modules keeps the Pool switch on when checked" do
+    sign_in_as(users(:one)) # admin of :alpha
+    households(:alpha).update!(pool_enabled: false)
+
+    patch update_modules_household_path(households(:alpha)), params: {
+      household: { enabled_modules: Household::MODULE_KEYS, pool_enabled: "1" }
+    }
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_equal true, households(:alpha).reload.pool_enabled
+  end
+
   test "update_modules refuses a non-admin member" do
     sign_in_as(users(:two)) # admin of :beta, not a member of :alpha
     households(:alpha).memberships.create!(user: users(:two), role: :member)

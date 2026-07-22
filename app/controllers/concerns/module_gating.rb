@@ -25,12 +25,10 @@ module ModuleGating
     "wine_cellars" => "wine_cellar", "bottles" => "wine_cellar",
     "waste" => "waste", "waste_collection_series" => "waste", "waste_collection_events" => "waste",
     "documents" => "documents", "document_folders" => "documents",
-    # Garden and Pool share a single "outdoor" toggle (Asks for a
-    # separate Pool switch): both live on the same ExteriorController#show page
-    # and template, so gating them independently would mean conditionally
-    # rendering half of one controller's view rather than a second entry here
-    # — a real architecture change, not a config tweak. Documented per the
-    # audit's own fallback rather than attempted half-done.
+    # Garden and Pool share the "outdoor" toggle (both live on the same
+    # ExteriorController#show page and template), but Pool also has its own
+    # finer-grained Household#pool_enabled flag for households with no pool
+    # — see POOL_GATED_CONTROLLERS/ensure_pool_enabled! below.
     "exterior" => "outdoor", "plants" => "outdoor", "pools" => "outdoor", "pool_readings" => "outdoor", "pool_actions" => "outdoor",
     "budget" => "budget", "budget_categories" => "budget", "budget_entries" => "budget", "savings_envelopes" => "budget",
     "shared_projects" => "budget", "shared_project_participants" => "budget", "shared_expenses" => "budget",
@@ -52,14 +50,27 @@ module ModuleGating
     "trips" => "trips", "trips/addresses" => "trips", "trips/notes" => "trips", "trips/shopping_lists" => "trips", "trips/tasks" => "trips"
   }.freeze
 
+  # Sits below the "outdoor" module toggle: even when Extérieur is enabled,
+  # a household without a pool can turn Pool off on its own without also
+  # hiding the garden.
+  POOL_GATED_CONTROLLERS = %w[pools pool_readings pool_actions].freeze
+
   included do
     before_action :ensure_module_enabled!
+    before_action :ensure_pool_enabled!
   end
 
   private
     def ensure_module_enabled!
       key = CONTROLLER_MODULES[controller_path]
       return if key.nil? || Current.household.nil? || Current.household.module_enabled?(key)
+
+      redirect_to root_path, alert: t("modules.disabled_alert")
+    end
+
+    def ensure_pool_enabled!
+      return unless POOL_GATED_CONTROLLERS.include?(controller_path)
+      return if Current.household.nil? || Current.household.pool_enabled?
 
       redirect_to root_path, alert: t("modules.disabled_alert")
     end

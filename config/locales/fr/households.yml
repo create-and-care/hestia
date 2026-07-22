@@ -57,6 +57,9 @@ fr:
       modules_heading: "Modules"
       modules_description: "Choisissez les modules qui apparaissent dans le menu latéral pour votre foyer."
       modules_admin_only: "Seuls les administrateurs peuvent modifier ces réglages."
+      pool_heading: "Piscine"
+      pool_label: "Piscine"
+      pool_description: "Vous n'avez pas de piscine ? Désactivez cette option pour masquer la section Piscine, sans toucher au reste du module Extérieur (jardin)."
       modules_submit: "Enregistrer les modules"
     create:
       created: "Foyer « %{name} » créé."

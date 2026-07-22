@@ -125,6 +125,17 @@ class GlobalSearchTest < ActiveSupport::TestCase
     assert pool_group, "expected an outdoor group matched by pool name"
   end
 
+  test "excludes pools when the household has turned off the Pool switch, but keeps plants" do
+    @household.update!(pool_enabled: false)
+
+    results = GlobalSearch.call(query: "Piscine principale", household: @household, user: @user)
+    assert_nil results.find { |g| g[:module_key] == "outdoor" }, "a disabled Pool switch must hide pool results"
+
+    results = GlobalSearch.call(query: "Rosier", household: @household, user: @user)
+    plant_group = results.find { |g| g[:module_key] == "outdoor" && g[:records].any? { |r| r[:label] == "Rosier" } }
+    assert plant_group, "plants must still be searchable when only Pool is disabled"
+  end
+
   test "finds a workout entry scoped to the searching user only, never another household member's" do
     @user.workout_entries.create!(exercise: "Squats bulgares", done_on: Date.current)
     users(:two).workout_entries.create!(exercise: "Squats sautés", done_on: Date.current)
