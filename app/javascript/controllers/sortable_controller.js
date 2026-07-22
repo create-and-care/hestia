@@ -36,7 +36,7 @@ export default class extends Controller {
         body: JSON.stringify({ ids })
       })
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
-    } catch (error) {
+    } catch {
       // A rejected PATCH used to fail completely silently, resetting the order on the next
       // reload with no explanation — surface it instead when the view opts in.
       if (this.errorMessageValue) {

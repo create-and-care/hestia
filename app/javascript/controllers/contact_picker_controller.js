@@ -20,7 +20,7 @@ export default class extends Controller {
       if (this.hasNameTarget && contact.name?.[0]) this.nameTarget.value = contact.name[0]
       if (this.hasPhoneTarget && contact.tel?.[0]) this.phoneTarget.value = contact.tel[0]
       if (this.hasEmailTarget && contact.email?.[0]) this.emailTarget.value = contact.email[0]
-    } catch (error) {
+    } catch {
       // The user cancelled the picker or denied permission — nothing to do.
     }
   }

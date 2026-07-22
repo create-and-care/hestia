@@ -48,7 +48,7 @@ export default class extends Controller {
         this.results = this.results || []
       })
       this.results = results
-    } catch (error) {
+    } catch {
       this.resultsTarget.innerHTML = `<p class="px-2 py-1 text-xs text-subdued">${this.unavailableTextValue}</p>`
     }
   }

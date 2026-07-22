@@ -33,7 +33,7 @@ export default class extends Controller {
       if (this.hasNameTarget && product.name) this.nameTarget.value = product.name
       if (this.hasRayonTarget && product.rayon) this.rayonTarget.value = product.rayon
       this.setStatus(`${this.foundTextValue} ${product.name}`)
-    } catch (error) {
+    } catch {
       this.setStatus(this.unavailableTextValue)
     }
   }
