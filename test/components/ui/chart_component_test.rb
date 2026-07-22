@@ -33,7 +33,7 @@ class Ui::ChartComponentTest < ViewComponent::TestCase
 
     render_inline(Ui::ChartComponent.new(data: data))
 
-    assert_selector "div.bg-blue-500", count: 2 # index 0 and index 5 both wrap to the first color
+    assert_selector "div.bg-indigo-600", count: 2 # index 0 and index 5 both wrap to the first color
   end
 
   test "each bar carries an accessible label combining its category and value" do

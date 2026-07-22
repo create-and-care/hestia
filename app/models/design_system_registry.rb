@@ -77,6 +77,8 @@ module DesignSystemRegistry
       description: "Accole un préfixe ou suffixe (icône, unité, @) à un Input."),
     Entry.new(slug: "textarea", name: "Textarea", category: CATEGORIES[0], component_class: Ui::TextareaComponent,
       description: "Zone de texte multiligne, même traitement visuel que Input."),
+    Entry.new(slug: "file-upload", name: "File Upload", category: CATEGORIES[0], component_class: Ui::FileUploadComponent,
+      description: "Zone de dépôt de fichier avec glisser-déposer, aperçu (image ou nom de fichier) et suppression."),
     Entry.new(slug: "native-select", name: "Native Select", category: CATEGORIES[0], component_class: Ui::NativeSelectComponent,
       description: "Habille le <select> natif du navigateur — le plus accessible pour une liste courte.", usage: SELECTION_USAGE,
       related: %w[select combobox]),

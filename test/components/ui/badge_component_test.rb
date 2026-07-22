@@ -29,6 +29,7 @@ class Ui::BadgeComponentTest < ViewComponent::TestCase
       default: "bg-button-primary",
       secondary: "bg-surface-inset",
       outline: "bg-transparent",
+      accent: /bg-accent/,
       success: /bg-success/,
       warning: /bg-warning/,
       urgent: /bg-orange/,

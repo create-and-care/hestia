@@ -52,6 +52,9 @@ application.register("dropdown-menu", DropdownMenuController)
 import FieldVisibilityController from "./field_visibility_controller"
 application.register("field-visibility", FieldVisibilityController)
 
+import FileUploadController from "./file_upload_controller"
+application.register("file-upload", FileUploadController)
+
 import FormController from "./form_controller"
 application.register("form", FormController)
 

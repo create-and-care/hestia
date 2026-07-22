@@ -76,7 +76,7 @@
       <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_ideas") } } %>
     <% end %>
 
-    <%= form_with model: [ @list, @idea ], url: gift_list_gift_ideas_path(@list), class: "flex flex-wrap items-end gap-2" do |form| %>
+    <%= form_with model: [ @list, @idea ], url: gift_list_gift_ideas_path(@list), multipart: true, class: "flex flex-wrap items-end gap-2" do |form| %>
       <%= render Ui::InputComponent.new(name: "gift_idea[name]", value: @idea.name, placeholder: t(".idea_placeholder"),
             html_options: { id: "gift_idea_name", required: true, class: "flex-1" }) %>
       <%= render Ui::InputComponent.new(type: "number", name: "gift_idea[price]", value: @idea.price, placeholder: "€",
@@ -86,7 +86,9 @@
       <%= render Ui::NativeSelectComponent.new(name: "gift_idea[status]",
             options: GiftIdea::STATUSES.map { |s| [ gift_status_label(s), s ] },
             selected: "wanted", html_options: { id: "gift_idea_status", class: "!w-auto" }) %>
-      <%= form.file_field :photo, accept: "image/*", class: "text-xs text-secondary" %>
+      <div class="w-40">
+        <%= render Ui::FileUploadComponent.new(name: "gift_idea[photo]", accept: "image/*") %>
+      </div>
       <div class="w-full">
         <%= render(Ui::TextareaComponent.new(name: "gift_idea[comment]", rows: 1, placeholder: t(".comment_placeholder"),
               html_options: { id: "gift_idea_comment", class: "w-full" })) %>

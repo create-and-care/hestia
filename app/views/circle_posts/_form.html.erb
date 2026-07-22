@@ -1,8 +1,10 @@
 <%= tag.div id: "new_circle_post" do %>
-  <%= form_with model: [ circle, post ], url: circle_posts_path(circle), class: "mb-6 flex flex-wrap items-end gap-2" do |form| %>
+  <%= form_with model: [ circle, post ], url: circle_posts_path(circle), multipart: true, class: "mb-6 flex flex-wrap items-end gap-2" do |form| %>
     <%= render Ui::TextareaComponent.new(name: "circle_post[body]", rows: 2, placeholder: t("circles.post_placeholder"),
           html_options: { id: "circle_post_body", required: true, class: "flex-1" }) %>
-    <%= form.file_field :photo, accept: "image/*", class: "text-xs text-secondary" %>
+    <div class="w-40">
+      <%= render Ui::FileUploadComponent.new(name: "circle_post[photo]", accept: "image/*") %>
+    </div>
     <%= render(Ui::ButtonComponent.new(type: "submit")) { t("circles.publish") } %>
   <% end %>
 <% end %>

@@ -4,6 +4,7 @@ module Ui
   class MarkerComponent < ApplicationComponent
     VARIANTS = {
       default: "bg-button-primary",
+      accent: "bg-accent",
       success: "bg-success",
       warning: "bg-warning",
       destructive: "bg-destructive",

@@ -1,4 +1,4 @@
-<%= form_with model: pet, url: url do |form| %>
+<%= form_with model: pet, url: url, multipart: true do |form| %>
   <% if pet.errors.any? %>
     <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
       <ul class="list-inside list-disc">
@@ -78,14 +78,9 @@
     <%= render(Ui::FieldComponent.new(id: "pet_photo")) do |field| %>
       <% field.with_label { t(".photo_label") } %>
       <% field.with_control do %>
-        <% if pet.photo.attached? %>
-          <div class="mb-2 size-24">
-            <%= render(Ui::AspectRatioComponent.new(ratio: 1)) do %>
-              <%= image_tag pet.photo.variant(resize_to_fill: [ 160, 160 ]), alt: "", class: "size-full rounded-full object-cover" %>
-            <% end %>
-          </div>
-        <% end %>
-        <%= form.file_field :photo, accept: "image/*", id: "pet_photo", class: "block text-sm text-secondary" %>
+        <%= render Ui::FileUploadComponent.new(name: "pet[photo]", accept: "image/*", shape: :circle,
+              existing_url: (url_for(pet.photo.variant(resize_to_fill: [ 160, 160 ])) if pet.photo.attached?),
+              html_options: { id: "pet_photo" }) %>
       <% end %>
     <% end %>
 

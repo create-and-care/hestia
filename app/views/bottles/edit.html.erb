@@ -3,7 +3,7 @@
 <div class="mx-auto mt-10 max-w-lg px-4">
   <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
 
-  <%= form_with model: @bottle, url: bottle_path(@bottle) do |form| %>
+  <%= form_with model: @bottle, url: bottle_path(@bottle), multipart: true do |form| %>
     <% if @bottle.errors.any? %>
       <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
         <ul class="list-inside list-disc">
@@ -58,14 +58,9 @@
       <%= render(Ui::FieldComponent.new(id: "bottle_photo")) do |field| %>
         <% field.with_label { t(".photo_label") } %>
         <% field.with_control do %>
-          <% if @bottle.photo.attached? %>
-            <div class="mb-2 max-w-32">
-              <%= render(Ui::AspectRatioComponent.new(ratio: 3.0 / 4)) do %>
-                <%= image_tag @bottle.photo.variant(resize_to_fill: [ 120, 160 ]), alt: "", class: "size-full rounded-md object-cover" %>
-              <% end %>
-            </div>
-          <% end %>
-          <%= form.file_field :photo, accept: "image/*", id: "bottle_photo", class: "block text-sm text-secondary" %>
+          <%= render Ui::FileUploadComponent.new(name: "bottle[photo]", accept: "image/*",
+                existing_url: (url_for(@bottle.photo.variant(resize_to_fill: [ 120, 160 ])) if @bottle.photo.attached?),
+                html_options: { id: "bottle_photo" }) %>
         <% end %>
       <% end %>
 

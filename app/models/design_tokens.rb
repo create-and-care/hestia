@@ -6,7 +6,9 @@
 module DesignTokens
   CSS_PATH = Rails.root.join("app/assets/stylesheets/application.tailwind.css")
 
-  HUE_ORDER = %w[gray red orange yellow green cyan blue indigo violet fuchsia pink].freeze
+  HUE_ORDER = %w[gray red orange amber yellow green cyan blue indigo violet fuchsia pink].freeze
+
+  BRAND_COLORS = %w[brand accent].freeze
 
   SEMANTIC_COLORS = %w[success warning destructive info link].freeze
 

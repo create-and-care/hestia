@@ -4,6 +4,7 @@ module Ui
       default: "bg-button-primary text-inverse",
       secondary: "bg-surface-inset text-primary",
       outline: "bg-transparent text-primary border border-primary",
+      accent: "bg-accent/10 text-accent",
       success: "bg-success/10 text-success",
       warning: "bg-warning/10 text-warning",
       urgent: "bg-orange-500/10 text-orange-600 dark:text-orange-400",

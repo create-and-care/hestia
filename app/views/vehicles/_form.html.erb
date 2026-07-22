@@ -1,4 +1,4 @@
-<%= form_with model: vehicle, url: url do |form| %>
+<%= form_with model: vehicle, url: url, multipart: true do |form| %>
   <% if vehicle.errors.any? %>
     <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
       <ul class="list-inside list-disc">
@@ -75,14 +75,9 @@
       <%= render(Ui::FieldComponent.new(id: "vehicle_photo")) do |field| %>
         <% field.with_label { t(".photo_label") } %>
         <% field.with_control do %>
-          <% if vehicle.photo.attached? %>
-            <div class="mb-2 max-w-40">
-              <%= render(Ui::AspectRatioComponent.new) do %>
-                <%= image_tag vehicle.photo.variant(resize_to_fill: [ 160, 90 ]), alt: "", class: "size-full rounded-md object-cover" %>
-              <% end %>
-            </div>
-          <% end %>
-          <%= form.file_field :photo, accept: "image/*", id: "vehicle_photo", class: "block text-sm text-secondary" %>
+          <%= render Ui::FileUploadComponent.new(name: "vehicle[photo]", accept: "image/*",
+                existing_url: (url_for(vehicle.photo.variant(resize_to_fill: [ 160, 90 ])) if vehicle.photo.attached?),
+                html_options: { id: "vehicle_photo" }) %>
         <% end %>
       <% end %>
     </div>

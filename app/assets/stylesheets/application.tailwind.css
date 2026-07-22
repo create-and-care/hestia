@@ -148,9 +148,23 @@
   --color-orange-800: #97180C;
   --color-orange-900: #771A0D;
 
+  --color-amber-25: #FFFCF0;
+  --color-amber-50: #FFFBEB;
+  --color-amber-100: #FEF3C7;
+  --color-amber-200: #FDE68A;
+  --color-amber-300: #FCD34D;
+  --color-amber-400: #FBBF24;
+  --color-amber-500: #F59E0B;
+  --color-amber-600: #D97706;
+  --color-amber-700: #B45309;
+  --color-amber-800: #92400E;
+  --color-amber-900: #78350F;
+
   /* semantic colors — values swap in `.dark`, see below */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
+  --color-accent: var(--accent);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-destructive: var(--destructive);
@@ -183,6 +197,10 @@
   --background: var(--color-white);
   --foreground: var(--color-gray-900);
 
+  --brand: var(--color-indigo-600);
+  --brand-hover: var(--color-indigo-700);
+  --accent: var(--color-amber-500);
+
   --success: var(--color-green-700);
   --warning: var(--color-yellow-600);
   --destructive: var(--color-red-500);
@@ -191,7 +209,7 @@
   --link: var(--color-blue-600);
   --shadow-color: color-mix(in oklab, var(--color-black) 6%, transparent);
 
-  --focus-ring: color-mix(in oklab, var(--color-black) 50%, transparent);
+  --focus-ring: color-mix(in oklab, var(--brand) 50%, transparent);
   --tertiary: color-mix(in oklab, var(--color-black) 8%, transparent);
 
   --surface: var(--color-gray-50);
@@ -225,8 +243,8 @@
   --border-inverse: color-mix(in oklab, var(--color-white) 10%, transparent);
   --shadow-border-color: color-mix(in oklab, var(--color-black) 5%, transparent);
 
-  --button-bg-primary: var(--color-gray-900);
-  --button-bg-primary-hover: var(--color-gray-800);
+  --button-bg-primary: var(--brand);
+  --button-bg-primary-hover: var(--brand-hover);
   --button-bg-secondary: var(--color-gray-50);
   --button-bg-secondary-hover: var(--color-gray-100);
   --button-bg-secondary-strong: var(--color-gray-200);
@@ -252,6 +270,10 @@
   --background: var(--color-black);
   --foreground: var(--color-white);
 
+  --brand: var(--color-indigo-400);
+  --brand-hover: var(--color-indigo-300);
+  --accent: var(--color-amber-400);
+
   --success: var(--color-green-400);
   --warning: var(--color-yellow-400);
   --destructive: var(--color-red-400);
@@ -260,7 +282,7 @@
   --link: var(--color-blue-500);
   --shadow-color: color-mix(in oklab, var(--color-white) 8%, transparent);
 
-  --focus-ring: color-mix(in oklab, var(--color-white) 50%, transparent);
+  --focus-ring: color-mix(in oklab, var(--brand) 50%, transparent);
   --tertiary: color-mix(in oklab, var(--color-white) 10%, transparent);
 
   --surface: var(--color-black);
@@ -294,8 +316,8 @@
   --border-inverse: color-mix(in oklab, var(--color-black) 15%, transparent);
   --shadow-border-color: color-mix(in oklab, var(--color-white) 5%, transparent);
 
-  --button-bg-primary: var(--color-white);
-  --button-bg-primary-hover: var(--color-gray-50);
+  --button-bg-primary: var(--brand);
+  --button-bg-primary-hover: var(--brand-hover);
   --button-bg-secondary: var(--color-gray-700);
   --button-bg-secondary-hover: var(--color-gray-600);
   --button-bg-secondary-strong: var(--color-gray-700);

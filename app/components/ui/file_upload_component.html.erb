@@ -1,0 +1,48 @@
+<div data-controller="file-upload" class="relative w-full">
+  <label class="block">
+    <%= tag.input(
+      type: "file", name: @name, id: input_id, accept: @accept, "aria-invalid": @invalid,
+      "data-file-upload-target": "input", "data-action": "change->file-upload#change",
+      **@html_options.except(:id, :class),
+      class: cn("peer sr-only", @html_options[:class])
+    ) %>
+
+    <div data-file-upload-target="dropzone"
+      data-action="dragover->file-upload#dragOver dragleave->file-upload#dragLeave drop->file-upload#drop"
+      class="<%= cn(
+        "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed bg-container px-4 py-6 text-center transition-colors hover:bg-surface-hover",
+        "peer-focus-visible:ring-focus peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
+        "data-[dragover]:border-brand data-[dragover]:bg-brand/5",
+        @invalid ? "border-destructive" : "border-primary",
+        @html_options[:class]
+      ) %>">
+
+      <div data-file-upload-target="preview" <%= "hidden" unless existing_preview_shown? %> class="flex flex-col items-center gap-2">
+        <img data-file-upload-target="previewImage" src="<%= @existing_url if existing_image_preview? %>" alt=""
+          <%= "hidden" unless existing_image_preview? %> class="<%= cn(preview_shape_classes, "object-cover") %>">
+        <div data-file-upload-target="previewChip" <%= "hidden" unless existing_chip_preview? %> class="inline-flex max-w-full items-center gap-2 rounded-md border border-primary bg-surface px-3 py-2 text-sm">
+          <svg class="size-4 shrink-0 text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551" />
+          </svg>
+          <span data-file-upload-target="previewName" class="max-w-[12rem] truncate font-medium text-primary"><%= @existing_filename %></span>
+        </div>
+      </div>
+
+      <div data-file-upload-target="placeholder" <%= "hidden" if existing_preview_shown? %> class="flex flex-col items-center gap-1.5">
+        <svg class="size-6 text-subdued" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="17 8 12 3 7 8" />
+          <line x1="12" y1="3" x2="12" y2="15" />
+        </svg>
+        <p class="text-sm text-secondary"><span class="font-medium text-brand">Cliquez pour choisir</span> ou glissez-déposez un fichier</p>
+        <% if @accept %><p class="text-xs text-subdued"><%= @accept %></p><% end %>
+      </div>
+    </div>
+  </label>
+
+  <button type="button" data-file-upload-target="removeButton" data-action="click->file-upload#remove" <%= "hidden" unless existing_preview_shown? %>
+    class="absolute right-2 top-2 rounded-full bg-container p-1 text-subdued shadow-xs hover:bg-surface-hover hover:text-primary"
+    aria-label="Retirer le fichier">
+    <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+  </button>
+</div>
