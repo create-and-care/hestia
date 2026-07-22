@@ -1,0 +1,28 @@
+name: Documentation
+description: Report an issue or improvement for the documentation.
+title: "[Docs]: "
+labels:
+  - documentation
+
+body:
+  - type: textarea
+    id: page
+    attributes:
+      label: Documentation page
+      description: Which page or file is concerned?
+      placeholder: README.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue
+      description: What is missing, incorrect or unclear?
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested improvement
