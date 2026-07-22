@@ -49,7 +49,7 @@ class HouseholdsController < ApplicationController
   # plus the finer-grained Pool switch (Household#pool_enabled?) shown on the same tab.
   def update_modules
     unless current_membership&.admin?
-      return redirect_to household_path(Current.household), alert: t(".not_authorized")
+      return redirect_to household_path(Current.household, tab: "modules"), alert: t(".not_authorized")
     end
 
     enabled_modules = Array(params.dig(:household, :enabled_modules))
@@ -66,9 +66,9 @@ class HouseholdsController < ApplicationController
     end
 
     if Current.household.update(disabled_modules: disabled_modules, pool_enabled: pool_enabled)
-      redirect_to household_path(Current.household), notice: t("households.update.updated")
+      redirect_to household_path(Current.household, tab: "modules"), notice: t("households.update.updated")
     else
-      redirect_to household_path(Current.household), alert: t("households.update.failed")
+      redirect_to household_path(Current.household, tab: "modules"), alert: t("households.update.failed")
     end
   end
 

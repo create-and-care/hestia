@@ -115,8 +115,21 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
       household: { enabled_modules: Household::MODULE_KEYS - [ "shopping" ] }
     }
 
-    assert_redirected_to household_path(households(:alpha))
+    assert_redirected_to household_path(households(:alpha), tab: "modules")
     assert_equal [ "shopping" ], households(:alpha).reload.disabled_modules
+  end
+
+  test "update_modules redirects back to the modules tab, not general, so the save is visible" do
+    sign_in_as(users(:one)) # admin of :alpha
+
+    patch update_modules_household_path(households(:alpha)), params: {
+      household: { enabled_modules: Household::MODULE_KEYS, pool_enabled: "0" }
+    }
+    assert_redirected_to household_path(households(:alpha), tab: "modules")
+
+    follow_redirect!
+    assert_response :success
+    assert_select "div[role=tabpanel][data-value=modules]:not([hidden])"
   end
 
   test "update sets the household's required meal types" do
@@ -148,7 +161,7 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
       household: { enabled_modules: Household::MODULE_KEYS, pool_enabled: "0" }
     }
 
-    assert_redirected_to household_path(households(:alpha))
+    assert_redirected_to household_path(households(:alpha), tab: "modules")
     assert_equal false, households(:alpha).reload.pool_enabled
   end
 
@@ -160,7 +173,7 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
       household: { enabled_modules: Household::MODULE_KEYS, pool_enabled: "1" }
     }
 
-    assert_redirected_to household_path(households(:alpha))
+    assert_redirected_to household_path(households(:alpha), tab: "modules")
     assert_equal true, households(:alpha).reload.pool_enabled
   end
 
@@ -173,7 +186,7 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
       household: { enabled_modules: Household::MODULE_KEYS - [ "shopping" ] }
     }
 
-    assert_redirected_to household_path(households(:alpha))
+    assert_redirected_to household_path(households(:alpha), tab: "modules")
     assert_empty households(:alpha).reload.disabled_modules
   end
 
