@@ -1,0 +1,79 @@
+<% content_for :title, t(".title") %>
+
+<div class="mt-10 max-w-md mx-auto px-4 pb-16">
+  <div class="mb-4"><%= render Ui::BreadcrumbComponent.new(items: [ [ t("common.dashboard"), root_path ], [ Current.household.name, household_path(Current.household, tab: "members") ], [ t(".heading"), nil ] ]) %></div>
+
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".heading") %></h1>
+
+  <%= render "shared/flash" %>
+
+  <%= form_with model: @user, url: account_path, method: :patch do |form| %>
+    <% if @user.errors.any? %>
+      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
+        <ul class="list-inside list-disc">
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <div class="space-y-4">
+      <%= render(Ui::FieldComponent.new(id: "user_name")) do |field| %>
+        <% field.with_label { t(".name") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(name: "user[name]", value: @user.name,
+                html_options: { id: "user_name", required: true, autocomplete: "name" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "user_email_address")) do |field| %>
+        <% field.with_label { t(".email") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "email", name: "user[email_address]", value: @user.email_address,
+                html_options: { id: "user_email_address", required: true, autocomplete: "username" }) %>
+        <% end %>
+      <% end %>
+
+      <div class="border-t border-primary pt-4">
+        <p class="mb-1 text-sm font-medium text-primary"><%= t(".password_section") %></p>
+        <p class="mb-3 text-xs text-secondary"><%= t(".password_section_description") %></p>
+
+        <div class="space-y-4">
+          <%= render(Ui::FieldComponent.new(id: "user_password")) do |field| %>
+            <% field.with_label { t(".password") } %>
+            <% field.with_control do %>
+              <%= render Ui::InputComponent.new(type: "password", name: "user[password]",
+                    html_options: { id: "user_password", autocomplete: "new-password", maxlength: 72, minlength: 8 }) %>
+            <% end %>
+          <% end %>
+
+          <%= render(Ui::FieldComponent.new(id: "user_password_confirmation")) do |field| %>
+            <% field.with_label { t(".password_confirmation") } %>
+            <% field.with_control do %>
+              <%= render Ui::InputComponent.new(type: "password", name: "user[password_confirmation]",
+                    html_options: { id: "user_password_confirmation", autocomplete: "new-password", maxlength: 72 }) %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="border-t border-primary pt-4">
+        <%= render(Ui::FieldComponent.new(id: "user_current_password")) do |field| %>
+          <% field.with_label { t(".current_password") } %>
+          <% field.with_control do %>
+            <%= render Ui::InputComponent.new(type: "password", name: "user[current_password]",
+                  html_options: { id: "user_current_password", required: true, autocomplete: "current-password" }) %>
+          <% end %>
+        <% end %>
+        <p class="mt-1 text-xs text-secondary"><%= t(".current_password_hint") %></p>
+      </div>
+
+      <%= render(Ui::ButtonComponent.new(type: "submit", html_options: { class: "w-full" })) { t(".submit") } %>
+    </div>
+  <% end %>
+
+  <p class="mt-6 text-sm">
+    <%= link_to t(".back"), household_path(Current.household, tab: "members"), class: "underline" %>
+  </p>
+</div>

@@ -1,6 +1,7 @@
 class NotificationsController < ApplicationController
   def index
     @notifications = Current.user.notifications.recent.limit(50)
+    @notifications_by_block = @notifications.group_by(&:block_key)
   end
 
   def mark_read

@@ -17,7 +17,11 @@ fr:
       expires_in_365: "1 an"
       expires_in_never: "Jamais"
       create: "Créer"
+      token_created_title: "Jeton créé"
+      token_created_description: "Copiez-le maintenant, il ne sera plus affiché."
+      copy: "Copier"
+      copied: "Jeton copié dans le presse-papiers"
     create:
-      created: "Jeton « %{name} » créé : %{token} (copiez-le, il ne sera plus affiché)."
+      created: "Jeton « %{name} » créé."
     destroy:
       revoked: "Jeton révoqué."

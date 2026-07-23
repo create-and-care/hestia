@@ -2,7 +2,10 @@
 <%= tag.div id: dom_id(notification), class: ("rounded-md bg-surface" unless notification.read?) do %>
   <%= render(Ui::ItemComponent.new) do |item| %>
     <% item.with_leading { notification_icon(notification) } %>
-    <% item.with_title { path ? link_to(notification.title, path, class: "hover:underline") : notification.title } %>
+    <% item.with_title do %>
+      <%= path ? link_to(notification.title, path, class: "hover:underline") : notification.title %>
+      <% if (modules_label = notification_modules_label(notification)) %><span class="font-normal text-secondary"><%= modules_label %></span><% end %>
+    <% end %>
     <% item.with_description do %>
       <% if notification.body.present? %><%= notification.body %> · <% end %><%= time_ago_in_words(notification.created_at) %>
       <% if notification.user.households.size > 1 %> · <%= notification.household.name %><% end %>

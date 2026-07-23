@@ -13,6 +13,7 @@ fr:
       preferences: "Préférences"
       mark_all_read: "Tout marquer lu"
       none: "Aucune notification pour l'instant."
+      global: "Global"
   notification_preferences:
     show:
       title: "Préférences de notification"

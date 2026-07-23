@@ -1,0 +1,18 @@
+en:
+  accounts:
+    edit:
+      title: "My account"
+      heading: "Edit my account"
+      name: "Name"
+      email: "Email address"
+      password_section: "Change password"
+      password_section_description: "Leave these fields blank to keep your current password."
+      password: "New password"
+      password_confirmation: "Confirm new password"
+      current_password: "Current password"
+      current_password_hint: "Required to confirm your changes."
+      submit: "Save"
+      back: "← Back to members"
+    update:
+      updated: "Account updated."
+      current_password_invalid: "Current password is incorrect."

@@ -67,6 +67,7 @@ Rails.application.routes.draw do
 
   resource :session
   resource :registration, only: %i[new create]
+  resource :account, only: %i[edit update]
   resources :passwords, param: :token
 
   # Onboarding: choosing to create / join a household.

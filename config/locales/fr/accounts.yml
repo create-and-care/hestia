@@ -1,0 +1,18 @@
+fr:
+  accounts:
+    edit:
+      title: "Mon compte"
+      heading: "Modifier mon compte"
+      name: "Nom"
+      email: "Adresse e-mail"
+      password_section: "Changer le mot de passe"
+      password_section_description: "Laissez ces champs vides pour conserver votre mot de passe actuel."
+      password: "Nouveau mot de passe"
+      password_confirmation: "Confirmer le nouveau mot de passe"
+      current_password: "Mot de passe actuel"
+      current_password_hint: "Requis pour confirmer les modifications."
+      submit: "Enregistrer"
+      back: "← Retour aux membres"
+    update:
+      updated: "Compte mis à jour."
+      current_password_invalid: "Mot de passe actuel incorrect."

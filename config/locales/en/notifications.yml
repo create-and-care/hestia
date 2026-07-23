@@ -13,6 +13,7 @@ en:
       preferences: "Preferences"
       mark_all_read: "Mark all read"
       none: "No notifications yet."
+      global: "Global"
   notification_preferences:
     show:
       title: "Notification preferences"

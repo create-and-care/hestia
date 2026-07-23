@@ -10,15 +10,16 @@ class ApiTokensController < ApplicationController
     token = Current.user.api_tokens.new(token_params.merge(expires_at: expires_at_from_params))
 
     if token.save
-      redirect_to household_path(Current.household), notice: t(".created", name: token.name, token: token.plaintext_token)
+      flash[:api_token] = token.plaintext_token
+      redirect_to household_path(Current.household, tab: "api"), notice: t(".created", name: token.name)
     else
-      redirect_to household_path(Current.household), alert: token.errors.full_messages.to_sentence
+      redirect_to household_path(Current.household, tab: "api"), alert: token.errors.full_messages.to_sentence
     end
   end
 
   def destroy
     Current.user.api_tokens.find(params[:id]).destroy
-    redirect_to household_path(Current.household), notice: t(".revoked")
+    redirect_to household_path(Current.household, tab: "api"), notice: t(".revoked")
   end
 
   private

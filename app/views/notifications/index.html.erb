@@ -15,16 +15,25 @@
 
   <%= render "shared/flash" %>
 
-  <div id="notifications_list" class="<%= "divide-y divide-primary rounded-lg border border-primary" if @notifications.any? %>">
-    <% if @notifications.none? %>
-      <%= render(Ui::EmptyComponent.new) do |empty| %>
-        <% empty.with_icon { lucide_icon("bell", css_class: "size-8") } %>
-        <% empty.with_description { t(".none") } %>
-      <% end %>
-    <% else %>
-      <% @notifications.each do |notification| %>
-        <%= render "notifications/notification", notification: notification %>
-      <% end %>
+  <% if @notifications.none? %>
+    <%= render(Ui::EmptyComponent.new) do |empty| %>
+      <% empty.with_icon { lucide_icon("bell", css_class: "size-8") } %>
+      <% empty.with_description { t(".none") } %>
     <% end %>
-  </div>
+  <% else %>
+    <div class="space-y-6">
+      <% NotificationsHelper::BLOCKS.each do |key, icon| %>
+        <div class="space-y-2 <%= NotificationsHelper::BLOCK_WRAPPER_CLASSES.fetch(key) %>">
+          <h2 class="flex items-center gap-1.5 text-sm font-semibold text-secondary">
+            <%= lucide_icon(icon, css_class: "size-4") %> <%= notification_block_label(key) %>
+          </h2>
+          <div id="notifications_list_<%= key %>" class="divide-y divide-primary rounded-lg border border-primary">
+            <% @notifications_by_block.fetch(key, []).each do |notification| %>
+              <%= render "notifications/notification", notification: notification %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 </div>

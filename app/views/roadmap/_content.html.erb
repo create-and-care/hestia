@@ -14,16 +14,11 @@
       <ol class="relative space-y-10">
         <% done_milestones.each do |milestone| %>
           <li class="relative pl-14">
-            <span class="absolute left-0 top-0 flex size-10 items-center justify-center rounded-full border border-success/30 bg-success/10 text-success">
+            <span class="absolute left-0 top-0 flex size-10 items-center justify-center rounded-full border border-success/30 bg-surface-inset text-success">
               <%= lucide_icon(milestone[:icon], css_class: "size-5") %>
             </span>
 
             <div class="flex flex-wrap items-center gap-x-3 gap-y-1 pt-2">
-              <% if milestone[:date] %>
-                <time datetime="<%= milestone[:date].iso8601 %>" class="text-xs font-medium uppercase tracking-wide text-subdued">
-                  <%= l(milestone[:date], format: :long) %>
-                </time>
-              <% end %>
               <%= render(Ui::BadgeComponent.new(variant: :success)) { t("roadmap.show.status.done") } %>
             </div>
 

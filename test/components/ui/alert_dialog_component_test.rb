@@ -45,4 +45,18 @@ class Ui::AlertDialogComponentTest < ViewComponent::TestCase
     assert_selector "button", text: "Cancel"
     assert_selector "button", text: "Continue"
   end
+
+  test "renders a real form submit for the confirm action when given a confirm_url" do
+    render_inline(
+      Ui::AlertDialogComponent.new(title: "Delete household?", confirm_label: "Delete", confirm_url: "/households/1", confirm_method: :delete)
+    ) do |c|
+      c.with_trigger { "Delete household" }
+    end
+
+    assert_selector "form[action='/households/1']" do
+      assert_selector "input[name='_method'][value='delete']", visible: false
+      assert_selector "button[type='submit']", text: "Delete"
+    end
+    refute_selector "button[data-action='click->dialog#close']", text: "Delete"
+  end
 end

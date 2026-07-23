@@ -17,7 +17,11 @@ en:
       expires_in_365: "1 year"
       expires_in_never: "Never"
       create: "Create"
+      token_created_title: "Token created"
+      token_created_description: "Copy it now — it won't be shown again."
+      copy: "Copy"
+      copied: "Token copied to clipboard"
     create:
-      created: "Token %{name} created: %{token} (copy it now, it will not be shown again)."
+      created: "Token %{name} created."
     destroy:
       revoked: "Token revoked."

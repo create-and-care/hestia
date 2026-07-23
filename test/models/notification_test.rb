@@ -21,4 +21,21 @@ class NotificationTest < ActiveSupport::TestCase
     notification.mark_read!
     assert notification.read?
   end
+
+  test "block_key groups a single-module kind under that module" do
+    notification = Notification.create!(user: users(:one), household: households(:alpha), kind: "birthday", title: "A")
+    assert_equal "birthdays", notification.block_key
+  end
+
+  test "block_key falls back to global for a kind with no mapped module" do
+    notification = Notification.new(user: users(:one), household: households(:alpha), kind: "birthday", title: "A")
+    notification.define_singleton_method(:module_keys) { [] }
+    assert_equal "global", notification.block_key
+  end
+
+  test "block_key falls back to global for a kind mapped to several modules" do
+    notification = Notification.new(user: users(:one), household: households(:alpha), kind: "birthday", title: "A")
+    notification.define_singleton_method(:module_keys) { %w[birthdays gifts] }
+    assert_equal "global", notification.block_key
+  end
 end

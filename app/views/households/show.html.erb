@@ -19,8 +19,10 @@
           <div class="flex items-center gap-2">
             <code class="rounded-md bg-surface-inset px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
             <% if current_membership&.admin? %>
-              <%= render(Ui::ButtonToComponent.new(regenerate_invite_code_household_path(@household), method: :post, variant: :outline, size: :sm,
-                    html_options: { form: { data: { turbo_confirm: t(".regenerate_code_confirm") } } })) { t(".regenerate_code") } %>
+              <%= render(Ui::AlertDialogComponent.new(title: t(".regenerate_code_confirm_title"), description: t(".regenerate_code_confirm_description"),
+                    confirm_label: t(".regenerate_code"), confirm_url: regenerate_invite_code_household_path(@household), confirm_variant: :outline)) do |alert_dialog| %>
+                <% alert_dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".regenerate_code") } } %>
+              <% end %>
             <% end %>
           </div>
         <% end %>
@@ -28,6 +30,12 @@
         <%= render(Ui::CardComponent.new) do |card| %>
           <% card.with_title { t(".language") } %>
           <%= render "shared/locale_switcher" %>
+        <% end %>
+
+        <%= render(Ui::CardComponent.new) do |card| %>
+          <% card.with_title { t(".theme_heading") } %>
+          <% card.with_description { t(".theme_description") } %>
+          <%= render Ui::ThemeToggleComponent.new %>
         <% end %>
 
         <%= render(Ui::CardComponent.new) do |card| %>
@@ -84,8 +92,9 @@
           <%= render(Ui::CardComponent.new(class_name: "border-destructive")) do |card| %>
             <% card.with_title { t(".danger_zone") } %>
             <% card.with_description { t(".delete_household_description") } %>
-            <%= form_with url: household_path(@household), method: :delete, data: { turbo_confirm: t(".delete_household_confirm") } do %>
-              <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm, type: "submit")) { t(".delete_household") } %>
+            <%= render(Ui::AlertDialogComponent.new(title: t(".delete_household_confirm_title"), description: t(".delete_household_confirm_description"),
+                  confirm_label: t(".delete_household"), confirm_url: household_path(@household), confirm_method: :delete)) do |alert_dialog| %>
+              <% alert_dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :destructive, size: :sm)) { t(".delete_household") } } %>
             <% end %>
           <% end %>
         <% end %>
@@ -117,9 +126,12 @@
                     <% end %>
                   <% elsif membership.user == Current.user %>
                     <% item.with_trailing do %>
-                      <%= form_with url: household_member_path(@household, membership), method: :delete, data: { turbo_confirm: t(".leave_confirm") } do %>
-                        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".leave") } %>
-                      <% end %>
+                      <div class="flex shrink-0 items-center gap-2">
+                        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_account_path)) { t(".edit_account") } %>
+                        <%= form_with url: household_member_path(@household, membership), method: :delete, data: { turbo_confirm: t(".leave_confirm") } do %>
+                          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".leave") } %>
+                        <% end %>
+                      </div>
                     <% end %>
                   <% end %>
                 <% end %>
@@ -143,9 +155,9 @@
 
         <%= render(Ui::CardComponent.new) do |card| %>
           <% card.with_title { t(".other_households") } %>
-          <div class="flex gap-4 text-sm">
-            <%= link_to t(".create_household"), new_household_path, class: "underline" %>
-            <%= link_to t(".join_household"), new_membership_path, class: "underline" %>
+          <div class="flex gap-3">
+            <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: new_household_path)) { t(".create_household") } %>
+            <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: new_membership_path)) { t(".join_household") } %>
           </div>
         <% end %>
       </div>
@@ -206,6 +218,21 @@
           <span class="inline-flex items-center gap-1.5"><%= lucide_icon("smartphone", css_class: "size-5") %> <%= t("api_tokens.index.title") %></span>
         <% end %>
         <% card.with_description { t("api_tokens.index.description") } %>
+
+        <% if flash[:api_token] %>
+          <%= render(Ui::AlertComponent.new(variant: :success, class_name: "mb-4")) do |alert| %>
+            <% alert.with_title { t("api_tokens.index.token_created_title") } %>
+            <p class="mb-2"><%= t("api_tokens.index.token_created_description") %></p>
+            <div class="flex items-center gap-2">
+              <code id="new_api_token" class="flex-1 truncate rounded-md bg-surface-inset px-3 py-2 font-mono text-sm"><%= flash[:api_token] %></code>
+              <button type="button" data-controller="clipboard" data-action="clipboard#copy"
+                    data-clipboard-text-value="<%= flash[:api_token] %>" data-clipboard-message-value="<%= t("api_tokens.index.copied") %>"
+                    class="inline-flex h-9 shrink-0 cursor-pointer items-center rounded-md border border-primary px-3 text-sm font-medium text-primary hover:bg-button-outline-hover">
+                <%= t("api_tokens.index.copy") %>
+              </button>
+            </div>
+          <% end %>
+        <% end %>
 
         <% if @api_tokens.any? %>
           <ul class="mb-4 divide-y divide-primary rounded-lg border border-primary">
@@ -301,7 +328,7 @@
           <% SidebarHelper::SIDEBAR_GROUPS.each do |group| %>
             <div>
               <h3 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-secondary"><%= lucide_icon(group[:icon], css_class: "size-4") %> <%= t("sidebar.groups.#{group[:key]}") %></h3>
-              <ul class="divide-y divide-primary rounded-lg border border-primary">
+              <ul class="divide-y divide-primary rounded-lg border border-primary overflow-hidden">
                 <% group[:items].each do |icon, nav_key, _path| %>
                   <li>
                     <%= render(Ui::ItemComponent.new) do |item| %>
@@ -324,7 +351,7 @@
 
           <div>
             <h3 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-secondary"><%= lucide_icon("waves", css_class: "size-4") %> <%= t(".pool_heading") %></h3>
-            <ul class="divide-y divide-primary rounded-lg border border-primary">
+            <ul class="divide-y divide-primary rounded-lg border border-primary overflow-hidden">
               <li>
                 <%= render(Ui::ItemComponent.new) do |item| %>
                   <% item.with_leading { lucide_icon("waves", css_class: "size-4") } %>
