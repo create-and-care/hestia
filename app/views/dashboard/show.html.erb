@@ -2,16 +2,18 @@
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <header class="mb-8">
-    <p class="text-sm text-secondary"><%= t(".active_household") %></p>
-    <h1 class="text-2xl font-semibold"><%= @household.name %></h1>
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= render Ui::MarkerComponent.new(variant: :success) %><%= @household.name %></h1>
   </header>
 
   <%= render "shared/flash" %>
 
-  <%= render Ui::CardComponent.new(class_name: "mb-8") do |card| %>
-    <% card.with_title { t(".invite_member") } %>
-    <% card.with_description { t(".invite_description") } %>
-    <code class="rounded-md bg-surface-inset px-3 py-2 text-lg font-semibold tracking-widest"><%= @household.invite_code %></code>
+  <%= render(Ui::CardComponent.new(class_name: "mb-8")) do %>
+    <p class="mb-1 text-sm text-secondary"><%= t(".invite_description") %></p>
+    <div class="flex items-center gap-2">
+      <code class="rounded-md bg-surface-inset px-3 py-1 text-sm font-semibold tracking-widest"><%= @household.invite_code %></code>
+      <button type="button" class="cursor-pointer text-sm text-secondary underline" data-controller="clipboard"
+            data-clipboard-text-value="<%= @household.invite_code %>" data-action="clipboard#copy"><%= t(".copy_code") %></button>
+    </div>
   <% end %>
 
   <% if @vehicles_needing_attention.any? %>
@@ -118,17 +120,11 @@
 
   <section class="mb-8">
     <h2 class="mb-3 font-medium"><%= t(".members", count: @memberships.size) %></h2>
-    <div class="divide-y divide-primary rounded-lg border border-primary">
-      <% @memberships.each do |membership| %>
-        <%= render Ui::ItemComponent.new do |item| %>
-          <% item.with_title { membership.user.name.presence || membership.user.email_address } %>
-          <% item.with_description { membership.user.email_address } %>
-          <% item.with_trailing do %>
-            <%= render Ui::BadgeComponent.new(variant: :secondary) { membership.admin? ? t(".admin") : t(".member") } %>
-          <% end %>
-        <% end %>
-      <% end %>
-    </div>
+    <% members = @memberships.map do |membership|
+         name = membership.user.name.presence || membership.user.email_address
+         { alt: name, label: "#{name} (#{membership.admin? ? t('.admin') : t('.member')})" }
+       end %>
+    <%= render Ui::AvatarGroupComponent.new(members: members) %>
   </section>
 
   <% if @other_households.any? %>
@@ -144,8 +140,8 @@
     </section>
   <% end %>
 
-  <section class="flex gap-4 text-sm">
-    <%= link_to t(".create_household"), new_household_path, class: "underline" %>
-    <%= link_to t(".join_household"), new_membership_path, class: "underline" %>
+  <section class="flex gap-3">
+    <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: new_household_path)) { t(".create_household") } %>
+    <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: new_membership_path)) { t(".join_household") } %>
   </section>
 </div>

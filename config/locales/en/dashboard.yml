@@ -2,7 +2,6 @@ en:
   dashboard:
     show:
       title: "Dashboard"
-      active_household: "Active household"
       roadmap: "Roadmap"
       preferences: "Preferences"
       api_tokens: "API tokens"
@@ -33,8 +32,8 @@ en:
         circles: "Circles"
         trips: "Trips"
         wellbeing: "Wellbeing"
-      invite_member: "Invite a member"
       invite_description: "Share this code to join the household:"
+      copy_code: "Copy"
       vehicles_needing_attention: "Technical inspections to watch"
       inspection_expires_on: "Due %{date}"
       plants_needing_attention: "Plants to watch"

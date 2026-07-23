@@ -172,6 +172,9 @@ module DesignSystemRegistry
     # ── Affichage de données ────────────────────────────────────────────
     Entry.new(slug: "avatar", name: "Avatar", category: CATEGORIES[3], component_class: Ui::AvatarComponent,
       description: "Image de profil avec repli sur des initiales si src est absent."),
+    Entry.new(slug: "avatar-group", name: "Avatar Group", category: CATEGORIES[3], component_class: Ui::AvatarGroupComponent,
+      description: "Pile d'avatars qui se chevauchent, avec une bulle d'identité au survol et un badge +N au-delà du maximum affiché.",
+      related: %w[avatar tooltip]),
     Entry.new(slug: "badge", name: "Badge", category: CATEGORIES[3], component_class: Ui::BadgeComponent,
       description: "Étiquette compacte de statut ou de catégorie."),
     Entry.new(slug: "kbd", name: "Kbd", category: CATEGORIES[3], component_class: Ui::KbdComponent,

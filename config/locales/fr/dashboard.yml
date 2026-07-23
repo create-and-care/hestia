@@ -2,7 +2,6 @@ fr:
   dashboard:
     show:
       title: "Tableau de bord"
-      active_household: "Foyer actif"
       roadmap: "Roadmap"
       preferences: "Préférences"
       api_tokens: "Jetons API"
@@ -33,8 +32,8 @@ fr:
         circles: "Cercles"
         trips: "Voyages"
         wellbeing: "Bien-être"
-      invite_member: "Inviter un membre"
       invite_description: "Partagez ce code pour rejoindre le foyer :"
+      copy_code: "Copier"
       vehicles_needing_attention: "Contrôles techniques à surveiller"
       inspection_expires_on: "Échéance le %{date}"
       plants_needing_attention: "Plantes à surveiller"

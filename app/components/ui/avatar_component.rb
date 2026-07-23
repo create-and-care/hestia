@@ -12,15 +12,16 @@ module Ui
       "bg-pink-500/15 text-pink-600 dark:text-pink-400"
     ].freeze
 
-    def initialize(src: nil, alt: "", fallback: nil, size: :default)
+    def initialize(src: nil, alt: "", fallback: nil, size: :default, class_name: nil)
       @src = src
       @alt = alt
       @fallback = fallback || alt.to_s.split.map(&:first).first(2).join.upcase
       @size = size
+      @class_name = class_name
     end
 
     def call
-      content_tag :span, class: cn("relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-medium", fallback_classes, SIZES.fetch(@size)) do
+      content_tag :span, class: cn("relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-medium", fallback_classes, SIZES.fetch(@size), @class_name) do
         if @src.present?
           image_tag @src, alt: @alt, class: "size-full object-cover"
         else

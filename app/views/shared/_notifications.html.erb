@@ -1,6 +1,6 @@
 <%= turbo_stream_from Current.user, :notifications %>
 
-<div class="rounded-full border border-primary bg-surface-inset">
+<div class="overflow-hidden rounded-full border border-primary bg-surface-inset">
 <%= render Ui::PopoverComponent.new(placement: "bottom-end") do |popover| %>
   <% popover.with_trigger do %>
     <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, html_options: { class: "relative", aria: { label: t(".title") } })) do %>
