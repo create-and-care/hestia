@@ -55,6 +55,9 @@ application.register("field-visibility", FieldVisibilityController)
 import FileUploadController from "./file_upload_controller"
 application.register("file-upload", FileUploadController)
 
+import FlashController from "./flash_controller"
+application.register("flash", FlashController)
+
 import FormController from "./form_controller"
 application.register("form", FormController)
 

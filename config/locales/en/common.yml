@@ -2,3 +2,7 @@ en:
   common:
     dashboard: "Dashboard"
     language: "Language"
+    view_mode:
+      label: "Display mode"
+      list: "List view"
+      grid: "Grid view"

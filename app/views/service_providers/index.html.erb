@@ -13,6 +13,7 @@
               html_options: { id: "service_providers_q", data: { action: "input->debounced-search#submit" } }) %>
       <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_service_provider_path)) { t(".new_provider") } %>
+      <%= render Ui::ViewToggleComponent.new(mode: @view_mode, path_for: ->(mode) { service_providers_path(q: @query.presence, type_id: @type&.id, view: mode) }) %>
     </div>
   </header>
 
@@ -47,7 +48,7 @@
     <% end %>
   </section>
 
-  <div id="service_providers" class="space-y-2">
+  <div id="service_providers" class="<%= Ui::ViewToggleComponent.container_classes(@view_mode) %>">
     <%= render @providers %>
   </div>
   <% if @providers.empty? %>

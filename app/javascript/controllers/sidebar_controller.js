@@ -20,6 +20,7 @@ export default class extends Controller {
   collapse() {
     this.panelTarget.classList.remove(this.expandedClass)
     this.panelTarget.classList.add(this.collapsedClass)
+    this.panelTarget.dataset.collapsed = "true"
     this.labelTargets.forEach((el) => el.classList.add("hidden"))
     if (this.hasPanelToggleTarget) this.panelToggleTarget.setAttribute("aria-expanded", "false")
     localStorage.setItem("sidebar:collapsed", "true")
@@ -28,6 +29,7 @@ export default class extends Controller {
   expand() {
     this.panelTarget.classList.remove(this.collapsedClass)
     this.panelTarget.classList.add(this.expandedClass)
+    delete this.panelTarget.dataset.collapsed
     this.labelTargets.forEach((el) => el.classList.remove("hidden"))
     if (this.hasPanelToggleTarget) this.panelToggleTarget.setAttribute("aria-expanded", "true")
     localStorage.setItem("sidebar:collapsed", "false")

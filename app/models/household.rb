@@ -6,6 +6,10 @@ class Household < ApplicationRecord
   # Public holidays displayable in the Calendar, optionally enabled.
   HOLIDAY_COUNTRIES = %w[FR BE CH].freeze
 
+  # Default list/grid layout for collection views across the app (per-view
+  # overrides are stored client-side, see app/javascript/controllers/list_grid_controller.js).
+  DEFAULT_VIEWS = %w[list grid].freeze
+
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
 
@@ -59,6 +63,7 @@ class Household < ApplicationRecord
   validates :invite_code, presence: true, uniqueness: true
   validates :holiday_country, inclusion: { in: HOLIDAY_COUNTRIES }, allow_blank: true
   validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
+  validates :default_view, inclusion: { in: DEFAULT_VIEWS }
   validate :disabled_modules_are_known_keys
   validate :required_meal_types_are_known_types
 

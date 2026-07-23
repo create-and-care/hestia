@@ -1,4 +1,6 @@
 class ServiceProvidersController < ApplicationController
+  include CollectionViewMode
+
   before_action :set_provider, only: %i[edit update destroy]
 
   def index
@@ -10,6 +12,7 @@ class ServiceProvidersController < ApplicationController
     providers = providers.where(service_provider_type_id: @type.id) if @type
     providers = providers.where("name ILIKE ?", "%#{@query}%") if @query.present?
     @providers = providers
+    @view_mode = collection_view_mode(:service_providers)
   end
 
   def new

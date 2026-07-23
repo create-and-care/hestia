@@ -5,13 +5,18 @@
 
   <header class="mb-6 flex items-center justify-between">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("users", css_class: "size-6") %> <%= t(".title") %></h1>
-    <%= link_to t(".join_circle"), new_circle_membership_path, class: "text-sm underline" %>
+    <div class="flex items-center gap-2">
+      <%= link_to t(".join_circle"), new_circle_membership_path, class: "text-sm underline" %>
+      <% if @circles.any? %>
+        <%= render Ui::ViewToggleComponent.new(mode: @view_mode, path_for: ->(mode) { circles_path(view: mode) }) %>
+      <% end %>
+    </div>
   </header>
 
   <%= render "shared/flash" %>
 
   <% if @circles.any? %>
-    <div class="mb-6 divide-y divide-primary rounded-lg border border-primary">
+    <div class="mb-6 <%= Ui::ViewToggleComponent.container_classes(@view_mode) %>">
       <% @circles.each do |circle| %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_title { link_to circle.name, circle_path(circle), class: "hover:underline" } %>

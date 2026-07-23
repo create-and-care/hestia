@@ -1,4 +1,6 @@
 class AddressesController < ApplicationController
+  include CollectionViewMode
+
   before_action :set_address, only: %i[edit update destroy]
 
   PER_PAGE = 24
@@ -9,6 +11,7 @@ class AddressesController < ApplicationController
     addresses = Current.household.addresses.general.ordered.includes(photo_attachment: :blob)
     addresses = addresses.where(address_type: @type) if @type
     addresses = addresses.where("name ILIKE :q OR full_address ILIKE :q", q: "%#{@query}%") if @query.present?
+    @view_mode = collection_view_mode(:addresses)
 
     @total = addresses.count
     @total_pages = [ (@total / PER_PAGE.to_f).ceil, 1 ].max

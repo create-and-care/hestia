@@ -80,6 +80,10 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Generates realistic fake data for the rake demo_data:default task
+  # (bin/rails demo_data:default), so a fresh dev DB can exercise every module.
+  gem "faker", require: false
 end
 
 group :development, :test do

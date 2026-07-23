@@ -1,4 +1,6 @@
 class ContactsController < ApplicationController
+  include CollectionViewMode
+
   before_action :set_contact, only: %i[edit update destroy]
 
   def index
@@ -8,6 +10,7 @@ class ContactsController < ApplicationController
     contacts = Current.household.contacts.includes(:contact_tags, :gift_lists)
     contacts = contacts.joins(:contact_taggings).where(contact_taggings: { contact_tag_id: @tag.id }) if @tag
     @contacts = contacts.to_a.sort_by { |contact| contact.days_until_birthday || 100_000 }
+    @view_mode = collection_view_mode(:contacts)
   end
 
   # Monthly grid view of birthdays (Spec: "liste + vue calendrier"), alongside the

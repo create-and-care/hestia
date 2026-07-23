@@ -50,6 +50,18 @@
         <% end %>
 
         <%= render(Ui::CardComponent.new) do |card| %>
+          <% card.with_title { t(".default_view_heading") } %>
+          <% card.with_description { t(".default_view_description") } %>
+          <%= form_with model: @household, url: household_path(@household), method: :patch, class: "flex items-end gap-3" do |form| %>
+            <%= render Ui::ToggleGroupComponent.new(name: "household[default_view]", items: [
+                  [ t(".default_view_list"), "list", @household.default_view == "list" ],
+                  [ t(".default_view_grid"), "grid", @household.default_view == "grid" ]
+                ]) %>
+            <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".default_view_submit") } %>
+          <% end %>
+        <% end %>
+
+        <%= render(Ui::CardComponent.new) do |card| %>
           <% card.with_title { t(".required_meal_types_heading") } %>
           <% card.with_description { t(".required_meal_types_description") } %>
           <%= form_with model: @household, url: household_path(@household), method: :patch, class: "space-y-4" do |form| %>

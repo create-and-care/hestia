@@ -1,4 +1,5 @@
 <% flash.each do |type, message| %>
   <% next if message.blank? %>
-  <%= render(Ui::AlertComponent.new(variant: type.to_s == "alert" ? :destructive : :success, class_name: "mb-4")) { message } %>
+  <div data-controller="flash" data-flash-message-value="<%= message %>"
+       data-flash-variant-value="<%= type.to_s == "alert" ? "destructive" : "success" %>"></div>
 <% end %>

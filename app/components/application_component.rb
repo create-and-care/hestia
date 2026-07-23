@@ -1,4 +1,6 @@
 class ApplicationComponent < ViewComponent::Base
+  include IconHelper
+
   # Extensibility convention — pick one, never a third pattern:
   #   class_name: nil        when callers only ever need extra Tailwind classes
   #                           (Card, Alert, Skeleton, ScrollArea…).

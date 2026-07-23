@@ -9,6 +9,7 @@
     <div class="flex items-center gap-2">
       <%= render(Ui::ButtonComponent.new(variant: :outline, href: calendar_contacts_path)) { t(".calendar_link") } %>
       <%= render Ui::ButtonComponent.new(href: new_contact_path) { t(".new_contact") } %>
+      <%= render Ui::ViewToggleComponent.new(mode: @view_mode, path_for: ->(mode) { contacts_path(tag_id: @tag&.id, view: mode) }) %>
     </div>
   </header>
 
@@ -39,7 +40,7 @@
     <% end %>
   </section>
 
-  <div id="contacts" class="space-y-2">
+  <div id="contacts" class="<%= Ui::ViewToggleComponent.container_classes(@view_mode) %>">
     <%= render @contacts %>
   </div>
   <% if @contacts.empty? %>

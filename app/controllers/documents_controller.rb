@@ -1,4 +1,6 @@
 class DocumentsController < ApplicationController
+  include CollectionViewMode
+
   before_action :set_document, only: %i[show edit update destroy preview]
   layout false, only: :preview
 
@@ -19,6 +21,7 @@ class DocumentsController < ApplicationController
     documents = documents.where("name ILIKE ?", "%#{@query}%") if @query.present?
     @documents = documents
     @document = Current.household.documents.new
+    @view_mode = collection_view_mode(:documents)
     @documentable_options = documentable_options
   end
 

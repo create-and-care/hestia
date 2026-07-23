@@ -3,8 +3,7 @@
     <div data-sidebar-target="label" class="flex min-w-0 items-center gap-2">
       <%= render Ui::AvatarComponent.new(alt: Current.household.name, size: :sm) %>
       <div class="min-w-0">
-        <p class="truncate text-sm font-semibold text-primary"><%= Current.household.name %></p>
-        <p class="truncate text-xs text-secondary"><%= Current.user.email_address %></p>
+        <p class="truncate text-sm font-semibold text-primary"><%= Hestia %></p>
       </div>
     </div>
   <% end %>
@@ -32,15 +31,15 @@
         </svg>
       </button>
 
-      <div data-sidebar-target="label groupPanel" class="ml-2 flex flex-col gap-0.5 border-l border-primary pl-3" <%= "hidden" unless group[:open] %>>
+      <div data-sidebar-target="groupPanel" class="ml-2 flex flex-col gap-0.5 border-l border-primary pl-3 group-data-[collapsed=true]:ml-0 group-data-[collapsed=true]:border-l-0 group-data-[collapsed=true]:pl-0" <%= "hidden" unless group[:open] %>>
         <% group[:items].each do |item| %>
-          <%= link_to item[:path], class: "flex items-center gap-3 rounded-md p-2 text-sm #{item[:active] ? "bg-brand/10 font-medium text-brand" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>
+          <%= link_to item[:path], class: "flex items-center gap-3 rounded-md p-2 text-sm group-data-[collapsed=true]:justify-center #{item[:active] ? "bg-brand/10 font-medium text-brand" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>
             <span class="relative shrink-0" aria-hidden="true">
               <%= lucide_icon(item[:icon], css_class: "size-4") %>
               <% if item[:active] %><span class="absolute -right-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
               <% if item[:unread] %><span class="absolute -left-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
             </span>
-            <span class="truncate"><%= item[:label] %></span>
+            <span data-sidebar-target="label" class="truncate"><%= item[:label] %></span>
             <% if item[:unread] %><span class="sr-only"><%= t("sidebar.unread") %></span><% end %>
           <% end %>
         <% end %>

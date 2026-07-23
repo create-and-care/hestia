@@ -1,8 +1,11 @@
 class PetsController < ApplicationController
+  include CollectionViewMode
+
   before_action :set_pet, only: %i[show edit update destroy]
 
   def index
     @pets = Current.household.pets.ordered.includes(photo_attachment: :blob)
+    @view_mode = collection_view_mode(:pets)
   end
 
   def show

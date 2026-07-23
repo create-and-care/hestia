@@ -13,12 +13,13 @@
               html_options: { id: "vehicles_q" }) %>
       <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_vehicle_path)) { t(".new_vehicle") } %>
+      <%= render Ui::ViewToggleComponent.new(mode: @view_mode, path_for: ->(mode) { vehicles_path(q: @query.presence, view: mode) }) %>
     </div>
   </header>
 
   <%= render "shared/flash" %>
 
-  <div id="vehicles" class="space-y-2">
+  <div id="vehicles" class="<%= Ui::ViewToggleComponent.container_classes(@view_mode) %>">
     <%= render @vehicles %>
   </div>
   <% if @vehicles.empty? %>

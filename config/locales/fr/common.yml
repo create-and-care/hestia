@@ -2,3 +2,7 @@ fr:
   common:
     dashboard: "Tableau de bord"
     language: "Langue"
+    view_mode:
+      label: "Mode d'affichage"
+      list: "Affichage en liste"
+      grid: "Affichage en grille"

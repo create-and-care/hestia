@@ -1,10 +1,13 @@
 class CirclesController < ApplicationController
+  include CollectionViewMode
+
   before_action :set_circle, only: %i[show edit update destroy regenerate_invite_code]
   before_action :require_admin!, only: %i[edit update destroy regenerate_invite_code]
 
   def index
     @circles = Current.user.circles.order(:name)
     @circle = Circle.new
+    @view_mode = collection_view_mode(:circles)
   end
 
   def show

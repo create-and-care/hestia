@@ -15,6 +15,7 @@
       <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
             html_options: { id: "documents_q" }) %>
     <% end %>
+    <%= render Ui::ViewToggleComponent.new(mode: @view_mode, path_for: ->(mode) { documents_path(q: @query.presence, folder_id: @folder&.id, view: mode) }) %>
   </header>
 
   <p class="mb-4 text-xs text-subdued"><%= t(".disclaimer") %></p>
@@ -64,7 +65,7 @@
     <% end %>
   <% end %>
 
-  <div class="rounded-lg border border-primary divide-y divide-primary">
+  <div class="<%= Ui::ViewToggleComponent.container_classes(@view_mode) %>">
     <% @documents.each do |document| %>
       <%= render(Ui::ItemComponent.new) do |item| %>
         <% item.with_title { render "documents/preview_trigger", document: document } %>

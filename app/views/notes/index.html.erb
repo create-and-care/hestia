@@ -14,6 +14,7 @@
       <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: notes_path(archived: (@archived ? nil : 1)))) {
             (@archived ? t(".active_filter") : t(".archived_filter")) } %>
+      <%= render Ui::ViewToggleComponent.new(mode: @view_mode, path_for: ->(mode) { notes_path(q: @query.presence, archived: (@archived ? 1 : nil), view: mode) }) %>
     </div>
   </header>
 
@@ -23,7 +24,7 @@
     <%= render "form", note: @note %>
   <% end %>
 
-  <div id="notes" class="mt-4 grid gap-3 sm:grid-cols-2">
+  <div id="notes" class="mt-4 <%= Ui::ViewToggleComponent.container_classes(@view_mode) %>">
     <%= render partial: "note", collection: @notes, locals: { query: @query, archived: @archived } %>
   </div>
   <% if @notes.empty? %>

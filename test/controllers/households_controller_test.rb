@@ -108,6 +108,24 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "UTC", households(:alpha).reload.time_zone
   end
 
+  test "update sets the household's default view" do
+    sign_in_as(users(:one))
+
+    patch household_path(households(:alpha)), params: { household: { default_view: "grid" } }
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_equal "grid", households(:alpha).reload.default_view
+  end
+
+  test "update rejects an unknown default view" do
+    sign_in_as(users(:one))
+
+    patch household_path(households(:alpha)), params: { household: { default_view: "carousel" } }
+
+    assert_redirected_to household_path(households(:alpha))
+    assert_equal "list", households(:alpha).reload.default_view
+  end
+
   test "update_modules lets an admin disable a module" do
     sign_in_as(users(:one)) # admin of :alpha
 

@@ -16,12 +16,13 @@
         <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".search_submit") } %>
       <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_address_path)) { t(".new_address") } %>
+      <%= render Ui::ViewToggleComponent.new(mode: @view_mode, path_for: ->(mode) { addresses_path(q: @query.presence, address_type: @type, page: @page, view: mode) }) %>
     </div>
   </header>
 
   <%= render "shared/flash" %>
 
-  <div id="addresses" class="space-y-2">
+  <div id="addresses" class="<%= Ui::ViewToggleComponent.container_classes(@view_mode) %>">
     <%= render @addresses %>
   </div>
   <% if @addresses.empty? %>

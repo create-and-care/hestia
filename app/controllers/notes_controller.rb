@@ -1,4 +1,6 @@
 class NotesController < ApplicationController
+  include CollectionViewMode
+
   before_action :set_note, only: %i[edit update destroy toggle_favorite toggle_archive promote_to_task]
 
   PER_PAGE = 20
@@ -9,6 +11,7 @@ class NotesController < ApplicationController
     notes = Current.household.notes.general.ordered.includes(:recipe, :document)
     notes = @archived ? notes.archived : notes.active
     notes = notes.where("title ILIKE :q OR content ILIKE :q", q: "%#{@query}%") if @query.present?
+    @view_mode = collection_view_mode(:notes)
 
     @total = notes.count
     @total_pages = [ (@total / PER_PAGE.to_f).ceil, 1 ].max

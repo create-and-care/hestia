@@ -1,0 +1,6 @@
+<div class="flex gap-1" role="group" aria-label="<%= t("common.view_mode.label") %>">
+  <%= render(Ui::ButtonComponent.new(variant: @mode == "list" ? :secondary : :outline, size: :icon,
+        href: @path_for.call("list"), html_options: { aria: { label: t("common.view_mode.list") } })) { lucide_icon("list", css_class: "size-4") } %>
+  <%= render(Ui::ButtonComponent.new(variant: @mode == "grid" ? :secondary : :outline, size: :icon,
+        href: @path_for.call("grid"), html_options: { aria: { label: t("common.view_mode.grid") } })) { lucide_icon("layout-grid", css_class: "size-4") } %>
+</div>

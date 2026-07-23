@@ -1,4 +1,6 @@
 class VehiclesController < ApplicationController
+  include CollectionViewMode
+
   before_action :set_vehicle, only: %i[show edit update destroy]
 
   def index
@@ -8,6 +10,7 @@ class VehiclesController < ApplicationController
       vehicles = vehicles.where("name ILIKE :q OR manufacturer ILIKE :q OR plate ILIKE :q", q: "%#{@query}%")
     end
     @vehicles = vehicles
+    @view_mode = collection_view_mode(:vehicles)
   end
 
   def show

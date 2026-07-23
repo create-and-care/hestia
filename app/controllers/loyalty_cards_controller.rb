@@ -1,10 +1,13 @@
 class LoyaltyCardsController < ApplicationController
+  include CollectionViewMode
+
   layout "minimal", only: :kiosk
 
   before_action :set_card, only: %i[show edit update destroy kiosk move_up move_down]
 
   def index
     @cards = Current.household.loyalty_cards.ordered
+    @view_mode = collection_view_mode(:loyalty_cards)
   end
 
   def show

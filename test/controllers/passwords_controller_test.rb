@@ -72,7 +72,10 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
+    # Flash messages are relayed to a sonner toast client-side (see
+    # app/javascript/controllers/flash_controller.js) rather than rendered as
+    # visible text, so assert against the data attribute the controller reads.
     def assert_notice(text)
-      assert_select "div", /#{text}/
+      assert_select "div[data-controller=flash][data-flash-message-value*=?]", text
     end
 end
