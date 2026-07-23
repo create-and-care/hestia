@@ -9,7 +9,6 @@ en:
     index:
       title: "Wine Cellar"
       search_placeholder: "Search for a bottle…"
-      new_cellar_placeholder: "New cellar (region, type…)"
       create_cellar: "Create cellar"
       results_for: "Results for “%{query}”"
       no_bottles_found: "No bottles found."
@@ -19,10 +18,28 @@ en:
       delete_cellar_confirm: "Delete this cellar and its bottles?"
       bottle_name_placeholder: "Name"
       vintage_placeholder: "Vintage"
-      region_placeholder: "Region"
+      region_placeholder: "Region (Bordeaux…)"
+      region_create_label: "Use “%{query}”"
       wine_type_label: "Type"
       type_blank: "Type"
       add: "Add"
+      filters_trigger: "Filters"
+      filters_heading: "Filters"
+      cellar_filter_label: "Cellar"
+      cellar_filter_blank: "All cellars"
+      region_filter_label: "Region"
+      region_filter_blank: "All regions"
+      vintage_filter_label: "Vintage"
+      vintage_filter_blank: "All vintages"
+      stock_filter_label: "Stock"
+      stock_filter_blank: "All"
+      stock_filter_in_stock: "In stock"
+      stock_filter_out: "Taken out"
+      filter_submit: "Apply filters"
+    form:
+      name_label: "Name"
+      name_placeholder: "e.g. Basement, Garage…"
+      submit: "Create cellar"
     create:
       created: "Cellar added."
     destroy:
@@ -30,10 +47,12 @@ en:
   bottles:
     bottle:
       take_out: "Take out"
+      take_out_confirm: "Take \"%{name}\" out of the cellar?"
       put_back: "Put back"
       move: "Move"
       edit_aria: "Edit \"%{name}\""
       delete_aria: "Delete \"%{name}\""
+      delete_label: "Delete"
       delete_confirm: "Permanently delete \"%{name}\"?"
       paired_indicator: "Recipe pairing"
     edit:
@@ -41,13 +60,14 @@ en:
       name_label: "Name"
       vintage_label: "Vintage"
       region_label: "Region"
+      region_placeholder: "Region (Bordeaux…)"
+      region_create_label: "Use “%{query}”"
       wine_type_label: "Type"
       type_blank: "Type"
       wine_cellar_label: "Cellar"
       photo_label: "Photo"
       paired_with: "Paired with"
       save: "Save"
-      back_to_wine_cellar: "← Wine Cellar"
     create:
       created: "Bottle added."
     update:

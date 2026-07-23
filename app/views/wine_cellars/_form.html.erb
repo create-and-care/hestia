@@ -1,0 +1,10 @@
+<%= form_with model: cellar, url: wine_cellars_path, class: "flex flex-col gap-3" do %>
+  <%= render(Ui::FieldComponent.new(id: "wine_cellar_name")) do |field| %>
+    <% field.with_label { t(".name_label") } %>
+    <% field.with_control do %>
+      <%= render Ui::InputComponent.new(name: "wine_cellar[name]", value: cellar.name, placeholder: t(".name_placeholder"),
+            html_options: { id: "wine_cellar_name", required: true }) %>
+    <% end %>
+  <% end %>
+  <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
+<% end %>

@@ -13,6 +13,7 @@ class BottlesController < ApplicationController
 
   def edit
     @cellar_options = Current.household.wine_cellars.order(:name).map { |cellar| [ cellar.name, cellar.id ] }
+    @regions = Current.household.bottles.where.not(region: [ nil, "" ]).distinct.order(:region).pluck(:region)
   end
 
   # Handles both correcting a bottle's own details (name/vintage/region/type/photo) and
@@ -30,6 +31,7 @@ class BottlesController < ApplicationController
       redirect_to wine_cellars_path, notice: t(".updated")
     else
       @cellar_options = Current.household.wine_cellars.order(:name).map { |cellar| [ cellar.name, cellar.id ] }
+      @regions = Current.household.bottles.where.not(region: [ nil, "" ]).distinct.order(:region).pluck(:region)
       render :edit, status: :unprocessable_entity
     end
   end

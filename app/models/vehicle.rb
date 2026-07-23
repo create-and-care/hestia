@@ -1,7 +1,7 @@
 class Vehicle < ApplicationRecord
   include HouseholdScoped
 
-  TYPES = %w[car motorcycle].freeze
+  TYPES = %w[car motorcycle scooter bicycle van truck camper boat trailer other].freeze
 
   has_many :vehicle_maintenance_entries, dependent: :destroy
   has_many :documents, as: :documentable, dependent: :nullify

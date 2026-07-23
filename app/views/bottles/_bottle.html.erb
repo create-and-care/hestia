@@ -22,13 +22,23 @@
     <% end %>
     <% item.with_trailing do %>
       <div class="flex flex-wrap items-center gap-2">
-        <%= render(Ui::ButtonToComponent.new(toggle_stock_bottle_path(bottle), method: :patch, variant: :outline, size: :sm)) {
-              bottle.in_stock ? t(".take_out") : t(".put_back") } %>
+        <% if bottle.in_stock %>
+          <%= render(Ui::AlertDialogComponent.new(title: t(".take_out_confirm", name: bottle.name), confirm_label: t(".take_out"),
+                confirm_url: toggle_stock_bottle_path(bottle), confirm_method: :patch, confirm_variant: :default)) do |alert_dialog| %>
+            <% alert_dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".take_out") } } %>
+          <% end %>
+        <% else %>
+          <%= render(Ui::ButtonToComponent.new(toggle_stock_bottle_path(bottle), method: :patch, variant: :outline, size: :sm)) { t(".put_back") } %>
+        <% end %>
         <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_bottle_path(bottle),
               html_options: { aria: { label: t(".edit_aria", name: bottle.name) } })) { lucide_icon("pencil", css_class: "size-4") } %>
-        <%= render(Ui::ButtonToComponent.new(bottle_path(bottle), method: :delete, variant: :ghost, size: :icon,
-              html_options: { aria: { label: t(".delete_aria", name: bottle.name) },
-                              form: { data: { turbo_confirm: t(".delete_confirm", name: bottle.name) } } })) { lucide_icon("x", css_class: "size-4") } %>
+        <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm", name: bottle.name), confirm_label: t(".delete_label"),
+              confirm_url: bottle_path(bottle), confirm_method: :delete)) do |alert_dialog| %>
+          <% alert_dialog.with_trigger do %>
+            <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon,
+                  html_options: { aria: { label: t(".delete_aria", name: bottle.name) } })) { lucide_icon("x", css_class: "size-4") } %>
+          <% end %>
+        <% end %>
       </div>
     <% end %>
   <% end %>

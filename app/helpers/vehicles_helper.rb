@@ -14,6 +14,7 @@ module VehiclesHelper
   def inspection_badge_variant(status) = INSPECTION_BADGE_VARIANTS.fetch(status)
   def vehicle_type_label(type) = t("vehicles.types.#{type}", default: type.to_s.humanize)
   def vehicle_type_options = Vehicle::TYPES.map { |type| [ vehicle_type_label(type), type ] }
+  def vehicle_type_custom?(type) = type.present? && !Vehicle::TYPES.include?(type)
 
   def maintenance_entry_type_label(type) = t("vehicle_maintenance_entries.types.#{type}", default: type)
   def maintenance_entry_type_options = VehicleMaintenanceEntry::TYPES.map { |type| [ maintenance_entry_type_label(type), type ] }

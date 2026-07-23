@@ -68,6 +68,59 @@ class WineCellarsControllerTest < ActionDispatch::IntegrationTest
     assert_select "form[action=?][data-turbo-confirm]", wine_cellar_path(cellar)
   end
 
+  test "search input is wired for debounced auto-submit" do
+    get wine_cellars_path
+    assert_select "form[data-controller='debounced-search']" do
+      assert_select "input[data-action='input->debounced-search#submit']"
+    end
+  end
+
+  test "the new-cellar form opens in a design-system dialog" do
+    get wine_cellars_path
+    assert_response :success
+    assert_select "dialog[role='dialog']" do
+      assert_select "input#wine_cellar_name"
+    end
+  end
+
+  test "the filters sheet offers cellar, type, region, vintage, and stock filters" do
+    get wine_cellars_path
+    assert_response :success
+    assert_select "select#wine_cellars_filter_cellar"
+    assert_select "select#wine_cellars_filter_wine_type"
+    assert_select "select#wine_cellars_filter_region option", text: "Bordeaux"
+    assert_select "select#wine_cellars_filter_vintage option", text: "2015"
+    assert_select "select#wine_cellars_filter_in_stock"
+  end
+
+  test "filtering by wine type narrows the bottle list" do
+    get wine_cellars_path(wine_type: "rouge")
+    assert_response :success
+    assert_includes @response.body, "Château Margaux"
+    assert_not_includes @response.body, "Chardonnay Bourgogne"
+  end
+
+  test "filtering by cellar narrows the bottle list" do
+    get wine_cellars_path(wine_cellar_id: wine_cellars(:alpha_whites).id)
+    assert_response :success
+    assert_includes @response.body, "Chardonnay Bourgogne"
+    assert_not_includes @response.body, "Château Margaux"
+  end
+
+  test "filtering by vintage narrows the bottle list" do
+    get wine_cellars_path(vintage: 2020)
+    assert_response :success
+    assert_includes @response.body, "Chardonnay Bourgogne"
+    assert_not_includes @response.body, "Château Margaux"
+  end
+
+  test "filtering by stock status narrows the bottle list" do
+    get wine_cellars_path(in_stock: "0")
+    assert_response :success
+    assert_includes @response.body, "Chardonnay Bourgogne"
+    assert_not_includes @response.body, "Château Margaux"
+  end
+
   test "paginates cellars when there are more than the page size" do
     households(:alpha).wine_cellars.destroy_all
     (WineCellarsController::PER_PAGE + 1).times { |i| households(:alpha).wine_cellars.create!(name: "Cave #{'%02d' % i}") }

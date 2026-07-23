@@ -69,6 +69,38 @@ class BottlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "delete button uses the design-system alert dialog instead of a native confirm" do
+    bottle = bottles(:alpha_bordeaux)
+    get wine_cellars_path
+    assert_response :success
+    assert_select "dialog[role='alertdialog']"
+    assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("bottles.bottle.delete_confirm", name: bottle.name))}"/, @response.body)
+  end
+
+  test "taking a bottle out asks for confirmation, putting it back does not" do
+    get wine_cellars_path
+    assert_response :success
+    assert_select "dialog[role='alertdialog'] h2", text: I18n.t("bottles.bottle.take_out_confirm", name: bottles(:alpha_bordeaux).name)
+    assert_select "form[action=?]", toggle_stock_bottle_path(bottles(:alpha_chardonnay)) do
+      assert_select "button", text: "Put back"
+    end
+  end
+
+  test "edit offers a region combobox seeded with the household's existing regions" do
+    get edit_bottle_path(bottles(:alpha_bordeaux))
+    assert_response :success
+    assert_select "[data-controller='combobox']"
+    assert_select "input[name='bottle[region]'][type='hidden']"
+  end
+
+  test "edit shows a breadcrumb instead of the old back link" do
+    get edit_bottle_path(bottles(:alpha_bordeaux))
+    assert_response :success
+    assert_select "nav"
+    assert_not_includes @response.body, "← Cave à vin"
+    assert_not_includes @response.body, "← Wine Cellar"
+  end
+
   test "shows the paired recipe when the bottle is linked to one" do
     bottle = bottles(:alpha_bordeaux)
     bottle.update!(recipe: recipes(:alpha_pancakes))

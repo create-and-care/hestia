@@ -3,11 +3,21 @@ class WineCellarsController < ApplicationController
 
   def index
     @query = params[:q].to_s.strip
+    @wine_cellar_id = params[:wine_cellar_id].presence
+    @wine_type = params[:wine_type].presence
+    @region = params[:region].presence
+    @vintage = params[:vintage].presence
+    @in_stock = params[:in_stock].presence
+    @filtering = @wine_cellar_id || @wine_type || @region || @vintage || @in_stock
 
-    if @query.present?
-      results = Current.household.bottles
-        .where("name ILIKE :q OR region ILIKE :q OR wine_type ILIKE :q", q: "%#{@query}%")
-        .includes(:wine_cellar, photo_attachment: :blob).ordered
+    if @query.present? || @filtering
+      results = Current.household.bottles.includes(:wine_cellar, photo_attachment: :blob).ordered
+      results = results.where("name ILIKE :q OR region ILIKE :q OR wine_type ILIKE :q", q: "%#{@query}%") if @query.present?
+      results = results.where(wine_cellar_id: @wine_cellar_id) if @wine_cellar_id
+      results = results.where(wine_type: @wine_type) if @wine_type
+      results = results.where(region: @region) if @region
+      results = results.where(vintage: @vintage) if @vintage
+      results = results.where(in_stock: @in_stock == "1") if @in_stock
       @results_total = results.count
       @results_total_pages = [ (@results_total / PER_PAGE.to_f).ceil, 1 ].max
       @results_page = [ [ params[:page].to_i, 1 ].max, @results_total_pages ].min
@@ -21,6 +31,8 @@ class WineCellarsController < ApplicationController
     end
 
     @cellar_options = Current.household.wine_cellars.order(:name).map { |cellar| [ cellar.name, cellar.id ] }
+    @regions = Current.household.bottles.where.not(region: [ nil, "" ]).distinct.order(:region).pluck(:region)
+    @vintages = Current.household.bottles.where.not(vintage: nil).distinct.order(vintage: :desc).pluck(:vintage)
     @cellar = Current.household.wine_cellars.new
     @bottle = Current.household.bottles.new
   end

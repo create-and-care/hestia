@@ -21,7 +21,7 @@ class BottleTest < ActiveSupport::TestCase
   test "ordered scope orders by name" do
     other = households(:alpha).bottles.create!(wine_cellar: wine_cellars(:alpha_reds), name: "Abricot")
     assert_equal [ other, bottles(:alpha_bordeaux) ],
-                 households(:alpha).bottles.ordered.to_a
+                 wine_cellars(:alpha_reds).bottles.ordered.to_a
   end
 
   test "destroying a wine cellar destroys its bottles" do

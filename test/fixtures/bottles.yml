@@ -7,6 +7,15 @@ alpha_bordeaux:
   wine_type: rouge
   in_stock: true
 
+alpha_chardonnay:
+  household: alpha
+  wine_cellar: alpha_whites
+  name: Chardonnay Bourgogne
+  vintage: 2020
+  region: Bourgogne
+  wine_type: blanc
+  in_stock: false
+
 beta_bottle:
   household: beta
   wine_cellar: beta_cellar

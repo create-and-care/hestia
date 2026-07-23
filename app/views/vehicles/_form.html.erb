@@ -1,4 +1,6 @@
-<%= form_with model: vehicle, url: url, multipart: true do |form| %>
+<% custom_type = vehicle_type_custom?(vehicle.vehicle_type) ? vehicle.vehicle_type : nil %>
+<%= form_with model: vehicle, url: url, multipart: true,
+      data: { controller: "maintenance-entry-type", action: "submit->maintenance-entry-type#beforeSubmit" } do |form| %>
   <% if vehicle.errors.any? %>
     <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
       <ul class="list-inside list-disc">
@@ -22,9 +24,15 @@
         <% field.with_label { t(".type_label") } %>
         <% field.with_control do %>
           <%= render Ui::NativeSelectComponent.new(name: "vehicle[vehicle_type]", options: vehicle_type_options,
-                selected: vehicle.vehicle_type, html_options: { id: "vehicle_vehicle_type" }) %>
+                selected: custom_type ? "other" : vehicle.vehicle_type,
+                html_options: { id: "vehicle_vehicle_type", data: { maintenance_entry_type_target: "select", action: "change->maintenance-entry-type#sync" } }) %>
         <% end %>
       <% end %>
+      <div class="mt-2">
+        <label for="vehicle_vehicle_type_custom" class="sr-only"><%= t(".type_custom_label") %></label>
+        <%= render Ui::InputComponent.new(type: "text", name: "vehicle[vehicle_type]", value: custom_type, placeholder: t(".type_custom_placeholder"),
+              html_options: { id: "vehicle_vehicle_type_custom", class: "hidden", data: { maintenance_entry_type_target: "custom" } }) %>
+      </div>
     </div>
     <div>
       <%= render(Ui::FieldComponent.new(id: "vehicle_manufacturer")) do |field| %>

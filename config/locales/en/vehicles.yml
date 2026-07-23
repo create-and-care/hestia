@@ -9,6 +9,14 @@ en:
     types:
       car: "Car"
       motorcycle: "Motorcycle"
+      scooter: "Scooter"
+      bicycle: "Bicycle"
+      van: "Van"
+      truck: "Truck"
+      camper: "Camper van"
+      boat: "Boat"
+      trailer: "Trailer"
+      other: "Other…"
     index:
       title: "Vehicles"
       search_placeholder: "Search…"
@@ -22,6 +30,8 @@ en:
     form:
       name_label: "Name"
       type_label: "Type"
+      type_custom_label: "Specify the type"
+      type_custom_placeholder: "Specify the type…"
       manufacturer_label: "Manufacturer"
       plate_label: "License plate"
       year_label: "Year"

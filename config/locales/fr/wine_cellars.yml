@@ -9,7 +9,6 @@ fr:
     index:
       title: "Cave à vin"
       search_placeholder: "Rechercher une bouteille…"
-      new_cellar_placeholder: "Nouvelle cave (région, type…)"
       create_cellar: "Créer la cave"
       results_for: "Résultats pour « %{query} »"
       no_bottles_found: "Aucune bouteille trouvée."
@@ -19,10 +18,28 @@ fr:
       delete_cellar_confirm: "Supprimer cette cave et ses bouteilles ?"
       bottle_name_placeholder: "Nom"
       vintage_placeholder: "Millésime"
-      region_placeholder: "Région"
+      region_placeholder: "Région (Bordeaux…)"
+      region_create_label: "Utiliser « %{query} »"
       wine_type_label: "Type"
       type_blank: "Type"
       add: "Ajouter"
+      filters_trigger: "Filtres"
+      filters_heading: "Filtres"
+      cellar_filter_label: "Cave"
+      cellar_filter_blank: "Toutes les caves"
+      region_filter_label: "Région"
+      region_filter_blank: "Toutes les régions"
+      vintage_filter_label: "Millésime"
+      vintage_filter_blank: "Tous les millésimes"
+      stock_filter_label: "Stock"
+      stock_filter_blank: "Toutes"
+      stock_filter_in_stock: "En stock"
+      stock_filter_out: "Sorties"
+      filter_submit: "Appliquer les filtres"
+    form:
+      name_label: "Nom"
+      name_placeholder: "Ex. Cave à vin, Garage…"
+      submit: "Créer la cave"
     create:
       created: "Cave ajoutée."
     destroy:
@@ -30,10 +47,12 @@ fr:
   bottles:
     bottle:
       take_out: "Sortir"
+      take_out_confirm: "Sortir « %{name} » de la cave ?"
       put_back: "Remettre"
       move: "Déplacer"
       edit_aria: "Modifier « %{name} »"
       delete_aria: "Supprimer « %{name} »"
+      delete_label: "Supprimer"
       delete_confirm: "Supprimer définitivement « %{name} » ?"
       paired_indicator: "Accord recette"
     edit:
@@ -41,13 +60,14 @@ fr:
       name_label: "Nom"
       vintage_label: "Millésime"
       region_label: "Région"
+      region_placeholder: "Région (Bordeaux…)"
+      region_create_label: "Utiliser « %{query} »"
       wine_type_label: "Type"
       type_blank: "Type"
       wine_cellar_label: "Cave"
       photo_label: "Photo"
       paired_with: "Accordée avec"
       save: "Enregistrer"
-      back_to_wine_cellar: "← Cave à vin"
     create:
       created: "Bouteille ajoutée."
     update:

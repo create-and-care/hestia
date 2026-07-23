@@ -127,7 +127,7 @@ module DemoData
         2.times do
           vehicle = @household.vehicles.create!(
             name: Faker::Vehicle.make_and_model,
-            vehicle_type: Vehicle::TYPES.sample,
+            vehicle_type: (Vehicle::TYPES - %w[other]).sample,
             manufacturer: Faker::Vehicle.manufacture,
             plate: Faker::Vehicle.license_plate,
             year: rand(2012..2024),

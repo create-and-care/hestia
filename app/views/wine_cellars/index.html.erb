@@ -9,24 +9,75 @@
 
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("wine", css_class: "size-6") %> <%= t(".title") %></h1>
-    <%= form_with url: wine_cellars_path, method: :get do %>
-      <label for="wine_cellars_q" class="sr-only"><%= t(".search_placeholder") %></label>
-      <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
-            html_options: { id: "wine_cellars_q" }) %>
-    <% end %>
+    <div class="flex items-center gap-2">
+      <%= form_with url: wine_cellars_path, method: :get, data: { controller: "debounced-search" } do |form| %>
+        <label for="wine_cellars_q" class="sr-only"><%= t(".search_placeholder") %></label>
+        <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
+              html_options: { id: "wine_cellars_q", data: { action: "input->debounced-search#submit" } }) %>
+        <%= form.hidden_field :wine_cellar_id, value: @wine_cellar_id %>
+        <%= form.hidden_field :wine_type, value: @wine_type %>
+        <%= form.hidden_field :region, value: @region %>
+        <%= form.hidden_field :vintage, value: @vintage %>
+        <%= form.hidden_field :in_stock, value: @in_stock %>
+      <% end %>
+      <%= render(Ui::SheetComponent.new) do |sheet| %>
+        <% sheet.with_trigger do %>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) do %>
+            <%= lucide_icon("list-filter", css_class: "size-4") %> <%= t(".filters_trigger") %>
+          <% end %>
+        <% end %>
+        <% sheet.with_title { t(".filters_heading") } %>
+        <%= form_with url: wine_cellars_path, method: :get, class: "flex flex-col gap-3" do |form| %>
+          <%= form.hidden_field :q, value: @query %>
+          <%= render(Ui::FieldComponent.new(id: "wine_cellars_filter_cellar")) do |field| %>
+            <% field.with_label { t(".cellar_filter_label") } %>
+            <% field.with_control { render Ui::NativeSelectComponent.new(name: "wine_cellar_id",
+                  options: [ [ t(".cellar_filter_blank"), "" ] ] + @cellar_options.map { |name, id| [ name, id.to_s ] },
+                  selected: @wine_cellar_id, html_options: { id: "wine_cellars_filter_cellar" }) } %>
+          <% end %>
+          <%= render(Ui::FieldComponent.new(id: "wine_cellars_filter_wine_type")) do |field| %>
+            <% field.with_label { t(".wine_type_label") } %>
+            <% field.with_control { render Ui::NativeSelectComponent.new(name: "wine_type",
+                  options: [ [ t(".type_blank"), "" ] ] + wine_type_options,
+                  selected: @wine_type, html_options: { id: "wine_cellars_filter_wine_type" }) } %>
+          <% end %>
+          <%= render(Ui::FieldComponent.new(id: "wine_cellars_filter_region")) do |field| %>
+            <% field.with_label { t(".region_filter_label") } %>
+            <% field.with_control { render Ui::NativeSelectComponent.new(name: "region",
+                  options: [ [ t(".region_filter_blank"), "" ] ] + @regions.map { |region| [ region, region ] },
+                  selected: @region, html_options: { id: "wine_cellars_filter_region" }) } %>
+          <% end %>
+          <%= render(Ui::FieldComponent.new(id: "wine_cellars_filter_vintage")) do |field| %>
+            <% field.with_label { t(".vintage_filter_label") } %>
+            <% field.with_control { render Ui::NativeSelectComponent.new(name: "vintage",
+                  options: [ [ t(".vintage_filter_blank"), "" ] ] + @vintages.map { |vintage| [ vintage.to_s, vintage.to_s ] },
+                  selected: @vintage, html_options: { id: "wine_cellars_filter_vintage" }) } %>
+          <% end %>
+          <%= render(Ui::FieldComponent.new(id: "wine_cellars_filter_in_stock")) do |field| %>
+            <% field.with_label { t(".stock_filter_label") } %>
+            <% field.with_control { render Ui::NativeSelectComponent.new(name: "in_stock",
+                  options: [ [ t(".stock_filter_blank"), "" ], [ t(".stock_filter_in_stock"), "1" ], [ t(".stock_filter_out"), "0" ] ],
+                  selected: @in_stock, html_options: { id: "wine_cellars_filter_in_stock" }) } %>
+          <% end %>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".filter_submit") } %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::DialogComponent.new(close_on_submit: true)) do |dialog| %>
+        <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :default, size: :sm)) { t(".create_cellar") } } %>
+        <% dialog.with_title { t(".create_cellar") } %>
+        <%= render "form", cellar: @cellar %>
+      <% end %>
+    </div>
   </header>
 
   <%= render "shared/flash" %>
 
-  <%= form_with model: @cellar, url: wine_cellars_path, class: "mb-6 flex gap-2" do %>
-    <label for="wine_cellar_name" class="sr-only"><%= t(".new_cellar_placeholder") %></label>
-    <%= render Ui::InputComponent.new(name: "wine_cellar[name]", value: @cellar.name, placeholder: t(".new_cellar_placeholder"),
-          html_options: { id: "wine_cellar_name", required: true, class: "flex-1" }) %>
-    <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".create_cellar") } %>
-  <% end %>
+  <% filter_query = { q: @query.presence, wine_cellar_id: @wine_cellar_id, wine_type: @wine_type, region: @region, vintage: @vintage, in_stock: @in_stock } %>
 
-  <% if @query.present? %>
-    <h2 class="mb-2 font-medium"><%= t(".results_for", query: @query) %></h2>
+  <% if @query.present? || @filtering %>
+    <% if @query.present? %>
+      <h2 class="mb-2 font-medium"><%= t(".results_for", query: @query) %></h2>
+    <% end %>
     <div class="space-y-2"><%= render partial: "bottles/bottle", collection: @results, as: :bottle, locals: { show_cellar: true } %></div>
     <% if @results.empty? %>
       <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_bottles_found") } } %>
@@ -34,7 +85,7 @@
     <% if @results_total_pages > 1 %>
       <div class="mt-6 flex justify-center">
         <%= render Ui::PaginationComponent.new(current: @results_page, total: @results_total_pages,
-              path: ->(page) { wine_cellars_path(q: @query, page: page) }) %>
+              path: ->(page) { wine_cellars_path(**filter_query, page: page) }) %>
       </div>
     <% end %>
   <% else %>
@@ -43,6 +94,7 @@
     <% end %>
     <div id="wine_cellars">
     <% @cellars.each do |cellar| %>
+      <%= tag.div id: dom_id(cellar) do %>
       <%= render(Ui::CardComponent.new(class_name: "mb-6")) do %>
         <div class="mb-3 flex items-center justify-between">
           <h2 class="font-medium"><%= cellar.name %> <span class="text-sm text-secondary">(<%= t(".in_stock_count", count: cellar.bottles.count { |bottle| bottle.in_stock }) %>)</span></h2>
@@ -65,9 +117,9 @@
                   html_options: { id: "bottle_vintage_#{cellar.id}", class: "w-24" }) %>
           </div>
           <div>
-            <label for="bottle_region_<%= cellar.id %>" class="sr-only"><%= t(".region_placeholder") %></label>
-            <%= render Ui::InputComponent.new(name: "bottle[region]", value: @bottle.region, placeholder: t(".region_placeholder"),
-                  html_options: { id: "bottle_region_#{cellar.id}", class: "w-28" }) %>
+            <%= render Ui::ComboboxComponent.new(name: "bottle[region]", options: @regions.map { |region| [ region, region ] },
+                  selected: @bottle.region, placeholder: t(".region_placeholder"),
+                  allow_custom: true, create_label: t(".region_create_label", query: "%{query}")) %>
           </div>
           <div>
             <label for="bottle_wine_type_<%= cellar.id %>" class="sr-only"><%= t(".wine_type_label") %></label>
@@ -76,6 +128,7 @@
           </div>
           <%= render(Ui::ButtonComponent.new(variant: :outline, type: "submit")) { t(".add") } %>
         <% end %>
+      <% end %>
       <% end %>
     <% end %>
     </div>

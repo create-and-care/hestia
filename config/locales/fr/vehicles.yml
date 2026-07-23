@@ -9,6 +9,14 @@ fr:
     types:
       car: "Voiture"
       motorcycle: "Moto"
+      scooter: "Scooter"
+      bicycle: "Vélo"
+      van: "Camionnette"
+      truck: "Camion"
+      camper: "Camping-car"
+      boat: "Bateau"
+      trailer: "Remorque"
+      other: "Autre…"
     index:
       title: "Véhicules"
       search_placeholder: "Rechercher…"
@@ -22,6 +30,8 @@ fr:
     form:
       name_label: "Nom"
       type_label: "Type"
+      type_custom_label: "Préciser le type"
+      type_custom_placeholder: "Préciser le type…"
       manufacturer_label: "Constructeur"
       plate_label: "Immatriculation"
       year_label: "Année"

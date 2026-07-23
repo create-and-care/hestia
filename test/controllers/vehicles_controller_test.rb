@@ -59,6 +59,19 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "create with a custom (free-text) vehicle type" do
+    post vehicles_path, params: { vehicle: { name: "Le quad", vehicle_type: "Quad" } }
+    assert_equal "Quad", Vehicle.find_by!(name: "Le quad").vehicle_type
+  end
+
+  test "the new-vehicle form offers a predefined type list plus a custom fallback field" do
+    get new_vehicle_path
+    assert_response :success
+    assert_select "select#vehicle_vehicle_type option", text: "Car"
+    assert_select "select#vehicle_vehicle_type option", text: "Other…"
+    assert_select "input#vehicle_vehicle_type_custom"
+  end
+
   test "create attaches an optional photo" do
     photo = fixture_file_upload("sample.png", "image/png")
     post vehicles_path, params: { vehicle: { name: "Le van", photo: photo } }
