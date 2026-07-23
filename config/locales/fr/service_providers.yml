@@ -8,10 +8,13 @@ fr:
       all_types: "Tous"
       type_icon_label: "Icône du type"
       type_name_placeholder: "Type"
+      type_name_custom_placeholder: "Préciser le type…"
+      other_type_option: "Autre…"
       add_type: "Ajouter"
       edit_type_aria: "Modifier le type « %{name} »"
       delete_type_aria: "Supprimer le type « %{name} »"
       delete_type_confirm: "Supprimer le type « %{name} » ? Les prestataires liés seront décatégorisés."
+      delete_type_confirm_label: "Supprimer"
       none: "Aucun prestataire."
     new:
       title: "Nouveau prestataire"
@@ -45,6 +48,22 @@ fr:
     destroy:
       deleted: "Prestataire supprimé."
   service_provider_types:
+    predefined:
+      plumber: "Plombier"
+      electrician: "Électricien"
+      heating_technician: "Chauffagiste"
+      gardener: "Jardinier"
+      cleaner: "Femme de ménage"
+      babysitter: "Baby-sitter"
+      tutor: "Professeur particulier"
+      vet: "Vétérinaire"
+      doctor: "Médecin"
+      painter: "Peintre"
+      locksmith: "Serrurier"
+      it_support: "Informatique"
+      insurance: "Assurance"
+      hairdresser: "Coiffeur"
+      mover: "Déménageur"
     colors:
       gray: "Gris"
       red: "Rouge"

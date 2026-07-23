@@ -28,12 +28,16 @@
         <% if type.color.present? %><span class="inline-block size-2 rounded-full <%= service_provider_type_dot_class(type.color) %>"></span><% end %>
         <%= link_to "#{type.icon} #{type.name}".strip, service_providers_path(type_id: type.id) %>
         <%= link_to edit_service_provider_type_path(type), aria: { label: t(".edit_type_aria", name: type.name) }, class: "text-subdued hover:text-primary" do %><%= lucide_icon("pencil", css_class: "size-3") %><% end %>
-        <%= button_to "×", service_provider_type_path(type), method: :delete, class: "cursor-pointer text-subdued hover:text-destructive",
-              aria: { label: t(".delete_type_aria", name: type.name) },
-              form: { class: "inline", data: { turbo_confirm: t(".delete_type_confirm", name: type.name) } } %>
+        <%= render(Ui::AlertDialogComponent.new(title: t(".delete_type_confirm", name: type.name), confirm_label: t(".delete_type_confirm_label"),
+              confirm_url: service_provider_type_path(type), confirm_method: :delete)) do |alert_dialog| %>
+          <% alert_dialog.with_trigger do %>
+            <button type="button" class="cursor-pointer text-subdued hover:text-destructive" aria-label="<%= t(".delete_type_aria", name: type.name) %>">×</button>
+          <% end %>
+        <% end %>
       <% end %>
     <% end %>
-    <%= form_with url: service_provider_types_path, method: :post, class: "inline-flex gap-1" do %>
+    <%= form_with url: service_provider_types_path, method: :post, class: "inline-flex flex-wrap items-end gap-1",
+          data: { controller: "maintenance-entry-type", action: "submit->maintenance-entry-type#beforeSubmit" } do %>
       <div>
         <label for="service_provider_type_icon" class="sr-only"><%= t(".type_icon_label") %></label>
         <%= render Ui::InputComponent.new(type: "text", name: "service_provider_type[icon]", placeholder: "🔧",
@@ -41,9 +45,11 @@
       </div>
       <div>
         <label for="service_provider_type_name" class="sr-only"><%= t(".type_name_placeholder") %></label>
-        <%= render Ui::InputComponent.new(type: "text", name: "service_provider_type[name]", placeholder: t(".type_name_placeholder"),
-              html_options: { id: "service_provider_type_name" }) %>
+        <%= render Ui::NativeSelectComponent.new(name: "service_provider_type[name]", options: service_provider_type_predefined_options,
+              html_options: { id: "service_provider_type_name", data: { maintenance_entry_type_target: "select", action: "change->maintenance-entry-type#sync" } }) %>
       </div>
+      <%= render Ui::InputComponent.new(type: "text", name: "service_provider_type[name]", placeholder: t(".type_name_custom_placeholder"),
+            html_options: { id: "service_provider_type_name_custom", class: "hidden w-32", data: { maintenance_entry_type_target: "custom" } }) %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add_type") } %>
     <% end %>
   </section>

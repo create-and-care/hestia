@@ -87,12 +87,26 @@ class ServiceProvidersControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "delete buttons ask for confirmation and have accessible names" do
+  test "provider delete button asks for confirmation and has an accessible name" do
     provider = service_providers(:alpha_plombier)
-    type = service_provider_types(:alpha_plumber)
     get service_providers_path
     assert_select "form[action=?][data-turbo-confirm]", service_provider_path(provider)
-    assert_select "form[action=?][data-turbo-confirm]", service_provider_type_path(type)
+  end
+
+  test "type delete button uses the design-system alert dialog instead of a native confirm" do
+    type = service_provider_types(:alpha_plumber)
+    get service_providers_path
+    assert_response :success
+    assert_select "dialog[role='alertdialog']", count: 1
+    assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("service_providers.index.delete_type_confirm", name: type.name))}"/, @response.body)
+  end
+
+  test "the new-type form offers a predefined list plus a custom fallback field" do
+    get service_providers_path
+    assert_response :success
+    assert_select "select#service_provider_type_name option", text: "Plumber"
+    assert_select "select#service_provider_type_name option", text: "Other…"
+    assert_select "input#service_provider_type_name_custom"
   end
 
   test "search input is wired for debounced auto-submit" do
