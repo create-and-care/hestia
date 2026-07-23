@@ -25,7 +25,6 @@ fr:
       clear_checked: "Vider les articles cochés"
       clear_checked_confirm: "Retirer tous les articles cochés de la liste ?"
       no_items: "Aucun article pour l'instant."
-      back_link: "← Toutes les listes"
     create:
       created: "Liste créée."
     destroy:
@@ -64,6 +63,7 @@ fr:
       move_to_fridge_title: "Ranger au frigo"
       expires_on_title: "Date de péremption (optionnel)"
       delete_aria: "Supprimer"
+      delete_confirm: "Supprimer cet article ?"
     create:
       alert: "Impossible d'ajouter l'article."
     move_to_fridge:

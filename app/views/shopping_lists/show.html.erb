@@ -2,6 +2,8 @@
 <%= turbo_stream_from @shopping_list %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:shopping, [ @shopping_list.name, nil ], module_path: shopping_lists_path) %></div>
+
   <header class="mb-6 flex items-center justify-between">
     <h1 class="flex items-center gap-2 text-2xl font-semibold">
       <span><%= @shopping_list.icon.presence || lucide_icon("shopping-cart", css_class: "size-6") %></span>
@@ -17,9 +19,9 @@
       <%= render "conversations/discuss_button", subject: @shopping_list %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: shopping_list_path(@shopping_list, format: :pdf),
             html_options: { target: "_blank" })) { t(".export_pdf") } %>
-      <%= form_with url: shopping_list_path(@shopping_list), method: :delete,
-            data: { turbo_confirm: t(".delete_confirm") } do %>
-        <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm, type: "submit")) { t(".delete") } %>
+      <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm"), confirm_label: t(".delete"),
+            confirm_url: shopping_list_path(@shopping_list), confirm_method: :delete)) do |alert_dialog| %>
+        <% alert_dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :destructive, size: :sm)) { t(".delete") } } %>
       <% end %>
     </div>
   </header>
@@ -32,8 +34,4 @@
        data-controller="sortable" data-sortable-url-value="<%= reorder_shopping_list_items_path(@shopping_list) %>">
     <%= render "shopping_list_items/list", shopping_list: @shopping_list %>
   </div>
-
-  <p class="mt-6 text-sm">
-    <%= link_to t(".back_link"), shopping_lists_path, class: "underline" %>
-  </p>
 </div>

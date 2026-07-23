@@ -36,7 +36,7 @@
         <% if shopping_list_item.checked %>
           <%= form_with url: move_to_fridge_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
                 method: :post, class: "flex items-center gap-1" do %>
-            <input type="date" name="expires_on" title="<%= t(".expires_on_title") %>" aria-label="<%= t(".expires_on_title") %>"
+            <input type="date" name="expires_on" value="<%= Date.current %>" title="<%= t(".expires_on_title") %>" aria-label="<%= t(".expires_on_title") %>"
                    class="h-7 w-28 rounded border border-primary bg-container px-1 text-xs text-primary">
             <button type="submit" class="shrink-0 cursor-pointer text-subdued hover:text-primary"
                     title="<%= t(".move_to_fridge_title") %>" aria-label="<%= t(".move_to_fridge_title") %>">
@@ -47,7 +47,7 @@
 
         <%= button_to shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
               method: :delete, class: "shrink-0 cursor-pointer text-subdued hover:text-destructive",
-              aria: { label: t(".delete_aria") } do %>
+              form: { data: { turbo_confirm: t(".delete_confirm") } }, aria: { label: t(".delete_aria") } do %>
           <%= lucide_icon("x", css_class: "size-4") %>
         <% end %>
       </div>
