@@ -1,4 +1,6 @@
 class WasteController < ApplicationController
+  include CollectionViewMode
+
   WINDOW_WEEKS = 8
 
   # View of upcoming collections (8-week rolling window, navigable) + management of recurring series.
@@ -10,6 +12,8 @@ class WasteController < ApplicationController
       .group_by(&:collected_on)
     @series = Current.household.waste_collection_series.order(:weekday)
     @event = Current.household.waste_collection_events.new(collected_on: Date.current)
+    @events_view_mode = collection_view_mode(:waste_events, param: :events_view)
+    @series_view_mode = collection_view_mode(:waste_series, param: :series_view)
   end
 
   private

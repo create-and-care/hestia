@@ -1,0 +1,33 @@
+<%= form_with url: waste_collection_series_index_path, method: :post, scope: :waste_collection_series, class: "flex flex-wrap items-end gap-2" do |form| %>
+  <div>
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:waste_type))) do |field| %>
+      <% field.with_label { t(".waste_type_label") } %>
+      <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:waste_type), options: waste_type_options, html_options: { id: form.field_id(:waste_type) }) } %>
+    <% end %>
+  </div>
+  <div>
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:weekday))) do |field| %>
+      <% field.with_label { t(".weekday_label") } %>
+      <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:weekday), options: weekday_options, html_options: { id: form.field_id(:weekday) }) } %>
+    <% end %>
+  </div>
+  <div class="w-16">
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:interval_weeks))) do |field| %>
+      <% field.with_label { t(".interval_weeks_label") } %>
+      <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:interval_weeks), value: 1, html_options: { id: form.field_id(:interval_weeks), min: 1 }) } %>
+    <% end %>
+  </div>
+  <div>
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:starts_on))) do |field| %>
+      <% field.with_label { t(".starts_on_label") } %>
+      <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:starts_on), value: Date.current, html_options: { id: form.field_id(:starts_on) }) } %>
+    <% end %>
+  </div>
+  <div>
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:ends_on))) do |field| %>
+      <% field.with_label { t(".ends_on_label") } %>
+      <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:ends_on), value: 3.months.from_now.to_date, html_options: { id: form.field_id(:ends_on) }) } %>
+    <% end %>
+  </div>
+  <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".generate_series") } %>
+<% end %>

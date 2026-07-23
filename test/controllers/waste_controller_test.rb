@@ -88,4 +88,31 @@ class WasteControllerTest < ActionDispatch::IntegrationTest
     assert_select "span.bg-surface-inset", text: /Household waste/ # ordures -> :secondary
     assert_select "span.bg-warning\\/10", text: /Recycling/ # recyclage -> :warning
   end
+
+  test "the one-time and recurring-series add forms open in design-system dialogs, not inline" do
+    get waste_path
+    assert_response :success
+    assert_select "dialog form select#waste_collection_event_waste_type"
+    assert_select "dialog form input#waste_collection_event_collected_on"
+    assert_select "dialog form select#waste_collection_series_waste_type"
+    assert_select "dialog form input#waste_collection_series_starts_on"
+  end
+
+  test "deleting a one-time collection uses the design-system alert dialog instead of a native confirm" do
+    get waste_path
+    assert_response :success
+    assert_select "dialog[role='alertdialog']"
+    assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("waste.show.delete_event_confirm"))}"/, @response.body)
+  end
+
+  test "offers an independent list/grid toggle for upcoming collections and recurring series" do
+    get waste_path
+    assert_response :success
+    assert_select "#waste_events.grid", count: 0
+    assert_select "#waste_series.grid", count: 0
+
+    get waste_path(events_view: "grid")
+    assert_select "#waste_events.grid"
+    assert_select "#waste_series.grid", count: 0
+  end
 end

@@ -14,7 +14,6 @@ fr:
       savings_rate_label: "Taux d'épargne : %{rate}%"
       new_category_heading: "Nouvelle catégorie"
       kind_label: "Type"
-      emoji_label: "Emoji"
       name_label: "Nom"
       add: "Ajouter"
       delete: "Supprimer"
@@ -48,7 +47,6 @@ fr:
       title: "Modifier la catégorie"
       kind_label: "Type"
       name_label: "Nom"
-      emoji_label: "Emoji"
       save: "Enregistrer"
       back_to_budget: "← Budget"
     update:

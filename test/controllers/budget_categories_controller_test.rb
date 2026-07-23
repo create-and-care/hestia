@@ -29,6 +29,12 @@ class BudgetCategoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "edit no longer offers an emoji input" do
+    get edit_budget_category_path(budget_categories(:alpha_rent))
+    assert_response :success
+    assert_select "input[name='budget_category[emoji]']", count: 0
+  end
+
   test "cannot edit another household's category" do
     get edit_budget_category_path(budget_categories(:beta_cat))
     assert_response :not_found
@@ -39,6 +45,13 @@ class BudgetCategoriesControllerTest < ActionDispatch::IntegrationTest
     patch budget_category_path(category), params: { budget_category: { name: "Loyer et charges" } }
     assert_redirected_to budget_path
     assert_equal "Loyer et charges", category.reload.name
+  end
+
+  test "update preserves an emoji set outside the web form, since its input was removed" do
+    category = budget_categories(:alpha_rent)
+    category.update_column(:emoji, "🏠")
+    patch budget_category_path(category), params: { budget_category: { name: "Loyer et charges" } }
+    assert_equal "🏠", category.reload.emoji
   end
 
   test "update with an invalid kind re-renders the edit form" do

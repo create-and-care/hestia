@@ -14,7 +14,6 @@ en:
       savings_rate_label: "Savings rate: %{rate}%"
       new_category_heading: "New category"
       kind_label: "Type"
-      emoji_label: "Emoji"
       name_label: "Name"
       add: "Add"
       delete: "Delete"
@@ -48,7 +47,6 @@ en:
       title: "Edit category"
       kind_label: "Type"
       name_label: "Name"
-      emoji_label: "Emoji"
       save: "Save"
       back_to_budget: "← Budget"
     update:

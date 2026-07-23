@@ -8,7 +8,7 @@
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("cake", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex items-center gap-2">
       <%= render(Ui::ButtonComponent.new(variant: :outline, href: calendar_contacts_path)) { t(".calendar_link") } %>
-      <%= render Ui::ButtonComponent.new(href: new_contact_path) { t(".new_contact") } %>
+      <%= render(Ui::ButtonComponent.new(href: new_contact_path)) { t(".new_contact") } %>
       <%= render Ui::ViewToggleComponent.new(mode: @view_mode, path_for: ->(mode) { contacts_path(tag_id: @tag&.id, view: mode) }) %>
     </div>
   </header>

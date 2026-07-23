@@ -21,6 +21,12 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "the add-birthday button has a visible label" do
+    get contacts_path
+    assert_response :success
+    assert_select "a[href=?]", new_contact_path, text: "New contact"
+  end
+
   test "create with a household tag" do
     assert_difference -> { households(:alpha).contacts.count }, 1 do
       post contacts_path, params: {

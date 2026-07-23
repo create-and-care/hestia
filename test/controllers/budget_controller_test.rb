@@ -52,4 +52,10 @@ class BudgetControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to budget_path
   end
+
+  test "no longer offers an emoji input in the new-category form" do
+    get budget_path
+    assert_response :success
+    assert_select "input[name='budget_category[emoji]']", count: 0
+  end
 end

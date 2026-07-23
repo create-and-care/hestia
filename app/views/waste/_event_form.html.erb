@@ -1,0 +1,15 @@
+<%= form_with model: event, url: waste_collection_events_path, class: "flex flex-wrap items-end gap-2" do |form| %>
+  <div>
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:waste_type))) do |field| %>
+      <% field.with_label { t(".waste_type_label") } %>
+      <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:waste_type), options: waste_type_options, selected: form.object.waste_type, html_options: { id: form.field_id(:waste_type) }) } %>
+    <% end %>
+  </div>
+  <div>
+    <%= render(Ui::FieldComponent.new(id: form.field_id(:collected_on))) do |field| %>
+      <% field.with_label { t(".collected_on_label") } %>
+      <% field.with_control { render Ui::InputComponent.new(type: "date", name: form.field_name(:collected_on), value: form.object.collected_on, html_options: { id: form.field_id(:collected_on) }) } %>
+    <% end %>
+  </div>
+  <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".add") } %>
+<% end %>

@@ -29,14 +29,6 @@
         <% end %>
       <% end %>
 
-      <%= render(Ui::FieldComponent.new(id: "budget_category_emoji")) do |field| %>
-        <% field.with_label { t(".emoji_label") } %>
-        <% field.with_control do %>
-          <%= render Ui::InputComponent.new(name: "budget_category[emoji]", value: @category.emoji,
-                html_options: { id: "budget_category_emoji", maxlength: 4 }) %>
-        <% end %>
-      <% end %>
-
       <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".save") } %>
     </div>
   <% end %>
