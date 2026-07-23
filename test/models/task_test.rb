@@ -1,6 +1,9 @@
 require "test_helper"
+require "turbo/broadcastable/test_helper"
 
 class TaskTest < ActiveSupport::TestCase
+  include Turbo::Broadcastable::TestHelper
+
   test "requires a title" do
     task = households(:alpha).tasks.build
     assert_not task.valid?
@@ -38,5 +41,18 @@ class TaskTest < ActiveSupport::TestCase
     task = tasks(:alpha_dishes)
     task_categories(:alpha_home).destroy
     assert_nil task.reload.task_category_id
+  end
+
+  test "removes the empty-column placeholder when the first task lands in a category" do
+    category = task_categories(:alpha_home)
+    household = households(:alpha)
+    household.tasks.where(task_category: category).destroy_all
+
+    streams = capture_turbo_stream_broadcasts household do
+      household.tasks.create!(title: "Nouvelle tâche", task_category: category)
+    end
+
+    removal = streams.find { |stream| stream["action"] == "remove" }
+    assert_equal "tasks_category_#{category.id}_empty", removal["target"]
   end
 end

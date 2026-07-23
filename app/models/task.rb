@@ -15,8 +15,13 @@ class Task < ApplicationRecord
   scope :ordered, -> { order(:done, :position, :id) }
 
   # Real-time: the card is targeted by its dom_id (replace/remove) and inserted into
-  # its category's column (append) — cf. kanban view.
-  after_create_commit  -> { broadcast_append_later_to household, target: board_column_id, partial: "tasks/task", locals: { task: self } }
+  # its category's column (append) — cf. kanban view. The column's "empty" placeholder
+  # has no dom_id of its own to be replaced, so it must be explicitly removed too, or it
+  # lingers next to the newly appended card.
+  after_create_commit  -> {
+    broadcast_remove_to household, target: "#{board_column_id}_empty"
+    broadcast_append_later_to household, target: board_column_id, partial: "tasks/task", locals: { task: self }
+  }
   after_update_commit  -> { broadcast_replace_later_to household }
   after_destroy_commit -> { broadcast_remove_to household }
 

@@ -1,6 +1,22 @@
 <% if Current.household.module_enabled?("messages") %>
-  <%= render(Ui::ButtonToComponent.new(discuss_conversations_path(subject_type: subject.class.name, subject_id: subject.id),
-        method: :post, variant: :outline, size: :sm)) do %>
-    <%= lucide_icon("message-circle", css_class: "size-4") %> <%= t("conversations.discuss_button") %>
+  <%= render(Ui::DialogComponent.new) do |dialog| %>
+    <% dialog.with_trigger do %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) do %>
+        <%= lucide_icon("message-circle", css_class: "size-4") %> <%= t("conversations.discuss_button") %>
+      <% end %>
+    <% end %>
+    <% dialog.with_title { t("conversations.discuss_dialog.title") } %>
+    <% dialog.with_description { t("conversations.discuss_dialog.description") } %>
+    <%= form_with url: discuss_conversations_path, method: :post, class: "flex flex-col gap-3" do %>
+      <%= hidden_field_tag :subject_type, subject.class.name %>
+      <%= hidden_field_tag :subject_id, subject.id %>
+      <% existing = discussable_conversations %>
+      <% if existing.any? %>
+        <%= render Ui::NativeSelectComponent.new(name: "conversation_id",
+              options: [ [ t("conversations.discuss_dialog.new_conversation_option"), "" ] ] + existing.map { |conversation| [ conversation.name, conversation.id ] },
+              html_options: { id: "discuss_conversation_id" }) %>
+      <% end %>
+      <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t("conversations.discuss_dialog.submit") } %>
+    <% end %>
   <% end %>
 <% end %>

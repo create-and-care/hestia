@@ -57,7 +57,9 @@
               <% if tasks.any? %>
                 <%= render tasks %>
               <% else %>
-                <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty_column") } } %>
+                <%= tag.div id: "#{category ? "tasks_category_#{category.id}" : "tasks_uncategorized"}_empty" do %>
+                  <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty_column") } } %>
+                <% end %>
               <% end %>
             </div>
           <% end %>

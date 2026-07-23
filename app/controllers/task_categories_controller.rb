@@ -5,7 +5,12 @@ class TaskCategoriesController < ApplicationController
   end
 
   def destroy
-    Current.household.task_categories.find(params[:id]).destroy
-    redirect_to tasks_path, notice: t(".notice")
+    category = Current.household.task_categories.find(params[:id])
+    if category.tasks.where(done: false).exists?
+      redirect_to tasks_path, alert: t(".pending_tasks_alert")
+    else
+      category.destroy
+      redirect_to tasks_path, notice: t(".notice")
+    end
   end
 end

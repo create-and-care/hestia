@@ -21,7 +21,6 @@ fr:
     form:
       title_label: "Tâche"
       title_placeholder: "Sortir les poubelles…"
-      emoji_label: "Emoji"
       due_label: "Échéance"
       assignee_label: "Responsable"
       category_label: "Catégorie"
@@ -35,16 +34,18 @@ fr:
       edit_aria: "Modifier"
       delete_aria: "Supprimer"
       delete_confirm: "Supprimer cette tâche ?"
+      delete_label: "Supprimer"
+      edit_loading: "Chargement…"
     edit:
       title: "Modifier la tâche"
       heading: "Modifier la tâche"
       title_label: "Titre"
       description_label: "Description"
-      emoji_label: "Emoji"
       due_label: "Échéance"
       assignee_label: "Responsable"
       category_label: "Catégorie"
       submit: "Enregistrer"
+      more_options_link: "Rappels, discussion…"
       reminders_heading: "Rappels"
       sent: "envoyé"
       remind_at_label: "Quand"
@@ -52,7 +53,6 @@ fr:
       add_reminder_submit: "Ajouter"
       delete_reminder_confirm: "Supprimer ce rappel ?"
       delete_reminder_aria: "Supprimer ce rappel"
-      back_link: "← Tâches"
     create:
       alert: "Impossible de créer la tâche."
     update:
@@ -65,6 +65,7 @@ fr:
   task_categories:
     destroy:
       notice: "Catégorie supprimée."
+      pending_tasks_alert: "Impossible de supprimer une catégorie qui contient encore des tâches non terminées."
   task_reminders:
     destroy:
       notice: "Rappel supprimé."

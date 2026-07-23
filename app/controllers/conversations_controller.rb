@@ -47,18 +47,23 @@ class ConversationsController < ApplicationController
     redirect_to conversations_path, notice: t(".deleted")
   end
 
-  # Finds (or starts) the conversation attached to a task, shopping list or
-  # calendar event, so "Discuter de ceci" is a single click rather than the
-  # full guided-creation form — the subject already implies name and
-  # participants (every household member, since it's a shared context).
+  # Attaches a task, shopping list or calendar event to a conversation so it
+  # can be discussed there — either one the user picks from their existing
+  # (subject-less) conversations, or a fresh one auto-named after the subject
+  # with every household member as a participant.
   def discuss
     klass = DISCUSSABLE_TYPES.fetch(params[:subject_type])
     subject = klass.where(household: Current.household).find(params[:subject_id])
 
-    conversation = Current.household.conversations.find_by(subject: subject)
-    if conversation.nil?
-      conversation = Current.household.conversations.create!(name: helpers.conversation_subject_label(subject), subject: subject)
-      conversation.participant_ids = Current.household.users.ids
+    if params[:conversation_id].present?
+      conversation = accessible_conversations.where(subject_id: nil).find(params[:conversation_id])
+      conversation.update!(subject: subject)
+    else
+      conversation = Current.household.conversations.find_by(subject: subject)
+      if conversation.nil?
+        conversation = Current.household.conversations.create!(name: helpers.conversation_subject_label(subject), subject: subject)
+        conversation.participant_ids = Current.household.users.ids
+      end
     end
     redirect_to conversation
   rescue KeyError

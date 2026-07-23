@@ -10,15 +10,6 @@
           <% end %>
         <% end %>
       </div>
-      <div class="w-16">
-        <%= render(Ui::FieldComponent.new(id: "task_emoji")) do |field| %>
-          <% field.with_label { t(".emoji_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::InputComponent.new(name: "task[emoji]", value: task.emoji,
-                  html_options: { id: "task_emoji", maxlength: 4 }) %>
-          <% end %>
-        <% end %>
-      </div>
       <div class="w-36">
         <%= render(Ui::FieldComponent.new(id: "task_due_on")) do |field| %>
           <% field.with_label { t(".due_label") } %>

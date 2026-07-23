@@ -35,11 +35,23 @@
     </div>
 
     <div class="flex shrink-0 flex-col items-end gap-1">
-      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_task_path(task),
-            html_options: { class: "size-auto p-0.5", aria: { label: t(".edit_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
-      <%= form_with url: task_path(task), method: :delete, data: { turbo_confirm: t(".delete_confirm") } do %>
-        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :icon,
-              html_options: { class: "size-auto p-0.5", aria: { label: t(".delete_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+      <%= render(Ui::DialogComponent.new(close_on_submit: true)) do |dialog| %>
+        <% dialog.with_trigger do %>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon,
+                html_options: { class: "size-auto p-0.5", aria: { label: t(".edit_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
+        <% end %>
+        <% dialog.with_title { t("tasks.edit.title") } %>
+        <%= turbo_frame_tag dom_id(task, :edit), src: edit_task_path(task), loading: :lazy,
+              class: "flex min-h-24 items-center justify-center text-sm text-secondary" do %>
+          <%= t(".edit_loading") %>
+        <% end %>
+      <% end %>
+      <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm"), confirm_label: t(".delete_label"),
+            confirm_url: task_path(task), confirm_method: :delete)) do |alert_dialog| %>
+        <% alert_dialog.with_trigger do %>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon,
+                html_options: { class: "size-auto p-0.5", aria: { label: t(".delete_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+        <% end %>
       <% end %>
     </div>
   </div>

@@ -1,0 +1,61 @@
+<%= form_with model: task, url: task_path(task) do |form| %>
+  <% if task.errors.any? %>
+    <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
+      <ul class="list-inside list-disc">
+        <% task.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+
+  <div class="space-y-4">
+    <%= render(Ui::FieldComponent.new(id: "#{dom_id(task)}_title")) do |field| %>
+      <% field.with_label { t("tasks.edit.title_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::InputComponent.new(name: "task[title]", value: task.title, invalid: task.errors[:title].any?,
+              html_options: { id: "#{dom_id(task)}_title", required: true }) %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::FieldComponent.new(id: "#{dom_id(task)}_description")) do |field| %>
+      <% field.with_label { t("tasks.edit.description_label") } %>
+      <% field.with_control do %>
+        <%= render(Ui::TextareaComponent.new(name: "task[description]", rows: 3, invalid: task.errors[:description].any?,
+              html_options: { id: "#{dom_id(task)}_description" })) { task.description } %>
+      <% end %>
+    <% end %>
+
+    <div class="grid grid-cols-2 gap-4">
+      <%= render(Ui::FieldComponent.new(id: "#{dom_id(task)}_due_on")) do |field| %>
+        <% field.with_label { t("tasks.edit.due_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::InputComponent.new(type: "date", name: "task[due_on]", value: task.due_on, invalid: task.errors[:due_on].any?,
+                html_options: { id: "#{dom_id(task)}_due_on" }) %>
+        <% end %>
+      <% end %>
+
+      <%= render(Ui::FieldComponent.new(id: "#{dom_id(task)}_assignee_id")) do |field| %>
+        <% field.with_label { t("tasks.edit.assignee_label") } %>
+        <% field.with_control do %>
+          <%= render Ui::NativeSelectComponent.new(name: "task[assignee_id]",
+                options: [ [ "—", "" ] ] + task_assignee_options,
+                selected: task.assignee_id, invalid: task.errors[:assignee_id].any?,
+                html_options: { id: "#{dom_id(task)}_assignee_id" }) %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%= render(Ui::FieldComponent.new(id: "#{dom_id(task)}_task_category_id")) do |field| %>
+      <% field.with_label { t("tasks.edit.category_label") } %>
+      <% field.with_control do %>
+        <%= render Ui::NativeSelectComponent.new(name: "task[task_category_id]",
+              options: [ [ "—", "" ] ] + task_category_options,
+              selected: task.task_category_id, invalid: task.errors[:task_category_id].any?,
+              html_options: { id: "#{dom_id(task)}_task_category_id" }) %>
+      <% end %>
+    <% end %>
+
+    <%= render(Ui::ButtonComponent.new(type: "submit", html_options: { class: "w-full" })) { t("tasks.edit.submit") } %>
+  </div>
+<% end %>

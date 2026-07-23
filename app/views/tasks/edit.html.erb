@@ -1,81 +1,17 @@
 <% content_for :title, t(".title") %>
 
-<div class="mx-auto mt-10 max-w-md px-4">
-  <div class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold"><%= t(".heading") %></h1>
-    <%= render "conversations/discuss_button", subject: @task %>
-  </div>
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <div class="mb-4"><%= module_breadcrumb(:tasks, [ t(".heading"), nil ], module_path: tasks_path) %></div>
 
-  <%= form_with model: @task, url: task_path(@task) do |form| %>
-    <% if @task.errors.any? %>
-      <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
-        <ul class="list-inside list-disc">
-          <% @task.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      <% end %>
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".heading") %></h1>
+
+  <%= turbo_frame_tag dom_id(@task, :edit) do %>
+    <%= render "form_fields", task: @task %>
+    <% if turbo_frame_request? %>
+      <p class="mt-4 text-sm">
+        <%= link_to t(".more_options_link"), edit_task_path(@task), data: { turbo_frame: "_top" }, class: "underline" %>
+      </p>
     <% end %>
-
-    <div class="space-y-4">
-      <%= render(Ui::FieldComponent.new(id: "task_title")) do |field| %>
-        <% field.with_label { t(".title_label") } %>
-        <% field.with_control do %>
-          <%= render Ui::InputComponent.new(name: "task[title]", value: @task.title, invalid: @task.errors[:title].any?,
-                html_options: { id: "task_title", required: true }) %>
-        <% end %>
-      <% end %>
-
-      <%= render(Ui::FieldComponent.new(id: "task_description")) do |field| %>
-        <% field.with_label { t(".description_label") } %>
-        <% field.with_control do %>
-          <%= render(Ui::TextareaComponent.new(name: "task[description]", rows: 3, invalid: @task.errors[:description].any?,
-                html_options: { id: "task_description" })) { @task.description } %>
-        <% end %>
-      <% end %>
-
-      <div class="grid grid-cols-2 gap-4">
-        <%= render(Ui::FieldComponent.new(id: "task_emoji")) do |field| %>
-          <% field.with_label { t(".emoji_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::InputComponent.new(name: "task[emoji]", value: @task.emoji, invalid: @task.errors[:emoji].any?,
-                  html_options: { id: "task_emoji", maxlength: 4 }) %>
-          <% end %>
-        <% end %>
-
-        <%= render(Ui::FieldComponent.new(id: "task_due_on")) do |field| %>
-          <% field.with_label { t(".due_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::InputComponent.new(type: "date", name: "task[due_on]", value: @task.due_on, invalid: @task.errors[:due_on].any?,
-                  html_options: { id: "task_due_on" }) %>
-          <% end %>
-        <% end %>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <%= render(Ui::FieldComponent.new(id: "task_assignee_id")) do |field| %>
-          <% field.with_label { t(".assignee_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::NativeSelectComponent.new(name: "task[assignee_id]",
-                  options: [ [ "—", "" ] ] + task_assignee_options,
-                  selected: @task.assignee_id, invalid: @task.errors[:assignee_id].any?,
-                  html_options: { id: "task_assignee_id" }) %>
-          <% end %>
-        <% end %>
-
-        <%= render(Ui::FieldComponent.new(id: "task_task_category_id")) do |field| %>
-          <% field.with_label { t(".category_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::NativeSelectComponent.new(name: "task[task_category_id]",
-                  options: [ [ "—", "" ] ] + task_category_options,
-                  selected: @task.task_category_id, invalid: @task.errors[:task_category_id].any?,
-                  html_options: { id: "task_task_category_id" }) %>
-          <% end %>
-        <% end %>
-      </div>
-
-      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
-    </div>
   <% end %>
 
   <section class="mt-8 border-t border-primary pt-6">
@@ -122,5 +58,5 @@
     <% end %>
   </section>
 
-  <p class="mt-6 text-sm"><%= link_to t(".back_link"), tasks_path, class: "underline" %></p>
+  <div class="mt-6"><%= render "conversations/discuss_button", subject: @task %></div>
 </div>

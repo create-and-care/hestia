@@ -3,6 +3,11 @@ en:
     message_placeholder: "Your message…"
     send: "Send"
     discuss_button: "Discuss this"
+    discuss_dialog:
+      title: "Discuss this"
+      description: "Choose an existing conversation or start a new one."
+      new_conversation_option: "— New conversation —"
+      submit: "Continue"
     index:
       title: "Messages"
       new_conversation: "New conversation"

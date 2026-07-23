@@ -17,6 +17,15 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_select "#tasks_uncategorized"
   end
 
+  test "task deletion uses the design-system alert dialog instead of a native confirm" do
+    get tasks_path
+    assert_response :success
+    assert_select "dialog[role='alertdialog']"
+    # The category delete button still uses a native confirm (untouched by this change) —
+    # only the task-level one, keyed off its own confirmation text, must be gone.
+    assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("tasks.task.delete_confirm"))}"/, @response.body)
+  end
+
   test "search filters the tasks" do
     get tasks_path(q: "vaisselle")
     assert_response :success
@@ -27,6 +36,13 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     tasks(:alpha_call).update!(description: "Prendre rendez-vous urgent")
     get tasks_path(q: "urgent")
     assert_includes @response.body, "Appeler le médecin"
+  end
+
+  test "search hides categories that have no matching tasks" do
+    get tasks_path(q: "vaisselle")
+    assert_response :success
+    assert_select "#tasks_category_#{task_categories(:alpha_home).id}"
+    assert_select "#tasks_uncategorized", count: 0
   end
 
   test "create passes the description through instead of dropping it" do
@@ -63,6 +79,46 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     patch task_path(task), params: { task: { title: "Vaisselle du soir" } }
     assert_redirected_to tasks_path
     assert_equal "Vaisselle du soir", task.reload.title
+  end
+
+  test "update via turbo_stream returns no content so the modal can close, relying on the real-time stream to refresh the card" do
+    task = tasks(:alpha_dishes)
+    patch task_path(task), params: { task: { title: "Vaisselle du matin" } }, as: :turbo_stream
+    assert_response :no_content
+    assert_equal "Vaisselle du matin", task.reload.title
+  end
+
+  test "update preserves an emoji set outside the web form, since its input was removed" do
+    task = tasks(:alpha_dishes)
+    task.update_column(:emoji, "🧽")
+    patch task_path(task), params: { task: { title: "Vaisselle du matin" } }
+    assert_equal "🧽", task.reload.emoji
+  end
+
+  test "edit no longer offers an emoji input" do
+    get edit_task_path(tasks(:alpha_dishes))
+    assert_response :success
+    assert_select "input[name='task[emoji]']", count: 0
+  end
+
+  test "edit shows a breadcrumb back to tasks instead of a back link" do
+    get edit_task_path(tasks(:alpha_dishes))
+    assert_select "nav a[href=?]", tasks_path
+  end
+
+  test "edit shows the reminders/discuss link only when loaded as a modal frame" do
+    task = tasks(:alpha_dishes)
+    get edit_task_path(task), headers: { "Turbo-Frame" => "edit_task_#{task.id}" }
+    assert_select "a[data-turbo-frame='_top']"
+
+    get edit_task_path(task)
+    assert_select "a[data-turbo-frame='_top']", count: 0
+  end
+
+  test "index offers a lazy-loaded edit modal for each task, scoped to the task's own frame" do
+    task = tasks(:alpha_dishes)
+    get tasks_path
+    assert_select "turbo-frame##{ActionView::RecordIdentifier.dom_id(task, :edit)}[src=?]", edit_task_path(task)
   end
 
   test "destroy" do
@@ -125,5 +181,10 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     get edit_task_path(tasks(:alpha_dishes))
     assert_response :success
     assert_select "form[action^=?]", discuss_conversations_path
+  end
+
+  test "edit offers existing subject-less conversations in the discuss dialog" do
+    get edit_task_path(tasks(:alpha_dishes))
+    assert_select "select[name='conversation_id']"
   end
 end

@@ -130,6 +130,23 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to existing
   end
 
+  test "discuss attaches the subject to a chosen existing conversation instead of creating a new one" do
+    task = households(:alpha).tasks.create!(title: "Organiser la fête")
+    conversation = conversations(:alpha_chat)
+
+    assert_no_difference -> { Conversation.count } do
+      post discuss_conversations_path, params: { subject_type: "Task", subject_id: task.id, conversation_id: conversation.id }
+    end
+    assert_redirected_to conversation
+    assert_equal task, conversation.reload.subject
+  end
+
+  test "discuss rejects a conversation_id the current user cannot access" do
+    task = households(:alpha).tasks.create!(title: "Organiser la fête")
+    post discuss_conversations_path, params: { subject_type: "Task", subject_id: task.id, conversation_id: conversations(:beta_chat).id }
+    assert_response :not_found
+  end
+
   test "discuss rejects a subject from another household" do
     other_task = households(:beta).tasks.create!(title: "Tâche Beta")
     assert_no_difference -> { Conversation.count } do

@@ -13,6 +13,7 @@ class TasksController < ApplicationController
 
     @columns = @categories.map { |category| [ category, @tasks.select { |t| t.task_category_id == category.id } ] }
     @columns << [ nil, @tasks.select { |t| t.task_category_id.nil? } ]
+    @columns = @columns.reject { |(_, tasks)| tasks.empty? } if @query.present?
 
     @task = Task.new
   end
@@ -43,14 +44,19 @@ class TasksController < ApplicationController
     @task.assign_attributes(
       title: task_params[:title],
       description: task_params[:description],
-      emoji: task_params[:emoji],
       due_on: task_params[:due_on]
     )
+    # The edit form has no Emoji input (removed — Hest.AI/API-set emojis are the only
+    # remaining source), so only touch it when a caller explicitly sends the key.
+    @task.emoji = task_params[:emoji] if params[:task].key?(:emoji)
     @task.assignee = find_member(task_params[:assignee_id])
     @task.task_category = find_category(task_params[:task_category_id])
 
     if @task.save
-      redirect_to tasks_path, notice: t(".notice")
+      respond_to do |format|
+        format.turbo_stream { head :no_content } # closes the modal; the card updates via the real-time stream
+        format.html { redirect_to tasks_path, notice: t(".notice") }
+      end
     else
       render :edit, status: :unprocessable_entity
     end

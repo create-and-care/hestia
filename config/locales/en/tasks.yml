@@ -21,7 +21,6 @@ en:
     form:
       title_label: "Task"
       title_placeholder: "Take out the trash…"
-      emoji_label: "Emoji"
       due_label: "Due date"
       assignee_label: "Assignee"
       category_label: "Category"
@@ -35,16 +34,18 @@ en:
       edit_aria: "Edit"
       delete_aria: "Delete"
       delete_confirm: "Delete this task?"
+      delete_label: "Delete"
+      edit_loading: "Loading…"
     edit:
       title: "Edit task"
       heading: "Edit task"
       title_label: "Title"
       description_label: "Description"
-      emoji_label: "Emoji"
       due_label: "Due date"
       assignee_label: "Assignee"
       category_label: "Category"
       submit: "Save"
+      more_options_link: "Reminders, discuss…"
       reminders_heading: "Reminders"
       sent: "sent"
       remind_at_label: "When"
@@ -52,7 +53,6 @@ en:
       add_reminder_submit: "Add"
       delete_reminder_confirm: "Delete this reminder?"
       delete_reminder_aria: "Delete this reminder"
-      back_link: "← Tasks"
     create:
       alert: "Couldn't create the task."
     update:
@@ -65,6 +65,7 @@ en:
   task_categories:
     destroy:
       notice: "Category deleted."
+      pending_tasks_alert: "Can't delete a category that still has unfinished tasks."
   task_reminders:
     destroy:
       notice: "Reminder deleted."

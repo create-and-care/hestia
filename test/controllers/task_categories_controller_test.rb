@@ -12,8 +12,23 @@ class TaskCategoriesControllerTest < ActionDispatch::IntegrationTest
 
   test "destroy" do
     category = task_categories(:alpha_home)
+    tasks(:alpha_dishes).update!(done: true)
     delete task_category_path(category)
     assert_redirected_to tasks_path
     assert_not TaskCategory.exists?(category.id)
+  end
+
+  test "destroy is blocked when the category still has an undone task" do
+    category = task_categories(:alpha_home)
+    task = tasks(:alpha_dishes)
+    assert_not task.done?
+
+    delete task_category_path(category)
+
+    assert_redirected_to tasks_path
+    follow_redirect!
+    assert_select "[data-flash-message-value=?]", I18n.t("task_categories.destroy.pending_tasks_alert")
+    assert TaskCategory.exists?(category.id)
+    assert_equal category.id, task.reload.task_category_id
   end
 end
