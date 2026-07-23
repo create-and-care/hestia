@@ -90,8 +90,12 @@ class CalendarController < ApplicationController
         .index_by { |holiday| holiday[:date] }
     end
 
+    # Participants are only rendered by the day/list views (see
+    # calendar/_occurrences_list.html.erb) — the month/week grid cells never
+    # touch the association, so eager loading it there is flagged as unused.
     def filtered_events
-      scope = Current.household.calendar_events.includes(:participants)
+      scope = Current.household.calendar_events
+      scope = scope.includes(:participants) if @view.in?(%w[day list])
       if @member_id
         scope = scope.joins(:event_participants).where(event_participants: { user_id: @member_id }).distinct
       end

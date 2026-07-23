@@ -67,5 +67,10 @@ Rails.application.configure do
   config.after_initialize do
     Bullet.enable = true
     Bullet.bullet_logger = true
+    # Preloading a has_many :through (participants) always preloads its join
+    # association (event_participants) too — app code only ever calls
+    # .participants, so Bullet permanently flags the join side as "unused".
+    # That's a structural false positive, not a real N+1 risk, so it's safelisted.
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "CalendarEvent", association: :event_participants
   end
 end
