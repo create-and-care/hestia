@@ -34,6 +34,12 @@
   </head>
 
   <body class="min-h-screen bg-surface text-primary">
+    <%# Mounted first so the sonner Stimulus controller registers its
+        "toast:show" listener before any flash partial further down the
+        page connects and dispatches one — otherwise the event fires with
+        no listener attached and the toast is silently dropped. %>
+    <%= render(Ui::SonnerComponent.new) %>
+
     <% if Current.user %>
       <div class="fixed top-3 right-3 z-40 flex items-center gap-1">
         <%= render "shared/notifications" %>
@@ -48,7 +54,5 @@
     <% else %>
       <%= yield %>
     <% end %>
-
-    <%= render(Ui::SonnerComponent.new) %>
   </body>
 </html>

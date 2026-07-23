@@ -25,7 +25,11 @@
   </head>
 
   <body class="min-h-screen bg-surface text-primary">
-    <%= yield %>
+    <%# Mounted first so the sonner Stimulus controller registers its
+        "toast:show" listener before any flash partial further down the
+        page connects and dispatches one — otherwise the event fires with
+        no listener attached and the toast is silently dropped. %>
     <%= render(Ui::SonnerComponent.new) %>
+    <%= yield %>
   </body>
 </html>
