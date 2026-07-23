@@ -23,7 +23,11 @@ class ServiceProvidersTest < ApplicationSystemTestCase
     select "Gardener", from: "service_provider_type_name"
     click_on "Add"
 
-    assert_text "Gardener"
+    # "Gardener" is already present as a <select> option before submission,
+    # so assert_text would pass immediately without waiting for the type to
+    # actually be created. The badge link only exists once the household's
+    # type list includes it, so assert_link waits on the right condition.
+    assert_link "Gardener"
     assert ServiceProviderType.exists?(name: "Gardener")
   end
 
