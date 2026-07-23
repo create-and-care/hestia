@@ -10,12 +10,18 @@ class RecipesController < ApplicationController
   def index
     @query = params[:q].to_s.strip
     @category = params[:category].to_s.strip
+    @servings = params[:servings].to_s.strip
+    @tag = params[:tag].to_s.strip
     @categories = Current.household.recipes.distinct.where.not(category: [ nil, "" ]).order(:category).pluck(:category)
+    @servings_options = Current.household.recipes.distinct.where.not(servings: nil).order(:servings).pluck(:servings)
+    @tags = Current.household.recipes.pluck(Arel.sql("DISTINCT unnest(tags)")).compact.sort
     @view_mode = recipe_view_mode
 
     recipes = Current.household.recipes.ordered.includes(photo_attachment: :blob)
     recipes = recipes.where("title ILIKE ?", "%#{@query}%") if @query.present?
     recipes = recipes.where(category: @category) if @category.present?
+    recipes = recipes.where(servings: @servings) if @servings.present?
+    recipes = recipes.where("? = ANY(tags)", @tag) if @tag.present?
 
     @per_page = PER_PAGE
     @total = recipes.count
@@ -27,6 +33,7 @@ class RecipesController < ApplicationController
   def show
     @linkable_notes = Current.household.notes.general.where(recipe_id: nil).order(:title)
     @linkable_bottles = Current.household.bottles.where(recipe_id: nil).order(:name)
+    @shopping_lists = Current.household.shopping_lists.general.order(:name)
   end
 
   def new
@@ -122,8 +129,12 @@ class RecipesController < ApplicationController
     end
 
     def target_shopping_list
-      Current.household.shopping_lists.order(:created_at).first ||
-        Current.household.shopping_lists.create!(name: t("shopping_lists.default_list_name"))
+      if params[:shopping_list_id].present?
+        Current.household.shopping_lists.find(params[:shopping_list_id])
+      else
+        Current.household.shopping_lists.order(:created_at).first ||
+          Current.household.shopping_lists.create!(name: t("shopping_lists.default_list_name"))
+      end
     end
 
     def recipe_params

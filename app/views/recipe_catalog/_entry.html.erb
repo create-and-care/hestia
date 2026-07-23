@@ -41,9 +41,11 @@
           <%= image_tag entry.image_url, alt: "", class: "size-full object-cover" %>
         <% end %>
       <% end %>
-      <h2 class="<%= "mt-3" if entry.image_url.present? %> font-medium text-primary"><%= entry.title %></h2>
+      <div class="<%= "mt-3" if entry.image_url.present? %> flex items-center justify-between gap-2">
+        <h2 class="font-medium text-primary"><%= entry.title %></h2>
+        <%= action %>
+      </div>
       <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-secondary"><%= meta %></div>
-      <div class="mt-3"><%= action %></div>
     <% end %>
   <% end %>
 </div>

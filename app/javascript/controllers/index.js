@@ -49,6 +49,9 @@ application.register("dialog", DialogController)
 import DropdownMenuController from "./dropdown_menu_controller"
 application.register("dropdown-menu", DropdownMenuController)
 
+import EscapeExitController from "./escape_exit_controller"
+application.register("escape-exit", EscapeExitController)
+
 import FieldVisibilityController from "./field_visibility_controller"
 application.register("field-visibility", FieldVisibilityController)
 

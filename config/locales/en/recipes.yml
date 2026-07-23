@@ -2,8 +2,19 @@ en:
   recipes:
     index:
       title: "Recipes"
+      filters_trigger: "Filters"
+      filters_heading: "Filters"
+      search_label: "Search"
       search_placeholder: "Search…"
+      category_label: "Category"
       category_blank: "All categories"
+      servings_label: "Number of servings"
+      servings_blank: "All"
+      servings_option:
+        one: "%{count} serving"
+        other: "%{count} servings"
+      tag_label: "Hashtag"
+      tag_blank: "All"
       filter_submit: "Filter"
       import_link: "Import"
       new_link: "New"
@@ -21,7 +32,6 @@ en:
       exit_link: "Exit cook mode"
       ingredients_heading: "Ingredients"
       steps_heading: "Steps"
-      back_link: "← Back to the recipe"
     edit:
       title: "Edit recipe"
       heading: "Edit recipe"
@@ -42,6 +52,10 @@ en:
       servings: "%{count} servings"
       cook_mode_link: "Cook mode"
       add_to_shopping_list_link: "Add to shopping list"
+      add_to_shopping_list_title: "Add the ingredients to the shopping list"
+      add_to_shopping_list_description: "Choose which shopping list to add this recipe's ingredients to."
+      add_to_shopping_list_new_option: "New list"
+      add_to_shopping_list_submit: "Add to this list"
       edit_link: "Edit"
       delete_link: "Delete"
       delete_confirm: "Delete this recipe?"
@@ -55,7 +69,6 @@ en:
       plan_meal_heading: "Plan this meal"
       plan_meal_submit: "Add to menu"
       view_shopping_list_link: "View shopping list"
-      back_link: "← All recipes"
     form:
       title_label: "Title"
       category_label: "Category"

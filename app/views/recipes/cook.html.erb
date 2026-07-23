@@ -1,8 +1,8 @@
 <% content_for :title, t(".title", title: @recipe.title) %>
 
-<div class="mx-auto max-w-2xl px-6 py-10" data-controller="wake-lock">
+<div class="mx-auto max-w-2xl px-6 py-10" data-controller="wake-lock escape-exit" data-action="keydown.esc@window->escape-exit#exit">
   <p class="mb-6">
-    <%= link_to recipe_path(@recipe), class: "inline-flex items-center gap-1.5 text-sm text-secondary hover:underline" do %>
+    <%= link_to recipe_path(@recipe), class: "inline-flex items-center gap-1.5 text-sm text-secondary hover:underline", data: { escape_exit_target: "link" } do %>
       <%= lucide_icon("x", css_class: "size-4") %> <%= t(".exit_link") %>
     <% end %>
   </p>
@@ -26,6 +26,4 @@
       <% end %>
     </ol>
   </section>
-
-  <p class="mt-10 text-sm"><%= link_to t(".back_link"), recipe_path(@recipe), class: "underline" %></p>
 </div>

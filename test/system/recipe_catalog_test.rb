@@ -17,7 +17,15 @@ class RecipeCatalogTest < ApplicationSystemTestCase
     assert_text recipe_catalog_entries(:carbonara).title
     assert_text "Faire cuire les pâtes."
 
-    submit_button_to "Add to shopping list"
-    assert_text "Ingredients added to the shopping list."
+    # A plain click_on is flaky here for the same reason noted in
+    # global_search_test.rb: Selenium's coordinate-based click occasionally
+    # misses a dialog trigger. Dispatch the click via JS instead.
+    page.execute_script("arguments[0].click()", find(:button, "Add to shopping list").native)
+    assert_selector "dialog[data-state='open']"
+    submit_button_to "Add to this list"
+
+    assert_text "View shopping list"
+    recipe = households(:alpha).recipes.find_by!(recipe_catalog_entry: recipe_catalog_entries(:carbonara))
+    assert_equal recipe.recipe_ingredients.count, ShoppingListItem.where(recipe: recipe).count
   end
 end

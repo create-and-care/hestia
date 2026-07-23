@@ -93,12 +93,30 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "cook mode wires the Escape key to the exit link and drops the bottom back link" do
+    recipe = recipes(:alpha_pancakes)
+    get cook_recipe_path(recipe)
+    assert_select "[data-action='keydown.esc@window->escape-exit#exit']"
+    assert_select "a[href=?][data-escape-exit-target='link']", recipe_path(recipe)
+  end
+
   test "add_to_shopping_list exports the ingredients" do
     recipe = recipes(:alpha_pancakes)
     assert_difference -> { ShoppingListItem.count }, recipe.recipe_ingredients.count do
       post add_to_shopping_list_recipe_path(recipe)
     end
     assert_redirected_to recipe
+  end
+
+  test "add_to_shopping_list exports to the chosen shopping list" do
+    recipe = recipes(:alpha_pancakes)
+    list = shopping_lists(:alpha_groceries)
+
+    assert_difference -> { list.items.count }, recipe.recipe_ingredients.count do
+      post add_to_shopping_list_recipe_path(recipe), params: { shopping_list_id: list.id }
+    end
+    assert_redirected_to recipe
+    assert_equal list.id, flash[:shopping_list_id]
   end
 
   test "add_to_shopping_list is idempotent and links to the shopping list when already added" do
@@ -140,6 +158,20 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Pancakes"
   end
 
+  test "filters by number of servings" do
+    households(:alpha).recipes.create!(title: "Soupe pour deux", servings: 2)
+    get recipes_path(servings: "2")
+    assert_includes @response.body, "Soupe pour deux"
+    assert_not_includes @response.body, "Pancakes"
+  end
+
+  test "filters by hashtag" do
+    households(:alpha).recipes.create!(title: "Curry", tags: [ "epice" ])
+    get recipes_path(tag: "epice")
+    assert_includes @response.body, "Curry"
+    assert_not_includes @response.body, "Pancakes"
+  end
+
   test "paginates when there are more recipes than the page size" do
     households(:alpha).recipes.destroy_all
     (RecipesController::PER_PAGE + 1).times { |i| households(:alpha).recipes.create!(title: "Recette #{'%02d' % i}") }
@@ -162,7 +194,7 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     get cook_recipe_path(recipes(:alpha_pancakes))
     assert_response :success
     assert_select "[data-controller='sidebar']", false
-    assert_select "[data-controller='wake-lock']"
+    assert_select "[data-controller~='wake-lock']"
   end
 
   test "link_note links an existing unlinked note to the recipe" do

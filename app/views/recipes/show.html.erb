@@ -1,6 +1,8 @@
 <% content_for :title, @recipe.title %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:recipes, [ @recipe.title, nil ], module_path: recipes_path) %></div>
+
   <header class="mb-4">
     <h1 class="text-2xl font-semibold"><%= @recipe.title %></h1>
     <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-secondary">
@@ -31,28 +33,47 @@
     <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: cook_recipe_path(@recipe))) do %>
       <%= lucide_icon("chef-hat", css_class: "size-4") %> <%= t(".cook_mode_link") %>
     <% end %>
-    <%= form_with url: add_to_shopping_list_recipe_path(@recipe), method: :post, class: "inline" do %>
-      <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) do %>
-        <%= lucide_icon("shopping-cart", css_class: "size-4") %> <%= t(".add_to_shopping_list_link") %>
+
+    <%= render(Ui::PopoverComponent.new) do |popover| %>
+      <% popover.with_trigger do %>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) do %>
+          <%= lucide_icon("calendar-plus", css_class: "size-4") %> <%= t(".plan_meal_heading") %>
+        <% end %>
+      <% end %>
+      <h2 class="mb-2 font-medium"><%= t(".plan_meal_heading") %></h2>
+      <%= form_with url: meal_plan_entries_path, scope: :meal_plan_entry, class: "flex flex-col gap-2" do |form| %>
+        <%= form.hidden_field :recipe_id, value: @recipe.id %>
+        <%= render Ui::InputComponent.new(type: "date", name: "meal_plan_entry[on_date]", value: Date.current,
+              html_options: { id: "meal_plan_entry_on_date" }) %>
+        <%= render Ui::NativeSelectComponent.new(name: "meal_plan_entry[meal_type]", options: meal_type_options,
+              html_options: { id: "meal_plan_entry_meal_type" }) %>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".plan_meal_submit") } %>
       <% end %>
     <% end %>
+
+    <%= render(Ui::DialogComponent.new) do |dialog| %>
+      <% dialog.with_trigger do %>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) do %>
+          <%= lucide_icon("shopping-cart", css_class: "size-4") %> <%= t(".add_to_shopping_list_link") %>
+        <% end %>
+      <% end %>
+      <% dialog.with_title { t(".add_to_shopping_list_title") } %>
+      <% dialog.with_description { t(".add_to_shopping_list_description") } %>
+      <%= form_with url: add_to_shopping_list_recipe_path(@recipe), method: :post, class: "flex flex-col gap-3" do %>
+        <% if @shopping_lists.any? %>
+          <%= render Ui::NativeSelectComponent.new(name: "shopping_list_id",
+                options: [ [ t(".add_to_shopping_list_new_option"), "" ] ] + @shopping_lists.map { |list| [ list.name, list.id ] },
+                html_options: { id: "add_to_shopping_list_id" }) %>
+        <% end %>
+        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".add_to_shopping_list_submit") } %>
+      <% end %>
+    <% end %>
+
     <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_recipe_path(@recipe))) { t(".edit_link") } %>
     <%= form_with url: recipe_path(@recipe), method: :delete, class: "inline", data: { turbo_confirm: t(".delete_confirm") } do %>
       <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete_link") } %>
     <% end %>
   </div>
-
-  <%= render(Ui::CardComponent.new(class_name: "mb-6")) do %>
-    <h2 class="mb-2 font-medium"><%= t(".plan_meal_heading") %></h2>
-    <%= form_with url: meal_plan_entries_path, scope: :meal_plan_entry, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= form.hidden_field :recipe_id, value: @recipe.id %>
-      <%= render Ui::InputComponent.new(type: "date", name: "meal_plan_entry[on_date]", value: Date.current,
-            html_options: { id: "meal_plan_entry_on_date" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: "meal_plan_entry[meal_type]", options: meal_type_options,
-            html_options: { id: "meal_plan_entry_meal_type" }) %>
-      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".plan_meal_submit") } %>
-    <% end %>
-  <% end %>
 
   <section class="mb-6">
     <h2 class="mb-2 font-medium"><%= t(".ingredients_heading") %></h2>
@@ -111,6 +132,4 @@
   <% if (source = safe_url(@recipe.source_url)) %>
     <p class="mb-4 text-sm text-secondary"><%= t(".source_label") %> <%= link_to source, source, class: "underline", target: "_blank", rel: "noopener" %></p>
   <% end %>
-
-  <p class="text-sm"><%= link_to t(".back_link"), recipes_path, class: "underline" %></p>
 </div>

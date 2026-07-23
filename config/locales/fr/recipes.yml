@@ -2,8 +2,19 @@ fr:
   recipes:
     index:
       title: "Recettes"
+      filters_trigger: "Filtres"
+      filters_heading: "Filtres"
+      search_label: "Recherche"
       search_placeholder: "Rechercher…"
+      category_label: "Catégorie"
       category_blank: "Toutes catégories"
+      servings_label: "Nombre de personnes"
+      servings_blank: "Toutes"
+      servings_option:
+        one: "%{count} personne"
+        other: "%{count} personnes"
+      tag_label: "Hashtag"
+      tag_blank: "Tous"
       filter_submit: "Filtrer"
       import_link: "Importer"
       new_link: "Nouvelle"
@@ -21,7 +32,6 @@ fr:
       exit_link: "Quitter le mode cuisine"
       ingredients_heading: "Ingrédients"
       steps_heading: "Étapes"
-      back_link: "← Retour à la recette"
     edit:
       title: "Modifier la recette"
       heading: "Modifier la recette"
@@ -42,6 +52,10 @@ fr:
       servings: "%{count} portions"
       cook_mode_link: "Mode cuisine"
       add_to_shopping_list_link: "Ajouter aux courses"
+      add_to_shopping_list_title: "Ajouter les ingrédients à la liste de courses"
+      add_to_shopping_list_description: "Choisis la liste de courses dans laquelle ajouter les ingrédients de cette recette."
+      add_to_shopping_list_new_option: "Nouvelle liste"
+      add_to_shopping_list_submit: "Ajouter à cette liste"
       edit_link: "Modifier"
       delete_link: "Supprimer"
       delete_confirm: "Supprimer cette recette ?"
@@ -55,7 +69,6 @@ fr:
       plan_meal_heading: "Planifier ce repas"
       plan_meal_submit: "Ajouter au menu"
       view_shopping_list_link: "Voir la liste de courses"
-      back_link: "← Toutes les recettes"
     form:
       title_label: "Titre"
       category_label: "Catégorie"
