@@ -15,14 +15,17 @@
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: notes_path(archived: (@archived ? nil : 1)))) {
             (@archived ? t(".active_filter") : t(".archived_filter")) } %>
       <%= render Ui::ViewToggleComponent.new(mode: @view_mode, path_for: ->(mode) { notes_path(q: @query.presence, archived: (@archived ? 1 : nil), view: mode) }) %>
+      <% unless @archived %>
+        <%= render(Ui::DialogComponent.new(close_on_submit: true)) do |dialog| %>
+          <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".new_note") } } %>
+          <% dialog.with_title { t(".new_note") } %>
+          <%= render "form", note: @note %>
+        <% end %>
+      <% end %>
     </div>
   </header>
 
   <%= render "shared/flash" %>
-
-  <% unless @archived %>
-    <%= render "form", note: @note %>
-  <% end %>
 
   <div id="notes" class="mt-4 <%= Ui::ViewToggleComponent.container_classes(@view_mode) %>">
     <%= render partial: "note", collection: @notes, locals: { query: @query, archived: @archived } %>

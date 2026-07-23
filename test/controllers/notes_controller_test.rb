@@ -59,6 +59,16 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     assert_select "label[for='note_content'].sr-only"
   end
 
+  test "the quick add form lives in a modal, and is hidden entirely while viewing archived notes" do
+    get notes_path
+    assert_response :success
+    assert_select "dialog[role='dialog'] input#note_title"
+
+    get notes_path(archived: 1)
+    assert_response :success
+    assert_select "input#note_title", count: 0
+  end
+
   test "toggle favorite and archive" do
     note = notes(:alpha_idea)
     patch toggle_favorite_note_path(note)
@@ -87,9 +97,18 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     assert_not Note.exists?(note.id)
   end
 
-  test "delete button asks for confirmation" do
+  test "delete button uses the design-system alert dialog instead of a native confirm" do
     get notes_path
-    assert_select "form[action=?][data-turbo-confirm]", note_path(notes(:alpha_idea))
+    assert_response :success
+    assert_select "dialog[role='alertdialog']"
+    assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("notes.note.delete_confirm"))}"/, @response.body)
+  end
+
+  test "promoting a note to a task asks for confirmation via the design-system alert dialog" do
+    get notes_path
+    assert_response :success
+    assert_select "dialog[role='alertdialog']", count: 2 # one per note fixture shown (delete + promote)
+    assert_includes @response.body, I18n.t("notes.note.promote_confirm")
   end
 
   test "cannot touch another household's note" do
@@ -103,6 +122,13 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     assert_select "select#note_recipe_id option", text: recipes(:alpha_pancakes).title
     assert_select "select#note_document_id option", text: documents(:alpha_doc).name
     assert_select "select#note_recipe_id option", text: recipes(:beta_soup).title, count: 0
+  end
+
+  test "edit shows a breadcrumb back to notes instead of a back link" do
+    get edit_note_path(notes(:alpha_idea))
+    assert_response :success
+    assert_select "nav a[href=?]", notes_path
+    assert_no_match(/← Notes/, @response.body)
   end
 
   test "update links a note to a recipe and a document from the same household" do

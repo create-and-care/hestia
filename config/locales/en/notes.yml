@@ -8,6 +8,7 @@ en:
       none: "No notes"
       none_archived_suffix: " archived"
       none_search_suffix: " for this search"
+      new_note: "New note"
     color_picker:
       label: "Color"
       default: "No color"
@@ -29,6 +30,8 @@ en:
       archive: "Archive"
       unarchive: "Unarchive"
       promote_to_task: "→ Task"
+      promote_confirm: "Convert this note to a task?"
+      promote_confirm_label: "Convert"
       delete: "Delete"
       delete_confirm: "Permanently delete this note?"
       edit_aria: "Edit \"%{title}\""
@@ -43,7 +46,6 @@ en:
       document_label: "Linked document"
       none_option: "None"
       save: "Save"
-      back_to_notes: "← Notes"
     create:
       cannot_create: "Couldn't create the note."
     update:

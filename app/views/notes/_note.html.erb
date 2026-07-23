@@ -31,9 +31,14 @@
               note.favorite ? t(".unfavorite") : t(".favorite") } %>
         <%= render(Ui::ButtonToComponent.new(toggle_archive_note_path(note, **filter_params), method: :patch)) {
               note.archived ? t(".unarchive") : t(".archive") } %>
-        <%= render(Ui::ButtonToComponent.new(promote_to_task_note_path(note, **filter_params), method: :post)) { t(".promote_to_task") } %>
-        <%= render(Ui::ButtonToComponent.new(note_path(note, **filter_params), method: :delete,
-              html_options: { form: { data: { turbo_confirm: t(".delete_confirm") } } })) { t(".delete") } %>
+        <%= render(Ui::AlertDialogComponent.new(title: t(".promote_confirm"), confirm_label: t(".promote_confirm_label"),
+              confirm_url: promote_to_task_note_path(note, **filter_params), confirm_method: :post, confirm_variant: :default)) do |alert_dialog| %>
+          <% alert_dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".promote_to_task") } } %>
+        <% end %>
+        <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm"), confirm_label: t(".delete"),
+              confirm_url: note_path(note, **filter_params), confirm_method: :delete)) do |alert_dialog| %>
+          <% alert_dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".delete") } } %>
+        <% end %>
       </div>
     </div>
   <% end %>

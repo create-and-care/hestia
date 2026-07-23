@@ -1,6 +1,6 @@
 <%= tag.div id: "new_note" do %>
-  <%= form_with model: note, url: notes_path do |form| %>
-    <div class="space-y-2 rounded-lg border border-primary p-3" data-controller="voice-dictation">
+  <%= form_with model: note, url: notes_path, class: "space-y-2" do |form| %>
+    <div class="space-y-2" data-controller="voice-dictation">
       <label for="note_title" class="sr-only"><%= t(".title_label") %></label>
       <%= render Ui::InputComponent.new(name: "note[title]", value: note.title, placeholder: t(".title_placeholder"),
             html_options: { id: "note_title", required: true, class: "font-medium" }) %>
