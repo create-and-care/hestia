@@ -11,7 +11,7 @@ en:
       empty: "No routines."
       new_routine: "New routine"
       lists_nav_aria: "Filter by list"
-      emoji_label: "Emoji"
+    form:
       name_label: "Name"
       frequency_label: "Frequency"
       interval_label: "Every"
@@ -29,25 +29,26 @@ en:
       edit_aria: "Edit routine"
       delete_aria: "Delete routine"
       delete_confirm: "Delete this routine?"
+      delete_label: "Delete"
+      edit_loading: "Loading…"
+      history_loading: "Loading…"
     show:
       title: "%{name} — History"
       next_due: "next due"
       history_heading: "Completion history"
+    history:
       empty_history: "No completions recorded yet."
       unknown_author: "Unknown"
-      back_to_routines: "← Routines"
     edit:
       title: "Edit routine"
       name_label: "Name"
       description_label: "Description"
-      emoji_label: "Emoji"
       list_label: "List"
       frequency_label: "Frequency"
       interval_label: "Every"
       next_due_label: "Next due date"
       assignee_label: "Assignee"
       save: "Save"
-      back_to_routines: "← Routines"
     update:
       updated: "Routine updated."
     destroy:

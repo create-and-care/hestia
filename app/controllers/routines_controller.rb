@@ -16,11 +16,7 @@ class RoutinesController < ApplicationController
     if @routine.save
       redirect_to routines_path
     else
-      # Re-render the index (rather than redirect) so the invalid routine's
-      # entered values and validation errors survive, matching #update's
-      # behavior instead of silently discarding what was typed.
-      load_index_collections
-      render :index, status: :unprocessable_entity
+      redirect_to routines_path, alert: @routine.errors.full_messages.to_sentence
     end
   end
 
@@ -31,7 +27,10 @@ class RoutinesController < ApplicationController
     @routine.assign_attributes(routine_params)
     @routine.assignee = scoped_member
     if @routine.save
-      redirect_to routines_path, notice: t(".updated")
+      respond_to do |format|
+        format.turbo_stream { head :no_content } # closes the modal; the card updates via the real-time stream
+        format.html { redirect_to routines_path, notice: t(".updated") }
+      end
     else
       render :edit, status: :unprocessable_entity
     end
@@ -39,7 +38,10 @@ class RoutinesController < ApplicationController
 
   def destroy
     @routine.destroy
-    redirect_to routines_path, notice: t(".deleted")
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(@routine) }
+      format.html { redirect_to routines_path, notice: t(".deleted") }
+    end
   end
 
   def complete

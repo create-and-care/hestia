@@ -1,7 +1,7 @@
 <% content_for :title, t(".title", name: @routine.name) %>
 
 <div class="mx-auto mt-10 max-w-lg px-4">
-  <div class="mb-4"><%= module_breadcrumb(:routines) %></div>
+  <div class="mb-4"><%= module_breadcrumb(:routines, [ @routine.name, nil ], module_path: routines_path) %></div>
 
   <header class="mb-6">
     <h1 class="flex items-center gap-2 text-2xl font-semibold">
@@ -16,18 +16,7 @@
   <%= render "shared/flash" %>
 
   <h2 class="mb-3 font-medium"><%= t(".history_heading") %></h2>
-  <% if @completions.any? %>
-    <ul class="divide-y divide-primary">
-      <% @completions.each do |completion| %>
-        <li class="flex items-center justify-between py-2 text-sm">
-          <span><%= completion.completed_on.strftime("%d/%m/%Y") %></span>
-          <span class="text-secondary"><%= completion.author&.name.presence || completion.author&.email_address || t(".unknown_author") %></span>
-        </li>
-      <% end %>
-    </ul>
-  <% else %>
-    <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty_history") } } %>
+  <%= turbo_frame_tag dom_id(@routine, :history) do %>
+    <%= render "history", completions: @completions %>
   <% end %>
-
-  <p class="mt-6 text-sm"><%= link_to t(".back_to_routines"), routines_path, class: "underline" %></p>
 </div>

@@ -1,80 +1,11 @@
 <% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-md px-4">
+  <div class="mb-4"><%= module_breadcrumb(:routines, [ t(".title"), nil ], module_path: routines_path) %></div>
+
   <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
 
-  <%= form_with model: @routine, url: routine_path(@routine) do |form| %>
-    <div class="space-y-4">
-      <%= render(Ui::FieldComponent.new(id: "routine_name")) do |field| %>
-        <% field.with_label { t(".name_label") } %>
-        <% field.with_control do %>
-          <%= render Ui::InputComponent.new(name: "routine[name]", value: @routine.name,
-                html_options: { id: "routine_name", required: true }) %>
-        <% end %>
-      <% end %>
-
-      <%= render(Ui::FieldComponent.new(id: "routine_description")) do |field| %>
-        <% field.with_label { t(".description_label") } %>
-        <% field.with_control do %>
-          <%= render(Ui::TextareaComponent.new(name: "routine[description]", rows: 2,
-                html_options: { id: "routine_description" })) { @routine.description } %>
-        <% end %>
-      <% end %>
-
-      <div class="grid grid-cols-2 gap-4">
-        <%= render(Ui::FieldComponent.new(id: "routine_emoji")) do |field| %>
-          <% field.with_label { t(".emoji_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::InputComponent.new(name: "routine[emoji]", value: @routine.emoji,
-                  html_options: { id: "routine_emoji", maxlength: 4 }) %>
-          <% end %>
-        <% end %>
-
-        <%= render(Ui::FieldComponent.new(id: "routine_list_name")) do |field| %>
-          <% field.with_label { t(".list_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::InputComponent.new(name: "routine[list_name]", value: @routine.list_name,
-                  html_options: { id: "routine_list_name" }) %>
-          <% end %>
-        <% end %>
-
-        <%= render(Ui::FieldComponent.new(id: "routine_frequency")) do |field| %>
-          <% field.with_label { t(".frequency_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::NativeSelectComponent.new(name: "routine[frequency]", options: routine_frequency_options,
-                  selected: @routine.frequency, html_options: { id: "routine_frequency" }) %>
-          <% end %>
-        <% end %>
-
-        <%= render(Ui::FieldComponent.new(id: "routine_interval")) do |field| %>
-          <% field.with_label { t(".interval_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::InputComponent.new(type: "number", name: "routine[interval]", value: @routine.interval,
-                  html_options: { id: "routine_interval", min: 1 }) %>
-          <% end %>
-        <% end %>
-
-        <%= render(Ui::FieldComponent.new(id: "routine_next_due_on")) do |field| %>
-          <% field.with_label { t(".next_due_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::InputComponent.new(type: "date", name: "routine[next_due_on]", value: @routine.next_due_on,
-                  html_options: { id: "routine_next_due_on" }) %>
-          <% end %>
-        <% end %>
-
-        <%= render(Ui::FieldComponent.new(id: "routine_assignee_id")) do |field| %>
-          <% field.with_label { t(".assignee_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::NativeSelectComponent.new(name: "routine[assignee_id]",
-                  options: [ [ "—", "" ] ] + routine_member_options, selected: @routine.assignee_id,
-                  html_options: { id: "routine_assignee_id" }) %>
-          <% end %>
-        <% end %>
-      </div>
-
-      <%= render(Ui::ButtonComponent.new(variant: :default, type: "submit")) { t(".save") } %>
-    </div>
+  <%= turbo_frame_tag dom_id(@routine, :edit) do %>
+    <%= render "form_fields", routine: @routine %>
   <% end %>
-
-  <p class="mt-6 text-sm"><%= link_to t(".back_to_routines"), routines_path, class: "underline" %></p>
 </div>

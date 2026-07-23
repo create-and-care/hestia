@@ -11,7 +11,7 @@ fr:
       empty: "Aucune routine."
       new_routine: "Nouvelle routine"
       lists_nav_aria: "Filtrer par liste"
-      emoji_label: "Emoji"
+    form:
       name_label: "Nom"
       frequency_label: "Fréquence"
       interval_label: "Tous les"
@@ -29,25 +29,26 @@ fr:
       edit_aria: "Modifier la routine"
       delete_aria: "Supprimer la routine"
       delete_confirm: "Supprimer cette routine ?"
+      delete_label: "Supprimer"
+      edit_loading: "Chargement…"
+      history_loading: "Chargement…"
     show:
       title: "%{name} — Historique"
       next_due: "prochaine"
       history_heading: "Historique des complétions"
+    history:
       empty_history: "Aucune complétion enregistrée pour l'instant."
       unknown_author: "Inconnu"
-      back_to_routines: "← Routines"
     edit:
       title: "Modifier la routine"
       name_label: "Nom"
       description_label: "Description"
-      emoji_label: "Emoji"
       list_label: "Liste"
       frequency_label: "Fréquence"
       interval_label: "Tous les"
       next_due_label: "Prochaine échéance"
       assignee_label: "Responsable"
       save: "Enregistrer"
-      back_to_routines: "← Routines"
     update:
       updated: "Routine mise à jour."
     destroy:
