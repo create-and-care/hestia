@@ -99,6 +99,28 @@ class MenuControllerTest < ActionDispatch::IntegrationTest
       post add_ingredients_menu_path(week: monday)
     end
 
-    assert_equal I18n.t("menu.add_ingredients.already_notice"), flash[:notice]
+    assert flash[:already_notice]
+  end
+
+  test "add_ingredients exports to the chosen shopping list" do
+    monday = Date.current.beginning_of_week
+    meal_plan_entries(:alpha_dinner).update!(on_date: monday + 1.day)
+    other_list = households(:alpha).shopping_lists.create!(name: "Autre liste")
+
+    assert_difference -> { other_list.items.count }, recipes(:alpha_pancakes).recipe_ingredients.count do
+      post add_ingredients_menu_path(week: monday), params: { shopping_list_id: other_list.id }
+    end
+
+    assert_equal other_list.id, flash[:shopping_list_id]
+  end
+
+  test "show renders an away entry with its label instead of a recipe or free name" do
+    monday = Date.current.beginning_of_week
+    households(:alpha).meal_plan_entries.create!(on_date: monday, meal_type: "dinner", away: true)
+
+    get menu_path(week: monday)
+
+    assert_response :success
+    assert_includes @response.body, I18n.t("meal_plan_entries.away_label")
   end
 end

@@ -45,4 +45,15 @@ class Ui::CollapsibleComponentTest < ViewComponent::TestCase
 
     assert_selector "div[data-collapsible-target='panel'][hidden][data-state='closed']", visible: :all
   end
+
+  test "open: true starts the panel expanded" do
+    render_inline(Ui::CollapsibleComponent.new(open: true)) do |c|
+      c.with_trigger { "Toggle" }
+      "Body"
+    end
+
+    assert_selector "button[data-collapsible-target='trigger'][aria-expanded='true']"
+    assert_selector "div[data-collapsible-target='panel'][data-state='open']"
+    refute_selector "div[data-collapsible-target='panel'][hidden]", visible: :all
+  end
 end

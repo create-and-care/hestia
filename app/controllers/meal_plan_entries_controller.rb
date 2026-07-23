@@ -21,7 +21,8 @@ class MealPlanEntriesController < ApplicationController
     # out an existing recipe and silently fail validation.
     @entry.recipe = scoped_recipe if params[:meal_plan_entry].key?(:recipe_id)
     if @entry.save
-      redirect_to menu_path(week: @entry.on_date), notice: t(".updated")
+      flash[:meal_notice] = "updated"
+      redirect_to menu_path(week: @entry.on_date)
     else
       render :edit, status: :unprocessable_entity
     end
@@ -29,7 +30,8 @@ class MealPlanEntriesController < ApplicationController
 
   def destroy
     @entry.destroy
-    redirect_to menu_path(week: @entry.on_date), notice: t(".deleted")
+    flash[:meal_notice] = "deleted"
+    redirect_to menu_path(week: @entry.on_date)
   end
 
   # Drag-and-drop reordering within a day (Reordering already backs
@@ -49,7 +51,7 @@ class MealPlanEntriesController < ApplicationController
     end
 
     def entry_params
-      params.require(:meal_plan_entry).permit(:on_date, :meal_type, :free_name, :position)
+      params.require(:meal_plan_entry).permit(:on_date, :meal_type, :free_name, :position, :away)
     end
 
     def scoped_recipe

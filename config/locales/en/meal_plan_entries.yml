@@ -1,5 +1,6 @@
 en:
   meal_plan_entries:
+    away_label: "Away"
     edit:
       title: "Edit meal"
       on_date_label: "Date"

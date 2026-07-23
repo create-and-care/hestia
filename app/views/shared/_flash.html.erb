@@ -1,5 +1,6 @@
-<% flash.each do |type, message| %>
+<% %i[notice alert].each do |type| %>
+  <% message = flash[type] %>
   <% next if message.blank? %>
   <div data-controller="flash" data-flash-message-value="<%= message %>"
-       data-flash-variant-value="<%= type.to_s == "alert" ? "destructive" : "success" %>"></div>
+       data-flash-variant-value="<%= type == :alert ? "destructive" : "success" %>"></div>
 <% end %>

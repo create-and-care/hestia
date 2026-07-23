@@ -45,6 +45,19 @@ class MealPlanEntriesControllerTest < ActionDispatch::IntegrationTest
     patch meal_plan_entry_path(entry), params: { meal_plan_entry: { meal_type: "lunch" } }
     assert_redirected_to menu_path(week: entry.on_date)
     assert_equal "lunch", entry.reload.meal_type
+    assert_equal "updated", flash[:meal_notice]
+  end
+
+  test "create marks an entry away without a recipe or free name" do
+    assert_difference -> { households(:alpha).meal_plan_entries.count }, 1 do
+      post meal_plan_entries_path, params: {
+        meal_plan_entry: { on_date: Date.current, meal_type: "dinner", away: "true" }
+      }
+    end
+    entry = MealPlanEntry.order(:id).last
+    assert entry.away?
+    assert_nil entry.recipe_id
+    assert_nil entry.free_name
   end
 
   test "update re-renders the edit form when both recipe and free name are cleared" do
@@ -73,6 +86,7 @@ class MealPlanEntriesControllerTest < ActionDispatch::IntegrationTest
       delete meal_plan_entry_path(entry)
     end
     assert_redirected_to menu_path(week: entry.on_date)
+    assert_equal "deleted", flash[:meal_notice]
   end
 
   test "cannot update another household's entry" do

@@ -1,9 +1,9 @@
 <div data-controller="collapsible">
   <button type="button" data-collapsible-target="trigger" data-action="click->collapsible#toggle"
-    aria-expanded="false" aria-controls="<%= panel_id %>">
+    aria-expanded="<%= @open %>" aria-controls="<%= panel_id %>" class="group">
     <%= trigger %>
   </button>
-  <div id="<%= panel_id %>" data-collapsible-target="panel" hidden data-state="closed"
+  <div id="<%= panel_id %>" data-collapsible-target="panel" <%= "hidden" unless @open %> data-state="<%= @open ? "open" : "closed" %>"
     class="overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
     <div class="pt-2"><%= content %></div>
   </div>

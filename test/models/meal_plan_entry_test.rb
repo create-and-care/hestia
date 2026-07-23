@@ -13,6 +13,17 @@ class MealPlanEntryTest < ActiveSupport::TestCase
     assert_equal "Salade", meal_plan_entries(:beta_lunch).display_name
   end
 
+  test "an away entry does not require a recipe or free name" do
+    entry = households(:alpha).meal_plan_entries.build(on_date: Date.current, meal_type: "dinner", away: true)
+    assert entry.valid?
+  end
+
+  test "display_name returns the away label regardless of recipe or free name" do
+    entry = meal_plan_entries(:alpha_dinner)
+    entry.away = true
+    assert_equal I18n.t("meal_plan_entries.away_label"), entry.display_name
+  end
+
   test "deleting a recipe keeps the meal as a free name" do
     entry = meal_plan_entries(:alpha_dinner)
     title = entry.recipe.title

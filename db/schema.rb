@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_23_122744) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_23_150747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -424,6 +424,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_23_122744) do
   end
 
   create_table "meal_plan_entries", force: :cascade do |t|
+    t.boolean "away", default: false, null: false
     t.datetime "created_at", null: false
     t.string "free_name"
     t.bigint "household_id", null: false

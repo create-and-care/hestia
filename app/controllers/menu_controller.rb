@@ -9,6 +9,7 @@ class MenuController < ApplicationController
       .includes(:recipe)
       .ordered
       .group_by(&:on_date)
+    @shopping_lists = Current.household.shopping_lists.general.order(:name)
   end
 
   # Menu → Shopping interconnection: exports the ingredients of
@@ -27,7 +28,11 @@ class MenuController < ApplicationController
     new_recipes = recipes.reject { |recipe| list.items.exists?(recipe_id: recipe.id) }
     new_recipes.each { |recipe| Recipes::AddIngredientsToShoppingList.call(recipe: recipe, shopping_list: list) }
 
-    flash[:notice] = new_recipes.any? ? t(".notice", count: new_recipes.size) : t(".already_notice")
+    if new_recipes.any?
+      flash[:notice] = t(".notice", count: new_recipes.size)
+    else
+      flash[:already_notice] = true
+    end
     flash[:shopping_list_id] = list.id
     redirect_to menu_path(week: week_start)
   end
@@ -43,7 +48,11 @@ class MenuController < ApplicationController
     end
 
     def target_shopping_list
-      Current.household.shopping_lists.order(:created_at).first ||
-        Current.household.shopping_lists.create!(name: t("shopping_lists.default_list_name"))
+      if params[:shopping_list_id].present?
+        Current.household.shopping_lists.find(params[:shopping_list_id])
+      else
+        Current.household.shopping_lists.order(:created_at).first ||
+          Current.household.shopping_lists.create!(name: t("shopping_lists.default_list_name"))
+      end
     end
 end

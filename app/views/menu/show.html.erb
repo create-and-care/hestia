@@ -7,27 +7,51 @@
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <div class="mb-4"><%= module_breadcrumb(:menu) %></div>
 
-  <header class="mb-4 flex items-center justify-between">
+  <header class="mb-4 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("utensils", css_class: "size-6") %> <%= t(".heading") %></h1>
-    <div class="flex items-center gap-2 text-sm">
-      <%= link_to t(".previous_week"), menu_path(week: @week_start - 1.week), class: "underline" %>
-      <%= link_to t(".this_week"), menu_path, class: "underline" %>
-      <%= link_to t(".next_week"), menu_path(week: @week_start + 1.week), class: "underline" %>
+    <div class="flex items-center gap-2">
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: menu_path(week: @week_start - 1.week))) { t(".previous_week") } %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: menu_path)) { t(".this_week") } %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: menu_path(week: @week_start + 1.week))) { t(".next_week") } %>
     </div>
   </header>
   <p class="mb-4 text-sm text-secondary"><%= t(".week_range", start: @week_start.strftime("%d/%m"), end: (@week_start + 6.days).strftime("%d/%m/%Y")) %></p>
 
   <%= render "shared/flash" %>
-  <% if flash[:shopping_list_id] %>
+
+  <% if flash[:already_notice] %>
+    <%= render(Ui::AlertComponent.new(variant: :warning, class_name: "mb-4")) do %>
+      <p class="mb-2"><%= t("menu.add_ingredients.already_notice") %></p>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: shopping_list_path(flash[:shopping_list_id]))) { t(".view_shopping_list_link") } %>
+    <% end %>
+  <% elsif flash[:shopping_list_id] %>
     <p class="-mt-2 mb-4 text-sm">
       <%= link_to t(".view_shopping_list_link"), shopping_list_path(flash[:shopping_list_id]), class: "underline" %>
     </p>
   <% end %>
 
+  <% if flash[:meal_notice] == "updated" %>
+    <%= render(Ui::AlertComponent.new(variant: :success, class_name: "mb-4")) { t("meal_plan_entries.update.updated") } %>
+  <% elsif flash[:meal_notice] == "deleted" %>
+    <%= render(Ui::AlertComponent.new(variant: :success, class_name: "mb-4")) { t("meal_plan_entries.destroy.deleted") } %>
+  <% end %>
+
   <div class="mb-4">
-    <%= form_with url: add_ingredients_menu_path(week: @week_start), method: :post, class: "inline" do %>
-      <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) do %>
-        <%= lucide_icon("shopping-cart", css_class: "size-4") %> <%= t(".add_ingredients_button") %>
+    <%= render(Ui::DialogComponent.new) do |dialog| %>
+      <% dialog.with_trigger do %>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) do %>
+          <%= lucide_icon("shopping-cart", css_class: "size-4") %> <%= t(".add_ingredients_button") %>
+        <% end %>
+      <% end %>
+      <% dialog.with_title { t(".add_ingredients_title") } %>
+      <% dialog.with_description { t(".add_ingredients_description") } %>
+      <%= form_with url: add_ingredients_menu_path(week: @week_start), method: :post, class: "flex flex-col gap-3" do %>
+        <% if @shopping_lists.any? %>
+          <%= render Ui::NativeSelectComponent.new(name: "shopping_list_id",
+                options: [ [ t(".add_ingredients_new_option"), "" ] ] + @shopping_lists.map { |list| [ list.name, list.id ] },
+                html_options: { id: "add_ingredients_shopping_list_id" }) %>
+        <% end %>
+        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".add_ingredients_submit") } %>
       <% end %>
     <% end %>
   </div>
@@ -35,71 +59,99 @@
   <div class="space-y-3">
     <% @days.each do |day| %>
       <%= render(Ui::CardComponent.new) do %>
-        <h2 class="mb-2 text-sm font-semibold"><%= day_name(day) %> <span class="text-subdued"><%= day.strftime("%d/%m") %></span></h2>
-
-        <% entries = Array(@entries[day]) %>
-        <% if entries.any? %>
-          <ul class="divide-y divide-primary" data-controller="sortable" data-sortable-url-value="<%= reorder_meal_plan_entries_path %>">
-            <% entries.each do |entry| %>
-              <li id="<%= dom_id(entry) %>" data-sortable-id="<%= entry.id %>">
-                <%= render(Ui::ItemComponent.new) do |item| %>
-                  <% item.with_leading do %>
-                    <span data-sortable-handle class="cursor-grab select-none text-subdued hover:text-secondary" title="<%= t(".move_title") %>">
-                      <%= lucide_icon("grip-vertical", css_class: "size-4") %>
-                    </span>
-                  <% end %>
-                  <% item.with_title do %>
-                    <span class="text-subdued"><%= meal_type_label(entry.meal_type) %> :</span> <%= entry.display_name %>
-                  <% end %>
-                  <% item.with_trailing do %>
-                    <div class="flex shrink-0 items-center gap-1">
-                      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_meal_plan_entry_path(entry),
-                            html_options: { class: "size-auto p-0.5", aria: { label: t(".edit_meal_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
-                      <%= form_with url: meal_plan_entry_path(entry), method: :delete, data: { turbo_confirm: t(".delete_meal_confirm") } do %>
-                        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :icon,
-                              html_options: { class: "size-auto p-0.5", aria: { label: t(".delete_meal_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
-                      <% end %>
-                    </div>
-                  <% end %>
-                <% end %>
-              </li>
-            <% end %>
-          </ul>
-        <% else %>
-          <%= render(Ui::EmptyComponent.new) do |empty| %>
-            <% empty.with_description { t(".empty_day") } %>
+        <%= render(Ui::CollapsibleComponent.new(id: "menu_day_#{day.iso8601}", open: day == Date.current)) do |collapsible| %>
+          <% collapsible.with_trigger do %>
+            <div class="flex w-full items-center justify-between text-left">
+              <span class="text-sm font-semibold"><%= day_name(day) %> <span class="text-subdued"><%= day.strftime("%d/%m") %></span></span>
+              <%= lucide_icon("chevron-down", css_class: "size-4 shrink-0 text-subdued transition-transform group-aria-expanded:rotate-180") %>
+            </div>
           <% end %>
-        <% end %>
 
-        <% if (missing = missing_meal_types(day)).any? %>
-          <p class="mt-2 flex items-center gap-1 text-xs text-amber-600"><%= lucide_icon("triangle-alert", css_class: "size-3.5") %> <%= t(".missing_meals", meals: missing.map { |type| meal_type_label(type) }.join(", ")) %></p>
-        <% end %>
+          <% entries = Array(@entries[day]) %>
+          <% if entries.any? %>
+            <ul class="divide-y divide-primary" data-controller="sortable" data-sortable-url-value="<%= reorder_meal_plan_entries_path %>">
+              <% entries.each do |entry| %>
+                <li id="<%= dom_id(entry) %>" data-sortable-id="<%= entry.id %>">
+                  <%= render(Ui::ItemComponent.new) do |item| %>
+                    <% item.with_leading do %>
+                      <span data-sortable-handle class="cursor-grab select-none text-subdued hover:text-secondary" title="<%= t(".move_title") %>">
+                        <%= lucide_icon("grip-vertical", css_class: "size-4") %>
+                      </span>
+                    <% end %>
+                    <% item.with_title do %>
+                      <span class="text-subdued"><%= meal_type_label(entry.meal_type) %> :</span>
+                      <% if entry.away? %>
+                        <span class="italic text-subdued"><%= entry.display_name %></span>
+                      <% else %>
+                        <%= entry.display_name %>
+                      <% end %>
+                    <% end %>
+                    <% item.with_trailing do %>
+                      <div class="flex shrink-0 items-center gap-1">
+                        <%= render(Ui::DialogComponent.new) do |dialog| %>
+                          <% dialog.with_trigger do %>
+                            <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon,
+                                  html_options: { class: "size-auto p-0.5", aria: { label: t(".edit_meal_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
+                          <% end %>
+                          <% dialog.with_title { t("meal_plan_entries.edit.title") } %>
+                          <%= render "meal_plan_entries/form", entry: entry %>
+                        <% end %>
+                        <%= render(Ui::AlertDialogComponent.new(title: t(".delete_meal_confirm"), confirm_label: t(".delete_meal_label"),
+                              confirm_url: meal_plan_entry_path(entry), confirm_method: :delete)) do |alert_dialog| %>
+                          <% alert_dialog.with_trigger do %>
+                            <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon,
+                                  html_options: { class: "size-auto p-0.5", aria: { label: t(".delete_meal_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <%= render(Ui::EmptyComponent.new) do |empty| %>
+              <% empty.with_description { t(".empty_day") } %>
+            <% end %>
+          <% end %>
 
-        <details class="mt-3">
-          <summary class="cursor-pointer text-sm text-secondary hover:text-primary"><%= t(".add_meal") %></summary>
-          <%= form_with url: meal_plan_entries_path, scope: :meal_plan_entry, class: "mt-3 flex flex-wrap items-end gap-3" do |form| %>
-            <%= form.hidden_field :on_date, value: day %>
-            <div class="w-36">
+          <% if (missing = missing_meal_types(day)).any? %>
+            <p class="mt-2 flex items-center gap-1.5 text-xs text-amber-600">
+              <%= render(Ui::TooltipComponent.new) do |tooltip| %>
+                <% tooltip.with_trigger { lucide_icon("info", css_class: "size-3.5") } %>
+                <%= t(".missing_meals", meals: missing.map { |type| meal_type_label(type) }.join(", ")) %>
+              <% end %>
+              <%= t(".missing_meals_label") %>
+            </p>
+          <% end %>
+
+          <%= render(Ui::DialogComponent.new) do |dialog| %>
+            <% dialog.with_trigger do %>
+              <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, html_options: { class: "mt-3" })) { t(".add_meal") } %>
+            <% end %>
+            <% dialog.with_title { t(".add_meal") } %>
+            <%= form_with url: meal_plan_entries_path, scope: :meal_plan_entry, class: "flex flex-col gap-3" do |form| %>
+              <%= form.hidden_field :on_date, value: day %>
               <%= render(Ui::FieldComponent.new(id: "meal_plan_entry_meal_type_#{day.iso8601}")) do |field| %>
                 <% field.with_label { t(".meal_type_label") } %>
                 <% field.with_control { render Ui::NativeSelectComponent.new(name: "meal_plan_entry[meal_type]", options: meal_type_options, html_options: { id: "meal_plan_entry_meal_type_#{day.iso8601}" }) } %>
               <% end %>
-            </div>
-            <div>
               <%= render(Ui::FieldComponent.new(id: "meal_plan_entry_recipe_id_#{day.iso8601}")) do |field| %>
                 <% field.with_label { t(".recipe_label") } %>
                 <% field.with_control { render Ui::ComboboxComponent.new(name: "meal_plan_entry[recipe_id]", options: recipe_options, placeholder: t(".recipe_blank")) } %>
               <% end %>
-            </div>
-            <div class="w-44">
               <%= render(Ui::FieldComponent.new(id: "meal_plan_entry_free_name_#{day.iso8601}")) do |field| %>
                 <% field.with_label { t(".free_name_placeholder") } %>
                 <% field.with_control { render Ui::InputComponent.new(name: "meal_plan_entry[free_name]", html_options: { id: "meal_plan_entry_free_name_#{day.iso8601}" }) } %>
               <% end %>
-            </div>
-            <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".add") } %>
+              <div class="flex gap-2">
+                <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".add") } %>
+                <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit",
+                      html_options: { name: "meal_plan_entry[away]", value: "true" })) { t(".away_button") } %>
+              </div>
+            <% end %>
           <% end %>
-        </details>
+        <% end %>
       <% end %>
     <% end %>
   </div>

@@ -1,5 +1,6 @@
 fr:
   meal_plan_entries:
+    away_label: "Absent(e)"
     edit:
       title: "Modifier le repas"
       on_date_label: "Date"

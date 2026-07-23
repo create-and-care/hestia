@@ -5,8 +5,10 @@ module MenuHelper
   def meal_type_options = MealPlanEntry::MEAL_TYPES.map { |type| [ meal_type_label(type), type ] }
   def day_name(date) = t("menu.days.#{DAY_KEYS.fetch((date.wday + 6) % 7)}")
 
+  # Memoized: rendered once per day's add-meal dialog and once per entry's
+  # edit dialog, so an unmemoized query here would run a dozen-plus times.
   def recipe_options
-    Current.household.recipes.order(:title).map { |recipe| [ recipe.title, recipe.id ] }
+    @recipe_options ||= Current.household.recipes.order(:title).map { |recipe| [ recipe.title, recipe.id ] }
   end
 
   # Which of the household's required meal types have no entry
