@@ -1,7 +1,7 @@
 <%= render(Ui::SidebarComponent.new(class_name: "sticky top-0 h-screen shrink-0")) do |sidebar| %>
   <% sidebar.with_header do %>
     <div data-sidebar-target="label" class="flex min-w-0 items-center gap-2">
-      <%= render Ui::AvatarComponent.new(alt: Current.household.name, size: :sm) %>
+      <%= image_tag "logo.png", alt: Hestia.to_s, class: "size-7 shrink-0 rounded-md object-cover" %>
       <div class="min-w-0">
         <p class="truncate text-sm font-semibold text-primary"><%= Hestia %></p>
       </div>
