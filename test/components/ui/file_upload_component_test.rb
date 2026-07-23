@@ -52,4 +52,19 @@ class Ui::FileUploadComponentTest < ViewComponent::TestCase
 
     assert_selector "input[id='pet_photo'][required]", visible: :all
   end
+
+  test "compact mode renders a single row-height control instead of the dropzone" do
+    render_inline(Ui::FileUploadComponent.new(name: "photo", compact: true))
+
+    assert_selector "div[data-file-upload-target='dropzone'].h-9"
+    assert_no_selector "div[data-file-upload-target='dropzone'].py-6"
+  end
+
+  test "compact mode still shows an existing filename preview" do
+    render_inline(Ui::FileUploadComponent.new(name: "photo", compact: true,
+      existing_url: "/doc.pdf", existing_filename: "contrat.pdf", existing_image: false))
+
+    assert_selector "span[data-file-upload-target='previewName']", text: "contrat.pdf"
+    assert_selector "span[data-file-upload-target='placeholder'][hidden]", visible: :all
+  end
 end

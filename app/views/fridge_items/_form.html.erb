@@ -13,7 +13,7 @@
           <%= render Ui::LabelComponent.new { t(".catalog_label") } %>
           <div class="mt-1">
             <%= render Ui::ComboboxComponent.new(name: "_catalog_picker", placeholder: t(".catalog_placeholder"),
-                  options: catalog_products.map { |p| [ [ p.name, p.brand.presence ].compact.join(" · "), "#{p.id}||#{p.name}" ] }) %>
+                  options: catalog_products.map { |p| [ p.name, "#{p.id}||#{p.name}" ] }) %>
           </div>
         </div>
       <% end %>

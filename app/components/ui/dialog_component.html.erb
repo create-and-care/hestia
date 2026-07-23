@@ -1,4 +1,4 @@
-<div data-controller="dialog" class="<%= trigger_wrapper_class %>">
+<div data-controller="dialog" <%= tag.attributes(data: { action: root_data_action }) if root_data_action %> class="<%= trigger_wrapper_class %>">
   <div data-action="click->dialog#open" class="<%= trigger_wrapper_class %>">
     <%= trigger %>
   </div>

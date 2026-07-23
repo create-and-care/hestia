@@ -6,10 +6,15 @@ en:
       search_placeholder: "Search…"
       all_locations: "All"
       suggestions_heading: "Recipes you can make with your fridge"
+      suggestions_marker:
+        one: "%{count} recipe you can make"
+        other: "%{count} recipes you can make"
       foods_heading: "Food"
+      add_food: "Add a food item"
       no_items: "No food items."
       no_items_for_search: "No food items for this search."
       dishes_heading: "Prepared dishes"
+      add_dish: "Add a prepared dish"
       no_dishes: "No prepared dishes."
     locations:
       refrigerateur: "Fridge"
@@ -37,18 +42,17 @@ en:
     fridge_item:
       until_date: "Until %{date}"
       edit: "Edit"
+      edit_loading: "Loading…"
       add_to_list_title: "Add to the shopping list"
+      add_to_list_confirm: "Add this food item to the shopping list?"
       rebuy_aria: "Buy again"
       delete_aria: "Delete"
       delete_confirm: "Delete this food item?"
     edit:
-      title: "Edit a food item"
-      heading: "Edit food item"
       name_label: "Food"
       location_label: "Location"
       expires_label: "Best-before date"
       submit: "Save"
-      back_link: "← Back to the fridge"
     create:
       alert: "Couldn't add this product."
     update:

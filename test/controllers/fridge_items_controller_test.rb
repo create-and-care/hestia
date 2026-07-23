@@ -29,6 +29,19 @@ class FridgeItemsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "congelateur", item.reload.location
   end
 
+  test "update via turbo_stream returns no content so the modal just closes" do
+    item = fridge_items(:alpha_yogurt)
+    patch fridge_item_path(item), params: { fridge_item: { location: "congelateur" } }, as: :turbo_stream
+    assert_response :no_content
+    assert_equal "congelateur", item.reload.location
+  end
+
+  test "update with invalid params re-renders the edit frame" do
+    item = fridge_items(:alpha_yogurt)
+    patch fridge_item_path(item), params: { fridge_item: { name: "" } }, as: :turbo_stream
+    assert_response :unprocessable_entity
+  end
+
   test "destroy removes the item" do
     item = fridge_items(:alpha_yogurt)
     delete fridge_item_path(item), as: :turbo_stream

@@ -7,7 +7,7 @@ module Ui
     }.freeze
 
     def initialize(name:, accept: nil, existing_url: nil, existing_filename: nil, existing_image: true,
-                    shape: :rectangle, invalid: false, html_options: {})
+                    shape: :rectangle, invalid: false, compact: false, html_options: {})
       @name = name
       @accept = accept
       @existing_url = existing_url
@@ -15,6 +15,7 @@ module Ui
       @existing_image = existing_image
       @shape = shape
       @invalid = invalid
+      @compact = compact
       @html_options = html_options
       @uid = SecureRandom.hex(4)
     end

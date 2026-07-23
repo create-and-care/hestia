@@ -46,7 +46,7 @@
 - Quand on veut supprimer un article, mettre une alerte ou à minima un bouton pour revenir en arrière
 - Dans la sélection d'un produit dans la recherche, on affiche le json, il faut que ça soit un article mais également sans la quantité (actuellement ça : ½ citron · {fruits_legumes: "Fruits & légumes", frais: "Frais", surgeles: "Surgelés", epicerie: "Épicerie", boissons: "Boissons", hygiene: "Hygiène", maison: "Maison", autre: "Autre"}, je veux ça : Citron)
 
-# Quotidien > Courses
+# Quotidien > Frigo
 
 - Dans la sélection d'un produit dans la recherche, retire la quantité pour n'avoir que le nom du produit
 - Créer une version light du filemanager qui tiens sur la ligne du formulaire et qui ne dépasse pas en hauteur

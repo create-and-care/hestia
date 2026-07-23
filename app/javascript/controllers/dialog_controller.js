@@ -37,4 +37,11 @@ export default class extends Controller {
     event.preventDefault()
     this.close()
   }
+
+  // Opt-in via close_on_submit: true — for one-shot forms (e.g. an edit
+  // modal) where a successful submission means "done", as opposed to
+  // quick-add forms meant to stay open for repeated entries.
+  closeOnSuccess(event) {
+    if (event.detail.success) this.close()
+  }
 }

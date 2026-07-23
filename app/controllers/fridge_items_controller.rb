@@ -22,7 +22,10 @@ class FridgeItemsController < ApplicationController
 
   def update
     if @fridge_item.update(fridge_item_params)
-      redirect_to fridge_path, notice: t(".notice")
+      respond_to do |format|
+        format.turbo_stream { head :no_content } # closes the modal; the item updates via the real-time stream
+        format.html { redirect_to fridge_path, notice: t(".notice") }
+      end
     else
       render :edit, status: :unprocessable_entity
     end

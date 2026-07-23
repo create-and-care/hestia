@@ -29,10 +29,12 @@
           <% end %>
         <% end %>
       </div>
-      <div class="w-40">
+      <div>
         <%= render Ui::LabelComponent.new(for_id: "prepared_dish_photo") { t(".photo_label") } %>
-        <%= render Ui::FileUploadComponent.new(name: "prepared_dish[photo]", accept: "image/*",
-              html_options: { id: "prepared_dish_photo", class: "mt-1" }) %>
+        <div class="mt-1">
+          <%= render Ui::FileUploadComponent.new(name: "prepared_dish[photo]", accept: "image/*", compact: true,
+                html_options: { id: "prepared_dish_photo" }) %>
+        </div>
       </div>
       <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
     </div>

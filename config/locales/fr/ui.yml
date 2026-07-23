@@ -15,3 +15,6 @@ fr:
     alert_dialog:
       confirm_label: Continuer
       cancel_label: Annuler
+    file_upload:
+      choose: Choisir un fichier
+      remove_aria: Retirer le fichier

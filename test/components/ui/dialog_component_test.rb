@@ -61,4 +61,22 @@ class Ui::DialogComponentTest < ViewComponent::TestCase
       end
     end
   end
+
+  test "omits the submit-end action by default" do
+    render_inline(Ui::DialogComponent.new) do |c|
+      c.with_trigger { "Open" }
+      "Body"
+    end
+
+    refute_selector "[data-action*='submit-end']"
+  end
+
+  test "wires up closeOnSuccess when close_on_submit is true" do
+    render_inline(Ui::DialogComponent.new(close_on_submit: true)) do |c|
+      c.with_trigger { "Open" }
+      "Body"
+    end
+
+    assert_selector "[data-controller='dialog'][data-action='turbo:submit-end->dialog#closeOnSuccess']"
+  end
 end

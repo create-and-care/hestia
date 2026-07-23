@@ -22,14 +22,19 @@ module Ui
       bottom: "data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom"
     }.freeze
 
-    def initialize(position: :center, role: "dialog", full_width_trigger: false)
+    def initialize(position: :center, role: "dialog", full_width_trigger: false, close_on_submit: false)
       @position = position
       @role = role
       @full_width_trigger = full_width_trigger
+      @close_on_submit = close_on_submit
     end
 
     def trigger_wrapper_class
       @full_width_trigger ? "flex w-full" : "inline-flex"
+    end
+
+    def root_data_action
+      "turbo:submit-end->dialog#closeOnSuccess" if @close_on_submit
     end
   end
 end

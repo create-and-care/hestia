@@ -6,10 +6,15 @@ fr:
       search_placeholder: "Rechercher…"
       all_locations: "Tous"
       suggestions_heading: "Recettes réalisables avec ton frigo"
+      suggestions_marker:
+        one: "%{count} recette réalisable"
+        other: "%{count} recettes réalisables"
       foods_heading: "Aliments"
+      add_food: "Ajouter un aliment"
       no_items: "Aucun aliment."
       no_items_for_search: "Aucun aliment pour cette recherche."
       dishes_heading: "Plats préparés"
+      add_dish: "Ajouter un plat préparé"
       no_dishes: "Aucun plat préparé."
     locations:
       refrigerateur: "Réfrigérateur"
@@ -37,18 +42,17 @@ fr:
     fridge_item:
       until_date: "Jusqu'au %{date}"
       edit: "Modifier"
+      edit_loading: "Chargement…"
       add_to_list_title: "Ajouter à la liste de courses"
+      add_to_list_confirm: "Ajouter cet aliment à la liste de courses ?"
       rebuy_aria: "Racheter"
       delete_aria: "Supprimer"
       delete_confirm: "Supprimer cet aliment ?"
     edit:
-      title: "Modifier un aliment"
-      heading: "Modifier l'aliment"
       name_label: "Aliment"
       location_label: "Emplacement"
       expires_label: "Date de péremption"
       submit: "Enregistrer"
-      back_link: "← Retour au frigo"
     create:
       alert: "Impossible d'ajouter ce produit."
     update:

@@ -1,8 +1,4 @@
-<% content_for :title, t(".title") %>
-
-<div class="mx-auto mt-16 max-w-md px-4">
-  <h1 class="mb-6 text-2xl font-semibold"><%= t(".heading") %></h1>
-
+<%= turbo_frame_tag dom_id(@fridge_item, :edit) do %>
   <%= form_with model: @fridge_item, url: fridge_item_path(@fridge_item), method: :patch do |form| %>
     <% if @fridge_item.errors.any? %>
       <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-4")) do %>
@@ -42,8 +38,4 @@
       <%= render(Ui::ButtonComponent.new(type: "submit", html_options: { class: "w-full" })) { t(".submit") } %>
     </div>
   <% end %>
-
-  <p class="mt-6 text-sm">
-    <%= link_to t(".back_link"), fridge_path, class: "underline" %>
-  </p>
-</div>
+<% end %>

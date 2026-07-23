@@ -16,19 +16,33 @@
   <%= render "shared/flash" %>
 
   <% if @recipe_suggestions.present? %>
-    <%= render(Ui::CardComponent.new(class_name: "mb-10")) do |card| %>
-      <% card.with_title { t(".suggestions_heading") } %>
-      <ul class="space-y-1 text-sm">
-        <% @recipe_suggestions.each do |recipe| %>
-          <li><%= link_to recipe.title, recipe_path(recipe), class: "underline" %></li>
+    <div class="mb-10">
+      <%= render(Ui::DialogComponent.new) do |dialog| %>
+        <% dialog.with_trigger do %>
+          <button type="button" class="inline-flex items-center rounded-lg border border-primary px-4 py-3 hover:bg-surface-hover">
+            <%= render Ui::MarkerComponent.new(variant: :accent, pulse: true,
+                  label: t(".suggestions_marker", count: @recipe_suggestions.size)) %>
+          </button>
         <% end %>
-      </ul>
-    <% end %>
+        <% dialog.with_title { t(".suggestions_heading") } %>
+        <ul class="space-y-1 text-sm">
+          <% @recipe_suggestions.each do |recipe| %>
+            <li><%= link_to recipe.title, recipe_path(recipe), class: "underline" %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
   <% end %>
 
   <section class="mb-10">
-    <h2 class="mb-3 font-medium"><%= t(".foods_heading") %></h2>
-    <%= render "fridge_items/form", fridge_item: @fridge_item %>
+    <div class="mb-3 flex items-center justify-between">
+      <h2 class="font-medium"><%= t(".foods_heading") %></h2>
+      <%= render(Ui::DialogComponent.new) do |dialog| %>
+        <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".add_food") } } %>
+        <% dialog.with_title { t(".add_food") } %>
+        <%= render "fridge_items/form", fridge_item: @fridge_item %>
+      <% end %>
+    </div>
 
     <div class="mt-4">
       <%= render(Ui::TabsComponent.new(default: "all")) do |tabs| %>
@@ -58,8 +72,14 @@
   </section>
 
   <section class="mb-8">
-    <h2 class="mb-3 font-medium"><%= t(".dishes_heading") %></h2>
-    <%= render "prepared_dishes/form", prepared_dish: @prepared_dish %>
+    <div class="mb-3 flex items-center justify-between">
+      <h2 class="font-medium"><%= t(".dishes_heading") %></h2>
+      <%= render(Ui::DialogComponent.new) do |dialog| %>
+        <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".add_dish") } } %>
+        <% dialog.with_title { t(".add_dish") } %>
+        <%= render "prepared_dishes/form", prepared_dish: @prepared_dish %>
+      <% end %>
+    </div>
 
     <div id="prepared_dishes" class="mt-4 space-y-2">
       <% if @prepared_dishes.any? %>
