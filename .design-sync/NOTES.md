@@ -33,11 +33,32 @@
 6. `node .design-sync/validate-conventions.mjs` && `node .design-sync/validate-previews.mjs`
    — gates: every class named in authored docs and every class in every markup pattern must
    resolve in the shipped CSS closure; icons must be vendored.
-7. Visual check: assemble a page from .design-sync/out/previews/*.html linking
-   ds-bundle/styles.css, screenshot light + `<html class="dark">` via headless Chrome.
+7. Visual check: `node .design-sync/out/assemble.mjs` batches the 67 previews (12/page) into
+   `.design-sync/out/assembled-<N>.html` linking `ds-bundle/styles.css` (dark: same file with
+   `<html class="dark">`, e.g. via `sed`). Screenshot with the cached Chrome for Testing binary
+   directly — no puppeteer npm package needed:
+   `~/.cache/puppeteer/chrome/*/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`
+   `--headless --disable-gpu --window-size=1400,6000 --screenshot=out.png file://.../assembled-N.html`.
+   window-size height must exceed the batch's real content height or the shot clips silently —
+   6000px was enough margin for 12-item batches; watch for silent clipping if batch size grows.
+   Stimulus-driven previews with no static markup (calendar's day grid) render empty in this
+   harness since no JS executes — expected, not a bug; only affects components whose content is
+   built by their controller's `connect()` rather than present in the ERB.
 8. Upload ds-bundle/ (styles.css, _ds_bundle.css, tokens/**, guidelines/**, README.md).
    No `_ds_sync.json` anchor is produced (style-only shape has no per-component verification
    to skip) — every sync re-verifies everything, which is cheap here.
+
+## Bugs found in the repo during re-sync (2026-07-31, fixed in working tree)
+
+- `app/views/design_system/previews/_code-block.html.erb` used `@entry.slug` — copied from
+  `component.html.erb` (the controller-action view, which sets `@entry`), but extract.rb renders
+  previews standalone via `ApplicationController.render(partial:)`, which never sets `@entry`.
+  Every other preview partial hardcodes its own slug string; this one alone didn't. Broke the
+  whole extract step (`undefined method 'slug' for nil`). Fixed by hardcoding
+  `design_system_source("code-block")`. Watch for this pattern if new previews are copy-pasted
+  from `component.html.erb`.
+- Repo grew from 63 to 67 registry entries since the 2026-07-17 sync (4 new components added).
+  All 67 previews now render and pass both validators.
 
 ## Bugs found in the repo during first sync (2026-07-17, fixed in working tree)
 

@@ -19,5 +19,17 @@ module Recipes
     test "returns nil for a non-http url" do
       assert_nil Recipes::PageFetcher.call("ftp://example.com/x")
     end
+
+    test "returns nil for a loopback host" do
+      assert_nil Recipes::PageFetcher.call("http://127.0.0.1/x")
+    end
+
+    test "returns nil for a link-local / cloud metadata host" do
+      assert_nil Recipes::PageFetcher.call("http://169.254.169.254/latest/meta-data/")
+    end
+
+    test "returns nil for a private RFC1918 host" do
+      assert_nil Recipes::PageFetcher.call("http://192.168.1.1/x")
+    end
   end
 end

@@ -51,6 +51,20 @@ module Api
         assert item.reload.checked
       end
 
+      test "destroy removes the item" do
+        item = shopping_list_items(:alpha_apples)
+        assert_difference -> { item.shopping_list.items.count }, -1 do
+          delete api_v1_shopping_list_item_path(item.shopping_list, item), headers: auth_headers
+        end
+        assert_response :no_content
+      end
+
+      test "destroy returns 404 for another household's list" do
+        item = shopping_list_items(:alpha_apples)
+        delete api_v1_shopping_list_item_path(shopping_lists(:beta_groceries), item), headers: auth_headers
+        assert_response :not_found
+      end
+
       test "rejects a token belonging to a user with no household" do
         homeless = User.create!(name: "Sans foyer", email_address: "homeless@example.com", password: "password")
         token = ApiToken.create!(user: homeless, name: "Test").plaintext_token

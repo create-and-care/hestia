@@ -89,10 +89,15 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "calendar shows the monthly grid with birthdays placed on their day" do
+    # Anchored to the 15th of the current month (year 1960) rather than the
+    # alpha_mom fixture's "Date.current + 3.days" — that offset rolls into
+    # next month, off this month's grid, whenever today is near month-end.
+    households(:alpha).contacts.create!(name: "Mamie", born_on: Date.new(1960, Date.current.month, 15))
+
     get calendar_contacts_path
     assert_response :success
     assert_select "[role='grid']"
-    assert_includes @response.body, "Maman"
+    assert_includes @response.body, "Mamie"
   end
 
   test "calendar navigates to another month" do
