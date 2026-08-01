@@ -1,5 +1,51 @@
 # design-sync notes — Hestia
 
+## ⚠️ 2026-08-01 correction — the live project is NOT style-only
+
+Everything below this notice (originally written 2026-07-16/17, "Confirmed with the user") describes
+a **style + guidelines only** sync to project `95819b9c…` ("no JS/React component package... which
+design-sync forbids"). That project **no longer exists** (404 on lookup, 2026-08-01) — the user
+pointed this sync at a different, pre-existing project instead: `1c75ab45-1fc4-45da-9051-63a9b2824922`
+(same name, "Hestia Design System"). **That live project is a full 73-component off-script React
+recreation** — one `.jsx` + `.d.ts` + `.prompt.md` + `*.card.html` per component, a real
+`_ds_bundle.js`, `_ds_manifest.json`, vendored Lucide icons, and an app-shell `ui_kits/` demo —
+built by hand directly in Claude Design (or by an agent working directly against the tool), **not**
+by any script in this directory. There is no local `.jsx` source in this repo for it at all.
+
+**Implication for every future sync**: the `config.json.shape` is now `"offscript-component-recreation"`,
+not `"style-only"`. The pipeline documented below (steps 1–8, `build-tokens.mjs`, `build-guidelines.mjs`,
+`extract.rb`, `validate-*.mjs`) was **never used to build the live project** and produces a
+completely different, incompatible artifact set (no `components/`, no `_ds_bundle.js`). **Do not run
+it expecting to update the live project** — it would need a brand-new project, and even then would
+regress the live one from full component fidelity down to tokens+guidelines only. It's left in place
+below only as a historical record and in case a from-scratch style-only project is ever wanted again.
+
+**What a real re-sync of the live project looks like** (done once, 2026-08-01, in response to the
+"Terre cuite" rebrand landing in `app/components/ui/` — commits 44d8529/9d582b2/521b3f7 on
+`design-system-v2`): `get_file` every remote token/component file that plausibly drifted, diff
+against the current Ruby source by hand, `write_files` only what actually changed. Nothing scripted
+— there's no local build to run. In that pass, tokens/CSS/jsx were found to **already match** the
+post-rebrand Ruby exactly (byte-identical hex values in `tokens/colors.css`/`tokens/spacing.css`;
+every checked `.jsx` — Button, Card, Item, Select, Checkbox, Avatar, AvatarGroup, AlertDialog, Empty,
+Skeleton, Accordion, Message, Switch, Slider, Table, InputOtp, Menubar, Popover, ContextMenu — already
+had the new control heights/radii/shadow-border treatment). The only real drift was **prose that
+called the direction and the 4 brand components (`ModuleMedallion`, `GreetingHeader`,
+`CelebrationMoment`, `HouseholdHeader`) speculative "intentional additions, no Ui:: equivalent"**,
+when upstream had since implemented all of them for real (plus `Empty#illustration`, `Avatar#tint`,
+the `clay-*`/`crimson-*` scales, and the Google Fonts CDN `@import` — all now literally in
+`application.tailwind.css`). Fixed: `readme.md`, the 4 brand components' `.jsx`/`.prompt.md`,
+`guidelines/colors-brand.html` (still said "Indigo brand"), `tokens/fonts.css` comment, `SKILL.md`
+(69→73), `github.md` sync record. Two tiny real code-drift fixes: `Tabs.jsx` active-tab shadow
+compounded with the hairline border (matching new `shadow-border-xs`); `ViewToggle.jsx` gained
+`aria-current` to match the upstream a11y fix. See `github.md` in the project itself for the full
+sync record going forward — it's a better source of truth than this file for that project's history.
+
+The `readmeHeader` config key and `conventions.md`/`design-language.md` below are vestigial for this
+project — nothing in the live project's `readme.md` is generated from them; it's hand-maintained
+directly in the project. They're harmless to keep in case a style-only project is built later.
+
+---
+
 - Hestia's design system is **Rails ViewComponents** (`app/components/ui/`, ~110 files, Ruby + ERB),
   styled with Tailwind v4 and animated by Stimulus controllers. There is no JS/React component
   package, no Storybook, no `dist/` — so the standard component sync (`_ds_bundle.js` +

@@ -1,7 +1,12 @@
-<%= content_tag(@href ? :a : :div, href: @href, class: "flex items-center gap-3 rounded-md py-2.5 px-3 #{"hover:bg-surface-hover cursor-pointer" if @href}") do %>
+<%= content_tag(@href ? :a : :div, href: @href,
+    "aria-current": (@active ? "page" : nil),
+    class: cn(
+      "flex items-center gap-3 rounded-md py-2.5 px-3 transition-colors",
+      @active ? "bg-surface-inset" : (@href ? "hover:bg-surface-hover cursor-pointer" : nil)
+    )) do %>
   <% if leading? %><div class="shrink-0"><%= leading %></div><% end %>
   <div class="flex-1 min-w-0">
-    <% if title? %><p class="text-base font-medium text-primary truncate"><%= title %></p><% end %>
+    <% if title? %><p class="text-base <%= @active ? "font-semibold" : "font-medium" %> text-primary truncate"><%= title %></p><% end %>
     <% if description? %><p class="text-sm text-secondary truncate"><%= description %></p><% end %>
   </div>
   <% if trailing? %><div class="shrink-0"><%= trailing %></div><% end %>

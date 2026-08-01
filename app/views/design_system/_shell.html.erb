@@ -1,8 +1,7 @@
 <%
   current_slug = @entry&.slug
   nav_link = ->(path, label, active) do
-    state_classes = active ? "bg-surface-inset text-primary font-medium" : "text-secondary hover:text-primary"
-    tag.a label, href: path, class: "block truncate rounded-md px-3 py-1.5 text-sm transition-colors #{state_classes}"
+    render(Ui::ItemComponent.new(href: path, active: active)) { |item| item.with_title { label } }
   end
 %>
 <div class="flex min-h-screen">

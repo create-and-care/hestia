@@ -31,6 +31,24 @@ class Ui::DrawerComponentTest < ViewComponent::TestCase
     assert_includes rendered_content, "slide-in-from-bottom"
   end
 
+  test "renders every valid side without raising" do
+    fragments = {
+      left: "rounded-r-lg",
+      right: "rounded-l-lg",
+      bottom: "rounded-t-lg"
+    }
+
+    fragments.each do |side, fragment|
+      render_inline(Ui::DrawerComponent.new(side: side)) do |c|
+        c.with_trigger { "Open" }
+        "Body"
+      end
+
+      assert_selector "dialog"
+      assert_includes rendered_content, fragment
+    end
+  end
+
   test "omits title, description and footer when their slots are not given" do
     render_inline(Ui::DrawerComponent.new) do |c|
       c.with_trigger { "Open" }
