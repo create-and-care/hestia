@@ -582,10 +582,16 @@ dialog::backdrop {
 dialog[data-state="open"]::backdrop { opacity: 1; }
 dialog[data-state="closed"]::backdrop { opacity: 0; }
 
-body { background: var(--surface); color: var(--text-primary); }
-a { color: var(--link); text-decoration: none; }
-a:hover { color: var(--link-hover); text-decoration: underline; text-underline-offset: 3px; }
+/* @layer base, not a bare rule: unlayered CSS beats @layer utilities
+   regardless of specificity, so a bare `a { color }` here would have
+   silently overridden every text-inverse/text-primary Button/Badge/etc.
+   rendered as an <a> (href buttons, linked badges, nav items) app-wide. */
+@layer base {
+  body { background: var(--surface); color: var(--text-primary); }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { color: var(--link-hover); text-decoration: underline; text-underline-offset: 3px; }
 
-/* .greeting — reserved for GreetingHeader/CelebrationMoment titles. Never
-   labels, body copy, or a data-view heading. */
-.greeting { font-family: var(--font-hand); font-weight: 600; font-size: 44px; line-height: 1.05; color: var(--text-primary); }
+  /* .greeting — reserved for GreetingHeader/CelebrationMoment titles. Never
+     labels, body copy, or a data-view heading. */
+  .greeting { font-family: var(--font-hand); font-weight: 600; font-size: 44px; line-height: 1.05; color: var(--text-primary); }
+}
