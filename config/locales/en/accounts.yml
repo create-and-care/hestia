@@ -12,7 +12,6 @@ en:
       current_password: "Current password"
       current_password_hint: "Required to confirm your changes."
       submit: "Save"
-      back: "← Back to members"
     update:
       updated: "Account updated."
       current_password_invalid: "Current password is incorrect."

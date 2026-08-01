@@ -66,7 +66,6 @@ en:
       waste_type_label: "Waste type"
       collected_on_label: "Date"
       save: "Save"
-      back_to_waste: "← Waste"
     update:
       updated: "Collection updated."
     destroy:

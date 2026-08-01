@@ -35,17 +35,14 @@ en:
     edit:
       title: "Edit recipe"
       heading: "Edit recipe"
-      back_link: "← Recipe"
     new:
       title: "New recipe"
       heading: "New recipe"
-      back_link: "← Recipes"
     new_import:
       title: "Import a recipe"
       heading: "Import a recipe"
       description: "Paste the URL of a recipe (schema.org/Recipe-compatible sites)."
       submit: "Import"
-      back_link: "← Recipes"
     show:
       prep_time: "Prep: %{minutes} min"
       cook_time: "Cook: %{minutes} min"

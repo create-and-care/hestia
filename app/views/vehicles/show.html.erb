@@ -2,6 +2,8 @@
 <%= turbo_stream_from @vehicle %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:vehicles, [ @vehicle.name, nil ], module_path: vehicles_path) %></div>
+
   <header class="mb-4 flex items-start justify-between gap-4">
     <div class="flex items-start gap-4">
       <% if @vehicle.photo.attached? %>
@@ -98,5 +100,4 @@
     <p class="text-sm"><%= link_to t(".manage_documents_link"), documents_path, class: "underline" %></p>
   </section>
 
-  <p class="mt-6 text-sm"><%= link_to t(".back_to_vehicles"), vehicles_path, class: "underline" %></p>
 </div>

@@ -2,6 +2,8 @@
 <%= turbo_stream_from Current.household, "exterior" %>
 
 <div class="mt-10 max-w-3xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:outdoor, [ @plant.name, nil ], module_path: exterior_path) %></div>
+
   <header class="mb-6 flex items-start gap-4">
     <% if @plant.photo.attached? %>
       <%= render Ui::AvatarComponent.new(src: @plant.photo.variant(resize_to_fill: [ 64, 64 ]), alt: @plant.name) %>
@@ -90,5 +92,4 @@
     <% end %>
   </section>
 
-  <p class="mt-6 text-sm"><%= link_to t(".back_to_outdoor"), exterior_path, class: "underline" %></p>
 </div>

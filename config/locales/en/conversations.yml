@@ -20,10 +20,8 @@ en:
       submit: "Save"
     edit:
       title: "Conversation settings"
-      back_to_conversation: "← Conversation"
     new:
       title: "New conversation"
-      back_to_messages: "← Messages"
     show:
       settings: "Settings"
       delete: "Delete"

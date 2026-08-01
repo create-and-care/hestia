@@ -48,7 +48,6 @@ en:
       kind_label: "Type"
       name_label: "Name"
       save: "Save"
-      back_to_budget: "← Budget"
     update:
       updated: "Category updated."
     destroy:
@@ -62,7 +61,6 @@ en:
       per_month_option: "/ month"
       per_year_option: "/ year"
       save: "Save"
-      back_to_budget: "← Budget"
     update:
       updated: "Entry updated."
     destroy:
@@ -73,7 +71,6 @@ en:
       name_label: "Name"
       recurring_deposit_label: "Monthly deposit"
       save: "Save"
-      back_to_budget: "← Budget"
     update:
       updated: "Envelope updated."
     destroy:
@@ -84,7 +81,6 @@ en:
       name_placeholder: "Holidays, roommates…"
       create: "Create"
       empty: "No shared projects."
-      back_to_budget: "← Budget"
     show:
       delete: "Delete"
       confirm_delete: "Delete this project and all its participants and expenses?"
@@ -119,7 +115,6 @@ en:
       payer_label: "Payer"
       payer_blank: "Payer"
       save: "Save"
-      back_to_project: "← Back to project"
     update:
       updated: "Expense updated."
     destroy:

@@ -9,7 +9,6 @@ fr:
       recipe_blank: "— recette —"
       free_name_label: "ou nom libre"
       save: "Enregistrer"
-      back_to_menu: "← Menu"
     update:
       updated: "Repas mis à jour."
     destroy:

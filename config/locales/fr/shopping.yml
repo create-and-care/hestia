@@ -17,7 +17,6 @@ fr:
       name_placeholder: "Drive du samedi"
       icon_label: "Icône (emoji, optionnel)"
       submit: "Créer la liste"
-      back_link: "← Retour aux listes"
     show:
       export_pdf: "Export PDF"
       delete: "Supprimer la liste"
@@ -78,6 +77,5 @@ fr:
       no_results: "Aucun produit ne correspond à cette recherche."
       list_select_aria: "Liste de destination"
       add_to_list: "Ajouter"
-      back_link: "← Listes de courses"
     add_to_list:
       added: "« %{name} » ajouté à « %{list} »."

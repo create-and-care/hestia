@@ -1,6 +1,8 @@
 <% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-lg px-4">
+  <div class="mb-4"><%= module_breadcrumb(:outdoor, [ @plant.name, plant_path(@plant) ], [ t(".title"), nil ], module_path: exterior_path) %></div>
+
   <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
 
   <%= form_with model: @plant, url: plant_path(@plant), multipart: true do |form| %>
@@ -59,5 +61,4 @@
     </div>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to t(".back_to_outdoor"), exterior_path, class: "underline" %></p>
 </div>

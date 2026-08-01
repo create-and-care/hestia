@@ -1,6 +1,5 @@
 fr:
   service_providers:
-    back_to_providers: "← Prestataires"
     index:
       title: "Prestataires"
       search_placeholder: "Rechercher…"

@@ -1,6 +1,8 @@
 <% content_for :title, t(".title") %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:calendar, [ t(".title"), nil ], module_path: calendar_path) %></div>
+
   <h1 class="mb-2 flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("refresh-cw", css_class: "size-6") %> <%= t(".heading") %></h1>
   <p class="mb-6 text-sm text-secondary">
     <%= t(".description") %>
@@ -44,5 +46,4 @@
     <% end %>
   </div>
 
-  <p class="mt-6 text-sm"><%= link_to t(".back_to_calendar"), calendar_path, class: "underline" %></p>
 </div>
