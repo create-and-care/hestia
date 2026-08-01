@@ -5,6 +5,6 @@
       data-action="input->input-otp#type keydown->input-otp#navigate paste->input-otp#paste"
       aria-label="Chiffre <%= index + 1 %> sur <%= @length %>"
       <%= "autocomplete=\"one-time-code\"".html_safe if index.zero? %>
-      class="size-10 rounded-md border border-primary bg-container text-center text-lg font-medium text-primary focus-visible:outline-none focus-visible:ring-focus">
+      class="size-10 rounded-md border border-primary bg-container text-center text-lg font-mono font-medium text-primary focus-visible:outline-none focus-visible:ring-focus">
   <% end %>
 </div>

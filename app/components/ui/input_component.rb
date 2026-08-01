@@ -16,7 +16,7 @@ module Ui
         "aria-invalid": @invalid,
         **@html_options.except(:class),
         class: cn(
-          "flex h-9 w-full rounded-md border bg-container px-3 text-sm text-primary placeholder:text-subdued",
+          "flex h-10 w-full rounded-md border bg-container px-3 text-sm text-primary placeholder:text-subdued",
           "focus-visible:outline-none focus-visible:ring-focus disabled:opacity-50 disabled:cursor-not-allowed",
           @invalid ? "border-destructive" : "border-primary",
           @html_options[:class]

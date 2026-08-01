@@ -476,6 +476,7 @@
 @utility border-destructive { border-color: var(--border-destructive); }
 @utility border-inverse { border-color: var(--border-inverse); }
 @utility border-button-primary { border-color: var(--button-bg-primary); }
+@utility accent-button-primary { accent-color: var(--button-bg-primary); }
 @utility bg-border-primary { background-color: var(--border-primary); }
 @utility ring-focus { box-shadow: 0 0 0 2px var(--focus-ring); }
 

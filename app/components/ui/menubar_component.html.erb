@@ -3,7 +3,7 @@
     <%= render(Ui::DropdownMenuComponent.new(items: items)) do |menu| %>
       <% menu.with_trigger do %>
         <button type="button" role="menuitem" data-menubar-target="item" data-action="keydown->menubar#onKeydown"
-          class="rounded-sm px-3 h-7 text-sm font-medium text-primary hover:bg-surface-hover"><%= label %></button>
+          class="rounded-sm px-3 h-9 text-sm font-medium text-primary hover:bg-surface-hover"><%= label %></button>
       <% end %>
     <% end %>
   <% end %>

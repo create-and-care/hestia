@@ -21,6 +21,8 @@ export default class extends Controller {
     if (!flexRow || !alignDiv || !bubble) return
 
     flexRow.classList.add("flex-row-reverse")
+    flexRow.classList.remove("items-start")
+    flexRow.classList.add("items-end")
     alignDiv.classList.remove("items-start")
     alignDiv.classList.add("items-end")
     bubble.classList.remove("mr-auto", "bg-surface", "text-primary", "border", "border-primary")
