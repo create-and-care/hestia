@@ -1,6 +1,5 @@
 fr:
   contacts:
-    back_to_contacts: "← Anniversaires"
     proximity:
       today: "Aujourd'hui !"
       week: "Cette semaine"

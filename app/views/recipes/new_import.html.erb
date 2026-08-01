@@ -1,6 +1,8 @@
 <% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-16 max-w-md px-4">
+  <div class="mb-4"><%= module_breadcrumb(:recipes, [ t(".title"), nil ], module_path: recipes_path) %></div>
+
   <h1 class="mb-2 text-2xl font-semibold"><%= t(".heading") %></h1>
   <p class="mb-6 text-sm text-secondary"><%= t(".description") %></p>
 
@@ -14,5 +16,4 @@
     </div>
   <% end %>
 
-  <p class="mt-6 text-sm"><%= link_to t(".back_link"), recipes_path, class: "underline" %></p>
 </div>

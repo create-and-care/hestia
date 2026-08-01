@@ -19,10 +19,8 @@ en:
       submit: "Save"
     edit:
       title: "Edit profile"
-      back_to_profile: "← Profile"
     new:
       title: "New baby profile"
-      back_to_babies: "← Baby"
     show:
       pediatrician_prefix: "Pediatrician:"
       edit: "Edit"
@@ -84,7 +82,6 @@ en:
       started_at_label: "Start"
       ended_at_label: "End"
       save: "Save"
-      back_to_profile: "← Profile"
     update:
       updated: "Feeding updated."
     stop:
@@ -100,7 +97,6 @@ en:
       introduced_on_label: "Date"
       acceptance_label: "Reaction"
       save: "Save"
-      back_to_profile: "← Profile"
     update:
       updated: "Food introduction updated."
     destroy:
@@ -114,7 +110,6 @@ en:
       tested_on_label: "Date"
       severity_label: "Severity"
       save: "Save"
-      back_to_profile: "← Profile"
     update:
       updated: "Allergen test updated."
     destroy:

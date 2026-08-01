@@ -17,7 +17,6 @@ en:
       name_placeholder: "Saturday grocery run"
       icon_label: "Icon (emoji, optional)"
       submit: "Create list"
-      back_link: "← Back to lists"
     show:
       export_pdf: "Export PDF"
       delete: "Delete list"
@@ -78,6 +77,5 @@ en:
       no_results: "No product matches this search."
       list_select_aria: "Target list"
       add_to_list: "Add"
-      back_link: "← Shopping lists"
     add_to_list:
       added: "\"%{name}\" added to \"%{list}\"."

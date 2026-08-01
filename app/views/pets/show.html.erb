@@ -1,6 +1,8 @@
 <% content_for :title, @pet.name %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:pets, [ @pet.name, nil ], module_path: pets_path) %></div>
+
   <header class="mb-2 flex items-start justify-between gap-4">
     <div class="flex items-start gap-4">
       <% if @pet.photo.attached? %>
@@ -188,5 +190,4 @@
     <p class="text-sm"><%= link_to t(".manage_documents_link"), documents_path, class: "underline" %></p>
   </section>
 
-  <p class="text-sm"><%= link_to t(".back_to_pets"), pets_path, class: "underline" %></p>
 </div>

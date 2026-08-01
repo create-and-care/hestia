@@ -1,6 +1,5 @@
 en:
   contacts:
-    back_to_contacts: "← Birthdays"
     proximity:
       today: "Today!"
       week: "This week"

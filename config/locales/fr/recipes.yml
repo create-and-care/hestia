@@ -35,17 +35,14 @@ fr:
     edit:
       title: "Modifier la recette"
       heading: "Modifier la recette"
-      back_link: "← Recette"
     new:
       title: "Nouvelle recette"
       heading: "Nouvelle recette"
-      back_link: "← Recettes"
     new_import:
       title: "Importer une recette"
       heading: "Importer une recette"
       description: "Collez l'URL d'une recette (sites compatibles schema.org/Recipe)."
       submit: "Importer"
-      back_link: "← Recettes"
     show:
       prep_time: "Préparation : %{minutes} min"
       cook_time: "Cuisson : %{minutes} min"

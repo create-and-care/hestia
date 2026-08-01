@@ -58,7 +58,6 @@ fr:
       starts_on_label: "Date de début"
       ends_on_label: "Date de fin"
       submit: "Enregistrer"
-      back_to_trip: "← Retour au voyage"
     update:
       updated: "Voyage mis à jour."
     update_sections:
@@ -74,7 +73,6 @@ fr:
         title_label: "Titre"
         content_label: "Contenu"
         submit: "Enregistrer"
-        back_to_trip: "← Retour au voyage"
     tasks:
       create:
         alert: "Impossible de créer le préparatif."
@@ -86,7 +84,6 @@ fr:
         emoji_label: "Emoji"
         due_on_label: "Date limite"
         submit: "Enregistrer"
-        back_to_trip: "← Retour au voyage"
     addresses:
       create:
         alert: "Impossible de créer l'adresse."
@@ -99,7 +96,6 @@ fr:
         full_address_label: "Adresse"
         phone_label: "Téléphone"
         submit: "Enregistrer"
-        back_to_trip: "← Retour au voyage"
     shopping_lists:
       create:
         alert: "Impossible de créer la liste de courses."

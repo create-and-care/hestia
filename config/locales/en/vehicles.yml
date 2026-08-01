@@ -42,10 +42,8 @@ en:
       submit: "Save"
     edit:
       title: "Edit vehicle"
-      back_to_vehicle: "← Vehicle"
     new:
       title: "New vehicle"
-      back_to_vehicles: "← Vehicles"
     show:
       inspection_prefix: "Vehicle inspection:"
       edit: "Edit"
@@ -67,7 +65,6 @@ en:
       documents_heading: "Documents"
       no_documents: "No linked documents."
       manage_documents_link: "Manage documents →"
-      back_to_vehicles: "← All vehicles"
     create:
       created: "Vehicle added."
     update:

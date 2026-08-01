@@ -48,7 +48,6 @@ fr:
       kind_label: "Type"
       name_label: "Nom"
       save: "Enregistrer"
-      back_to_budget: "← Budget"
     update:
       updated: "Catégorie mise à jour."
     destroy:
@@ -62,7 +61,6 @@ fr:
       per_month_option: "/ mois"
       per_year_option: "/ an"
       save: "Enregistrer"
-      back_to_budget: "← Budget"
     update:
       updated: "Entrée mise à jour."
     destroy:
@@ -73,7 +71,6 @@ fr:
       name_label: "Nom"
       recurring_deposit_label: "Versement mensuel"
       save: "Enregistrer"
-      back_to_budget: "← Budget"
     update:
       updated: "Enveloppe mise à jour."
     destroy:
@@ -84,7 +81,6 @@ fr:
       name_placeholder: "Vacances, coloc…"
       create: "Créer"
       empty: "Aucun projet partagé."
-      back_to_budget: "← Budget"
     show:
       delete: "Supprimer"
       confirm_delete: "Supprimer ce projet, tous ses participants et toutes ses dépenses ?"
@@ -119,7 +115,6 @@ fr:
       payer_label: "Payeur"
       payer_blank: "Payeur"
       save: "Enregistrer"
-      back_to_project: "← Retour au projet"
     update:
       updated: "Dépense mise à jour."
     destroy:

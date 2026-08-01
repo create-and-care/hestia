@@ -66,7 +66,6 @@ fr:
       waste_type_label: "Type de déchet"
       collected_on_label: "Date"
       save: "Enregistrer"
-      back_to_waste: "← Déchets"
     update:
       updated: "Collecte mise à jour."
     destroy:

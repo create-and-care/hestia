@@ -11,7 +11,6 @@ fr:
       disconnect: "Déconnecter"
       disconnect_confirm: "Déconnecter ce calendrier ? Les événements déjà importés resteront dans Hestia."
       connect_provider: "Connecter %{provider}"
-      back_to_calendar: "← Calendrier"
     connect:
       unknown_provider: "Fournisseur inconnu."
       not_configured: "Synchronisation %{provider} non configurée sur cette instance (identifiants d'application manquants — voir README)."
@@ -23,7 +22,6 @@ fr:
       username_label: "Nom d'utilisateur"
       password_label: "Mot de passe (un mot de passe d'application, si votre fournisseur le propose)"
       submit: "Connecter"
-      back_link: "← Retour"
     callback:
       unknown_provider: "Fournisseur inconnu."
       state_mismatch: "Demande de connexion expirée ou invalide — merci de réessayer."

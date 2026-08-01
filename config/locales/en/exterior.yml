@@ -90,7 +90,6 @@ en:
       frequency_label: "Frequency"
       interval_label: "Every"
       add_task: "Add"
-      back_to_outdoor: "← Outdoor"
     edit:
       title: "Edit plant"
       name_label: "Name"
@@ -100,7 +99,6 @@ en:
       notes_label: "Needs / notes"
       photo_label: "Photo"
       save: "Save"
-      back_to_outdoor: "← Outdoor"
     update:
       updated: "Plant updated."
     destroy:
@@ -113,7 +111,6 @@ en:
       service_provider_label: "Service provider"
       no_service_provider: "—"
       save: "Save"
-      back_to_outdoor: "← Outdoor"
     update:
       updated: "Pool updated."
     destroy:
@@ -125,4 +122,3 @@ en:
       no_readings: "No readings recorded yet."
       actions_heading: "Maintenance actions"
       no_actions: "No maintenance actions recorded yet."
-      back_to_outdoor: "← Outdoor"
