@@ -16,9 +16,10 @@ class CalendarController < ApplicationController
       format.pdf do
         month = parse_month
         range = month.beginning_of_month.beginning_of_day..month.end_of_month.end_of_day
-        # Birthdays (Contact) and waste collections (WasteCollectionEvent) aren't CalendarEvent
-        # records — the PDF layout assumes the CalendarEvent interface, so only real events go in it.
-        event_only_occurrences = occurrences_in(range).reject { |_time, occurrence| occurrence.is_a?(Contact) || occurrence.is_a?(WasteCollectionEvent) }
+        # Birthdays (Contact), waste collections (WasteCollectionEvent) and trips (Trip) aren't
+        # CalendarEvent records — the PDF layout assumes the CalendarEvent interface, so only
+        # real events go in it.
+        event_only_occurrences = occurrences_in(range).reject { |_time, occurrence| occurrence.is_a?(Contact) || occurrence.is_a?(WasteCollectionEvent) || occurrence.is_a?(Trip) }
         send_data Pdf::CalendarMonthDocument.new(month, event_only_occurrences).render,
           filename: "#{t('.pdf_filename_prefix')}-#{month.strftime('%Y-%m')}.pdf", type: "application/pdf", disposition: "inline"
       end
@@ -127,7 +128,19 @@ class CalendarController < ApplicationController
 
     def occurrences_in(range)
       event_occurrences = @events.flat_map { |event| event.occurrences_between(range.begin, range.end).map { |time| [ time, event ] } }
-      (event_occurrences + birthday_occurrences_in(range) + waste_occurrences_in(range)).sort_by(&:first)
+      (event_occurrences + birthday_occurrences_in(range) + waste_occurrences_in(range) + trip_occurrences_in(range)).sort_by(&:first)
+    end
+
+    # Trips/Calendar interconnection: surfaces every day of a trip on the calendar (one
+    # occurrence per day in range) instead of it only ever showing on the Trips module's own page.
+    def trip_occurrences_in(range)
+      return [] if @member_id
+
+      Current.household.trips.where.not(starts_on: nil).flat_map do |trip|
+        (trip.starts_on..(trip.ends_on || trip.starts_on)).filter_map do |date|
+          date.to_time.between?(range.begin, range.end) ? [ date.to_time, trip ] : nil
+        end
+      end
     end
 
     # Waste/Calendar interconnection (Spec): surfaces upcoming collections alongside real

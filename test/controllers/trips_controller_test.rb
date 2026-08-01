@@ -147,7 +147,7 @@ class TripsControllerTest < ActionDispatch::IntegrationTest
     Trip::SECTIONS.each { |key| assert_not trip.section_enabled?(key) }
   end
 
-  test "show has a destructive delete button and empty states" do
+  test "show has empty states and uses the design-system alert dialog instead of a native confirm to delete" do
     trip = trips(:alpha_trip)
     trip.notes.destroy_all
     trip.tasks.destroy_all
@@ -157,6 +157,8 @@ class TripsControllerTest < ActionDispatch::IntegrationTest
     get trip_path(trip)
 
     assert_response :success
-    assert_select "form[action=?][data-turbo-confirm]", trip_path(trip)
+    assert_select "dialog[role='alertdialog']"
+    assert_select "form[action=?]", trip_path(trip)
+    assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("trips.show.delete_trip_confirm"))}"/, @response.body)
   end
 end

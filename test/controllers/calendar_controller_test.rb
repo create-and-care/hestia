@@ -104,6 +104,18 @@ class CalendarControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "surfaces every day of a trip in the list view" do
+    households(:alpha).trips.create!(name: "Chalet", starts_on: 2.days.from_now.to_date, ends_on: 4.days.from_now.to_date)
+    get calendar_path(view: :list)
+    assert_includes @response.body, "Chalet"
+  end
+
+  test "PDF export excludes trips (they aren't CalendarEvent records)" do
+    households(:alpha).trips.create!(name: "Chalet", starts_on: Date.current + 2.days, ends_on: Date.current + 4.days)
+    get calendar_path(format: :pdf)
+    assert_response :success
+  end
+
   test "PDF export does not crash when a birthday falls within the month" do
     households(:alpha).contacts.create!(name: "Papi", born_on: Date.current.change(year: 1945))
     get calendar_path(format: :pdf)

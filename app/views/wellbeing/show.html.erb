@@ -3,52 +3,49 @@
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <div class="mb-4"><%= module_breadcrumb(:wellbeing) %></div>
 
-  <h1 class="mb-1 flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("heart-pulse", css_class: "size-6") %> <%= t(".title") %></h1>
+  <div class="mb-1 flex flex-wrap items-center justify-between gap-2">
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("heart-pulse", css_class: "size-6") %> <%= t(".title") %></h1>
+    <%= render(Ui::SheetComponent.new) do |sheet| %>
+      <% sheet.with_trigger do %>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) do %>
+          <%= lucide_icon("list-filter", css_class: "size-4") %> <%= t(".filters_trigger") %>
+        <% end %>
+      <% end %>
+      <% sheet.with_title { t(".filters_heading") } %>
+      <%= form_with url: wellbeing_path, method: :get, class: "flex flex-col gap-3" do |form| %>
+        <%= render(Ui::FieldComponent.new(id: "wellbeing_period")) do |field| %>
+          <% field.with_label { t(".period_label") } %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: "period",
+                options: WellbeingController::PERIODS.map { |period| [ t(".period_options.#{period}"), period ] },
+                selected: @period, html_options: { id: "wellbeing_period" }) } %>
+        <% end %>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".filter_submit") } %>
+      <% end %>
+    <% end %>
+  </div>
   <p class="mb-6 text-xs text-subdued"><%= t(".privacy_note") %></p>
 
   <%= render "shared/flash" %>
 
-  <section class="mb-8">
-    <%= render(Ui::CardComponent.new) do %>
-      <h2 class="mb-3 font-medium"><%= t(".my_profile") %></h2>
-      <%= form_with model: @profile, url: wellbeing_profile_path, method: :patch, class: "grid grid-cols-2 gap-3 sm:grid-cols-3" do |form| %>
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:height))) do |field| %>
-          <% field.with_label { t(".height_label") } %>
-          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:height), value: form.object.height, html_options: { id: form.field_id(:height) }) } %>
+  <% if @profile.height.present? || @latest_weight %>
+    <section class="mb-8">
+      <%= render(Ui::CardComponent.new) do %>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h2 class="font-medium"><%= t(".my_profile") %></h2>
+          <%= link_to t(".edit_profile"), edit_account_path, class: "text-sm underline" %>
+        </div>
+        <% if @latest_weight && @profile.bmi(@latest_weight) %>
+          <p class="mt-2 text-sm"><%= t(".bmi_prefix") %> <span class="font-semibold"><%= @profile.bmi(@latest_weight) %></span> <%= t(".bmi_suffix", weight: @latest_weight) %></p>
         <% end %>
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:age))) do |field| %>
-          <% field.with_label { t(".age_label") } %>
-          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:age), value: form.object.age, html_options: { id: form.field_id(:age) }) } %>
-        <% end %>
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:sex))) do |field| %>
-          <% field.with_label { t(".sex_label") } %>
-          <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:sex), options: [ [ "—", "" ] ] + sex_options, selected: form.object.sex, html_options: { id: form.field_id(:sex) }) } %>
-        <% end %>
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:activity_level))) do |field| %>
-          <% field.with_label { t(".activity_label") } %>
-          <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:activity_level), options: [ [ "—", "" ] ] + activity_options, selected: form.object.activity_level, html_options: { id: form.field_id(:activity_level) }) } %>
-        <% end %>
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:start_weight))) do |field| %>
-          <% field.with_label { t(".start_weight_label") } %>
-          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:start_weight), value: form.object.start_weight, html_options: { id: form.field_id(:start_weight), step: :any }) } %>
-        <% end %>
-        <%= render(Ui::FieldComponent.new(id: form.field_id(:goal_weight))) do |field| %>
-          <% field.with_label { t(".goal_weight_label") } %>
-          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:goal_weight), value: form.object.goal_weight, html_options: { id: form.field_id(:goal_weight), step: :any }) } %>
-        <% end %>
-        <div class="col-span-2 sm:col-span-3"><%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".save_profile") } %></div>
       <% end %>
-      <% if @latest_weight && @profile.bmi(@latest_weight) %>
-        <p class="mt-3 text-sm"><%= t(".bmi_prefix") %> <span class="font-semibold"><%= @profile.bmi(@latest_weight) %></span> <%= t(".bmi_suffix", weight: @latest_weight) %></p>
-      <% end %>
-    <% end %>
-  </section>
+    </section>
+  <% end %>
 
   <% if @weight_chart_data.size >= 2 %>
     <section class="mb-8">
       <h2 class="mb-2 flex items-center gap-1.5 font-medium"><%= lucide_icon("trending-up", css_class: "size-5") %> <%= t(".chart_heading") %></h2>
       <%= render(Ui::CardComponent.new) do %>
-        <%= render Ui::ChartComponent.new(data: @weight_chart_data) %>
+        <%= render Ui::ChartComponent.new(data: @weight_chart_data, variant: :line, color: "wellbeing") %>
       <% end %>
     </section>
   <% end %>
@@ -59,12 +56,36 @@
       <%= link_to t(".see_full_history"), history_wellbeing_path, class: "text-sm underline" %>
     </div>
     <%= render(Ui::CardComponent.new) do %>
+      <% if @latest_weight && @profile.goal_weight.present? %>
+        <div class="mb-4 grid grid-cols-3 gap-2 text-center">
+          <div>
+            <p class="text-lg font-semibold"><%= @latest_weight %> kg</p>
+            <p class="text-xs text-subdued"><%= t(".current_weight_label") %></p>
+          </div>
+          <div>
+            <p class="text-lg font-semibold"><%= @profile.goal_weight %> kg</p>
+            <p class="text-xs text-subdued"><%= t(".goal_weight_label") %></p>
+          </div>
+          <div>
+            <p class="text-lg font-semibold"><%= format("%+.1f", @latest_weight - @profile.goal_weight) %> kg</p>
+            <p class="text-xs text-subdued"><%= t(".remaining_to_goal_label") %></p>
+          </div>
+        </div>
+      <% end %>
       <% if @weight_entries.any? %>
         <ul class="mb-2 divide-y divide-primary text-sm">
           <% @weight_entries.each do |entry| %>
             <li>
               <%= render(Ui::ItemComponent.new) do |item| %>
                 <% item.with_title { "#{entry.recorded_on.strftime('%d/%m/%Y')} — #{entry.weight} kg" } %>
+                <% if (delta = @weight_deltas[entry.id]) %>
+                  <% item.with_description do %>
+                    <%= render(Ui::BadgeComponent.new(variant: weight_delta_variant(delta, @goal_direction))) do %>
+                      <%= lucide_icon(delta.positive? ? "trending-up" : "trending-down", css_class: "size-3") %>
+                      <%= format("%+.1f kg", delta) %>
+                    <% end %>
+                  <% end %>
+                <% end %>
                 <% item.with_trailing do %>
                   <div class="flex shrink-0 items-center gap-1">
                     <%= link_to edit_weight_entry_path(entry), "aria-label": t(".edit_weight_entry_aria", date: entry.recorded_on.strftime("%d/%m/%Y")), class: "text-subdued hover:text-primary" do %>
@@ -148,6 +169,40 @@
           <% end %>
         </div>
         <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="mb-8">
+    <div class="mb-2 flex items-center justify-between">
+      <h2 class="flex items-center gap-1.5 font-medium"><%= lucide_icon("list-checks", css_class: "size-5") %> <%= t(".workout_templates_heading") %></h2>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: new_workout_template_path)) { t(".new_workout_template") } %>
+    </div>
+    <%= render(Ui::CardComponent.new) do %>
+      <% if @workout_templates.any? %>
+        <ul class="divide-y divide-primary text-sm">
+          <% @workout_templates.each do |template| %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title { template.name } %>
+                <% item.with_description { t(".exercise_count", count: template.workout_template_exercises.size) } %>
+                <% item.with_trailing do %>
+                  <div class="flex shrink-0 items-center gap-2">
+                    <%= form_with url: log_workout_template_path(template), method: :post do %>
+                      <%= hidden_field_tag :done_on, Date.current %>
+                      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".log_today") } %>
+                    <% end %>
+                    <%= link_to edit_workout_template_path(template), "aria-label": t(".edit_template_aria", name: template.name), class: "text-subdued hover:text-primary" do %>
+                      <%= lucide_icon("pencil", css_class: "size-3.5") %>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".workout_templates_empty") } } %>
       <% end %>
     <% end %>
   </section>

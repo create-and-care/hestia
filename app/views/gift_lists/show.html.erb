@@ -9,12 +9,15 @@
       <span class="text-sm text-subdued">(<%= perspective_label(@list.perspective) %><%= " · #{@list.theme}" if @list.theme.present? %>)</span>
       <% if @list.restricted? %><%= render(Ui::BadgeComponent.new(variant: :secondary)) { t(".restricted_badge") } %><% end %>
     </h1>
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2">
       <% if @list.created_by_id.nil? || @list.created_by_id == Current.user.id %>
-        <%= link_to t(".edit"), edit_gift_list_path(@list), class: "text-sm underline" %>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_gift_list_path(@list))) { t(".edit") } %>
       <% end %>
-      <%= form_with url: gift_list_path(@list), method: :delete, data: { turbo_confirm: t(".delete_confirm") } do %>
-        <%= render(Ui::ButtonComponent.new(type: "submit", variant: :destructive, size: :sm)) { t(".delete") } %>
+      <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm"), confirm_label: t(".delete"),
+            confirm_url: gift_list_path(@list), confirm_method: :delete)) do |alert_dialog| %>
+        <% alert_dialog.with_trigger do %>
+          <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm)) { t(".delete") } %>
+        <% end %>
       <% end %>
     </div>
   </header>
@@ -43,7 +46,14 @@
   <% end %>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium"><%= t(".ideas") %></h2>
+    <div class="mb-2 flex items-center justify-between">
+      <h2 class="font-medium"><%= t(".ideas") %></h2>
+      <%= render(Ui::DialogComponent.new) do |dialog| %>
+        <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".add") } } %>
+        <% dialog.with_title { t(".idea_placeholder") } %>
+        <%= render "gift_ideas/form", list: @list, idea: @idea %>
+      <% end %>
+    </div>
     <% if @ideas.any? %>
       <ul class="mb-3 space-y-2">
         <% @ideas.each do |idea| %>
@@ -75,27 +85,5 @@
     <% else %>
       <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_ideas") } } %>
     <% end %>
-
-    <%= form_with model: [ @list, @idea ], url: gift_list_gift_ideas_path(@list), multipart: true, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(name: "gift_idea[name]", value: @idea.name, placeholder: t(".idea_placeholder"),
-            html_options: { id: "gift_idea_name", required: true, class: "flex-1" }) %>
-      <%= render Ui::InputComponent.new(type: "number", name: "gift_idea[price]", value: @idea.price, placeholder: "€",
-            html_options: { id: "gift_idea_price", step: "any", class: "w-20" }) %>
-      <%= render Ui::InputComponent.new(type: "url", name: "gift_idea[url]", value: @idea.url, placeholder: t(".link_placeholder"),
-            html_options: { id: "gift_idea_url", class: "w-40" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: "gift_idea[status]",
-            options: GiftIdea::STATUSES.map { |s| [ gift_status_label(s), s ] },
-            selected: "wanted", html_options: { id: "gift_idea_status", class: "!w-auto" }) %>
-      <div class="w-40">
-        <%= render Ui::FileUploadComponent.new(name: "gift_idea[photo]", accept: "image/*") %>
-      </div>
-      <div class="w-full">
-        <%= render(Ui::TextareaComponent.new(name: "gift_idea[comment]", rows: 1, placeholder: t(".comment_placeholder"),
-              html_options: { id: "gift_idea_comment", class: "w-full" })) %>
-      </div>
-      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
-    <% end %>
   </section>
-
-  <p class="text-sm"><%= link_to t(".back_to_gifts"), gift_lists_path, class: "underline" %></p>
 </div>

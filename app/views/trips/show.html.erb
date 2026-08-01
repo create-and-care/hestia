@@ -1,6 +1,8 @@
 <% content_for :title, @trip.name %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:trips, [ @trip.name, nil ], module_path: trips_path) %></div>
+
   <header class="mb-6 flex items-start justify-between">
     <div>
       <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("luggage", css_class: "size-6") %> <%= @trip.name %></h1>
@@ -8,8 +10,11 @@
     </div>
     <div class="flex items-center gap-2">
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_trip_path(@trip))) { t(".edit_trip") } %>
-      <%= form_with url: trip_path(@trip), method: :delete, data: { turbo_confirm: t(".delete_trip_confirm") } do %>
-        <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm, type: "submit")) { t(".delete_trip") } %>
+      <%= render(Ui::AlertDialogComponent.new(title: t(".delete_trip_confirm"), confirm_label: t(".delete_trip"),
+            confirm_url: trip_path(@trip), confirm_method: :delete)) do |alert_dialog| %>
+        <% alert_dialog.with_trigger do %>
+          <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm)) { t(".delete_trip") } %>
+        <% end %>
       <% end %>
     </div>
   </header>
@@ -214,6 +219,4 @@
       <% end %>
     <% end %>
   <% end %>
-
-  <p class="mt-6 text-sm"><%= link_to t(".back_to_trips"), trips_path, class: "underline" %></p>
 </div>

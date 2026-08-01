@@ -18,7 +18,7 @@
       </p>
     </div>
     <% if @my_membership&.role == "admin" %>
-      <%= link_to t(".settings"), edit_circle_path(@circle), class: "text-sm underline" %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_circle_path(@circle))) { t(".settings") } %>
     <% end %>
   </header>
 
@@ -51,11 +51,10 @@
     <% end %>
   <% end %>
 
-  <p class="mt-6 flex items-center justify-between text-sm">
-    <%= link_to t("circles.back_to_circles"), circles_path, class: "underline" %>
-    <% if @my_membership %>
-      <%= button_to t(".leave"), circle_member_path(@circle, @my_membership), method: :delete,
-            form: { data: { turbo_confirm: t(".leave_confirm") } }, class: "cursor-pointer text-red-600 underline" %>
-    <% end %>
-  </p>
+  <% if @my_membership %>
+    <div class="mt-6 flex justify-end">
+      <%= render(Ui::ButtonToComponent.new(circle_member_path(@circle, @my_membership), method: :delete, variant: :outline, size: :sm,
+            html_options: { class: "text-destructive", form: { data: { turbo_confirm: t(".leave_confirm") } } })) { t(".leave") } %>
+    </div>
+  <% end %>
 </div>

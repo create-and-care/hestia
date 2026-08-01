@@ -1,0 +1,14 @@
+<%= form_with model: list, url: gift_lists_path, class: "flex flex-col gap-3",
+      data: { controller: "field-visibility", field_visibility_show_when_value: [ "give" ].to_json } do |form| %>
+  <%= render Ui::InputComponent.new(name: "gift_list[name]", value: list.name, placeholder: t("gift_lists.index.name_placeholder"),
+        html_options: { id: "gift_list_name", required: true }) %>
+  <%= render Ui::NativeSelectComponent.new(name: "gift_list[perspective]",
+        options: [ [ t("gift_lists.index.receive"), "receive" ], [ t("gift_lists.index.give"), "give" ] ],
+        selected: list.perspective, html_options: { id: "gift_list_perspective", data: { field_visibility_target: "trigger", action: "change->field-visibility#refresh" } }) %>
+  <div data-field-visibility-target="field">
+    <%= render Ui::NativeSelectComponent.new(name: "gift_list[contact_id]",
+          options: [ [ t("gift_lists.index.recipient_placeholder"), "" ] ] + contact_options,
+          selected: list.contact_id, html_options: { id: "gift_list_contact_id" }) %>
+  </div>
+  <%= render(Ui::ButtonComponent.new(type: "submit")) { t("gift_lists.index.create") } %>
+<% end %>

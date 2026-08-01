@@ -1,8 +1,19 @@
-<div class="flex items-end gap-3" style="height: <%= @height %>px">
-  <% @data.each_with_index do |(label, value), index| %>
-    <div class="flex flex-1 max-w-8 flex-col items-center justify-end gap-2 h-full">
-      <div class="w-full rounded-t-sm <%= COLORS[index % COLORS.size] %>" style="height: <%= (value / @max * 100).round(2) %>%" role="img" aria-label="<%= label %> : <%= value %>"></div>
-      <span class="text-xs text-secondary"><%= label %></span>
-    </div>
-  <% end %>
-</div>
+<% if line? %>
+  <div class="w-full <%= color_class %>" style="height: <%= @height %>px">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="h-full w-full" role="img" aria-label="<%= @data.map { |label, value| "#{label} : #{value}" }.join(", ") %>">
+      <polyline points="<%= line_points %>" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </div>
+  <div class="mt-1 flex justify-between text-xs text-secondary">
+    <% @data.each do |label, _| %><span><%= label %></span><% end %>
+  </div>
+<% else %>
+  <div class="flex items-end gap-3" style="height: <%= @height %>px">
+    <% @data.each_with_index do |(label, value), index| %>
+      <div class="flex flex-1 max-w-8 flex-col items-center justify-end gap-2 h-full">
+        <div class="w-full rounded-t-sm <%= COLORS[index % COLORS.size] %>" style="height: <%= (value / @max * 100).round(2) %>%" role="img" aria-label="<%= label %> : <%= value %>"></div>
+        <span class="text-xs text-secondary"><%= label %></span>
+      </div>
+    <% end %>
+  </div>
+<% end %>

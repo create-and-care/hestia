@@ -3,10 +3,15 @@
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <div class="mb-4"><%= module_breadcrumb(:circles) %></div>
 
-  <header class="mb-6 flex items-center justify-between">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("users", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex items-center gap-2">
-      <%= link_to t(".join_circle"), new_circle_membership_path, class: "text-sm underline" %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: new_circle_membership_path)) { t(".join_circle") } %>
+      <%= render(Ui::DialogComponent.new) do |dialog| %>
+        <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :default, size: :sm)) { t(".new_circle") } } %>
+        <% dialog.with_title { t(".new_circle") } %>
+        <%= render "form", circle: @circle %>
+      <% end %>
       <% if @circles.any? %>
         <%= render Ui::ViewToggleComponent.new(mode: @view_mode, path_for: ->(mode) { circles_path(view: mode) }) %>
       <% end %>
@@ -30,17 +35,6 @@
     <div class="mb-6">
       <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty") } } %>
     </div>
-  <% end %>
-
-  <%= render(Ui::CardComponent.new) do |card| %>
-    <% card.with_title { t(".new_circle") } %>
-    <%= form_with model: @circle, url: circles_path, class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(name: "circle[name]", placeholder: t(".name_placeholder"),
-            html_options: { id: "circle_name", required: true, class: "flex-1" }) %>
-      <%= render Ui::InputComponent.new(name: "circle[theme]", placeholder: t(".theme_placeholder"),
-            html_options: { id: "circle_theme", class: "w-32" }) %>
-      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".create") } %>
-    <% end %>
   <% end %>
 
 </div>

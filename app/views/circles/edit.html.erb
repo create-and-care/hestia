@@ -61,6 +61,4 @@
     <%= button_to t(".delete"), circle_path(@circle), method: :delete,
           form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-sm text-red-600 underline" %>
   <% end %>
-
-  <p class="mt-6 text-sm"><%= link_to t("circles.back_to_circles"), circle_path(@circle), class: "underline" %></p>
 </div>

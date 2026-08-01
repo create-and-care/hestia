@@ -50,7 +50,6 @@ fr:
         addresses: "Carnet d'adresses"
         menu: "Menu"
       sections_submit: "Enregistrer"
-      back_to_trips: "← Voyages"
     destroy:
       deleted: "Voyage supprimé (et toutes ses données)."
     edit:

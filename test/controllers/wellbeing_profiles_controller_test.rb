@@ -12,7 +12,7 @@ class WellbeingProfilesControllerTest < ActionDispatch::IntegrationTest
   test "update builds a profile for the current user when none exists" do
     assert_nil users(:one).wellbeing_profile
     patch wellbeing_profile_path, params: { wellbeing_profile: { height: 175, age: 30, sex: "female", activity_level: "moderate" } }
-    assert_redirected_to wellbeing_path
+    assert_redirected_to edit_account_path
     assert_equal 175, users(:one).reload.wellbeing_profile.height
   end
 

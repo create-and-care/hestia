@@ -61,6 +61,12 @@
           <% item.with_title { link_to waste_type_label(occurrence.waste_type), edit_waste_collection_event_path(occurrence), class: "hover:underline" } %>
           <% item.with_description { time.strftime("%a %d/%m") } %>
         <% end %>
+      <% elsif trip_occurrence?(occurrence) %>
+        <%= render(Ui::ItemComponent.new) do |item| %>
+          <% item.with_leading { lucide_icon("luggage", css_class: "size-4") } %>
+          <% item.with_title { link_to occurrence.name, trip_path(occurrence), class: "hover:underline" } %>
+          <% item.with_description { time.strftime("%a %d/%m") } %>
+        <% end %>
       <% else %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_leading { tag.span "", class: "size-2 rounded-full #{event_color_class(occurrence.color)}" } %>

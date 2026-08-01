@@ -3,7 +3,14 @@
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <div class="mb-4"><%= module_breadcrumb(:gifts) %></div>
 
-  <h1 class="mb-6 flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("gift", css_class: "size-6") %> <%= t(".title") %></h1>
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("gift", css_class: "size-6") %> <%= t(".title") %></h1>
+    <%= render(Ui::DialogComponent.new) do |dialog| %>
+      <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :default, size: :sm)) { t(".new_list") } } %>
+      <% dialog.with_title { t(".new_list") } %>
+      <%= render "form", list: @list %>
+    <% end %>
+  </header>
 
   <%= render "shared/flash" %>
 
@@ -23,6 +30,8 @@
     </div>
     <% if @receive_lists.empty? %>
       <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_list") } } %>
+    <% elsif @receive_limited %>
+      <div class="mt-2"><%= link_to t(".see_more"), gift_lists_path(receive_all: 1, give_all: params[:give_all]), class: "text-sm underline" %></div>
     <% end %>
   </section>
 
@@ -42,24 +51,9 @@
     </div>
     <% if @give_lists.empty? %>
       <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_list") } } %>
+    <% elsif @give_limited %>
+      <div class="mt-2"><%= link_to t(".see_more"), gift_lists_path(give_all: 1, receive_all: params[:receive_all]), class: "text-sm underline" %></div>
     <% end %>
   </section>
-
-  <%= render(Ui::CardComponent.new) do |card| %>
-    <% card.with_title { t(".new_list") } %>
-    <%= form_with model: @list, url: gift_lists_path, class: "flex flex-wrap items-end gap-2", data: { controller: "field-visibility", field_visibility_show_when_value: [ "give" ].to_json } do |form| %>
-      <%= render Ui::InputComponent.new(name: "gift_list[name]", value: @list.name, placeholder: t(".name_placeholder"),
-            html_options: { id: "gift_list_name", required: true, class: "flex-1" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: "gift_list[perspective]",
-            options: [ [ t(".receive"), "receive" ], [ t(".give"), "give" ] ],
-            selected: @list.perspective, html_options: { id: "gift_list_perspective", class: "!w-auto", data: { field_visibility_target: "trigger", action: "change->field-visibility#refresh" } }) %>
-      <div data-field-visibility-target="field">
-        <%= render Ui::NativeSelectComponent.new(name: "gift_list[contact_id]",
-              options: [ [ t(".recipient_placeholder"), "" ] ] + contact_options,
-              selected: @list.contact_id, html_options: { id: "gift_list_contact_id", class: "!w-auto" }) %>
-      </div>
-      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".create") } %>
-    <% end %>
-  <% end %>
 
 </div>

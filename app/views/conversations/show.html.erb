@@ -2,6 +2,8 @@
 <%= turbo_stream_from @conversation %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:messages, [ @conversation.name, nil ], module_path: conversations_path) %></div>
+
   <header class="mb-4 flex items-center justify-between">
     <div>
       <h1 class="text-2xl font-semibold"><%= @conversation.name %></h1>
@@ -12,10 +14,14 @@
         </p>
       <% end %>
     </div>
-    <div class="flex items-center gap-3 text-sm">
-      <%= link_to t(".settings"), edit_conversation_path(@conversation), class: "underline" %>
-      <%= button_to t(".delete"), conversation_path(@conversation), method: :delete,
-            form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-destructive underline" %>
+    <div class="flex items-center gap-2">
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_conversation_path(@conversation))) { t(".settings") } %>
+      <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm"), confirm_label: t(".delete"),
+            confirm_url: conversation_path(@conversation), confirm_method: :delete)) do |alert_dialog| %>
+        <% alert_dialog.with_trigger do %>
+          <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :sm)) { t(".delete") } %>
+        <% end %>
+      <% end %>
     </div>
   </header>
 
@@ -32,6 +38,4 @@
   <% end %>
 
   <%= render "messages/form", conversation: @conversation, message: @message %>
-
-  <p class="mt-6 text-sm"><%= link_to t(".back_to_conversations"), conversations_path, class: "underline" %></p>
 </div>

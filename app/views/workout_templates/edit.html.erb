@@ -1,0 +1,48 @@
+<% content_for :title, t(".title") %>
+
+<div class="mx-auto mt-10 max-w-lg px-4">
+  <div class="mb-4"><%= module_breadcrumb(:wellbeing, [ t("workout_templates.index.title"), workout_templates_path ], [ @template.name, nil ], module_path: wellbeing_path) %></div>
+
+  <h1 class="mb-6 text-2xl font-semibold"><%= t(".title") %></h1>
+
+  <%= render "form", template: @template, url: workout_template_path(@template) %>
+
+  <section class="mt-8">
+    <h2 class="mb-3 font-medium"><%= t(".exercises_heading") %></h2>
+    <%= render(Ui::CardComponent.new) do %>
+      <% if @template.workout_template_exercises.any? %>
+        <ul class="mb-4 divide-y divide-primary text-sm">
+          <% @template.workout_template_exercises.each do |exercise| %>
+            <li>
+              <%= render(Ui::ItemComponent.new) do |item| %>
+                <% item.with_title { exercise.duration_minutes ? "#{exercise.exercise} (#{exercise.duration_minutes} min)" : exercise.exercise } %>
+                <% item.with_trailing do %>
+                  <%= form_with url: workout_template_exercise_path(@template, exercise), method: :delete do %>
+                    <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :icon, type: "submit",
+                          html_options: { aria: { label: t(".delete_exercise_aria", exercise: exercise.exercise) } })) { lucide_icon("x", css_class: "size-4") } %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".exercises_empty") } } %>
+      <% end %>
+
+      <%= form_with model: @exercise, url: workout_template_exercises_path(@template), class: "flex flex-wrap items-end gap-2" do |form| %>
+        <div class="flex-1">
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:exercise))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(name: form.field_name(:exercise), value: form.object.exercise, placeholder: t("wellbeing.show.exercise_placeholder"), html_options: { id: form.field_id(:exercise), required: true }) } %>
+          <% end %>
+        </div>
+        <div class="w-20">
+          <%= render(Ui::FieldComponent.new(id: form.field_id(:duration_minutes))) do |field| %>
+            <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:duration_minutes), value: form.object.duration_minutes, placeholder: t("wellbeing.show.duration_placeholder"), html_options: { id: form.field_id(:duration_minutes) }) } %>
+          <% end %>
+        </div>
+        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add_exercise") } %>
+      <% end %>
+    <% end %>
+  </section>
+</div>

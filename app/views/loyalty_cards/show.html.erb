@@ -1,6 +1,8 @@
 <% content_for :title, @card.name %>
 
 <div class="mx-auto mt-10 max-w-md px-4 text-center">
+  <div class="mb-4 text-left"><%= module_breadcrumb(:loyalty, [ @card.name, nil ], module_path: loyalty_cards_path) %></div>
+
   <h1 class="mb-6 flex items-center justify-center gap-2 text-2xl font-semibold">
     <% if @card.loyalty_brand&.logo_emoji.present? %><span aria-hidden="true"><%= @card.loyalty_brand.logo_emoji %></span><% end %>
     <%= @card.name %>
@@ -23,7 +25,6 @@
 
   <div class="mt-6 flex flex-wrap justify-center gap-3 text-sm">
     <%= render(Ui::ButtonComponent.new(variant: :default, href: kiosk_loyalty_card_path(@card))) { t(".kiosk_link") } %>
-    <%= link_to t(".edit"), edit_loyalty_card_path(@card), class: "underline" %>
-    <%= link_to t(".back_to_all"), loyalty_cards_path, class: "underline" %>
+    <%= render(Ui::ButtonComponent.new(variant: :outline, href: edit_loyalty_card_path(@card))) { t(".edit") } %>
   </div>
 </div>

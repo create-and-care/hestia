@@ -29,7 +29,6 @@ fr:
       delete: "Supprimer"
       delete_confirm: "Supprimer cette conversation et tous ses messages ?"
       about_prefix: "À propos de :"
-      back_to_conversations: "← Conversations"
     update:
       updated: "Conversation mise à jour."
       left: "Vous avez quitté la conversation."

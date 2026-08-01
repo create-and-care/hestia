@@ -307,6 +307,10 @@ Rails.application.routes.draw do
   resource :wellbeing_profile, only: :update
   resources :weight_entries, only: %i[create edit update destroy]
   resources :workout_entries, only: %i[create edit update destroy]
+  resources :workout_templates, except: %i[show] do
+    resources :exercises, only: %i[create destroy], controller: "workout_template_exercises"
+    member { post :log }
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

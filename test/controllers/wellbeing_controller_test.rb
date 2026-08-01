@@ -36,7 +36,7 @@ class WellbeingControllerTest < ActionDispatch::IntegrationTest
   test "profile update with an invalid sex flashes an alert instead of failing silently" do
     sign_in_as(users(:one))
     patch wellbeing_profile_path, params: { wellbeing_profile: { sex: "bogus" } }
-    assert_redirected_to wellbeing_path
+    assert_redirected_to edit_account_path
     assert_not_nil flash[:alert]
   end
 
@@ -81,7 +81,7 @@ class WellbeingControllerTest < ActionDispatch::IntegrationTest
 
     get history_wellbeing_path
     assert_response :success
-    assert_select "a[href=?]", history_wellbeing_path(weight_page: 2, workout_page: 1)
+    assert_select "a[href=?]", history_wellbeing_path(weight_page: 2, workout_page: 1, tab: "weight")
   end
 
   test "history is scoped to the current user" do

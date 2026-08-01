@@ -4,7 +4,7 @@ class ConversationsController < ApplicationController
   before_action :set_conversation, only: %i[show edit update destroy]
 
   def index
-    @conversations = accessible_conversations.includes(:conversation_participants, messages: :author).ordered
+    @conversations = accessible_conversations.includes(:conversation_participants, :participants, messages: :author).ordered
   end
 
   def show

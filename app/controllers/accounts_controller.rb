@@ -1,10 +1,12 @@
 class AccountsController < ApplicationController
   def edit
     @user = Current.user
+    @profile = Current.user.wellbeing_profile || Current.user.build_wellbeing_profile
   end
 
   def update
     @user = Current.user
+    @profile = Current.user.wellbeing_profile || Current.user.build_wellbeing_profile
 
     unless @user.authenticate(params.dig(:user, :current_password).to_s)
       @user.errors.add(:base, t(".current_password_invalid"))

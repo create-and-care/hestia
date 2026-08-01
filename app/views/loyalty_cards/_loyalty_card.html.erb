@@ -22,9 +22,13 @@
               html_options: { aria: { label: t(".view_large") } })) { lucide_icon("search", css_class: "size-4") } %>
         <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, href: edit_loyalty_card_path(loyalty_card),
               html_options: { aria: { label: t(".edit_aria", name: loyalty_card.name) } })) { lucide_icon("pencil", css_class: "size-4") } %>
-        <%= render(Ui::ButtonToComponent.new(loyalty_card_path(loyalty_card), method: :delete, variant: :ghost, size: :icon,
-              html_options: { aria: { label: t(".delete_aria", name: loyalty_card.name) },
-                              form: { data: { turbo_confirm: t(".delete_confirm", name: loyalty_card.name) } } })) { lucide_icon("x", css_class: "size-4") } %>
+        <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm", name: loyalty_card.name),
+              confirm_url: loyalty_card_path(loyalty_card), confirm_method: :delete)) do |alert_dialog| %>
+          <% alert_dialog.with_trigger do %>
+            <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon,
+                  html_options: { aria: { label: t(".delete_aria", name: loyalty_card.name) } })) { lucide_icon("x", css_class: "size-4") } %>
+          <% end %>
+        <% end %>
       </div>
     </div>
   <% end %>

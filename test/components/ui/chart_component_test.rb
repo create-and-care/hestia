@@ -49,4 +49,17 @@ class Ui::ChartComponentTest < ViewComponent::TestCase
     assert_selector "div.flex.items-end"
     assert_no_selector "span"
   end
+
+  test "line variant renders a single polyline instead of bars" do
+    render_inline(Ui::ChartComponent.new(data: [ [ "Jan", 42 ], [ "Feb", 73 ] ], variant: :line))
+
+    assert_selector "polyline", count: 1
+    assert_no_selector "div.bg-module-tasks"
+  end
+
+  test "line variant applies the given module color as a text token" do
+    render_inline(Ui::ChartComponent.new(data: [ [ "Jan", 42 ], [ "Feb", 73 ] ], variant: :line, color: "wellbeing"))
+
+    assert_selector "div.text-module-wellbeing"
+  end
 end
