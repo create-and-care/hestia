@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;600&display=swap');
 @import "tailwindcss";
 
 /*
@@ -8,11 +9,29 @@
 @theme {
   --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* Handwritten accent — greetings and celebration moments ONLY. Never labels,
+     body copy, or a heading in a data view. One line at a time. */
+  --font-hand: 'Caveat', 'Segoe Script', 'Bradley Hand', cursive;
+  --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
 
-  --radius-md: 8px;
-  --radius-lg: 10px;
+  /* Type scale — enlarged from text-sm-first to text-base-first (body 16px,
+     captions 13px) for shared-family legibility. Was: xs12/sm14/lg18/xl20/2xl24/3xl30/4xl36. */
+  --text-xs: 13px;
+  --text-sm: 15px;
+  --text-base: 16px;
+  --text-lg: 20px;
+  --text-xl: 22px;
+  --text-2xl: 26px;
+  --text-3xl: 32px;
+  --text-4xl: 40px;
+
+  /* Radii softened/expanded as part of the Terre cuite direction. Was: md 8px, lg 10px. */
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-2xl: 20px;
 
   /* raw palette */
   --color-white: #ffffff;
@@ -160,6 +179,37 @@
   --color-amber-800: #92400E;
   --color-amber-900: #78350F;
 
+  /* Clay — the terracotta brand scale (Terre cuite direction, adopted 2026-07-31).
+     Hestia's own palette had no muted earth tone; built to sit harmoniously
+     beside it (hue ≈ 32°, desaturated vs. orange-*). */
+  --color-clay-25: #FDF8F5;
+  --color-clay-50: #FBF1EB;
+  --color-clay-100: #F6E1D6;
+  --color-clay-200: #EDC5B1;
+  --color-clay-300: #E0A183;
+  --color-clay-400: #CE7B56;
+  --color-clay-500: #BC6039;
+  --color-clay-600: #A85030;
+  --color-clay-700: #8B4128;
+  --color-clay-800: #6F3320;
+  --color-clay-900: #55271A;
+
+  /* Crimson — cooler destructive red (hue ≈ 348°, pink-leaning). Hestia's raw
+     red-* scale sits at hue ≈ 3°, too close to the clay brand for a delete
+     button to read as "dangerous" rather than "branded". red-* stays
+     untouched for data viz. */
+  --color-crimson-25: #FFF5F6;
+  --color-crimson-50: #FFE8EB;
+  --color-crimson-100: #FFD0D7;
+  --color-crimson-200: #FCA6B4;
+  --color-crimson-300: #F5748C;
+  --color-crimson-400: #E94467;
+  --color-crimson-500: #D91F48;
+  --color-crimson-600: #BE143C;
+  --color-crimson-700: #9C0F31;
+  --color-crimson-800: #7C0C27;
+  --color-crimson-900: #610A20;
+
   /* semantic colors — values swap in `.dark`, see below */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -186,6 +236,20 @@
   --color-budget-unused-fill: var(--budget-unused-fill);
   --color-budget-unallocated-fill: var(--budget-unallocated-fill);
 
+  /* Per-module accents — tint an icon/avatar at 10-15% opacity, never a solid fill. */
+  --color-module-courses: var(--module-courses);
+  --color-module-fridge: var(--module-fridge);
+  --color-module-budget: var(--module-budget);
+  --color-module-calendar: var(--module-calendar);
+  --color-module-tasks: var(--module-tasks);
+  --color-module-recipes: var(--module-recipes);
+  --color-module-baby: var(--module-baby);
+  --color-module-gifts: var(--module-gifts);
+  --color-module-pets: var(--module-pets);
+  --color-module-vehicles: var(--module-vehicles);
+  --color-module-messages: var(--module-messages);
+  --color-module-wellbeing: var(--module-wellbeing);
+
   --shadow-xs: var(--shadow-xs-value);
   --shadow-sm: var(--shadow-sm-value);
   --shadow-md: var(--shadow-md-value);
@@ -195,69 +259,95 @@
 
 :root {
   --background: var(--color-white);
-  --foreground: var(--color-gray-900);
+  --foreground: #2A211C;
 
-  --brand: var(--color-indigo-600);
-  --brand-hover: var(--color-indigo-700);
-  --accent: var(--color-amber-500);
+  --brand: var(--color-clay-600);
+  --brand-hover: var(--color-clay-700);
+  --accent: var(--color-amber-600);
 
   --success: var(--color-green-700);
   --warning: var(--color-yellow-600);
-  --destructive: var(--color-red-500);
-  --destructive-subtle: var(--color-red-200);
+  --destructive: var(--color-crimson-600);
+  --destructive-subtle: var(--color-crimson-200);
   --info: var(--color-blue-600);
-  --link: var(--color-blue-600);
-  --shadow-color: color-mix(in oklab, var(--color-black) 6%, transparent);
+  --link: var(--color-blue-700);
+  --link-hover: var(--color-blue-800);
 
-  --focus-ring: color-mix(in oklab, var(--brand) 50%, transparent);
-  --tertiary: color-mix(in oklab, var(--color-black) 8%, transparent);
+  /* Status text on a light tint. --success/--warning/--destructive/--info/--accent
+     above are tuned as FILLS (dots, bars, borders); at 13-15px on a 10% tint
+     several land under 4.5:1. Rule: tint background uses --X, text on it uses --X-text. */
+  --success-text: var(--color-green-800);
+  --warning-text: var(--color-yellow-700);
+  --destructive-text: var(--color-crimson-700);
+  --info-text: var(--color-blue-700);
+  --accent-text: var(--color-amber-800);
 
-  --surface: var(--color-gray-50);
-  --surface-hover: var(--color-gray-100);
-  --surface-inset: var(--color-gray-100);
-  --surface-inset-hover: var(--color-gray-200);
+  --shadow-color: color-mix(in oklab, #4A2E1E 8%, transparent);
+
+  --focus-ring: color-mix(in oklab, var(--brand) 45%, transparent);
+  --tertiary: color-mix(in oklab, #3A2A22 8%, transparent);
+
+  --surface: #FBF7F4;
+  --surface-hover: #F5EDE7;
+  --surface-inset: #F3EAE3;
+  --surface-inset-hover: #EADFD6;
   --container: var(--color-white);
-  --container-hover: var(--color-gray-50);
-  --container-inset: var(--color-gray-50);
-  --container-inset-hover: var(--color-gray-100);
-  --nav-indicator: var(--color-black);
-  --toggle-track: var(--color-gray-300);
+  --container-hover: #FBF7F4;
+  --container-inset: #FBF7F4;
+  --container-inset-hover: #F5EDE7;
+  --nav-indicator: var(--color-clay-700);
+  --toggle-track: #D9CBC1;
 
-  --budget-unused-fill: var(--color-gray-200);
-  --budget-unallocated-fill: var(--color-gray-50);
+  --budget-unused-fill: #EADFD6;
+  --budget-unallocated-fill: #FBF7F4;
 
-  --bg-inverse: var(--color-gray-800);
-  --bg-inverse-hover: var(--color-gray-700);
-  --bg-overlay: color-mix(in oklab, var(--color-gray-100) 50%, transparent);
+  --bg-inverse: #3A2A22;
+  --bg-inverse-hover: #4E3729;
+  --bg-overlay: color-mix(in oklab, #3A2A22 45%, transparent);
 
-  --text-primary: var(--color-gray-900);
+  --text-primary: #2A211C;
   --text-inverse: var(--color-white);
-  --text-secondary: var(--color-gray-500);
-  --text-subdued: var(--color-gray-400);
+  --text-secondary: #6E625B;
+  --text-subdued: #7A6B61;
 
-  --border-primary: color-mix(in oklab, var(--color-black) 15%, transparent);
-  --border-secondary: color-mix(in oklab, var(--color-black) 10%, transparent);
-  --border-subdued: color-mix(in oklab, var(--color-black) 5%, transparent);
-  --border-solid: var(--color-black);
-  --border-destructive: var(--color-red-500);
+  --border-primary: color-mix(in oklab, #3A2A22 15%, transparent);
+  --border-secondary: color-mix(in oklab, #3A2A22 10%, transparent);
+  --border-subdued: color-mix(in oklab, #3A2A22 5%, transparent);
+  --border-solid: #2A211C;
+  --border-destructive: var(--color-crimson-600);
   --border-inverse: color-mix(in oklab, var(--color-white) 10%, transparent);
-  --shadow-border-color: color-mix(in oklab, var(--color-black) 5%, transparent);
+  --shadow-border-color: color-mix(in oklab, #4A2E1E 6%, transparent);
 
   --button-bg-primary: var(--brand);
   --button-bg-primary-hover: var(--brand-hover);
-  --button-bg-secondary: var(--color-gray-50);
-  --button-bg-secondary-hover: var(--color-gray-100);
-  --button-bg-secondary-strong: var(--color-gray-200);
-  --button-bg-secondary-strong-hover: var(--color-gray-300);
-  --button-bg-disabled: var(--color-gray-50);
-  --button-bg-destructive: var(--color-red-600);
-  --button-bg-destructive-hover: var(--color-red-700);
-  --button-bg-ghost-hover: var(--color-gray-50);
-  --button-bg-outline-hover: var(--color-gray-100);
+  --button-bg-secondary: #FBF1EB;
+  --button-bg-secondary-hover: #F6E1D6;
+  --button-bg-secondary-strong: #F6E1D6;
+  --button-bg-secondary-strong-hover: #EDC5B1;
+  --button-bg-disabled: #F3EAE3;
+  --button-bg-destructive: var(--color-crimson-600);
+  --button-bg-destructive-hover: var(--color-crimson-700);
+  --button-bg-ghost-hover: #F5EDE7;
+  --button-bg-outline-hover: #F5EDE7;
 
   --tab-item-active: var(--color-white);
-  --tab-item-hover: var(--color-gray-200);
-  --tab-bg-group: var(--color-gray-50);
+  --tab-item-hover: #F5EDE7;
+  --tab-bg-group: #F3EAE3;
+
+  /* Per-module accents — one hue per household domain, so many modules stay
+     scannable. Tinted at 12% behind an icon; never a solid fill. */
+  --module-courses: var(--color-clay-600);
+  --module-fridge: var(--color-cyan-700);
+  --module-budget: var(--color-green-800);
+  --module-calendar: var(--color-amber-700);
+  --module-tasks: var(--color-violet-600);
+  --module-recipes: var(--color-orange-600);
+  --module-baby: var(--color-pink-600);
+  --module-gifts: var(--color-fuchsia-700);
+  --module-pets: var(--color-yellow-900);
+  --module-vehicles: var(--color-blue-700);
+  --module-messages: var(--color-indigo-600);
+  --module-wellbeing: var(--color-green-700);
 
   --shadow-xs-value: 0px 1px 2px 0px var(--shadow-color);
   --shadow-sm-value: 0px 1px 6px 0px var(--shadow-color);
@@ -267,70 +357,91 @@
 }
 
 .dark {
-  --background: var(--color-black);
-  --foreground: var(--color-white);
+  --background: #14100E;
+  --foreground: #FBF7F4;
 
-  --brand: var(--color-indigo-400);
-  --brand-hover: var(--color-indigo-300);
+  --brand: var(--color-clay-300);
+  --brand-hover: var(--color-clay-200);
   --accent: var(--color-amber-400);
 
   --success: var(--color-green-400);
   --warning: var(--color-yellow-400);
-  --destructive: var(--color-red-400);
-  --destructive-subtle: var(--color-red-800);
+  --destructive: var(--color-crimson-300);
+  --destructive-subtle: var(--color-crimson-800);
   --info: var(--color-blue-500);
-  --link: var(--color-blue-500);
-  --shadow-color: color-mix(in oklab, var(--color-white) 8%, transparent);
+  --link: var(--color-blue-400);
+  --link-hover: var(--color-blue-300);
 
-  --focus-ring: color-mix(in oklab, var(--brand) 50%, transparent);
-  --tertiary: color-mix(in oklab, var(--color-white) 10%, transparent);
+  --success-text: var(--color-green-300);
+  --warning-text: var(--color-yellow-300);
+  --destructive-text: var(--color-crimson-300);
+  --info-text: var(--color-blue-400);
+  --accent-text: var(--color-amber-300);
 
-  --surface: var(--color-black);
-  --surface-hover: var(--color-gray-800);
-  --surface-inset: var(--color-gray-800);
-  --surface-inset-hover: var(--color-gray-800);
-  --container: var(--color-gray-900);
-  --container-hover: var(--color-gray-800);
-  --container-inset: var(--color-gray-800);
-  --container-inset-hover: var(--color-gray-700);
-  --nav-indicator: var(--color-white);
-  --toggle-track: var(--color-gray-700);
+  --shadow-color: color-mix(in oklab, var(--color-black) 40%, transparent);
 
-  --budget-unused-fill: var(--color-gray-500);
-  --budget-unallocated-fill: var(--color-gray-700);
+  --focus-ring: color-mix(in oklab, var(--brand) 45%, transparent);
+  --tertiary: color-mix(in oklab, #F6E1D6 12%, transparent);
 
-  --bg-inverse: var(--color-white);
-  --bg-inverse-hover: var(--color-gray-100);
-  --bg-overlay: color-mix(in oklab, var(--color-black) 85%, transparent);
+  --surface: #14100E;
+  --surface-hover: #26201C;
+  --surface-inset: #26201C;
+  --surface-inset-hover: #322A25;
+  --container: #1D1815;
+  --container-hover: #26201C;
+  --container-inset: #26201C;
+  --container-inset-hover: #322A25;
+  --nav-indicator: var(--color-clay-300);
+  --toggle-track: #4A3E37;
 
-  --text-primary: var(--color-white);
-  --text-inverse: var(--color-gray-900);
-  --text-secondary: var(--color-gray-300);
-  --text-subdued: var(--color-gray-400);
+  --budget-unused-fill: #4A3E37;
+  --budget-unallocated-fill: #322A25;
 
-  --border-primary: color-mix(in oklab, var(--color-white) 30%, transparent);
-  --border-secondary: color-mix(in oklab, var(--color-white) 20%, transparent);
-  --border-subdued: color-mix(in oklab, var(--color-white) 10%, transparent);
-  --border-solid: var(--color-white);
-  --border-destructive: var(--color-red-400);
+  --bg-inverse: #FBF7F4;
+  --bg-inverse-hover: #F6E1D6;
+  --bg-overlay: color-mix(in oklab, #14100E 85%, transparent);
+
+  --text-primary: #FBF7F4;
+  --text-inverse: #2A211C;
+  --text-secondary: #C6B8AF;
+  --text-subdued: #9C8F86;
+
+  --border-primary: color-mix(in oklab, #F6E1D6 26%, transparent);
+  --border-secondary: color-mix(in oklab, #F6E1D6 18%, transparent);
+  --border-subdued: color-mix(in oklab, #F6E1D6 10%, transparent);
+  --border-solid: #FBF7F4;
+  --border-destructive: var(--color-crimson-300);
   --border-inverse: color-mix(in oklab, var(--color-black) 15%, transparent);
-  --shadow-border-color: color-mix(in oklab, var(--color-white) 5%, transparent);
+  --shadow-border-color: color-mix(in oklab, #F6E1D6 6%, transparent);
 
   --button-bg-primary: var(--brand);
   --button-bg-primary-hover: var(--brand-hover);
-  --button-bg-secondary: var(--color-gray-700);
-  --button-bg-secondary-hover: var(--color-gray-600);
-  --button-bg-secondary-strong: var(--color-gray-700);
-  --button-bg-secondary-strong-hover: var(--color-gray-600);
-  --button-bg-disabled: var(--color-gray-700);
-  --button-bg-destructive: var(--color-red-400);
-  --button-bg-destructive-hover: var(--color-red-500);
-  --button-bg-ghost-hover: var(--color-gray-800);
-  --button-bg-outline-hover: var(--color-gray-700);
+  --button-bg-secondary: #322A25;
+  --button-bg-secondary-hover: #4A3E37;
+  --button-bg-secondary-strong: #4A3E37;
+  --button-bg-secondary-strong-hover: #5E4E44;
+  --button-bg-disabled: #322A25;
+  --button-bg-destructive: var(--color-crimson-300);
+  --button-bg-destructive-hover: var(--color-crimson-200);
+  --button-bg-ghost-hover: #26201C;
+  --button-bg-outline-hover: #322A25;
 
-  --tab-item-active: var(--color-gray-700);
-  --tab-item-hover: var(--color-gray-800);
-  --tab-bg-group: color-mix(in oklab, var(--color-black) 50%, transparent);
+  --tab-item-active: #4A3E37;
+  --tab-item-hover: #26201C;
+  --tab-bg-group: color-mix(in oklab, var(--color-black) 40%, transparent);
+
+  --module-courses: var(--color-clay-300);
+  --module-fridge: var(--color-cyan-400);
+  --module-budget: var(--color-green-400);
+  --module-calendar: var(--color-amber-400);
+  --module-tasks: var(--color-violet-400);
+  --module-recipes: var(--color-orange-300);
+  --module-baby: var(--color-pink-400);
+  --module-gifts: var(--color-fuchsia-400);
+  --module-pets: var(--color-yellow-400);
+  --module-vehicles: var(--color-blue-400);
+  --module-messages: var(--color-indigo-400);
+  --module-wellbeing: var(--color-green-300);
 }
 
 /* utility classes for tokens that map to a single CSS property rather than
@@ -344,6 +455,18 @@
 @utility text-inverse { color: var(--text-inverse); }
 @utility text-secondary { color: var(--text-secondary); }
 @utility text-subdued { color: var(--text-subdued); }
+@utility bg-subdued { background-color: var(--text-subdued); }
+
+/* text-on-tint overrides: --success/--warning/--destructive/--info/--accent are
+   tuned as FILLS (dots, bars, borders), too light for 13-15px text at 4.5:1.
+   !important: Tailwind's auto-generated text-* utilities (from the --color-*
+   theme registration above) share the utilities layer with these and would
+   otherwise win regardless of source order. */
+@utility text-success { color: var(--success-text) !important; }
+@utility text-warning { color: var(--warning-text) !important; }
+@utility text-destructive { color: var(--destructive-text) !important; }
+@utility text-info { color: var(--info-text) !important; }
+@utility text-accent { color: var(--accent-text) !important; }
 
 @utility border-primary { border-color: var(--border-primary); }
 @utility border-secondary { border-color: var(--border-secondary); }
@@ -458,3 +581,11 @@ dialog::backdrop {
 
 dialog[data-state="open"]::backdrop { opacity: 1; }
 dialog[data-state="closed"]::backdrop { opacity: 0; }
+
+body { background: var(--surface); color: var(--text-primary); }
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; text-underline-offset: 3px; }
+
+/* .greeting — reserved for GreetingHeader/CelebrationMoment titles. Never
+   labels, body copy, or a data-view heading. */
+.greeting { font-family: var(--font-hand); font-weight: 600; font-size: 44px; line-height: 1.05; color: var(--text-primary); }

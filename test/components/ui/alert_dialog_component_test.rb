@@ -59,4 +59,16 @@ class Ui::AlertDialogComponentTest < ViewComponent::TestCase
     end
     refute_selector "button[data-action='click->dialog#close']", text: "Delete"
   end
+
+  test "the decorative confirm button honors a non-destructive confirm_variant" do
+    render_inline(
+      Ui::AlertDialogComponent.new(title: "Sign out?", confirm_label: "Sign out", confirm_variant: :secondary)
+    ) do |c|
+      c.with_trigger { "Open" }
+    end
+
+    confirm_button = page.find("button[data-action='click->dialog#close']", text: "Sign out")
+    assert confirm_button[:class].include?("bg-button-secondary")
+    refute confirm_button[:class].include?("bg-button-destructive")
+  end
 end

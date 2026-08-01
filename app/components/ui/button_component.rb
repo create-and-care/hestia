@@ -10,10 +10,10 @@ module Ui
     }.freeze
 
     SIZES = {
-      sm: "h-8 px-3 text-sm gap-1.5",
-      default: "h-9 px-4 text-sm gap-2",
-      lg: "h-10 px-6 text-base gap-2",
-      icon: "size-9 p-0 justify-center"
+      sm: "h-9 px-3 text-sm gap-1.5",
+      default: "h-10 px-4 text-sm gap-2",
+      lg: "h-11 px-6 text-base gap-2",
+      icon: "size-10 p-0 justify-center"
     }.freeze
 
     def initialize(variant: :default, size: :default, type: "button", disabled: false, href: nil, html_options: {})

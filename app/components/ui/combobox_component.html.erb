@@ -4,16 +4,16 @@
 
   <button type="button" data-combobox-target="trigger" data-action="click->combobox#toggle"
     aria-haspopup="listbox" aria-expanded="false" aria-controls="<%= listbox_id %>"
-    class="flex h-9 w-full items-center justify-between rounded-md border border-primary bg-container px-3 text-sm text-primary">
+    class="flex h-10 w-full items-center justify-between rounded-md border border-primary bg-container px-3 text-sm text-primary">
     <span data-combobox-target="label"><%= selected_label %></span>
     <svg class="size-4 text-secondary" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
 
   <div data-combobox-target="panel" hidden data-state="closed"
-    class="fixed z-50 w-56 rounded-md border border-primary bg-container p-1 shadow-lg
+    class="fixed z-50 w-56 rounded-md border border-primary bg-container p-1 shadow-border-md
            data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-top-2
            data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
-    <input type="text" data-combobox-target="search" data-action="input->combobox#filter keydown->combobox#onSearchKeydown" placeholder="Search…"
+    <input type="text" data-combobox-target="search" data-action="input->combobox#filter keydown->combobox#onSearchKeydown" placeholder="Rechercher…"
       class="mb-1 w-full rounded-sm border-0 border-b border-primary px-2 py-1.5 text-sm text-primary focus:outline-none">
     <div id="<%= listbox_id %>" role="listbox" class="max-h-56 overflow-auto">
       <% @options.each do |label, value| %>
@@ -23,7 +23,7 @@
           <%= label %>
         </button>
       <% end %>
-      <p data-combobox-target="empty" hidden class="px-2 py-1.5 text-sm text-secondary">No results found.</p>
+      <p data-combobox-target="empty" hidden class="px-2 py-1.5 text-sm text-secondary">Aucun résultat.</p>
       <% if @allow_custom %>
         <button type="button" role="option" tabindex="-1" data-combobox-target="createOption" hidden
           data-action="click->combobox#selectCustom"

@@ -1,7 +1,7 @@
 module Ui
   class ComboboxComponent < ApplicationComponent
-    def initialize(name:, options: [], selected: nil, placeholder: "Select an option",
-                    allow_custom: false, create_label: "Use “%{query}”")
+    def initialize(name:, options: [], selected: nil, placeholder: "Sélectionner…",
+                    allow_custom: false, create_label: "Utiliser « %{query} »")
       @name = name
       @options = options
       @selected = selected

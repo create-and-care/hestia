@@ -4,7 +4,7 @@ class Ui::AvatarGroupComponentTest < ViewComponent::TestCase
   test "renders one avatar per member with an overlapping stack" do
     render_inline(Ui::AvatarGroupComponent.new(members: [ { alt: "Jane Doe" }, { alt: "John Doe" } ]))
 
-    assert_selector ".-space-x-2"
+    assert_selector ".-space-x-2\\.5"
     assert_selector "span", text: "JD", exact_text: true, count: 2
   end
 

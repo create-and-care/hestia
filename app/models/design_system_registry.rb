@@ -40,7 +40,8 @@ module DesignSystemRegistry
     "Navigation",
     "Affichage de données",
     "Feedback & mise en page",
-    "Conversation"
+    "Conversation",
+    "Marque"
   ].freeze
 
   SELECTION_USAGE = "Trois façons de choisir une valeur dans une liste, à ne pas confondre :\n" \
@@ -239,7 +240,24 @@ module DesignSystemRegistry
     Entry.new(slug: "message-scroller", name: "Message Scroller", category: CATEGORIES[5],
       component_class: defined?(Ui::MessageScrollerComponent) ? Ui::MessageScrollerComponent : nil,
       description: "Conteneur de fil de discussion : ancre le scroll en bas, bouton de retour au dernier message.",
-      related: %w[message])
+      related: %w[message]),
+
+    # ── Marque ───────────────────────────────────────────────────────────
+    Entry.new(slug: "greeting-header", name: "Greeting Header", category: CATEGORIES[6],
+      component_class: defined?(Ui::GreetingHeaderComponent) ? Ui::GreetingHeaderComponent : nil,
+      description: "Salutation selon l'heure de la journée dans la police manuscrite, plus une ligne secondaire optionnelle. Ouvre le tableau de bord."),
+    Entry.new(slug: "household-header", name: "Household Header", category: CATEGORIES[6],
+      component_class: defined?(Ui::HouseholdHeaderComponent) ? Ui::HouseholdHeaderComponent : nil,
+      description: "Carte d'identité du foyer : photo, nom, avatars des membres et action — une fois en haut du tableau de bord.",
+      related: %w[avatar-group]),
+    Entry.new(slug: "module-medallion", name: "Module Medallion", category: CATEGORIES[6],
+      component_class: defined?(Ui::ModuleMedallionComponent) ? Ui::ModuleMedallionComponent : nil,
+      description: "Badge rond teinté à 12% par module du foyer (courses, frigo, budget…), pour repérer un domaine d'un coup d'œil.",
+      related: %w[celebration-moment]),
+    Entry.new(slug: "celebration-moment", name: "Celebration Moment", category: CATEGORIES[6],
+      component_class: defined?(Ui::CelebrationMomentComponent) ? Ui::CelebrationMomentComponent : nil,
+      description: "Bandeau chaleureux et dismissible pour un anniversaire proche, une série maintenue ou une étape franchie — un seul à l'écran à la fois.",
+      related: %w[module-medallion])
   ].freeze
 
   def self.all

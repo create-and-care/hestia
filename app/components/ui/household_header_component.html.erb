@@ -1,0 +1,19 @@
+<div class="<%= cn("rounded-lg overflow-hidden border border-primary bg-container", @class_name) %>">
+  <div class="relative flex items-center justify-center bg-surface-inset" style="height: <%= @height %>px">
+    <% if photo? %>
+      <%= photo %>
+    <% else %>
+      <span class="text-sm text-subdued">Ajoutez une photo du foyer</span>
+    <% end %>
+  </div>
+
+  <div class="flex items-center gap-4 px-5 py-4">
+    <div class="flex-1 min-w-0">
+      <h2 class="text-[22px] font-semibold tracking-[-0.02em] text-primary truncate"><%= @name %></h2>
+      <% if @note %><p class="text-sm text-secondary mt-0.5"><%= @note %></p><% end %>
+    </div>
+
+    <% if @members.any? %><%= render Ui::AvatarGroupComponent.new(members: @members, max: 5) %><% end %>
+    <% if action? %><%= action %><% end %>
+  </div>
+</div>

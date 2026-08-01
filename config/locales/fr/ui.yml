@@ -18,3 +18,12 @@ fr:
     file_upload:
       choose: Choisir un fichier
       remove_aria: Retirer le fichier
+    greeting_header:
+      night: Bonne nuit
+      morning: Bonjour
+      lunch: Bon appétit
+      afternoon: Bon après-midi
+      evening: Bonsoir
+      late_evening: Bonne soirée
+    celebration_moment:
+      dismiss_aria: Fermer

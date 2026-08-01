@@ -18,4 +18,10 @@ class Ui::SkeletonComponentTest < ViewComponent::TestCase
 
     assert_selector "div.bg-loader.h-10.w-10.rounded-full"
   end
+
+  test "a custom radius class replaces the default instead of stacking with it" do
+    render_inline(Ui::SkeletonComponent.new(class_name: "size-10 rounded-full"))
+
+    refute_selector "div.rounded-md"
+  end
 end

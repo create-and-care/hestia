@@ -22,4 +22,14 @@ class Ui::EmptyComponentTest < ViewComponent::TestCase
     refute_selector "p"
     refute_selector "div.mt-3"
   end
+
+  test "illustration slot takes precedence over icon when both are given" do
+    render_inline(Ui::EmptyComponent.new) do |c|
+      c.with_illustration { "<svg data-testid='illustration'></svg>".html_safe }
+      c.with_icon { "ICON" }
+    end
+
+    assert_selector "svg[data-testid='illustration']"
+    refute_text "ICON"
+  end
 end
