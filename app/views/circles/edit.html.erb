@@ -56,7 +56,7 @@
     </div>
   <% end %>
 
-  <%= render(Ui::CardComponent.new(class_name: "mb-6 border-red-200 dark:border-red-900")) do |card| %>
+  <%= render(Ui::CardComponent.new(class_name: "mb-6 border-destructive")) do |card| %>
     <% card.with_title { t(".danger_zone") } %>
     <%= button_to t(".delete"), circle_path(@circle), method: :delete,
           form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-sm text-red-600 underline" %>

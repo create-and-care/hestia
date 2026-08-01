@@ -12,7 +12,7 @@ module Ui
     def call
       content_tag :select, name: @name, disabled: @disabled, "aria-invalid": @invalid, **@html_options.except(:class),
         class: cn(
-          "flex h-10 w-full appearance-none rounded-md border bg-container px-3 text-sm text-primary",
+          "flex h-[var(--control-h-default)] w-full appearance-none rounded-md border bg-container px-3 text-sm text-primary",
           "focus-visible:outline-none focus-visible:ring-focus disabled:opacity-50",
           @invalid ? "border-destructive" : "border-primary",
           @html_options[:class]

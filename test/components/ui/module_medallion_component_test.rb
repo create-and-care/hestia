@@ -5,7 +5,7 @@ class Ui::ModuleMedallionComponentTest < ViewComponent::TestCase
     render_inline(Ui::ModuleMedallionComponent.new(mod: :courses, icon: "shopping-cart"))
 
     assert_selector "span.bg-module-courses\\/12.text-module-courses"
-    assert_selector "svg[aria-hidden='true']"
+    assert_selector "span[aria-hidden='true'][style*='mask']"
   end
 
   test "sizes map to the SIZES scale" do

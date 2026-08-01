@@ -32,6 +32,13 @@
   --radius-md: 10px;
   --radius-lg: 14px;
   --radius-2xl: 20px;
+  --radius-full: 9999px;
+
+  /* Control heights — single source of truth for Button/Input/Select/Textarea/InputOtp.
+     Was: 32/36/40. */
+  --control-h-sm: 36px;
+  --control-h-default: 40px;
+  --control-h-lg: 44px;
 
   /* raw palette */
   --color-white: #ffffff;
@@ -231,7 +238,6 @@
   --color-container-hover: var(--container-hover);
   --color-container-inset: var(--container-inset);
   --color-container-inset-hover: var(--container-inset-hover);
-  --color-nav-indicator: var(--nav-indicator);
   --color-toggle-track: var(--toggle-track);
   --color-budget-unused-fill: var(--budget-unused-fill);
   --color-budget-unallocated-fill: var(--budget-unallocated-fill);
@@ -295,7 +301,6 @@
   --container-hover: #FBF7F4;
   --container-inset: #FBF7F4;
   --container-inset-hover: #F5EDE7;
-  --nav-indicator: var(--color-clay-700);
   --toggle-track: #D9CBC1;
 
   --budget-unused-fill: #EADFD6;
@@ -391,7 +396,6 @@
   --container-hover: #26201C;
   --container-inset: #26201C;
   --container-inset-hover: #322A25;
-  --nav-indicator: var(--color-clay-300);
   --toggle-track: #4A3E37;
 
   --budget-unused-fill: #4A3E37;
@@ -595,4 +599,13 @@ dialog[data-state="closed"]::backdrop { opacity: 0; }
   /* .greeting — reserved for GreetingHeader/CelebrationMoment titles. Never
      labels, body copy, or a data-view heading. */
   .greeting { font-family: var(--font-hand); font-weight: 600; font-size: 44px; line-height: 1.05; color: var(--text-primary); }
+
+  /* Heading scale — explicit line-height/letter-spacing per level, single
+     source of truth for Typography's h1-h4 variants (and any raw markup). */
+  .h1 { font-size: var(--text-4xl); line-height: 1.15; letter-spacing: -0.02em; font-weight: var(--font-weight-semibold); color: var(--text-primary); }
+  .h2 { font-size: var(--text-3xl); line-height: 1.2; letter-spacing: -0.02em; font-weight: var(--font-weight-semibold); color: var(--text-primary); }
+  .h3 { font-size: var(--text-2xl); line-height: 1.25; letter-spacing: -0.02em; font-weight: var(--font-weight-semibold); color: var(--text-primary); }
+  .h4 { font-size: var(--text-xl); line-height: 1.3; letter-spacing: -0.02em; font-weight: var(--font-weight-semibold); color: var(--text-primary); }
+
+  .body-text { font-size: 16px; line-height: 1.6; }
 }

@@ -27,4 +27,10 @@ class Ui::AvatarGroupComponentTest < ViewComponent::TestCase
 
     assert_no_text "+"
   end
+
+  test "propagates each member's tint to its avatar" do
+    render_inline(Ui::AvatarGroupComponent.new(members: [ { alt: "Jane Doe", tint: :budget } ]))
+
+    assert_selector "span.bg-module-budget\\/14.text-module-budget"
+  end
 end

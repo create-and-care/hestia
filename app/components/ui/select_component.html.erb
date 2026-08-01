@@ -17,7 +17,7 @@
 
   <button type="button" data-select-target="trigger" data-action="click->select#toggle keydown->select#onTriggerKeydown"
     aria-haspopup="listbox" aria-expanded="false" aria-controls="<%= panel_id %>"
-    class="flex h-10 w-full items-center justify-between rounded-md border border-primary bg-container px-3 text-sm text-primary">
+    class="flex h-[var(--control-h-default)] w-full items-center justify-between rounded-md border border-primary bg-container px-3 text-sm text-primary">
     <span data-select-target="label"><%= selected_label %></span>
     <svg class="size-4 text-secondary" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>

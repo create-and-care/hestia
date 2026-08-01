@@ -1,0 +1,106 @@
+<% content_for :title, "Illustrations — Design system — Hestia" %>
+
+<%= render(layout: "design_system/shell") do %>
+  <p class="text-xs font-medium text-subdued">Fondations</p>
+  <h1 class="mt-1 text-2xl font-semibold text-primary">Illustrations</h1>
+  <p class="mt-2 text-sm text-secondary max-w-prose">
+    Réservées aux états vides et à l'onboarding — jamais un titre de vue de données, jamais une bannière marketing.
+    <%= link_to "Ui::EmptyComponent", design_system_component_path("empty"), class: "underline" %> accepte un slot
+    <code class="font-mono text-xs">illustration</code> qui remplace l'icône par défaut, affiché à 200px de large.
+  </p>
+
+  <div class="mt-10">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Contexte produit</h2>
+    <p class="mt-3 text-sm text-secondary max-w-prose">
+      Quatre écrans passent le plus clair de leur temps vides — surtout pour un nouveau foyer : les courses avant le
+      premier article, le frigo avant le premier inventaire, la liste de cadeaux avant la première idée, et l'accueil
+      avant que le foyer n'existe. Une icône Lucide générique y suffit fonctionnellement, mais une illustration chaude
+      et spécifique au module transforme "il n'y a rien ici" en "commence ici" — cohérent avec le ton éditorial du
+      reste du système (encouragement, jamais erreur).
+    </p>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Spécifications techniques</h2>
+    <ul class="mt-3 text-sm text-secondary space-y-1 list-disc list-inside">
+      <li>480 × 360px, fond transparent (PNG ou SVG)</li>
+      <li>Palette : 2 couleurs maximum — <code class="font-mono text-xs">#A85030</code> (clay-600) et
+        <code class="font-mono text-xs">#CE7B56</code> (clay-400), plus <code class="font-mono text-xs">#F59E0B</code>
+        (amber-500) en accent ponctuel uniquement</li>
+      <li>Style plat, ligne fine, silhouette simple — pas de dégradé complexe ni de texture photo</li>
+    </ul>
+    <div class="mt-4 flex gap-4">
+      <div class="flex flex-col items-center gap-1">
+        <div class="size-14 rounded-md border border-subdued" style="background-color: #A85030"></div>
+        <span class="font-mono text-[11px] text-secondary">#A85030</span>
+      </div>
+      <div class="flex flex-col items-center gap-1">
+        <div class="size-14 rounded-md border border-subdued" style="background-color: #CE7B56"></div>
+        <span class="font-mono text-[11px] text-secondary">#CE7B56</span>
+      </div>
+      <div class="flex flex-col items-center gap-1">
+        <div class="size-14 rounded-md border border-subdued" style="background-color: #F59E0B"></div>
+        <span class="font-mono text-[11px] text-secondary">#F59E0B (accent)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Les 4 sujets</h2>
+    <dl class="mt-3 text-sm space-y-2">
+      <div><dt class="inline font-medium text-primary">Courses —</dt> <dd class="inline text-secondary">un panier ou un cabas à moitié rempli, posé, en attente du premier article.</dd></div>
+      <div><dt class="inline font-medium text-primary">Frigo —</dt> <dd class="inline text-secondary">une porte de réfrigérateur entrouverte sur des étagères encore vides.</dd></div>
+      <div><dt class="inline font-medium text-primary">Cadeaux —</dt> <dd class="inline text-secondary">une boîte cadeau fermée, ruban noué, avant qu'aucune idée n'y soit associée.</dd></div>
+      <div><dt class="inline font-medium text-primary">Onboarding —</dt> <dd class="inline text-secondary">une maison simple, porte ouverte, qui invite à entrer plutôt qu'un logo abstrait.</dd></div>
+    </dl>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Bloc de prompt réutilisable</h2>
+    <p class="mt-2 text-xs text-secondary">À adapter en remplaçant <code class="font-mono text-xs">{sujet}</code> par l'un des 4 ci-dessus.</p>
+    <pre class="mt-3 rounded-md border border-primary bg-surface-inset p-4 text-xs font-mono text-primary whitespace-pre-wrap">Illustration plate et minimaliste pour un état vide d'application familiale, style ligne fine à deux couleurs (#A85030 et #CE7B56, avec #F59E0B en accent ponctuel uniquement), fond entièrement transparent, cadrage 480×360px, sujet centré avec beaucoup d'espace autour.
+
+Sujet : {sujet}.
+
+Ton chaleureux et accueillant, jamais triste ni vide de sens. Composition simple, une seule silhouette ou objet, pas de scène complexe.
+
+Interdits stricts : pas de mascotte ni de personnage anthropomorphe, pas d'objet flottant sur un dégradé de fond, pas de visage triste ou pleurant, pas de rendu 3D ni photoréaliste, aucun texte ni lettrage dans l'image.</pre>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Interdits</h2>
+    <ul class="mt-3 text-sm text-secondary space-y-1 list-disc list-inside">
+      <li>Pas de mascotte ou de personnage anthropomorphe</li>
+      <li>Pas d'objet flottant sur un dégradé de fond</li>
+      <li>Pas de tête ou visage triste</li>
+      <li>Pas de rendu 3D</li>
+      <li>Pas de texte dans l'image</li>
+    </ul>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-sm font-semibold text-primary border-b border-primary pb-2">Emplacements</h2>
+    <p class="mt-2 text-xs text-secondary">
+      Dépose <code class="font-mono text-xs">courses.png</code>, <code class="font-mono text-xs">fridge.png</code>,
+      <code class="font-mono text-xs">gifts.png</code> ou <code class="font-mono text-xs">onboarding.png</code>
+      (SVG accepté aussi) dans <code class="font-mono text-xs">app/assets/images/illustrations/</code> — cette page les
+      détecte automatiquement, aucun code à changer.
+    </p>
+    <% slot_icons = { courses: "shopping-cart", fridge: "refrigerator", gifts: "gift", onboarding: "house" } %>
+    <div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <% @illustration_slots.each do |slug, asset_path| %>
+        <div class="flex flex-col items-center gap-2 rounded-lg border border-dashed border-primary p-4">
+          <% if asset_path %>
+            <%= image_tag asset_path, class: "h-[150px] w-full object-contain", alt: slug.to_s %>
+          <% else %>
+            <div class="flex h-[150px] w-full flex-col items-center justify-center gap-1 rounded-md bg-surface-inset text-center">
+              <%= lucide_icon slot_icons.fetch(slug), css_class: "size-6 text-subdued" %>
+              <span class="text-xs text-subdued px-2">En attente d'illustration</span>
+            </div>
+          <% end %>
+          <span class="font-mono text-[11px] text-secondary"><%= slug %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

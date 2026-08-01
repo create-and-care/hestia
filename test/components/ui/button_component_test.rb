@@ -22,7 +22,7 @@ class Ui::ButtonComponentTest < ViewComponent::TestCase
       render_inline(Ui::ButtonComponent.new(size: size)) { "Button" }
 
       fragment = Ui::ButtonComponent::SIZES.fetch(size).split.first
-      assert_selector "button.#{fragment}"
+      assert_selector "button[class*='#{fragment}']"
     end
   end
 

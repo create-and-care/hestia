@@ -320,6 +320,7 @@ Rails.application.routes.draw do
   get "design-system/colors", to: "design_system#colors"
   get "design-system/typography", to: "design_system#typography"
   get "design-system/icons", to: "design_system#icons"
+  get "design-system/illustrations", to: "design_system#illustrations"
   get "design-system/components/:id", to: "design_system#component", as: :design_system_component
 
   # Global command-palette search (sidebar) — searches across all household

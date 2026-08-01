@@ -13,4 +13,19 @@ module IconHelper
     attrs_html = attrs.map { |key, value| %(#{key}="#{ERB::Util.html_escape(value)}") }.join(" ")
     raw(svg.sub(/class="[^"]*"/, attrs_html))
   end
+
+  # Same icon set, painted via CSS mask instead of inline SVG. Use this
+  # instead of `lucide_icon` wherever the glyph must inherit a color that
+  # isn't the surrounding text color — e.g. ModuleMedallion, where the glyph
+  # is `text-module-*` but the element itself has no text content to inherit
+  # `currentColor` from via stroke. `background-color: currentColor` clipped
+  # to the icon shape achieves the same "colored by the parent" effect.
+  def lucide_icon_mask(name, css_class: "size-4", **html_options)
+    url = asset_path("lucide/#{name}.svg")
+    mask = "url('#{url}') center / contain no-repeat"
+    style = "mask: #{mask}; -webkit-mask: #{mask};"
+    classes = [ "inline-block bg-current", css_class ].join(" ")
+    attrs = { class: classes, style: style, "aria-hidden": true }.merge(html_options)
+    tag.span(**attrs)
+  end
 end

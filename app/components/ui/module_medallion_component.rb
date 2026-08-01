@@ -26,7 +26,7 @@ module Ui
         "bg-module-#{@mod}/12 text-module-#{@mod}",
         SIZES.fetch(@size), @class_name
       ) do
-        lucide_icon(@icon, css_class: GLYPH_SIZES.fetch(@size))
+        lucide_icon_mask(@icon, css_class: GLYPH_SIZES.fetch(@size))
       end
     end
   end

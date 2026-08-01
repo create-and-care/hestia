@@ -1,7 +1,7 @@
 <div class="flex <%= OVERLAP.fetch(@size) %>">
   <% visible_members.each do |member| %>
     <%= render(Ui::TooltipComponent.new) do |tooltip| %>
-      <% tooltip.with_trigger { render Ui::AvatarComponent.new(src: member[:src], alt: member[:alt], fallback: member[:fallback], size: @size, class_name: "ring-2 ring-container") } %>
+      <% tooltip.with_trigger { render Ui::AvatarComponent.new(src: member[:src], alt: member[:alt], fallback: member[:fallback], tint: member[:tint], size: @size, class_name: "ring-2 ring-container") } %>
       <%= member[:label] || member[:alt] %>
     <% end %>
   <% end %>

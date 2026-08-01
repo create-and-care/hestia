@@ -32,7 +32,7 @@ class Ui::BadgeComponentTest < ViewComponent::TestCase
       accent: /bg-accent/,
       success: /bg-success/,
       warning: /bg-warning/,
-      urgent: /bg-orange/,
+      urgent: /bg-module-recipes/,
       destructive: /bg-destructive/
     }.fetch(variant)
   end
