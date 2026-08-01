@@ -12,7 +12,10 @@ module Ui
     end
 
     def call
-      tag.div(content, class: cn("max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed break-words", VARIANTS.fetch(@variant)))
+      # A fixed cap (rather than a viewport-relative %) so short messages don't wrap onto a
+      # second line just because the row happens to be narrow (e.g. mobile) — only long
+      # messages that actually exceed this width wrap.
+      tag.div(content, class: cn("max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed break-words sm:max-w-md", VARIANTS.fetch(@variant)))
     end
   end
 end

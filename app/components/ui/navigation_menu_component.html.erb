@@ -14,7 +14,7 @@
   <% menus.each do |menu| %>
     <div id="<%= panel_id(menu.key) %>" role="menu" aria-labelledby="<%= trigger_id(menu.key) %>"
       data-navigation-menu-target="panel" data-for="<%= menu.key %>" hidden data-state="closed"
-      class="fixed z-50 w-80 rounded-lg border border-primary bg-container p-4 shadow-lg
+      class="fixed z-50 w-80 rounded-lg bg-container p-4 shadow-border-lg
              data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95
              data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
       <%= menu %>

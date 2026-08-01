@@ -11,7 +11,7 @@
       <%= render(Ui::ButtonToComponent.new(@confirm_url, method: @confirm_method, variant: @confirm_variant, size: :default)) { @confirm_label } %>
     <% else %>
       <button type="button" data-action="click->dialog#close"
-        class="inline-flex h-9 items-center rounded-md px-4 text-sm font-medium text-inverse bg-button-destructive hover:bg-button-destructive-hover">
+        class="<%= cn("inline-flex h-9 items-center rounded-md px-4 text-sm font-medium", Ui::ButtonComponent::VARIANTS.fetch(@confirm_variant)) %>">
         <%= @confirm_label %>
       </button>
     <% end %>

@@ -2,9 +2,9 @@ class WellbeingProfilesController < ApplicationController
   def update
     profile = Current.user.wellbeing_profile || Current.user.build_wellbeing_profile
     if profile.update(profile_params)
-      redirect_to wellbeing_path, notice: t(".updated")
+      redirect_to edit_account_path, notice: t(".updated")
     else
-      redirect_to wellbeing_path, alert: profile.errors.full_messages.to_sentence
+      redirect_to edit_account_path, alert: profile.errors.full_messages.to_sentence
     end
   end
 

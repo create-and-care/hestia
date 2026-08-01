@@ -1,7 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
-const MONTH_NAMES = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ]
-const WEEKDAYS = [ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" ]
+// Matches DatePicker's already-French default placeholder/date formatting —
+// the calendar grid itself was the one piece still hardcoded to English.
+const MONTH_FORMATTER = new Intl.DateTimeFormat("fr-FR", { month: "long" })
+const WEEKDAY_FORMATTER = new Intl.DateTimeFormat("fr-FR", { weekday: "narrow" })
+// Jan 1-7 2023 is a Sunday-Saturday week, used purely as an index into the
+// locale formatter — none of these dates are displayed.
+const WEEKDAYS = [ 1, 2, 3, 4, 5, 6, 7 ].map((day) => WEEKDAY_FORMATTER.format(new Date(2023, 0, day)))
 
 export default class extends Controller {
   static targets = [ "label", "grid", "input" ]
@@ -55,7 +60,8 @@ export default class extends Controller {
   }
 
   render() {
-    this.labelTarget.textContent = `${MONTH_NAMES[this.monthValue]} ${this.yearValue}`
+    const monthLabel = MONTH_FORMATTER.format(new Date(this.yearValue, this.monthValue, 1))
+    this.labelTarget.textContent = `${monthLabel.charAt(0).toUpperCase()}${monthLabel.slice(1)} ${this.yearValue}`
 
     const firstWeekday = new Date(this.yearValue, this.monthValue, 1).getDay()
     const daysInMonth = new Date(this.yearValue, this.monthValue + 1, 0).getDate()

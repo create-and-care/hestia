@@ -1,0 +1,38 @@
+<% content_for :title, t(".title") %>
+
+<div class="mt-10 max-w-2xl mx-auto px-4">
+  <div class="mb-4"><%= module_breadcrumb(:wellbeing, [ t(".title"), nil ], module_path: wellbeing_path) %></div>
+
+  <header class="mb-6 flex items-center justify-between">
+    <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("list-checks", css_class: "size-6") %> <%= t(".title") %></h1>
+    <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, href: new_workout_template_path)) { t(".new") } %>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <% if @templates.any? %>
+    <ul class="divide-y divide-primary text-sm">
+      <% @templates.each do |template| %>
+        <li>
+          <%= render(Ui::ItemComponent.new) do |item| %>
+            <% item.with_title { template.name } %>
+            <% item.with_description { t(".exercise_count", count: template.workout_template_exercises.size) } %>
+            <% item.with_trailing do %>
+              <div class="flex shrink-0 items-center gap-1">
+                <%= link_to edit_workout_template_path(template), "aria-label": t(".edit_aria", name: template.name), class: "text-subdued hover:text-primary" do %>
+                  <%= lucide_icon("pencil", css_class: "size-3.5") %>
+                <% end %>
+                <%= form_with url: workout_template_path(template), method: :delete, data: { turbo_confirm: t(".delete_confirm") } do %>
+                  <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :icon, type: "submit",
+                        html_options: { aria: { label: t(".delete_aria", name: template.name) } })) { lucide_icon("x", css_class: "size-4") } %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty") } } %>
+  <% end %>
+</div>

@@ -1,4 +1,5 @@
 <% content_for :title, t(".title") %>
+<%= turbo_stream_from Current.user, :conversations %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <div class="mb-4"><%= module_breadcrumb(:messages) %></div>
@@ -10,31 +11,10 @@
 
   <%= render "shared/flash" %>
 
-  <% if @conversations.any? %>
-    <div class="divide-y divide-primary rounded-lg border border-primary">
-      <% @conversations.each do |conversation| %>
-        <% last_message = conversation.messages.max_by(&:created_at) %>
-        <%= render(Ui::ItemComponent.new(href: conversation_path(conversation))) do |item| %>
-          <% item.with_title do %>
-            <span class="inline-flex items-center gap-1.5">
-              <% if conversation.unread_for?(Current.user) %>
-                <span class="size-1.5 shrink-0 rounded-full bg-button-primary"></span>
-                <span class="sr-only"><%= t(".unread") %></span>
-              <% end %>
-              <%= conversation.name %>
-            </span>
-          <% end %>
-          <% item.with_description do %>
-            <% if last_message %>
-              <%= truncate(last_message.content, length: 60) %> · <%= time_ago_in_words(last_message.created_at) %>
-            <% else %>
-              <%= conversation.participants.map { |u| u.name.presence || u.email_address }.join(", ") %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-    </div>
-  <% else %>
+  <div id="conversations_list" class="<%= "divide-y divide-primary rounded-lg border border-primary" if @conversations.any? %>">
+    <%= render partial: "conversation", collection: @conversations, as: :conversation, locals: { viewer: Current.user } %>
+  </div>
+  <% if @conversations.empty? %>
     <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty") } } %>
   <% end %>
 

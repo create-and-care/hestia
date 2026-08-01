@@ -46,6 +46,9 @@ application.register("debounced-search", DebouncedSearchController)
 import DialogController from "./dialog_controller"
 application.register("dialog", DialogController)
 
+import DismissController from "./dismiss_controller"
+application.register("dismiss", DismissController)
+
 import DropdownMenuController from "./dropdown_menu_controller"
 application.register("dropdown-menu", DropdownMenuController)
 

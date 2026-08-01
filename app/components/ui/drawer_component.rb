@@ -4,5 +4,9 @@ module Ui
     renders_one :title
     renders_one :description
     renders_one :footer
+
+    def initialize(side: :bottom)
+      @side = side
+    end
   end
 end

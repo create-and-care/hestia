@@ -1,0 +1,7 @@
+<%= form_with model: circle, url: circles_path, class: "flex flex-col gap-3" do |form| %>
+  <%= render Ui::InputComponent.new(name: "circle[name]", placeholder: t("circles.index.name_placeholder"),
+        html_options: { id: "circle_name", required: true }) %>
+  <%= render Ui::InputComponent.new(name: "circle[theme]", placeholder: t("circles.index.theme_placeholder"),
+        html_options: { id: "circle_theme" }) %>
+  <%= render(Ui::ButtonComponent.new(type: "submit")) { t("circles.index.create") } %>
+<% end %>

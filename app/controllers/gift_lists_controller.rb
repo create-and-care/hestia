@@ -1,13 +1,21 @@
 class GiftListsController < ApplicationController
+  PER_PAGE = 10
+
   before_action :set_list, only: %i[show edit update destroy]
   before_action :require_visible!, only: %i[show edit update destroy]
   before_action :require_creator!, only: %i[edit update destroy]
 
   def index
-    visible_lists = Current.household.gift_lists.includes(:gift_list_share, :contact).ordered
+    visible_lists = Current.household.gift_lists.includes(:gift_list_share, :contact).order(created_at: :desc)
       .select { |list| list.visible_to?(Current.user) }
     @receive_lists = visible_lists.select { |l| l.perspective == "receive" }
     @give_lists = visible_lists.select { |l| l.perspective == "give" }
+
+    @receive_limited = params[:receive_all].blank? && @receive_lists.size > PER_PAGE
+    @give_limited = params[:give_all].blank? && @give_lists.size > PER_PAGE
+    @receive_lists = @receive_lists.first(PER_PAGE) if @receive_limited
+    @give_lists = @give_lists.first(PER_PAGE) if @give_limited
+
     @list = Current.household.gift_lists.new
   end
 

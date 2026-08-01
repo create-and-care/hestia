@@ -4,7 +4,7 @@ class Ui::TypographyComponentTest < ViewComponent::TestCase
   test "renders default paragraph variant" do
     render_inline(Ui::TypographyComponent.new) { "Body copy" }
 
-    assert_selector "p.leading-relaxed", text: "Body copy"
+    assert_selector "p.body-text", text: "Body copy"
   end
 
   test "renders every variant with the correct tag and a distinguishing class" do
@@ -20,18 +20,18 @@ class Ui::TypographyComponentTest < ViewComponent::TestCase
   test "merges custom html_options including class and id" do
     render_inline(Ui::TypographyComponent.new(variant: :h1, html_options: { id: "my-heading", class: "extra-class" })) { "Title" }
 
-    assert_selector "h1#my-heading.extra-class.text-4xl", text: "Title"
+    assert_selector "h1#my-heading.extra-class.h1", text: "Title"
   end
 
   private
 
   def fragment_for(variant)
     {
-      h1: "text-4xl",
-      h2: "text-3xl",
-      h3: "text-2xl",
-      h4: "text-xl",
-      p: "leading-relaxed",
+      h1: "h1",
+      h2: "h2",
+      h3: "h3",
+      h4: "h4",
+      p: "body-text",
       lead: [ "text-lg", "text-secondary" ],
       large: [ "text-lg", "font-semibold" ],
       small: "leading-none",

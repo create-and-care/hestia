@@ -1,0 +1,14 @@
+<%= form_with model: [ list, idea ], url: gift_list_gift_ideas_path(list), multipart: true, class: "flex flex-col gap-3" do |form| %>
+  <%= render Ui::InputComponent.new(name: "gift_idea[name]", value: idea.name, placeholder: t("gift_lists.show.idea_placeholder"),
+        html_options: { id: "gift_idea_name", required: true }) %>
+  <div class="flex gap-2">
+    <%= render Ui::InputComponent.new(type: "number", name: "gift_idea[price]", value: idea.price, placeholder: "€",
+          html_options: { id: "gift_idea_price", step: "any", class: "w-24" }) %>
+    <%= render Ui::InputComponent.new(type: "url", name: "gift_idea[url]", value: idea.url, placeholder: t("gift_lists.show.link_placeholder"),
+          html_options: { id: "gift_idea_url", class: "flex-1" }) %>
+  </div>
+  <%= render Ui::FileUploadComponent.new(name: "gift_idea[photo]", accept: "image/*") %>
+  <%= render(Ui::TextareaComponent.new(name: "gift_idea[comment]", rows: 2, placeholder: t("gift_lists.show.comment_placeholder"),
+        html_options: { id: "gift_idea_comment" })) %>
+  <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t("gift_lists.show.add") } %>
+<% end %>

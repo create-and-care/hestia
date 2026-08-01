@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_23_150747) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_01_220050) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -992,7 +992,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_23_150747) do
     t.string "exercise", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.bigint "workout_template_id"
     t.index ["user_id"], name: "index_workout_entries_on_user_id"
+    t.index ["workout_template_id"], name: "index_workout_entries_on_workout_template_id"
+  end
+
+  create_table "workout_template_exercises", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "duration_minutes"
+    t.string "exercise", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.bigint "workout_template_id", null: false
+    t.index ["workout_template_id"], name: "index_workout_template_exercises_on_workout_template_id"
+  end
+
+  create_table "workout_templates", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_workout_templates_on_user_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -1119,4 +1139,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_23_150747) do
   add_foreign_key "wellbeing_profiles", "users"
   add_foreign_key "wine_cellars", "households"
   add_foreign_key "workout_entries", "users"
+  add_foreign_key "workout_entries", "workout_templates"
+  add_foreign_key "workout_template_exercises", "workout_templates"
+  add_foreign_key "workout_templates", "users"
 end

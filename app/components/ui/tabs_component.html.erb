@@ -4,7 +4,7 @@
       <button type="button" role="tab" id="<%= tab_id(tab.value) %>" data-tabs-target="tab" data-value="<%= tab.value %>"
         data-action="click->tabs#select keydown->tabs#onKeydown" aria-selected="<%= tab.value == active_value %>"
         aria-controls="<%= panel_id(tab.value) %>" tabindex="<%= tab.value == active_value ? "0" : "-1" %>"
-        class="rounded-md px-3 h-8 text-sm font-medium transition-colors <%= tab.value == active_value ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary" %>">
+        class="rounded-md px-3 h-8 text-sm font-medium transition-colors <%= tab.value == active_value ? "bg-tab-item-active text-primary shadow-border-xs" : "text-secondary hover:text-primary" %>">
         <%= tab.label %>
       </button>
     <% end %>

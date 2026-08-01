@@ -4,20 +4,34 @@ en:
       title: "Wellbeing"
       privacy_note: "Strictly private data — visible to you only, never to other household members. BMI is shown for informational purposes only."
       my_profile: "My profile"
+      edit_profile: "Edit in my settings"
       height_label: "Height (cm)"
       age_label: "Age"
       sex_label: "Sex"
       activity_label: "Activity"
       start_weight_label: "Starting weight"
       goal_weight_label: "Goal"
+      goal_weight_placeholder: "e.g. 70"
       save_profile: "Save profile"
       bmi_prefix: "Current BMI:"
       bmi_suffix: "(weight %{weight} kg)"
       chart_heading: "Weight trend"
       see_full_history: "See full history"
+      filters_trigger: "Filter"
+      filters_heading: "Displayed period"
+      period_label: "Period"
+      period_options:
+        "7": "Last 7 days"
+        "30": "Last 30 days"
+        "90": "Last 90 days"
+        "365": "Last 12 months"
+        all: "Entire history"
+      filter_submit: "Apply"
       weight: "Weight"
       weight_placeholder: "kg"
       weight_empty: "No weigh-ins yet."
+      current_weight_label: "Current"
+      remaining_to_goal_label: "Left to goal"
       edit_weight_entry_aria: "Edit the %{date} weigh-in"
       delete_weight_entry_aria: "Delete the %{date} weigh-in"
       delete_weight_entry_confirm: "Delete this weigh-in?"
@@ -29,13 +43,21 @@ en:
       edit_workout_entry_aria: "Edit the %{exercise} workout"
       delete_workout_entry_aria: "Delete the %{exercise} workout"
       delete_workout_entry_confirm: "Delete this workout?"
+      workout_templates_heading: "Workout templates"
+      new_workout_template: "New template"
+      exercise_count:
+        zero: "No exercises"
+        one: "%{count} exercise"
+        other: "%{count} exercises"
+      log_today: "Log today"
+      edit_template_aria: "Edit the %{name} template"
+      workout_templates_empty: "No workout templates yet."
     history:
       title: "Wellbeing history"
-      weight_heading: "Weight history"
+      weight_tab: "Weight history"
       weight_empty: "No weigh-ins yet."
-      workouts_heading: "Workout history"
+      workouts_tab: "Workout history"
       workouts_empty: "No workouts logged yet."
-      back_to_wellbeing: "Back to Wellbeing"
     sexes:
       female: "Female"
       male: "Male"
@@ -57,7 +79,6 @@ en:
       weight_label: "Weight (kg)"
       recorded_on_label: "Date"
       save: "Save"
-      back_to_wellbeing: "Back to Wellbeing"
     update:
       updated: "Weigh-in updated."
     destroy:
@@ -71,8 +92,39 @@ en:
       duration_label: "Duration (min)"
       done_on_label: "Date"
       save: "Save"
-      back_to_wellbeing: "Back to Wellbeing"
     update:
       updated: "Workout updated."
     destroy:
       deleted: "Workout deleted."
+  workout_templates:
+    index:
+      title: "Workout templates"
+      new: "New template"
+      exercise_count:
+        zero: "No exercises"
+        one: "%{count} exercise"
+        other: "%{count} exercises"
+      edit_aria: "Edit the %{name} template"
+      delete_aria: "Delete the %{name} template"
+      delete_confirm: "Delete this template?"
+      empty: "No workout templates yet."
+    new:
+      title: "New workout template"
+    edit:
+      title: "Edit workout template"
+      exercises_heading: "Exercises"
+      exercises_empty: "No exercises yet."
+      add_exercise: "Add"
+      delete_exercise_aria: "Delete the %{exercise} exercise"
+    form:
+      name_label: "Template name"
+      name_placeholder: "e.g. Leg day, Upper body…"
+      save: "Save"
+    create:
+      created: "Template created. Add its exercises below."
+    update:
+      updated: "Template updated."
+    destroy:
+      deleted: "Template deleted."
+    log:
+      logged: "Workout added to your history."

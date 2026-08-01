@@ -1,0 +1,5 @@
+<div class="w-full max-w-md">
+  <%= render(Ui::HouseholdHeaderComponent.new(name: "Foyer Dupont", note: "4 membres", members: [ { alt: "Camille" }, { alt: "Sacha" }, { alt: "Nino" } ])) do |c| %>
+    <% c.with_action { render(Ui::ButtonComponent.new(variant: :ghost, size: :sm)) { "Modifier" } } %>
+  <% end %>
+</div>

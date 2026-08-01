@@ -1,0 +1,24 @@
+<%# viewer: local rather than Current.user directly — this partial is also rendered from
+    Message#broadcast_to_participants (Solid Queue job context, no Current.user) so each
+    participant's own unread status can still be computed correctly. %>
+<%= tag.div id: dom_id(conversation) do %>
+  <%= render(Ui::ItemComponent.new(href: conversation_path(conversation))) do |item| %>
+    <% item.with_title do %>
+      <span class="inline-flex items-center gap-1.5">
+        <% if viewer && conversation.unread_for?(viewer) %>
+          <span class="size-1.5 shrink-0 rounded-full bg-button-primary"></span>
+          <span class="sr-only"><%= t("conversations.index.unread") %></span>
+        <% end %>
+        <%= conversation.name %>
+      </span>
+    <% end %>
+    <% item.with_description do %>
+      <% last_message = conversation.messages.max_by(&:created_at) %>
+      <% if last_message %>
+        <%= truncate(last_message.content, length: 60) %> · <%= time_ago_in_words(last_message.created_at) %>
+      <% else %>
+        <%= conversation.participants.map { |u| u.name.presence || u.email_address }.join(", ") %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

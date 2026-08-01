@@ -73,6 +73,39 @@
     </div>
   <% end %>
 
+  <section class="mt-8">
+    <h2 class="mb-3 font-medium"><%= t("wellbeing.show.my_profile") %></h2>
+    <%= render(Ui::CardComponent.new) do %>
+      <%= form_with model: @profile, url: wellbeing_profile_path, method: :patch, class: "grid grid-cols-2 gap-3 sm:grid-cols-3" do |form| %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:height))) do |field| %>
+          <% field.with_label { t("wellbeing.show.height_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:height), value: form.object.height, html_options: { id: form.field_id(:height) }) } %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:age))) do |field| %>
+          <% field.with_label { t("wellbeing.show.age_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:age), value: form.object.age, html_options: { id: form.field_id(:age) }) } %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:sex))) do |field| %>
+          <% field.with_label { t("wellbeing.show.sex_label") } %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:sex), options: [ [ "—", "" ] ] + sex_options, selected: form.object.sex, html_options: { id: form.field_id(:sex) }) } %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:activity_level))) do |field| %>
+          <% field.with_label { t("wellbeing.show.activity_label") } %>
+          <% field.with_control { render Ui::NativeSelectComponent.new(name: form.field_name(:activity_level), options: [ [ "—", "" ] ] + activity_options, selected: form.object.activity_level, html_options: { id: form.field_id(:activity_level) }) } %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:start_weight))) do |field| %>
+          <% field.with_label { t("wellbeing.show.start_weight_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:start_weight), value: form.object.start_weight, html_options: { id: form.field_id(:start_weight), step: :any }) } %>
+        <% end %>
+        <%= render(Ui::FieldComponent.new(id: form.field_id(:goal_weight))) do |field| %>
+          <% field.with_label { t("wellbeing.show.goal_weight_label") } %>
+          <% field.with_control { render Ui::InputComponent.new(type: "number", name: form.field_name(:goal_weight), value: form.object.goal_weight, placeholder: t("wellbeing.show.goal_weight_placeholder"), html_options: { id: form.field_id(:goal_weight), step: :any }) } %>
+        <% end %>
+        <div class="col-span-2 sm:col-span-3"><%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t("wellbeing.show.save_profile") } %></div>
+      <% end %>
+    <% end %>
+  </section>
+
   <p class="mt-6 text-sm">
     <%= link_to t(".back"), household_path(Current.household, tab: "members"), class: "underline" %>
   </p>

@@ -1,4 +1,4 @@
-<div data-controller="command" class="w-full max-w-md rounded-lg border border-primary bg-container shadow-lg">
+<div data-controller="command" class="w-full max-w-md rounded-lg bg-container shadow-border-lg">
   <input type="text" data-command-target="input" data-action="input->command#filter keydown->command#onKeydown"
     placeholder="<%= @placeholder %>" role="combobox" aria-expanded="true" aria-controls="<%= list_id %>" aria-activedescendant=""
     class="w-full border-0 border-b border-primary px-3 py-3 text-sm text-primary focus:outline-none">
@@ -9,7 +9,7 @@
       <% items.each do |item_label, value| %>
         <button type="button" id="<%= item_id(item_index) %>" role="option" aria-selected="false"
           data-command-target="item" data-value="<%= value %>" data-action="click->command#select"
-          class="flex w-full items-center rounded-sm px-2 py-1.5 text-sm text-primary hover:bg-surface-hover">
+          class="flex w-full items-center rounded-md px-2 py-1.5 text-sm text-primary hover:bg-surface-hover">
           <%= item_label %>
         </button>
         <% item_index += 1 %>

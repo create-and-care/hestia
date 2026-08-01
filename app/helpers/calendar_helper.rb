@@ -35,4 +35,7 @@ module CalendarHelper
 
   # Same idea for a waste collection: [time, WasteCollectionEvent] rather than [time, CalendarEvent].
   def waste_occurrence?(occurrence) = occurrence.is_a?(WasteCollectionEvent)
+
+  # Same idea for a trip day: [time, Trip] rather than [time, CalendarEvent].
+  def trip_occurrence?(occurrence) = occurrence.is_a?(Trip)
 end

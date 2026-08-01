@@ -8,7 +8,7 @@ class Ui::ComboboxComponentTest < ViewComponent::TestCase
 
     assert_selector "div[data-controller='combobox']"
     assert_selector "input[type='hidden'][name='fruit'][data-combobox-target='input']", visible: :all
-    assert_selector "span[data-combobox-target='label']", text: "Select an option"
+    assert_selector "span[data-combobox-target='label']", text: "Sélectionner…"
   end
 
   test "renders a custom placeholder" do
@@ -35,7 +35,7 @@ class Ui::ComboboxComponentTest < ViewComponent::TestCase
     render_inline(Ui::ComboboxComponent.new(name: "fruit", options: OPTIONS))
 
     assert_selector "input[data-combobox-target='search'][data-action*='input->combobox#filter']", visible: :all
-    assert_selector "p[data-combobox-target='empty'][hidden]", text: "No results found.", visible: :all
+    assert_selector "p[data-combobox-target='empty'][hidden]", text: "Aucun résultat.", visible: :all
   end
 
   test "panel starts hidden and closed" do

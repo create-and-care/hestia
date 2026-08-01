@@ -12,6 +12,7 @@ en:
       name_placeholder: "Name (Christmas, birthday…)"
       recipient_placeholder: "Recipient (give)"
       create: "Create"
+      see_more: "See more"
     show:
       edit: "Edit"
       delete: "Delete"
@@ -30,7 +31,6 @@ en:
       delete_idea: "Delete this idea"
       delete_idea_confirm: "Delete this idea?"
       add: "Add"
-      back_to_gifts: "← Gifts"
     edit:
       title: "Settings for \"%{name}\""
       theme_placeholder: "Occasion (Christmas, birthday…)"

@@ -1,6 +1,6 @@
 <div data-controller="popover date-picker" data-action="calendar:select->popover#hide calendar:select->date-picker#select" class="inline-flex">
   <div data-popover-target="trigger" data-action="click->popover#toggle" class="inline-flex">
-    <button type="button" class="inline-flex items-center gap-2 rounded-md border border-primary bg-transparent px-4 h-9 text-sm font-medium text-primary hover:bg-button-outline-hover transition-colors">
+    <button type="button" class="inline-flex items-center gap-2 rounded-md border border-primary bg-transparent px-4 h-10 text-sm font-medium text-primary hover:bg-button-outline-hover transition-colors">
       <svg class="size-4 text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M8 2v4" /><path d="M16 2v4" /><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M3 10h18" />
       </svg>
@@ -8,7 +8,7 @@
     </button>
   </div>
   <div data-popover-target="panel" hidden data-state="closed"
-    class="z-50 w-auto rounded-lg border border-primary bg-container p-0 shadow-lg
+    class="z-50 w-auto rounded-lg bg-container p-0 shadow-border-lg
            data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-top-2
            data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
     <%= render Ui::CalendarComponent.new(name: @name, selected: @selected) %>

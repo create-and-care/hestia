@@ -2,7 +2,6 @@ en:
   circles:
     post_placeholder: "Share a moment…"
     publish: "Post"
-    back_to_circles: "← Circles"
     copy_code: "Copy"
     react_with: "React with %{emoji}"
     not_admin: "Only a circle admin can do that."

@@ -1,12 +1,12 @@
-<div class="flex -space-x-2">
+<div class="flex <%= OVERLAP.fetch(@size) %>">
   <% visible_members.each do |member| %>
     <%= render(Ui::TooltipComponent.new) do |tooltip| %>
-      <% tooltip.with_trigger { render Ui::AvatarComponent.new(src: member[:src], alt: member[:alt], fallback: member[:fallback], size: @size, class_name: "ring-2 ring-container") } %>
+      <% tooltip.with_trigger { render Ui::AvatarComponent.new(src: member[:src], alt: member[:alt], fallback: member[:fallback], tint: member[:tint], size: @size, class_name: "ring-2 ring-container") } %>
       <%= member[:label] || member[:alt] %>
     <% end %>
   <% end %>
 
   <% if overflow_count.positive? %>
-    <span class="<%= cn("relative inline-flex shrink-0 items-center justify-center rounded-full bg-surface-inset font-medium text-secondary ring-2 ring-container", Ui::AvatarComponent::SIZES.fetch(@size)) %>" aria-hidden="true">+<%= overflow_count %></span>
+    <%= render Ui::AvatarComponent.new(fallback: "+#{overflow_count}", size: @size, class_name: "ring-2 ring-container") %>
   <% end %>
 </div>

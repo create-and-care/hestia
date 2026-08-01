@@ -5,6 +5,14 @@
 <%= turbo_stream_from @project, "project" %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
+  <div class="mb-4">
+    <% if @project.trip %>
+      <%= module_breadcrumb(:trips, [ @project.trip.name, trip_path(@project.trip) ], [ @project.name, nil ], module_path: trips_path) %>
+    <% else %>
+      <%= module_breadcrumb(:budget, [ t("shared_projects.index.title"), shared_projects_path ], [ @project.name, nil ], module_path: budget_path) %>
+    <% end %>
+  </div>
+
   <header class="mb-4 flex items-center justify-between">
     <div>
       <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("handshake", css_class: "size-6") %> <%= @project.name %></h1>
@@ -20,8 +28,19 @@
   <%= render "shared/flash" %>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium"><%= t(".participants_heading") %></h2>
-    <div class="mb-2 flex flex-wrap gap-2">
+    <div class="mb-2 flex items-center justify-between">
+      <h2 class="font-medium"><%= t(".participants_heading") %></h2>
+      <%= render(Ui::DialogComponent.new) do |dialog| %>
+        <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".add") } } %>
+        <% dialog.with_title { t(".participants_heading") } %>
+        <%= form_with model: [ @project, @participant ], url: shared_project_shared_project_participants_path(@project), class: "flex gap-2" do |form| %>
+          <%= render Ui::InputComponent.new(name: "shared_project_participant[name]", value: @participant.name, placeholder: t(".participant_name_placeholder"),
+                html_options: { id: "shared_project_participant_name", required: true, class: "flex-1" }) %>
+          <%= render(Ui::ButtonComponent.new(variant: :default, size: :sm, type: "submit")) { t(".add") } %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="flex flex-wrap gap-2">
       <% @project.shared_project_participants.each do |participant| %>
         <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
           <%= participant.name %>
@@ -32,15 +51,26 @@
         <% end %>
       <% end %>
     </div>
-    <%= form_with model: [ @project, @participant ], url: shared_project_shared_project_participants_path(@project), class: "flex gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(name: "shared_project_participant[name]", value: @participant.name, placeholder: t(".participant_name_placeholder"),
-            html_options: { id: "shared_project_participant_name", required: true, class: "flex-1" }) %>
-      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
-    <% end %>
   </section>
 
   <section class="mb-6">
-    <h2 class="mb-2 font-medium"><%= t(".expenses_heading") %></h2>
+    <div class="mb-2 flex items-center justify-between">
+      <h2 class="font-medium"><%= t(".expenses_heading") %></h2>
+      <%= render(Ui::DialogComponent.new) do |dialog| %>
+        <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".add") } } %>
+        <% dialog.with_title { t(".expenses_heading") } %>
+        <%= form_with model: [ @project, @expense ], url: shared_project_shared_expenses_path(@project), class: "flex flex-col gap-3" do |form| %>
+          <%= render Ui::InputComponent.new(type: "number", name: "shared_expense[amount]", value: @expense.amount, placeholder: "€",
+                html_options: { id: "shared_expense_amount", step: "any", required: true }) %>
+          <%= render Ui::InputComponent.new(name: "shared_expense[description]", value: @expense.description, placeholder: t(".description_placeholder"),
+                html_options: { id: "shared_expense_description" }) %>
+          <%= render Ui::NativeSelectComponent.new(name: "shared_expense[shared_project_participant_id]",
+                options: [ [ t(".payer_blank"), "" ] ] + @project.shared_project_participants.map { |participant| [ participant.name, participant.id ] },
+                selected: @expense.shared_project_participant_id, html_options: { id: "shared_expense_shared_project_participant_id" }) %>
+          <%= render(Ui::ButtonComponent.new(type: "submit", variant: :default, size: :sm)) { t(".add") } %>
+        <% end %>
+      <% end %>
+    </div>
     <% if @project.shared_expenses.recent.any? %>
       <div class="mb-2 divide-y divide-primary rounded-lg border border-primary text-sm">
         <% @project.shared_expenses.recent.each do |expense| %>
@@ -67,16 +97,6 @@
       <div class="mb-2">
         <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_expenses") } } %>
       </div>
-    <% end %>
-    <%= form_with model: [ @project, @expense ], url: shared_project_shared_expenses_path(@project), class: "flex flex-wrap items-end gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(type: "number", name: "shared_expense[amount]", value: @expense.amount, placeholder: "€",
-            html_options: { id: "shared_expense_amount", step: "any", required: true, class: "w-24" }) %>
-      <%= render Ui::InputComponent.new(name: "shared_expense[description]", value: @expense.description, placeholder: t(".description_placeholder"),
-            html_options: { id: "shared_expense_description", class: "flex-1" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: "shared_expense[shared_project_participant_id]",
-            options: [ [ t(".payer_blank"), "" ] ] + @project.shared_project_participants.map { |participant| [ participant.name, participant.id ] },
-            selected: @expense.shared_project_participant_id, html_options: { id: "shared_expense_shared_project_participant_id" }) %>
-      <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".add") } %>
     <% end %>
   </section>
 
@@ -112,6 +132,4 @@
       </div>
     <% end %>
   </section>
-
-  <p class="text-sm"><%= link_to t(".back_to_projects"), shared_projects_path, class: "underline" %></p>
 </div>

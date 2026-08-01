@@ -307,6 +307,10 @@ Rails.application.routes.draw do
   resource :wellbeing_profile, only: :update
   resources :weight_entries, only: %i[create edit update destroy]
   resources :workout_entries, only: %i[create edit update destroy]
+  resources :workout_templates, except: %i[show] do
+    resources :exercises, only: %i[create destroy], controller: "workout_template_exercises"
+    member { post :log }
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
@@ -320,6 +324,7 @@ Rails.application.routes.draw do
   get "design-system/colors", to: "design_system#colors"
   get "design-system/typography", to: "design_system#typography"
   get "design-system/icons", to: "design_system#icons"
+  get "design-system/illustrations", to: "design_system#illustrations"
   get "design-system/components/:id", to: "design_system#component", as: :design_system_component
 
   # Global command-palette search (sidebar) — searches across all household

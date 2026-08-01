@@ -5,7 +5,7 @@
 
   <dialog data-dialog-target="dialog" role="<%= @role %>" data-action="click->dialog#closeOnBackdrop cancel->dialog#onCancel" data-state="closed"
     class="<%= cn(
-      "p-0 border border-primary bg-container shadow-lg duration-200 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
+      "p-0 bg-container shadow-border-lg duration-200 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
       POSITION_CLASSES.fetch(@position), ANIMATION_CLASSES.fetch(@position)
     ) %>">
     <button type="button" data-action="click->dialog#close" class="absolute right-4 top-4 rounded-md p-1 text-secondary hover:bg-surface-hover" aria-label="<%= t("ui.dialog.close_aria") %>">

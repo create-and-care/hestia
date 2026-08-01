@@ -7,17 +7,17 @@ module Ui
     }.freeze
 
     VARIANTS = {
-      h1: "scroll-m-20 text-4xl font-semibold tracking-tight text-primary",
-      h2: "scroll-m-20 text-3xl font-semibold tracking-tight text-primary",
-      h3: "scroll-m-20 text-2xl font-semibold tracking-tight text-primary",
-      h4: "scroll-m-20 text-xl font-semibold tracking-tight text-primary",
-      p: "text-sm leading-relaxed text-primary",
+      h1: "scroll-m-20 h1",
+      h2: "scroll-m-20 h2",
+      h3: "scroll-m-20 h3",
+      h4: "scroll-m-20 h4",
+      p: "body-text text-primary",
       lead: "text-lg text-secondary",
       large: "text-lg font-semibold text-primary",
       small: "text-sm font-medium leading-none text-primary",
       muted: "text-sm text-secondary",
       blockquote: "border-l-2 border-primary pl-4 italic text-secondary",
-      inline_code: "rounded bg-surface-inset px-1.5 py-0.5 font-mono text-sm text-primary",
+      inline_code: "rounded-[6px] bg-surface-inset px-1.5 py-0.5 font-mono text-sm text-primary",
       list: "list-disc list-inside space-y-1 text-sm text-primary"
     }.freeze
 

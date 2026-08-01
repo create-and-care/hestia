@@ -12,6 +12,7 @@ fr:
       name_placeholder: "Nom (Noël, anniversaire…)"
       recipient_placeholder: "Destinataire (offrir)"
       create: "Créer"
+      see_more: "Voir plus"
     show:
       edit: "Modifier"
       delete: "Supprimer"
@@ -30,7 +31,6 @@ fr:
       delete_idea: "Supprimer cette idée"
       delete_idea_confirm: "Supprimer cette idée ?"
       add: "Ajouter"
-      back_to_gifts: "← Cadeaux"
     edit:
       title: "Réglages de « %{name} »"
       theme_placeholder: "Occasion (Noël, anniversaire…)"

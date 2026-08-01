@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_one :wellbeing_profile, dependent: :destroy
   has_many :weight_entries, dependent: :destroy
   has_many :workout_entries, dependent: :destroy
+  has_many :workout_templates, dependent: :destroy
 
   # Reminders & notifications.
   has_many :notifications, dependent: :destroy

@@ -108,7 +108,6 @@ fr:
       settled: "à jour"
       transfers_heading: "Virements suggérés"
       transfer_line: "%{from} paie %{amount} à %{to}"
-      back_to_projects: "← Projets partagés"
     destroy:
       deleted: "Projet supprimé."
   shared_expenses:

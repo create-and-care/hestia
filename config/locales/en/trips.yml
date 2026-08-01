@@ -50,7 +50,6 @@ en:
         addresses: "Address book"
         menu: "Menu"
       sections_submit: "Save"
-      back_to_trips: "← Trips"
     destroy:
       deleted: "Trip deleted (and all its data)."
     edit:

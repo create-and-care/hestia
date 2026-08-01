@@ -1,0 +1,15 @@
+<div data-controller="dismiss" role="status" class="<%= cn("flex items-center gap-4 rounded-lg border border-primary px-5 py-4", "bg-module-#{medallion[:mod]}/10", @class_name) %>">
+  <%= render Ui::ModuleMedallionComponent.new(mod: medallion[:mod], icon: medallion[:icon]) %>
+
+  <div class="flex-1 min-w-0">
+    <p class="font-hand font-semibold text-2xl leading-tight text-primary"><%= @title %></p>
+    <% if @note %><p class="text-secondary text-sm mt-0.5"><%= @note %></p><% end %>
+  </div>
+
+  <% if action? %><div class="shrink-0"><%= action %></div><% end %>
+
+  <button type="button" data-action="click->dismiss#dismiss" aria-label="<%= t("ui.celebration_moment.dismiss_aria") %>"
+    class="shrink-0 rounded-md p-1 text-subdued hover:bg-surface-hover hover:text-primary">
+    <%= lucide_icon("x", css_class: "size-4") %>
+  </button>
+</div>

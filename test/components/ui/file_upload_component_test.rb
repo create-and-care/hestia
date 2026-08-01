@@ -56,7 +56,7 @@ class Ui::FileUploadComponentTest < ViewComponent::TestCase
   test "compact mode renders a single row-height control instead of the dropzone" do
     render_inline(Ui::FileUploadComponent.new(name: "photo", compact: true))
 
-    assert_selector "div[data-file-upload-target='dropzone'].h-9"
+    assert_selector "div[data-file-upload-target='dropzone'].h-10"
     assert_no_selector "div[data-file-upload-target='dropzone'].py-6"
   end
 

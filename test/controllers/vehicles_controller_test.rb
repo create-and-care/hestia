@@ -83,7 +83,7 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
     soon = households(:alpha).vehicles.create!(name: "Soon", inspection_expires_on: 60.days.from_now.to_date)
 
     get vehicles_path
-    assert_select "##{dom_id(urgent)} span.bg-orange-500\\/10"
+    assert_select "##{dom_id(urgent)} span.bg-module-recipes\\/10"
     assert_select "##{dom_id(soon)} span.bg-warning\\/10"
   end
 

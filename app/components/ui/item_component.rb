@@ -5,8 +5,9 @@ module Ui
     renders_one :description
     renders_one :trailing
 
-    def initialize(href: nil)
+    def initialize(href: nil, active: false)
       @href = href
+      @active = active
     end
   end
 end

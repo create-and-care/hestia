@@ -1,7 +1,7 @@
 {
-  "projectId": "95819b9c-7f6d-40f9-bd21-e3cef091a4c6",
+  "projectId": "1c75ab45-1fc4-45da-9051-63a9b2824922",
   "projectName": "Hestia Design System",
-  "shape": "style-only",
+  "shape": "offscript-component-recreation",
   "pkg": ".",
   "readmeHeader": ".design-sync/conventions.md"
 }

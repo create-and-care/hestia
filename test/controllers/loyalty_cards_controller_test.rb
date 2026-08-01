@@ -72,10 +72,12 @@ class LoyaltyCardsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, other.reload.position
   end
 
-  test "delete button asks for confirmation and has an accessible name" do
+  test "delete uses the design-system alert dialog instead of a native confirm, and edit has an accessible name" do
     card = loyalty_cards(:alpha_supermarket)
     get loyalty_cards_path
-    assert_select "form[action=?][data-turbo-confirm]", loyalty_card_path(card)
+    assert_select "dialog[role='alertdialog']"
+    assert_select "form[action=?]", loyalty_card_path(card)
+    assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("loyalty_cards.loyalty_card.delete_confirm", name: card.name))}"/, @response.body)
     assert_select "a[href=?][aria-label=?]", edit_loyalty_card_path(card), "Edit \"Supermarché\""
   end
 

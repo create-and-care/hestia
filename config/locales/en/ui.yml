@@ -18,3 +18,12 @@ en:
     file_upload:
       choose: Choose a file
       remove_aria: Remove file
+    greeting_header:
+      night: Good night
+      morning: Good morning
+      lunch: Enjoy your meal
+      afternoon: Good afternoon
+      evening: Good evening
+      late_evening: Good evening
+    celebration_moment:
+      dismiss_aria: Dismiss

@@ -15,7 +15,7 @@ module Ui
           class: "peer sr-only", **@html_options
         ) +
         tag.span(class: "absolute inset-0 rounded-full bg-toggle-track transition-colors peer-checked:bg-button-primary peer-focus-visible:ring-focus peer-disabled:opacity-50") +
-        tag.span(class: "absolute left-0.5 size-4 rounded-full bg-white shadow-xs transition-transform peer-checked:translate-x-4")
+        tag.span(class: "absolute left-0.5 size-4 rounded-full bg-container shadow-xs transition-transform peer-checked:translate-x-4")
       end
     end
   end
