@@ -9,10 +9,10 @@ class Ui::SidebarItemComponentTest < ViewComponent::TestCase
     assert_selector "span.min-w-0.flex-1.truncate", text: "Accueil"
   end
 
-  test "renders active state with inset background, semibold label and aria-current" do
+  test "renders active state with the active background, semibold label and aria-current" do
     render_inline(Ui::SidebarItemComponent.new(icon: "house", label: "Accueil", href: "/", active: true))
 
-    assert_selector "a[href='/'][aria-current='page'].bg-surface-inset"
+    assert_selector "a[href='/'][aria-current='page'].bg-item-active"
     assert_selector "span.font-semibold", text: "Accueil"
   end
 

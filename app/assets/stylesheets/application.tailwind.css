@@ -234,6 +234,7 @@
   --color-surface-hover: var(--surface-hover);
   --color-surface-inset: var(--surface-inset);
   --color-surface-inset-hover: var(--surface-inset-hover);
+  --color-item-active: var(--item-active);
   --color-container: var(--container);
   --color-container-hover: var(--container-hover);
   --color-container-inset: var(--container-inset);
@@ -297,6 +298,11 @@
   --surface-hover: #F5EDE7;
   --surface-inset: #F3EAE3;
   --surface-inset-hover: #EADFD6;
+  /* Dedicated "this row is the active one" token — --surface-inset itself is
+     ~1.5 ΔE from --surface-hover (imperceptible), so reusing it as an active
+     state made active and hovered rows indistinguishable. See
+     test/lib/color_contrast_test.rb for the ΔE floor this must clear. */
+  --item-active: #EADFD6;
   --container: var(--color-white);
   --container-hover: #FBF7F4;
   --container-inset: #FBF7F4;
@@ -392,6 +398,7 @@
   --surface-hover: #26201C;
   --surface-inset: #26201C;
   --surface-inset-hover: #322A25;
+  --item-active: #322A25;
   --container: #1D1815;
   --container-hover: #26201C;
   --container-inset: #26201C;
