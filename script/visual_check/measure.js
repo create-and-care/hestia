@@ -179,8 +179,14 @@
       if (!isVisible(el)) return;
       const cs = getComputedStyle(el);
       const overflowAmt = el.scrollWidth - el.clientWidth;
-      const intentionalScroller = cs.overflowX === "auto" || cs.overflowX === "scroll";
-      if (overflowAmt > 2 && !intentionalScroller) {
+      // "auto"/"scroll" scroll instead of visibly overflowing; "hidden"/"clip"
+      // clip instead — none of the four ever spill into neighboring layout,
+      // so none is the "Débordement horizontal" this rule exists to catch.
+      // Without this, e.g. a `truncate` (overflow-x: hidden) element's
+      // unwrapped text measures as "overflowing" its own clipped box, which
+      // is the technique working as intended, not a bug.
+      const clipsOrScrolls = [ "auto", "scroll", "hidden", "clip" ].includes(cs.overflowX);
+      if (overflowAmt > 2 && !clipsOrScrolls) {
         violations.push({ rule: "overflow_container", selector: cssPath(el), signature: groupKey(el), value: `${overflowAmt.toFixed(1)}px` });
         return; // don't descend — children of an overflowing container trivially overflow too
       }

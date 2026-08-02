@@ -8,8 +8,11 @@
 
   <% if action? %><div class="shrink-0"><%= action %></div><% end %>
 
-  <button type="button" data-action="click->dismiss#dismiss" aria-label="<%= t("ui.celebration_moment.dismiss_aria") %>"
-    class="shrink-0 rounded-md p-1 text-subdued hover:bg-surface-hover hover:text-primary">
+  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, html_options: {
+        class: "shrink-0",
+        data: { action: "click->dismiss#dismiss" },
+        aria: { label: t("ui.celebration_moment.dismiss_aria") }
+      })) do %>
     <%= lucide_icon("x", css_class: "size-4") %>
-  </button>
+  <% end %>
 </div>

@@ -20,9 +20,10 @@
     <% @tags.each do |tag| %>
       <%= render(Ui::BadgeComponent.new(variant: @tag == tag ? :default : :secondary)) do %>
         <%= link_to "#{tag.emoji} #{tag.name}".strip, contacts_path(tag_id: tag.id) %>
-        <%= button_to "×", contact_tag_path(tag), method: :delete, class: "cursor-pointer text-subdued hover:text-destructive",
-              aria: { label: t(".delete_tag_aria", name: tag.name) },
-              form: { class: "inline", data: { turbo_confirm: t(".delete_tag_confirm", name: tag.name) } } %>
+        <%= form_with url: contact_tag_path(tag), method: :delete, class: "inline", data: { turbo_confirm: t(".delete_tag_confirm", name: tag.name) } do %>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, type: "submit",
+                html_options: { aria: { label: t(".delete_tag_aria", name: tag.name) } })) { lucide_icon("x", css_class: "size-3.5") } %>
+        <% end %>
       <% end %>
     <% end %>
     <%= form_with url: contact_tags_path, method: :post, class: "inline-flex items-end gap-1" do %>

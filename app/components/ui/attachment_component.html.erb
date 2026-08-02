@@ -7,8 +7,11 @@
     <% if @size %><p class="text-xs text-subdued"><%= @size %></p><% end %>
   </div>
   <% if @removable %>
-    <button type="button" class="ml-1 shrink-0 rounded p-1 text-subdued hover:bg-surface-hover hover:text-primary" aria-label="Retirer la pièce jointe">
+    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, html_options: {
+          class: "ml-1 shrink-0",
+          aria: { label: "Retirer la pièce jointe" }
+        })) do %>
       <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
-    </button>
+    <% end %>
   <% end %>
 </div>

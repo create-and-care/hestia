@@ -7,7 +7,7 @@ module Ui
       accent: "bg-accent/10 text-accent",
       success: "bg-success/10 text-success",
       warning: "bg-warning/10 text-warning",
-      urgent: "bg-module-recipes/10 text-module-recipes",
+      urgent: "bg-destructive/10 text-destructive",
       destructive: "bg-destructive/10 text-destructive"
     }.freeze
 

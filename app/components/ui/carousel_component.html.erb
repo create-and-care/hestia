@@ -9,14 +9,20 @@
 
   <div data-carousel-target="status" role="status" aria-live="polite" class="sr-only"></div>
 
-  <button type="button" data-action="click->carousel#previous"
-    class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full border border-primary bg-container p-2 shadow-md hover:bg-surface-hover" aria-label="Previous slide">
+  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, html_options: {
+        class: "absolute left-2 top-1/2 -translate-y-1/2 !rounded-full border border-primary !bg-container hover:!bg-surface-hover shadow-md",
+        data: { action: "click->carousel#previous" },
+        aria: { label: "Previous slide" }
+      })) do %>
     <svg class="size-4" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
-  <button type="button" data-action="click->carousel#next"
-    class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full border border-primary bg-container p-2 shadow-md hover:bg-surface-hover" aria-label="Next slide">
+  <% end %>
+  <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, html_options: {
+        class: "absolute right-2 top-1/2 -translate-y-1/2 !rounded-full border border-primary !bg-container hover:!bg-surface-hover shadow-md",
+        data: { action: "click->carousel#next" },
+        aria: { label: "Next slide" }
+      })) do %>
     <svg class="size-4" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
+  <% end %>
 
   <div class="mt-3 flex justify-center gap-1.5">
     <% slides.each_with_index do |_, index| %>
