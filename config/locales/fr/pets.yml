@@ -19,10 +19,8 @@ fr:
       submit: "Enregistrer"
     edit:
       title: "Modifier l'animal"
-      back_to_pet: "← Fiche"
     new:
       title: "Nouvel animal"
-      back_to_pets: "← Animaux"
     show:
       chip_prefix: "puce"
       edit: "Modifier"
@@ -61,7 +59,6 @@ fr:
       documents_heading: "Documents"
       no_documents: "Aucun document lié."
       manage_documents_link: "Gérer les documents →"
-      back_to_pets: "← Tous les animaux"
     create:
       created: "Animal ajouté."
     update:
@@ -78,7 +75,6 @@ fr:
       booster_on_label: "Rappel le"
       price_label: "Prix"
       save: "Enregistrer"
-      back_to_pet: "← Fiche animal"
     update:
       updated: "Vaccin mis à jour."
     destroy:
@@ -94,7 +90,6 @@ fr:
       last_done_on_label: "Dernière prise"
       price_label: "Prix"
       save: "Enregistrer"
-      back_to_pet: "← Fiche animal"
     update:
       updated: "Traitement mis à jour."
     destroy:
@@ -108,7 +103,6 @@ fr:
       order_url_label: "Lien de commande"
       next_order_on_label: "Prochaine commande le"
       save: "Enregistrer"
-      back_to_pet: "← Fiche animal"
     update:
       updated: "Produit mis à jour."
     destroy:

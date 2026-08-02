@@ -1,6 +1,5 @@
 en:
   service_providers:
-    back_to_providers: "← Providers"
     index:
       title: "Providers"
       search_placeholder: "Search…"

@@ -1,7 +1,8 @@
 <% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-2xl px-4">
+  <div class="mb-4"><%= module_breadcrumb(:recipes, [ t(".title"), nil ], module_path: recipes_path) %></div>
+
   <h1 class="mb-6 text-2xl font-semibold"><%= t(".heading") %></h1>
   <%= render "form", recipe: @recipe, url: recipes_path %>
-  <p class="mt-6 text-sm"><%= link_to t(".back_link"), recipes_path, class: "underline" %></p>
 </div>

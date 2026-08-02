@@ -1,6 +1,5 @@
 en:
   addresses:
-    back_to_addresses: "← Addresses"
     types:
       restaurant: "Restaurant"
       cafe: "Café"

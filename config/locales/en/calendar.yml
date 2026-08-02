@@ -105,11 +105,9 @@ en:
       delay_label: "Delay"
       recipient_label: "Recipient"
       add_reminder_submit: "Add"
-      back_link: "← Calendar"
     new:
       title: "New event"
       heading: "New event"
-      back_link: "← Calendar"
     create:
       notice: "Event created."
     update:

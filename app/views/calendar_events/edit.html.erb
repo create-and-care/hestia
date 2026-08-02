@@ -1,6 +1,8 @@
 <% content_for :title, t(".title") %>
 
 <div class="mx-auto mt-10 max-w-lg px-4">
+  <div class="mb-4"><%= module_breadcrumb(:calendar, [ t(".title"), nil ], module_path: calendar_path) %></div>
+
   <div class="mb-6 flex items-center justify-between">
     <h1 class="text-2xl font-semibold"><%= t(".heading") %></h1>
     <div class="flex items-center gap-2">
@@ -62,5 +64,4 @@
     <% end %>
   </section>
 
-  <p class="mt-6 text-sm"><%= link_to t(".back_link"), calendar_path, class: "underline" %></p>
 </div>

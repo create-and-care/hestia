@@ -20,10 +20,8 @@ fr:
       submit: "Enregistrer"
     edit:
       title: "Réglages de la conversation"
-      back_to_conversation: "← Conversation"
     new:
       title: "Nouvelle conversation"
-      back_to_messages: "← Messages"
     show:
       settings: "Réglages"
       delete: "Supprimer"

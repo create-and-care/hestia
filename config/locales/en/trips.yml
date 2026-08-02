@@ -58,7 +58,6 @@ en:
       starts_on_label: "Start date"
       ends_on_label: "End date"
       submit: "Save"
-      back_to_trip: "← Back to the trip"
     update:
       updated: "Trip updated."
     update_sections:
@@ -74,7 +73,6 @@ en:
         title_label: "Title"
         content_label: "Content"
         submit: "Save"
-        back_to_trip: "← Back to the trip"
     tasks:
       create:
         alert: "Could not create the to-do item."
@@ -86,7 +84,6 @@ en:
         emoji_label: "Emoji"
         due_on_label: "Due date"
         submit: "Save"
-        back_to_trip: "← Back to the trip"
     addresses:
       create:
         alert: "Could not create the address."
@@ -99,7 +96,6 @@ en:
         full_address_label: "Address"
         phone_label: "Phone"
         submit: "Save"
-        back_to_trip: "← Back to the trip"
     shopping_lists:
       create:
         alert: "Could not create the shopping list."

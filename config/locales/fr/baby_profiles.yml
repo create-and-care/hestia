@@ -19,10 +19,8 @@ fr:
       submit: "Enregistrer"
     edit:
       title: "Modifier le profil"
-      back_to_profile: "← Fiche"
     new:
       title: "Nouveau profil bébé"
-      back_to_babies: "← Bébé"
     show:
       pediatrician_prefix: "Pédiatre :"
       edit: "Modifier"
@@ -84,7 +82,6 @@ fr:
       started_at_label: "Début"
       ended_at_label: "Fin"
       save: "Enregistrer"
-      back_to_profile: "← Fiche"
     update:
       updated: "Tétée mise à jour."
     stop:
@@ -100,7 +97,6 @@ fr:
       introduced_on_label: "Date"
       acceptance_label: "Réaction"
       save: "Enregistrer"
-      back_to_profile: "← Fiche"
     update:
       updated: "Aliment mis à jour."
     destroy:
@@ -114,7 +110,6 @@ fr:
       tested_on_label: "Date"
       severity_label: "Sévérité"
       save: "Enregistrer"
-      back_to_profile: "← Fiche"
     update:
       updated: "Allergène mis à jour."
     destroy:

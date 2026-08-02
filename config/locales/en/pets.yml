@@ -19,10 +19,8 @@ en:
       submit: "Save"
     edit:
       title: "Edit pet"
-      back_to_pet: "← Pet"
     new:
       title: "New pet"
-      back_to_pets: "← Pets"
     show:
       chip_prefix: "chip"
       edit: "Edit"
@@ -61,7 +59,6 @@ en:
       documents_heading: "Documents"
       no_documents: "No linked documents."
       manage_documents_link: "Manage documents →"
-      back_to_pets: "← All pets"
     create:
       created: "Pet added."
     update:
@@ -78,7 +75,6 @@ en:
       booster_on_label: "Booster due"
       price_label: "Price"
       save: "Save"
-      back_to_pet: "← Pet profile"
     update:
       updated: "Vaccine updated."
     destroy:
@@ -94,7 +90,6 @@ en:
       last_done_on_label: "Last done"
       price_label: "Price"
       save: "Save"
-      back_to_pet: "← Pet profile"
     update:
       updated: "Treatment updated."
     destroy:
@@ -108,7 +103,6 @@ en:
       order_url_label: "Order link"
       next_order_on_label: "Next order by"
       save: "Save"
-      back_to_pet: "← Pet profile"
     update:
       updated: "Supply updated."
     destroy:
