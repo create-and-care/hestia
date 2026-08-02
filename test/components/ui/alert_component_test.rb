@@ -54,4 +54,10 @@ class Ui::AlertComponentTest < ViewComponent::TestCase
       assert_selector "div[role='alert'].#{fragments.fetch(variant)}"
     end
   end
+
+  test "carries the on-tone marker so a nested <a> inherits the alert's own color" do
+    render_inline(Ui::AlertComponent.new) { "Body copy" }
+
+    assert_selector "div[role='alert'].on-tone"
+  end
 end

@@ -12,7 +12,7 @@
          title="<%= holiday&.fetch(:name) %>">
       <div class="mb-1 flex items-center justify-between">
         <%= link_to date.day, new_calendar_event_path(starts_at: date.to_time.change(hour: 9).iso8601),
-              class: "rounded px-1 text-xs hover:bg-surface-hover #{"font-bold text-primary" if date == Date.current}",
+              class: "rounded px-1 text-xs hover:bg-surface-hover #{"font-semibold text-primary" if date == Date.current}",
               title: t(".new_event_on", date: l(date, format: :long)) %>
       </div>
       <% if holiday %>

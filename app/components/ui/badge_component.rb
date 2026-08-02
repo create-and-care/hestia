@@ -18,7 +18,7 @@ module Ui
 
     def call
       content_tag :span, **@html_options,
-        class: cn("inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium gap-1", VARIANTS.fetch(@variant), @html_options[:class]) do
+        class: cn("on-tone inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium gap-1", VARIANTS.fetch(@variant), @html_options[:class]) do
         content
       end
     end

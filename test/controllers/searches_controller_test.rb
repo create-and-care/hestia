@@ -35,4 +35,11 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, I18n.t("search.no_results")
   end
+
+  test "echoes back the requesting turbo-frame id instead of a hardcoded one" do
+    get search_path(q: "vaisselle"), headers: { "Turbo-Frame" => "global_search_results_mobile" }
+    assert_response :success
+    assert_select "turbo-frame#global_search_results_mobile"
+    assert_select "turbo-frame#global_search_results", false
+  end
 end

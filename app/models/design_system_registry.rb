@@ -70,6 +70,9 @@ module DesignSystemRegistry
       description: "Déclenche une action ponctuelle ; variants default/secondary/outline/ghost/destructive/link, tailles sm/default/lg/icon."),
     Entry.new(slug: "button-group", name: "Button Group", category: CATEGORIES[0], component_class: Ui::ButtonGroupComponent,
       description: "Regroupe plusieurs boutons liés (ex. sélecteur de période) avec des coins fusionnés."),
+    Entry.new(slug: "copy-button", name: "Copy Button", category: CATEGORIES[0], component_class: Ui::CopyButtonComponent,
+      description: "Bouton lien qui copie une valeur dans le presse-papiers via le contrôleur Stimulus clipboard, avec confirmation toast.",
+      related: %w[button]),
     Entry.new(slug: "field", name: "Field", category: CATEGORIES[0], component_class: Ui::FieldComponent,
       description: "Assemble label, contrôle, description et message d'erreur d'un champ de formulaire."),
     Entry.new(slug: "input", name: "Input", category: CATEGORIES[0], component_class: Ui::InputComponent,
@@ -167,6 +170,12 @@ module DesignSystemRegistry
       description: "Colonne de navigation repliable, sert de base à la nav de ce site de doc."),
     Entry.new(slug: "item", name: "Item", category: CATEGORIES[2], component_class: Ui::ItemComponent,
       description: "Ligne générique leading/title/description/trailing — sert de brique aux listes (contacts, menus, sidebar)."),
+    Entry.new(slug: "sidebar-item", name: "Sidebar Item", category: CATEGORIES[2], component_class: Ui::SidebarItemComponent,
+      description: "Ligne de navigation de la sidebar : médaillon + libellé + accent de module optionnel, gère elle-même son repli en rail 64px.",
+      usage: "Réservé aux lignes de navigation (sidebar, rail repliable) ; pour toute liste non-navigationnelle (contacts, résultats de recherche, réglages), Item reste le bon composant — c'est la raison d'être de la séparation entre les deux.\n" \
+        "Le repli visible (icône seule, rail à 64px) est piloté en CSS depuis le conteneur parent via data-collapsed et les utilitaires group-data-[collapsed=true]: — la prop collapsed: ne sert qu'au rendu statique isolé (ce catalogue, les tests), jamais au repli live réel.\n" \
+        "mod: absent ou inconnu bascule sur un médaillon neutre (bg-surface-inset), même forme — jamais une icône nue, pour ne pas casser la géométrie de la ligne.",
+      related: %w[item module-medallion sidebar]),
     Entry.new(slug: "carousel", name: "Carousel", category: CATEGORIES[2], component_class: Ui::CarouselComponent,
       description: "Défilement horizontal d'un jeu de diapositives."),
 

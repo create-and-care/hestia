@@ -1,0 +1,52 @@
+<div class="flex flex-col gap-8">
+  <div>
+    <p class="mb-2 text-xs font-medium text-subdued">Repos / survol / actif — sur bg-surface, le fond réel de la sidebar</p>
+    <div class="flex w-64 flex-col gap-1 rounded-lg border border-primary bg-surface p-2">
+      <div>
+        <%= render Ui::SidebarItemComponent.new(icon: "house", label: "Accueil", href: "#") %>
+        <p class="px-3 text-xs text-secondary">repos</p>
+      </div>
+      <div>
+        <%= render Ui::SidebarItemComponent.new(icon: "layout-dashboard", label: "Budgets", href: "#") %>
+        <p class="px-3 text-xs text-secondary">survol (survolez la ligne)</p>
+      </div>
+      <div>
+        <%= render Ui::SidebarItemComponent.new(icon: "settings", label: "Réglages", href: "#", active: true) %>
+        <p class="px-3 text-xs text-secondary">actif</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p class="mb-2 text-xs font-medium text-subdued">Médaillon — avec et sans module</p>
+    <div class="flex w-64 flex-col gap-1 rounded-lg border border-primary bg-surface p-2">
+      <div>
+        <%= render Ui::SidebarItemComponent.new(icon: "refrigerator", label: "Frigo", href: "#", mod: :fridge) %>
+        <p class="px-3 text-xs text-secondary">module avec accent</p>
+      </div>
+      <div>
+        <%= render Ui::SidebarItemComponent.new(icon: "notebook-pen", label: "Notes", href: "#") %>
+        <p class="px-3 text-xs text-secondary">module sans accent (13 nav_key aujourd'hui)</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p class="mb-2 text-xs font-medium text-subdued">Repliée — rail de 64px : hauteur 44px conservée, médaillon centré</p>
+    <div class="w-16 rounded-lg border border-primary bg-surface p-2">
+      <%= render Ui::SidebarItemComponent.new(icon: "layout-dashboard", label: "Accueil", href: "#", collapsed: true) %>
+    </div>
+  </div>
+
+  <div>
+    <p class="mb-2 text-xs font-medium text-subdued">Slot trailing — badge « non lu »</p>
+    <div class="w-64 rounded-lg border border-primary bg-surface p-2">
+      <%= render(Ui::SidebarItemComponent.new(icon: "message-circle", label: "Messages", href: "#")) do |item| %>
+        <% item.with_trailing do %>
+          <span class="block size-1.5 rounded-full bg-button-primary" aria-hidden="true"></span>
+          <span class="sr-only">Non lu</span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -41,7 +41,12 @@
     <%= render(Ui::SonnerComponent.new) %>
 
     <% if Current.user %>
-      <div class="fixed top-3 right-3 z-40 flex items-center gap-1">
+      <%# Below md this sits inside the mobile nav bar's 56px band (see
+          shared/_app_sidebar); above md it floats exactly as before. Stays a
+          single instance either way — it carries its own turbo_stream_from
+          subscription and a fixed "notifications_badge" id, so duplicating it
+          would double-subscribe and break Turbo Stream targeting. %>
+      <div class="fixed right-3 top-0 z-40 flex h-14 items-center gap-1 md:top-3 md:h-auto">
         <%= render "shared/notifications" %>
       </div>
     <% end %>
@@ -49,7 +54,7 @@
     <% if Current.household %>
       <div class="flex min-h-screen">
         <%= render "shared/app_sidebar" %>
-        <div class="min-w-0 flex-1 pb-16"><%= yield %></div>
+        <div class="min-w-0 flex-1 pb-16 pt-14 md:pt-0"><%= yield %></div>
       </div>
     <% else %>
       <%= yield %>

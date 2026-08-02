@@ -225,11 +225,8 @@
             <p class="mb-2"><%= t("api_tokens.index.token_created_description") %></p>
             <div class="flex items-center gap-2">
               <code id="new_api_token" class="flex-1 truncate rounded-md bg-surface-inset px-3 py-2 font-mono text-sm"><%= flash[:api_token] %></code>
-              <button type="button" data-controller="clipboard" data-action="clipboard#copy"
-                    data-clipboard-text-value="<%= flash[:api_token] %>" data-clipboard-message-value="<%= t("api_tokens.index.copied") %>"
-                    class="inline-flex h-9 shrink-0 cursor-pointer items-center rounded-md border border-primary px-3 text-sm font-medium text-primary hover:bg-button-outline-hover">
-                <%= t("api_tokens.index.copy") %>
-              </button>
+              <%= render(Ui::CopyButtonComponent.new(value: flash[:api_token], label: t("api_tokens.index.copy"),
+                    message: t("api_tokens.index.copied"), html_options: { class: "shrink-0" })) %>
             </div>
           <% end %>
         <% end %>

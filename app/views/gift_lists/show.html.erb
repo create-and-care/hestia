@@ -31,8 +31,8 @@
         <p class="mb-2 text-sm text-secondary"><%= t(".share_link_description") %></p>
         <div class="flex items-center gap-2">
           <code class="block flex-1 rounded bg-surface-inset px-3 py-2 text-sm break-all"><%= public_gift_list_url(@list.gift_list_share.token) %></code>
-          <button type="button" class="shrink-0 cursor-pointer text-sm text-secondary underline" data-controller="clipboard"
-                data-clipboard-text-value="<%= public_gift_list_url(@list.gift_list_share.token) %>" data-action="clipboard#copy"><%= t("circles.copy_code") %></button>
+          <%= render(Ui::CopyButtonComponent.new(value: public_gift_list_url(@list.gift_list_share.token), label: t("circles.copy_code"),
+                html_options: { class: "shrink-0" })) %>
         </div>
         <%= form_with url: gift_list_share_path(@list), method: :delete, class: "mt-2" do %>
           <%= render(Ui::ButtonComponent.new(type: "submit", variant: :ghost, size: :sm)) { t(".disable_link") } %>

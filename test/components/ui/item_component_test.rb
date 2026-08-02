@@ -18,12 +18,12 @@ class Ui::ItemComponentTest < ViewComponent::TestCase
     assert_selector "a[href='/things/1'].hover\\:bg-surface-hover.cursor-pointer"
   end
 
-  test "renders active state with inset background, semibold title and aria-current" do
+  test "renders active state with the active background, semibold title and aria-current" do
     render_inline(Ui::ItemComponent.new(href: "/things/1", active: true)) do |item|
       item.with_title { "Title" }
     end
 
-    assert_selector "a[href='/things/1'][aria-current='page'].bg-surface-inset"
+    assert_selector "a[href='/things/1'][aria-current='page'].bg-item-active"
     assert_selector "p.font-semibold", text: "Title"
     refute_selector ".hover\\:bg-surface-hover"
   end
@@ -58,5 +58,13 @@ class Ui::ItemComponentTest < ViewComponent::TestCase
 
     assert_selector "p", count: 1
     assert_selector "p", text: "Only a title"
+  end
+
+  test "carries the on-tone marker so a nested <a> title inherits the item's own color" do
+    render_inline(Ui::ItemComponent.new) do |item|
+      item.with_title { "Title" }
+    end
+
+    assert_selector "div.on-tone"
   end
 end

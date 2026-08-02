@@ -2,6 +2,7 @@ fr:
   sidebar:
     home: "Accueil"
     unread: "Non lu"
+    open_nav: "Ouvrir la navigation"
     groups:
       daily: "Quotidien"
       home: "Maison"

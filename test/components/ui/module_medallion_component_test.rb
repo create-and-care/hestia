@@ -14,9 +14,16 @@ class Ui::ModuleMedallionComponentTest < ViewComponent::TestCase
     assert_selector "span.size-16"
   end
 
-  test "raises for an unknown module" do
-    assert_raises(ArgumentError) do
-      Ui::ModuleMedallionComponent.new(mod: :nonexistent, icon: "house")
-    end
+  test "falls back to a neutral tint for an unknown module" do
+    render_inline(Ui::ModuleMedallionComponent.new(mod: :nonexistent, icon: "house"))
+
+    assert_selector "span.bg-surface-inset.text-secondary"
+    refute_selector "[class*='bg-module-'], [class*='text-module-']"
+  end
+
+  test "falls back to a neutral tint when no module is given" do
+    render_inline(Ui::ModuleMedallionComponent.new(icon: "house"))
+
+    assert_selector "span.bg-surface-inset.text-secondary"
   end
 end

@@ -8,7 +8,7 @@
     <% muted = date.month != current_month.month %>
     <div role="gridcell" aria-current="<%= "date" if date == Date.current %>"
          class="min-h-20 p-1 <%= muted ? "bg-surface text-subdued" : "bg-container" %>">
-      <p class="mb-1 text-xs <%= "font-bold text-primary" if date == Date.current %>"><%= date.day %></p>
+      <p class="mb-1 text-xs <%= "font-semibold text-primary" if date == Date.current %>"><%= date.day %></p>
       <% Array(by_day[date]).each do |contact| %>
         <p class="truncate text-[10px]" title="<%= contact.name %>">
           <%= lucide_icon("cake", css_class: "inline size-2.5") %> <%= contact.name %>

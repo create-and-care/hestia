@@ -1,4 +1,7 @@
-<%= turbo_frame_tag "global_search_results", role: "listbox" do %>
+<%# Echoes back whichever frame id the request targeted (see turbo_frame_request_id)
+    rather than a hardcoded id — the mobile nav drawer's search entry renders this
+    same partial into a differently-id'd frame than the desktop sidebar's. %>
+<%= turbo_frame_tag(turbo_frame_request_id || "global_search_results", role: "listbox") do %>
   <% if @query.blank? %>
     <p class="px-2 py-6 text-center text-sm text-secondary"><%= t("search.hint") %></p>
   <% elsif @results.empty? %>

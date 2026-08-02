@@ -14,8 +14,7 @@
       <% end %>
       <%= form_with url: sort_tasks_path, method: :post, class: "flex items-center gap-1" do %>
         <%= render Ui::NativeSelectComponent.new(name: "by",
-              options: [ [ t(".sort_due_date"), "due_date" ], [ t(".sort_assignee"), "assignee" ] ],
-              html_options: { class: "!h-8 !text-xs" }) %>
+              options: [ [ t(".sort_due_date"), "due_date" ], [ t(".sort_assignee"), "assignee" ] ], size: :sm) %>
         <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".sort_submit") } %>
       <% end %>
     </div>
@@ -33,7 +32,8 @@
         <%= category.name %>
         <%= form_with url: task_category_path(category), method: :delete, class: "inline",
               data: { turbo_confirm: t(".delete_category_confirm") } do %>
-          <button type="submit" class="cursor-pointer text-subdued hover:text-destructive" aria-label="<%= t(".delete_category_aria", name: category.name) %>">×</button>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
+                html_options: { aria: { label: t(".delete_category_aria", name: category.name) } })) { lucide_icon("x", css_class: "size-4") } %>
         <% end %>
       <% end %>
     <% end %>

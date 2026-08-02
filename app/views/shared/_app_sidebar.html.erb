@@ -1,70 +1,32 @@
-<%= render(Ui::SidebarComponent.new(class_name: "sticky top-0 h-screen shrink-0")) do |sidebar| %>
-  <% sidebar.with_header do %>
-    <div data-sidebar-target="label" class="flex min-w-0 items-center gap-2">
-      <%= image_tag "logo.png", alt: Hestia.to_s, class: "size-7 shrink-0 rounded-md object-cover" %>
-      <div class="min-w-0">
-        <p class="truncate text-sm font-semibold text-primary"><%= Hestia %></p>
-      </div>
-    </div>
-  <% end %>
+<%# Persistent desktop sidebar (>= md, collapsible to a 64px rail) below which
+    the same nav content relocates into a Ui::DrawerComponent — see the mobile
+    top bar right below. Both mounts render "shared/sidebar_nav" etc, so the
+    nav markup itself exists exactly once; only the wrapper differs. %>
+<%= render(Ui::SidebarComponent.new(class_name: "sticky top-0 h-screen shrink-0 max-md:hidden")) do |sidebar| %>
+  <% sidebar.with_header { render "shared/sidebar_brand" } %>
 
-  <div data-sidebar-target="label">
-    <%= render "shared/search_dialog" %>
-  </div>
+  <%= render "shared/sidebar_nav" %>
 
-  <%= link_to root_path, class: "flex items-center gap-3 rounded-md p-2 text-sm #{current_page?(root_path) ? "bg-surface-hover font-medium text-primary" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>
-    <span class="relative shrink-0" aria-hidden="true">
-      <%= lucide_icon("layout-dashboard", css_class: "size-5") %>
-      <% if current_page?(root_path) %><span class="absolute -right-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
-    </span>
-    <span data-sidebar-target="label" class="truncate"><%= t("sidebar.home") %></span>
-  <% end %>
-
-  <% sidebar_groups.each do |group| %>
-    <div class="flex flex-col gap-0.5" data-sidebar-target="group">
-      <button type="button" data-action="click->sidebar#toggleGroup" aria-expanded="<%= group[:open] %>"
-        class="flex w-full items-center gap-3 rounded-md p-2 text-sm font-medium text-secondary hover:bg-surface-hover">
-        <span class="shrink-0" aria-hidden="true"><%= lucide_icon(group[:icon], css_class: "size-5") %></span>
-        <span data-sidebar-target="label" class="flex-1 truncate text-left"><%= group[:label] %></span>
-        <svg data-sidebar-target="label groupChevron" class="size-4 shrink-0 transition-transform <%= "rotate-180" if group[:open] %>" viewBox="0 0 24 24" fill="none">
-          <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </button>
-
-      <div data-sidebar-target="groupPanel" class="ml-2 flex flex-col gap-0.5 border-l border-primary pl-3 group-data-[collapsed=true]:ml-0 group-data-[collapsed=true]:border-l-0 group-data-[collapsed=true]:pl-0" <%= "hidden" unless group[:open] %>>
-        <% group[:items].each do |item| %>
-          <%= link_to item[:path], class: "flex items-center gap-3 rounded-md p-2 text-sm group-data-[collapsed=true]:justify-center #{item[:active] ? "bg-brand/10 font-medium text-brand" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>
-            <span class="relative shrink-0" aria-hidden="true">
-              <%= lucide_icon(item[:icon], css_class: "size-4") %>
-              <% if item[:active] %><span class="absolute -right-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
-              <% if item[:unread] %><span class="absolute -left-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
-            </span>
-            <span data-sidebar-target="label" class="truncate"><%= item[:label] %></span>
-            <% if item[:unread] %><span class="sr-only"><%= t("sidebar.unread") %></span><% end %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
-
-  <% sidebar.with_footer do %>
-    <div class="flex flex-col gap-0.5 border-t border-primary pt-3">
-      <%= link_to household_path(Current.household), class: "flex items-center gap-3 rounded-md p-2 text-sm text-primary hover:bg-surface-hover" do %>
-        <span class="shrink-0" aria-hidden="true"><%= lucide_icon("settings", css_class: "size-5") %></span>
-        <span data-sidebar-target="label" class="truncate"><%= t("sidebar.footer.settings") %></span>
-      <% end %>
-
-      <div data-sidebar-target="label" class="mt-2 flex items-center gap-2 rounded-md border border-primary p-2">
-        <%= render Ui::AvatarComponent.new(alt: Current.user.name.presence || Current.user.email_address, size: :sm) %>
-        <div class="min-w-0 flex-1">
-          <p class="truncate text-sm font-medium text-primary"><%= Current.user.name.presence || Current.user.email_address %></p>
-          <p class="truncate text-xs text-secondary"><%= Current.user.email_address %></p>
-        </div>
-        <%= button_to session_path, method: :delete, class: "shrink-0 cursor-pointer rounded-md p-1.5 text-secondary hover:bg-surface-hover", title: t("sidebar.footer.sign_out") do %>
-          <svg class="size-4" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-          <span class="sr-only"><%= t("sidebar.footer.sign_out") %></span>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
+  <% sidebar.with_footer { render "shared/sidebar_user_card" } %>
 <% end %>
+
+<div class="fixed inset-x-0 top-0 z-30 flex h-14 items-center justify-between border-b border-primary bg-surface px-2 md:hidden">
+  <%= render(Ui::DrawerComponent.new(side: :left, close_on_visit: true)) do |drawer| %>
+    <% drawer.with_trigger do %>
+      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, html_options: { aria: { label: t("sidebar.open_nav") } })) do %>
+        <%= lucide_icon("menu", css_class: "size-5") %>
+      <% end %>
+    <% end %>
+
+    <div data-controller="sidebar" class="flex h-full flex-col gap-4 p-4">
+      <%= render "shared/sidebar_brand" %>
+      <nav class="flex-1 min-h-0 flex flex-col gap-1 overflow-y-auto">
+        <%= render "shared/sidebar_nav", frame_id: "global_search_results_mobile", keyboard_shortcut: false %>
+      </nav>
+      <%= render "shared/sidebar_user_card" %>
+    </div>
+  <% end %>
+
+  <p class="pointer-events-none text-sm font-semibold text-primary"><%= Hestia %></p>
+  <div class="w-9" aria-hidden="true"></div>
+</div>

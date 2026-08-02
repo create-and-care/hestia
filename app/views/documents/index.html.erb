@@ -31,18 +31,19 @@
         <% end %>
         <%= link_to folder.name, documents_path(folder_id: folder.id, q: @query.presence) %>
         <%= link_to edit_document_folder_path(folder), "aria-label": t(".edit_folder_aria", name: folder.name), class: "text-subdued hover:text-primary" do %>
-          <%= lucide_icon("pencil", css_class: "size-3") %>
+          <%= lucide_icon("pencil", css_class: "size-4") %>
         <% end %>
         <%= form_with url: document_folder_path(folder), method: :delete, class: "inline", data: { turbo_confirm: t(".delete_folder_confirm") } do %>
-          <button type="submit" class="cursor-pointer text-subdued hover:text-destructive" aria-label="<%= t(".delete_folder_aria", name: folder.name) %>"><%= lucide_icon("x", css_class: "size-3") %></button>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
+                html_options: { aria: { label: t(".delete_folder_aria", name: folder.name) } })) { lucide_icon("x", css_class: "size-4") } %>
         <% end %>
       <% end %>
     <% end %>
     <%= form_with url: document_folders_path, method: :post, scope: :document_folder, class: "inline-flex items-center gap-1" do |form| %>
-      <%= render Ui::InputComponent.new(name: form.field_name(:name), placeholder: t(".new_folder_placeholder"),
-            html_options: { id: form.field_id(:name), class: "!h-8 !w-36 !text-xs" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: form.field_name(:color), options: folder_color_options,
-            html_options: { id: form.field_id(:color), class: "!h-8 !w-auto !text-xs" }) %>
+      <%= render Ui::InputComponent.new(name: form.field_name(:name), placeholder: t(".new_folder_placeholder"), size: :sm,
+            html_options: { id: form.field_id(:name), class: "!w-36" }) %>
+      <%= render Ui::NativeSelectComponent.new(name: form.field_name(:color), options: folder_color_options, size: :sm,
+            html_options: { id: form.field_id(:color), class: "!w-auto" }) %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add") } %>
     <% end %>
   </section>

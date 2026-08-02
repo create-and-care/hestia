@@ -11,8 +11,7 @@
     <p class="mb-1 text-sm text-secondary"><%= t(".invite_description") %></p>
     <div class="flex items-center gap-2">
       <code class="rounded-md bg-surface-inset px-3 py-1 text-sm font-semibold tracking-widest"><%= @household.invite_code %></code>
-      <button type="button" class="cursor-pointer text-sm text-secondary underline" data-controller="clipboard"
-            data-clipboard-text-value="<%= @household.invite_code %>" data-action="clipboard#copy"><%= t(".copy_code") %></button>
+      <%= render(Ui::CopyButtonComponent.new(value: @household.invite_code, label: t(".copy_code"))) %>
     </div>
   <% end %>
 
