@@ -1,6 +1,6 @@
 <%= render(Ui::SidebarComponent.new(class_name: "sticky top-0 h-screen shrink-0")) do |sidebar| %>
   <% sidebar.with_header do %>
-    <div data-sidebar-target="label" class="flex min-w-0 items-center gap-2">
+    <div class="flex min-w-0 items-center gap-2 group-data-[collapsed=true]:hidden">
       <%= image_tag "logo.png", alt: Hestia.to_s, class: "size-7 shrink-0 rounded-md object-cover" %>
       <div class="min-w-0">
         <p class="truncate text-sm font-semibold text-primary"><%= Hestia %></p>
@@ -8,39 +8,32 @@
     </div>
   <% end %>
 
-  <div data-sidebar-target="label">
+  <div class="group-data-[collapsed=true]:hidden">
     <%= render "shared/search_dialog" %>
   </div>
 
-  <%= link_to root_path, class: "flex items-center gap-3 rounded-md p-2 text-sm #{current_page?(root_path) ? "bg-surface-hover font-medium text-primary" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>
-    <span class="relative shrink-0" aria-hidden="true">
-      <%= lucide_icon("layout-dashboard", css_class: "size-5") %>
-      <% if current_page?(root_path) %><span class="absolute -right-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
-    </span>
-    <span data-sidebar-target="label" class="truncate"><%= t("sidebar.home") %></span>
-  <% end %>
+  <%= render(Ui::SidebarItemComponent.new(icon: "layout-dashboard", label: t("sidebar.home"), href: root_path, active: current_page?(root_path))) %>
 
   <% sidebar_groups.each do |group| %>
     <div class="flex flex-col gap-0.5" data-sidebar-target="group">
       <button type="button" data-action="click->sidebar#toggleGroup" aria-expanded="<%= group[:open] %>"
         class="flex w-full items-center gap-3 rounded-md p-2 text-sm font-medium text-secondary hover:bg-surface-hover">
         <span class="shrink-0" aria-hidden="true"><%= lucide_icon(group[:icon], css_class: "size-5") %></span>
-        <span data-sidebar-target="label" class="flex-1 truncate text-left"><%= group[:label] %></span>
-        <svg data-sidebar-target="label groupChevron" class="size-4 shrink-0 transition-transform <%= "rotate-180" if group[:open] %>" viewBox="0 0 24 24" fill="none">
+        <span class="flex-1 truncate text-left group-data-[collapsed=true]:hidden"><%= group[:label] %></span>
+        <svg data-sidebar-target="groupChevron" class="size-4 shrink-0 transition-transform group-data-[collapsed=true]:hidden <%= "rotate-180" if group[:open] %>" viewBox="0 0 24 24" fill="none">
           <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </button>
 
       <div data-sidebar-target="groupPanel" class="ml-2 flex flex-col gap-0.5 border-l border-primary pl-3 group-data-[collapsed=true]:ml-0 group-data-[collapsed=true]:border-l-0 group-data-[collapsed=true]:pl-0" <%= "hidden" unless group[:open] %>>
         <% group[:items].each do |item| %>
-          <%= link_to item[:path], class: "flex items-center gap-3 rounded-md p-2 text-sm group-data-[collapsed=true]:justify-center #{item[:active] ? "bg-brand/10 font-medium text-brand" : "text-primary hover:bg-surface-hover"}", data: { sidebar_target: "item" } do %>
-            <span class="relative shrink-0" aria-hidden="true">
-              <%= lucide_icon(item[:icon], css_class: "size-4") %>
-              <% if item[:active] %><span class="absolute -right-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
-              <% if item[:unread] %><span class="absolute -left-0.5 -top-0.5 size-1.5 rounded-full bg-button-primary"></span><% end %>
-            </span>
-            <span data-sidebar-target="label" class="truncate"><%= item[:label] %></span>
-            <% if item[:unread] %><span class="sr-only"><%= t("sidebar.unread") %></span><% end %>
+          <%= render(Ui::SidebarItemComponent.new(icon: item[:icon], label: item[:label], href: item[:path], active: item[:active])) do |sidebar_item| %>
+            <% if item[:unread] %>
+              <% sidebar_item.with_trailing do %>
+                <span class="block size-1.5 rounded-full bg-button-primary" aria-hidden="true"></span>
+                <span class="sr-only"><%= t("sidebar.unread") %></span>
+              <% end %>
+            <% end %>
           <% end %>
         <% end %>
       </div>
@@ -49,12 +42,9 @@
 
   <% sidebar.with_footer do %>
     <div class="flex flex-col gap-0.5 border-t border-primary pt-3">
-      <%= link_to household_path(Current.household), class: "flex items-center gap-3 rounded-md p-2 text-sm text-primary hover:bg-surface-hover" do %>
-        <span class="shrink-0" aria-hidden="true"><%= lucide_icon("settings", css_class: "size-5") %></span>
-        <span data-sidebar-target="label" class="truncate"><%= t("sidebar.footer.settings") %></span>
-      <% end %>
+      <%= render(Ui::SidebarItemComponent.new(icon: "settings", label: t("sidebar.footer.settings"), href: household_path(Current.household))) %>
 
-      <div data-sidebar-target="label" class="mt-2 flex items-center gap-2 rounded-md border border-primary p-2">
+      <div class="mt-2 flex items-center gap-2 rounded-md border border-primary p-2 group-data-[collapsed=true]:hidden">
         <%= render Ui::AvatarComponent.new(alt: Current.user.name.presence || Current.user.email_address, size: :sm) %>
         <div class="min-w-0 flex-1">
           <p class="truncate text-sm font-medium text-primary"><%= Current.user.name.presence || Current.user.email_address %></p>

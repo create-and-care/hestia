@@ -162,13 +162,13 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
   test "the sidebar marks Messages as unread when the household has an unread conversation" do
     get baby_profiles_path
-    assert_select "span.absolute.-left-0\\.5.rounded-full.bg-button-primary"
+    assert_select "span.sr-only", text: I18n.t("sidebar.unread")
   end
 
   test "the sidebar does not mark Messages as unread once the conversation has been read" do
     conversations(:alpha_chat).conversation_participants.find_by(user: users(:one)).update!(last_read_at: Time.current)
     get baby_profiles_path
-    assert_select "span.absolute.-left-0\\.5.rounded-full.bg-button-primary", count: 0
+    assert_select "span.sr-only", text: I18n.t("sidebar.unread"), count: 0
   end
 
   test "conversation show links back to its subject" do

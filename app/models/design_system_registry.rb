@@ -167,6 +167,12 @@ module DesignSystemRegistry
       description: "Colonne de navigation repliable, sert de base à la nav de ce site de doc."),
     Entry.new(slug: "item", name: "Item", category: CATEGORIES[2], component_class: Ui::ItemComponent,
       description: "Ligne générique leading/title/description/trailing — sert de brique aux listes (contacts, menus, sidebar)."),
+    Entry.new(slug: "sidebar-item", name: "Sidebar Item", category: CATEGORIES[2], component_class: Ui::SidebarItemComponent,
+      description: "Ligne de navigation de la sidebar : médaillon + libellé + accent de module optionnel, gère elle-même son repli en rail 64px.",
+      usage: "Réservé aux lignes de navigation (sidebar, rail repliable) ; pour toute liste non-navigationnelle (contacts, résultats de recherche, réglages), Item reste le bon composant — c'est la raison d'être de la séparation entre les deux.\n" \
+        "Le repli visible (icône seule, rail à 64px) est piloté en CSS depuis le conteneur parent via data-collapsed et les utilitaires group-data-[collapsed=true]: — la prop collapsed: ne sert qu'au rendu statique isolé (ce catalogue, les tests), jamais au repli live réel.\n" \
+        "mod: absent ou inconnu bascule sur un médaillon neutre (bg-surface-inset), même forme — jamais une icône nue, pour ne pas casser la géométrie de la ligne.",
+      related: %w[item module-medallion sidebar]),
     Entry.new(slug: "carousel", name: "Carousel", category: CATEGORIES[2], component_class: Ui::CarouselComponent,
       description: "Défilement horizontal d'un jeu de diapositives."),
 

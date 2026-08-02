@@ -9,11 +9,12 @@ module Ui
     SIZES = { sm: "size-8", default: "size-11", lg: "size-16" }.freeze
     GLYPH_SIZES = { sm: "size-3.5", default: "size-5", lg: "size-7" }.freeze
 
-    # mod: one of MODULES — named `mod`, not `module`, since the latter is a
+    # mod: one of MODULES, or nil/unknown for callers with no module mapping
+    # yet (e.g. sidebar rows) — those render the same shape with a neutral
+    # surface-inset tint instead of raising, so geometry never breaks while a
+    # mapping is undecided. Named `mod`, not `module`, since the latter is a
     # Ruby keyword and can't be referenced as a bare local inside the method body.
-    def initialize(mod:, icon:, size: :default, class_name: nil)
-      raise ArgumentError, "unknown module: #{mod.inspect}" unless MODULES.include?(mod)
-
+    def initialize(mod: nil, icon:, size: :default, class_name: nil)
       @mod = mod
       @icon = icon
       @size = size
@@ -23,11 +24,17 @@ module Ui
     def call
       tag.span class: cn(
         "inline-flex shrink-0 items-center justify-center rounded-full",
-        "bg-module-#{@mod}/12 text-module-#{@mod}",
+        known_module? ? "bg-module-#{@mod}/12 text-module-#{@mod}" : "bg-surface-inset text-secondary",
         SIZES.fetch(@size), @class_name
       ) do
         lucide_icon_mask(@icon, css_class: GLYPH_SIZES.fetch(@size))
       end
     end
+
+    private
+
+      def known_module?
+        MODULES.include?(@mod)
+      end
   end
 end

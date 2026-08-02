@@ -1,0 +1,55 @@
+require "test_helper"
+
+class Ui::SidebarItemComponentTest < ViewComponent::TestCase
+  test "renders a link with icon medallion and label" do
+    render_inline(Ui::SidebarItemComponent.new(icon: "house", label: "Accueil", href: "/"))
+
+    assert_selector "a[href='/'][title='Accueil']"
+    assert_selector "span.bg-surface-inset.text-secondary"
+    assert_selector "span.min-w-0.flex-1.truncate", text: "Accueil"
+  end
+
+  test "renders active state with inset background, semibold label and aria-current" do
+    render_inline(Ui::SidebarItemComponent.new(icon: "house", label: "Accueil", href: "/", active: true))
+
+    assert_selector "a[href='/'][aria-current='page'].bg-surface-inset"
+    assert_selector "span.font-semibold", text: "Accueil"
+  end
+
+  test "omits aria-current and uses regular weight when not active" do
+    render_inline(Ui::SidebarItemComponent.new(icon: "house", label: "Accueil", href: "/"))
+
+    refute_selector "[aria-current]"
+    assert_selector "span.font-medium", text: "Accueil"
+  end
+
+  test "tints the medallion when a known module is given" do
+    render_inline(Ui::SidebarItemComponent.new(icon: "refrigerator", label: "Frigo", href: "/fridge", mod: :fridge))
+
+    assert_selector "span.bg-module-fridge\\/12.text-module-fridge"
+  end
+
+  test "collapsed forces the icon-rail recipe: label hidden, row centered, title kept" do
+    render_inline(Ui::SidebarItemComponent.new(icon: "house", label: "Accueil", href: "/", collapsed: true))
+
+    assert_selector "a[title='Accueil'].justify-center"
+    assert_selector "span.hidden", text: "Accueil"
+    assert_selector "span.bg-surface-inset.text-secondary"
+  end
+
+  test "hides trailing content when collapsed" do
+    render_inline(Ui::SidebarItemComponent.new(icon: "message-circle", label: "Messages", href: "/conversations", collapsed: true)) do |item|
+      item.with_trailing { "<span>2</span>".html_safe }
+    end
+
+    assert_selector "div.hidden", text: "2"
+  end
+
+  test "shows trailing content when expanded" do
+    render_inline(Ui::SidebarItemComponent.new(icon: "message-circle", label: "Messages", href: "/conversations")) do |item|
+      item.with_trailing { "<span>2</span>".html_safe }
+    end
+
+    assert_selector "div:not(.hidden)", text: "2"
+  end
+end
