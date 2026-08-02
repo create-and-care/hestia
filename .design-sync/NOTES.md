@@ -1,5 +1,32 @@
 # design-sync notes — Hestia
 
+## 2026-08-02 re-sync — component + illustration reconciliation
+
+Same manual process as 2026-08-01 (no local build exists for this project — `get_file` the
+plausibly-drifted remote files, diff by hand against the Ruby source, `write_files` only what
+changed). Repo was 3 commits ahead of the last sync's `a247619` (up to `385deaa`). Full details
+in the project's own `github.md` ("Updated in this project", 2026-08-02 entry) — summary:
+
+- `Chart.jsx`/`.d.ts`/`.prompt.md` updated for the new `variant: :line` mode
+  (`chart_component.rb`/`.html.erb`) and `color:` param. Also fixed the bar-mode `COLORS` array,
+  which had drifted from the real `bg-module-{tasks,recipes,fridge,wellbeing,gifts}` order — a
+  pre-existing bug, not introduced this pass, just never caught before.
+- `Bubble.jsx` max-width updated for `max-w-[75%]` → `max-w-[85%] sm:max-w-md`
+  (`bubble_component.rb`). This system's components are inline-style-only (no breakpoints), so
+  `maxWidth: "min(85%, 28rem)"` approximates the two-value Tailwind rule in one expression —
+  watch for this gap (no responsive mechanism) if a future upstream change is breakpoint-specific.
+- The 4 illustrations from `guidelines/illustration-brief.md` shipped for real
+  (`app/assets/images/illustrations/*.png`, previously an empty `.keep`-only dir). Uploaded as
+  `assets/illustrations/*.png`; `guidelines/illustration-system.html` rewritten from 4 empty
+  interactive `<image-slot>` placeholders to plain `<img>` tags showing the real shipped assets —
+  they're production-final now, not something a designer should still be dropping exploratory
+  images onto. Updated the brief's "Livraison" section and readme.md's "Illustration system"
+  section to match (delivered, not fillable).
+- Breadcrumb usage expanded to ~30 more views this pass, but `Ui::BreadcrumbComponent` itself is
+  unchanged since `v1.0.0-beta4` — confirmed via `git log`, nothing to sync there. Same for the
+  other repo changes in this range (workout-template feature, locale trims): outside this
+  system's surface.
+
 ## ⚠️ 2026-08-01 correction — the live project is NOT style-only
 
 Everything below this notice (originally written 2026-07-16/17, "Confirmed with the user") describes
