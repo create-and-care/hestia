@@ -28,7 +28,7 @@
     <p class="text-sm text-secondary"><%= t(".invite_code_label") %></p>
     <div class="flex items-center gap-2">
       <code id="circle_invite_code" class="rounded bg-surface-inset px-3 py-1 font-semibold tracking-widest"><%= @circle.invite_code %></code>
-      <button type="button" class="cursor-pointer text-sm text-secondary underline" data-controller="clipboard" data-clipboard-text-value="<%= @circle.invite_code %>" data-action="clipboard#copy"><%= t("circles.copy_code") %></button>
+      <%= render(Ui::CopyButtonComponent.new(value: @circle.invite_code, label: t("circles.copy_code"))) %>
     </div>
   <% end %>
 

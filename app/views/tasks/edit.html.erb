@@ -27,9 +27,8 @@
           <% item.with_trailing do %>
             <%= form_with url: task_task_reminder_path(@task, reminder), method: :delete,
                   data: { turbo_confirm: t(".delete_reminder_confirm") } do %>
-              <button type="submit" class="cursor-pointer text-subdued hover:text-destructive" aria-label="<%= t(".delete_reminder_aria") %>">
-                <%= lucide_icon("x", css_class: "size-4") %>
-              </button>
+              <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
+                    html_options: { aria: { label: t(".delete_reminder_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
             <% end %>
           <% end %>
         <% end %>

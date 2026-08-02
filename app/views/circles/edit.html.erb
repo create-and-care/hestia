@@ -23,7 +23,7 @@
     <p class="mb-2 text-sm text-secondary"><%= t(".invite_code_description") %></p>
     <div class="flex items-center gap-2">
       <code id="circle_invite_code" class="rounded bg-surface-inset px-3 py-1 font-semibold tracking-widest"><%= @circle.invite_code %></code>
-      <button type="button" class="cursor-pointer text-sm text-secondary underline" data-controller="clipboard" data-clipboard-text-value="<%= @circle.invite_code %>" data-action="clipboard#copy"><%= t("circles.copy_code") %></button>
+      <%= render(Ui::CopyButtonComponent.new(value: @circle.invite_code, label: t("circles.copy_code"))) %>
     </div>
     <%= button_to t(".regenerate"), regenerate_invite_code_circle_path(@circle), method: :post,
           form: { data: { turbo_confirm: t(".regenerate_confirm") }, class: "mt-2" },
@@ -47,7 +47,7 @@
                 <% end %>
                 <%= button_to t(".remove_member"), circle_member_path(@circle, membership), method: :delete,
                       form: { data: { turbo_confirm: t(".remove_member_confirm") } },
-                      class: "cursor-pointer text-sm text-red-600 underline" %>
+                      class: "cursor-pointer text-sm text-destructive underline" %>
               </div>
             <% end %>
           <% end %>
@@ -59,6 +59,6 @@
   <%= render(Ui::CardComponent.new(class_name: "mb-6 border-destructive")) do |card| %>
     <% card.with_title { t(".danger_zone") } %>
     <%= button_to t(".delete"), circle_path(@circle), method: :delete,
-          form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-sm text-red-600 underline" %>
+          form: { data: { turbo_confirm: t(".delete_confirm") } }, class: "cursor-pointer text-sm text-destructive underline" %>
   <% end %>
 </div>

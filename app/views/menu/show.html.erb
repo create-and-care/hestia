@@ -116,7 +116,7 @@
           <% end %>
 
           <% if (missing = missing_meal_types(day)).any? %>
-            <p class="mt-2 flex items-center gap-1.5 text-xs text-amber-600">
+            <p class="mt-2 flex items-center gap-1.5 text-xs text-warning">
               <%= render(Ui::TooltipComponent.new) do |tooltip| %>
                 <% tooltip.with_trigger { lucide_icon("info", css_class: "size-3.5") } %>
                 <%= t(".missing_meals", meals: missing.map { |type| meal_type_label(type) }.join(", ")) %>

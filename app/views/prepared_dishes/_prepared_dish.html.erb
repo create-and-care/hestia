@@ -13,9 +13,8 @@
         <%= render(Ui::BadgeComponent.new(variant: expiration_badge_variant(prepared_dish.expiration_status))) { expiration_label(prepared_dish.expiration_status) } %>
         <%= form_with url: prepared_dish_path(prepared_dish), method: :delete, class: "inline",
               data: { turbo_confirm: t(".delete_confirm") } do %>
-          <button type="submit" class="shrink-0 cursor-pointer text-subdued hover:text-destructive" aria-label="<%= t(".delete_aria") %>">
-            <%= lucide_icon("x", css_class: "size-4") %>
-          </button>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
+                html_options: { class: "shrink-0", aria: { label: t(".delete_aria") } })) { lucide_icon("x", css_class: "size-4") } %>
         <% end %>
       </div>
     <% end %>

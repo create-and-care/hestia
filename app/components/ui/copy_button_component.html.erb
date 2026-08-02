@@ -1,0 +1,6 @@
+<%= render(Ui::ButtonComponent.new(variant: :link, type: "button",
+      html_options: {
+        class: @html_options[:class],
+        data: { controller: "clipboard", action: "clipboard#copy", clipboard_text_value: @value,
+                **(@message ? { clipboard_message_value: @message } : {}) }
+      })) { @label } %>

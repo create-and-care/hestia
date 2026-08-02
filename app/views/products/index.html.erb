@@ -23,8 +23,8 @@
               <% if @shopping_lists.any? %>
                 <%= form_with url: add_to_list_product_path(product), method: :post, class: "flex items-center gap-1" do %>
                   <%= render Ui::NativeSelectComponent.new(name: "shopping_list_id",
-                        options: @shopping_lists.map { |l| [ l.name, l.id ] },
-                        html_options: { class: "!h-8 !w-32 !text-xs", "aria-label": t(".list_select_aria") }) %>
+                        options: @shopping_lists.map { |l| [ l.name, l.id ] }, size: :sm,
+                        html_options: { class: "!w-32", "aria-label": t(".list_select_aria") }) %>
                   <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".add_to_list") } %>
                 <% end %>
               <% end %>

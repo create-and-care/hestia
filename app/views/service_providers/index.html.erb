@@ -31,7 +31,8 @@
         <%= render(Ui::AlertDialogComponent.new(title: t(".delete_type_confirm", name: type.name), confirm_label: t(".delete_type_confirm_label"),
               confirm_url: service_provider_type_path(type), confirm_method: :delete)) do |alert_dialog| %>
           <% alert_dialog.with_trigger do %>
-            <button type="button" class="cursor-pointer text-subdued hover:text-destructive" aria-label="<%= t(".delete_type_aria", name: type.name) %>">×</button>
+            <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon,
+                  html_options: { aria: { label: t(".delete_type_aria", name: type.name) } })) { lucide_icon("x", css_class: "size-4") } %>
           <% end %>
         <% end %>
       <% end %>

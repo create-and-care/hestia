@@ -41,8 +41,8 @@
                     <%= render(Ui::AlertDialogComponent.new(title: t(".delete_event_confirm"), confirm_label: t(".delete_event_label"),
                           confirm_url: waste_collection_event_path(event), confirm_method: :delete)) do |alert_dialog| %>
                       <% alert_dialog.with_trigger do %>
-                        <button type="button" class="cursor-pointer hover:text-destructive"
-                          aria-label="<%= t(".delete_event_aria", type: waste_type_label(event.waste_type)) %>">×</button>
+                        <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon,
+                              html_options: { aria: { label: t(".delete_event_aria", type: waste_type_label(event.waste_type)) } })) { lucide_icon("x", css_class: "size-4") } %>
                       <% end %>
                     <% end %>
                   <% end %>
