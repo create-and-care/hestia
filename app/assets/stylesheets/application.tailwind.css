@@ -616,3 +616,16 @@ dialog[data-state="closed"]::backdrop { opacity: 0; }
 
   .body-text { font-size: 16px; line-height: 1.6; }
 }
+
+/* Design-system rule, not a per-call-site patch: any component that paints its
+   own background + foreground (Badge, Card, Alert, Item — anything a raw <a>
+   might be dropped into as content) must keep a nested <a> reading as part of
+   that surface instead of falling back to the global link color above. `.on-tone`
+   marks that component's root; @layer components sits after @layer base, so this
+   reliably wins over the bare `a` rule regardless of selector specificity.
+   A color set directly on the <a> itself (e.g. a folder-color chip) is
+   untouched — that's a class on the element, not this descendant rule. */
+@layer components {
+  .on-tone a { color: inherit; text-decoration: none; }
+  .on-tone a:hover { text-decoration: underline; }
+}

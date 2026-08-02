@@ -59,4 +59,12 @@ class Ui::ItemComponentTest < ViewComponent::TestCase
     assert_selector "p", count: 1
     assert_selector "p", text: "Only a title"
   end
+
+  test "carries the on-tone marker so a nested <a> title inherits the item's own color" do
+    render_inline(Ui::ItemComponent.new) do |item|
+      item.with_title { "Title" }
+    end
+
+    assert_selector "div.on-tone"
+  end
 end

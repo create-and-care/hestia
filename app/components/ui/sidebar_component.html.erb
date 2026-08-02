@@ -1,9 +1,12 @@
 <div data-controller="sidebar" data-sidebar-collapsed-class="w-16" data-sidebar-expanded-class="w-64" class="flex">
   <aside data-sidebar-target="panel" class="<%= cn("group flex w-64 flex-col gap-4 border-r border-primary bg-surface p-4 transition-[width] overflow-hidden", @class_name) %>">
     <% if header? %><div class="flex items-center justify-between gap-2"><%= header %>
-      <button type="button" data-action="click->sidebar#toggle" data-sidebar-target="panelToggle" class="rounded-md p-1.5 text-secondary hover:bg-surface-hover" aria-label="Toggle sidebar" aria-expanded="true">
+      <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, html_options: {
+            data: { action: "click->sidebar#toggle", sidebar_target: "panelToggle" },
+            aria: { label: "Toggle sidebar", expanded: "true" }
+          })) do %>
         <svg class="size-4" viewBox="0 0 24 24" fill="none"><path d="M9 4v16M4 4h16v16H4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
-      </button>
+      <% end %>
     </div><% end %>
 
     <nav class="flex-1 min-h-0 flex flex-col gap-1 overflow-y-auto"><%= content %></nav>

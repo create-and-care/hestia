@@ -1,0 +1,39 @@
+<%
+  # Shared by the persistent desktop aside and the mobile nav drawer — see
+  # shared/_app_sidebar — so this renders exactly once per breakpoint rather
+  # than being hand-copied. frame_id/keyboard_shortcut pass through to the
+  # search dialog so the mobile copy doesn't collide with the desktop one.
+  frame_id = local_assigns.fetch(:frame_id, "global_search_results")
+  keyboard_shortcut = local_assigns.fetch(:keyboard_shortcut, true)
+%>
+<div class="group-data-[collapsed=true]:hidden">
+  <%= render "shared/search_dialog", frame_id: frame_id, keyboard_shortcut: keyboard_shortcut %>
+</div>
+
+<%= render(Ui::SidebarItemComponent.new(icon: "layout-dashboard", label: t("sidebar.home"), href: root_path, active: current_page?(root_path))) %>
+
+<% sidebar_groups.each do |group| %>
+  <div class="flex flex-col gap-0.5" data-sidebar-target="group">
+    <button type="button" data-action="click->sidebar#toggleGroup" aria-expanded="<%= group[:open] %>"
+      class="flex w-full items-center gap-3 rounded-md p-2 text-sm font-medium text-secondary hover:bg-surface-hover">
+      <span class="shrink-0" aria-hidden="true"><%= lucide_icon(group[:icon], css_class: "size-5") %></span>
+      <span class="flex-1 truncate text-left group-data-[collapsed=true]:hidden"><%= group[:label] %></span>
+      <svg data-sidebar-target="groupChevron" class="size-4 shrink-0 transition-transform group-data-[collapsed=true]:hidden <%= "rotate-180" if group[:open] %>" viewBox="0 0 24 24" fill="none">
+        <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+
+    <div data-sidebar-target="groupPanel" class="ml-2 flex flex-col gap-0.5 border-l border-primary pl-3 group-data-[collapsed=true]:ml-0 group-data-[collapsed=true]:border-l-0 group-data-[collapsed=true]:pl-0" <%= "hidden" unless group[:open] %>>
+      <% group[:items].each do |item| %>
+        <%= render(Ui::SidebarItemComponent.new(icon: item[:icon], label: item[:label], href: item[:path], active: item[:active])) do |sidebar_item| %>
+          <% if item[:unread] %>
+            <% sidebar_item.with_trailing do %>
+              <span class="block size-1.5 rounded-full bg-button-primary" aria-hidden="true"></span>
+              <span class="sr-only"><%= t("sidebar.unread") %></span>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -22,6 +22,12 @@ class Ui::BadgeComponentTest < ViewComponent::TestCase
     assert_selector "span#my-badge.extra-class.bg-button-primary", text: "Tag"
   end
 
+  test "carries the on-tone marker so a nested <a> inherits the badge's own color" do
+    render_inline(Ui::BadgeComponent.new) { "Tag" }
+
+    assert_selector "span.on-tone"
+  end
+
   private
 
   def fragment_for(variant)

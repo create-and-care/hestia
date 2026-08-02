@@ -22,11 +22,12 @@ module Ui
       bottom: "data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom"
     }.freeze
 
-    def initialize(position: :center, role: "dialog", full_width_trigger: false, close_on_submit: false)
+    def initialize(position: :center, role: "dialog", full_width_trigger: false, close_on_submit: false, close_on_visit: false)
       @position = position
       @role = role
       @full_width_trigger = full_width_trigger
       @close_on_submit = close_on_submit
+      @close_on_visit = close_on_visit
     end
 
     def trigger_wrapper_class
@@ -34,7 +35,13 @@ module Ui
     end
 
     def root_data_action
-      "turbo:submit-end->dialog#closeOnSuccess" if @close_on_submit
+      actions = []
+      actions << "turbo:submit-end->dialog#closeOnSuccess" if @close_on_submit
+      # Opt-in for persistent-chrome drawers (e.g. the mobile nav) whose markup
+      # survives a Turbo morph across pages — an ordinary full-page Visit
+      # already tears the dialog down, so this only matters there.
+      actions << "turbo:before-visit@document->dialog#close" if @close_on_visit
+      actions.join(" ") if actions.any?
     end
   end
 end

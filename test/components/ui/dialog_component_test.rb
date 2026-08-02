@@ -79,4 +79,31 @@ class Ui::DialogComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-controller='dialog'][data-action='turbo:submit-end->dialog#closeOnSuccess']"
   end
+
+  test "omits the before-visit action by default" do
+    render_inline(Ui::DialogComponent.new) do |c|
+      c.with_trigger { "Open" }
+      "Body"
+    end
+
+    refute_selector "[data-action*='before-visit']"
+  end
+
+  test "wires up close on Turbo navigation when close_on_visit is true" do
+    render_inline(Ui::DialogComponent.new(close_on_visit: true)) do |c|
+      c.with_trigger { "Open" }
+      "Body"
+    end
+
+    assert_selector "[data-controller='dialog'][data-action='turbo:before-visit@document->dialog#close']"
+  end
+
+  test "combines close_on_submit and close_on_visit into one data-action" do
+    render_inline(Ui::DialogComponent.new(close_on_submit: true, close_on_visit: true)) do |c|
+      c.with_trigger { "Open" }
+      "Body"
+    end
+
+    assert_selector "[data-controller='dialog'][data-action='turbo:submit-end->dialog#closeOnSuccess turbo:before-visit@document->dialog#close']"
+  end
 end

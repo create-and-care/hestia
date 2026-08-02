@@ -35,4 +35,10 @@ class Ui::CardComponentTest < ViewComponent::TestCase
 
     assert_selector "div.rounded-lg.my-card"
   end
+
+  test "carries the on-tone marker so a nested <a> inherits the card's own color" do
+    render_inline(Ui::CardComponent.new) { "Body" }
+
+    assert_selector "div.on-tone"
+  end
 end

@@ -58,4 +58,13 @@ class Ui::DrawerComponentTest < ViewComponent::TestCase
     refute_selector "h2"
     refute_selector "p"
   end
+
+  test "forwards close_on_visit to the underlying dialog" do
+    render_inline(Ui::DrawerComponent.new(side: :left, close_on_visit: true)) do |c|
+      c.with_trigger { "Open" }
+      "Body"
+    end
+
+    assert_selector "[data-controller='dialog'][data-action='turbo:before-visit@document->dialog#close']"
+  end
 end

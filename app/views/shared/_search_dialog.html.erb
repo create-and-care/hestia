@@ -1,23 +1,31 @@
+<%
+  # frame_id/keyboard_shortcut let this partial render safely more than once on
+  # a page (e.g. the mobile nav drawer duplicates the desktop sidebar's search
+  # entry) — a second instance needs its own turbo-frame id so results don't
+  # collide, and shouldn't also answer the global ⌘K shortcut.
+  frame_id = local_assigns.fetch(:frame_id, "global_search_results")
+  keyboard_shortcut = local_assigns.fetch(:keyboard_shortcut, true)
+%>
 <%= render(Ui::DialogComponent.new(full_width_trigger: true, position: :high)) do |dialog| %>
   <% dialog.with_trigger do %>
-    <%= render Ui::ButtonComponent.new(variant: :outline, html_options: { class: "w-full justify-start gap-2 text-secondary", data: { action: "keydown@window->dialog#open" } }) do %>
+    <%= render Ui::ButtonComponent.new(variant: :outline, html_options: { class: "w-full justify-start gap-2 text-secondary", data: (keyboard_shortcut ? { action: "keydown@window->dialog#open" } : {}) }) do %>
       <%= lucide_icon("search", css_class: "size-4 shrink-0") %>
       <span class="flex-1 truncate text-left"><%= t("search.button_label") %></span>
-      <kbd class="hidden shrink-0 rounded border border-primary px-1.5 py-0.5 text-xs text-subdued sm:inline">⌘K</kbd>
+      <% if keyboard_shortcut %><kbd class="hidden shrink-0 rounded border border-primary px-1.5 py-0.5 text-xs text-subdued sm:inline">⌘K</kbd><% end %>
     <% end %>
   <% end %>
 
   <div data-controller="search-palette" class="-mx-6 -mb-6 pr-8">
-    <%= form_with url: search_path, method: :get, data: { turbo_frame: "global_search_results", action: "input->search-palette#submit keydown->search-palette#onKeydown" } do %>
+    <%= form_with url: search_path, method: :get, data: { turbo_frame: frame_id, action: "input->search-palette#submit keydown->search-palette#onKeydown" } do %>
       <div class="[&_input]:focus-visible:ring-0">
         <%= render Ui::InputComponent.new(type: "search", name: "q", placeholder: t("search.placeholder"),
               html_options: { autocomplete: "off", autofocus: true, data: { search_palette_target: "input" },
-                              role: "combobox", "aria-expanded": "true", "aria-controls": "global_search_results", "aria-activedescendant": "",
+                              role: "combobox", "aria-expanded": "true", "aria-controls": frame_id, "aria-activedescendant": "",
                               class: "border-0 rounded-none" }) %>
       </div>
     <% end %>
     <div class="max-h-80 overflow-auto p-2">
-      <%= turbo_frame_tag "global_search_results", role: "listbox", data: { action: "turbo:frame-load->search-palette#onFrameLoad" } %>
+      <%= turbo_frame_tag frame_id, role: "listbox", data: { action: "turbo:frame-load->search-palette#onFrameLoad" } %>
     </div>
   </div>
 <% end %>

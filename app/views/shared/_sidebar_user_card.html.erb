@@ -1,0 +1,16 @@
+<div class="flex flex-col gap-0.5 border-t border-primary pt-3">
+  <%= render(Ui::SidebarItemComponent.new(icon: "settings", label: t("sidebar.footer.settings"), href: household_path(Current.household))) %>
+
+  <div class="mt-2 flex items-center gap-2 rounded-md border border-primary p-2 group-data-[collapsed=true]:hidden">
+    <%= render Ui::AvatarComponent.new(alt: Current.user.name.presence || Current.user.email_address, size: :sm) %>
+    <div class="min-w-0 flex-1">
+      <p class="truncate text-sm font-medium text-primary"><%= Current.user.name.presence || Current.user.email_address %></p>
+      <p class="truncate text-xs text-secondary"><%= Current.user.email_address %></p>
+    </div>
+    <%= render(Ui::ButtonToComponent.new(session_path, method: :delete, variant: :ghost, size: :sm,
+          html_options: { class: "shrink-0", title: t("sidebar.footer.sign_out") })) do %>
+      <svg class="size-4" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      <span class="sr-only"><%= t("sidebar.footer.sign_out") %></span>
+    <% end %>
+  </div>
+</div>

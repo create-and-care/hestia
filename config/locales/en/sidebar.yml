@@ -2,6 +2,7 @@ en:
   sidebar:
     home: "Home"
     unread: "Unread"
+    open_nav: "Open navigation"
     groups:
       daily: "Daily life"
       home: "Home & assets"

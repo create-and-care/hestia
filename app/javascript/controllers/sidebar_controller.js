@@ -5,7 +5,10 @@ export default class extends Controller {
   static classes = [ "collapsed", "expanded" ]
 
   connect() {
-    if (localStorage.getItem("sidebar:collapsed") === "true") this.collapse()
+    // The mobile nav drawer reuses this controller for its group accordions
+    // but has no rail to collapse (no panelToggle/panel target) — nothing to
+    // restore there.
+    if (this.hasPanelTarget && localStorage.getItem("sidebar:collapsed") === "true") this.collapse()
   }
 
   toggle() {
