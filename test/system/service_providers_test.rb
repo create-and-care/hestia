@@ -50,7 +50,7 @@ class ServiceProvidersTest < ApplicationSystemTestCase
     provider = service_providers(:alpha_plombier)
     visit service_providers_path
 
-    page.execute_script("arguments[0].click()", find(:button, "×").native)
+    page.execute_script("arguments[0].click()", find(:css, "button[aria-label='Delete the \"#{type.name}\" type']").native)
     assert_selector "dialog[role='alertdialog'][data-state='open']"
     within "dialog[data-state='open']" do
       submit_button_to "Delete"
