@@ -21,7 +21,7 @@ class RecipeCatalogTest < ApplicationSystemTestCase
     # global_search_test.rb: Selenium's coordinate-based click occasionally
     # misses a dialog trigger. Dispatch the click via JS instead.
     page.execute_script("arguments[0].click()", find(:button, "Add to shopping list").native)
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     submit_button_to "Add to this list"
 
     assert_text "View shopping list"

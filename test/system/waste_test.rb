@@ -14,7 +14,7 @@ class WasteTest < ApplicationSystemTestCase
     visit waste_path
 
     page.execute_script("arguments[0].click()", find(:button, "Add").native)
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     within "dialog[data-state='open']" do
       select "Compost", from: "waste_collection_event_waste_type"
       submit_button_to "Add"
@@ -31,7 +31,7 @@ class WasteTest < ApplicationSystemTestCase
     within "##{ActionView::RecordIdentifier.dom_id(event)}" do
       page.execute_script("arguments[0].click()", find("[aria-label='Delete the \"Household waste\" collection']").native)
     end
-    assert_selector "dialog[role='alertdialog'][data-state='open']"
+    assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     within "dialog[data-state='open']" do
       submit_button_to "Delete"
     end

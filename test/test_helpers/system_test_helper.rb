@@ -12,6 +12,29 @@ module SystemTestHelper
     button = find(:button, text)
     page.execute_script('arguments[0].closest("form").requestSubmit(arguments[0])', button.native)
   end
+
+  # A <dialog> becomes scriptable the instant dialog#open flips data-state to
+  # "open", but it then spends 200ms fading and scaling in (animate-in,
+  # zoom-in-95, fade-in-0). WebDriver silently drops send_keys aimed inside a
+  # dialog that is still animating: no error is raised, the keystrokes reach
+  # no element at all, and the failure surfaces much later and somewhere else
+  # — "the dialog never closed", because requestSubmit hit a required field
+  # that was still empty. So asserting the dialog is open is not enough to
+  # start typing in it; wait for the entrance to finish, which is all a human
+  # does by being slower than the machine.
+  #
+  # Only the dialog's own animations are awaited, deliberately: a subtree walk
+  # would also pick up an infinite one (a loading skeleton's animate-pulse)
+  # and wait for a promise that never settles.
+  def assert_dialog_open(selector = "dialog[data-state='open']")
+    assert_selector selector
+    page.evaluate_async_script(<<~JS, selector)
+      const done = arguments[arguments.length - 1]
+      const dialog = document.querySelector(arguments[0])
+      const animations = dialog ? dialog.getAnimations() : []
+      Promise.allSettled(animations.map((animation) => animation.finished)).then(() => done())
+    JS
+  end
 end
 
 ActiveSupport.on_load(:action_dispatch_system_test_case) do

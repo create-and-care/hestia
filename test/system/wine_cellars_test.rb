@@ -14,7 +14,7 @@ class WineCellarsTest < ApplicationSystemTestCase
     visit wine_cellars_path
 
     page.execute_script("arguments[0].click()", find(:button, "Create cellar").native)
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     within "dialog[data-state='open']" do
       fill_in "wine_cellar_name", with: "Champagnes"
       submit_button_to "Create cellar"
@@ -28,7 +28,7 @@ class WineCellarsTest < ApplicationSystemTestCase
     visit wine_cellars_path
 
     page.execute_script("arguments[0].click()", find(:button, "Filters").native)
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     within "dialog[data-state='open']" do
       select "White", from: "wine_cellars_filter_wine_type"
       submit_button_to "Apply filters"
@@ -46,7 +46,7 @@ class WineCellarsTest < ApplicationSystemTestCase
     within "##{ActionView::RecordIdentifier.dom_id(bottle)}" do
       page.execute_script("arguments[0].click()", find("[aria-label='Delete \"#{bottle.name}\"']").native)
     end
-    assert_selector "dialog[role='alertdialog'][data-state='open']"
+    assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     within "dialog[data-state='open']" do
       submit_button_to "Delete"
     end
@@ -63,7 +63,7 @@ class WineCellarsTest < ApplicationSystemTestCase
     within "##{ActionView::RecordIdentifier.dom_id(bottle)}" do
       page.execute_script("arguments[0].click()", find(:button, "Take out").native)
     end
-    assert_selector "dialog[role='alertdialog'][data-state='open']"
+    assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     within "dialog[data-state='open']" do
       submit_button_to "Take out"
     end

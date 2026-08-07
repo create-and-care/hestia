@@ -36,7 +36,7 @@ class MenuTest < ApplicationSystemTestCase
     within "#menu_day_#{Date.current.iso8601}-panel" do
       page.execute_script("arguments[0].click()", find(:button, "Add a meal").native)
     end
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     fill_in "meal_plan_entry[free_name]", with: "Salade César"
     submit_button_to "Add"
     assert_text "Salade César"
@@ -44,7 +44,7 @@ class MenuTest < ApplicationSystemTestCase
     within "#menu_day_#{Date.current.iso8601}-panel" do
       page.execute_script("arguments[0].click()", find(:button, "Add a meal").native)
     end
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     submit_button_to "Away"
     assert_text "Away"
 
@@ -52,7 +52,7 @@ class MenuTest < ApplicationSystemTestCase
     within "li", text: "Away" do
       page.execute_script("arguments[0].click()", find("[aria-label='Edit meal']").native)
     end
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     within "dialog[data-state='open']" do
       page.execute_script("arguments[0].click()", find("[aria-label='Close']", visible: :all).native)
     end
@@ -60,7 +60,7 @@ class MenuTest < ApplicationSystemTestCase
     within "li", text: "Away" do
       page.execute_script("arguments[0].click()", find("[aria-label='Delete meal']").native)
     end
-    assert_selector "dialog[role='alertdialog'][data-state='open']"
+    assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     submit_button_to "Delete"
 
     assert_text "Meal deleted."
@@ -79,7 +79,7 @@ class MenuTest < ApplicationSystemTestCase
     visit menu_path
 
     page.execute_script("arguments[0].click()", find(:button, "Add ingredients to shopping list").native)
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     submit_button_to "Add to this list"
 
     assert_text "This week's recipes were already added to the shopping list."
