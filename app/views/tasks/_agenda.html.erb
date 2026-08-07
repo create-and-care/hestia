@@ -1,0 +1,40 @@
+<%# The proposed alternative to the kanban board.
+    A board groups by category, but a category is not a workflow state — nobody
+    drags a task from "Courses" to "Maison" as progress, so the columns never
+    move and the horizontal scroll buys nothing. Worse, the one question a
+    household task list is opened to answer, "what needs doing now", is the one
+    thing a category board cannot show: an overdue task is buried in whichever
+    column it happens to live in.
+
+    So: one vertical list, bucketed by when a task is due (see
+    TasksController::AGENDA_GROUPS), category demoted to a badge on the row.
+    Drag-and-drop stays per bucket, and the manual order within a bucket is
+    preserved, so the existing sort and reorder controls still mean something.
+
+    The board is still one click away — nothing is taken away, only re-defaulted. %>
+<div class="space-y-6">
+  <% if groups.empty? %>
+    <%= render(Ui::EmptyComponent.new) do |empty| %>
+      <% empty.with_icon { lucide_icon("square-check", css_class: "size-8") } %>
+      <% empty.with_description { t("tasks.index.empty_agenda") } %>
+    <% end %>
+  <% end %>
+
+  <% groups.each do |(key, tasks)| %>
+    <section>
+      <div class="mb-2 flex items-center gap-2">
+        <h2 class="text-sm font-semibold <%= key == :overdue ? "text-destructive" : "text-secondary" %>">
+          <%= t("tasks.index.agenda.#{key}") %>
+        </h2>
+        <span class="text-xs text-subdued"><%= tasks.size %></span>
+      </div>
+
+      <%# Each bucket is its own sortable root, so a drag reorders within the
+          bucket rather than silently moving a task between due dates. %>
+      <div id="tasks_agenda_<%= key %>" class="space-y-2"
+           data-controller="sortable" data-sortable-url-value="<%= reorder_tasks_path %>">
+        <%= render partial: "tasks/task", collection: tasks, locals: { show_category: true } %>
+      </div>
+    </section>
+  <% end %>
+</div>

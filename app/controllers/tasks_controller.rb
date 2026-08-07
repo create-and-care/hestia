@@ -1,16 +1,31 @@
 class TasksController < ApplicationController
+  include TaskViewMode
+
   FAR_FUTURE = Date.new(9999, 12, 31)
+
+  # Agenda buckets, in the order they are shown. A task lands in the first one
+  # whose test it passes, so "done" wins over any due date and the overdue
+  # bucket wins over today's.
+  AGENDA_GROUPS = [
+    [ :overdue,   ->(task) { task.due_on && task.due_on < Date.current } ],
+    [ :today,     ->(task) { task.due_on == Date.current } ],
+    [ :this_week, ->(task) { task.due_on && task.due_on <= Date.current.end_of_week } ],
+    [ :later,     ->(task) { task.due_on.present? } ],
+    [ :someday,   ->(task) { true } ]
+  ].freeze
 
   before_action :set_task, only: %i[edit update destroy toggle move_up move_down]
 
   def index
     @query = params[:q].to_s.strip
+    @view_mode = task_view_mode
     @categories = Current.household.task_categories.order(:name)
 
-    # :assignee only — the kanban groups by task_category_id (Task#board_column_id)
-    # and takes its column headings from @categories, so it never reads the
-    # association. Preloading it fetched a table nothing on the page asked for.
+    # :assignee for the card's avatar. :task_category too in agenda mode, which
+    # names each task's category on the row itself — the board doesn't, since it
+    # takes its column headings from @categories and groups on the foreign key.
     tasks = Current.household.tasks.general.ordered.includes(:assignee)
+    tasks = tasks.includes(:task_category) if @view_mode == "agenda"
     tasks = tasks.where("title ILIKE :q OR description ILIKE :q OR emoji ILIKE :q", q: "%#{@query}%") if @query.present?
     @tasks = tasks.to_a
 
@@ -18,6 +33,7 @@ class TasksController < ApplicationController
     @columns << [ nil, @tasks.select { |t| t.task_category_id.nil? } ]
     @columns = @columns.reject { |(_, tasks)| tasks.empty? } if @query.present?
 
+    @agenda = agenda_groups(@tasks)
     @task = Task.new
   end
 
@@ -120,6 +136,23 @@ class TasksController < ApplicationController
   end
 
   private
+    # Open tasks bucketed by when they are due, plus a trailing "done" bucket.
+    # Within a bucket the household's own drag-and-drop order is preserved
+    # (@tasks arrives `ordered`), so sorting by due date still means something
+    # here rather than being overridden by the grouping.
+    def agenda_groups(tasks)
+      open_tasks, done_tasks = tasks.partition { |task| !task.done? }
+
+      groups = AGENDA_GROUPS.filter_map do |key, test|
+        matching = open_tasks.select(&test)
+        open_tasks -= matching
+        [ key, matching ] if matching.any?
+      end
+
+      groups << [ :done, done_tasks ] if done_tasks.any?
+      groups
+    end
+
     def set_task
       @task = Current.household.tasks.find(params[:id])
     end

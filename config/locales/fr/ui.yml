@@ -15,6 +15,8 @@ fr:
     alert_dialog:
       confirm_label: Continuer
       cancel_label: Annuler
+    confirm_dialog:
+      title: Confirmer cette action
     file_upload:
       choose: Choisir un fichier
       remove_aria: Retirer le fichier

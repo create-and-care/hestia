@@ -107,7 +107,8 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   test "promoting a note to a task asks for confirmation via the design-system alert dialog" do
     get notes_path
     assert_response :success
-    assert_select "dialog[role='alertdialog']", count: 2 # one per note fixture shown (delete + promote)
+    # one per note fixture shown (delete + promote); the layout's own is excluded
+    assert_select "dialog[role='alertdialog']:not(#global_confirm_dialog)", count: 2
     assert_body_includes I18n.t("notes.note.promote_confirm")
   end
 

@@ -45,6 +45,11 @@
         no listener attached and the toast is silently dropped. %>
     <%= render(Ui::SonnerComponent.new) %>
 
+    <%# Stands in for the browser's confirm() on every data-turbo-confirm in the
+        app — see the partial. Mounted beside the toast viewport for the same
+        reason: it has to exist before anything can ask it to open. %>
+    <%= render "shared/confirm_dialog" %>
+
     <% if Current.user %>
       <%# Below md this sits inside the mobile nav bar's 56px band (see
           shared/_app_sidebar); above md it floats exactly as before. Stays a
