@@ -19,6 +19,12 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, other.title
   end
 
+  test "the preferences button opens the notifications tab of the household settings" do
+    get notifications_path
+    assert_response :success
+    assert_select "a[href=?]", household_path(households(:alpha), tab: "notifications")
+  end
+
   test "mark_read marks a single notification as read" do
     notification = Notification.create!(user: users(:one), household: households(:alpha), kind: "birthday", title: "Mine")
     patch mark_read_notification_path(notification)
