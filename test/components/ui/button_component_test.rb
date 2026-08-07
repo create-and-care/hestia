@@ -96,6 +96,31 @@ class Ui::ButtonComponentTest < ViewComponent::TestCase
     assert_selector "a[href='/x'] svg"
   end
 
+  # The global `a:hover` rule in application.tailwind.css underlines every
+  # anchor, so a button rendered with href: has to opt out explicitly.
+  test "a button rendered as a link opts out of the global anchor underline" do
+    render_inline(Ui::ButtonComponent.new(href: "/somewhere")) { "Go" }
+
+    assert_selector "a.no-underline.hover\\:no-underline"
+  end
+
+  test "every variant but :link opts out of the underline" do
+    (Ui::ButtonComponent::VARIANTS.keys - [ :link ]).each do |variant|
+      render_inline(Ui::ButtonComponent.new(variant: variant, href: "/x")) { "Go" }
+
+      assert_selector "a.hover\\:no-underline", count: 1
+    end
+  end
+
+  # :link is the deliberate exception — it is styled as a textual link and
+  # asks for the underline itself, so the opt-out must not be applied to it.
+  test "the :link variant keeps its hover underline" do
+    render_inline(Ui::ButtonComponent.new(variant: :link, href: "/x")) { "Go" }
+
+    assert_selector "a.hover\\:underline"
+    assert_no_selector "a.hover\\:no-underline"
+  end
+
   private
 
   def variant_fragment(variant)
