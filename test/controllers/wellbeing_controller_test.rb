@@ -44,8 +44,8 @@ class WellbeingControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(users(:one))
     get wellbeing_path
     assert_response :success
-    assert_includes @response.body, I18n.t("wellbeing.show.weight_empty")
-    assert_includes @response.body, I18n.t("wellbeing.show.workouts_empty")
+    assert_body_includes I18n.t("wellbeing.show.weight_empty")
+    assert_body_includes I18n.t("wellbeing.show.workouts_empty")
   end
 
   test "does not render the weight chart with fewer than 2 weigh-ins" do
@@ -53,7 +53,7 @@ class WellbeingControllerTest < ActionDispatch::IntegrationTest
     users(:one).weight_entries.create!(recorded_on: Date.current, weight: 70)
     get wellbeing_path
     assert_response :success
-    assert_not_includes @response.body, I18n.t("wellbeing.show.chart_heading")
+    assert_body_excludes I18n.t("wellbeing.show.chart_heading")
   end
 
   test "renders the weight chart from 2 weigh-ins" do
@@ -62,7 +62,7 @@ class WellbeingControllerTest < ActionDispatch::IntegrationTest
     users(:one).weight_entries.create!(recorded_on: Date.current, weight: 70)
     get wellbeing_path
     assert_response :success
-    assert_includes @response.body, I18n.t("wellbeing.show.chart_heading")
+    assert_body_includes I18n.t("wellbeing.show.chart_heading")
   end
 
   test "delete forms for entries have a turbo_confirm" do
@@ -89,7 +89,7 @@ class WellbeingControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(users(:one))
     get history_wellbeing_path
     assert_response :success
-    assert_includes @response.body, I18n.t("wellbeing.history.weight_empty")
+    assert_body_includes I18n.t("wellbeing.history.weight_empty")
   end
 
   # --- Strict privacy ---

@@ -68,7 +68,7 @@ class AddressesControllerTest < ActionDispatch::IntegrationTest
     address = addresses(:alpha_resto)
     get addresses_path
     assert_select "form[action=?][data-turbo-confirm]", address_path(address)
-    assert_select "a[href=?][aria-label=?]", edit_address_path(address), "Edit \"Chez Léon\""
+    assert_select "a[href=?][aria-label=?]", edit_address_path(address), I18n.t("addresses.address.edit_aria", name: address.name)
   end
 
   test "index filter bar uses design-system inputs and no longer references the internal spec" do

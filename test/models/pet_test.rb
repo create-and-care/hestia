@@ -42,7 +42,7 @@ class PetTest < ActiveSupport::TestCase
   test "rejects a service provider from another household" do
     pet = households(:alpha).pets.build(name: "X", service_provider: service_providers(:beta_provider))
     assert_not pet.valid?
-    assert_includes pet.errors[:service_provider], "is invalid"
+    assert_includes pet.errors[:service_provider], error_message(:invalid)
   end
 
   test "accepts a service provider from the same household" do

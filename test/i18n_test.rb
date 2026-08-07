@@ -10,11 +10,18 @@ require "i18n/tasks"
 class I18nTest < ActiveSupport::TestCase
   def setup
     @i18n = I18n::Tasks::BaseTask.new
-    @missing = @i18n.missing_keys
   end
 
   test "no translation is missing from either locale" do
-    assert_empty @missing, "#{@missing.leaves.count} missing keys:\n#{@missing.inspect}"
+    missing = @i18n.missing_keys
+
+    assert_empty missing, "#{missing.leaves.count} missing keys:\n#{missing.inspect}"
+  end
+
+  test "no translation is left unused" do
+    unused = @i18n.unused_keys
+
+    assert_empty unused, "#{unused.leaves.count} unused keys:\n#{unused.inspect}"
   end
 
   # `missing` only looks one way from the base locale: a key that exists in fr

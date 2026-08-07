@@ -94,8 +94,8 @@ class PetsControllerTest < ActionDispatch::IntegrationTest
 
   test "shows an empty state for each sub-list when a pet has no records yet" do
     get pet_path(pets(:alpha_dog))
-    assert_select "p", text: "No vaccinations recorded."
-    assert_select "p", text: "No treatments recorded."
-    assert_select "p", text: "No recurring supplies recorded."
+    assert_select "p", text: I18n.t("pets.show.no_vaccinations")
+    assert_select "p", text: I18n.t("pets.show.no_treatments")
+    assert_select "p", text: I18n.t("pets.show.no_supplies")
   end
 end

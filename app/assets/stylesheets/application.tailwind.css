@@ -285,7 +285,11 @@
      several land under 4.5:1. Rule: tint background uses --X, text on it uses --X-text. */
   --success-text: var(--color-green-800);
   --warning-text: var(--color-yellow-700);
-  --destructive-text: var(--color-crimson-700);
+  /* crimson-800, not -700: --destructive-subtle is crimson-200, and -700 on it
+     measured 4.45:1 — under the bar by a hair, on the calendar's public-holiday
+     cells. -800 gives 5.80:1 there and only more elsewhere, since every other
+     background this sits on is lighter. */
+  --destructive-text: var(--color-crimson-800);
   --info-text: var(--color-blue-700);
   --accent-text: var(--color-amber-800);
 
@@ -319,7 +323,11 @@
   --text-primary: #2A211C;
   --text-inverse: var(--color-white);
   --text-secondary: #6E625B;
-  --text-subdued: #7A6B61;
+  /* Darkened from #7A6B61, which measured 4.31:1 on --surface-inset — the
+     token exists to be quiet, not to be unreadable, and a form's help text is
+     exactly where it lands on an inset. 4.79:1 now, still clearly below
+     --text-secondary. */
+  --text-subdued: #72645C;
 
   --border-primary: color-mix(in oklab, #3A2A22 15%, transparent);
   --border-secondary: color-mix(in oklab, #3A2A22 10%, transparent);
@@ -385,7 +393,9 @@
 
   --success-text: var(--color-green-300);
   --warning-text: var(--color-yellow-300);
-  --destructive-text: var(--color-crimson-300);
+  /* Mirror of the light-mode note above: crimson-300 on --destructive-subtle
+     (crimson-800 here) measured 4.00:1; crimson-200 gives 5.80:1. */
+  --destructive-text: var(--color-crimson-200);
   --info-text: var(--color-blue-400);
   --accent-text: var(--color-amber-300);
 

@@ -1,13 +1,19 @@
 <div data-controller="tabs" data-tabs-active-value="<%= active_value %>">
-  <div role="tablist" class="inline-flex gap-1 rounded-md bg-tab-group p-1">
+  <%# The tab strip scrolls instead of widening the page. Five tabs at their
+      natural width come to 640px, so household settings on a 390px phone was
+      scrolling sideways as a whole — the largest overflow_page finding in the
+      app. A tablist is exactly the kind of strip that should scroll on its own. %>
+  <div class="max-w-full overflow-x-auto">
+    <div role="tablist" class="inline-flex gap-1 rounded-md bg-tab-group p-1">
     <% tabs.each do |tab| %>
       <button type="button" role="tab" id="<%= tab_id(tab.value) %>" data-tabs-target="tab" data-value="<%= tab.value %>"
         data-action="click->tabs#select keydown->tabs#onKeydown" aria-selected="<%= tab.value == active_value %>"
         aria-controls="<%= panel_id(tab.value) %>" tabindex="<%= tab.value == active_value ? "0" : "-1" %>"
-        class="rounded-md px-3 h-8 text-sm font-medium transition-colors <%= tab.value == active_value ? "bg-tab-item-active text-primary shadow-border-xs" : "text-secondary hover:text-primary" %>">
+        class="rounded-md px-3 h-[var(--control-h-sm)] text-sm font-medium transition-colors <%= tab.value == active_value ? "bg-tab-item-active text-primary shadow-border-xs" : "text-secondary hover:text-primary" %>">
         <%= tab.label %>
       </button>
     <% end %>
+    </div>
   </div>
   <% tabs.each do |tab| %>
     <div role="tabpanel" id="<%= panel_id(tab.value) %>" aria-labelledby="<%= tab_id(tab.value) %>"

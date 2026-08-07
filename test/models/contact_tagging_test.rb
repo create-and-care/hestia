@@ -13,7 +13,7 @@ class ContactTaggingTest < ActiveSupport::TestCase
 
     duplicate = ContactTagging.new(contact: contact, contact_tag: tag)
     assert_not duplicate.valid?
-    assert_includes duplicate.errors[:contact_id], "has already been taken"
+    assert_includes duplicate.errors[:contact_id], error_message(:taken)
   end
 
   test "allows the same contact to have different tags" do

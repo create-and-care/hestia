@@ -25,7 +25,7 @@ class ServiceProviderTypeTest < ActiveSupport::TestCase
   test "rejects an unknown color" do
     type = households(:alpha).service_provider_types.build(name: "X", color: "chartreuse")
     assert_not type.valid?
-    assert_includes type.errors[:color], "is not included in the list"
+    assert_includes type.errors[:color], error_message(:inclusion)
   end
 
   test "allows a blank color" do

@@ -1,5 +1,10 @@
 <div class="flex flex-col gap-0.5 border-t border-primary pt-3">
   <%= render(Ui::SidebarItemComponent.new(icon: "settings", label: t("sidebar.footer.settings"), href: household_path(Current.household))) %>
+  <%# /roadmap is the project's canonical scope document (README says so, and
+      app/models/roadmap.rb calls itself "the single source of truth for
+      progress") but it was linked only from onboarding's footer and a settings
+      tab — so a signed-in user with a household could never reach it (PROD-04). %>
+  <%= render(Ui::SidebarItemComponent.new(icon: "map", label: t("sidebar.footer.roadmap"), href: roadmap_path)) %>
 
   <div class="mt-2 flex items-center gap-2 rounded-md border border-primary p-2 group-data-[collapsed=true]:hidden">
     <%= render Ui::AvatarComponent.new(alt: Current.user.name.presence || Current.user.email_address, size: :sm) %>

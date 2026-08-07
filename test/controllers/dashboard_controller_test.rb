@@ -184,12 +184,15 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
 
   test "surfaces an upcoming calendar event" do
     sign_in_as(users(:one))
-    households(:alpha).calendar_events.create!(title: "Anniversaire", starts_at: 2.days.from_now, ends_at: 2.days.from_now + 1.hour)
+    # Not "Anniversaire": that is also the French label of the Birthdays
+    # module in the sidebar, so the assertion passed for the wrong reason in
+    # one locale and failed in the other.
+    households(:alpha).calendar_events.create!(title: "Zorglub", starts_at: 2.days.from_now, ends_at: 2.days.from_now + 1.hour)
 
     get root_path
 
     assert_response :success
-    assert_includes @response.body, "Anniversaire"
+    assert_includes @response.body, "Zorglub"
   end
 
   test "does not surface a past calendar event" do
@@ -205,12 +208,12 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
   test "hides upcoming events when the calendar module is disabled" do
     households(:alpha).update!(disabled_modules: [ "calendar" ])
     sign_in_as(users(:one))
-    households(:alpha).calendar_events.create!(title: "Anniversaire", starts_at: 2.days.from_now, ends_at: 2.days.from_now + 1.hour)
+    households(:alpha).calendar_events.create!(title: "Zorglub", starts_at: 2.days.from_now, ends_at: 2.days.from_now + 1.hour)
 
     get root_path
 
     assert_response :success
-    assert_not_includes @response.body, "Anniversaire"
+    assert_not_includes @response.body, "Zorglub"
   end
 
   test "surfaces a recipe suggestion built from fridge contents" do

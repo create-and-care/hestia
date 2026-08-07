@@ -7,7 +7,9 @@ class PlantCareTask < ApplicationRecord
   CARE_TYPES = %w[watering repotting fertilizing pruning misting other].freeze
 
   belongs_to :plant
-  has_many :plant_care_completions, dependent: :destroy
+  # delete_all for the same reason as Task#task_reminders: a completion is a
+  # log row with no callbacks and no children of its own.
+  has_many :plant_care_completions, dependent: :delete_all
 
   validates :care_type, presence: true
   validates :frequency, inclusion: { in: Recurrence::PERIODS.keys }

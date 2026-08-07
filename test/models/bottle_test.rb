@@ -40,6 +40,6 @@ class BottleTest < ActiveSupport::TestCase
   test "rejects a wine cellar from another household" do
     bottle = households(:alpha).bottles.build(name: "X", wine_cellar: wine_cellars(:beta_cellar))
     assert_not bottle.valid?
-    assert_includes bottle.errors[:wine_cellar], "is invalid"
+    assert_includes bottle.errors[:wine_cellar], error_message(:invalid)
   end
 end

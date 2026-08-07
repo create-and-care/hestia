@@ -4,7 +4,7 @@ class WorkoutTemplateTest < ActiveSupport::TestCase
   test "requires a name" do
     template = WorkoutTemplate.new(user: users(:one))
     assert_not template.valid?
-    assert_includes template.errors[:name], "can't be blank"
+    assert_includes template.errors[:name], error_message(:blank)
   end
 
   test "log_session creates one workout entry per exercise on the given date" do

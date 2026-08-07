@@ -4,7 +4,11 @@ class Task < ApplicationRecord
   belongs_to :task_category, optional: true
   belongs_to :assignee, class_name: "User", optional: true
   belongs_to :trip, optional: true
-  has_many :task_reminders, dependent: :destroy
+  # delete_all, not destroy: TaskReminder carries no callbacks and owns
+  # nothing further, so loading every reminder of every task to delete a
+  # household was work for its own sake — the largest remaining Bullet
+  # finding, and one no `includes` could have addressed.
+  has_many :task_reminders, dependent: :delete_all
   has_one :conversation, as: :subject, dependent: :nullify
 
   validates :title, presence: true

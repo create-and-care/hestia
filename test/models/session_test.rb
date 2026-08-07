@@ -4,7 +4,7 @@ class SessionTest < ActiveSupport::TestCase
   test "belongs to a user" do
     session = Session.new
     assert_not session.valid?
-    assert_includes session.errors[:user], "must exist"
+    assert_includes session.errors[:user], error_message(:required)
   end
 
   test "active_household is optional" do

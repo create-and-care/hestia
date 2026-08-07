@@ -1,5 +1,10 @@
 <% if count.to_i.positive? %>
-  <span id="notifications_badge" class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-button-destructive px-1 text-[10px] font-semibold text-inverse">
+  <%# Inside the trigger's box, not hanging off it: the bell sits in a
+      `overflow-hidden rounded-full` wrapper, so a badge at -right-1 -top-1 was
+      clipped by 4px on every page of the app — and was visual:check's most
+      widespread overflow_container finding, 424 occurrences of the same
+      element. %>
+  <span id="notifications_badge" class="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-button-destructive px-1 text-[10px] font-semibold text-inverse">
     <%= count > 9 ? "9+" : count %>
   </span>
 <% else %>

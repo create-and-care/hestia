@@ -7,7 +7,10 @@ class TasksController < ApplicationController
     @query = params[:q].to_s.strip
     @categories = Current.household.task_categories.order(:name)
 
-    tasks = Current.household.tasks.general.ordered.includes(:assignee, :task_category)
+    # :assignee only — the kanban groups by task_category_id (Task#board_column_id)
+    # and takes its column headings from @categories, so it never reads the
+    # association. Preloading it fetched a table nothing on the page asked for.
+    tasks = Current.household.tasks.general.ordered.includes(:assignee)
     tasks = tasks.where("title ILIKE :q OR description ILIKE :q OR emoji ILIKE :q", q: "%#{@query}%") if @query.present?
     @tasks = tasks.to_a
 

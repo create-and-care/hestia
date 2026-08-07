@@ -4,14 +4,14 @@ class CirclePostTest < ActiveSupport::TestCase
   test "requires a body" do
     post = CirclePost.new(circle: circles(:family), author: users(:one))
     assert_not post.valid?
-    assert_includes post.errors[:body], "can't be blank"
+    assert_includes post.errors[:body], error_message(:blank)
   end
 
   test "belongs to a circle and an author" do
     post = CirclePost.new(body: "Coucou")
     assert_not post.valid?
-    assert_includes post.errors[:circle], "must exist"
-    assert_includes post.errors[:author], "must exist"
+    assert_includes post.errors[:circle], error_message(:required)
+    assert_includes post.errors[:author], error_message(:required)
   end
 
   test "destroying a post destroys its reactions" do

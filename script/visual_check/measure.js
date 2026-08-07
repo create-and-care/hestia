@@ -6,12 +6,55 @@
 // them — reimplementing that in Node would just be a worse CSS engine.
 (function () {
   const TOUCH_MIN = 36;
+  const TOUCH_MIN_COMPACT = 24; // WCAG 2.5.8 AA — see touchFloorFor below
   const CONTRAST_MIN_NORMAL = 4.5;
   const CONTRAST_MIN_LARGE = 3.0;
   const SPACING_STEP = 4;
   const SPACING_TOLERANCE = 0.5;
   const FONT_WEIGHT_MAX = 600;
   const FONT_SIZE_MIN = 13;
+
+  // ── Scope of each rule ───────────────────────────────────────────────────
+  // The rules below all encode "this is body UI" assumptions. Three classes of
+  // element break those assumptions without being defects, and were producing
+  // roughly two thirds of the report's volume — enough noise to hide the real
+  // findings under it, which is the only way a measurement tool fails.
+
+  // A counter pill, a keycap, a status dot: elements whose whole job is to be
+  // small and which carry no prose. The 4px spacing grid and the 13px reading
+  // floor are both about *text people read*, and neither says anything useful
+  // here. Recognised by size rather than by class, so it needs no maintenance
+  // as components are added.
+  // Height rather than area: a keycap is wider than it is tall and its width
+  // follows the glyph, so an area bound would let "⌘K" through and stop at
+  // "⌥⌘K". Height is what actually says "this is a chip, not a line of body
+  // text". The character bound is what keeps a real badge — one with a word in
+  // it — inside the rules, since that one *is* text a person reads.
+  const MICRO_MAX_HEIGHT = 24;
+  const MICRO_MAX_CHARS = 3;
+
+  function isMicroElement(el) {
+    if (el.getBoundingClientRect().height > MICRO_MAX_HEIGHT) return false;
+
+    return (el.textContent || "").trim().length <= MICRO_MAX_CHARS;
+  }
+
+  // A link inside running text is not a tap target — you read it, you don't
+  // aim at it. The rule already knew this for <p>; a breadcrumb trail is the
+  // same case, and it alone accounted for 582 of the 994 touch-target findings,
+  // being rendered by 101 views.
+  //
+  // Deliberately *not* "any <a> inside a <ul>/<ol>": a list of links is the
+  // standard shape of a navigation menu, where every item genuinely is a tap
+  // target. Only a <nav> that names itself a breadcrumb qualifies, plus the
+  // prose containers where a link cannot be anything but inline.
+  // Matched on data-breadcrumb rather than on the aria-label, which is
+  // translated — see Ui::BreadcrumbComponent.
+  const TEXT_FLOW_ANCESTORS = "p, dd, blockquote, figcaption, nav[data-breadcrumb]";
+
+  function isInTextFlow(el) {
+    return el.tagName === "A" && el.closest(TEXT_FLOW_ANCESTORS) !== null;
+  }
 
   function isVisible(el) {
     if (!el || el.nodeType !== 1) return false;
@@ -145,19 +188,54 @@
     }
   }
 
+  // A checkbox is 16px square in every browser, and nobody aims at the box —
+  // they tap the label, which activates the control. So the target is the
+  // union of the two, and measuring the input alone reports a defect that
+  // does not exist for anyone actually using the form.
+  function effectiveTargetRect(el) {
+    const rect = el.getBoundingClientRect();
+    const labels = el.labels ? Array.from(el.labels) : [];
+    if (labels.length === 0) return rect;
+
+    return labels.reduce((acc, label) => {
+      const l = label.getBoundingClientRect();
+      const top = Math.min(acc.top, l.top);
+      const left = Math.min(acc.left, l.left);
+      return {
+        top, left,
+        width: Math.max(acc.left + acc.width, l.left + l.width) - left,
+        height: Math.max(acc.top + acc.height, l.top + l.height) - top
+      };
+    }, rect);
+  }
+
+  // 36px is the design system's own bar, stricter than WCAG 2.5.8 AA (24px)
+  // and looser than 2.5.5 AAA (44px). Some controls genuinely cannot meet it —
+  // a chip in a filter row, the up/down pair in a list's reorder gutter, where
+  // 36px each would double the row. Those carry data-touch-target="compact"
+  // and are held to the AA floor instead.
+  //
+  // The exception lives in the markup rather than in a list here on purpose:
+  // it is then visible in review, at the call site, to whoever is choosing to
+  // take it.
+  function touchFloorFor(el) {
+    return el.closest('[data-touch-target="compact"]') ? TOUCH_MIN_COMPACT : TOUCH_MIN;
+  }
+
   function checkTouchTargets(root) {
     const bucket = new Map();
     root.querySelectorAll("a, button, input, select, [role=button], [onclick]").forEach((el) => {
       if (!isVisible(el)) return;
-      if (el.tagName === "A" && el.closest("p")) return; // in-flow text link, not a tap target
-      const rect = el.getBoundingClientRect();
+      if (isInTextFlow(el)) return; // read, not aimed at
+      const rect = effectiveTargetRect(el);
       const minDim = Math.min(rect.width, rect.height);
-      if (minDim < TOUCH_MIN) {
+      const floor = touchFloorFor(el);
+      if (minDim < floor) {
         pushDeduped(bucket, `touch:${groupKey(el)}:${minDim.toFixed(0)}`, {
           rule: "touch_target",
           selector: cssPath(el),
           signature: groupKey(el),
-          value: `${minDim.toFixed(1)}px (need >= ${TOUCH_MIN}px)`
+          value: `${minDim.toFixed(1)}px (need >= ${floor}px)`
         });
       }
     });
@@ -176,10 +254,20 @@
       });
     }
 
+    // Every overflowing element is collected, then only the deepest in each
+    // chain is reported.
+    //
+    // The rule used to stop at the first offender on the way down, which is
+    // right for a nested clip but wrong for the case that matters: when a page
+    // scrolls sideways, <body> overflows too, and stopping there reported
+    // `html > body` on six screens and named the actual culprit on none of
+    // them. An ancestor overflowing because its child does is exactly as
+    // uninformative as a child overflowing because its ancestor does.
+    const offenders = [];
+
     function walk(el) {
       if (!isVisible(el)) return;
       const cs = getComputedStyle(el);
-      const overflowAmt = el.scrollWidth - el.clientWidth;
       // "auto"/"scroll" scroll instead of visibly overflowing; "hidden"/"clip"
       // clip instead — none of the four ever spill into neighboring layout,
       // so none is the "Débordement horizontal" this rule exists to catch.
@@ -187,13 +275,26 @@
       // unwrapped text measures as "overflowing" its own clipped box, which
       // is the technique working as intended, not a bug.
       const clipsOrScrolls = [ "auto", "scroll", "hidden", "clip" ].includes(cs.overflowX);
-      if (overflowAmt > 2 && !clipsOrScrolls) {
-        violations.push({ rule: "overflow_container", selector: cssPath(el), signature: groupKey(el), value: `${overflowAmt.toFixed(1)}px` });
-        return; // don't descend — children of an overflowing container trivially overflow too
-      }
+      const overflowAmt = el.scrollWidth - el.clientWidth;
+      if (overflowAmt > 2 && !clipsOrScrolls) offenders.push({ el, overflowAmt });
+
+      if (clipsOrScrolls) return; // whatever is inside is contained; stop here
       Array.from(el.children).forEach(walk);
     }
     walk(root);
+
+    const offending = new Set(offenders.map((o) => o.el));
+    offenders
+      .filter(({ el }) => !Array.from(offending).some((other) => other !== el && el.contains(other)))
+      .forEach(({ el, overflowAmt }) => {
+        violations.push({
+          rule: "overflow_container",
+          selector: cssPath(el),
+          signature: groupKey(el),
+          value: `${overflowAmt.toFixed(1)}px`
+        });
+      });
+
     return violations;
   }
 
@@ -227,6 +328,9 @@
     const PROPS = ["marginTop", "marginBottom", "paddingTop", "paddingBottom"];
     root.querySelectorAll("*").forEach((el) => {
       if (!isVisible(el)) return;
+      // A 2px inset on a keycap is not a grid violation; it is what makes it a
+      // keycap. The ⌘K hint alone was 1 120 of the 1 264 spacing findings.
+      if (isMicroElement(el)) return;
       const cs = getComputedStyle(el);
       PROPS.forEach((prop) => {
         const val = parseFloat(cs[prop]);
@@ -262,7 +366,9 @@
           value: `font-weight: ${weight} (cap is ${FONT_WEIGHT_MAX})`
         });
       }
-      if (size < FONT_SIZE_MIN) {
+      // The reading floor is about text people read. A count badge showing "3"
+      // is a glyph, and it was 436 of the 444 font-size findings.
+      if (size < FONT_SIZE_MIN && !isMicroElement(el)) {
         pushDeduped(bucket, `size:${groupKey(el)}:${size}`, {
           rule: "font_size",
           selector: cssPath(el),

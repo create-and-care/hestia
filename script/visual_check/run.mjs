@@ -188,20 +188,39 @@ async function run() {
   await browser.close();
   fs.writeFileSync(path.join(outDir, "results.json"), JSON.stringify(results, null, 2));
 
-  const absurdThreshold = 1500;
+  // Counted on distinct (rule, element) pairs, not on per-screen findings:
+  // the old count rose with the number of routes, so it fired on a rule that
+  // was working and stayed quiet on one that was not.
+  const absurdThreshold = 60;
   const byRule = {};
-  results.violations.forEach((v) => { byRule[v.rule] = (byRule[v.rule] || 0) + 1; });
-  const absurd = Object.entries(byRule).filter(([, count]) => count > absurdThreshold);
+  results.violations.forEach((v) => {
+    (byRule[v.rule] = byRule[v.rule] || new Set()).add(v.signature || v.selector);
+  });
+  const absurd = Object.entries(byRule)
+    .map(([rule, set]) => [ rule, set.size ])
+    .filter(([, count]) => count > absurdThreshold);
   if (absurd.length > 0) {
     results.warnings.push(
-      ...absurd.map(([rule, count]) => `${rule}: ${count} distinct findings across all screens — before assuming the rule is broken, check "Récurrences inter-écrans" below: a single sitewide element (sidebar, header) repeated across every screen inflates this count without being N separate bugs.`)
+      ...absurd.map(([rule, count]) => `${rule}: ${count} distinct elements across all screens — that is a lot for one rule. Check "Récurrences inter-écrans" below before assuming it is ${count} separate bugs, then ask whether the rule's scope is right.`)
     );
     fs.writeFileSync(path.join(outDir, "results.json"), JSON.stringify(results, null, 2));
     console.error("SUSPICIOUS RULE OUTPUT (likely a broken rule, not a broken app):");
     absurd.forEach(([rule, count]) => console.error(`  ${rule}: ${count} violations`));
   }
 
-  console.log(`visual_check: ${results.violations.length} violations, ${results.runtimeSkips.length} runtime skips, ${results.screenshots.length} screenshots`);
+  // The headline is the number of *distinct* (rule, element) pairs, not the
+  // number of occurrences. Chrome shared by the whole app — the sidebar, the
+  // notification bell — is measured once per screen, so occurrences scale with
+  // the route count and say nothing about how much work there is. Reporting
+  // the occurrence count first is what made "3 212 violations" read as a queue
+  // of 3 212 things to fix when it was 163.
+  const distinct = new Set(results.violations.map((v) => `${v.rule}:${v.signature || v.selector}`)).size;
+  const occurrences = results.violations.reduce((sum, v) => sum + (v.count || 1), 0);
+
+  console.log(
+    `visual_check: ${distinct} distinct findings (${occurrences} occurrences across ${results.screenshots.length || "all"} screens), ` +
+      `${results.runtimeSkips.length} runtime skips, ${results.screenshots.length} screenshots`
+  );
 }
 
 run().catch((err) => {

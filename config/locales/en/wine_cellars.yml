@@ -49,7 +49,6 @@ en:
       take_out: "Take out"
       take_out_confirm: "Take \"%{name}\" out of the cellar?"
       put_back: "Put back"
-      move: "Move"
       edit_aria: "Edit \"%{name}\""
       delete_aria: "Delete \"%{name}\""
       delete_label: "Delete"

@@ -36,7 +36,7 @@ class VehicleMaintenanceEntryTest < ActiveSupport::TestCase
   test "rejects a service provider from another household" do
     entry = vehicles(:alpha_car).vehicle_maintenance_entries.build(entry_type: "Vidange", service_provider: service_providers(:beta_provider))
     assert_not entry.valid?
-    assert_includes entry.errors[:service_provider], "is invalid"
+    assert_includes entry.errors[:service_provider], error_message(:invalid)
   end
 
   test "accepts a service provider from the same household" do

@@ -11,7 +11,7 @@ class RecipeIngredientTest < ActiveSupport::TestCase
   test "belongs to a recipe" do
     ingredient = RecipeIngredient.new(name: "Sel")
     assert_not ingredient.valid?
-    assert_includes ingredient.errors[:recipe], "must exist"
+    assert_includes ingredient.errors[:recipe], error_message(:required)
   end
 
   test "is ordered by position on the recipe" do

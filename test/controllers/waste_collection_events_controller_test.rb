@@ -21,7 +21,7 @@ class WasteCollectionEventsControllerTest < ActionDispatch::IntegrationTest
     event = waste_collection_events(:alpha_event)
     delete waste_collection_event_path(event)
     follow_redirect!
-    assert_includes @response.body, "Collection deleted."
+    assert_body_includes I18n.t("waste_collection_events.destroy.deleted")
   end
 
   test "cannot destroy another household's event" do
@@ -36,7 +36,7 @@ class WasteCollectionEventsControllerTest < ActionDispatch::IntegrationTest
     post waste_collection_events_path, params: { waste_collection_event: { waste_type: "verre", collected_on: Date.current + 1.week } }
     assert_redirected_to waste_path
     follow_redirect!
-    assert_includes @response.body, "Collection added."
+    assert_body_includes I18n.t("waste_collection_events.create.created")
   end
 
   test "create with a blank collected_on does not persist and surfaces an error" do
@@ -44,7 +44,7 @@ class WasteCollectionEventsControllerTest < ActionDispatch::IntegrationTest
       post waste_collection_events_path, params: { waste_collection_event: { waste_type: "verre", collected_on: "" } }
     end
     assert_redirected_to waste_path
-    assert_equal "Collected on can't be blank", flash[:alert]
+    assert_equal validation_message(WasteCollectionEvent, :collected_on), flash[:alert]
   end
 
   test "edit and update an event's type and date" do

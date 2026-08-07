@@ -23,10 +23,10 @@
         of sync in another already-open panel. %>
     <nav role="tablist" aria-label="<%= t(".lists_nav_aria") %>" class="mb-4 inline-flex flex-wrap gap-1 rounded-md bg-tab-group p-1 text-sm">
       <%= link_to t(".all"), routines_path, role: "tab", aria: { selected: @list.nil? },
-            class: "flex h-8 items-center rounded-md px-3 font-medium transition-colors #{@list.nil? ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
+            class: "flex h-[var(--control-h-sm)] items-center rounded-md px-3 font-medium transition-colors #{@list.nil? ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
       <% @lists.each do |list| %>
         <%= link_to list, routines_path(list: list), role: "tab", aria: { selected: @list == list },
-              class: "flex h-8 items-center rounded-md px-3 font-medium transition-colors #{@list == list ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
+              class: "flex h-[var(--control-h-sm)] items-center rounded-md px-3 font-medium transition-colors #{@list == list ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
       <% end %>
     </nav>
   <% end %>

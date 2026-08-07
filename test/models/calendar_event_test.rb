@@ -109,7 +109,7 @@ class CalendarEventTest < ActiveSupport::TestCase
   test "rejects an address from another household" do
     event = households(:alpha).calendar_events.build(title: "X", starts_at: Time.current, frequency: "none", address: addresses(:beta_place))
     assert_not event.valid?
-    assert_includes event.errors[:address], "is invalid"
+    assert_includes event.errors[:address], error_message(:invalid)
   end
 
   test "accepts an address from the same household" do

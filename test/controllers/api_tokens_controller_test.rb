@@ -15,7 +15,7 @@ class ApiTokensControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to household_path(households(:alpha), tab: "api")
     follow_redirect!
-    assert_match(/Token iPhone created/, @response.body)
+    assert_body_includes I18n.t("api_tokens.create.created", name: "iPhone")
 
     token_value = css_select("#new_api_token").first.text.strip
     assert_match(/\A[0-9a-f]{64}\z/, token_value)

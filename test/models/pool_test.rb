@@ -4,13 +4,13 @@ class PoolTest < ActiveSupport::TestCase
   test "requires a name" do
     pool = Pool.new(household: households(:alpha), treatment_type: "sel")
     assert_not pool.valid?
-    assert_includes pool.errors[:name], "can't be blank"
+    assert_includes pool.errors[:name], error_message(:blank)
   end
 
   test "requires a treatment_type from the allowed list" do
     pool = Pool.new(household: households(:alpha), name: "Spa", treatment_type: "eau_de_javel")
     assert_not pool.valid?
-    assert_includes pool.errors[:treatment_type], "is not included in the list"
+    assert_includes pool.errors[:treatment_type], error_message(:inclusion)
   end
 
   test "accepts each allowed treatment_type" do
@@ -48,7 +48,7 @@ class PoolTest < ActiveSupport::TestCase
     pool = Pool.new(household: households(:alpha), name: "Spa", treatment_type: "sel",
       service_provider: service_providers(:beta_provider))
     assert_not pool.valid?
-    assert_includes pool.errors[:service_provider], "is invalid"
+    assert_includes pool.errors[:service_provider], error_message(:invalid)
   end
 
   test "measure_types depends on treatment_type" do

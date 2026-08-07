@@ -13,7 +13,7 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     get search_path
     assert_response :success
     assert_select "turbo-frame#global_search_results"
-    assert_includes @response.body, I18n.t("search.hint")
+    assert_body_includes I18n.t("search.hint")
   end
 
   test "finds a matching record scoped to the household" do
@@ -33,7 +33,7 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
   test "renders the no-results state for a query matching nothing" do
     get search_path(q: "zzzznomatchzzzz")
     assert_response :success
-    assert_includes @response.body, I18n.t("search.no_results")
+    assert_body_includes I18n.t("search.no_results")
   end
 
   test "echoes back the requesting turbo-frame id instead of a hardcoded one" do

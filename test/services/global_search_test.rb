@@ -112,7 +112,7 @@ class GlobalSearchTest < ActiveSupport::TestCase
     group = results.find { |g| g[:module_key] == "waste" }
 
     assert group, "expected a waste group matched by waste_type"
-    assert_includes group[:records].map { |r| r[:label] }, "Household waste"
+    assert_includes group[:records].map { |r| r[:label] }, I18n.t("waste.types.ordures")
   end
 
   test "finds a plant and a pool under the outdoor module" do

@@ -5,11 +5,11 @@
 # person writing the feature thinks in. `i18n-tasks missing` is what turns
 # that into a red build.
 #
-# Only `missing` is enforced in CI. `unused` is deliberately left out for now:
-# on a tree of ~2 000 keys it reports a long tail on day one (keys reached
-# through interpolated names, keys used only by a mailer template, keys a
-# component looks up from a constant), and a check that fails from the first
-# commit teaches people to skip it. Cleaning that tail is its own task.
+# Both `missing` and `unused` are enforced. `unused` was expected to report a
+# long tail on a tree of ~2 000 keys; it reported eleven, of which seven were
+# genuinely dead (a dashboard user menu that had moved into the sidebar and
+# household settings, and two placeholders whose forms had changed). Those are
+# deleted; the four that remain are structural and listed under ignore_unused. Cleaning that tail is its own task.
 
 base_locale: en
 locales: [ en, fr ]
@@ -72,3 +72,9 @@ ignore_unused:
   - "date.formats.*"
   - "time.formats.*"
   - "pwa.*"
+  # Resolved by Rails itself, never by a literal t(): ActiveModel looks this up
+  # from `errors.add(:ends_on, :before_starts_on)`.
+  - "activerecord.errors.*"
+  # Same class-body `rate_limit(with: -> { t(".rate_limited") })` as in
+  # ignore_missing above: the key is real, its call site is just not a literal.
+  - "*.create.rate_limited"

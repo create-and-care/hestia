@@ -104,8 +104,8 @@ class ServiceProvidersControllerTest < ActionDispatch::IntegrationTest
   test "the new-type form offers a predefined list plus a custom fallback field" do
     get service_providers_path
     assert_response :success
-    assert_select "select#service_provider_type_name option", text: "Plumber"
-    assert_select "select#service_provider_type_name option", text: "Other…"
+    assert_select "select#service_provider_type_name option", text: I18n.t("service_provider_types.predefined.plumber")
+    assert_select "select#service_provider_type_name option", text: I18n.t("service_providers.index.other_type_option")
     assert_select "input#service_provider_type_name_custom"
   end
 

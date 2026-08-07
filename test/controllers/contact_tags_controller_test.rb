@@ -15,7 +15,7 @@ class ContactTagsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to contacts_path
     follow_redirect!
-    assert_includes @response.body, "Tag added."
+    assert_body_includes I18n.t("contact_tags.create.created")
   end
 
   test "create with a blank name does not persist and surfaces an error" do
@@ -23,7 +23,7 @@ class ContactTagsControllerTest < ActionDispatch::IntegrationTest
       post contact_tags_path, params: { contact_tag: { name: "" } }
     end
     assert_redirected_to contacts_path
-    assert_equal "Name can't be blank", flash[:alert]
+    assert_equal validation_message(ContactTag, :name), flash[:alert]
   end
 
   test "destroy" do

@@ -1,4 +1,7 @@
-<nav aria-label="<%= t("ui.breadcrumb.nav_aria") %>">
+<%# data-breadcrumb is not styling: visual:check excludes the links of a
+    breadcrumb trail from its touch-target rule (they are read, not aimed at),
+    and matching on the aria-label would mean matching on a translated string. %>
+<nav aria-label="<%= t("ui.breadcrumb.nav_aria") %>" data-breadcrumb>
   <ol class="flex items-center gap-1.5 text-sm">
     <% @items.each_with_index do |(label, href), index| %>
       <li class="flex items-center gap-1.5">

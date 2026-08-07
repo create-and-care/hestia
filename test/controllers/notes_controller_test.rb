@@ -108,7 +108,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     get notes_path
     assert_response :success
     assert_select "dialog[role='alertdialog']", count: 2 # one per note fixture shown (delete + promote)
-    assert_includes @response.body, I18n.t("notes.note.promote_confirm")
+    assert_body_includes I18n.t("notes.note.promote_confirm")
   end
 
   test "cannot touch another household's note" do

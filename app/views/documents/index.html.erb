@@ -22,7 +22,11 @@
 
   <%= render "shared/flash" %>
 
-  <section class="mb-4 flex flex-wrap items-center gap-2">
+  <%# Filter chips: a row of tags is a chip strip, not a toolbar. 36px each
+      would turn three lines of filters into six, so it takes the WCAG AA
+      floor (24px) and says so — see touchFloorFor in
+      script/visual_check/measure.js. %>
+  <section class="mb-4 flex flex-wrap items-center gap-2" data-touch-target="compact">
     <%= render(Ui::BadgeComponent.new(variant: @folder ? :secondary : :default)) { link_to t(".all"), documents_path(q: @query.presence) } %>
     <% @folders.each do |folder| %>
       <%= render(Ui::BadgeComponent.new(variant: @folder == folder ? :default : :secondary)) do %>

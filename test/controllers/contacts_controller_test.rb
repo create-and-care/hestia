@@ -24,7 +24,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   test "the add-birthday button has a visible label" do
     get contacts_path
     assert_response :success
-    assert_select "a[href=?]", new_contact_path, text: "New contact"
+    assert_select "a[href=?]", new_contact_path, text: I18n.t("contacts.index.new_contact")
   end
 
   test "create with a household tag" do
@@ -65,7 +65,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   test "delete and edit controls have accessible names and a delete confirmation" do
     contact = contacts(:alpha_mom)
     get contacts_path
-    assert_select "a[href=?][aria-label=?]", edit_contact_path(contact), "Edit \"Maman\""
+    assert_select "a[href=?][aria-label=?]", edit_contact_path(contact), I18n.t("contacts.contact.edit_aria", name: contact.name)
     assert_select "form[action=?][data-turbo-confirm]", contact_path(contact)
   end
 
@@ -103,6 +103,6 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   test "calendar navigates to another month" do
     get calendar_contacts_path(month: "2026-01")
     assert_response :success
-    assert_includes @response.body, "January 2026"
+    assert_body_includes "#{I18n.t("calendar.months").first} 2026"
   end
 end

@@ -46,7 +46,7 @@ class FeedingSessionsControllerTest < ActionDispatch::IntegrationTest
     baby = baby_profiles(:alpha_baby)
     post baby_profile_feeding_sessions_path(baby), params: { feeding_session: { kind: "bottle" } }
     follow_redirect!
-    assert_includes @response.body, "Feeding added."
+    assert_body_includes I18n.t("feeding_sessions.create.created")
   end
 
   test "create with an invalid kind does not persist and surfaces an error" do
@@ -55,7 +55,7 @@ class FeedingSessionsControllerTest < ActionDispatch::IntegrationTest
       post baby_profile_feeding_sessions_path(baby), params: { feeding_session: { kind: "spoon" } }
     end
     assert_redirected_to baby
-    assert_equal "Kind is not included in the list", flash[:alert]
+    assert_equal validation_message(FeedingSession, :kind, :inclusion), flash[:alert]
   end
 
   test "stop sets the end time on an in-progress session" do

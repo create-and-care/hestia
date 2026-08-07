@@ -4,7 +4,7 @@ class ConversationParticipantTest < ActiveSupport::TestCase
   test "requires a unique user per conversation" do
     duplicate = ConversationParticipant.new(conversation: conversations(:alpha_chat), user: users(:one))
     assert_not duplicate.valid?
-    assert_includes duplicate.errors[:user_id], "has already been taken"
+    assert_includes duplicate.errors[:user_id], error_message(:taken)
   end
 
   test "the same user can participate in conversations from different households" do

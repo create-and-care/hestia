@@ -9,7 +9,7 @@ class ServiceProviderTypesControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to service_providers_path
     follow_redirect!
-    assert_includes @response.body, "Type added."
+    assert_body_includes I18n.t("service_provider_types.create.created")
   end
 
   test "create with a blank name does not persist and surfaces an error" do
@@ -17,7 +17,7 @@ class ServiceProviderTypesControllerTest < ActionDispatch::IntegrationTest
       post service_provider_types_path, params: { service_provider_type: { name: "" } }
     end
     assert_redirected_to service_providers_path
-    assert_equal "Name can't be blank", flash[:alert]
+    assert_equal validation_message(ServiceProviderType, :name), flash[:alert]
   end
 
   test "edit and update the name, icon, and color" do

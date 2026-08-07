@@ -72,6 +72,6 @@ class CirclePostsControllerTest < ActionDispatch::IntegrationTest
       post circle_posts_path(circle), params: { circle_post: { body: "" } }, as: :turbo_stream
     end
     assert_redirected_to circle
-    assert_equal "Body can't be blank", flash[:alert]
+    assert_equal validation_message(CirclePost, :body), flash[:alert]
   end
 end

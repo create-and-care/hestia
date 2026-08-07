@@ -31,7 +31,7 @@ class BabyProfilesControllerTest < ActionDispatch::IntegrationTest
   test "show displays the baby's age in months" do
     get baby_profile_path(baby_profiles(:alpha_baby))
     assert_response :success
-    assert_includes @response.body, "months old"
+    assert_body_includes I18n.t("baby_profiles.age_months", count: baby_profiles(:alpha_baby).age_in_months)
   end
 
   test "show links to the linked pediatrician" do

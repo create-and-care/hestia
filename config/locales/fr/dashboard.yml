@@ -2,10 +2,6 @@ fr:
   dashboard:
     show:
       title: "Tableau de bord"
-      roadmap: "Roadmap"
-      preferences: "Préférences"
-      api_tokens: "Jetons API"
-      sign_out: "Se déconnecter"
       nav:
         shopping: "Courses"
         fridge: "Frigo"

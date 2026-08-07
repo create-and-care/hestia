@@ -63,15 +63,16 @@ Rails.application.configure do
   # fallback locale here, and the fixture users' own locale in
   # test/fixtures/users.yml, since every signed-in page renders in theirs.
   #
-  # Read it as a diagnostic, not as a gate. It currently reports 57 failures,
-  # and every one of them is a test asserting English interface copy —
-  # `assert_select ... "Name can't be blank"`, `aria-label="Edit ..."`, flash
-  # messages. Not one is a date. Making it green means rewriting those
-  # assertions to be locale-independent, which is a real piece of work and not
-  # I18N-03's; what I18N-03 owns is pinned directly instead, by
-  # test/lib/localized_dates_test.rb and
-  # test/integration/localized_dates_rendering_test.rb, both of which run in
-  # both locales on every ordinary `bin/rails test`.
+  # It is green, and that is the point: it started at 93 failures, none of
+  # which were bugs. Every one was an assertion spelling an English string —
+  # "Name can't be blank", aria-label="Edit …", a flash message, a date, a
+  # currency — which is a test asserting, silently, that the suite runs in
+  # English. They now resolve the same string through I18n, so the suite
+  # checks behaviour in either language instead of checking the language.
+  #
+  # Worth running before touching anything user-facing. A new hard-coded
+  # string will pass in English and fail here, which is exactly when it is
+  # cheapest to notice.
   config.i18n.default_locale = ENV.fetch("LOCALE", "en").to_sym
 
   # Active Record Encryption (ExternalCalendarConnection#access_token/refresh_token,
@@ -87,38 +88,45 @@ Rails.application.configure do
   #
   # Logs by default; `BULLET_RAISE=1 bin/rails test` turns every detection into
   # a failure. That is how PERF-06 enumerated the missing `includes` — asking
-  # the tool rather than reading eleven controllers by hand — and it is how the
-  # next batch should be found too, so the switch stays.
+  # the tool rather than reading eleven controllers by hand — and how the four
+  # that survived it were then closed:
   #
-  # It is not on by default because Bullet judges a *rendered request*: a
-  # controller can be perfectly eager-loaded and still trip it from a partial
-  # reached only by some fixtures, and a red build on that would push people to
-  # safelist rather than to look.
+  #   * Task => :task_reminders and PlantCareTask => :plant_care_completions
+  #     were `dependent: :destroy` cascades loading every child row to run
+  #     callbacks that do not exist. Both are `delete_all` now.
+  #   * LoyaltyCard => :address was a validation re-reading the association on
+  #     every save, so a drag-and-drop reorder issued one query per card. It
+  #     now runs only when the foreign key actually changed.
+  #   * Document => :file_attachment and Task => :task_category were preloads
+  #     of associations no view reads — the document lists show a name and a
+  #     lazily-loaded preview frame, and the kanban groups on task_category_id.
+  #     Both are gone.
   #
-  # What it still reports after PERF-06, each looked at and left alone:
-  #   * "USE eager loading" on Task => :task_reminders, PlantCareTask =>
-  #     :plant_care_completions — both raised by #destroy, where the
-  #     `dependent: :destroy` cascade has to load the children to run their
-  #     callbacks. No `includes` applies; only `delete_all` would, and that
-  #     would skip the callbacks on purpose.
-  #   * "USE eager loading" on LoyaltyCard => :address — raised by reordering,
-  #     where each card's `address_belongs_to_household` validation reads the
-  #     association on save. A view concern it is not.
-  #   * "AVOID eager loading" on WorkoutTemplate => :workout_template_exercises
-  #     — the index renders `.size`, which Bullet does not count as a read.
-  #     The preload is what keeps that `.size` from being a COUNT per row.
-  #   * "AVOID eager loading" on Task => :task_category, Document =>
-  #     :file_attachment, GiftList => :contact, CalendarEvent => :participants
-  #     — pre-existing, and each needs its own look at whether the association
-  #     is genuinely unused or merely unused by the fixtures at hand.
+  # It is still not on by default, because Bullet judges a *rendered request*:
+  # a controller can be perfectly eager-loaded and still trip it from a partial
+  # only some fixtures reach, and a red build on that teaches people to
+  # safelist rather than to look. The safelists below are what that looks like
+  # when it is the right answer — each names why the association is real.
   config.after_initialize do
     Bullet.enable = true
     Bullet.bullet_logger = true
     Bullet.raise = ENV["BULLET_RAISE"].present?
+
     # Preloading a has_many :through (participants) always preloads its join
     # association (event_participants) too — app code only ever calls
     # .participants, so Bullet permanently flags the join side as "unused".
-    # That's a structural false positive, not a real N+1 risk, so it's safelisted.
+    # That's a structural false positive, not a real N+1 risk.
     Bullet.add_safelist type: :unused_eager_loading, class_name: "CalendarEvent", association: :event_participants
+
+    # Read by the view, but only on a row the fixtures do not provide: no
+    # calendar event has participants and no gift list has a contact, so the
+    # branch that reads them never runs here. Removing the preload would be a
+    # real N+1 the moment a household used the feature.
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "CalendarEvent", association: :participants
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "GiftList", association: :contact
+
+    # `.size` on a preloaded association is what stops it being a COUNT per
+    # row, but Bullet does not count it as a read.
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "WorkoutTemplate", association: :workout_template_exercises
   end
 end

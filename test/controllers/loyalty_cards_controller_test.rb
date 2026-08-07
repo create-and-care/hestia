@@ -78,7 +78,7 @@ class LoyaltyCardsControllerTest < ActionDispatch::IntegrationTest
     assert_select "dialog[role='alertdialog']"
     assert_select "form[action=?]", loyalty_card_path(card)
     assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("loyalty_cards.loyalty_card.delete_confirm", name: card.name))}"/, @response.body)
-    assert_select "a[href=?][aria-label=?]", edit_loyalty_card_path(card), "Edit \"Supermarché\""
+    assert_select "a[href=?][aria-label=?]", edit_loyalty_card_path(card), I18n.t("loyalty_cards.loyalty_card.edit_aria", name: card.name)
   end
 
   test "create links an address from the household's address book" do

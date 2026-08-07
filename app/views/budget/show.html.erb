@@ -18,9 +18,9 @@
           Turbo broadcast-sync concern here since there's only one panel). %>
       <nav role="tablist" aria-label="<%= t(".periods_nav_aria") %>" class="inline-flex gap-1 rounded-md bg-tab-group p-1">
         <%= link_to t(".monthly"), budget_path(period: :monthly), role: "tab", aria: { selected: @period == :monthly },
-              class: "flex h-8 items-center rounded-md px-3 font-medium transition-colors #{@period == :monthly ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
+              class: "flex h-[var(--control-h-sm)] items-center rounded-md px-3 font-medium transition-colors #{@period == :monthly ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
         <%= link_to t(".annual"), budget_path(period: :annual), role: "tab", aria: { selected: @period == :annual },
-              class: "flex h-8 items-center rounded-md px-3 font-medium transition-colors #{@period == :annual ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
+              class: "flex h-[var(--control-h-sm)] items-center rounded-md px-3 font-medium transition-colors #{@period == :annual ? "bg-tab-item-active text-primary" : "text-secondary hover:text-primary"}" %>
       </nav>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: shared_projects_path)) { t(".shared_projects_link") } %>
     </div>

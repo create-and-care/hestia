@@ -4,11 +4,14 @@
     <% item.with_leading do %>
       <div class="flex items-center gap-2">
         <span data-sortable-handle class="cursor-grab select-none text-subdued hover:text-secondary" title="<%= t('.move_title') %>"><%= lucide_icon("grip-vertical", css_class: "size-4") %></span>
-        <div class="flex flex-col">
+        <%# Reorder gutter: 36px each would double the row height, so this pair
+          takes the WCAG AA floor (24px) instead and says so — see
+          touchFloorFor in script/visual_check/measure.js. %>
+      <div class="flex flex-col" data-touch-target="compact">
           <%= button_to move_up_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item), method: :patch,
-                class: "-mb-1 cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_up_aria") } do %><%= lucide_icon("chevron-up", css_class: "size-3") %><% end %>
+                class: "flex size-6 items-center justify-center cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_up_aria") } do %><%= lucide_icon("chevron-up", css_class: "size-3") %><% end %>
           <%= button_to move_down_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item), method: :patch,
-                class: "cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_down_aria") } do %><%= lucide_icon("chevron-down", css_class: "size-3") %><% end %>
+                class: "flex size-6 items-center justify-center cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_down_aria") } do %><%= lucide_icon("chevron-down", css_class: "size-3") %><% end %>
         </div>
         <%= button_to toggle_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
               method: :patch, class: "shrink-0 cursor-pointer",
@@ -37,7 +40,7 @@
           <%= form_with url: move_to_fridge_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
                 method: :post, class: "flex items-center gap-1" do %>
             <input type="date" name="expires_on" value="<%= Date.current %>" title="<%= t(".expires_on_title") %>" aria-label="<%= t(".expires_on_title") %>"
-                   class="h-7 w-28 rounded border border-primary bg-container px-1 text-xs text-primary">
+                   class="h-[var(--control-h-sm)] w-28 rounded border border-primary bg-container px-1 text-xs text-primary">
             <button type="submit" class="shrink-0 cursor-pointer text-subdued hover:text-primary"
                     title="<%= t(".move_to_fridge_title") %>" aria-label="<%= t(".move_to_fridge_title") %>">
               <%= lucide_icon("refrigerator", css_class: "size-4") %>

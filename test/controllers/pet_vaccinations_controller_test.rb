@@ -40,7 +40,7 @@ class PetVaccinationsControllerTest < ActionDispatch::IntegrationTest
       post pet_vaccinations_path(pet), params: { pet_vaccination: { name: "" } }
     end
     assert_redirected_to pet
-    assert_equal "Name can't be blank", flash[:alert]
+    assert_equal validation_message(PetVaccination, :name), flash[:alert]
   end
 
   test "edit and update a vaccination's name, dates and price" do
@@ -68,8 +68,9 @@ class PetVaccinationsControllerTest < ActionDispatch::IntegrationTest
     pet = pets(:alpha_dog)
     pet.pet_vaccinations.create!(name: "Rage", price: 30, booster_on: Date.current - 1)
     get pet_path(pet)
-    assert_includes @response.body, "30.00"
-    assert_select "span.bg-destructive\\/10", text: /booster/
+    assert_body_includes ActiveSupport::NumberHelper.number_to_currency(30, unit: "€", format: "%n %u")
+    assert_select "span.bg-destructive\\/10",
+      text: /#{Regexp.escape(I18n.t("pets.show.vaccination_booster_on", date: ""). strip)}/
   end
 
   test "delete button asks for confirmation and has an accessible name" do

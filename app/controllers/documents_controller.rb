@@ -19,7 +19,7 @@ class DocumentsController < ApplicationController
     # Each row shows its folder and what it is attached to, alongside the file
     # itself (PERF-06). :documentable is polymorphic, so it is preloaded rather
     # than joined.
-    documents = Current.household.documents.ordered.with_attached_file.includes(:document_folder, :documentable)
+    documents = Current.household.documents.ordered.includes(:document_folder, :documentable)
     documents = documents.where(document_folder_id: @folder.id) if @folder
     documents = documents.where("name ILIKE ?", "%#{@query}%") if @query.present?
     @documents = documents
