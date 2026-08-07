@@ -32,7 +32,7 @@ class TasksTest < ApplicationSystemTestCase
     visit tasks_path
 
     within "##{ActionView::RecordIdentifier.dom_id(task)}" do
-      page.execute_script("arguments[0].click()", find("[aria-label='Edit']").native)
+      click_element(find("[aria-label='Edit']"))
     end
     assert_dialog_open
     assert_field "Title", with: "Faire la vaisselle"
@@ -51,7 +51,7 @@ class TasksTest < ApplicationSystemTestCase
     visit tasks_path
 
     within "##{ActionView::RecordIdentifier.dom_id(task)}" do
-      page.execute_script("arguments[0].click()", find("[aria-label='Delete']").native)
+      click_element(find("[aria-label='Delete']"))
     end
     assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     submit_button_to "Delete"

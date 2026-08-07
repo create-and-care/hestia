@@ -1,6 +1,18 @@
 module SystemTestHelper
-  # Selenium's native WebDriver click occasionally never triggers a
-  # button_to submit button's underlying form in this environment — no
+  # Selenium's native click occasionally never reaches the page in this
+  # environment: no request is made, no error is raised, and the failure
+  # surfaces much later as an assertion timing out against a page that simply
+  # never changed. test_system lost a run to exactly that on the Waste view
+  # toggle — an ordinary <a href> whose failure screenshot shows the page
+  # still in list mode, ten seconds after the click. Dispatching the click
+  # from JS targets the element itself instead of a point on the screen, so
+  # it cannot land next to it, and Turbo sees the same event either way.
+  def click_element(node_or_selector)
+    node = node_or_selector.respond_to?(:native) ? node_or_selector : find(node_or_selector)
+    page.execute_script("arguments[0].click()", node.native)
+  end
+
+  # The same failure, on the specific case of a button_to submit button: no
   # request ever reaches the server, with no error raised on the Capybara
   # side either (confirmed by comparing it side-by-side with a JS-dispatched
   # submit on the exact same element, which works reliably every time).

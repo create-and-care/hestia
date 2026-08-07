@@ -27,7 +27,7 @@ class NotesTest < ApplicationSystemTestCase
     sign_in_to_alpha
     visit notes_path
 
-    page.execute_script("arguments[0].click()", find(:button, "New note").native)
+    click_element(find(:button, "New note"))
     assert_dialog_open
 
     fill_in "Title", with: "Acheter du pain"
@@ -43,7 +43,7 @@ class NotesTest < ApplicationSystemTestCase
     visit notes_path
 
     within "##{ActionView::RecordIdentifier.dom_id(note)}" do
-      page.execute_script("arguments[0].click()", find(:button, "→ Task").native)
+      click_element(find(:button, "→ Task"))
     end
     assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     within "dialog[data-state='open']" do
@@ -60,7 +60,7 @@ class NotesTest < ApplicationSystemTestCase
     visit notes_path
 
     within "##{ActionView::RecordIdentifier.dom_id(note)}" do
-      page.execute_script("arguments[0].click()", find(:button, "Delete").native)
+      click_element(find(:button, "Delete"))
     end
     assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     within "dialog[data-state='open']" do
