@@ -37,4 +37,22 @@ class PublicGiftListsControllerTest < ActionDispatch::IntegrationTest
     get public_gift_list_path("does-not-exist")
     assert_response :not_found
   end
+
+  test "reserving is rate limited past the threshold" do
+    idea = gift_ideas(:alpha_book)
+    token = gift_list_shares(:alpha_share).token
+
+    10.times { post reserve_public_gift_path(token, idea), params: { reserver_name: "Tante Jeanne" } }
+    assert_response :redirect
+
+    post reserve_public_gift_path(token, idea), params: { reserver_name: "Tante Jeanne" }
+    assert_response :too_many_requests
+  end
+
+  test "browsing is rate limited past the threshold, which is where token enumeration would show up" do
+    60.times { get public_gift_list_path("does-not-exist") }
+
+    get public_gift_list_path(gift_list_shares(:alpha_share).token)
+    assert_response :too_many_requests
+  end
 end

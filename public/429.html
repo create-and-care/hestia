@@ -1,0 +1,121 @@
+<!doctype html>
+
+<html lang="en">
+
+  <head>
+
+    <title>Too many requests (429 Too Many Requests)</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <meta name="robots" content="noindex, nofollow">
+
+    <style>
+
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+
+      * {
+        margin: 0;
+      }
+
+      html {
+        font-size: 16px;
+      }
+
+      body {
+        background: #FFF;
+        color: #261B23;
+        display: grid;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Aptos, Roboto, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-size: clamp(1rem, 2.5vw, 2rem);
+        -webkit-font-smoothing: antialiased;
+        font-style: normal;
+        font-weight: 400;
+        letter-spacing: -0.0025em;
+        line-height: 1.4;
+        min-height: 100dvh;
+        place-items: center;
+        text-rendering: optimizeLegibility;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      #error-id {
+        color: #f0eff0;
+        font-size: 4em;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1;
+      }
+
+      #error-description {
+        color: #d30001;
+        font-size: 0.9em;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #101010;
+          color: #e0e0e0;
+        }
+
+        #error-id {
+          color: #2c2c2c;
+        }
+
+        #error-description {
+          color: #FF6161;
+        }
+      }
+
+      b, strong {
+        font-weight: 700;
+      }
+
+      main {
+        display: grid;
+        gap: 1em;
+        padding: 2em;
+        place-items: center;
+        text-align: center;
+      }
+
+      main header {
+        display: grid;
+        gap: 0.25em;
+        place-items: center;
+      }
+
+      main article {
+        width: min(100%, 30em);
+      }
+
+      main article p {
+        font-size: 75%;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <!-- This file lives in public/429.html -->
+
+    <main>
+      <header>
+        <p id="error-id">429</p>
+        <p id="error-description">Too many requests</p>
+      </header>
+      <article>
+        <p><strong>You've made too many requests in a short time.</strong> Wait a minute and try again. If you're the application owner check the logs for more information.</p>
+      </article>
+    </main>
+
+  </body>
+
+</html>

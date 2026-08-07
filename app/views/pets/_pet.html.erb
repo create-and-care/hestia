@@ -3,7 +3,7 @@
     <% if pet.photo.attached? %>
       <% item.with_leading do %>
         <div class="size-8 overflow-hidden rounded-full">
-          <%= image_tag pet.photo.variant(resize_to_fill: [ 32, 32 ]), alt: "", class: "size-full object-cover" %>
+          <%= image_tag pet.photo.variant(resize_to_fill: [ 32, 32 ]), alt: "", loading: :lazy, class: "size-full object-cover" %>
         </div>
       <% end %>
     <% else %>

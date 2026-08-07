@@ -21,7 +21,7 @@
     <div data-controller="sidebar" class="flex h-full flex-col gap-4 p-4">
       <%= render "shared/sidebar_brand" %>
       <nav class="flex-1 min-h-0 flex flex-col gap-1 overflow-y-auto">
-        <%= render "shared/sidebar_nav", frame_id: "global_search_results_mobile", keyboard_shortcut: false %>
+        <%= render "shared/sidebar_nav", frame_id: "global_search_results_mobile", keyboard_shortcut: false, preload: false %>
       </nav>
       <%= render "shared/sidebar_user_card" %>
     </div>

@@ -30,6 +30,13 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
+    # `rate_limit` counters live in the controller cache store, which the test
+    # environment points at a real in-memory store so limits can be asserted at
+    # all. That store outlives an individual test, and every test drives the app
+    # from the same 127.0.0.1, so without this the suite would share one counter
+    # per limit and start tripping its own rate limits as it grew.
+    setup { ActionController::Base.cache_store.clear }
+
     # Add more helper methods to be used by all tests here...
   end
 end

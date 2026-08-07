@@ -6,7 +6,7 @@
     </div>
     <p class="mt-1 whitespace-pre-line"><%= circle_post.body %></p>
     <% if circle_post.photo.attached? %>
-      <%= image_tag circle_post.photo.variant(resize_to_limit: [ 480, 480 ]), alt: "", class: "mt-2 max-h-80 w-auto rounded-lg object-cover" %>
+      <%= image_tag circle_post.photo.variant(resize_to_limit: [ 480, 480 ]), alt: "", loading: :lazy, class: "mt-2 max-h-80 w-auto rounded-lg object-cover" %>
     <% end %>
 
     <% my_reaction = circle_post.circle_post_reactions.detect { |r| r.user_id == Current.user.id } %>

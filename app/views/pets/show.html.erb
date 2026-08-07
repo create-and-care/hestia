@@ -8,7 +8,7 @@
       <% if @pet.photo.attached? %>
         <div class="size-16 shrink-0">
           <%= render(Ui::AspectRatioComponent.new(ratio: 1)) do %>
-            <%= image_tag @pet.photo.variant(resize_to_fill: [ 128, 128 ]), alt: "", class: "size-full rounded-full object-cover" %>
+            <%= image_tag @pet.photo.variant(resize_to_fill: [ 128, 128 ]), alt: "", loading: :lazy, class: "size-full rounded-full object-cover" %>
           <% end %>
         </div>
       <% end %>

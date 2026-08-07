@@ -76,7 +76,7 @@
               </div>
             </div>
             <% if idea.photo.attached? %>
-              <%= image_tag idea.photo.variant(resize_to_limit: [ 200, 200 ]), alt: "", class: "mt-2 max-h-32 w-auto rounded-md object-cover" %>
+              <%= image_tag idea.photo.variant(resize_to_limit: [ 200, 200 ]), alt: "", loading: :lazy, class: "mt-2 max-h-32 w-auto rounded-md object-cover" %>
             <% end %>
             <% if idea.comment.present? %><p class="mt-1 text-secondary"><%= idea.comment %></p><% end %>
           </li>

@@ -1,0 +1,7 @@
+<div class="flex flex-wrap items-center gap-2">
+  <%= render(Ui::ButtonToComponent.new(design_system_component_path("button-to"), method: :get)) { "Outline (défaut)" } %>
+  <%= render(Ui::ButtonToComponent.new(design_system_component_path("button-to"), method: :get, variant: :default)) { "Default" } %>
+  <%= render(Ui::ButtonToComponent.new(design_system_component_path("button-to"), method: :get, variant: :destructive)) { "Destructive" } %>
+  <%= render(Ui::ButtonToComponent.new(design_system_component_path("button-to"), method: :get, variant: :ghost, size: :icon,
+        html_options: { aria: { label: "Supprimer" } })) { lucide_icon("trash-2", css_class: "size-4") } %>
+</div>

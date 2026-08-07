@@ -38,9 +38,18 @@ class ApiTokensControllerTest < ActionDispatch::IntegrationTest
     assert ApiToken.exists?(other_token.id)
   end
 
-  test "create with no expiration choice never expires" do
+  test "an unrecognised expiration choice falls back to the default instead of never expiring" do
     post api_tokens_path, params: { api_token: { name: "iPhone", expires_in: "" } }
-    assert_nil users(:one).api_tokens.find_by!(name: "iPhone").expires_at
+    assert_in_delta 90.days.from_now, users(:one).api_tokens.find_by!(name: "iPhone").expires_at, 1.minute
+
+    post api_tokens_path, params: { api_token: { name: "iPad", expires_in: "99999" } }
+    assert_in_delta 90.days.from_now, users(:one).api_tokens.find_by!(name: "iPad").expires_at, 1.minute
+  end
+
+  test "the expiration select offers no never-expires option" do
+    get household_path(households(:alpha), tab: "api")
+    assert_select "select#api_token_expires_in option", 3
+    assert_select "select#api_token_expires_in option[value='']", false
   end
 
   test "create with a 30 day expiration sets expires_at" do

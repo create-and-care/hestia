@@ -270,7 +270,7 @@
               <% field.with_control do %>
                 <%= render Ui::NativeSelectComponent.new(name: "api_token[expires_in]", selected: "90", html_options: { id: "api_token_expires_in" },
                       options: [ [ t("api_tokens.index.expires_in_30"), "30" ], [ t("api_tokens.index.expires_in_90"), "90" ],
-                                 [ t("api_tokens.index.expires_in_365"), "365" ], [ t("api_tokens.index.expires_in_never"), "" ] ]) %>
+                                 [ t("api_tokens.index.expires_in_365"), "365" ] ]) %>
               <% end %>
             <% end %>
           </div>

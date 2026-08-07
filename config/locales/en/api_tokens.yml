@@ -15,7 +15,6 @@ en:
       expires_in_30: "30 days"
       expires_in_90: "90 days"
       expires_in_365: "1 year"
-      expires_in_never: "Never"
       create: "Create"
       token_created_title: "Token created"
       token_created_description: "Copy it now — it won't be shown again."

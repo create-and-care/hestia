@@ -11,13 +11,21 @@ module Ui
   class SidebarItemComponent < ApplicationComponent
     renders_one :trailing
 
-    def initialize(icon:, label:, href: nil, active: false, mod: nil, collapsed: false)
+    # `preload:` stamps data-turbo-preload, which makes Turbo fetch the target
+    # into its snapshot cache once the page has loaded, so the next visit is
+    # instant. Deliberately opt-in per row rather than on by default: that cache
+    # holds ten snapshots, so preloading the whole ~25-row module nav would
+    # evict its own entries and spend a background request per row to do it.
+    # Everything else is already covered by Turbo 8's hover prefetch, which is
+    # on by default and costs nothing until the pointer actually lands.
+    def initialize(icon:, label:, href: nil, active: false, mod: nil, collapsed: false, preload: false)
       @icon = icon
       @label = label
       @href = href
       @active = active
       @mod = mod
       @collapsed = collapsed
+      @preload = preload
     end
   end
 end

@@ -1,0 +1,4 @@
+<div class="flex flex-col gap-4">
+  <%= render Ui::ViewToggleComponent.new(mode: "list", path_for: ->(mode) { design_system_component_path("view-toggle", view: mode) }) %>
+  <%= render Ui::ViewToggleComponent.new(mode: "grid", path_for: ->(mode) { design_system_component_path("view-toggle", view: mode) }) %>
+</div>

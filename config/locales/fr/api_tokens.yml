@@ -15,7 +15,6 @@ fr:
       expires_in_30: "30 jours"
       expires_in_90: "90 jours"
       expires_in_365: "1 an"
-      expires_in_never: "Jamais"
       create: "Créer"
       token_created_title: "Jeton créé"
       token_created_description: "Copiez-le maintenant, il ne sera plus affiché."

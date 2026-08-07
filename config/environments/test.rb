@@ -22,6 +22,14 @@ Rails.application.configure do
   config.consider_all_requests_local = true
   config.cache_store = :null_store
 
+  # Rate limiting counts through the *controller* cache store, which defaults to
+  # Rails.cache — the null store above. A null store's #increment always returns
+  # nil, so every `rate_limit` in the app would be silently inert here and could
+  # never be asserted. Pointing only this one at a real store fixes that while
+  # leaving Rails.cache null, so tests that exercise application caching still
+  # have to opt in explicitly (see ActiveSupport::Testing::CacheStore).
+  config.action_controller.cache_store = :memory_store
+
   # Render exception templates for rescuable exceptions and raise for other exceptions.
   config.action_dispatch.show_exceptions = :rescuable
 

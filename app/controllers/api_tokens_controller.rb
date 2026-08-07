@@ -3,8 +3,13 @@
 # created (see ApiToken).
 class ApiTokensController < ApplicationController
   # Fixed menu of choices rather than an arbitrary date input, mirroring how
-  # GitHub/GitLab present personal access token expirations.
-  EXPIRATION_CHOICES = { "30" => 30.days, "90" => 90.days, "365" => 365.days, "" => nil }.freeze
+  # GitHub/GitLab present personal access token expirations. There is
+  # deliberately no never-expires choice: a perpetual bearer token that is
+  # only ever shown once cannot be audited afterwards. Tokens created before
+  # this restriction keep their NULL expires_at and stay valid (see
+  # ApiToken.active) — the choice is removed going forward, not retroactively.
+  EXPIRATION_CHOICES = { "30" => 30.days, "90" => 90.days, "365" => 365.days }.freeze
+  DEFAULT_EXPIRATION = "90"
 
   def create
     token = Current.user.api_tokens.new(token_params.merge(expires_at: expires_at_from_params))
@@ -27,8 +32,11 @@ class ApiTokensController < ApplicationController
       params.require(:api_token).permit(:name)
     end
 
+    # Falls back to the default rather than to nil, so an unrecognised
+    # expires_in — a hand-crafted POST, or a stale form — cannot mint the
+    # perpetual token the <select> no longer offers.
     def expires_at_from_params
-      duration = EXPIRATION_CHOICES.fetch(params[:api_token][:expires_in].to_s, nil)
-      duration && Time.current + duration
+      duration = EXPIRATION_CHOICES.fetch(params[:api_token][:expires_in].to_s) { EXPIRATION_CHOICES.fetch(DEFAULT_EXPIRATION) }
+      Time.current + duration
     end
 end

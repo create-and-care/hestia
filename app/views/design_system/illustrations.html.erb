@@ -91,7 +91,7 @@ Interdits stricts : pas de mascotte ni de personnage anthropomorphe, pas d'objet
       <% @illustration_slots.each do |slug, asset_path| %>
         <div class="flex flex-col items-center gap-2 rounded-lg border border-dashed border-primary p-4">
           <% if asset_path %>
-            <%= image_tag asset_path, class: "h-[150px] w-full object-contain", alt: slug.to_s %>
+            <%= image_tag asset_path, loading: :lazy, class: "h-[150px] w-full object-contain", alt: slug.to_s %>
           <% else %>
             <div class="flex h-[150px] w-full flex-col items-center justify-center gap-1 rounded-md bg-surface-inset text-center">
               <%= lucide_icon slot_icons.fetch(slug), css_class: "size-6 text-subdued" %>

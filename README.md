@@ -42,7 +42,7 @@ this project started from.
 | Real-time | Hotwire (Turbo + Stimulus) + Solid Cable |
 | Async jobs | Solid Queue |
 | Cache | Solid Cache |
-| UI | ViewComponent (shadcn-style library, ~50 components) + Tailwind v4 |
+| UI | ViewComponent (shadcn-style library, 75 components) + Tailwind v4 |
 | Mobile | Flutter/Dart (skeleton, consumes the `api/v1` API) |
 | Deployment | Docker / Kamal |
 
