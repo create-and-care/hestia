@@ -1,0 +1,107 @@
+<%# Body of the catalog preview dialog, fetched into the card's lazy turbo-frame.
+    The recipe itself on the left, everything *about* it on the right — the split
+    the recipes#show page already uses, at dialog scale. %>
+<%= turbo_frame_tag dom_id(entry, :preview) do %>
+  <div class="grid gap-6 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+    <div class="min-w-0 space-y-5">
+      <section>
+        <h3 class="mb-2 text-sm font-semibold text-primary"><%= t(".ingredients_heading") %></h3>
+        <% if entry.ingredients.any? %>
+          <ul class="space-y-1.5 text-sm text-secondary">
+            <% entry.ingredients.each do |ingredient| %>
+              <li class="flex gap-2">
+                <span class="mt-[7px] size-1 shrink-0 rounded-full bg-subdued" aria-hidden="true"></span>
+                <span><%= ingredient %></span>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-sm text-subdued"><%= t(".no_ingredients") %></p>
+        <% end %>
+      </section>
+
+      <section>
+        <h3 class="mb-2 text-sm font-semibold text-primary"><%= t(".steps_heading") %></h3>
+        <% if entry.steps.any? %>
+          <ol class="space-y-2 text-sm text-secondary">
+            <% entry.steps.each_with_index do |step, index| %>
+              <li class="flex gap-2.5">
+                <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-surface-inset text-xs font-medium text-secondary"><%= index + 1 %></span>
+                <span><%= step %></span>
+              </li>
+            <% end %>
+          </ol>
+        <% else %>
+          <p class="text-sm text-subdued"><%= t(".no_steps") %></p>
+        <% end %>
+      </section>
+    </div>
+
+    <aside class="min-w-0 space-y-4">
+      <% if entry.image_url.present? %>
+        <%= render(Ui::AspectRatioComponent.new) do %>
+          <%= image_tag entry.image_url, alt: "", loading: :lazy, class: "size-full rounded-md object-cover" %>
+        <% end %>
+      <% end %>
+
+      <dl class="divide-y divide-primary overflow-hidden rounded-lg border border-primary text-sm">
+        <% if entry.prep_time_minutes %>
+          <div class="flex items-center justify-between gap-3 px-3 py-2">
+            <dt class="text-secondary"><%= t(".prep_time") %></dt>
+            <dd class="font-medium text-primary"><%= t("recipes.recipe.total_time", minutes: entry.prep_time_minutes) %></dd>
+          </div>
+        <% end %>
+        <% if entry.cook_time_minutes %>
+          <div class="flex items-center justify-between gap-3 px-3 py-2">
+            <dt class="text-secondary"><%= t(".cook_time") %></dt>
+            <dd class="font-medium text-primary"><%= t("recipes.recipe.total_time", minutes: entry.cook_time_minutes) %></dd>
+          </div>
+        <% end %>
+        <% if entry.total_time_minutes %>
+          <div class="flex items-center justify-between gap-3 px-3 py-2">
+            <dt class="text-secondary"><%= t(".total_time") %></dt>
+            <dd class="font-medium text-primary"><%= t("recipes.recipe.total_time", minutes: entry.total_time_minutes) %></dd>
+          </div>
+        <% end %>
+        <% if entry.servings %>
+          <div class="flex items-center justify-between gap-3 px-3 py-2">
+            <dt class="text-secondary"><%= t(".servings") %></dt>
+            <dd class="font-medium text-primary"><%= entry.servings %></dd>
+          </div>
+        <% end %>
+        <div class="flex items-center justify-between gap-3 px-3 py-2">
+          <dt class="text-secondary"><%= t(".ingredients_count") %></dt>
+          <dd class="font-medium text-primary"><%= entry.ingredients.size %></dd>
+        </div>
+      </dl>
+
+      <% if entry.tags.any? %>
+        <div>
+          <h3 class="mb-1.5 text-sm font-semibold text-primary"><%= t(".tags_heading") %></h3>
+          <div class="flex flex-wrap gap-1.5">
+            <% entry.tags.each do |tag| %>
+              <%= render(Ui::BadgeComponent.new(variant: :secondary)) { "##{t("recipe_catalog.tags.#{tag}", default: tag.humanize)}" } %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="space-y-2">
+        <%# The dialog's own copy of the card's action, so a preview can be acted
+            on without closing it first. %>
+        <% if already_added %>
+          <p class="text-sm text-subdued"><%= t("recipe_catalog.entry.already_added") %></p>
+        <% else %>
+          <%= form_with url: add_to_household_recipe_catalog_path(entry), method: :post do %>
+            <%= render(Ui::ButtonComponent.new(type: "submit", size: :sm, icon: "plus",
+                  html_options: { class: "w-full justify-center" })) { t(".add") } %>
+          <% end %>
+        <% end %>
+        <% if entry.source_url.present? %>
+          <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: entry.source_url, icon: "external-link",
+                html_options: { target: "_blank", rel: "noopener", class: "w-full justify-center" })) { t(".source") } %>
+        <% end %>
+      </div>
+    </aside>
+  </div>
+<% end %>
