@@ -54,11 +54,20 @@ class ShoppingListItemsController < ApplicationController
 
   # Purchased item → stored in the fridge then removed from the list (Shopping → Fridge bridge).
   def move_to_fridge
+    name = @item.name
     Frigo::AddFromShoppingListItem.call(shopping_list_item: @item, expires_on: params[:expires_on].presence)
 
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(@item) }
-      format.html { redirect_to @shopping_list, notice: t(".notice") }
+      # The row simply vanishes otherwise, which is indistinguishable from
+      # having deleted it — say where it went.
+      format.turbo_stream do
+        flash.now[:notice] = t(".notice", name: name)
+        render turbo_stream: [
+          turbo_stream.remove(@item),
+          turbo_stream.append("flash_relay", partial: "shared/flash")
+        ]
+      end
+      format.html { redirect_to @shopping_list, notice: t(".notice", name: name) }
     end
   end
 

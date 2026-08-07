@@ -17,7 +17,12 @@
         <% end %>
       <% end %>
       <%= render "conversations/discuss_button", subject: @shopping_list %>
-      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: shopping_list_path(@shopping_list, format: :pdf),
+      <%# :secondary rather than :outline, with the glyph the rest of the app uses
+          for an export. Among a ghost button and a solid destructive one, a
+          transparent outline was the palest thing in the header and read as
+          disabled — the export works on any list, empty ones included. %>
+      <%= render(Ui::ButtonComponent.new(variant: :secondary, size: :sm, icon: "file-text",
+            href: shopping_list_path(@shopping_list, format: :pdf),
             html_options: { target: "_blank" })) { t(".export_pdf") } %>
       <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm"), confirm_label: t(".delete"),
             confirm_url: shopping_list_path(@shopping_list), confirm_method: :delete)) do |alert_dialog| %>

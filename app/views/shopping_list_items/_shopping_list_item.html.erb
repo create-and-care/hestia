@@ -42,8 +42,14 @@
         <% if shopping_list_item.checked %>
           <%= form_with url: move_to_fridge_shopping_list_item_path(shopping_list_item.shopping_list, shopping_list_item),
                 method: :post, class: "flex items-center gap-1" do %>
-            <input type="date" name="expires_on" value="<%= Date.current %>" title="<%= t(".expires_on_title") %>" aria-label="<%= t(".expires_on_title") %>"
-                   class="h-[var(--control-h-sm)] w-28 rounded border border-primary bg-container px-1 text-xs text-primary">
+            <%# A visible label, not just a tooltip: a bare date box next to a
+                fridge icon reads as "when did you buy it" at least as easily as
+                "when does it expire", and only one of those is right. %>
+            <label class="flex items-center gap-1 text-xs text-subdued">
+              <span><%= t(".expires_on_label") %></span>
+              <input type="date" name="expires_on" value="<%= Date.current %>" title="<%= t(".expires_on_title") %>" aria-label="<%= t(".expires_on_title") %>"
+                     class="h-[var(--control-h-sm)] w-28 rounded border border-primary bg-container px-1 text-xs text-primary">
+            </label>
             <button type="submit" class="shrink-0 cursor-pointer text-subdued hover:text-primary"
                     title="<%= t(".move_to_fridge_title") %>" aria-label="<%= t(".move_to_fridge_title") %>">
               <%= lucide_icon("refrigerator", css_class: "size-4") %>
