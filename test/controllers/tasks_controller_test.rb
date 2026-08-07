@@ -9,21 +9,80 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_path
   end
 
-  test "index shows the household's tasks in a kanban" do
+  test "index shows the household's tasks, grouped by due date by default" do
     get tasks_path
     assert_response :success
     assert_includes @response.body, "Faire la vaisselle"
     assert_not_includes @response.body, "Rapport" # beta's task
+    assert_select "[id^='tasks_agenda_']"
+    assert_select "#tasks_uncategorized", count: 0
+  end
+
+  test "the board is still available, and the chosen view is remembered" do
+    get tasks_path(view: "board")
+    assert_response :success
     assert_select "#tasks_uncategorized"
+
+    get tasks_path # no explicit view this time
+    assert_response :success
+    assert_select "#tasks_uncategorized"
+  end
+
+  test "an unknown view falls back to the agenda" do
+    get tasks_path(view: "gantt")
+    assert_response :success
+    assert_select "[id^='tasks_agenda_']"
+  end
+
+  test "the agenda buckets an overdue task apart from one due later" do
+    households(:alpha).tasks.create!(title: "En retard", due_on: 3.days.ago.to_date)
+    households(:alpha).tasks.create!(title: "Plus tard", due_on: 3.months.from_now.to_date)
+
+    get tasks_path(view: "agenda")
+
+    assert_response :success
+    assert_select "#tasks_agenda_overdue" do
+      assert_select "*", text: /En retard/
+    end
+    assert_select "#tasks_agenda_later"
+  end
+
+  test "a completed task drops to the done bucket whatever its due date" do
+    households(:alpha).tasks.create!(title: "Faite mais en retard", due_on: 3.days.ago.to_date, done: true)
+
+    get tasks_path(view: "agenda")
+
+    assert_response :success
+    assert_select "#tasks_agenda_done" do
+      assert_select "*", text: /Faite mais en retard/
+    end
   end
 
   test "task deletion uses the design-system alert dialog instead of a native confirm" do
     get tasks_path
     assert_response :success
     assert_select "dialog[role='alertdialog']"
-    # The category delete button still uses a native confirm (untouched by this change) —
-    # only the task-level one, keyed off its own confirmation text, must be gone.
     assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("tasks.task.delete_confirm"))}"/, @response.body)
+  end
+
+  test "category deletion uses the design-system alert dialog too" do
+    get tasks_path(view: "board")
+    assert_response :success
+    assert_select "dialog[role='alertdialog']", text: /#{Regexp.escape(I18n.t("tasks.index.delete_category_confirm"))}/
+    assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("tasks.index.delete_category_confirm"))}"/, @response.body)
+  end
+
+  # The chips duplicated every category the board already names, purely to hang
+  # a delete button off each one.
+  test "the category chip row is gone, leaving only the add form" do
+    get tasks_path(view: "board")
+    assert_response :success
+
+    assert_select "form[action=?]", task_categories_path
+    # Deleting a category is now reachable only from its column heading's alert
+    # dialog, not from a row of chips repeating every category name.
+    assert_select "form[action=?]", task_category_path(task_categories(:alpha_home)), count: 1
+    assert_select "dialog[role='alertdialog'] form[action=?]", task_category_path(task_categories(:alpha_home))
   end
 
   test "search filters the tasks" do
@@ -39,7 +98,7 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search hides categories that have no matching tasks" do
-    get tasks_path(q: "vaisselle")
+    get tasks_path(q: "vaisselle", view: "board")
     assert_response :success
     assert_select "#tasks_category_#{task_categories(:alpha_home).id}"
     assert_select "#tasks_uncategorized", count: 0

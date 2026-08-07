@@ -97,7 +97,8 @@ class ServiceProvidersControllerTest < ActionDispatch::IntegrationTest
     type = service_provider_types(:alpha_plumber)
     get service_providers_path
     assert_response :success
-    assert_select "dialog[role='alertdialog']", count: 1
+    # :not(#global_confirm_dialog) — the layout mounts one on every page.
+    assert_select "dialog[role='alertdialog']:not(#global_confirm_dialog)", count: 1
     assert_no_match(/data-turbo-confirm="#{Regexp.escape(I18n.t("service_providers.index.delete_type_confirm", name: type.name))}"/, @response.body)
   end
 

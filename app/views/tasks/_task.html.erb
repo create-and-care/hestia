@@ -34,6 +34,14 @@
         <% unless task.due_status == :none %>
           <%= render(Ui::BadgeComponent.new(variant: due_badge_variant(task.due_status))) { due_label(task.due_status) } %>
         <% end %>
+        <%# Only in the agenda, where the grouping is by due date — on the board
+            the column heading already says which category this is. %>
+        <% if local_assigns[:show_category] && task.task_category %>
+          <%= render(Ui::BadgeComponent.new(variant: :secondary)) { task.task_category.name } %>
+        <% end %>
+        <% if local_assigns[:show_category] && task.due_on %>
+          <span class="text-subdued"><%= l(task.due_on, format: :short) %></span>
+        <% end %>
       </div>
     </div>
 
