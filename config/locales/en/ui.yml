@@ -18,6 +18,8 @@ en:
     alert_dialog:
       confirm_label: Continue
       cancel_label: Cancel
+    confirm_dialog:
+      title: Confirm this action
     file_upload:
       choose: Choose a file
       remove_aria: Remove file
