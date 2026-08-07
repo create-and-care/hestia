@@ -1,5 +1,28 @@
 # design-sync notes — Hestia
 
+## 2026-08-07 re-sync — real logo mark caught (missed by a same-day sync)
+
+Same manual process as prior re-syncs: read `github.md` in the live project first — it recorded a
+sync from earlier the same day (2026-08-07T07:07Z) that confirmed 75/75 component parity and ported
+two upstream fixes (`.on-tone` rule, `Badge` `urgent` variant). All commits on `main` since then were
+non-design-system (dependency bumps, a flaky-test fix, `package-lock.json`/`yarn.lock` housekeeping,
+two analysis-doc commits) — confirmed via `git log --oneline --name-only`, none touch
+`app/components/ui/` or `application.tailwind.css`.
+
+One real miss survived that morning sync: `app/assets/images/logo.png` has been a real 75KB PNG
+(flat clay house + amber sun, 480×360) since commit `7b38a0c` (2026-08-05) — used live in
+`shared/_sidebar_brand.html.erb` and reused as `public/icon.png` (apple-touch-icon, PWA manifest).
+The live project's `readme.md` still called it "a 0-byte empty file". Caught by cross-checking the
+file's actual bytes/usage against the readme's specific claim, not by trusting the fresh sync note.
+
+Fixed: uploaded `assets/logo.png`; `readme.md`'s "Sources & caveats" section rewritten to describe
+the real mark (and to keep the still-true half — `public/icon.svg`, the `<link rel="icon">` target,
+remains a placeholder red circle, untouched); `thumbnail.html` now pairs the mark with the wordmark
+instead of type-only; `ui_kits/hestia-app/index.html` sidebar header swapped its placeholder Lucide
+`house` icon for the real logo image. Also fixed an unrelated bug found while touching that file: a
+stray duplicate `</Sidebar>` closing tag that would have broken the app-shell card's Babel parse.
+Full record in the project's own `github.md` ("2026-08-07 (2)").
+
 ## 2026-08-02 re-sync — component + illustration reconciliation
 
 Same manual process as 2026-08-01 (no local build exists for this project — `get_file` the
