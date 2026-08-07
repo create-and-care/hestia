@@ -15,8 +15,28 @@ module Ui
       @path_for = path_for
     end
 
+    # The counterpart of CONTAINER_CLASSES, for the rows that go *inside* it.
+    # It existed only as an unwritten rule, and views kept getting it wrong in
+    # the same direction: in list mode the container already draws the outline
+    # and the divide-y separators, so a row must contribute nothing but padding.
+    # Giving it a border and a radius of its own is what puts a rounded, boxed
+    # card on every row *inside* the box. In grid mode there is no container
+    # chrome at all, so there each row does have to be a card in its own right.
+    #
+    # Rows built on Ui::ItemComponent (pets, contacts, notes, documents…) are
+    # already correct without this — that component deliberately draws no
+    # border. This is for the views that lay out their own row markup.
+    ITEM_CLASSES = {
+      "list" => "px-4 py-3",
+      "grid" => "rounded-lg border border-primary bg-container p-4 shadow-xs"
+    }.freeze
+
     def self.container_classes(mode)
       CONTAINER_CLASSES.fetch(mode, CONTAINER_CLASSES["list"])
+    end
+
+    def self.item_classes(mode)
+      ITEM_CLASSES.fetch(mode, ITEM_CLASSES["list"])
     end
   end
 end

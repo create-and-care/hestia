@@ -1,4 +1,9 @@
-<%= tag.div id: dom_id(address), class: "flex flex-wrap items-center gap-3 rounded-lg border border-primary px-3 py-2" do %>
+<%# view_mode decides the row chrome: the list container already draws the
+    outline and separators, so only the grid variant is a card of its own.
+    Defaults to "list" so a stray `render @addresses` without the local still
+    renders the safe shape rather than a boxed row inside a box. %>
+<%= tag.div id: dom_id(address),
+      class: "flex flex-wrap items-center gap-3 #{Ui::ViewToggleComponent.item_classes(local_assigns.fetch(:view_mode, 'list'))}" do %>
   <% if address.photo.attached? %>
     <div class="size-12 shrink-0">
       <%= render(Ui::AspectRatioComponent.new) do %>

@@ -23,7 +23,7 @@
   <%= render "shared/flash" %>
 
   <div id="addresses" class="<%= Ui::ViewToggleComponent.container_classes(@view_mode) %>">
-    <%= render @addresses %>
+    <%= render partial: "address", collection: @addresses, locals: { view_mode: @view_mode } %>
   </div>
   <% if @addresses.empty? %>
     <div class="mt-4">

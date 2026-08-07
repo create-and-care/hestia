@@ -29,7 +29,10 @@
     <% if @events.any? %>
       <div id="waste_events" class="<%= Ui::ViewToggleComponent.container_classes(@events_view_mode) %>">
         <% @events.each do |date, events| %>
-          <%= render(Ui::CardComponent.new) do %>
+          <%# Not a CardComponent: in list mode this sits inside a container that
+              already draws the border and the separators, so a card here nested
+              a rounded box in every row. item_classes picks the right chrome. %>
+          <%= tag.div class: Ui::ViewToggleComponent.item_classes(@events_view_mode) do %>
             <p class="mb-1 text-xs font-medium text-secondary"><%= weekday_label(date.wday) %> <%= l(date, format: :numeric_short) %></p>
             <div class="flex flex-wrap gap-2">
               <% events.each do |event| %>
@@ -75,7 +78,7 @@
       <div id="waste_series" class="<%= Ui::ViewToggleComponent.container_classes(@series_view_mode) %>">
         <% @series.each do |series| %>
           <%= tag.div id: dom_id(series) do %>
-            <%= render(Ui::CardComponent.new) do %>
+            <%= tag.div class: Ui::ViewToggleComponent.item_classes(@series_view_mode) do %>
               <div class="flex flex-wrap items-center justify-between gap-2 text-sm">
                 <div>
                   <%= waste_type_icon(series.waste_type) %> <%= waste_type_label(series.waste_type) %> —

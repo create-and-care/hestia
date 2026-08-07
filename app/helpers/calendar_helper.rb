@@ -1,11 +1,17 @@
 module CalendarHelper
+  # A user-chosen hue, so the raw palette is right here — a --module-* token
+  # would tie the event to a household domain it has nothing to do with. What
+  # was missing is the dark half: a *-100 tint with *-800 text is a light chip,
+  # and with no dark: variant every event on a dark calendar rendered as a
+  # near-white block. Mirrors the pairs NotesHelper::CARD_CLASSES already uses
+  # for exactly the same "user picked a color" problem.
   COLOR_CLASSES = {
-    "blue" => "bg-blue-100 text-blue-800",
-    "green" => "bg-green-100 text-green-800",
-    "red" => "bg-red-100 text-red-800",
-    "purple" => "bg-purple-100 text-purple-800",
-    "orange" => "bg-orange-100 text-orange-800",
-    "gray" => "bg-gray-100 text-gray-800"
+    "blue" => "bg-blue-100 text-blue-800 dark:bg-blue-950/50 dark:text-blue-200",
+    "green" => "bg-green-100 text-green-800 dark:bg-green-950/50 dark:text-green-200",
+    "red" => "bg-red-100 text-red-800 dark:bg-red-950/50 dark:text-red-200",
+    "purple" => "bg-purple-100 text-purple-800 dark:bg-purple-950/50 dark:text-purple-200",
+    "orange" => "bg-orange-100 text-orange-800 dark:bg-orange-950/50 dark:text-orange-200",
+    "gray" => "bg-gray-100 text-gray-800 dark:bg-gray-800/60 dark:text-gray-200"
   }.freeze
 
   def event_color_class(color) = COLOR_CLASSES.fetch(color, COLOR_CLASSES.fetch("blue"))
