@@ -9,6 +9,10 @@ fr:
       family: "Famille"
       social: "Social"
     footer:
+      account: "Mon compte"
+      menu: "Ouvrir le menu du compte"
+      notifications: "Notifications"
+      design_system: "Design system"
       roadmap: "Roadmap"
       settings: "Paramètres du foyer"
       sign_out: "Se déconnecter"

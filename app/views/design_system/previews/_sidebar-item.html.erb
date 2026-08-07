@@ -32,6 +32,24 @@
   </div>
 
   <div>
+    <p class="mb-2 text-xs font-medium text-subdued">Variants — une par niveau de hiérarchie, sur bg-container comme dans les cartes de la sidebar</p>
+    <div class="flex w-64 flex-col gap-1 rounded-lg border border-primary bg-container p-2">
+      <div>
+        <%= render Ui::SidebarItemComponent.new(icon: "layout-dashboard", label: "Accueil", href: "#") %>
+        <p class="px-3 text-xs text-secondary">:default — médaillon, 44px</p>
+      </div>
+      <div>
+        <%= render Ui::SidebarItemComponent.new(variant: :plain, icon: "settings", label: "Paramètres du foyer", href: "#") %>
+        <p class="px-3 text-xs text-secondary">:plain — glyphe nu, 40px</p>
+      </div>
+      <div class="ml-4 border-l border-primary pl-2">
+        <%= render Ui::SidebarItemComponent.new(variant: :sub, label: "Courses", href: "#") %>
+        <p class="px-3 text-xs text-secondary">:sub — sans icône, 36px (enfant de groupe)</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
     <p class="mb-2 text-xs font-medium text-subdued">Repliée — rail de 64px : hauteur 44px conservée, médaillon centré</p>
     <div class="w-16 rounded-lg border border-primary bg-surface p-2">
       <%= render Ui::SidebarItemComponent.new(icon: "layout-dashboard", label: "Accueil", href: "#", collapsed: true) %>

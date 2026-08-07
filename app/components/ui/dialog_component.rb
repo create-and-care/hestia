@@ -13,6 +13,24 @@ module Ui
       bottom: "mt-auto mb-0 w-full rounded-t-lg max-h-[80vh]"
     }.freeze
 
+    # The content wrapper's height rule follows the placement. A side sheet's
+    # <dialog> is already h-full, so capping its content at 80vh left the panel
+    # taller than anything inside it — invisible while the drawer's content was
+    # the same white as the dialog, obvious the moment it paints its own
+    # background (the mobile nav drawer). Everything else is anchored to one
+    # edge and grows from its content, so there the cap is what does the work.
+    CONTENT_CLASSES = {
+      center: "max-h-[80vh]", high: "max-h-[80vh]", bottom: "max-h-[80vh]",
+      right: "h-full min-h-0", left: "h-full min-h-0"
+    }.freeze
+
+    # ...and the slot wrapper inside it has to pass that height on. It is a plain
+    # block by default, which stops a percentage height on the caller's own root
+    # from resolving — the caller ends up sized to its content with bare dialog
+    # below it. flex-1 only ever claims *leftover* space, so on the placements
+    # whose column is content-sized there is none to claim and nothing changes.
+    BODY_CLASSES = { right: "flex-1 min-h-0", left: "flex-1 min-h-0" }.freeze
+
     # Mirrors shadcn: dialog/alert-dialog zoom, sheet/drawer slide from their side.
     ANIMATION_CLASSES = {
       center: "data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95",

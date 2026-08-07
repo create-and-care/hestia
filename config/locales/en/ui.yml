@@ -27,3 +27,5 @@ en:
       late_evening: Good evening
     celebration_moment:
       dismiss_aria: Dismiss
+    sidebar:
+      toggle_aria: Toggle sidebar

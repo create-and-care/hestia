@@ -3,11 +3,14 @@
     "data-turbo-preload": ((@preload && @href && !@active) ? "" : nil),
     title: @label,
     class: cn(
-      "flex h-11 items-center gap-3 rounded-md px-3 text-sm transition-colors",
+      # no-underline: the row already signals hover with a background, and the
+      # global `a:hover { text-decoration: underline }` from @layer base would
+      # otherwise underline every label in the sidebar.
+      "flex items-center gap-3 rounded-md px-3 text-sm no-underline transition-colors hover:no-underline", VARIANTS.fetch(@variant),
       "group-data-[collapsed=true]:justify-center", @collapsed && "justify-center",
       @active ? "bg-item-active" : (@href ? "hover:bg-surface-hover cursor-pointer" : nil)
     )) do %>
-  <%= render Ui::ModuleMedallionComponent.new(mod: @mod, icon: @icon, size: :sm) %>
+  <%= leading %>
   <span class="<%= cn(
     "min-w-0 flex-1 truncate text-primary", @active ? "font-semibold" : "font-medium",
     "group-data-[collapsed=true]:hidden", @collapsed && "hidden"

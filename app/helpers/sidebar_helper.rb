@@ -37,6 +37,28 @@ module SidebarHelper
     ] }
   ].freeze
 
+  # The sidebar's three stacked cards (nav, secondary menu, user) share one
+  # chrome recipe, defined here rather than copied into each partial.
+  #
+  # `on-tone` is not decorative: a card paints its own background, and without
+  # it every nested <a> falls back to the global link color from @layer base —
+  # see the .on-tone rule at the bottom of application.tailwind.css.
+  #
+  # The collapsed overrides strip the chrome entirely in the 64px rail, so the
+  # rail reads as a plain column of icons instead of three boxes squeezed to
+  # 40px of usable width.
+  # Chrome only — no layout. Each card declares its own flex direction, because
+  # two direction utilities of equal specificity on one element race in the
+  # compiled stylesheet and whichever Tailwind emits last silently wins (the
+  # same trap documented in sidebar_controller.js for the panel widths).
+  SIDEBAR_CARD_CLASS = "on-tone rounded-xl border border-primary bg-container p-1.5 shadow-xs " \
+    "group-data-[collapsed=true]:border-transparent group-data-[collapsed=true]:bg-transparent " \
+    "group-data-[collapsed=true]:p-0 group-data-[collapsed=true]:shadow-none"
+
+  def sidebar_card_class(*extra)
+    [ SIDEBAR_CARD_CLASS, *extra ].compact_blank.join(" ")
+  end
+
   # Resolves the SIDEBAR_GROUPS route lambdas and translations lazily, so this
   # helper stays a plain data source (module labels reuse dashboard.show.nav.*
   # so there is a single source of truth for each module's display name).

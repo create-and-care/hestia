@@ -4,6 +4,7 @@
     nav markup itself exists exactly once; only the wrapper differs. %>
 <%= render(Ui::SidebarComponent.new(class_name: "sticky top-0 h-screen shrink-0 max-md:hidden")) do |sidebar| %>
   <% sidebar.with_header { render "shared/sidebar_brand" } %>
+  <% sidebar.with_toolbar { render "shared/search_dialog" } %>
 
   <%= render "shared/sidebar_nav" %>
 
@@ -18,12 +19,18 @@
       <% end %>
     <% end %>
 
-    <div data-controller="sidebar" class="flex h-full flex-col gap-4 p-4">
+    <%# The drawer's own dialog is bg-container, so the cards would be white on
+        white — this wrapper restores the tinted ground they are drawn against.
+        -m-6 cancels the dialog's own p-6 gutter and the height adds it back, so
+        the ground reaches all four edges instead of floating as an inset panel;
+        p-3 then matches the desktop aside's padding. %>
+    <div data-controller="sidebar" class="-m-6 flex h-[calc(100%+3rem)] flex-col gap-3 bg-surface p-3">
       <%= render "shared/sidebar_brand" %>
-      <nav class="flex-1 min-h-0 flex flex-col gap-1 overflow-y-auto">
-        <%= render "shared/sidebar_nav", frame_id: "global_search_results_mobile", keyboard_shortcut: false, preload: false %>
+      <%= render "shared/search_dialog", frame_id: "global_search_results_mobile", keyboard_shortcut: false %>
+      <nav class="flex-1 min-h-0 overflow-y-auto">
+        <%= render "shared/sidebar_nav", preload: false %>
       </nav>
-      <%= render "shared/sidebar_user_card" %>
+      <div class="shrink-0"><%= render "shared/sidebar_user_card" %></div>
     </div>
   <% end %>
 

@@ -43,7 +43,10 @@ export default class extends Controller {
     const isOpen = !panel.hidden
 
     panel.hidden = isOpen
-    chevron?.classList.toggle("rotate-180", !isOpen)
+    // The chevron points right when closed and down when open, so the rotation
+    // is a quarter turn — not the half turn a chevron-down glyph would need.
+    chevron?.classList.toggle("rotate-90", !isOpen)
+    event.currentTarget.classList.toggle("bg-item-active", !isOpen)
     event.currentTarget.setAttribute("aria-expanded", String(!isOpen))
   }
 }

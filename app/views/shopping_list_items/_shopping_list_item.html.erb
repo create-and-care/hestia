@@ -1,5 +1,8 @@
+<%# No border or radius of its own: the row is one cell of the bordered list in
+    shopping_lists#show, which draws the outline once and separates rows with
+    divide-y. Rounding it here put a corner radius on every row *inside* the box. %>
 <%= tag.div id: dom_id(shopping_list_item), data: { sortable_id: shopping_list_item.id },
-      class: "rounded-lg border border-primary #{'opacity-50' if shopping_list_item.checked}" do %>
+      class: shopping_list_item.checked ? "opacity-50" : nil do %>
   <%= render(Ui::ItemComponent.new) do |item| %>
     <% item.with_leading do %>
       <div class="flex items-center gap-2">

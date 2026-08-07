@@ -16,7 +16,7 @@
       <svg class="size-4" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     <% end %>
 
-    <div class="flex flex-col gap-4 p-6 max-h-[80vh] overflow-auto">
+    <div class="<%= cn("flex flex-col gap-4 overflow-auto p-6", CONTENT_CLASSES.fetch(@position)) %>">
       <% if title? || description? %>
         <div class="pr-8">
           <% if title? %><h2 class="text-base font-semibold text-primary"><%= title %></h2><% end %>
@@ -24,7 +24,7 @@
         </div>
       <% end %>
 
-      <div class="text-sm text-primary"><%= content %></div>
+      <div class="<%= cn("text-sm text-primary", BODY_CLASSES[@position]) %>"><%= content %></div>
 
       <% if footer? %>
         <div class="flex items-center justify-end gap-2"><%= footer %></div>

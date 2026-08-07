@@ -8,16 +8,22 @@
 %>
 <%= render(Ui::DialogComponent.new(full_width_trigger: true, position: :high)) do |dialog| %>
   <% dialog.with_trigger do %>
-    <%= render Ui::ButtonComponent.new(variant: :outline, html_options: { class: "w-full justify-start gap-2 text-secondary", data: (keyboard_shortcut ? { action: "keydown@window->dialog#open" } : {}) }) do %>
+    <%# Dressed as a text field (container fill, softer radius) but still a
+        button opening the ⌘K palette — the real input lives in the dialog. %>
+    <%= render Ui::ButtonComponent.new(variant: :outline, html_options: { class: "w-full justify-start gap-2 rounded-lg bg-container font-normal text-secondary", data: (keyboard_shortcut ? { action: "keydown@window->dialog#open" } : {}) }) do %>
       <%= lucide_icon("search", css_class: "size-4 shrink-0") %>
       <span class="flex-1 truncate text-left"><%= t("search.button_label") %></span>
       <% if keyboard_shortcut %><kbd class="hidden shrink-0 rounded border border-primary px-1.5 py-0.5 text-xs text-subdued sm:inline">⌘K</kbd><% end %>
     <% end %>
   <% end %>
 
-  <div data-controller="search-palette" class="-mx-6 -mb-6 pr-8">
+  <%# The right gutter belongs to the input row alone, which is the only thing
+      the dialog's absolutely-positioned ✕ sits on top of. On the wrapper it
+      also shortened every result row, so the list stopped well before the
+      dialog's right edge while the header ran the full width. %>
+  <div data-controller="search-palette" class="-mx-6 -mb-6">
     <%= form_with url: search_path, method: :get, data: { turbo_frame: frame_id, action: "input->search-palette#submit keydown->search-palette#onKeydown" } do %>
-      <div class="[&_input]:focus-visible:ring-0">
+      <div class="pr-12 [&_input]:focus-visible:ring-0">
         <%= render Ui::InputComponent.new(type: "search", name: "q", placeholder: t("search.placeholder"),
               html_options: { autocomplete: "off", autofocus: true, data: { search_palette_target: "input" },
                               role: "combobox", "aria-expanded": "true", "aria-controls": frame_id, "aria-activedescendant": "",

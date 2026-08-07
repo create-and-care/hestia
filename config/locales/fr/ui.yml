@@ -27,3 +27,5 @@ fr:
       late_evening: Bonne soirée
     celebration_moment:
       dismiss_aria: Fermer
+    sidebar:
+      toggle_aria: Replier ou déplier la navigation

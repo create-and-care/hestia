@@ -182,14 +182,19 @@ module DesignSystemRegistry
     Entry.new(slug: "pagination", name: "Pagination", category: CATEGORIES[2], component_class: Ui::PaginationComponent,
       description: "Navigation entre pages d'une liste découpée en lots."),
     Entry.new(slug: "sidebar", name: "Sidebar", category: CATEGORIES[2], component_class: Ui::SidebarComponent,
-      description: "Colonne de navigation repliable, sert de base à la nav de ce site de doc."),
+      description: "Colonne de navigation repliable, sert de base à la nav de ce site de doc.",
+      usage: "Quatre zones : header (logotype + bouton de repli), toolbar, content, footer. Seul content scrolle.\n" \
+        "toolbar: existe pour ce qui doit rester visible pendant que la nav défile — la recherche globale. Y mettre du contenu dans `content` le fait sortir de l'écran dès que deux groupes sont dépliés.\n" \
+        "Le composant ne dessine aucune carte : les fonds blancs de la sidebar de l'app viennent de SidebarHelper#sidebar_card_class, appliqué par les partials appelants."),
     Entry.new(slug: "item", name: "Item", category: CATEGORIES[2], component_class: Ui::ItemComponent,
       description: "Ligne générique leading/title/description/trailing — sert de brique aux listes (contacts, menus, sidebar)."),
     Entry.new(slug: "sidebar-item", name: "Sidebar Item", category: CATEGORIES[2], component_class: Ui::SidebarItemComponent,
-      description: "Ligne de navigation de la sidebar : médaillon + libellé + accent de module optionnel, gère elle-même son repli en rail 64px.",
+      description: "Ligne de navigation de la sidebar : trois variants selon la profondeur, accent de module optionnel, gère elle-même son repli en rail 64px.",
       usage: "Réservé aux lignes de navigation (sidebar, rail repliable) ; pour toute liste non-navigationnelle (contacts, résultats de recherche, réglages), Item reste le bon composant — c'est la raison d'être de la séparation entre les deux.\n" \
-        "Le repli visible (icône seule, rail à 64px) est piloté en CSS depuis le conteneur parent via data-collapsed et les utilitaires group-data-[collapsed=true]: — la prop collapsed: ne sert qu'au rendu statique isolé (ce catalogue, les tests), jamais au repli live réel.\n" \
-        "mod: absent ou inconnu bascule sur un médaillon neutre (bg-surface-inset), même forme — jamais une icône nue, pour ne pas casser la géométrie de la ligne.",
+        "variant: se choisit sur la profondeur, pas sur le goût. :default (médaillon, 44px) pour une destination de 1er niveau autonome et pour tout appel hors sidebar de l'app ; :plain (glyphe nu 16px, 40px) dans une carte où une colonne de pastilles teintées couvrirait les libellés ; :sub (aucune icône, 36px) pour les enfants d'un groupe repliable, où l'icône du groupe et le filet d'indentation portent déjà la hiérarchie.\n" \
+        "En :default, mod: absent ou inconnu bascule sur un médaillon neutre (bg-surface-inset), même forme — jamais une icône nue, pour ne pas casser la géométrie de la ligne. C'est justement ce que :plain assume, à une autre échelle.\n" \
+        ":sub n'a rien à afficher dans le rail de 64px : c'est au parent de masquer le panneau de groupe entier (group-data-[collapsed=true]:hidden), pas à la ligne de se débrouiller.\n" \
+        "Le repli visible (icône seule, rail à 64px) est piloté en CSS depuis le conteneur parent via data-collapsed et les utilitaires group-data-[collapsed=true]: — la prop collapsed: ne sert qu'au rendu statique isolé (ce catalogue, les tests), jamais au repli live réel.",
       related: %w[item module-medallion sidebar]),
     Entry.new(slug: "carousel", name: "Carousel", category: CATEGORIES[2], component_class: Ui::CarouselComponent,
       description: "Défilement horizontal d'un jeu de diapositives."),

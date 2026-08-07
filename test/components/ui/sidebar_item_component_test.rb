@@ -52,4 +52,35 @@ class Ui::SidebarItemComponentTest < ViewComponent::TestCase
 
     assert_selector "div:not(.hidden)", text: "2"
   end
+
+  test "the plain variant swaps the medallion for a bare glyph" do
+    render_inline(Ui::SidebarItemComponent.new(variant: :plain, icon: "settings", label: "Réglages", href: "/settings"))
+
+    assert_selector "a[href='/settings'] svg"
+    refute_selector "span.bg-surface-inset"
+    assert_selector "span", text: "Réglages"
+  end
+
+  test "the sub variant renders no glyph at all" do
+    render_inline(Ui::SidebarItemComponent.new(variant: :sub, label: "Courses", href: "/shopping_lists"))
+
+    refute_selector "svg"
+    refute_selector "span.bg-surface-inset"
+    assert_selector "a[href='/shopping_lists']", text: "Courses"
+  end
+
+  test "each variant sets its own row height" do
+    { default: "h-11", plain: "h-10", sub: "h-9" }.each do |variant, height|
+      render_inline(Ui::SidebarItemComponent.new(variant: variant, icon: "house", label: "Accueil", href: "/"))
+
+      assert_selector "a.#{height}", count: 1
+    end
+  end
+
+  test "the sub variant still carries the active state" do
+    render_inline(Ui::SidebarItemComponent.new(variant: :sub, label: "Courses", href: "/shopping_lists", active: true))
+
+    assert_selector "a[aria-current='page'].bg-item-active"
+    assert_selector "span.font-semibold", text: "Courses"
+  end
 end

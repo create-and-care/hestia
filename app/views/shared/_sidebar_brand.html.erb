@@ -1,6 +1,7 @@
+<%# Wordmark, not a label: uppercase + tight tracking at 24px is what makes the
+    header read as a logotype next to the mark. Stays on --font-sans (Geist) —
+    no display face is loaded for a single word. %>
 <div class="flex min-w-0 items-center gap-2 group-data-[collapsed=true]:hidden">
-  <%= image_tag "logo.png", alt: Hestia.to_s, class: "size-7 shrink-0 rounded-md object-cover" %>
-  <div class="min-w-0">
-    <p class="truncate text-sm font-semibold text-primary"><%= Hestia %></p>
-  </div>
+  <%= image_tag "logo.png", alt: Hestia.to_s, class: "size-9 shrink-0 rounded-lg object-cover" %>
+  <p class="min-w-0 truncate text-2xl font-semibold uppercase tracking-tight text-primary"><%= Hestia %></p>
 </div>

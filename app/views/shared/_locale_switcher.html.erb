@@ -1,4 +1,14 @@
-<div class="flex items-center rounded-full bg-white text-xs" aria-label="<%= t("common.language") %>">
+<%# Ui::SelectComponent already paints the whole control (bordered, bg-container,
+    w-56), so this wrapper must not paint anything. It used to carry
+    `flex items-center rounded-full bg-white`: block-level, it stretched to the
+    card's full width behind a w-56 select — hence the white pill trailing off
+    to the right — and `bg-white` is a raw color rather than a token, so it
+    stayed pure white in dark mode instead of following --container.
+
+    role="group" is what makes the aria-label count: on a bare <div> with no
+    role, assistive tech ignores it, so the control's only accessible name was
+    the current locale code ("FR"). %>
+<div role="group" aria-label="<%= t("common.language") %>">
   <%= form_with url: locale_path, method: :patch, data: { controller: "form", action: "select:select->form#submit" } do %>
     <%= render Ui::SelectComponent.new(
       name: "locale",

@@ -502,8 +502,18 @@
 @utility ring-focus { box-shadow: 0 0 0 2px var(--focus-ring); }
 
 /* divide-{color} has no semantic-token equivalent yet — most lists still use
-   divide-gray-100, which never adapts to dark mode (raw Tailwind gray). */
-@utility divide-primary { & > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-primary); } }
+   divide-gray-100, which never adapts to dark mode (raw Tailwind gray).
+
+   The selector MUST stay in step with whatever `divide-y` itself emits. These
+   were written against Tailwind v3's `:not([hidden]) ~ :not([hidden])`, which
+   skips the first child; v4 compiles `divide-y` to `> :not(:last-child)` with a
+   *bottom* border, which includes it. The two sets differ by exactly one
+   element, so the first row of every divided list in the app got the border
+   width with no border color — falling back to currentColor, i.e. an opaque
+   near-white rule in dark mode and a near-black one in light, sitting under
+   row 1 and looking for all the world like a stray header separator. */
+@utility divide-primary { & > :not(:last-child) { border-color: var(--border-primary); } }
+@utility divide-tertiary { & > :not(:last-child) { border-color: var(--tertiary); } }
 
 /* ── Stacking order ────────────────────────────────────────────────────────
    Tailwind v4 gives z-index no @theme namespace (unlike --color-*, --radius-*,
@@ -636,6 +646,14 @@ dialog[data-state="closed"]::backdrop { opacity: 0; }
   a { color: var(--link); text-decoration: none; }
   a:hover { color: var(--link-hover); text-decoration: underline; text-underline-offset: 3px; }
 
+  /* Chrome/Safari draw their own clear glyph inside input[type="search"], in a
+     UA blue that answers to none of the tokens above. In the ⌘K palette it
+     landed a second ✕ right beside the dialog's own close button — two
+     different dismiss affordances, one of them off-palette. Escape and the
+     dialog's ✕ already cover clearing, so the native one goes. */
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
+
   /* .greeting — reserved for GreetingHeader/CelebrationMoment titles. Never
      labels, body copy, or a data-view heading. */
   .greeting { font-family: var(--font-hand); font-weight: 600; font-size: 44px; line-height: 1.05; color: var(--text-primary); }
@@ -659,6 +677,17 @@ dialog[data-state="closed"]::backdrop { opacity: 0; }
    A color set directly on the <a> itself (e.g. a folder-color chip) is
    untouched — that's a class on the element, not this descendant rule. */
 @layer components {
-  .on-tone a { color: inherit; text-decoration: none; }
+  /* `a.on-tone` as well as `.on-tone a`: several components render their own
+     root as the anchor (Item and SidebarItem with an href — a whole clickable
+     row). There the marker element and the anchor are the same node, so a
+     descendant-only selector never matched it and the root fell through to
+     `a { color: var(--link) }` above. The row's own text survived because it
+     sets text-primary explicitly — but anything riding on currentColor did
+     not, which is why a linked list row drew its leading icon in link blue. */
+  .on-tone a, a.on-tone { color: inherit; text-decoration: none; }
   .on-tone a:hover { text-decoration: underline; }
+  /* A root that *is* the link is a surface, not an inline link in prose: it
+     already signals hover with its own background, so it must not underline
+     its entire contents on top of that. */
+  a.on-tone:hover { text-decoration: none; }
 }

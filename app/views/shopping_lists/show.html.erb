@@ -30,7 +30,13 @@
 
   <%= render "shopping_list_items/form", shopping_list: @shopping_list, item: @item %>
 
-  <div id="shopping_list_items" class="mt-6 space-y-2"
+  <%# One bordered container with hairline separators — the design system's list
+      recipe (same as shopping_lists#index and the household module toggles).
+      Rows must stay direct children: this element is both the sortable root
+      (sortable_controller reads this.element.children) and the target
+      ShoppingListItem's broadcasts_to appends new rows to, so grouping them
+      into per-rayon boxes would break drag-and-drop and real-time inserts. %>
+  <div id="shopping_list_items" class="mt-6 divide-y divide-primary overflow-hidden rounded-lg border border-primary"
        data-controller="sortable" data-sortable-url-value="<%= reorder_shopping_list_items_path(@shopping_list) %>">
     <%= render "shopping_list_items/list", shopping_list: @shopping_list %>
   </div>

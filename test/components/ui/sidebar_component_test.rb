@@ -51,6 +51,22 @@ class Ui::SidebarComponentTest < ViewComponent::TestCase
   test "exposes collapsed/expanded width classes for the stimulus controller" do
     render_inline(Ui::SidebarComponent.new) { "Nav content" }
 
-    assert_selector "div[data-controller='sidebar'][data-sidebar-collapsed-class='w-16'][data-sidebar-expanded-class='w-64']"
+    assert_selector "div[data-controller='sidebar'][data-sidebar-collapsed-class='w-16'][data-sidebar-expanded-class='w-72']"
+  end
+
+  test "renders the toolbar slot outside the scrollable nav so it stays put" do
+    render_inline(Ui::SidebarComponent.new) do |c|
+      c.with_toolbar { "Search" }
+      "Nav content"
+    end
+
+    assert_selector "aside[data-sidebar-target='panel']", text: "Search"
+    refute_selector "nav", text: "Search"
+  end
+
+  test "omits the toolbar block when no toolbar given" do
+    render_inline(Ui::SidebarComponent.new) { "Nav content" }
+
+    assert_selector "aside[data-sidebar-target='panel'] > *", count: 1
   end
 end

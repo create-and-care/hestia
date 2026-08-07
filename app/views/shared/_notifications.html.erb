@@ -12,7 +12,7 @@
   <div class="flex items-center justify-between border-primary pb-2">
     <h2 class="text-sm font-medium"><%= t(".title") %></h2>
     <%= button_to t(".mark_all_read"), mark_all_read_notifications_path, method: :patch,
-          class: "cursor-pointer text-xs text-secondary underline" %>
+          class: "cursor-pointer text-xs text-secondary transition-colors hover:text-primary" %>
   </div>
   <div id="notifications_list" class="max-h-80 divide-y divide-primary overflow-y-auto">
     <% notifications = recent_notifications(10) %>
@@ -25,6 +25,10 @@
       <%= render "notifications/notification", notification: notification %>
     <% end %>
   </div>
-  <%= link_to t(".see_all"), notifications_path, class: "mt-2 block text-center text-xs underline" %>
+  <%# Explicit color: the popover paints bg-container but carries no .on-tone, so
+      a bare <a> fell through to `--link` from @layer base — the one raw blue,
+      underlined link left in the app chrome. %>
+  <%= link_to t(".see_all"), notifications_path,
+        class: "mt-2 block text-center text-xs text-secondary no-underline transition-colors hover:text-primary hover:no-underline" %>
 <% end %>
   </div>

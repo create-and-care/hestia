@@ -21,8 +21,14 @@
           <% item.with_title { list.name } %>
           <% item.with_trailing do %>
             <%# Counted in Ruby over the preloaded items: `items.where(...).count`
-                ignores the preload and issues a query per list (PERF-06). %>
-            <span class="text-sm text-secondary"><%= t(".items_count", count: list.items.count { |item| !item.checked? }) %></span>
+                ignores the preload and issues a query per list (PERF-06).
+                `.to_a` first, deliberately: Bullet prepends CollectionProxy#count
+                with `def count(column_name = nil)` and flags "Need Counter Cache"
+                before it ever looks at the block, so the proxy form reported a
+                phantom N+1 on a call that runs entirely in memory. A counter
+                cache couldn't serve this line anyway — it counts *unchecked*
+                items, and a cached column counts all of them. %>
+            <span class="text-sm text-secondary"><%= t(".items_count", count: list.items.to_a.count { |item| !item.checked? }) %></span>
           <% end %>
         <% end %>
       <% end %>

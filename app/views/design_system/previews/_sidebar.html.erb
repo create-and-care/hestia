@@ -1,6 +1,36 @@
 <%= render(Ui::SidebarComponent.new) do |sidebar| %>
-  <% sidebar.with_header { tag.span("Hestia", class: "font-semibold text-primary") } %>
-  <%= render(Ui::ItemComponent.new(href: "#")) { |item| item.with_title { "Dashboard" } } %>
-  <%= render(Ui::ItemComponent.new(href: "#")) { |item| item.with_title { "Budgets" } } %>
-  <%= render(Ui::ItemComponent.new(href: "#")) { |item| item.with_title { "Settings" } } %>
+  <% sidebar.with_header { tag.span("Hestia", class: "text-2xl font-semibold uppercase tracking-tight text-primary") } %>
+  <% sidebar.with_toolbar do %>
+    <%= render(Ui::ButtonComponent.new(variant: :outline, icon: "search",
+          html_options: { class: "w-full justify-start gap-2 rounded-lg bg-container font-normal text-secondary" })) { "Rechercher…" } %>
+  <% end %>
+
+  <div class="<%= sidebar_card_class("flex flex-col gap-0.5") %>">
+    <%= render Ui::SidebarItemComponent.new(variant: :plain, icon: "layout-dashboard", label: "Accueil", href: "#") %>
+    <%= render Ui::SidebarItemComponent.new(variant: :plain, icon: "list-checks", label: "Quotidien", href: "#") %>
+    <%= render Ui::SidebarItemComponent.new(variant: :plain, icon: "house", label: "Maison", href: "#") %>
+  </div>
+
+  <% sidebar.with_footer do %>
+    <div class="<%= sidebar_card_class("flex flex-row items-center gap-2") %>">
+      <%= render Ui::AvatarComponent.new(alt: "Anthony Galiano", size: :sm) %>
+      <div class="min-w-0 flex-1">
+        <p class="truncate text-sm font-medium text-primary">Anthony Galiano</p>
+        <p class="truncate text-xs text-secondary">anthony@example.com</p>
+      </div>
+      <%= render(Ui::PopoverComponent.new(placement: "top-end", variant: :menu)) do |popover| %>
+        <% popover.with_trigger do %>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, html_options: { class: "px-2", aria: { label: "Ouvrir le menu du compte" } })) do %>
+            <%= lucide_icon("settings", css_class: "size-4 text-secondary") %>
+          <% end %>
+        <% end %>
+        <div class="flex flex-col gap-0.5">
+          <%= render Ui::SidebarItemComponent.new(variant: :plain, icon: "user", label: "Mon compte", href: "#") %>
+          <%= render Ui::SidebarItemComponent.new(variant: :plain, icon: "settings", label: "Paramètres du foyer", href: "#") %>
+          <div class="my-1 border-t border-primary"></div>
+          <%= render Ui::SidebarItemComponent.new(variant: :plain, icon: "log-out", label: "Se déconnecter", href: "#") %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>

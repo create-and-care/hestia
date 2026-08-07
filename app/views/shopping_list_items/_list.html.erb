@@ -1,6 +1,9 @@
 <% if shopping_list.items.any? %>
   <% shopping_list.items_by_rayon.each do |rayon, items| %>
-    <h3 class="pt-2 text-xs font-semibold uppercase tracking-wide text-subdued"><%= rayon_label(rayon) %></h3>
+    <%# A band inside the list rather than a heading floating above it, now that
+        the rows share one bordered container. sortable_controller skips it: it
+        maps children to data-sortable-id and filters the blanks. %>
+    <h3 class="bg-surface-inset px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-subdued"><%= rayon_label(rayon) %></h3>
     <%= render items %>
   <% end %>
 <% else %>

@@ -1,0 +1,27 @@
+<%# Contents of the popover behind the gear in shared/_sidebar_user_card — not a
+    standalone card. Three blocks split by a hairline: account, reference,
+    session. Sign out sits in its own block because a destructive action one
+    pixel from "Notifications" invites misclicks. %>
+<div class="on-tone flex flex-col gap-0.5">
+  <%= render(Ui::SidebarItemComponent.new(variant: :plain, icon: "user", label: t("sidebar.footer.account"), href: edit_account_path)) %>
+  <%= render(Ui::SidebarItemComponent.new(variant: :plain, icon: "settings", label: t("sidebar.footer.settings"), href: household_path(Current.household))) %>
+  <%= render(Ui::SidebarItemComponent.new(variant: :plain, icon: "bell", label: t("sidebar.footer.notifications"), href: notifications_path)) %>
+
+  <div class="my-1 border-t border-primary"></div>
+
+  <%# /roadmap is the project's canonical scope document (README says so, and
+      app/models/roadmap.rb calls itself "the single source of truth for
+      progress") but it was linked only from onboarding's footer and a settings
+      tab — so a signed-in user with a household could never reach it (PROD-04). %>
+  <%= render(Ui::SidebarItemComponent.new(variant: :plain, icon: "map", label: t("sidebar.footer.roadmap"), href: roadmap_path)) %>
+  <%= render(Ui::SidebarItemComponent.new(variant: :plain, icon: "book-open", label: t("sidebar.footer.design_system"), href: design_system_path)) %>
+
+  <div class="my-1 border-t border-primary"></div>
+
+  <%= render(Ui::ButtonToComponent.new(session_path, method: :delete, variant: :ghost, size: :sm,
+        html_options: { class: "h-10 w-full justify-start gap-3 rounded-md px-3 font-medium text-primary hover:bg-surface-hover",
+                        title: t("sidebar.footer.sign_out") })) do %>
+    <span class="shrink-0 text-secondary"><%= lucide_icon("log-out", css_class: "size-4") %></span>
+    <span class="min-w-0 flex-1 truncate text-left"><%= t("sidebar.footer.sign_out") %></span>
+  <% end %>
+</div>
