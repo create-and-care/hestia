@@ -4,14 +4,199 @@ All notable changes to Hestia are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 The project hasn't reached a stable v1.0.0 yet: the `1.0.0-betaN` versions
-correspond to the successive scaffolding milestones of the functional scope
-described in the [Specification](<Specification — Hestia.md>).
+correspond to the successive scaffolding milestones of the functional scope,
+now described by [`app/models/roadmap.rb`](app/models/roadmap.rb) and rendered
+at `/roadmap`. Entries below 2026-07-06 cite a Specification and an
+Implementation Plan: both were deleted once their content had been absorbed
+into the roadmap, and the links are left as they were written rather than
+rewritten after the fact.
 
-## [Unreleased] — 2026-07-05
+## [Unreleased] — 2026-08-07
 
-Nine cross-cutting efforts identified in the
-[Implementation Plan](<Implementation Plan — Hestia.md>) §6 as missing are
-shipped in this session:
+Execution of `TODO.md`, waves 0 to 4. The backlog was itself the product of
+checking two ~800-line audit documents line by line against the code: roughly
+60% of their factual claims described work already shipped, and `TODO.md` §2
+records the refuted ones so they are not re-implemented. What follows is what
+survived that check.
+
+### Security
+
+- **A Content-Security-Policy that is actually sent.** The initializer was
+  commented out in full, so the app shipped no CSP at all. Now enforcing in
+  every environment, with a per-request nonce on `script-src` — generated
+  with `SecureRandom` rather than Rails' suggested `session.id`, which emits
+  an empty nonce to a first-time visitor and would block the anti-FOUC script
+  on every cold visit. `style-src` keeps `unsafe-inline` and takes no nonce:
+  17 views set dynamic inline `style` attributes, which a nonce cannot cover,
+  and adding one makes browsers ignore `unsafe-inline` entirely.
+- **Module gating on the JSON API.** A household could switch Shopping off,
+  watch it disappear from the web UI, and still read and write every list
+  through an API token. Both surfaces now share one mapping (the `api/v1/`
+  prefix is stripped before lookup), and `ModuleGatingTest` walks the route
+  set so that a controller in neither the map nor the explicit exemption list
+  is a red build. That found five live holes on the web side too:
+  `recipe_catalog`, `plant_care_tasks`, `workout_templates`,
+  `workout_template_exercises` and `trips/meal_plan_entries`.
+- **Rate limiting on the public gift list**, browse and write separately,
+  with a 429 page in the site's own dress. It was the only unauthenticated
+  route with no limit.
+- **No more never-expiring API token**: three durations, 90 days by default.
+  Tokens created before this keep working.
+- `force_ssl` / `assume_ssl` restored behind `FORCE_SSL`, so a
+  reverse-proxied deployment can enable HSTS without breaking plain-HTTP
+  access on a home network.
+
+### Performance
+
+- **`Rails.cache` has call sites.** It had none in the whole app while
+  `solid_cache` sat configured and unused. Open Food Facts and Nominatim
+  lookups are cached, and the first one documents the conventions the rest
+  follow. Failures are never cached: "unknown product" and "the network was
+  down" both arrive as `nil`, and pinning the second for 30 days turns a blip
+  into a lasting wrong answer.
+- **The dashboard narrows in SQL.** Every widget keeps five rows and used to
+  get there by loading the whole relation and filtering in Ruby. The
+  predicates are date arithmetic, so no `includes` would have helped and
+  Bullet would never have seen it — the cost simply grew with the age of the
+  household. Each model now owns the scope stating its own threshold, sharing
+  constants with the status method beside it.
+- **Recurrence expansion is bounded by the window, not by the age of the
+  series.** The old expansion walked a recurring event from its first
+  occurrence and gave up at a 1,000-iteration guard: a weekly event more than
+  about 19 years old silently stopped appearing. Occurrences are also now
+  counted from the start rather than accumulated, so a monthly series
+  beginning on the 31st no longer collapses onto the 28th at the first
+  February and stays there.
+- **Eager loading where it was missing**, enumerated with `BULLET_RAISE=1`
+  rather than by reading eleven controllers. The widest fix: the notification
+  partial, rendered by the sidebar popover on *every* page, asked "does this
+  user belong to more than one household?" once per line.
+
+### Design system
+
+- `Ui::ItemComponent` put back on the 4px grid (it carried `py-2.5`, and 51
+  views render it) without moving every list in the app: a `min-h-11` floor
+  keeps the common row pixel-identical while the padding returns to the grid.
+- A **named z-index scale** — `z-sticky` / `z-floating` / `z-overlay` /
+  `z-toast` — replacing twelve hand-picked numbers, with a test that refuses
+  any raw one. Tailwind v4 gives z-index no `@theme` namespace, so it is
+  spelled as utilities.
+- **Loading skeletons** in the four lazy turbo-frames.
+  `Ui::SkeletonComponent` existed, was tested, and was used by nothing but
+  its own preview.
+- `icon:` / `icon_position:` on `Ui::ButtonComponent`, with the glyph sized
+  from the button rather than from the call site.
+- The design-system documentation is usable on mobile: it rendered its 256px
+  sidebar at every width, so at 390px the page was 470px wide and scrolled
+  sideways — on the pages that document the type scale, while using
+  `text-[10px]` instead of it.
+
+### Added — the app is installable
+
+- The PWA manifest and service worker had been on disk since the app was
+  generated, with their routes and the layout's `<link rel="manifest">`
+  commented out. Beyond uncommenting them: the manifest was still the
+  scaffold's, with `"theme_color": "red"` and a 480×360 file declared as
+  512×512; `public/icon.svg` was Rails' red circle, which is what the favicon
+  in every browser tab actually was. Square 192/512 and maskable icons are
+  generated from the logo, and the worker is served by the app's own
+  controller because `Rails::PwaController` cannot set
+  `Service-Worker-Allowed` — without which a worker at `/service-worker` may
+  control `/service-worker/*` and nothing else. It caches exactly one thing:
+  an offline page.
+
+### Internationalization
+
+- **51 display `strftime` calls migrated to `l()`.** They hard-coded
+  `"%d/%m/%Y"`, so an English-speaking user was shown `07/08/2026` for
+  7 August and read it as 8 July — a wrong date, not an untranslated one.
+  `date:` / `time:` `formats:` blocks now exist in both locales; there were
+  none, and the eleven existing `l()` calls were running on `rails-i18n`'s
+  defaults.
+- **Two guards**, because a migration without one comes undone one pull
+  request at a time: `bin/rails i18n:check` (also a CI job) fails on a
+  missing translation and on any key present in one locale but not the other,
+  and a test refuses any new display `strftime`.
+
+### Fixed
+
+- `TasksController#swap_with_sibling` selected siblings with no `ORDER BY`,
+  so move up/down swapped against Postgres heap order rather than the order
+  the column is displayed in — sometimes the wrong task, sometimes nothing.
+- `bin/rails visual:check` injected its measurement script with
+  `page.addScriptTag()`, which the new CSP correctly refused.
+
+### Documentation
+
+- `amelioration.md` and `design-system.md` deleted. They were harmful rather
+  than merely stale: their false claims named files and proposed diffs, which
+  is worse than no document at all. Their reusable product ideation was
+  harvested into `TODO.md` §8.3 and the roadmap first, each line re-checked
+  against the code.
+- Test infrastructure worth naming: rate limits were silently inert in the
+  test environment (the null cache store's `#increment` returns `nil`), so
+  the three pre-existing auth limits had never actually been exercised
+  either.
+
+## [1.0.0-beta37] — 2026-08-02
+
+The month this file went unwritten. Recorded here from the commit history
+rather than left as a gap, since the entry above it is what made the gap
+visible.
+
+### Added
+
+- **Design System v2, "Terre cuite"**: a full rebrand onto a clay/amber
+  palette, carried by semantic tokens (`--brand` / `--accent` through an
+  indirection) rather than by literal colours, and applied across all 75
+  `Ui::` components and every view. `/design-system` became navigable
+  component documentation with per-component previews, usage notes and
+  source.
+- **Global search**, a ⌘K command palette spanning every module, gating its
+  results per module rather than per request.
+- **Responsive sidebar**: collapsible to a rail on desktop, relocated into a
+  drawer below `md`, with `Ui::SidebarItemComponent` and one nav rendered
+  once for both mounts.
+- **Breadcrumbs** replacing the "back to dashboard" links across every module
+  view.
+- **`bin/rails visual:check`**: a headless pass (Puppeteer, in-process Puma)
+  over 273 routes × 2 themes × 2 viewports, measuring contrast, touch-target
+  size, font size, spacing scale and horizontal overflow. It is what waves 2
+  and 3 above were fixed against.
+- The **Lucide icon set** replacing emoji throughout, vendored and rendered
+  inline; `Ui::CopyButtonComponent`, `Ui::FileUploadComponent`, an
+  illustrations page.
+- **Recipe catalog and discovery** (95 hand-authored recipes), fridge-based
+  recipe suggestions, aisle guessing for shopping items, and a Menu that
+  flags a day missing a required meal.
+- **Plant care management** (Outdoor): `PlantCareTask` mirroring the Routine
+  shape, wired into the Calendar, the dashboard and notifications.
+- **Household settings as tabs**, with admin-only module toggles, and the
+  roadmap moved in as one of them.
+- **Reliability tooling**: SimpleCov, Bullet, Sentry, `mission_control-jobs`,
+  explicit time zones, real system tests, and 77 new test files.
+
+### Changed
+
+- **Internationalization of the project itself**: English as the default
+  locale with a per-user French preference, all 25 modules migrated, and
+  English documentation and code comments throughout. `rails-i18n` added for
+  translated ActiveRecord defaults.
+- `api/v1` extended from five modules to all 25.
+- External calendar sync went from scaffold to real Google/Microsoft OAuth
+  and CalDAV.
+
+### Fixed
+
+- An SSRF hole in the recipe URL import, alongside a batch of code-review
+  findings.
+- Assorted flaky system tests, a toast race on sign-in, and a `pg` segfault
+  on arm64-darwin caused by forking parallel test workers.
+
+## [1.0.0-beta36] — 2026-07-05
+
+Nine cross-cutting efforts identified in the Implementation Plan §6 as
+missing are shipped in this session:
 
 ### Added
 

@@ -29,10 +29,31 @@ backlog concurrent, il pourrira exactement comme les deux qu'il remplace.
 
 `TODO.md` est **la file court terme**, pas la timeline produit. Il doit être vidé dans
 `roadmap.rb` et **supprimé à la 1.0**. Aucun nouveau document d'analyse à la racine ne
-doit être créé : le dépôt porte déjà `README`, `CHANGELOG`, `CONTRIBUTING`,
-`CODE_OF_CONDUCT` — plus ces deux audits, dont le §10 organise la suppression.
+doit être créé : le dépôt porte déjà `README`, `CHANGELOG`, `CONTRIBUTING` et
+`CODE_OF_CONDUCT`. Les deux audits que ce fichier remplace ont été supprimés en
+`3ff2f8b` (DOC-03) et restent lisibles à `git show a9be35b:amelioration.md`.
 
 *Un backlog qui ne planifie pas sa propre mort devient ce qu'il remplaçait.*
+
+## État d'exécution — 2026-08-07
+
+**Vagues 0 à 4 exécutées et closes**, plus le §10 ; les cases correspondantes sont
+cochées et l'annexe B porte les chiffres avant/après. Ce qui reste ouvert est la
+**vague 5** (produit, y compris la récolte §8.3) et la **vague 6** (parqué) — c'est-à-
+dire précisément la partie que le §1 décrit comme de l'arbitrage plutôt que de la
+correction.
+
+La contrepartie honnête : deux vérifications de la Definition of Done ne sont pas
+tenues au sens littéral, et il vaut mieux le lire ici que le découvrir.
+
+1. `bin/rails test` compte **6 échecs**, tous dans `test/services/recipes/` et tous dus
+   au même point : `Recipes::PageFetcher` résout le nom d'hôte (`Resolv.getaddresses`)
+   *avant* d'ouvrir la connexion, et WebMock ne stube pas le DNS. Sans DNS, la garde
+   anti-SSRF refuse l'hôte et le service renvoie `nil`. Reproduits à l'identique sur
+   `main` : antérieurs à ce travail, et invisibles sur une machine qui résout.
+2. `bin/rails visual:check` passe de **3 724 à 3 212** violations. Aucune n'est une
+   régression — les items DS ne visaient qu'une part du total, et le reste est
+   inventorié au §6. Les deux routes de DS-07 sont, elles, à zéro.
 
 ---
 
@@ -487,6 +508,74 @@ l'infrastructure est là, il ne reste qu'à la brancher.
 - [ ] **PROD-13 — Tutoriel guidé au premier lancement** — la seule critique d'onboarding
   des audits qui tienne (le « 5+ étapes » est faux : il y en a 2). *Effort* : L
 
+## 8.3 Récolté des audits supprimés (DOC-02)
+
+Les deux documents supprimés en `3ff2f8b` contenaient, sous ~60 % d'affirmations
+techniques fausses, de l'**idéation produit** qui n'existait nulle part ailleurs dans le
+dépôt. Elle est consignée ici avant que l'historique git ne devienne le seul endroit où
+la chercher. Chaque ligne a été **revérifiée contre le code** : celles qui décrivaient
+du déjà-livré (dark mode, filtres de recettes, catalogue de fidélité) ne sont pas
+reprises, elles sont au §2.
+
+Ordonné par rapport valeur/effort tel qu'estimé ici, pas par l'ordre des audits.
+
+- [ ] **PROD-14 — Expiration et mot de passe sur les partages publics** — `GiftListShare`
+  ne porte qu'un `token` (`urlsafe_base64(16)`) : un lien partagé une fois vaut pour
+  toujours, et rien ne le révoque à part supprimer le partage. Deux colonnes
+  (`expires_at`, `password_digest`) et le contrôleur public sait déjà refuser.
+  *Effort* : M · *Note* : la seule suggestion **sécurité** des audits qui ne soit pas
+  déjà traitée par SEC-01…SEC-06.
+- [ ] **PROD-15 — Détection des doublons à l'ajout aux courses** — `Product.for_name`
+  déduplique déjà **au catalogue** (unicité insensible à la casse par foyer), mais rien
+  ne rapproche « Lait » d'une ligne « lait 1L » déjà cochée dans la liste ouverte.
+  *Effort* : M · *Note* : à faire **après** PROD-03 (`quantity`/`unit` sur `fridge_items`),
+  sans quoi la fusion n'a rien à additionner.
+- [ ] **PROD-16 — Suggestions depuis l'historique d'achat** — la donnée existe
+  (`shopping_list_items` conserve ses lignes cochées), rien ne la relit. Version honnête :
+  « vous rachetez ceci toutes les ~3 semaines, la dernière fois c'était il y a 24 jours »,
+  pas une recommandation opaque. *Effort* : M
+- [ ] **PROD-17 — Factures récurrentes dans Budget** — `BudgetEntry` n'a **aucune** notion
+  de récurrence ; un loyer se resaisit tous les mois. `Recurrence` et le mécanisme de
+  rappels (`Reminders::DeliverDue`) sont tous deux déjà en place. *Effort* : M ·
+  *Dépend de* : PERF-05 si l'on veut réutiliser la fenêtre bornée.
+- [ ] **PROD-18 — Profil allergènes par membre + filtrage des recettes** — `AllergenTest`
+  existe mais appartient à **Baby** (diversification alimentaire). Rien au niveau d'un
+  utilisateur adulte, donc rien à quoi confronter une recette. *Effort* : M
+- [ ] **PROD-19 — Calendrier scolaire français (zones A/B/C)** —
+  `HolidayReference` (service, pas modèle) couvre les jours fériés
+  France/Belgique/Suisse ; les vacances scolaires sont un autre jeu de données, et c'est
+  celui qui structure l'année d'un foyer avec enfants. *Effort* : M
+- [ ] **PROD-20 — Inventaire des biens** — pour l'assurance et la revente : photo, valeur,
+  date d'achat, garantie. Adjacent à Documents (pièces jointes) et Vehicles (le même
+  motif « un objet, ses papiers, ses échéances »), sans recouvrement. *Effort* : L
+- [ ] **PROD-21 — Suivi médical humain** — traitements, vaccins, cycles. Le motif est
+  intégralement écrit dans **Pets** (`PetVaccination`, `PetTreatment`, avec rappels de
+  rappel), et absent pour les humains ; Wellbeing ne couvre que poids et séances.
+  *Effort* : L · *Note* : donnée de santé — à ne pas commencer sans décider d'abord ce
+  qu'un export de foyer en fait.
+- [ ] **PROD-22 — Webhooks entrants/sortants** — l'API `api/v1` est en lecture/écriture
+  par jeton mais ne **notifie** rien : aucune automatisation externe (Zapier, IFTTT,
+  n8n, Home Assistant) ne peut réagir à un événement Hestia. *Effort* : L
+- [ ] **PROD-23 — Thèmes personnalisés** — les couleurs passent déjà toutes par des
+  variables CSS avec l'indirection `--brand`/`--accent`, donc la moitié du travail est
+  faite ; il manque la persistance par foyer et un sélecteur. *Effort* : M ·
+  *Note* : le contrôle de contraste (`test/lib/`, `visual:check`) devient alors une
+  contrainte **à l'exécution**, pas une vérification de build — c'est le vrai coût.
+
+### Écarté à la récolte, avec le motif
+
+| Suggestion | Motif |
+|---|---|
+| Synchronisation bancaire (Plaid / Nordigen) | Identifiants bancaires dans une app auto-hébergée par des non-spécialistes. Le rapport risque/valeur n'est pas défendable tant qu'il n'y a pas de modèle de menace écrit. |
+| Alexa / Google Assistant | Dépend de PROD-22 (webhooks) et d'un compte développeur chez chacun. À reconsidérer une fois l'API notifiante. |
+| Rappels géolocalisés | Exige une app mobile en arrière-plan ; `mobile/` se décrit lui-même comme un squelette jamais exécuté. |
+| Temps d'écran des enfants | Hors périmètre : c'est un contrôle d'appareil, pas une donnée de foyer. |
+| Suivi scolaire (notes, devoirs) | Module entier ; à rouvrir seulement si PROD-19 trouve son public. |
+| Statistiques d'usage | Un tableau de bord d'analytique dans une app **auto-hébergée mono-foyer** mesure une population de deux à cinq personnes. |
+| Espagnol / allemand / italien | La parité en/fr est désormais tenue par `bin/rails i18n:check` (I18N-02). Ajouter une locale est mécanique ; ce qui manque est un traducteur, pas du code. |
+| Dégradés, animations d'entrée, effets sonores | Cosmétique proposé sans mesure. `visual:check` mesure ; aucun de ces trois n'apparaît dans son rapport. |
+| Mode daltonien | La contrainte réelle — ne jamais coder une information par la seule couleur — est déjà tenue : badges et statuts portent tous un libellé, et `test/lib/color_contrast_test.rb` garde les paires. Un « mode » séparé ajouterait une surface sans ajouter d'information. |
+
 ---
 
 # 9. Vague 6 — Parqué
@@ -521,18 +610,52 @@ l'infrastructure est là, il ne reste qu'à la brancher.
 Le désaccord est consigné ici pour que la question ne soit pas rouverte sans élément
 nouveau. Un vrai signal serait de la donnée d'usage, pas une intuition de niche.
 
+## 9.2 Benchmark : la désactivation de modules ailleurs (récolté, DOC-02)
+
+Le seul passage des audits qui argumente une **question d'architecture** plutôt qu'une
+liste de souhaits. Repris ici parce que la question se reposera à chaque module ajouté.
+
+| App | Désactivable | Mécanisme | Coût au chargement |
+|---|---|---|---|
+| Trello | non | interface minimale par défaut | nul |
+| Notion, ClickUp | oui | masquage dans la navigation | faible — tout reste chargé |
+| Jira, Discourse, WordPress | oui | système de greffons installables | élevé, mais réellement à la demande |
+
+L'audit en tirait que Hestia est « entre les deux » et proposait de refondre les
+25 modules en gems Rails. **Cette conclusion ne suit pas de ses propres prémisses.**
+
+Le tableau oppose deux axes qu'il confond : *masquer* (une question d'interface) et
+*ne pas charger* (une question de démarrage). Hestia fait déjà mieux que la ligne
+« masquage » — `ModuleGating` **ferme les routes**, sur le web comme sur l'API depuis
+SEC-05/06, et `GlobalSearch` filtre par résultat. Ce qu'elle ne fait pas, c'est éviter
+de charger le code d'un module désactivé, et c'est là que l'argument s'effondre : dans
+un processus Rails à `eager_load`, ne pas charger `WineCellar` économise quelques
+milliers d'objets au démarrage, **une fois**, sur une instance mono-foyer. Le prix
+demandé — 25 gems, un graphe de dépendances, des migrations par module — se paie à
+chaque changement, pour toujours.
+
+Ce qui reste juste dans le passage, et qui est déjà consigné ailleurs :
+
+- désactiver un module laisse ses lignes en base, intactes et invisibles → **PROD-10** ;
+- rien n'explique à l'utilisateur ce qu'un module contient avant de l'activer → à
+  rapprocher de **PROD-13** (tutoriel guidé).
+
+*Déclencheur de réévaluation* : un temps de démarrage mesuré au-delà de ~5 s, ou un
+déploiement multi-foyers où le code inutilisé devient de la surface d'attaque plutôt que
+de la mémoire.
+
 ---
 
 # 10. Documentation & hygiène du dépôt
 
-- [ ] **DOC-02 — Récolter le contenu réutilisable des deux audits**
+- [x] **DOC-02 — Récolter le contenu réutilisable des deux audits**
   - *Pourquoi* : au-delà de leurs erreurs factuelles, les deux documents contiennent de
     l'idéation produit **absente du dépôt** : le benchmark concurrentiel (§ « Comment
     Font les Autres Apps ? ») et les suggestions par module. Extraire avant de supprimer.
   - *Cible* : vagues 5/6 de ce fichier + jalons `upcoming` de `roadmap.rb`
   - *Effort* : M · *Bloque* : DOC-03
 
-- [ ] **DOC-03 — Supprimer `amelioration.md` et `design-system.md`**
+- [x] **DOC-03 — Supprimer `amelioration.md` et `design-system.md`**
   - *Pourquoi* : ils sont **nuisibles, pas seulement périmés**. Leurs affirmations
     fausses ont l'apparence de l'actionnable — elles nomment des fichiers et proposent
     des diffs. C'est strictement pire que pas de document du tout.
@@ -547,7 +670,7 @@ nouveau. Un vrai signal serait de la donnée d'usage, pas une intuition de niche
   - *Vérif* : `git show a9be35b:amelioration.md` reste accessible — l'historique fait le
     travail d'archive.
 
-- [ ] **DOC-04 — Rafraîchir le CHANGELOG**
+- [x] **DOC-04 — Rafraîchir le CHANGELOG**
   - *Pourquoi* : dernière entrée au 2026-07-05, et il **référence encore
     `Specification — Hestia.md` et `Implementation Plan — Hestia.md`, deux fichiers qui
     n'existent plus**. C'est le coût exact de n'avoir pas terminé l'absorption la fois
@@ -588,7 +711,8 @@ ls test/components/ui/*_test.rb | wc -l        # → 75
 grep -rE "\b(text|bg|border)-(gray|slate|zinc|neutral|stone|red|blue|green|yellow|indigo|purple|pink)-[0-9]{2,3}" \
   app/views app/components | wc -l             # → 0
 
-# Parité des locales (1984 = 1984, zéro manquante dans les deux sens)
+# Parité des locales — le script ci-dessous est désormais `bin/rails i18n:check`,
+# qui échoue aussi bien sur une clé absente que sur une clé présente d'un seul côté.
 ruby -ryaml -e '
 def leaves(h, pre="")
   h.flat_map { |k,v| v.is_a?(Hash) ? leaves(v, "#{pre}#{k}.") : ["#{pre}#{k}"] }
@@ -596,14 +720,32 @@ end
 en = Dir["config/locales/en/*.yml"].flat_map { |f| leaves(YAML.unsafe_load_file(f)["en"] || {}) }
 fr = Dir["config/locales/fr/*.yml"].flat_map { |f| leaves(YAML.unsafe_load_file(f)["fr"] || {}) }
 puts "en=#{en.size} fr=#{fr.size} manquantes_fr=#{(en-fr).size} manquantes_en=#{(fr-en).size}"'
+```
 
-# Écarts réels
-grep -rn "Rails.cache" app/ lib/ | wc -l       # → 0   (PERF-02)
-grep -c "^[^#]" config/initializers/content_security_policy.rb  # → 0  (SEC-01)
-grep -rn "strftime" app/views | wc -l          # → 60  (I18N-03)
-grep -rn "turbo-preload" app/views | wc -l     # → 0   (PERF-01)
-grep -rln "SkeletonComponent" app/views | grep -v previews | wc -l  # → 0  (DS-05)
-grep -rhoE "\bz-(\[?[0-9]+\]?)" app/views app/components | sort | uniq -c  # (DS-06)
+## Écarts réels — avant / après les vagues 0 à 4
+
+Les chiffres de gauche sont ceux qui ont motivé chaque item ; ceux de droite sont
+l'état après exécution. Les commandes n'ont pas changé, c'est le but : elles restent
+rejouables, et une régression se voit au premier coup d'œil.
+
+```bash
+grep -rn "Rails.cache" app/ lib/ | wc -l                          # 0  → 4   (PERF-02/03 : 3 appels + 1 commentaire)
+grep -c "^[^#]" config/initializers/content_security_policy.rb    # 0  → 53  (SEC-01)
+grep -rn "strftime" app/views | wc -l                             # 60 → 9   (I18N-03 ; les 9 restants ne sont pas de l'affichage)
+grep -rln "SkeletonComponent" app/views | grep -v previews | wc -l # 0 → 1   (DS-05 : un partiel partagé par les 4 frames)
+grep -rhoE "\bz-(\[?[0-9]+\]?)" app/views app/components | wc -l  # 12 → 0   (DS-06)
+
+# PERF-01 : la commande d'origine cherchait dans app/views et y renverra
+# toujours 0 — l'attribut est posé par le composant, pas par une vue.
+grep -rn "turbo-preload" app/views app/components | wc -l         # 0  → 2
+```
+
+Et les trois vérifications qui n'existaient pas avant :
+
+```bash
+bin/rails i18n:check                    # parité en/fr dans les deux sens (I18N-02)
+BULLET_RAISE=1 bin/rails test           # énumère les N+1 au lieu de les chercher (PERF-06)
+bin/rails test test/lib/                # z-index bruts, strftime d'affichage, contraste, boutons-icônes
 ```
 
 # Annexe C — Propositions des audits non retenues

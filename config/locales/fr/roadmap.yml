@@ -199,11 +199,41 @@ fr:
           - "Étendre le catalogue de fiches Extérieur au-delà des 6 fiches de départ"
           - "Étendre le catalogue de fidélité au-delà de la dizaine de départ"
           - "Fusion intelligente des ingrédients (doublons, conversion d'unités) lors de l'ajout d'une recette aux courses"
-      pwa:
-        title: "Activer la PWA"
+      design_system_measured:
+        title: "Design system : les écarts mesurés"
         items:
-          - "Manifeste et service worker déjà présents sous app/views/pwa/, encore commentés dans les routes et le layout"
-          - "Permettrait d'installer l'application sur mobile/bureau en attendant la parité complète du client Flutter"
+          - "Rapport visual:check rejoué sur 273 routes × 2 thèmes × 2 largeurs, et corrigé d'après ses chiffres plutôt que d'après une impression"
+          - "Ui::ItemComponent remis sur la grille de 4 px sans déplacer les listes de l'application : un plancher de hauteur garde la ligne courante au pixel près"
+          - "Échelle de z-index nommée (sticky, floating, overlay, toast) : l'ordre d'empilement était douze nombres choisis à la main et écrit nulle part"
+          - "Squelettes de chargement dans les turbo-frames différés, avec un libellé pour lecteur d'écran — une forme grise ne dit rien"
+          - "Documentation du design system rendue utilisable sur mobile : elle débordait de 80 px à 390 px, sur les pages mêmes qui décrivent l'échelle typographique"
+          - "icon: et icon_position: sur Ui::ButtonComponent, la taille du glyphe découlant de celle du bouton"
+      i18n_guardrails:
+        title: "Internationalisation : des garde-fous plutôt que de la discipline"
+        items:
+          - "Blocs date/time formats dans les deux locales : il n'en existait aucun, les appels l() tenaient par les défauts de rails-i18n"
+          - "51 strftime d'affichage migrés vers l() — ils codaient « %d/%m/%Y » en dur, donc un lecteur anglophone voyait 07/08/2026 pour le 7 août et lisait 8 juillet"
+          - "bin/rails i18n:check (et son job CI) échoue sur une traduction manquante et sur toute clé présente dans une seule des deux locales"
+          - "Un test refuse tout nouveau strftime d'affichage et vérifie qu'une date numérique se lit bien différemment en anglais et en français"
+      pwa:
+        title: "Application installable (PWA)"
+        items:
+          - "Manifeste et service worker branchés : routes, lien dans le layout, et une couleur de thème et des icônes carrées qui remplacent les valeurs du gabarit Rails"
+          - "Icônes 192/512 et variante « maskable » générées depuis le logo, et une icône vectorielle à la place du cercle rouge qui servait de favicon"
+          - "Page hors-ligne servie par le service worker quand une navigation échoue — seule ressource mise en cache, servir un tableau de bord périmé serait pire que ne rien servir"
+          - "Installable sur mobile et bureau en attendant la parité complète du client Flutter"
+      shared_link_controls:
+        title: "Maîtrise des liens partagés"
+        items:
+          - "Expiration et mot de passe sur les partages publics de liste de cadeaux : un lien partagé une fois vaut aujourd'hui pour toujours"
+          - "Mode invité à durée limitée, pour laisser voir une liste de courses à quelqu'un sans compte Hestia"
+      household_logistics:
+        title: "Logistique du foyer"
+        items:
+          - "Factures récurrentes dans Budget : un loyer se resaisit chaque mois alors que le moteur de récurrence et les rappels existent tous les deux"
+          - "Inventaire des biens (photo, valeur, date d'achat, garantie), pour l'assurance et la revente"
+          - "Calendrier des vacances scolaires françaises (zones A/B/C) — les jours fériés sont couverts, pas ce qui structure l'année d'un foyer avec enfants"
+          - "Détection des doublons à l'ajout aux courses, et suggestions tirées de l'historique d'achat déjà en base"
       marketing_docs:
         title: "Site vitrine & documentation utilisateur"
         items:
