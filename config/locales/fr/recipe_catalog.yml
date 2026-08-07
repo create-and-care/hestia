@@ -2,7 +2,9 @@ fr:
   recipe_catalog:
     index:
       title: "Découvrir des recettes"
+      search_label: "Recherche"
       search_placeholder: "Rechercher…"
+      tag_label: "Catégorie"
       tag_blank: "Toutes les catégories"
       filter_submit: "Filtrer"
       mine_tab: "Mes recettes"
@@ -21,6 +23,21 @@ fr:
     entry:
       add_link: "Ajouter à mon livre"
       already_added: "Recette déjà ajoutée"
+      preview_link: "Voir la recette"
+      preview_loading: "Chargement de la recette…"
+    preview:
+      ingredients_heading: "Ingrédients"
+      steps_heading: "Préparation"
+      no_ingredients: "Aucun ingrédient renseigné."
+      no_steps: "Aucune étape renseignée."
+      tags_heading: "Catégories"
+      prep_time: "Préparation"
+      cook_time: "Cuisson"
+      total_time: "Temps total"
+      servings: "Portions"
+      ingredients_count: "Nombre d'ingrédients"
+      add: "Ajouter à mon livre"
+      source: "Voir la source"
     add_to_household:
       notice: "Recette ajoutée à ton livre."
       already_notice: "Cette recette est déjà dans ton livre."

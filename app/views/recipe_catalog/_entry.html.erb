@@ -11,6 +11,23 @@
   <% end %>
 <% end %>
 
+<%# Preview beside the add button: the catalog is 95 recipes you have not written,
+    so "what is actually in this one" has to be answerable without cloning it into
+    your book first. The body arrives through a lazy frame — a page of 24 entries
+    would otherwise ship 24 sets of ingredients and steps nobody has asked for. %>
+<% preview = capture do %>
+  <%= render(Ui::DialogComponent.new(size: :xl)) do |dialog| %>
+    <% dialog.with_trigger do %>
+      <%= render(Ui::ButtonComponent.new(variant: :outline, size: :icon, icon: "eye",
+            html_options: { class: "rounded-full", title: t(".preview_link"), aria: { label: t(".preview_link", title: entry.title) } })) %>
+    <% end %>
+    <% dialog.with_title { entry.title } %>
+    <%= turbo_frame_tag dom_id(entry, :preview), src: preview_recipe_catalog_path(entry), loading: :lazy do %>
+      <%= render "shared/frame_skeleton", label: t(".preview_loading"), rows: 6 %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <% action = capture do %>
   <% if @added_entry_ids&.include?(entry.id) %>
     <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-primary bg-surface text-subdued" title="<%= t(".already_added") %>">
@@ -32,7 +49,7 @@
       <% end %>
       <% item.with_title { entry.title } %>
       <% item.with_description { meta } %>
-      <% item.with_trailing { action } %>
+      <% item.with_trailing { tag.div(safe_join([ preview, action ]), class: "flex shrink-0 items-center gap-2") } %>
     <% end %>
   <% else %>
     <%= render(Ui::CardComponent.new) do %>
@@ -42,8 +59,8 @@
         <% end %>
       <% end %>
       <div class="<%= "mt-3" if entry.image_url.present? %> flex items-center justify-between gap-2">
-        <h2 class="font-medium text-primary"><%= entry.title %></h2>
-        <%= action %>
+        <h2 class="min-w-0 font-medium text-primary"><%= entry.title %></h2>
+        <div class="flex shrink-0 items-center gap-2"><%= preview %><%= action %></div>
       </div>
       <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-secondary"><%= meta %></div>
     <% end %>
