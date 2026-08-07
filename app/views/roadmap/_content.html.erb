@@ -1,25 +1,29 @@
-<%# Vertical timeline: past waves first (oldest to newest), an "Aujourd'hui"/"Today"
-    divider, then upcoming work in intent order (no committed date yet). Two independent
-    <ol>s (rather than one) so each gets its own connecting line — the divider sits
-    between them undisturbed instead of a single line running behind it. %>
+<%# Vertical timeline, read from what's next down to what shipped: upcoming work
+    first (in intent order, no committed date yet), an "Aujourd'hui"/"Today" divider,
+    then past deliveries newest-first. A roadmap is consulted for where the project
+    is going; the archive is the part you scroll to, not the part you scroll past.
+    Two independent <ol>s (rather than one) so each gets its own connecting line —
+    the divider sits between them undisturbed instead of a single line running
+    behind it. %>
 <% done_milestones, upcoming_milestones = milestones.partition { |milestone| milestone[:status] == :done } %>
+<% done_milestones = done_milestones.reverse %>
 
 <div class="space-y-8">
   <p class="text-sm text-secondary"><%= t("roadmap.show.description") %></p>
 
-  <% if done_milestones.any? %>
+  <% if upcoming_milestones.any? %>
     <div class="relative">
-      <div class="absolute left-5 top-5 bottom-5 w-px bg-border-primary" aria-hidden="true"></div>
+      <div class="absolute left-5 top-5 bottom-5 w-px border-l border-dashed border-primary" aria-hidden="true"></div>
 
       <ol class="relative space-y-10">
-        <% done_milestones.each do |milestone| %>
+        <% upcoming_milestones.each do |milestone| %>
           <li class="relative pl-14">
-            <span class="absolute left-0 top-0 flex size-10 items-center justify-center rounded-full border border-success/30 bg-surface-inset text-success">
+            <span class="absolute left-0 top-0 flex size-10 items-center justify-center rounded-full border border-primary bg-surface-inset text-subdued">
               <%= lucide_icon(milestone[:icon], css_class: "size-5") %>
             </span>
 
             <div class="flex flex-wrap items-center gap-x-3 gap-y-1 pt-2">
-              <%= render(Ui::BadgeComponent.new(variant: :success)) { t("roadmap.show.status.done") } %>
+              <%= render(Ui::BadgeComponent.new(variant: :secondary)) { t("roadmap.show.status.upcoming") } %>
             </div>
 
             <h3 class="mt-1 font-medium"><%= milestone[:title] %></h3>
@@ -46,19 +50,24 @@
     </div>
   <% end %>
 
-  <% if upcoming_milestones.any? %>
+  <% if done_milestones.any? %>
     <div class="relative">
-      <div class="absolute left-5 top-5 bottom-5 w-px border-l border-dashed border-primary" aria-hidden="true"></div>
+      <div class="absolute left-5 top-5 bottom-5 w-px bg-border-primary" aria-hidden="true"></div>
 
       <ol class="relative space-y-10">
-        <% upcoming_milestones.each do |milestone| %>
+        <% done_milestones.each do |milestone| %>
           <li class="relative pl-14">
-            <span class="absolute left-0 top-0 flex size-10 items-center justify-center rounded-full border border-primary bg-surface-inset text-subdued">
+            <span class="absolute left-0 top-0 flex size-10 items-center justify-center rounded-full border border-success/30 bg-surface-inset text-success">
               <%= lucide_icon(milestone[:icon], css_class: "size-5") %>
             </span>
 
             <div class="flex flex-wrap items-center gap-x-3 gap-y-1 pt-2">
-              <%= render(Ui::BadgeComponent.new(variant: :secondary)) { t("roadmap.show.status.upcoming") } %>
+              <%= render(Ui::BadgeComponent.new(variant: :success)) { t("roadmap.show.status.done") } %>
+              <%# The ship date, which the timeline never showed: without it a
+                  reverse-chronological archive gives no sense of pace. %>
+              <% if milestone[:date] %>
+                <span class="text-xs text-subdued"><%= l(milestone[:date], format: :long) %></span>
+              <% end %>
             </div>
 
             <h3 class="mt-1 font-medium"><%= milestone[:title] %></h3>

@@ -8,12 +8,20 @@
 #
 # Text lives in config/locales/{en,fr}/roadmap.yml, keyed by the slug
 # below; only structural data (date, icon, ordering) stays in Ruby. A
-# milestone with no date is upcoming work with no committed date yet —
-# it's ordered last, by intent rather than by day shipped. Within that
-# upcoming block the order is roughly cost-ascending: what only needs
-# wiring first, what needs a decision before a line of code is written
-# (health_records) or a measurement before it is worth writing at all
-# (scaling_thresholds) last.
+# milestone with no date is upcoming work with no committed date yet.
+# Within that upcoming block the order is roughly cost-ascending: what
+# only needs wiring first, what needs a decision before a line of code is
+# written (health_records) or a measurement before it is worth writing at
+# all (scaling_thresholds) last.
+#
+# This list stays in chronological order — oldest shipped work first. The
+# view is what reads it back to front (upcoming block first, then shipped
+# newest-first); keeping the data chronological is what lets the dates
+# below stay in an order a human can check.
+#
+# Shipped milestones are written as release notes: what a household can
+# now do, not how it was built. The implementation detail belongs in
+# CHANGELOG.md, which is versioned and already carries it.
 module Roadmap
   MILESTONE_SLUGS = %w[
     foundation design_system wave_2a wave_2b wave_2c wave_2d pdf_export_reordering

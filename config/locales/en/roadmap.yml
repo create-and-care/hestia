@@ -3,170 +3,166 @@ en:
     show:
       title: Roadmap
       description: >-
-        The project's timeline, from v0 to the latest shipped work — and what's next. This
-        page is now the single source of truth on Hestia's progress; it replaces the original
-        Specification and Implementation Plan documents, whose content has been fully folded in
-        here. Precise version history lives in CHANGELOG.md.
+        What's coming next, then everything already shipped, most recent first. This page is
+        the single source of truth on Hestia's progress; it replaces the original Specification
+        and Implementation Plan documents, whose content has been fully folded in here. The
+        technical detail of each release lives in CHANGELOG.md.
       status:
         done: Done
         upcoming: Upcoming
       today: Today
     milestones:
       foundation:
-        title: "Foundation"
+        title: "Foundations"
         items:
-          - "User, Session, Household, Membership (member/admin roles, unique invite code)"
-          - "Multi-household scoping (Current.household, the HouseholdScoped concern)"
-          - "Sign-up, onboarding (create or join a household via code), dashboard"
+          - "Accounts, households and invitations: each household is a closed space, joined by invite code"
+          - "Member and administrator roles"
+          - "Sign-up, guided onboarding and a home dashboard"
       design_system:
-        title: "Ui:: component library"
+        title: "Visual identity and interface library"
         items:
-          - "About fifty shadcn/ui-style ViewComponents (buttons, dialogs, calendar, charts, combobox...) exposed on /design-system"
-          - "Tailwind v4 foundation and design tokens (semantic colors, dark mode)"
+          - "A single consistent interface across the whole app, dark mode included"
+          - "A component library browsable from inside the app"
       wave_2a:
-        title: "Wave 2.a — Priority modules"
+        title: "The five everyday modules"
         items:
-          - "Shopping, Fridge, Recipes, Tasks, Calendar: model, controller, views, real-time"
-          - "Per-domain services (Courses::AddItem, Frigo::AddItem, Tasks::CreateTask, Calendar::CreateEvent...)"
+          - "Shopping, Fridge, Recipes, Tasks and Calendar"
+          - "Live updates between members of the same household"
       wave_2b:
-        title: "Wave 2.b — Satellite modules"
+        title: "Eleven supporting modules"
         items:
-          - "11 modules: Notes, Birthdays, Addresses, Service Providers, Loyalty, Pets, Vehicles, Wine Cellar, Waste, Baby, Messages"
+          - "Notes, Birthdays, Addresses, Service providers and Loyalty cards"
+          - "Pets, Vehicles, Wine cellar, Waste, Baby and Messages"
       wave_2c:
-        title: "Wave 2.c — Richer business logic"
+        title: "Household planning and tracking"
         items:
-          - "Menu (meal planning), Routines (recurrence engine shared with Calendar)"
-          - "Outdoor (garden and pools), Budget (automatic split calculation), Documents (storage via Active Storage)"
+          - "Weekly menu and recurring routines"
+          - "Outdoors (garden and pool), Budget with automatic splitting, and Documents"
       wave_2d:
-        title: "Wave 2.d — Architecture deviations"
+        title: "Sharing beyond the household"
         items:
-          - "Gifts: unauthenticated public sharing via token (g/:token)"
-          - "Circles: independent of the household, group users beyond it"
-          - "Trip: cross-cutting sub-context (trip_id) on Addresses, Notes, Tasks, Shopping"
-          - "Wellbeing: strict per-user scoping, never per household — not even an admin can access it"
+          - "Gift lists shareable by public link, with no account needed for the guest"
+          - "Circles: groups that reach beyond the household"
+          - "Trip: a cross-cutting context gathering a stay's addresses, notes, tasks and shopping"
+          - "Wellbeing: strictly private, visible only to the member it belongs to"
       pdf_export_reordering:
-        title: "PDF export & reordering"
+        title: "PDF export and reordering"
         items:
-          - "PDF export of the shopping list and the displayed calendar month (Prawn)"
-          - "Drag-and-drop reordering on shopping items, tasks, and loyalty cards"
+          - "PDF export of the shopping list and of the calendar month on screen"
+          - "Drag-and-drop reordering of shopping items, tasks and loyalty cards"
       reminders_notifications:
-        title: "Reminders & notifications"
+        title: "Reminders and notifications"
         items:
-          - "Notification, NotificationPreference, TaskReminder, EventReminder"
-          - "Solid Queue jobs: Reminders::DeliverDue (due dates) and Reminders::DailyDigest (daily recap, including today's birthdays)"
-          - "Unread-notifications badge and a per-user preferences page"
+          - "Due-date reminders on tasks and events"
+          - "A daily digest, including the day's birthdays"
+          - "A notification centre and per-member preferences"
       external_integrations_v1:
         title: "External integrations"
         items:
-          - "Open Food Facts for barcode scanning (Shopping, Fridge)"
-          - "Nominatim geocoding for address search"
-          - "France / Belgium / Switzerland public holidays on Calendar, country configurable per household"
+          - "Barcode scanning to fill the shopping list and the fridge"
+          - "Address search with autocompletion"
+          - "French, Belgian and Swiss public holidays on the calendar"
       reference_catalogs:
-        title: "Reference catalogs"
+        title: "Reference catalogues"
         items:
-          - "Loyalty brand catalog (about ten to start, Loyalty)"
-          - "Plant care-sheet catalog (6 sheets to start, Outdoor)"
+          - "A retailer catalogue for loyalty cards"
+          - "Ready-made care sheets for plants"
       api_and_mobile_skeleton:
-        title: "API api/v1 & mobile skeleton"
+        title: "API and first mobile app"
         items:
-          - "ApiToken, Api::V1::BaseController, REST endpoints for Shopping, Fridge, Recipes, Tasks, Calendar"
-          - "Flutter client skeleton: login screen, read-only Shopping"
-          - "External calendar sync: first scaffold (Google/Microsoft/CalDAV), the real flow not yet wired up"
+          - "An API opened by personal token across the five everyday modules"
+          - "First mobile app: sign-in and shopping list browsing"
       governance:
-        title: "Governance & documentation"
+        title: "Governance and documentation"
         items:
-          - "LICENSE (AGPLv3), README, CONTRIBUTING, CHANGELOG"
-          - "First version of the in-app Roadmap page"
+          - "AGPLv3 open-source licence, contribution guide and changelog"
+          - "Roadmap published inside the app"
       i18n:
-        title: "Full internationalization"
+        title: "Bilingual app"
         items:
-          - "English by default, per-user language preference (French available)"
-          - "All 25 modules migrated to I18n"
+          - "Hestia available in English and French"
+          - "Language chosen per member, independently of the household"
       reliability_quality:
-        title: "Reliability & quality"
+        title: "Reliability"
         items:
-          - "SimpleCov (test coverage), Bullet (N+1 query detection), Sentry (production error tracking)"
-          - "mission_control-jobs: Solid Queue admin UI at /jobs, closed by default"
-          - "Explicit per-household time zone for day-sensitive calculations (due dates, expiry, birthdays)"
-          - "Real Capybara system tests and 77 new test files closing the coverage gap"
+          - "Error tracking in production"
+          - "A time zone per household for due dates, expiry dates and birthdays"
+          - "Test coverage extended across the whole app"
       external_calendar_sync_real:
-        title: "Real external calendar sync"
+        title: "External calendar sync"
         items:
-          - "Full OAuth2 flow for Google and Microsoft, with automatic refresh of an expired token"
-          - "CalDAV (Apple, Nextcloud, Fastmail...) via a genuine REPORT calendar-query request"
-          - "Access tokens encrypted at rest (Active Record Encryption)"
+          - "Google and Microsoft calendars connected"
+          - "CalDAV support (Apple, Nextcloud, Fastmail)"
+          - "Calendar credentials encrypted at rest"
       api_v1_full:
-        title: "API api/v1 extended to all 25 modules"
+        title: "API extended to every module"
         items:
-          - "The 20 remaining modules exposed: Notes, Birthdays, Addresses, Service Providers, Loyalty, Pets, Vehicles, Wine Cellar, Waste, Baby, Messages, Menu, Routines, Outdoor, Budget, Documents, Gifts, Circles, Trip, Wellbeing"
-          - "Scoping honored for the special cases: Circles by membership (not household), Wellbeing by user, Messages by conversation participant"
+          - "All 25 modules reachable from the API"
+          - "Privacy preserved: Wellbeing stays private, Circles and Messages stay limited to their members"
       navigation_settings:
-        title: "Navigation & household settings"
+        title: "Navigation and household settings"
         items:
-          - "Collapsible sidebar, grouped by theme"
-          - "Household settings consolidated into tabs: general, members, notifications, API, sessions, modules, roadmap"
+          - "A collapsible sidebar, grouped by theme"
+          - "Household settings gathered into tabs"
       recipe_catalog:
-        title: "Recipe catalog & discovery"
+        title: "Recipe catalogue and discovery"
         items:
-          - "Shared recipe catalog ready to clone into your own book (up to 95 hand-authored recipes)"
-          - "Recipe suggestions based on the fridge's contents"
+          - "95 recipes ready to add to your book in one step"
+          - "Recipe suggestions based on what's in the fridge"
       visual_polish_icons:
-        title: "Cross-cutting visual polish"
+        title: "Visual consistency"
         items:
-          - "Replaced emoji icons with the Lucide icon library throughout the app"
-          - "Consistent breadcrumb and pagination on every module page"
+          - "A single icon set across the whole app"
+          - "Breadcrumbs and pagination on every module"
       ui_migration_a11y:
-        title: "Full Ui:: migration & accessibility"
+        title: "Unified interface and accessibility"
         items:
-          - "Every view in the app migrated to Ui:: components, with dedicated tests"
-          - "First accessibility fixes and a locale-switcher correction"
+          - "Every page moved onto the component library"
+          - "First round of accessibility fixes"
       global_search:
-        title: "⌘K global search"
+        title: "Global search"
         items:
-          - "⌘K command palette replacing the sidebar's nav filter"
-          - "Covers every module enabled for the household"
+          - "An instant keyboard search palette (⌘K)"
+          - "Covers every module the household has enabled"
       refinement_wave_day1:
-        title: "Refinement wave — day 1: Shopping, Calendar, Tasks, Gifts, Circles"
+        title: "Shopping, Calendar, Tasks, Gifts and Circles deepened"
         items:
-          - "Shopping: sorting by real aisle order, catalog management tools"
-          - "Calendar: Day/Week views, single-occurrence vs series editing, birthdays shown"
-          - "Tasks: delete confirmations, keyboard reordering, auto-sort"
-          - "Gifts: secured public reservation cancellation, list ownership and visibility"
-          - "Circles: photo posts, correctness bug fixes"
+          - "Shopping: aisle-order sorting and product catalogue management"
+          - "Calendar: Day and Week views, recurring-series handling, birthdays included"
+          - "Tasks: keyboard reordering and automatic sorting"
+          - "Gifts: control over list ownership and visibility"
+          - "Circles: posts with photos"
       refinement_wave_day2a:
-        title: "Refinement wave — day 2: Fridge, Recipes, Notes, Birthdays, Addresses, Service Providers"
+        title: "Fridge, Recipes, Notes, Birthdays, Addresses and Providers deepened"
         items:
-          - "Fridge: prepared-dish photos, location tabs, delete confirmations"
-          - "Recipes: real cook mode (keeps the screen awake), photos, category filtering"
-          - "Notes: filters, richer formatting, links"
-          - "Birthdays: calendar view, hardening, accessibility"
-          - "Addresses: photo, accessibility, interconnections with other modules"
-          - "Service Providers: customizable types, accessibility, import"
+          - "Fridge: photos of prepared dishes and storage by location"
+          - "Recipes: a cooking mode that keeps the screen awake, photos and category filters"
+          - "Notes: rich formatting, filters and links"
+          - "Birthdays: a calendar view"
+          - "Addresses and Providers: photos, custom types and import"
       refinement_wave_day2b:
-        title: "Refinement wave — day 2: Loyalty, Pets, Vehicles, Wine Cellar, Waste, Baby, Messages"
+        title: "Loyalty, Pets, Vehicles, Wine cellar, Waste, Baby and Messages deepened"
         items:
-          - "Loyalty: real detected barcodes/QR codes, full-screen kiosk mode at checkout"
-          - "Pets, Vehicles, Wine Cellar: editing, photo, real-time, an N+1 query fix"
-          - "Waste: editing, a Calendar link, visual badges"
-          - "Baby: a real feeding timer, editing, interconnections"
-          - "Messages: a real-time fix, privacy, interconnections"
+          - "Loyalty: barcodes and QR codes shown full-screen for the checkout"
+          - "Pets, Vehicles and Wine cellar: full editing and photos"
+          - "Waste: collections carried onto the calendar"
+          - "Baby: a feeding and bottle timer"
+          - "Messages: privacy and live updates"
       refinement_wave_day3a:
-        title: "Refinement wave — day 3: Menu, Routines, Outdoor, Budget, Documents, Trip, Wellbeing"
+        title: "Menu, Routines, Outdoors, Budget, Documents, Trip and Wellbeing deepened"
         items:
-          - "Menu: reordering, editing, direct export to Shopping"
-          - "Routines: completion history, accessibility, dark mode"
-          - "Outdoor: editing, history, accessibility, dark mode"
-          - "Budget: editing, a Trip link, accessibility, dark mode"
-          - "Documents: a built-in PDF viewer, sharing, interconnections"
-          - "Trip: à-la-carte tabs, per-stay Menu isolation, editing"
-          - "Wellbeing: a weight chart, editing, full history, accessibility"
+          - "Menu: reordering and direct export to the shopping list"
+          - "Routines: a history of completions"
+          - "Budget: tracking attached to trips"
+          - "Documents: a built-in PDF reader and sharing"
+          - "Trip: pick-your-own tabs and a menu scoped to the stay"
+          - "Wellbeing: a weight curve and full history"
       refinement_wave_day3b:
-        title: "Refinement wave — day 3: Foundation, Design system, Navigation"
+        title: "Household management, appearance and navigation"
         items:
-          - "Foundation: dashboard widgets, member/household management (leave, remove, promote, delete), revocable active sessions"
-          - "Foundation: hardening — an 8-character minimum password, configurable API token expiration"
-          - "Design system: dark-mode tokens applied app-wide, the last hardcoded strings translated"
-          - "Navigation: extended search coverage, notifications clickable to their source, the Roadmap page rebuilt as a timeline"
+          - "Member management: leave, remove, promote, and revoke an active session"
+          - "Dark mode applied across the whole app"
+          - "Notifications clickable straight through to their source"
       account_privacy:
         title: "User account & privacy"
         items:
@@ -179,21 +175,17 @@ en:
           - "A household activity feed (who did what, when)"
           - "Household data export in JSON/CSV"
       public_route_hardening:
-        title: "Public route hardening"
+        title: "Public link security"
         items:
-          - "Rate limiting on the public gift list (g/:token): separate browse and write limits, the latter on reservation, plus a 429 page in the site's own dress"
-          - "No more never-expiring API token: three durations to choose from, 90 days by default"
-          - "Automated accessibility auditing: bin/rails visual:check measures contrast, touch-target size and font size across 273 routes × 2 themes × 2 widths, and test/lib/ carries the contrast and accessibility tests"
+          - "Public gift lists protected against abuse"
+          - "API tokens with a limited lifetime, 90 days by default"
+          - "Automated accessibility checking across every page, in both themes"
       security_performance_hardening:
-        title: "Security & measured performance"
+        title: "Security and performance"
         items:
-          - "A Content-Security-Policy that is actually sent (it was commented out in full), with a per-request nonce on script-src"
-          - "force_ssl / assume_ssl switchable through FORCE_SSL, without breaking plain-HTTP access on a home network"
-          - "Disabled modules now closed on the JSON API too: one mapping shared by the web and the API, and a test that walks the routes so no controller stays unclassified"
-          - "Open Food Facts and Nominatim lookups cached — the first uses of Rails.cache, setting the key and TTL conventions"
-          - "Dashboard filtered in SQL: every widget asks the database for the five rows it shows instead of loading the whole relation"
-          - "Recurrence expansion bounded by the date window rather than by the age of the series"
-          - "Eager loading on the lists that lacked it, enumerated by making Bullet fail the test suite (BULLET_RAISE=1)"
+          - "A content security policy actually enforced, and HTTPS forceable without breaking local-network access"
+          - "Disabled modules closed on the API as well as on the web"
+          - "Dashboard, calendar and lists noticeably faster"
       reference_catalog_growth:
         title: "Grow the catalogs & the automation"
         items:
@@ -201,28 +193,22 @@ en:
           - "Expand the Loyalty brand catalog beyond the starter dozen"
           - "Smart ingredient merging (duplicates, unit conversion) when adding a recipe to shopping"
       design_system_measured:
-        title: "Design system: the measured gaps"
+        title: "Design system: the gaps closed"
         items:
-          - "The visual:check report re-run across 273 routes × 2 themes × 2 widths, and fixed from its numbers rather than from an impression"
-          - "Ui::ItemComponent put back on the 4px grid without moving every list in the app: a height floor keeps the common row pixel-identical"
-          - "A named z-index scale (sticky, floating, overlay, toast): the stacking order was twelve hand-picked numbers and written down nowhere"
-          - "Loading skeletons in the lazy turbo-frames, with a screen-reader label — a grey shape says nothing"
-          - "The design-system documentation made usable on mobile: it overflowed by 80px at 390px, on the very pages that describe the type scale"
-          - "icon: and icon_position: on Ui::ButtonComponent, with the glyph sized from the button"
+          - "Contrast, target sizes and typography reworked from a measurement across every page"
+          - "Design-system documentation usable on mobile"
+          - "Loading skeletons in place of empty areas"
       i18n_guardrails:
-        title: "Internationalization: guardrails instead of discipline"
+        title: "Dependable dates and translations"
         items:
-          - "date/time format blocks in both locales: none existed, and the l() calls were running on rails-i18n's defaults"
-          - "51 display strftime calls migrated to l() — they hard-coded \"%d/%m/%Y\", so an English reader saw 07/08/2026 for 7 August and read 8 July"
-          - "bin/rails i18n:check (and its CI job) fails on a missing translation and on any key present in only one of the two locales"
-          - "A test refuses any new display strftime and pins that a numeric date really does read differently in English and in French"
+          - "Dates shown in the format the reader's language expects"
+          - "An automated check that refuses any missing translation"
       pwa:
-        title: "Installable app (PWA)"
+        title: "Installable app"
         items:
-          - "Manifest and service worker wired up: routes, the layout link, and a theme colour and square icons in place of the Rails template's own values"
-          - "192/512 icons and a maskable variant generated from the logo, plus a vector icon replacing the red circle that had been serving as the favicon"
-          - "An offline page served by the worker when a navigation fails — the only cached resource, since serving a stale dashboard would be worse than serving nothing"
-          - "Installable on mobile and desktop while waiting for full Flutter client parity"
+          - "Hestia installs on mobile and desktop like an app"
+          - "Icons and a theme colour of Hestia's own"
+          - "An offline page when the connection drops"
       shared_link_controls:
         title: "Control over shared links"
         items:
