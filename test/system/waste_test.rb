@@ -13,8 +13,8 @@ class WasteTest < ApplicationSystemTestCase
     sign_in_to_alpha
     visit waste_path
 
-    page.execute_script("arguments[0].click()", find(:button, "Add").native)
-    assert_selector "dialog[data-state='open']"
+    click_element(find(:button, "Add"))
+    assert_dialog_open
     within "dialog[data-state='open']" do
       select "Compost", from: "waste_collection_event_waste_type"
       submit_button_to "Add"
@@ -29,9 +29,9 @@ class WasteTest < ApplicationSystemTestCase
     visit waste_path
 
     within "##{ActionView::RecordIdentifier.dom_id(event)}" do
-      page.execute_script("arguments[0].click()", find("[aria-label='Delete the \"Household waste\" collection']").native)
+      click_element(find("[aria-label='Delete the \"Household waste\" collection']"))
     end
-    assert_selector "dialog[role='alertdialog'][data-state='open']"
+    assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     within "dialog[data-state='open']" do
       submit_button_to "Delete"
     end
@@ -44,7 +44,7 @@ class WasteTest < ApplicationSystemTestCase
     sign_in_to_alpha
     visit waste_path
 
-    find("a[href*='events_view=grid']").click
+    click_element(find("a[href*='events_view=grid']"))
 
     assert_selector "#waste_events.grid"
     assert_no_selector "#waste_series.grid"

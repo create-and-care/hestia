@@ -20,7 +20,7 @@ class MenuTest < ApplicationSystemTestCase
     # here for the same reason noted in global_search_test.rb/recipe_catalog_test.rb:
     # dispatch it via JS instead.
     trigger = find("button[aria-controls='menu_day_#{other_day.iso8601}-panel']")
-    page.execute_script("arguments[0].click()", trigger.native)
+    click_element(trigger)
     assert_selector "#menu_day_#{other_day.iso8601}-panel"
   end
 
@@ -34,33 +34,33 @@ class MenuTest < ApplicationSystemTestCase
     visit menu_path
 
     within "#menu_day_#{Date.current.iso8601}-panel" do
-      page.execute_script("arguments[0].click()", find(:button, "Add a meal").native)
+      click_element(find(:button, "Add a meal"))
     end
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     fill_in "meal_plan_entry[free_name]", with: "Salade César"
     submit_button_to "Add"
     assert_text "Salade César"
 
     within "#menu_day_#{Date.current.iso8601}-panel" do
-      page.execute_script("arguments[0].click()", find(:button, "Add a meal").native)
+      click_element(find(:button, "Add a meal"))
     end
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     submit_button_to "Away"
     assert_text "Away"
 
     entry = MealPlanEntry.find_by!(away: true)
     within "li", text: "Away" do
-      page.execute_script("arguments[0].click()", find("[aria-label='Edit meal']").native)
+      click_element(find("[aria-label='Edit meal']"))
     end
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     within "dialog[data-state='open']" do
-      page.execute_script("arguments[0].click()", find("[aria-label='Close']", visible: :all).native)
+      click_element(find("[aria-label='Close']", visible: :all))
     end
 
     within "li", text: "Away" do
-      page.execute_script("arguments[0].click()", find("[aria-label='Delete meal']").native)
+      click_element(find("[aria-label='Delete meal']"))
     end
-    assert_selector "dialog[role='alertdialog'][data-state='open']"
+    assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     submit_button_to "Delete"
 
     assert_text "Meal deleted."
@@ -78,8 +78,8 @@ class MenuTest < ApplicationSystemTestCase
 
     visit menu_path
 
-    page.execute_script("arguments[0].click()", find(:button, "Add ingredients to shopping list").native)
-    assert_selector "dialog[data-state='open']"
+    click_element(find(:button, "Add ingredients to shopping list"))
+    assert_dialog_open
     submit_button_to "Add to this list"
 
     assert_text "This week's recipes were already added to the shopping list."

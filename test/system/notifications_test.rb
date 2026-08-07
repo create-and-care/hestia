@@ -10,10 +10,10 @@ class NotificationsTest < ApplicationSystemTestCase
     click_on "Sign in"
     assert_text households(:alpha).name
 
-    find("[aria-label='Notifications']").click
+    click_element(find("[aria-label='Notifications']"))
     assert_text "Anniversaire de Mamie"
 
-    find("[aria-label='Mark as read']").click
+    click_element(find("[aria-label='Mark as read']"))
 
     assert_no_selector "[aria-label='Mark as read']"
     assert_current_path root_path

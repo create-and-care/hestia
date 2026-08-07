@@ -13,8 +13,8 @@ class WineCellarsTest < ApplicationSystemTestCase
     sign_in_to_alpha
     visit wine_cellars_path
 
-    page.execute_script("arguments[0].click()", find(:button, "Create cellar").native)
-    assert_selector "dialog[data-state='open']"
+    click_element(find(:button, "Create cellar"))
+    assert_dialog_open
     within "dialog[data-state='open']" do
       fill_in "wine_cellar_name", with: "Champagnes"
       submit_button_to "Create cellar"
@@ -27,8 +27,8 @@ class WineCellarsTest < ApplicationSystemTestCase
     sign_in_to_alpha
     visit wine_cellars_path
 
-    page.execute_script("arguments[0].click()", find(:button, "Filters").native)
-    assert_selector "dialog[data-state='open']"
+    click_element(find(:button, "Filters"))
+    assert_dialog_open
     within "dialog[data-state='open']" do
       select "White", from: "wine_cellars_filter_wine_type"
       submit_button_to "Apply filters"
@@ -44,9 +44,9 @@ class WineCellarsTest < ApplicationSystemTestCase
     visit wine_cellars_path
 
     within "##{ActionView::RecordIdentifier.dom_id(bottle)}" do
-      page.execute_script("arguments[0].click()", find("[aria-label='Delete \"#{bottle.name}\"']").native)
+      click_element(find("[aria-label='Delete \"#{bottle.name}\"']"))
     end
-    assert_selector "dialog[role='alertdialog'][data-state='open']"
+    assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     within "dialog[data-state='open']" do
       submit_button_to "Delete"
     end
@@ -61,9 +61,9 @@ class WineCellarsTest < ApplicationSystemTestCase
     visit wine_cellars_path
 
     within "##{ActionView::RecordIdentifier.dom_id(bottle)}" do
-      page.execute_script("arguments[0].click()", find(:button, "Take out").native)
+      click_element(find(:button, "Take out"))
     end
-    assert_selector "dialog[role='alertdialog'][data-state='open']"
+    assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     within "dialog[data-state='open']" do
       submit_button_to "Take out"
     end
@@ -79,9 +79,9 @@ class WineCellarsTest < ApplicationSystemTestCase
 
     within "##{ActionView::RecordIdentifier.dom_id(cellar)}" do
       fill_in "bottle_name_#{cellar.id}", with: "Saint-Émilion"
-      find("[data-combobox-target='trigger']").click
+      click_element(find("[data-combobox-target='trigger']"))
       find("[data-combobox-target='search']").set("Pomerol")
-      find("[data-combobox-target='createOption']").click
+      click_element(find("[data-combobox-target='createOption']"))
       click_on "Add"
     end
 

@@ -172,6 +172,7 @@ en:
         items:
           - "User account deletion"
           - "Personal-data export, for portability even when self-hosted"
+          - "Per-module data reset: today it is all or nothing (delete the household), and turning a module off leaves its rows in place and invisible"
       household_activity_export:
         title: "Dashboard: activity & export"
         items:
@@ -234,12 +235,55 @@ en:
           - "A belongings inventory (photo, value, purchase date, warranty), for insurance and resale"
           - "French school-holiday calendar (zones A/B/C) — public holidays are covered, what shapes a family's year is not"
           - "Duplicate detection when adding to the shopping list, and suggestions drawn from the purchase history already in the database"
+      wired_patterns:
+        title: "Patterns already in the repo, finally wired up"
+        items:
+          - "Attachments and reactions on messages: CirclePost already carries has_one_attached :photo and a complete CirclePostReaction model with its controller and routes — the pattern is written, tested and shipped, it is simply not applied to messages"
+          - "Charts in Budget: Ui::ChartComponent already runs in Pools and Wellbeing, while budget/show has nothing but a progress bar"
+          - "quantity and unit on fridge items: shopping list items carry both, fridge items carry neither, and the two Fridge↔Shopping services already cross that boundary and drop the information"
+      tasks_and_recurrence:
+        title: "Tasks and recurrence, in depth"
+        items:
+          - "Subtasks, priority and tags on tasks — mitigated today by kanban categories, an emoji and a derived due status"
+          - "RRULE-grade recurrence: the Recurrence service covers daily/weekly/monthly/yearly and nothing else — no \"second Tuesday\", no occurrence count, no multi-day rule"
+      cooking_and_shopping:
+        title: "Cooking and shopping, past the basics"
+        items:
+          - "Recipe search by ingredient — a joins(:recipe_ingredients) in a filter chain that already exists; \"what can I cook with chicken?\" returns nothing today"
+          - "A price on shopping list items, with a running total"
+      notifications_automation:
+        title: "Notifications and outbound automation"
+        items:
+          - "The three notification types that ignore preferences: task reminders, event reminders and external calendar sync failures are unconditional — three of the six types"
+          - "Outbound webhooks: the api/v1 surface reads and writes under a token but notifies nothing, so no external automation (Home Assistant, n8n, IFTTT) can react to anything happening in Hestia"
+      first_run_experience:
+        title: "First run: demo data and a guided tour"
+        items:
+          - "Demo data from the interface: DemoData::Seeder already covers some 22 modules but is reachable only through bin/rails demo_data:default"
+          - "A guided first-run tour — the one onboarding criticism worth keeping from the deleted audits (their \"5+ steps\" claim was wrong: there are two)"
+      personalization:
+        title: "Making it yours"
+        items:
+          - "Per-household custom themes: every colour already goes through a CSS variable behind the --brand/--accent indirection, so half the work is done — what is missing is persistence and a picker, knowing that contrast checking then becomes a runtime constraint rather than a build-time check"
+          - "Sidebar reordering: SortableJS is already wired to lists, tasks, loyalty and the menu, just not to the navigation"
+      health_records:
+        title: "Health records for people"
+        items:
+          - "Human medical tracking (treatments, vaccinations, cycles): the pattern is written in full for Pets — PetVaccination, PetTreatment, with booster reminders — and absent for people; Wellbeing covers weight and sessions only"
+          - "A per-person allergen profile, and recipe filtering against it: AllergenTest exists but belongs to Baby (food diversification), so an adult recipe has nothing to be checked against"
+          - "Not to be started before three decisions are made: whether it hangs off an account, off a profile without one (as BabyProfile does), or off a new person entity; who in the household may read it; and what a household export does with health data"
       marketing_docs:
         title: "Marketing site & user documentation"
         items:
           - "A public marketing site (home page, one page per module, a Hest.AI presentation page)"
           - "A per-module user documentation hub"
           - "A privacy policy suited to the self-hosted context"
+      scaling_thresholds:
+        title: "Parked until a measurement says otherwise"
+        items:
+          - "Two-factor authentication — rate limiting already covers the three authentication entry points, cookies are signed and httponly, and sessions are revocable from the interface. Trigger: the first multi-household instance exposed on the public internet"
+          - "pg_trgm / GIN indexing on search — 28 leading-wildcard ILIKE queries, a trade-off documented in the service header and correct for a single household. Trigger: search latency above 300 ms on a real household"
+          - "Splitting the esbuild bundle — one bundle, 50 Stimulus controllers loaded up front, but only three third-party dependencies (Stimulus, Turbo, sortablejs). Trigger: adding a heavy third-party dependency"
       mobile_parity:
         title: "Mobile functional parity"
         items:

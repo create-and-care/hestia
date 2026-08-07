@@ -20,7 +20,7 @@ class GlobalSearchTest < ApplicationSystemTestCase
     # correctly positioned. Dispatching the click via JS sidesteps that
     # WebDriver/Chrome quirk without weakening what the test verifies.
     result_link = find(:link_or_button, tasks(:alpha_dishes).title)
-    page.execute_script("arguments[0].click()", result_link.native)
+    click_element(result_link)
 
     assert_current_path edit_task_path(tasks(:alpha_dishes))
   end

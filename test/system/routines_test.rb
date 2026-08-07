@@ -29,9 +29,9 @@ class RoutinesTest < ApplicationSystemTestCase
     visit routines_path
 
     within "##{ActionView::RecordIdentifier.dom_id(routine)}" do
-      page.execute_script("arguments[0].click()", find("[aria-label='Edit routine']").native)
+      click_element(find("[aria-label='Edit routine']"))
     end
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     assert_field "Name", with: "Passer l'aspirateur"
 
     fill_in "Name", with: "Passer l'aspirateur du salon"
@@ -48,9 +48,9 @@ class RoutinesTest < ApplicationSystemTestCase
     visit routines_path
 
     within "##{ActionView::RecordIdentifier.dom_id(routine)}" do
-      page.execute_script("arguments[0].click()", find("[aria-label='View completion history']").native)
+      click_element(find("[aria-label='View completion history']"))
     end
-    assert_selector "dialog[data-state='open']"
+    assert_dialog_open
     assert_text "Alice"
   end
 
@@ -60,9 +60,9 @@ class RoutinesTest < ApplicationSystemTestCase
     visit routines_path
 
     within "##{ActionView::RecordIdentifier.dom_id(routine)}" do
-      page.execute_script("arguments[0].click()", find("[aria-label='Delete routine']").native)
+      click_element(find("[aria-label='Delete routine']"))
     end
-    assert_selector "dialog[role='alertdialog'][data-state='open']"
+    assert_dialog_open "dialog[role='alertdialog'][data-state='open']"
     submit_button_to "Delete"
 
     assert_no_text routine.name
