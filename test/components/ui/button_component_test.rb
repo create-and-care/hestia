@@ -108,7 +108,7 @@ class Ui::ButtonComponentTest < ViewComponent::TestCase
     (Ui::ButtonComponent::VARIANTS.keys - [ :link ]).each do |variant|
       render_inline(Ui::ButtonComponent.new(variant: variant, href: "/x")) { "Go" }
 
-      assert_selector "a.hover\\:no-underline", count: 1
+      assert_selector "a.no-underline.hover\\:no-underline", count: 1
     end
   end
 
@@ -119,6 +119,9 @@ class Ui::ButtonComponentTest < ViewComponent::TestCase
 
     assert_selector "a.hover\\:underline"
     assert_no_selector "a.hover\\:no-underline"
+    # Both halves of the opt-out must stay off it, or `no-underline` and the
+    # variant's own `hover:underline` are left to fight over source order.
+    assert_no_selector "a.no-underline"
   end
 
   private
