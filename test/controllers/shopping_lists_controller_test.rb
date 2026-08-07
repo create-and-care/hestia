@@ -16,6 +16,31 @@ class ShoppingListsControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Courses Beta"
   end
 
+  # Rows arrive by broadcast append and leave by broadcast remove, neither of
+  # which re-runs `if items.any?`, so the empty state has to hide itself.
+  test "show keeps the empty state in the DOM, revealed only when it stands alone" do
+    list = households(:alpha).shopping_lists.create!(name: "Vide")
+
+    get shopping_list_path(list)
+    assert_response :success
+    assert_select "#shopping_list_items > div.only\\:block", 1
+
+    list.items.create!(name: "Pain")
+    get shopping_list_path(list)
+    assert_select "#shopping_list_items > div.only\\:block", 1
+    assert_select "#shopping_list_items > *", minimum: 2
+  end
+
+  test "the PDF export is offered on an empty list too" do
+    list = households(:alpha).shopping_lists.create!(name: "Vide")
+
+    get shopping_list_path(list)
+    assert_select "a[href=?]:not([disabled])", shopping_list_path(list, format: :pdf)
+
+    get shopping_list_path(list, format: :pdf)
+    assert_response :success
+  end
+
   test "show renders the list and wires the real-time stream" do
     get shopping_list_path(shopping_lists(:alpha_groceries))
     assert_response :success

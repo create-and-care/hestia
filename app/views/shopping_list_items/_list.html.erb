@@ -1,11 +1,17 @@
-<% if shopping_list.items.any? %>
-  <% shopping_list.items_by_rayon.each do |rayon, items| %>
-    <%# A band inside the list rather than a heading floating above it, now that
-        the rows share one bordered container. sortable_controller skips it: it
-        maps children to data-sortable-id and filters the blanks. %>
-    <h3 class="bg-surface-inset px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-subdued"><%= rayon_label(rayon) %></h3>
-    <%= render items %>
-  <% end %>
-<% else %>
-  <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t("shopping_lists.show.no_items") } } %>
+<% shopping_list.items_by_rayon.each do |rayon, items| %>
+  <%# A band inside the list rather than a heading floating above it, now that
+      the rows share one bordered container. sortable_controller skips it: it
+      maps children to data-sortable-id and filters the blanks. %>
+  <h3 class="bg-surface-inset px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-subdued"><%= rayon_label(rayon) %></h3>
+  <%= render items %>
 <% end %>
+
+<%# Always rendered, shown only while it is the container's sole child. Rows
+    arrive here as a broadcast append and leave as a broadcast remove, and
+    neither re-runs an `if items.any?` on the server — which is why adding the
+    first item used to leave "Aucun article pour l'instant" sitting above it
+    until a refresh. Letting :only-child decide costs one CSS rule and is
+    correct for every member of the household, not just whoever typed. %>
+<div class="hidden only:block">
+  <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t("shopping_lists.show.no_items") } } %>
+</div>

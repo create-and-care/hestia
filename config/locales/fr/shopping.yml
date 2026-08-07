@@ -60,13 +60,14 @@ fr:
       uncheck_aria: "Décocher"
       check_aria: "Cocher"
       move_to_fridge_title: "Ranger au frigo"
-      expires_on_title: "Date de péremption (optionnel)"
+      expires_on_label: "Péremption"
+      expires_on_title: "Date de péremption du produit (optionnel)"
       delete_aria: "Supprimer"
       delete_confirm: "Supprimer cet article ?"
     create:
       alert: "Impossible d'ajouter l'article."
     move_to_fridge:
-      notice: "Rangé au frigo."
+      notice: "%{name} rangé au frigo."
   products:
     index:
       title: "Catalogue de produits"
