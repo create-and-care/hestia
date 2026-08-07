@@ -7,10 +7,15 @@ class PlantCareTask < ApplicationRecord
   CARE_TYPES = %w[watering repotting fertilizing pruning misting other].freeze
 
   belongs_to :plant
-  has_many :plant_care_completions, dependent: :destroy
+  # delete_all for the same reason as Task#task_reminders: a completion is a
+  # log row with no callbacks and no children of its own.
+  has_many :plant_care_completions, dependent: :delete_all
 
   validates :care_type, presence: true
   validates :frequency, inclusion: { in: Recurrence::PERIODS.keys }
+
+  # Shared with Plant.needing_care, which asks the same question in SQL.
+  SOON_DAYS = 3
 
   scope :ordered, -> { order(:next_due_on) }
 
@@ -19,7 +24,7 @@ class PlantCareTask < ApplicationRecord
   before_validation :set_initial_due, on: :create
 
   def overdue? = next_due_on.present? && next_due_on < Date.current
-  def due_soon?(days = 3) = next_due_on.present? && next_due_on.between?(Date.current, Date.current + days.days)
+  def due_soon?(days = SOON_DAYS) = next_due_on.present? && next_due_on.between?(Date.current, Date.current + days.days)
 
   def status
     return :overdue if overdue?

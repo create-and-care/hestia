@@ -1,0 +1,17 @@
+<%# Placeholder for a lazily-loaded turbo-frame, in place of the line of text
+    these frames used to show. Ui::SkeletonComponent existed, was tested, and
+    was used by nothing but its own preview (DS-05).
+
+    The bars are aria-hidden (the component sets that itself), so the label
+    still carries the meaning for anyone who is not looking at the shape: the
+    wrapper announces itself as a status region and names what is loading.
+
+    `rows` is how many field-shaped pairs to draw — enough to fill the frame
+    without pretending to know the form's exact shape. %>
+<div role="status" class="flex min-h-24 flex-col justify-center gap-3 py-2">
+  <span class="sr-only"><%= label %></span>
+  <% local_assigns.fetch(:rows, 2).times do %>
+    <%= render Ui::SkeletonComponent.new(class_name: "h-3 w-24") %>
+    <%= render Ui::SkeletonComponent.new(class_name: "h-9 w-full") %>
+  <% end %>
+</div>

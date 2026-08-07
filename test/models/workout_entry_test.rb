@@ -4,14 +4,14 @@ class WorkoutEntryTest < ActiveSupport::TestCase
   test "requires done_on and exercise" do
     entry = WorkoutEntry.new(user: users(:one))
     assert_not entry.valid?
-    assert_includes entry.errors[:done_on], "can't be blank"
-    assert_includes entry.errors[:exercise], "can't be blank"
+    assert_includes entry.errors[:done_on], error_message(:blank)
+    assert_includes entry.errors[:exercise], error_message(:blank)
   end
 
   test "belongs to a user" do
     entry = WorkoutEntry.new(done_on: Date.current, exercise: "Course")
     assert_not entry.valid?
-    assert_includes entry.errors[:user], "must exist"
+    assert_includes entry.errors[:user], error_message(:required)
   end
 
   test "recent orders from newest to oldest" do

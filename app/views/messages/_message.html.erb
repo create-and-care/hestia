@@ -15,7 +15,7 @@
   <%= render(Ui::MessageComponent.new(
         role: message.author == Current.user ? :user : :assistant,
         name: message.author.name.presence || message.author.email_address,
-        timestamp: message.created_at.strftime("%d/%m %H:%M")
+        timestamp: l(message.created_at, format: :numeric_short)
       )) do %>
     <p class="whitespace-pre-line"><%= message.content %></p>
   <% end %>

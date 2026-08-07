@@ -37,7 +37,6 @@ en:
       complete_task_aria: "Mark as done"
       addresses_empty: "No addresses yet."
       address_name_placeholder: "Place"
-      address_full_placeholder: "Address"
       address_phone_placeholder: "Phone"
       edit_address_aria: "Edit address %{name}"
       menu_empty: "No meals planned for this trip yet."

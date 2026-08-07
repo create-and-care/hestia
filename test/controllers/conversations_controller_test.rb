@@ -70,7 +70,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
     patch conversation_path(conversation), params: { conversation: { name: conversation.name }, participant_ids: [ other.id ] }
     follow_redirect!
-    assert_includes @response.body, "You left the conversation."
+    assert_body_includes I18n.t("conversations.update.left")
 
     get conversation_path(conversation)
     assert_response :not_found

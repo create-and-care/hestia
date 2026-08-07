@@ -6,7 +6,7 @@
         <p class="font-medium text-primary truncate"><%= baby_profile.name %></p>
         <% if baby_profile.born_on %>
           <p class="text-xs text-secondary truncate">
-            <%= t("baby_profiles.born_on", date: baby_profile.born_on.strftime("%d/%m/%Y")) %>
+            <%= t("baby_profiles.born_on", date: l(baby_profile.born_on, format: :numeric)) %>
             · <%= t("baby_profiles.age_months", count: baby_profile.age_in_months) %>
           </p>
         <% end %>

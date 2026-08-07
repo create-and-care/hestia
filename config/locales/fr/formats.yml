@@ -1,0 +1,43 @@
+# Formats de date et d'heure. Aucun bloc `formats:` n'existait dans le dépôt :
+# les appels `l()` marchaient uniquement grâce aux défauts de la gem rails-i18n,
+# et tout le reste des vues écrivait "%d/%m/%Y" à la main — c'est-à-dire une
+# date française servie telle quelle à un utilisateur en anglais, pour qui
+# 07/08/2026 se lit « 8 juillet ». Faux, et pas seulement non traduit.
+#
+# `default`, `short` et `long` reprennent volontairement, au caractère près, ce
+# que rails-i18n rendait déjà : les rapatrier ici sans rien changer permet de
+# les faire évoluer plus tard sans que l'existant bouge aujourd'hui.
+#
+# La famille `numeric*` est la nouveauté : c'est ce que les 51 `strftime`
+# d'affichage appelaient de leurs vœux, un jour de l'année écrit en chiffres.
+# Elle existe dans les deux locales avec le même nom et un ordre différent —
+# c'est tout l'intérêt.
+fr:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%e %B"
+      long: "%e %B %Y"
+      # 07/08/2026
+      numeric: "%d/%m/%Y"
+      # 07/08/26
+      numeric_compact: "%d/%m/%y"
+      # 07/08
+      numeric_short: "%d/%m"
+      # ven. 07/08
+      weekday_numeric: "%a %d/%m"
+      # août 2026
+      month_year: "%B %Y"
+  time:
+    formats:
+      default: "%d %B %Y %Hh %Mmin %Ss"
+      short: "%d %b %Hh%M"
+      long: "%A %d %B %Y %Hh%M"
+      # 07/08/2026 14:05
+      numeric: "%d/%m/%Y %H:%M"
+      # 07/08 14:05
+      numeric_short: "%d/%m %H:%M"
+      # ven. 07/08 — 14:05
+      weekday_numeric: "%a %d/%m — %H:%M"
+      # 14:05
+      hour_minute: "%H:%M"

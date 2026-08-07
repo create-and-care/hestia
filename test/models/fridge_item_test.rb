@@ -35,4 +35,17 @@ class FridgeItemTest < ActiveSupport::TestCase
   test "is scoped to its household" do
     assert_not_includes households(:alpha).fridge_items, fridge_items(:beta_milk)
   end
+
+  test "expiring matches exactly the items expiration_status flags, soonest first" do
+    household = households(:alpha)
+    household.fridge_items.destroy_all
+    soon = household.fridge_items.create!(name: "Bientôt", location: "refrigerateur",
+      expires_on: Perishable::SOON_DAYS.days.from_now.to_date)
+    expired = household.fridge_items.create!(name: "Périmé", location: "refrigerateur", expires_on: 2.days.ago.to_date)
+    fresh = household.fridge_items.create!(name: "Frais", location: "refrigerateur", expires_on: 30.days.from_now.to_date)
+    household.fridge_items.create!(name: "Sans date", location: "refrigerateur", expires_on: nil)
+
+    assert_equal [ expired, soon ], household.fridge_items.expiring.to_a
+    assert_equal :ok, fresh.expiration_status
+  end
 end

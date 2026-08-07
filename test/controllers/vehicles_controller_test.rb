@@ -67,8 +67,8 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
   test "the new-vehicle form offers a predefined type list plus a custom fallback field" do
     get new_vehicle_path
     assert_response :success
-    assert_select "select#vehicle_vehicle_type option", text: "Car"
-    assert_select "select#vehicle_vehicle_type option", text: "Other…"
+    assert_select "select#vehicle_vehicle_type option", text: I18n.t("vehicles.types.car")
+    assert_select "select#vehicle_vehicle_type option", text: I18n.t("vehicles.types.other")
     assert_select "input#vehicle_vehicle_type_custom"
   end
 
@@ -91,6 +91,6 @@ class VehiclesControllerTest < ActionDispatch::IntegrationTest
     vehicle = vehicles(:alpha_car)
     get vehicles_path
     assert_select "form[action=?][data-turbo-confirm]", vehicle_path(vehicle)
-    assert_select "a[href=?][aria-label=?]", edit_vehicle_path(vehicle), "Edit \"La Clio\""
+    assert_select "a[href=?][aria-label=?]", edit_vehicle_path(vehicle), I18n.t("vehicles.vehicle.edit_aria", name: vehicle.name)
   end
 end

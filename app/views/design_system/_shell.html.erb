@@ -1,39 +1,40 @@
-<%
-  current_slug = @entry&.slug
-  nav_link = ->(path, label, active) do
-    render(Ui::ItemComponent.new(href: path, active: active)) { |item| item.with_title { label } }
-  end
-%>
+<%# The 256px sidebar used to be rendered at every width, so at 390px the page
+    was 470px wide and scrolled sideways — the largest overflow_page finding in
+    visual:check, on the very pages that document how not to do this (DS-07).
+    It now follows the app's own pattern: hidden below md, with the same nav
+    relocated into a drawer behind a top bar. %>
 <div class="flex min-h-screen">
-  <%= render(Ui::SidebarComponent.new(class_name: "shrink-0")) do |sidebar| %>
+  <%= render(Ui::SidebarComponent.new(class_name: "shrink-0 max-md:hidden")) do |sidebar| %>
     <% sidebar.with_header do %>
-      <%= link_to "Hestia · Design system", design_system_path, class: "font-semibold text-primary text-sm" %>
+      <%= link_to "Hestia · Design system", design_system_path,
+            class: "flex min-h-9 items-center text-sm font-semibold text-primary" %>
     <% end %>
 
-    <%= nav_link.call(design_system_path, "Vue d'ensemble", request.path == design_system_path) %>
-
-    <div class="mt-4">
-      <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-subdued">Fondations</p>
-      <%= nav_link.call(design_system_colors_path, "Couleurs", request.path == design_system_colors_path) %>
-      <%= nav_link.call(design_system_typography_path, "Typographie", request.path == design_system_typography_path) %>
-      <%= nav_link.call(design_system_icons_path, "Icônes", request.path == design_system_icons_path) %>
-    </div>
-
-    <% @categories.each do |category, entries| %>
-      <div class="mt-4">
-        <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-subdued"><%= category %></p>
-        <% entries.each do |entry| %>
-          <%= nav_link.call(design_system_component_path(entry.slug), entry.name, entry.slug == current_slug) %>
-        <% end %>
-      </div>
-    <% end %>
+    <%= render "design_system/nav" %>
   <% end %>
 
   <div class="min-w-0 flex-1">
-    <div class="flex items-center justify-end border-b border-primary px-8 py-3">
+    <div class="flex items-center justify-between border-b border-primary px-4 py-3 md:justify-end md:px-8">
+      <div class="md:hidden">
+      <%= render(Ui::DrawerComponent.new(side: :left, close_on_visit: true)) do |drawer| %>
+        <% drawer.with_trigger do %>
+          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm,
+                html_options: { aria: { label: "Ouvrir la navigation" } })) do %>
+            <%= lucide_icon("menu", css_class: "size-5") %>
+          <% end %>
+        <% end %>
+
+        <nav class="flex h-full flex-col gap-1 overflow-y-auto p-4">
+          <%= link_to "Hestia · Design system", design_system_path,
+                class: "flex min-h-9 items-center text-sm font-semibold text-primary" %>
+          <%= render "design_system/nav" %>
+        </nav>
+      <% end %>
+      </div>
+
       <%= render Ui::ThemeToggleComponent.new %>
     </div>
-    <main class="mx-auto max-w-3xl px-8 py-10">
+    <main class="mx-auto max-w-3xl px-4 py-10 md:px-8">
       <%= yield %>
     </main>
   </div>

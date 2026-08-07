@@ -69,7 +69,7 @@ class HouseholdsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", text: households(:alpha).name
     assert_select "code", text: households(:alpha).invite_code
     assert_includes @response.body, "iPhone"
-    assert_includes @response.body, "Foundation"
+    assert_body_includes I18n.t("roadmap.milestones.foundation.title")
   end
 
   test "show deep-links to a specific tab via ?tab=" do

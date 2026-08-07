@@ -60,7 +60,7 @@ class WasteControllerTest < ActionDispatch::IntegrationTest
       } }
     end
     assert_redirected_to waste_path
-    assert_equal "Invalid series.", flash[:alert]
+    assert_equal I18n.t("waste_collection_series.create.invalid"), flash[:alert]
   end
 
   test "series delete button asks for confirmation" do
@@ -85,8 +85,8 @@ class WasteControllerTest < ActionDispatch::IntegrationTest
 
     get waste_path
 
-    assert_select "span.bg-surface-inset", text: /Household waste/ # ordures -> :secondary
-    assert_select "span.bg-warning\\/10", text: /Recycling/ # recyclage -> :warning
+    assert_select "span.bg-surface-inset", text: /#{I18n.t("waste.types.ordures")}/ # ordures -> :secondary
+    assert_select "span.bg-warning\\/10", text: /#{I18n.t("waste.types.recyclage")}/ # recyclage -> :warning
   end
 
   test "the one-time and recurring-series add forms open in design-system dialogs, not inline" do

@@ -45,4 +45,29 @@ class PlantTest < ActiveSupport::TestCase
     plant.plant_care_tasks.create!(care_type: "watering", frequency: "weekly", next_due_on: 3.weeks.from_now.to_date)
     assert_equal :ok, plant.care_status
   end
+
+  # The dashboard used to load every plant with its whole care schedule to keep
+  # five of them; `needing_care` is the same question asked of the database.
+  test "needing_care keeps only plants with a care task due or overdue" do
+    household = households(:alpha)
+    household.plants.destroy_all
+    late = household.plants.create!(name: "Assoiffée")
+    late.plant_care_tasks.create!(care_type: "watering", frequency: "weekly", next_due_on: 2.days.ago.to_date)
+    fine = household.plants.create!(name: "Tranquille")
+    fine.plant_care_tasks.create!(care_type: "watering", frequency: "weekly", next_due_on: 3.weeks.from_now.to_date)
+    household.plants.create!(name: "Sans entretien")
+
+    assert_equal [ late ], household.plants.needing_care.to_a
+    assert_equal :ok, fine.care_status
+  end
+
+  test "needing_care lists a plant once however many of its tasks are due" do
+    household = households(:alpha)
+    household.plants.destroy_all
+    plant = household.plants.create!(name: "Exigeante")
+    plant.plant_care_tasks.create!(care_type: "watering", frequency: "weekly", next_due_on: Date.current)
+    plant.plant_care_tasks.create!(care_type: "misting", frequency: "daily", next_due_on: 1.day.ago.to_date)
+
+    assert_equal [ plant ], household.plants.needing_care.to_a
+  end
 end

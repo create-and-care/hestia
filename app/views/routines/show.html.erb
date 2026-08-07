@@ -9,7 +9,7 @@
     </h1>
     <p class="mt-1 text-sm text-secondary">
       <%= routine_frequency_label(@routine.frequency) %><%= " ×#{@routine.interval}" if @routine.interval.to_i > 1 %>
-      <% if @routine.next_due_on %>· <%= t(".next_due") %> : <%= @routine.next_due_on.strftime("%d/%m/%Y") %><% end %>
+      <% if @routine.next_due_on %>· <%= t(".next_due") %> : <%= l(@routine.next_due_on, format: :numeric) %><% end %>
     </p>
   </header>
 

@@ -49,7 +49,6 @@ fr:
       take_out: "Sortir"
       take_out_confirm: "Sortir « %{name} » de la cave ?"
       put_back: "Remettre"
-      move: "Déplacer"
       edit_aria: "Modifier « %{name} »"
       delete_aria: "Supprimer « %{name} »"
       delete_label: "Supprimer"

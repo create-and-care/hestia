@@ -10,8 +10,10 @@
     <%= csp_meta_tag %>
 
     <%# Applies the persisted theme (light/dark/system) before first paint to avoid a flash.
-        Kept in sync afterwards by app/javascript/controllers/theme_controller.js. %>
-    <script>
+        Kept in sync afterwards by app/javascript/controllers/theme_controller.js.
+        The nonce is what keeps this inline script running under the CSP — without
+        it, script-src :self blocks it and the flash comes back. %>
+    <script nonce="<%= content_security_policy_nonce %>">
       (function () {
         var stored = localStorage.getItem("theme") || "system";
         var isDark = stored === "dark" || (stored === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
@@ -21,12 +23,15 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <%= tag.link rel: "manifest", href: pwa_manifest_path %>
+    <%# iOS reads none of the manifest's colours; it needs its own tag. It also
+        needs a square apple-touch-icon, and the /icon.png offered here was
+        480×360 — hence /icon-192.png below, generated from the same logo. %>
+    <meta name="theme-color" content="#A85030">
 
-    <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+    <link rel="apple-touch-icon" href="/icon-192.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
@@ -46,7 +51,7 @@
           single instance either way — it carries its own turbo_stream_from
           subscription and a fixed "notifications_badge" id, so duplicating it
           would double-subscribe and break Turbo Stream targeting. %>
-      <div class="fixed right-3 top-0 z-40 flex h-14 items-center gap-1 md:top-3 md:h-auto">
+      <div class="fixed right-3 top-0 z-floating flex h-14 items-center gap-1 md:top-3 md:h-auto">
         <%= render "shared/notifications" %>
       </div>
     <% end %>

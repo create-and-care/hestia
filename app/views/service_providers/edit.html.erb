@@ -10,7 +10,7 @@
     <h2 class="mb-2 font-medium"><%= t(".documents_heading") %></h2>
     <% if @provider.documents.ordered.any? %>
       <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
-        <% @provider.documents.ordered.with_attached_file.each do |document| %>
+        <% @provider.documents.ordered.each do |document| %>
           <%= render(Ui::ItemComponent.new) do |item| %>
             <% item.with_title { render "documents/preview_trigger", document: document } %>
           <% end %>

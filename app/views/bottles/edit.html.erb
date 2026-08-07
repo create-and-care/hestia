@@ -22,7 +22,7 @@
         <% end %>
       <% end %>
 
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <%= render(Ui::FieldComponent.new(id: "bottle_vintage")) do |field| %>
           <% field.with_label { t(".vintage_label") } %>
           <% field.with_control do %>

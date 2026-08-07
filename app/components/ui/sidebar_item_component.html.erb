@@ -1,5 +1,6 @@
 <%= content_tag(@href ? :a : :div, href: @href,
     "aria-current": (@active ? "page" : nil),
+    "data-turbo-preload": ((@preload && @href && !@active) ? "" : nil),
     title: @label,
     class: cn(
       "flex h-11 items-center gap-3 rounded-md px-3 text-sm transition-colors",

@@ -11,7 +11,7 @@ class RecipeStepTest < ActiveSupport::TestCase
   test "belongs to a recipe" do
     step = RecipeStep.new(content: "Mélanger")
     assert_not step.valid?
-    assert_includes step.errors[:recipe], "must exist"
+    assert_includes step.errors[:recipe], error_message(:required)
   end
 
   test "is ordered by position on the recipe" do

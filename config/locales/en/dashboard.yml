@@ -2,10 +2,6 @@ en:
   dashboard:
     show:
       title: "Dashboard"
-      roadmap: "Roadmap"
-      preferences: "Preferences"
-      api_tokens: "API tokens"
-      sign_out: "Sign out"
       nav:
         shopping: "Shopping"
         fridge: "Fridge"

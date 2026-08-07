@@ -28,19 +28,19 @@ class NoteTest < ActiveSupport::TestCase
   test "rejects an unknown color" do
     note = households(:alpha).notes.build(title: "X", color: "chartreuse")
     assert_not note.valid?
-    assert_includes note.errors[:color], "is not included in the list"
+    assert_includes note.errors[:color], error_message(:inclusion)
   end
 
   test "rejects a recipe from another household" do
     note = households(:alpha).notes.build(title: "X", recipe: recipes(:beta_soup))
     assert_not note.valid?
-    assert_includes note.errors[:recipe], "is invalid"
+    assert_includes note.errors[:recipe], error_message(:invalid)
   end
 
   test "rejects a document from another household" do
     note = households(:alpha).notes.build(title: "X", document: documents(:beta_doc))
     assert_not note.valid?
-    assert_includes note.errors[:document], "is invalid"
+    assert_includes note.errors[:document], error_message(:invalid)
   end
 
   test "accepts a recipe and a document from the same household" do

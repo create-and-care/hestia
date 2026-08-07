@@ -38,7 +38,7 @@ class AllergenTestsControllerTest < ActionDispatch::IntegrationTest
     baby = baby_profiles(:alpha_baby)
     post baby_profile_allergen_tests_path(baby), params: { allergen_test: { allergen: "Arachide" } }
     follow_redirect!
-    assert_includes @response.body, "Allergen test added."
+    assert_body_includes I18n.t("allergen_tests.create.created")
   end
 
   test "create with a blank allergen does not persist and surfaces an error" do
@@ -47,7 +47,7 @@ class AllergenTestsControllerTest < ActionDispatch::IntegrationTest
       post baby_profile_allergen_tests_path(baby), params: { allergen_test: { allergen: "" } }
     end
     assert_redirected_to baby
-    assert_equal "Allergen can't be blank", flash[:alert]
+    assert_equal validation_message(AllergenTest, :allergen), flash[:alert]
   end
 
   test "edit and update an allergen test" do

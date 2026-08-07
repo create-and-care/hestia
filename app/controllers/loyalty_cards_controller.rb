@@ -6,7 +6,8 @@ class LoyaltyCardsController < ApplicationController
   before_action :set_card, only: %i[show edit update destroy kiosk move_up move_down]
 
   def index
-    @cards = Current.household.loyalty_cards.ordered
+    # Each card renders its brand's logo and colour (PERF-06).
+    @cards = Current.household.loyalty_cards.ordered.includes(:loyalty_brand)
     @view_mode = collection_view_mode(:loyalty_cards)
   end
 

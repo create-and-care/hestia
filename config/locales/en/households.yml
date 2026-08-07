@@ -51,7 +51,6 @@ en:
       edit_account: "Edit my account"
       leave: "Leave"
       leave_confirm: "Leave this household? You'll need an invite code to rejoin."
-      last_admin: "This household needs at least one admin — promote someone else first."
       switch_household: "Switch active household"
       switch_to: "Switch to “%{name}”"
       other_households: "More households"

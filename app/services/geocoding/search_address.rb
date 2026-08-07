@@ -1,5 +1,6 @@
 require "net/http"
 require "json"
+require "digest"
 
 # Looks up places via Nominatim/OpenStreetMap, to pre-fill
 # an Address (name, address, GPS coordinates) on creation. Fails silently
@@ -15,6 +16,19 @@ module Geocoding
     READ_TIMEOUT = 3
     LIMIT = 5
 
+    # Same conventions as OpenFoodFacts::LookupProduct, which documents them,
+    # with two deliberate differences:
+    #   * a shorter TTL — a barcode names a physical object, whereas a place
+    #     gets renamed, renumbered or corrected upstream in OSM, and a week is
+    #     already far longer than a session of typing an address;
+    #   * the key is digested, because it is free text: a raw query would put
+    #     user-typed punctuation and spaces straight into a cache key, and
+    #     "12 rue de l'Église" is not something to hand a key parser unescaped.
+    # Empty result sets are not cached (skip_nil is no help here, [] is not
+    # nil), for the same reason nils are not: a timeout also yields [].
+    CACHE_TTL = 7.days
+    CACHE_KEY = "nominatim/search/v1/%<digest>s"
+
     def self.call(query:) = new(query:).call
 
     def initialize(query:)
@@ -24,15 +38,26 @@ module Geocoding
     def call
       return [] if @query.blank?
 
-      response = fetch
-      return [] unless response.is_a?(Net::HTTPSuccess)
+      cached = Rails.cache.read(cache_key)
+      return cached if cached
 
-      parse(response.body)
-    rescue Timeout::Error, SocketError, Net::HTTPError, JSON::ParserError
-      []
+      search.tap { |results| Rails.cache.write(cache_key, results, expires_in: CACHE_TTL) if results.any? }
     end
 
     private
+      def cache_key
+        format(CACHE_KEY, digest: Digest::SHA256.hexdigest(@query.downcase))
+      end
+
+      def search
+        response = fetch
+        return [] unless response.is_a?(Net::HTTPSuccess)
+
+        parse(response.body)
+      rescue Timeout::Error, SocketError, Net::HTTPError, JSON::ParserError
+        []
+      end
+
       def fetch
         uri = URI(ENDPOINT)
         uri.query = URI.encode_www_form(q: @query, format: "jsonv2", limit: LIMIT, addressdetails: 1)

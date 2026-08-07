@@ -16,12 +16,24 @@ module Ui
       icon: "size-[var(--control-h-default)] p-0 justify-center"
     }.freeze
 
-    def initialize(variant: :default, size: :default, type: "button", disabled: false, href: nil, html_options: {})
+    # The glyph is sized from the button's own size rather than from a
+    # caller-supplied class, so a label and its icon cannot drift apart.
+    ICON_SIZES = { sm: "size-4", default: "size-4", lg: "size-5", icon: "size-4" }.freeze
+
+    # `icon:` is a convenience over what the block could always do — the
+    # `gap-*` in SIZES has been there for icons from the start. It exists
+    # because "the icon goes before the label, at this size" was being
+    # re-decided at every call site, and about half of them were passing their
+    # own size class.
+    def initialize(variant: :default, size: :default, type: "button", disabled: false, href: nil,
+      icon: nil, icon_position: :leading, html_options: {})
       @variant = variant
       @size = size
       @type = type
       @disabled = disabled
       @href = href
+      @icon = icon
+      @icon_position = icon_position
       @html_options = html_options
     end
 
@@ -34,13 +46,25 @@ module Ui
 
       if @href
         link_to @href, **@html_options, class: cn(classes, @html_options[:class]) do
-          content
+          body
         end
       else
         content_tag :button, type: @type, disabled: @disabled, **@html_options, class: cn(classes, @html_options[:class]) do
-          content
+          body
         end
       end
     end
+
+    private
+      def body
+        return content if @icon.blank?
+
+        glyph = lucide_icon(@icon, css_class: ICON_SIZES.fetch(@size, "size-4"))
+        # An icon-only button has no label to sit beside; anything else keeps
+        # the block's content and puts the glyph on the side asked for.
+        return glyph if @size == :icon && content.blank?
+
+        @icon_position == :trailing ? safe_join([ content, glyph ]) : safe_join([ glyph, content ])
+      end
   end
 end

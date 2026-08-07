@@ -19,7 +19,7 @@ class LoyaltyCardTest < ActiveSupport::TestCase
   test "rejects an address from another household" do
     card = households(:alpha).loyalty_cards.build(name: "X", number: "1", code_format: "barcode", address: addresses(:beta_place))
     assert_not card.valid?
-    assert_includes card.errors[:address], "is invalid"
+    assert_includes card.errors[:address], error_message(:invalid)
   end
 
   test "accepts an address from the same household" do

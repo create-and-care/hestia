@@ -38,7 +38,7 @@ class FoodIntroductionsControllerTest < ActionDispatch::IntegrationTest
     baby = baby_profiles(:alpha_baby)
     post baby_profile_food_introductions_path(baby), params: { food_introduction: { food: "Carotte" } }
     follow_redirect!
-    assert_includes @response.body, "Food introduction added."
+    assert_body_includes I18n.t("food_introductions.create.created")
   end
 
   test "create with a blank food does not persist and surfaces an error" do
@@ -47,7 +47,7 @@ class FoodIntroductionsControllerTest < ActionDispatch::IntegrationTest
       post baby_profile_food_introductions_path(baby), params: { food_introduction: { food: "" } }
     end
     assert_redirected_to baby
-    assert_equal "Food can't be blank", flash[:alert]
+    assert_equal validation_message(FoodIntroduction, :food), flash[:alert]
   end
 
   test "edit and update a food introduction" do

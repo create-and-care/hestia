@@ -13,7 +13,7 @@ class DocumentTest < ActiveSupport::TestCase
   test "requires an attached file" do
     document = households(:alpha).documents.build(name: "Contrat")
     assert_not document.valid?
-    assert_includes document.errors[:file], "can't be blank"
+    assert_includes document.errors[:file], error_message(:blank)
   end
 
   test "document_folder is optional" do
@@ -58,7 +58,7 @@ class DocumentTest < ActiveSupport::TestCase
     document = households(:alpha).documents.build(name: "Carte grise", documentable: vehicles(:beta_car))
     attach_sample_file(document)
     assert_not document.valid?
-    assert_includes document.errors[:documentable], "is invalid"
+    assert_includes document.errors[:documentable], error_message(:invalid)
   end
 
   test "destroying the linked vehicle nullifies the document rather than destroying it" do

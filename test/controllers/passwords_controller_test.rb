@@ -14,7 +14,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_path
 
     follow_redirect!
-    assert_notice "reset instructions sent"
+    assert_notice I18n.t("passwords.create.instructions_sent")
   end
 
   test "create for an unknown user redirects but sends no mail" do
@@ -23,7 +23,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_path
 
     follow_redirect!
-    assert_notice "reset instructions sent"
+    assert_notice I18n.t("passwords.create.instructions_sent")
   end
 
   test "edit" do
@@ -36,7 +36,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_password_path
 
     follow_redirect!
-    assert_notice "reset link is invalid"
+    assert_notice I18n.t("passwords.invalid_or_expired")
   end
 
   test "update" do
@@ -46,7 +46,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     end
 
     follow_redirect!
-    assert_notice "Password has been reset"
+    assert_notice I18n.t("passwords.update.success")
   end
 
   test "update with non matching passwords" do
@@ -57,7 +57,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     end
 
     follow_redirect!
-    assert_notice "confirmation doesn"
+    assert_notice validation_message(User, :password_confirmation, :confirmation, attribute: User.human_attribute_name(:password))
   end
 
   test "update with a too-short password re-renders with an error" do
@@ -68,7 +68,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     end
 
     follow_redirect!
-    assert_notice "too short"
+    assert_notice error_message(:too_short, count: 8)
   end
 
   private

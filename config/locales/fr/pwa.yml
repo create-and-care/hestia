@@ -1,0 +1,9 @@
+fr:
+  pwa:
+    # Sert de description dans le manifeste (/manifest.json) et donc dans la
+    # fiche d'installation affichée par le navigateur ou la boutique.
+    description: "Le tableau de bord de votre foyer : courses, repas, tâches, calendrier, budget et tout le reste, au même endroit."
+    offline:
+      title: "Vous êtes hors ligne"
+      body: "Hestia a besoin d'une connexion pour afficher cette page. Elle se rechargera d'elle-même dès que le réseau reviendra."
+      retry: "Réessayer"

@@ -19,8 +19,11 @@ module Roadmap
     visual_polish_icons ui_migration_a11y global_search
     refinement_wave_day1 refinement_wave_day2a refinement_wave_day2b
     refinement_wave_day3a refinement_wave_day3b
-    account_privacy household_activity_export public_route_hardening
-    reference_catalog_growth pwa marketing_docs mobile_parity
+    public_route_hardening security_performance_hardening
+    design_system_measured pwa i18n_guardrails
+    account_privacy household_activity_export
+    reference_catalog_growth shared_link_controls household_logistics
+    marketing_docs mobile_parity
     cross_household_recipes hestai
   ].freeze
 
@@ -50,7 +53,12 @@ module Roadmap
     "refinement_wave_day2a" => Date.new(2026, 7, 18),
     "refinement_wave_day2b" => Date.new(2026, 7, 18),
     "refinement_wave_day3a" => Date.new(2026, 7, 19),
-    "refinement_wave_day3b" => Date.new(2026, 7, 19)
+    "refinement_wave_day3b" => Date.new(2026, 7, 19),
+    "public_route_hardening" => Date.new(2026, 8, 7),
+    "security_performance_hardening" => Date.new(2026, 8, 7),
+    "design_system_measured" => Date.new(2026, 8, 7),
+    "pwa" => Date.new(2026, 8, 7),
+    "i18n_guardrails" => Date.new(2026, 8, 7)
   }.freeze
 
   MILESTONE_STATUSES = MILESTONE_SLUGS.index_with { |slug| MILESTONE_DATES.key?(slug) ? :done : :upcoming }.freeze
@@ -68,7 +76,10 @@ module Roadmap
     "refinement_wave_day2b" => "package", "refinement_wave_day3a" => "package",
     "refinement_wave_day3b" => "wrench",
     "account_privacy" => "trash-2", "household_activity_export" => "trending-up",
-    "public_route_hardening" => "triangle-alert", "reference_catalog_growth" => "sprout",
+    "public_route_hardening" => "triangle-alert", "security_performance_hardening" => "wrench",
+    "design_system_measured" => "layout-grid", "i18n_guardrails" => "info",
+    "shared_link_controls" => "link", "household_logistics" => "sofa",
+    "reference_catalog_growth" => "sprout",
     "pwa" => "smartphone", "marketing_docs" => "map-pin", "mobile_parity" => "smartphone",
     "cross_household_recipes" => "handshake", "hestai" => "message-circle"
   }.freeze

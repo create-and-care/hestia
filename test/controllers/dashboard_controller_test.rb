@@ -184,12 +184,15 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
 
   test "surfaces an upcoming calendar event" do
     sign_in_as(users(:one))
-    households(:alpha).calendar_events.create!(title: "Anniversaire", starts_at: 2.days.from_now, ends_at: 2.days.from_now + 1.hour)
+    # Not "Anniversaire": that is also the French label of the Birthdays
+    # module in the sidebar, so the assertion passed for the wrong reason in
+    # one locale and failed in the other.
+    households(:alpha).calendar_events.create!(title: "Zorglub", starts_at: 2.days.from_now, ends_at: 2.days.from_now + 1.hour)
 
     get root_path
 
     assert_response :success
-    assert_includes @response.body, "Anniversaire"
+    assert_includes @response.body, "Zorglub"
   end
 
   test "does not surface a past calendar event" do
@@ -205,12 +208,12 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
   test "hides upcoming events when the calendar module is disabled" do
     households(:alpha).update!(disabled_modules: [ "calendar" ])
     sign_in_as(users(:one))
-    households(:alpha).calendar_events.create!(title: "Anniversaire", starts_at: 2.days.from_now, ends_at: 2.days.from_now + 1.hour)
+    households(:alpha).calendar_events.create!(title: "Zorglub", starts_at: 2.days.from_now, ends_at: 2.days.from_now + 1.hour)
 
     get root_path
 
     assert_response :success
-    assert_not_includes @response.body, "Anniversaire"
+    assert_not_includes @response.body, "Zorglub"
   end
 
   test "surfaces a recipe suggestion built from fridge contents" do
@@ -237,4 +240,82 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_not_includes @response.body, "Crêpes"
   end
+
+  # ── Bounded loading (PERF-04/PERF-05) ────────────────────────────────────
+  # Every widget keeps five rows. It used to get there by loading the whole
+  # relation and filtering in Ruby, so the page's cost grew with the age of the
+  # household rather than with what it displays. These tests fail if that ever
+  # comes back: they watch the SQL, because the rendered output is identical
+  # either way.
+  test "the widgets narrow in SQL rather than loading whole relations" do
+    sign_in_as(users(:one))
+    seed_a_busy_household
+
+    queries = capture_sql { get root_path }
+    assert_response :success
+
+    %w[fridge_items tasks calendar_events contacts vehicles].each do |table|
+      unbounded = queries.grep(/FROM "#{table}"/).reject { |sql| bounded?(sql) }
+      assert_empty unbounded, "#{table} is still read without a bound:\n#{unbounded.join("\n")}"
+    end
+  end
+
+  test "an old recurring event is not expanded from its first occurrence" do
+    sign_in_as(users(:one))
+    # Weekly since 2015: ~570 past occurrences, none of which any window
+    # starting today can contain. The previous expansion walked all of them
+    # and gave up at its 1 000-iteration guard.
+    households(:alpha).calendar_events.create!(title: "Poubelles", starts_at: Time.zone.local(2015, 1, 5, 8),
+      frequency: "weekly", recurrence_interval: 1)
+
+    get root_path
+
+    assert_response :success
+    assert_includes @response.body, "Poubelles"
+  end
+
+  test "a series that ended long ago is never loaded at all" do
+    sign_in_as(users(:one))
+    households(:alpha).calendar_events.create!(title: "Cours de piano", starts_at: 5.years.ago,
+      frequency: "weekly", recurrence_interval: 1, recurrence_until: 4.years.ago.to_date)
+
+    get root_path
+
+    assert_response :success
+    assert_not_includes @response.body, "Cours de piano"
+  end
+
+  private
+    # A query is bounded when it caps the rows (LIMIT), narrows on a date or a
+    # set of values (the widgets' scopes), or reads a single column.
+    #
+    # That last case is Frigo::SuggestRecipes, which plucks every fridge item's
+    # name to match against recipe ingredients. It is unbounded by nature — the
+    # match needs the whole larder — but one text column is not the same cost as
+    # instantiating every row, so it is out of PERF-04's scope rather than an
+    # oversight.
+    def bounded?(sql)
+      sql.match?(/LIMIT|IN \(|EXTRACT|>=|<=|<|>/) || sql.match?(/\ASELECT "\w+"\."\w+" FROM/)
+    end
+
+    def seed_a_busy_household
+      household = households(:alpha)
+      50.times do |index|
+        household.fridge_items.create!(name: "Yaourt #{index}", location: "refrigerateur", expires_on: index.days.from_now.to_date)
+        household.tasks.create!(title: "Tâche #{index}", due_on: (index - 25).days.from_now.to_date)
+        household.contacts.create!(name: "Ami #{index}", born_on: Date.new(1990, 1, 1) + index.days)
+        household.calendar_events.create!(title: "RDV #{index}", starts_at: (index - 25).days.from_now, frequency: "none")
+      end
+    end
+
+    def capture_sql
+      queries = []
+      subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |_, _, _, _, payload|
+        queries << payload[:sql] unless payload[:name].in?([ "SCHEMA", "TRANSACTION" ])
+      end
+      yield
+      queries
+    ensure
+      ActiveSupport::Notifications.unsubscribe(subscriber)
+    end
 end

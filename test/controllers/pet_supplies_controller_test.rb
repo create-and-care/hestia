@@ -40,7 +40,7 @@ class PetSuppliesControllerTest < ActionDispatch::IntegrationTest
       post pet_supplies_path(pet), params: { pet_supply: { name: "" } }
     end
     assert_redirected_to pet
-    assert_equal "Name can't be blank", flash[:alert]
+    assert_equal validation_message(PetSupply, :name), flash[:alert]
   end
 
   test "edit and update a supply's fields" do

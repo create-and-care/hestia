@@ -8,7 +8,7 @@
     <% end %>
     <% item.with_description do %>
       <% if notification.body.present? %><%= notification.body %> · <% end %><%= time_ago_in_words(notification.created_at) %>
-      <% if notification.user.households.size > 1 %> · <%= notification.household.name %><% end %>
+      <% if name_notification_household?(notification) %> · <%= notification.household.name %><% end %>
     <% end %>
     <% unless notification.read? %>
       <% item.with_trailing do %>

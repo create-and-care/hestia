@@ -20,7 +20,7 @@ class HouseholdTest < ActiveSupport::TestCase
   test "requires a name" do
     household = Household.new
     assert_not household.valid?
-    assert_includes household.errors[:name], "can't be blank"
+    assert_includes household.errors[:name], error_message(:blank)
   end
 
   test "regenerate_invite_code! changes the code" do
@@ -38,7 +38,7 @@ class HouseholdTest < ActiveSupport::TestCase
   test "rejects an unknown time zone" do
     household = Household.new(name: "Test", time_zone: "Not/AZone")
     assert_not household.valid?
-    assert_includes household.errors[:time_zone], "is not included in the list"
+    assert_includes household.errors[:time_zone], error_message(:inclusion)
   end
 
   test "in_time_zone switches Time.zone for the duration of the block, then reverts" do

@@ -5,7 +5,7 @@
         <p class="font-medium"><%= contact.name %></p>
         <p class="text-xs text-secondary">
           <% if contact.born_on %>
-            <%= contact.born_on.strftime(contact.year_known ? "%d/%m/%Y" : "%d/%m") %>
+            <%= l(contact.born_on, format: contact.year_known ? :numeric : :numeric_short) %>
             <% if contact.age %> · <%= contact.age %> <%= t(".years") %><% end %>
           <% else %>
             <%= t(".no_date") %>

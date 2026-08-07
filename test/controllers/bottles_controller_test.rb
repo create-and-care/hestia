@@ -47,7 +47,7 @@ class BottlesControllerTest < ActionDispatch::IntegrationTest
       post bottles_path, params: { bottle: { wine_cellar_id: cellar.id, name: "" } }
     end
     assert_redirected_to wine_cellars_path
-    assert_equal "Name can't be blank", flash[:alert]
+    assert_equal validation_message(Bottle, :name), flash[:alert]
   end
 
   test "edit and update a bottle's own details and photo" do
@@ -82,7 +82,7 @@ class BottlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "dialog[role='alertdialog'] h2", text: I18n.t("bottles.bottle.take_out_confirm", name: bottles(:alpha_bordeaux).name)
     assert_select "form[action=?]", toggle_stock_bottle_path(bottles(:alpha_chardonnay)) do
-      assert_select "button", text: "Put back"
+      assert_select "button", text: I18n.t("bottles.bottle.put_back")
     end
   end
 
@@ -105,6 +105,6 @@ class BottlesControllerTest < ActionDispatch::IntegrationTest
     bottle = bottles(:alpha_bordeaux)
     bottle.update!(recipe: recipes(:alpha_pancakes))
     get wine_cellars_path
-    assert_includes @response.body, "Recipe pairing"
+    assert_body_includes I18n.t("bottles.bottle.paired_indicator")
   end
 end

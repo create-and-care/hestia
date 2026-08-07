@@ -2,6 +2,22 @@ class PublicGiftListsController < ApplicationController
   # Public unauthenticated access via token.
   allow_unauthenticated_access
   allow_without_household
+
+  # The only routes in the app that are both unauthenticated and guarded by
+  # nothing but a secret in the URL, so they are also the only ones where an
+  # attacker can look for a valid token by trying tokens. Two limits, because
+  # the two risks have different shapes:
+  #
+  #   browse — every action, generous. Aimed at token enumeration, which needs
+  #            volume; a real family opening the same list a few times over,
+  #            possibly from behind one NAT address, must not trip it.
+  #   write  — the state-changing pair, tight, mirroring the `to: 10,
+  #            within: 3.minutes` already on the three authentication entries.
+  #
+  # Both count through the controller cache store (Solid Cache in production).
+  rate_limit to: 60, within: 1.minute, name: "public-gift-browse"
+  rate_limit to: 10, within: 3.minutes, name: "public-gift-write", only: %i[reserve unreserve]
+
   before_action :set_shared_list
 
   def show

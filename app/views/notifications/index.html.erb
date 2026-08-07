@@ -3,7 +3,7 @@
 <%= turbo_stream_from Current.user, :notifications %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
-  <header class="mb-6 flex items-center justify-between">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("bell", css_class: "size-6") %> <%= t(".title") %></h1>
     <div class="flex gap-3">
       <%= render(Ui::ButtonComponent.new(variant: :outline, href: household_path(Current.household))) { t(".preferences") } %>

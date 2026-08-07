@@ -8,6 +8,13 @@ class Plant < ApplicationRecord
   validates :name, presence: true
 
   scope :ordered, -> { order(:name) }
+  # :overdue or :soon — a plant with at least one care task due within
+  # PlantCareTask::SOON_DAYS. Expressed as a join so the dashboard stops
+  # loading every plant and its whole care schedule to keep five of them;
+  # the exact status still comes from #care_status on those five.
+  scope :needing_care, -> {
+    where(id: PlantCareTask.where(next_due_on: ..(Date.current + PlantCareTask::SOON_DAYS)).select(:plant_id))
+  }
 
   broadcasts_refreshes_to ->(plant) { [ plant.household, "exterior" ] }
 

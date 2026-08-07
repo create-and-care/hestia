@@ -2,7 +2,7 @@
   <% @items.each do |label, value, pressed| %>
     <button type="button" data-toggle-group-target="item" data-value="<%= value %>" data-action="click->toggle-group#toggle"
       aria-pressed="<%= !!pressed %>"
-      class="h-8 px-3 rounded-md text-sm font-medium text-secondary aria-pressed:bg-container aria-pressed:text-primary aria-pressed:shadow-xs">
+      class="h-[var(--control-h-sm)] px-3 rounded-md text-sm font-medium text-secondary aria-pressed:bg-container aria-pressed:text-primary aria-pressed:shadow-xs">
       <%= label %>
     </button>
   <% end %>

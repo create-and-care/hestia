@@ -4,15 +4,28 @@ class Task < ApplicationRecord
   belongs_to :task_category, optional: true
   belongs_to :assignee, class_name: "User", optional: true
   belongs_to :trip, optional: true
-  has_many :task_reminders, dependent: :destroy
+  # delete_all, not destroy: TaskReminder carries no callbacks and owns
+  # nothing further, so loading every reminder of every task to delete a
+  # household was work for its own sake — the largest remaining Bullet
+  # finding, and one no `includes` could have addressed.
+  has_many :task_reminders, dependent: :delete_all
   has_one :conversation, as: :subject, dependent: :nullify
 
   validates :title, presence: true
+
+  # Thresholds for #due_status, shared with the scopes below so the dashboard's
+  # SQL and the badge's Ruby always agree on what "overdue" means.
+  URGENT_DAYS = 1
+  SOON_DAYS = 7
 
   scope :general, -> { where(trip_id: nil) }
 
   # Not-done first, then manual order (drag-and-drop), then due date.
   scope :ordered, -> { order(:done, :position, :id) }
+
+  # Unfinished and past due, soonest first. Replaces loading every task of the
+  # household on the dashboard to keep five of them.
+  scope :overdue, -> { where(done: false).where(due_on: ...Date.current).order(:due_on) }
 
   # Real-time: the card is targeted by its dom_id (replace/remove) and inserted into
   # its category's column (append) — cf. kanban view. The column's "empty" placeholder
@@ -36,9 +49,9 @@ class Task < ApplicationRecord
     days_left = (due_on - Date.current).to_i
     if days_left.negative?
       :overdue
-    elsif days_left <= 1
+    elsif days_left <= URGENT_DAYS
       :urgent
-    elsif days_left <= 7
+    elsif days_left <= SOON_DAYS
       :soon
     else
       :later

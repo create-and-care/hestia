@@ -1,0 +1,26 @@
+<%# The documentation's own navigation, rendered once and mounted twice — the
+    persistent sidebar on desktop, the drawer on mobile — exactly as the app's
+    own nav does it (shared/_app_sidebar). %>
+<%
+  current_slug = @entry&.slug
+  nav_link = ->(path, label, active) do
+    render(Ui::ItemComponent.new(href: path, active: active)) { |item| item.with_title { label } }
+  end
+%>
+<%= nav_link.call(design_system_path, "Vue d'ensemble", request.path == design_system_path) %>
+
+<div class="mt-4">
+  <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-subdued">Fondations</p>
+  <%= nav_link.call(design_system_colors_path, "Couleurs", request.path == design_system_colors_path) %>
+  <%= nav_link.call(design_system_typography_path, "Typographie", request.path == design_system_typography_path) %>
+  <%= nav_link.call(design_system_icons_path, "Icônes", request.path == design_system_icons_path) %>
+</div>
+
+<% @categories.each do |category, entries| %>
+  <div class="mt-4">
+    <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-subdued"><%= category %></p>
+    <% entries.each do |entry| %>
+      <%= nav_link.call(design_system_component_path(entry.slug), entry.name, entry.slug == current_slug) %>
+    <% end %>
+  </div>
+<% end %>

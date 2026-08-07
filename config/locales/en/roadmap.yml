@@ -180,19 +180,60 @@ en:
       public_route_hardening:
         title: "Public route hardening"
         items:
-          - "Rate limiting on the public gift-reservation route (g/:token/reserve/:idea_id), the only sensitive route with none today"
-          - "Automated accessibility auditing — no a11y test tooling in place despite the manual fixes already shipped module by module"
+          - "Rate limiting on the public gift list (g/:token): separate browse and write limits, the latter on reservation, plus a 429 page in the site's own dress"
+          - "No more never-expiring API token: three durations to choose from, 90 days by default"
+          - "Automated accessibility auditing: bin/rails visual:check measures contrast, touch-target size and font size across 273 routes × 2 themes × 2 widths, and test/lib/ carries the contrast and accessibility tests"
+      security_performance_hardening:
+        title: "Security & measured performance"
+        items:
+          - "A Content-Security-Policy that is actually sent (it was commented out in full), with a per-request nonce on script-src"
+          - "force_ssl / assume_ssl switchable through FORCE_SSL, without breaking plain-HTTP access on a home network"
+          - "Disabled modules now closed on the JSON API too: one mapping shared by the web and the API, and a test that walks the routes so no controller stays unclassified"
+          - "Open Food Facts and Nominatim lookups cached — the first uses of Rails.cache, setting the key and TTL conventions"
+          - "Dashboard filtered in SQL: every widget asks the database for the five rows it shows instead of loading the whole relation"
+          - "Recurrence expansion bounded by the date window rather than by the age of the series"
+          - "Eager loading on the lists that lacked it, enumerated by making Bullet fail the test suite (BULLET_RAISE=1)"
       reference_catalog_growth:
         title: "Grow the catalogs & the automation"
         items:
           - "Expand the Outdoor plant reference catalog beyond the 6 starter sheets"
           - "Expand the Loyalty brand catalog beyond the starter dozen"
           - "Smart ingredient merging (duplicates, unit conversion) when adding a recipe to shopping"
-      pwa:
-        title: "Enable the PWA"
+      design_system_measured:
+        title: "Design system: the measured gaps"
         items:
-          - "The manifest and service worker already exist under app/views/pwa/, still commented out in routes and the layout"
-          - "Would let the app be installed on mobile/desktop while waiting for full Flutter client parity"
+          - "The visual:check report re-run across 273 routes × 2 themes × 2 widths, and fixed from its numbers rather than from an impression"
+          - "Ui::ItemComponent put back on the 4px grid without moving every list in the app: a height floor keeps the common row pixel-identical"
+          - "A named z-index scale (sticky, floating, overlay, toast): the stacking order was twelve hand-picked numbers and written down nowhere"
+          - "Loading skeletons in the lazy turbo-frames, with a screen-reader label — a grey shape says nothing"
+          - "The design-system documentation made usable on mobile: it overflowed by 80px at 390px, on the very pages that describe the type scale"
+          - "icon: and icon_position: on Ui::ButtonComponent, with the glyph sized from the button"
+      i18n_guardrails:
+        title: "Internationalization: guardrails instead of discipline"
+        items:
+          - "date/time format blocks in both locales: none existed, and the l() calls were running on rails-i18n's defaults"
+          - "51 display strftime calls migrated to l() — they hard-coded \"%d/%m/%Y\", so an English reader saw 07/08/2026 for 7 August and read 8 July"
+          - "bin/rails i18n:check (and its CI job) fails on a missing translation and on any key present in only one of the two locales"
+          - "A test refuses any new display strftime and pins that a numeric date really does read differently in English and in French"
+      pwa:
+        title: "Installable app (PWA)"
+        items:
+          - "Manifest and service worker wired up: routes, the layout link, and a theme colour and square icons in place of the Rails template's own values"
+          - "192/512 icons and a maskable variant generated from the logo, plus a vector icon replacing the red circle that had been serving as the favicon"
+          - "An offline page served by the worker when a navigation fails — the only cached resource, since serving a stale dashboard would be worse than serving nothing"
+          - "Installable on mobile and desktop while waiting for full Flutter client parity"
+      shared_link_controls:
+        title: "Control over shared links"
+        items:
+          - "Expiry and a password on public gift-list shares: a link shared once is currently good forever"
+          - "A time-limited guest mode, to let someone without a Hestia account see a shopping list"
+      household_logistics:
+        title: "Household logistics"
+        items:
+          - "Recurring bills in Budget: rent is re-entered by hand every month, while both the recurrence engine and the reminders already exist"
+          - "A belongings inventory (photo, value, purchase date, warranty), for insurance and resale"
+          - "French school-holiday calendar (zones A/B/C) — public holidays are covered, what shapes a family's year is not"
+          - "Duplicate detection when adding to the shopping list, and suggestions drawn from the purchase history already in the database"
       marketing_docs:
         title: "Marketing site & user documentation"
         items:

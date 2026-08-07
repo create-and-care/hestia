@@ -30,7 +30,7 @@
       <div id="waste_events" class="<%= Ui::ViewToggleComponent.container_classes(@events_view_mode) %>">
         <% @events.each do |date, events| %>
           <%= render(Ui::CardComponent.new) do %>
-            <p class="mb-1 text-xs font-medium text-secondary"><%= weekday_label(date.wday) %> <%= date.strftime("%d/%m") %></p>
+            <p class="mb-1 text-xs font-medium text-secondary"><%= weekday_label(date.wday) %> <%= l(date, format: :numeric_short) %></p>
             <div class="flex flex-wrap gap-2">
               <% events.each do |event| %>
                 <%= tag.span id: dom_id(event) do %>
@@ -80,7 +80,7 @@
                 <div>
                   <%= waste_type_icon(series.waste_type) %> <%= waste_type_label(series.waste_type) %> —
                   <%= weekday_label(series.weekday) %>, <%= t(".every_n_weeks", count: series.interval_weeks) %>
-                  <span class="text-subdued">(<%= series.starts_on.strftime("%d/%m/%y") %> → <%= series.ends_on.strftime("%d/%m/%y") %>)</span>
+                  <span class="text-subdued">(<%= l(series.starts_on, format: :numeric_compact) %> → <%= l(series.ends_on, format: :numeric_compact) %>)</span>
                 </div>
                 <%= render(Ui::ButtonToComponent.new(waste_collection_series_path(series), method: :delete, variant: :ghost, size: :sm,
                       html_options: { aria: { label: t(".delete_series_aria", type: waste_type_label(series.waste_type)) },

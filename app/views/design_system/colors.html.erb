@@ -16,7 +16,7 @@
       <% DesignTokens::BRAND_COLORS.each do |token| %>
         <div class="flex flex-col items-center gap-1">
           <div class="size-20 rounded-md border border-subdued" style="background-color: var(--color-<%= token %>)"></div>
-          <span class="font-mono text-[11px] text-secondary"><%= token %></span>
+          <span class="font-mono text-xs text-secondary"><%= token %></span>
         </div>
       <% end %>
     </div>
@@ -30,7 +30,7 @@
           <% shades.each do |shade| %>
             <div class="flex flex-col items-center gap-1 shrink-0">
               <div class="size-11 rounded-md border border-subdued" style="background-color: var(--color-<%= hue %>-<%= shade %>)"></div>
-              <span class="font-mono text-[10px] text-subdued"><%= shade %></span>
+              <span class="font-mono text-xs text-subdued"><%= shade %></span>
             </div>
           <% end %>
         </div>
@@ -45,7 +45,7 @@
       <% DesignTokens::SEMANTIC_COLORS.each do |token| %>
         <div class="flex flex-col items-center gap-1">
           <div class="size-14 rounded-md border border-subdued" style="background-color: var(--color-<%= token %>)"></div>
-          <span class="font-mono text-[11px] text-secondary"><%= token %></span>
+          <span class="font-mono text-xs text-secondary"><%= token %></span>
         </div>
       <% end %>
     </div>
@@ -58,7 +58,7 @@
       <% DesignTokens::SURFACE_COLORS.each do |token| %>
         <div class="flex flex-col items-center gap-1">
           <div class="size-14 rounded-md border border-subdued" style="background-color: var(--color-<%= token %>)"></div>
-          <span class="font-mono text-[11px] text-secondary"><%= token %></span>
+          <span class="font-mono text-xs text-secondary"><%= token %></span>
         </div>
       <% end %>
     </div>
@@ -70,7 +70,7 @@
       <% %w[xs sm md lg xl].each do |size| %>
         <div class="flex flex-col items-center gap-2">
           <div class="size-16 rounded-md bg-container" style="box-shadow: var(--shadow-<%= size %>)"></div>
-          <span class="font-mono text-[11px] text-secondary">shadow-<%= size %></span>
+          <span class="font-mono text-xs text-secondary">shadow-<%= size %></span>
         </div>
       <% end %>
     </div>
@@ -81,11 +81,11 @@
     <div class="mt-4 flex flex-wrap gap-6">
       <div class="flex flex-col items-center gap-2">
         <div class="size-16 border border-primary bg-surface" style="border-radius: var(--radius-md)"></div>
-        <span class="font-mono text-[11px] text-secondary">rounded-md · 8px</span>
+        <span class="font-mono text-xs text-secondary">rounded-md · 8px</span>
       </div>
       <div class="flex flex-col items-center gap-2">
         <div class="size-16 border border-primary bg-surface" style="border-radius: var(--radius-lg)"></div>
-        <span class="font-mono text-[11px] text-secondary">rounded-lg · 10px</span>
+        <span class="font-mono text-xs text-secondary">rounded-lg · 10px</span>
       </div>
     </div>
   </div>

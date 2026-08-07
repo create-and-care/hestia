@@ -19,10 +19,28 @@ module Recipes
       ::1/128 fc00::/7 fe80::/10
     ].map { |range| IPAddr.new(range) }.freeze
 
-    def self.call(url) = new(url).call
+    # How a hostname becomes a list of addresses. Swappable because it is the
+    # one part of this class that reaches outside the process *before* the HTTP
+    # call, and so the one part WebMock cannot stand in for: a test that stubs
+    # the request still fails here, on a machine with no DNS, with the request
+    # never attempted. Six tests were failing that way — the guard doing
+    # exactly its job, on a question the test had not meant to ask.
+    #
+    # Not a general seam for the sake of it: production has exactly one
+    # resolver, and this default is it.
+    DEFAULT_RESOLVER = ->(host) { Resolv.getaddresses(host) }
 
-    def initialize(url)
+    class << self
+      attr_writer :resolver
+
+      def resolver = @resolver ||= DEFAULT_RESOLVER
+
+      def call(url, resolver: nil) = new(url, resolver: resolver).call
+    end
+
+    def initialize(url, resolver: nil)
       @url = url.to_s.strip
+      @resolver = resolver || self.class.resolver
     end
 
     def call
@@ -43,7 +61,7 @@ module Recipes
 
     private
       def public_host?(host)
-        addresses = Resolv.getaddresses(host)
+        addresses = @resolver.call(host)
         addresses.present? && addresses.all? { |address| BLOCKED_RANGES.none? { |range| range.include?(IPAddr.new(address)) } }
       end
   end

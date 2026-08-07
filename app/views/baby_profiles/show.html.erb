@@ -9,7 +9,7 @@
       <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("baby", css_class: "size-6") %> <%= @baby.name %></h1>
       <% if @baby.born_on %>
         <p class="text-sm text-secondary">
-          <%= t("baby_profiles.born_on", date: @baby.born_on.strftime("%d/%m/%Y")) %>
+          <%= t("baby_profiles.born_on", date: l(@baby.born_on, format: :numeric)) %>
           · <%= t("baby_profiles.age_months", count: @baby.age_in_months) %>
         </p>
       <% end %>
@@ -38,7 +38,7 @@
           <%= render(Ui::ItemComponent.new) do |item| %>
             <% item.with_title do %>
               <%= feeding_kind_label(session.kind) %>
-              <% if session.started_at %><span class="text-subdued">· <%= session.started_at.strftime("%d/%m %H:%M") %></span><% end %>
+              <% if session.started_at %><span class="text-subdued">· <%= l(session.started_at, format: :numeric_short) %></span><% end %>
               <% if session.ended_at.nil? %>
                 <%= render(Ui::BadgeComponent.new(variant: :warning)) { t(".in_progress") } %>
               <% elsif session.duration_minutes %>
@@ -63,7 +63,7 @@
 
     <% if (ongoing = @baby.feeding_sessions.in_progress.first) %>
       <div class="flex flex-wrap items-center gap-2">
-        <p class="text-sm text-secondary"><%= t(".feeding_in_progress", kind: feeding_kind_label(ongoing.kind), time: ongoing.started_at.strftime("%H:%M")) %></p>
+        <p class="text-sm text-secondary"><%= t(".feeding_in_progress", kind: feeding_kind_label(ongoing.kind), time: l(ongoing.started_at, format: :hour_minute)) %></p>
         <%= render(Ui::ButtonToComponent.new(stop_baby_profile_feeding_session_path(@baby, ongoing), method: :patch, variant: :default, size: :sm)) { t(".stop") } %>
       </div>
     <% else %>
@@ -88,7 +88,7 @@
           <%= render(Ui::ItemComponent.new) do |item| %>
             <% item.with_title do %>
               <%= introduction.food %>
-              <% if introduction.introduced_on %><span class="text-subdued">· <%= introduction.introduced_on.strftime("%d/%m/%Y") %></span><% end %>
+              <% if introduction.introduced_on %><span class="text-subdued">· <%= l(introduction.introduced_on, format: :numeric) %></span><% end %>
               <% if introduction.acceptance.present? %><span class="text-subdued">· <%= introduction.acceptance %></span><% end %>
             <% end %>
             <% item.with_trailing do %>
@@ -143,7 +143,7 @@
           <%= render(Ui::ItemComponent.new) do |item| %>
             <% item.with_title do %>
               <%= test.allergen %>
-              <% if test.tested_on %><span class="text-subdued">· <%= test.tested_on.strftime("%d/%m/%Y") %></span><% end %>
+              <% if test.tested_on %><span class="text-subdued">· <%= l(test.tested_on, format: :numeric) %></span><% end %>
               <% if test.severity.present? %><span class="text-subdued">· <%= test.severity %></span><% end %>
             <% end %>
             <% item.with_trailing do %>

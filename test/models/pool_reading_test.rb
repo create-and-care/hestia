@@ -4,14 +4,14 @@ class PoolReadingTest < ActiveSupport::TestCase
   test "requires measured_on and measure_type" do
     reading = PoolReading.new(pool: pools(:alpha_pool))
     assert_not reading.valid?
-    assert_includes reading.errors[:measured_on], "can't be blank"
-    assert_includes reading.errors[:measure_type], "can't be blank"
+    assert_includes reading.errors[:measured_on], error_message(:blank)
+    assert_includes reading.errors[:measure_type], error_message(:blank)
   end
 
   test "belongs to a pool" do
     reading = PoolReading.new(measure_type: "pH", value: 7.2, measured_on: Date.current)
     assert_not reading.valid?
-    assert_includes reading.errors[:pool], "must exist"
+    assert_includes reading.errors[:pool], error_message(:required)
   end
 
   test "recent orders by measured_on then created_at, most recent first" do
@@ -26,7 +26,7 @@ class PoolReadingTest < ActiveSupport::TestCase
     pool = pools(:alpha_pool) # sel
     reading = pool.pool_readings.new(measure_type: "chlore_libre", value: 1, measured_on: Date.current)
     assert_not reading.valid?
-    assert_includes reading.errors[:measure_type], "is not included in the list"
+    assert_includes reading.errors[:measure_type], error_message(:inclusion)
   end
 
   test "accepts a measure_type relevant to the pool's treatment_type" do

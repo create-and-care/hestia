@@ -3,7 +3,7 @@
     <% item.with_title do %><%= "#{routine.emoji} " if routine.emoji.present? %><%= routine.name %><% end %>
     <% item.with_description do %>
       <%= routine_frequency_label(routine.frequency) %><%= " ×#{routine.interval}" if routine.interval.to_i > 1 %>
-      <% if routine.next_due_on %>· <%= t(".next_due") %> : <%= routine.next_due_on.strftime("%d/%m/%Y") %><% end %>
+      <% if routine.next_due_on %>· <%= t(".next_due") %> : <%= l(routine.next_due_on, format: :numeric) %><% end %>
       <% if routine.overdue? %><span class="font-medium text-destructive">· <%= t(".overdue") %></span><% end %>
       <% if routine.assignee %>· <%= routine.assignee.name.presence || routine.assignee.email_address %><% end %>
       <% if routine.list_name.present? %>· <%= routine.list_name %><% end %>
@@ -19,7 +19,7 @@
           <% end %>
           <% dialog.with_title { t("routines.show.history_heading") } %>
           <%= turbo_frame_tag dom_id(routine, :history), src: routine_path(routine), loading: :lazy do %>
-            <div class="flex min-h-24 items-center justify-center text-sm text-secondary"><%= t(".history_loading") %></div>
+            <%= render "shared/frame_skeleton", label: t(".history_loading"), rows: 2 %>
           <% end %>
         <% end %>
         <%= render(Ui::DialogComponent.new(close_on_submit: true)) do |dialog| %>
@@ -29,7 +29,7 @@
           <% end %>
           <% dialog.with_title { t("routines.edit.title") } %>
           <%= turbo_frame_tag dom_id(routine, :edit), src: edit_routine_path(routine), loading: :lazy do %>
-            <div class="flex min-h-24 items-center justify-center text-sm text-secondary"><%= t(".edit_loading") %></div>
+            <%= render "shared/frame_skeleton", label: t(".edit_loading"), rows: 3 %>
           <% end %>
         <% end %>
         <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm"), confirm_label: t(".delete_label"),

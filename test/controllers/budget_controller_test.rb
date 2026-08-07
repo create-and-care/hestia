@@ -22,7 +22,7 @@ class BudgetControllerTest < ActionDispatch::IntegrationTest
 
     get budget_path
     assert_response :success
-    assert_includes @response.body, "1 linked document"
+    assert_body_includes I18n.t("budget.show.documents_count", count: 1)
   end
 
   test "create a category" do

@@ -5,7 +5,7 @@ class WorkoutTemplateExerciseTest < ActiveSupport::TestCase
     template = users(:one).workout_templates.create!(name: "Jambes")
     exercise = template.workout_template_exercises.new
     assert_not exercise.valid?
-    assert_includes exercise.errors[:exercise], "can't be blank"
+    assert_includes exercise.errors[:exercise], error_message(:blank)
   end
 
   test "assigns incrementing positions in creation order" do

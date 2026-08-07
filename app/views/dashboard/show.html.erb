@@ -96,7 +96,7 @@
         <% @upcoming_events.each do |time, event| %>
           <%= render Ui::ItemComponent.new do |item| %>
             <% item.with_title { link_to event.title, calendar_path, class: "hover:underline" } %>
-            <% item.with_description { time.strftime("%a %d/%m — %H:%M") } %>
+            <% item.with_description { l(time, format: :weekday_numeric) } %>
           <% end %>
         <% end %>
       </div>

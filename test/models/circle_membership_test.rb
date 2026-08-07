@@ -4,7 +4,7 @@ class CircleMembershipTest < ActiveSupport::TestCase
   test "requires a role from the allowed list" do
     membership = CircleMembership.new(circle: circles(:family), user: users(:one), role: "owner")
     assert_not membership.valid?
-    assert_includes membership.errors[:role], "is not included in the list"
+    assert_includes membership.errors[:role], error_message(:inclusion)
   end
 
   test "accepts each allowed role" do
@@ -17,14 +17,14 @@ class CircleMembershipTest < ActiveSupport::TestCase
   test "belongs to a circle and a user" do
     membership = CircleMembership.new(role: "member")
     assert_not membership.valid?
-    assert_includes membership.errors[:circle], "must exist"
-    assert_includes membership.errors[:user], "must exist"
+    assert_includes membership.errors[:circle], error_message(:required)
+    assert_includes membership.errors[:user], error_message(:required)
   end
 
   test "a user cannot join the same circle twice" do
     duplicate = CircleMembership.new(circle: circles(:family), user: users(:one), role: "member")
     assert_not duplicate.valid?
-    assert_includes duplicate.errors[:user_id], "has already been taken"
+    assert_includes duplicate.errors[:user_id], error_message(:taken)
   end
 
   test "the same user can belong to different circles" do

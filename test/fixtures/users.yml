@@ -1,11 +1,18 @@
 <% password_digest = BCrypt::Password.create("password") %>
+<%# Every signed-in page renders in User#locale, so moving I18n.default_locale
+    alone would leave the whole authenticated app in English. This is what
+    makes `LOCALE=fr bin/rails test` actually exercise the French formats —
+    see config/environments/test.rb (I18N-03). %>
+<% locale = ENV.fetch("LOCALE", "en") %>
 
 one:
   name: Alice
   email_address: one@example.com
   password_digest: <%= password_digest %>
+  locale: <%= locale %>
 
 two:
   name: Bob
   email_address: two@example.com
   password_digest: <%= password_digest %>
+  locale: <%= locale %>

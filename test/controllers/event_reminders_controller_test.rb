@@ -18,7 +18,7 @@ class EventRemindersControllerTest < ActionDispatch::IntegrationTest
       post calendar_event_event_reminders_path(event), params: { event_reminder: { minutes_before: 0 } }
     end
     assert_redirected_to edit_calendar_event_path(event)
-    assert_includes flash[:alert], "greater than 0"
+    assert_includes flash[:alert], error_message(:greater_than, count: 0)
   end
 
   test "ignores a user_id from another household and falls back to the current user" do

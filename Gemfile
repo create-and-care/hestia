@@ -75,6 +75,10 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Locale parity, checked instead of remembered. en and fr are at 1 985 keys
+  # each by hand today; the only question is when that stops being true.
+  gem "i18n-tasks", require: false
 end
 
 group :development do

@@ -2,7 +2,7 @@
   <ul class="divide-y divide-primary">
     <% completions.each do |completion| %>
       <li class="flex items-center justify-between py-2 text-sm">
-        <span><%= completion.completed_on.strftime("%d/%m/%Y") %></span>
+        <span><%= l(completion.completed_on, format: :numeric) %></span>
         <span class="text-secondary"><%= completion.author&.name.presence || completion.author&.email_address || t(".unknown_author") %></span>
       </li>
     <% end %>

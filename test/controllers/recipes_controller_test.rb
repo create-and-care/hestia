@@ -129,7 +129,7 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to recipe
     follow_redirect!
-    assert_includes @response.body, "already on the shopping list"
+    assert_body_includes I18n.t("recipes.add_to_shopping_list.already_notice")
     assert_select "a[href=?]", shopping_list_path(list)
   end
 

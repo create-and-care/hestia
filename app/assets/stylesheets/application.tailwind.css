@@ -285,7 +285,11 @@
      several land under 4.5:1. Rule: tint background uses --X, text on it uses --X-text. */
   --success-text: var(--color-green-800);
   --warning-text: var(--color-yellow-700);
-  --destructive-text: var(--color-crimson-700);
+  /* crimson-800, not -700: --destructive-subtle is crimson-200, and -700 on it
+     measured 4.45:1 — under the bar by a hair, on the calendar's public-holiday
+     cells. -800 gives 5.80:1 there and only more elsewhere, since every other
+     background this sits on is lighter. */
+  --destructive-text: var(--color-crimson-800);
   --info-text: var(--color-blue-700);
   --accent-text: var(--color-amber-800);
 
@@ -319,7 +323,11 @@
   --text-primary: #2A211C;
   --text-inverse: var(--color-white);
   --text-secondary: #6E625B;
-  --text-subdued: #7A6B61;
+  /* Darkened from #7A6B61, which measured 4.31:1 on --surface-inset — the
+     token exists to be quiet, not to be unreadable, and a form's help text is
+     exactly where it lands on an inset. 4.79:1 now, still clearly below
+     --text-secondary. */
+  --text-subdued: #72645C;
 
   --border-primary: color-mix(in oklab, #3A2A22 15%, transparent);
   --border-secondary: color-mix(in oklab, #3A2A22 10%, transparent);
@@ -385,7 +393,9 @@
 
   --success-text: var(--color-green-300);
   --warning-text: var(--color-yellow-300);
-  --destructive-text: var(--color-crimson-300);
+  /* Mirror of the light-mode note above: crimson-300 on --destructive-subtle
+     (crimson-800 here) measured 4.00:1; crimson-200 gives 5.80:1. */
+  --destructive-text: var(--color-crimson-200);
   --info-text: var(--color-blue-400);
   --accent-text: var(--color-amber-300);
 
@@ -494,6 +504,29 @@
 /* divide-{color} has no semantic-token equivalent yet — most lists still use
    divide-gray-100, which never adapts to dark mode (raw Tailwind gray). */
 @utility divide-primary { & > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-primary); } }
+
+/* ── Stacking order ────────────────────────────────────────────────────────
+   Tailwind v4 gives z-index no @theme namespace (unlike --color-*, --radius-*,
+   --shadow-*, --text-*), so the scale is spelled out as utilities rather than
+   tokens. The point is not the numbers — it is that the order is written down
+   in one place instead of being inferred from a dozen hand-picked values
+   scattered across components.
+
+   A native <dialog> opened with showModal() sits in the browser's top layer
+   and is above every one of these without being told. That is why Dialog,
+   AlertDialog and Drawer carry no z-index at all, and why giving them one
+   would be a mistake: it would put them back into the ordinary stacking
+   context they escaped, underneath the toasts that are meant to reach the
+   user *through* an open dialog.
+
+     z-sticky    30   bars pinned to the viewport (the mobile top bar)
+     z-floating  40   controls hovering over those bars (the notification bell)
+     z-overlay   50   layers anchored to a trigger — menus, popovers, tooltips
+     z-toast    100   the last word, above everything including the top layer */
+@utility z-sticky { z-index: 30; }
+@utility z-floating { z-index: 40; }
+@utility z-overlay { z-index: 50; }
+@utility z-toast { z-index: 100; }
 
 @utility shadow-border-xs { box-shadow: var(--shadow-xs), 0px 0px 0px 1px var(--shadow-border-color); }
 @utility shadow-border-sm { box-shadow: var(--shadow-sm), 0px 0px 0px 1px var(--shadow-border-color); }

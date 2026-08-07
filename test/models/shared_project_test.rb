@@ -40,6 +40,6 @@ class SharedProjectTest < ActiveSupport::TestCase
   test "rejects a trip from another household" do
     project = households(:alpha).shared_projects.new(name: "Voyage", trip: trips(:beta_trip))
     assert_not project.valid?
-    assert_includes project.errors[:trip], "is invalid"
+    assert_includes project.errors[:trip], error_message(:invalid)
   end
 end

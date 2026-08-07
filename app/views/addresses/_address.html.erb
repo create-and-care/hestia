@@ -2,7 +2,7 @@
   <% if address.photo.attached? %>
     <div class="size-12 shrink-0">
       <%= render(Ui::AspectRatioComponent.new) do %>
-        <%= image_tag address.photo.variant(resize_to_fill: [ 48, 48 ]), alt: "", class: "size-full rounded-md object-cover" %>
+        <%= image_tag address.photo.variant(resize_to_fill: [ 48, 48 ]), alt: "", loading: :lazy, class: "size-full rounded-md object-cover" %>
       <% end %>
     </div>
   <% end %>

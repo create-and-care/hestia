@@ -8,7 +8,7 @@
       <% if @pet.photo.attached? %>
         <div class="size-16 shrink-0">
           <%= render(Ui::AspectRatioComponent.new(ratio: 1)) do %>
-            <%= image_tag @pet.photo.variant(resize_to_fill: [ 128, 128 ]), alt: "", class: "size-full rounded-full object-cover" %>
+            <%= image_tag @pet.photo.variant(resize_to_fill: [ 128, 128 ]), alt: "", loading: :lazy, class: "size-full rounded-full object-cover" %>
           <% end %>
         </div>
       <% end %>
@@ -55,12 +55,12 @@
           <%= render(Ui::ItemComponent.new) do |item| %>
             <% item.with_title do %>
               <%= vaccination.name %>
-              <% if vaccination.injected_on %><span class="text-subdued">· <%= t(".vaccination_done_on", date: vaccination.injected_on.strftime("%d/%m/%Y")) %></span><% end %>
+              <% if vaccination.injected_on %><span class="text-subdued">· <%= t(".vaccination_done_on", date: l(vaccination.injected_on, format: :numeric)) %></span><% end %>
               <% if vaccination.booster_on %>
                 <% if vaccination.booster_overdue? %>
-                  <%= render(Ui::BadgeComponent.new(variant: :destructive)) { t(".vaccination_booster_on", date: vaccination.booster_on.strftime("%d/%m/%Y")) } %>
+                  <%= render(Ui::BadgeComponent.new(variant: :destructive)) { t(".vaccination_booster_on", date: l(vaccination.booster_on, format: :numeric)) } %>
                 <% else %>
-                  <span class="text-subdued">· <%= t(".vaccination_booster_on", date: vaccination.booster_on.strftime("%d/%m/%Y")) %></span>
+                  <span class="text-subdued">· <%= t(".vaccination_booster_on", date: l(vaccination.booster_on, format: :numeric)) %></span>
                 <% end %>
               <% end %>
               <% if vaccination.price %><span class="text-subdued">· <%= number_to_currency(vaccination.price, unit: "€", format: "%n %u") %></span><% end %>
@@ -103,7 +103,7 @@
               <%= treatment.name %>
               <% if treatment.frequency.present? %><span class="text-subdued">· <%= treatment.frequency %></span><% end %>
               <% if treatment.quantity.present? %><span class="text-subdued">· <%= treatment.quantity %></span><% end %>
-              <% if treatment.last_done_on %><span class="text-subdued">· <%= t(".treatment_last_done", date: treatment.last_done_on.strftime("%d/%m/%Y")) %></span><% end %>
+              <% if treatment.last_done_on %><span class="text-subdued">· <%= t(".treatment_last_done", date: l(treatment.last_done_on, format: :numeric)) %></span><% end %>
               <% if treatment.price %><span class="text-subdued">· <%= number_to_currency(treatment.price, unit: "€", format: "%n %u") %></span><% end %>
             <% end %>
             <% item.with_trailing do %>
@@ -144,7 +144,7 @@
           <%= render(Ui::ItemComponent.new) do |item| %>
             <% item.with_title do %>
               <% if supply.order_url.present? %><%= link_to supply.name, supply.order_url, target: "_blank", rel: "noopener", class: "underline" %><% else %><%= supply.name %><% end %>
-              <% if supply.next_order_on %><span class="text-subdued">· <%= t(".next_order_on", date: supply.next_order_on.strftime("%d/%m/%Y")) %></span><% end %>
+              <% if supply.next_order_on %><span class="text-subdued">· <%= t(".next_order_on", date: l(supply.next_order_on, format: :numeric)) %></span><% end %>
             <% end %>
             <% item.with_trailing do %>
               <div class="flex items-center gap-1">
@@ -178,7 +178,7 @@
     <h2 class="mb-2 font-medium"><%= t(".documents_heading") %></h2>
     <% if @pet.documents.ordered.any? %>
       <div class="mb-3 divide-y divide-primary rounded-lg border border-primary">
-        <% @pet.documents.ordered.with_attached_file.each do |document| %>
+        <% @pet.documents.ordered.each do |document| %>
           <%= render(Ui::ItemComponent.new) do |item| %>
             <% item.with_title { render "documents/preview_trigger", document: document } %>
           <% end %>

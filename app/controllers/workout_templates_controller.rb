@@ -2,7 +2,8 @@ class WorkoutTemplatesController < ApplicationController
   before_action :set_template, only: %i[edit update destroy log]
 
   def index
-    @templates = Current.user.workout_templates.order(:name)
+    # Each template lists its exercises inline (PERF-06).
+    @templates = Current.user.workout_templates.order(:name).includes(:workout_template_exercises)
   end
 
   def new

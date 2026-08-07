@@ -51,7 +51,6 @@ fr:
       edit_account: "Modifier mon compte"
       leave: "Quitter"
       leave_confirm: "Quitter ce foyer ? Un code d'invitation sera nécessaire pour le rejoindre."
-      last_admin: "Ce foyer a besoin d'au moins un administrateur — promouvez quelqu'un d'autre d'abord."
       switch_household: "Changer de foyer actif"
       switch_to: "Passer à « %{name} »"
       other_households: "Autres foyers"

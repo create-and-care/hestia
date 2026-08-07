@@ -4,7 +4,7 @@
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <div class="mb-4"><%= module_breadcrumb(:shopping, [ @shopping_list.name, nil ], module_path: shopping_lists_path) %></div>
 
-  <header class="mb-6 flex items-center justify-between">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold">
       <span><%= @shopping_list.icon.presence || lucide_icon("shopping-cart", css_class: "size-6") %></span>
       <span><%= @shopping_list.name %></span>

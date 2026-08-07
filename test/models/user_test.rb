@@ -9,7 +9,7 @@ class UserTest < ActiveSupport::TestCase
   test "rejects a password shorter than 8 characters" do
     user = User.new(name: "Test", email_address: "short_pw@example.com", password: "short", password_confirmation: "short")
     assert_not user.valid?
-    assert_includes user.errors[:password], "is too short (minimum is 8 characters)"
+    assert_includes user.errors[:password], error_message(:too_short, count: 8)
   end
 
   test "accepts a password of 8 characters or more" do

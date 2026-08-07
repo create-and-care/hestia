@@ -16,8 +16,8 @@ class ExternalCalendarConnectionTest < ActiveSupport::TestCase
   test "requires a caldav_url and username for CalDAV, but not for OAuth providers" do
     caldav = ExternalCalendarConnection.new(user: users(:one), provider: "caldav")
     assert_not caldav.valid?
-    assert_includes caldav.errors[:caldav_url], "can't be blank"
-    assert_includes caldav.errors[:username], "can't be blank"
+    assert_includes caldav.errors[:caldav_url], error_message(:blank)
+    assert_includes caldav.errors[:username], error_message(:blank)
 
     google = ExternalCalendarConnection.new(user: users(:one), provider: "google")
     assert google.valid?

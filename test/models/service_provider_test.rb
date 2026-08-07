@@ -26,6 +26,6 @@ class ServiceProviderTest < ActiveSupport::TestCase
   test "rejects a linked address from another household" do
     provider = households(:alpha).service_providers.build(name: "X", linked_address: addresses(:beta_place))
     assert_not provider.valid?
-    assert_includes provider.errors[:linked_address], "is invalid"
+    assert_includes provider.errors[:linked_address], error_message(:invalid)
   end
 end

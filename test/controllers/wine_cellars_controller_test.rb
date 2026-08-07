@@ -59,7 +59,7 @@ class WineCellarsControllerTest < ActionDispatch::IntegrationTest
       post wine_cellars_path, params: { wine_cellar: { name: "" } }
     end
     assert_redirected_to wine_cellars_path
-    assert_equal "Name can't be blank", flash[:alert]
+    assert_equal validation_message(WineCellar, :name), flash[:alert]
   end
 
   test "delete cellar button asks for confirmation" do

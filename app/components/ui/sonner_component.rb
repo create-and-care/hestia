@@ -4,7 +4,7 @@ module Ui
   class SonnerComponent < ApplicationComponent
     def call
       tag.div data: { controller: "sonner" }, role: "status", "aria-live": "polite",
-        class: "pointer-events-none fixed bottom-4 right-4 z-[100] flex flex-col gap-2"
+        class: "pointer-events-none fixed bottom-4 right-4 z-toast flex flex-col gap-2"
     end
   end
 end

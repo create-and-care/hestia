@@ -9,5 +9,6 @@ en:
       family: "Family"
       social: "Social"
     footer:
+      roadmap: "Roadmap"
       settings: "Household settings"
       sign_out: "Sign out"

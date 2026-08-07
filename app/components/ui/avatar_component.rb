@@ -44,7 +44,7 @@ module Ui
         class: cn("relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-medium", fallback_classes, SIZES.fetch(@size), @class_name),
         style: fallback_style do
         if @src.present?
-          image_tag @src, alt: @alt, class: "size-full object-cover bg-surface-inset"
+          image_tag @src, alt: @alt, loading: :lazy, class: "size-full object-cover bg-surface-inset"
         else
           @fallback
         end

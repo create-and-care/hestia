@@ -25,7 +25,7 @@ class ExternalCalendarConnectionsControllerTest < ActionDispatch::IntegrationTes
     get connect_external_calendar_connections_path(provider: "google")
     assert_redirected_to external_calendar_connections_path
     follow_redirect!
-    assert_match(/not configured/, @response.body)
+    assert_body_includes I18n.t("external_calendar_connections.connect.not_configured", provider: "Google")
   end
 
   test "connect redirects to the provider's real authorize URL once configured" do
@@ -54,7 +54,7 @@ class ExternalCalendarConnectionsControllerTest < ActionDispatch::IntegrationTes
 
     assert_redirected_to external_calendar_connections_path
     follow_redirect!
-    assert_match(/expired or invalid/, @response.body)
+    assert_body_includes I18n.t("external_calendar_connections.callback.state_mismatch")
   end
 
   test "callback exchanges the code, creates a connection, and triggers a first sync" do

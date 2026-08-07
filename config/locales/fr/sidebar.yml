@@ -9,5 +9,6 @@ fr:
       family: "Famille"
       social: "Social"
     footer:
+      roadmap: "Roadmap"
       settings: "Paramètres du foyer"
       sign_out: "Se déconnecter"

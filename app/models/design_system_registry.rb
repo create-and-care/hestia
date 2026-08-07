@@ -67,12 +67,27 @@ module DesignSystemRegistry
   ENTRIES = [
     # ── Formulaires & saisie ──────────────────────────────────────────
     Entry.new(slug: "button", name: "Button", category: CATEGORIES[0], component_class: Ui::ButtonComponent,
-      description: "Déclenche une action ponctuelle ; variants default/secondary/outline/ghost/destructive/link, tailles sm/default/lg/icon."),
+      description: "Déclenche une action ponctuelle ; variants default/secondary/outline/ghost/destructive/link, tailles sm/default/lg/icon.",
+      usage: "`icon:` prend un nom d'icône Lucide et `icon_position:` (:leading par défaut, :trailing) le côté où la poser.\n" \
+        "La taille du glyphe découle de celle du bouton (size-4, size-5 en :lg) : ne la passez pas à la main, " \
+        "c'est ainsi qu'un libellé et son icône finissent par diverger d'un écran à l'autre.\n" \
+        "`size: :icon` sans bloc rend le glyphe seul — pensez alors à `html_options: { aria: { label: … } }`, " \
+        "un bouton sans texte n'annonce rien.\n" \
+        "Le bloc reste disponible pour tout le reste : `icon:` n'ajoute pas une capacité, il retire une décision répétée.",
+      related: %w[button-to button-group]),
     Entry.new(slug: "button-group", name: "Button Group", category: CATEGORIES[0], component_class: Ui::ButtonGroupComponent,
       description: "Regroupe plusieurs boutons liés (ex. sélecteur de période) avec des coins fusionnés."),
+    Entry.new(slug: "button-to", name: "Button To", category: CATEGORIES[0], component_class: Ui::ButtonToComponent,
+      description: "Bouton qui poste, patche ou supprime une URL — même recette visuelle que Button, mais dans son propre formulaire.",
+      usage: "Button dès qu'un simple lien ou un submit suffit ; c'est le cas par défaut.\n" \
+        "Button To quand l'action change l'état du serveur hors d'un formulaire existant (supprimer une ligne, arrêter un minuteur) : " \
+        "button_to génère son propre <form> avec le jeton CSRF, là où un <a> en GET ne le ferait pas.\n" \
+        "L'imbrication est la raison d'être du composant : le <button> de button_to ne peut pas être enveloppé dans Button (deux <button> imbriqués sont du HTML invalide), " \
+        "donc les classes de VARIANTS/SIZES sont réappliquées ici plutôt que recopiées à la main sur chaque site d'appel.",
+      related: %w[button]),
     Entry.new(slug: "copy-button", name: "Copy Button", category: CATEGORIES[0], component_class: Ui::CopyButtonComponent,
       description: "Bouton lien qui copie une valeur dans le presse-papiers via le contrôleur Stimulus clipboard, avec confirmation toast.",
-      related: %w[button]),
+      related: %w[button button-to]),
     Entry.new(slug: "field", name: "Field", category: CATEGORIES[0], component_class: Ui::FieldComponent,
       description: "Assemble label, contrôle, description et message d'erreur d'un champ de formulaire."),
     Entry.new(slug: "input", name: "Input", category: CATEGORIES[0], component_class: Ui::InputComponent,
@@ -178,6 +193,12 @@ module DesignSystemRegistry
       related: %w[item module-medallion sidebar]),
     Entry.new(slug: "carousel", name: "Carousel", category: CATEGORIES[2], component_class: Ui::CarouselComponent,
       description: "Défilement horizontal d'un jeu de diapositives."),
+    Entry.new(slug: "view-toggle", name: "View Toggle", category: CATEGORIES[2], component_class: Ui::ViewToggleComponent,
+      description: "Bascule liste / grille d'une collection, à associer à CollectionViewMode côté contrôleur.",
+      usage: "path_for reçoit \"list\" ou \"grid\" et doit renvoyer l'URL de la page courante avec ce mode appliqué — c'est une navigation, pas du JS : le mode est persisté côté serveur.\n" \
+        "ViewToggleComponent.container_classes(mode) habille le conteneur de la collection elle-même, pour que toutes les vues qui câblent ce composant restent visuellement cohérentes.\n" \
+        "Toggle Group ressemble à celui-ci mais ne navigue pas : à réserver aux réglages locaux à la page.",
+      related: %w[toggle-group button-group]),
 
     # ── Affichage de données ────────────────────────────────────────────
     Entry.new(slug: "avatar", name: "Avatar", category: CATEGORIES[3], component_class: Ui::AvatarComponent,

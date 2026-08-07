@@ -2,7 +2,8 @@ class ShoppingListsController < ApplicationController
   before_action :set_shopping_list, only: %i[show destroy]
 
   def index
-    @shopping_lists = Current.household.shopping_lists.general.order(:name)
+    # Each card shows its list's item count (PERF-06).
+    @shopping_lists = Current.household.shopping_lists.general.order(:name).includes(:items)
   end
 
   def show

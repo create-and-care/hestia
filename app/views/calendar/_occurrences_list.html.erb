@@ -59,20 +59,20 @@
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_leading { waste_type_icon(occurrence.waste_type) } %>
           <% item.with_title { link_to waste_type_label(occurrence.waste_type), edit_waste_collection_event_path(occurrence), class: "hover:underline" } %>
-          <% item.with_description { time.strftime("%a %d/%m") } %>
+          <% item.with_description { l(time.to_date, format: :weekday_numeric) } %>
         <% end %>
       <% elsif trip_occurrence?(occurrence) %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_leading { lucide_icon("luggage", css_class: "size-4") } %>
           <% item.with_title { link_to occurrence.name, trip_path(occurrence), class: "hover:underline" } %>
-          <% item.with_description { time.strftime("%a %d/%m") } %>
+          <% item.with_description { l(time.to_date, format: :weekday_numeric) } %>
         <% end %>
       <% else %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_leading { tag.span "", class: "size-2 rounded-full #{event_color_class(occurrence.color)}" } %>
           <% item.with_title { link_to occurrence.title, edit_calendar_event_path(occurrence, occurrence: time.iso8601), class: "hover:underline" } %>
           <% item.with_description do %>
-            <%= time.strftime("%a %d/%m — %H:%M") %>
+            <%= l(time, format: :weekday_numeric) %>
             <% if occurrence.address %>
               · <%= link_to occurrence.address.name, occurrence.address.maps_url, target: "_blank", rel: "noopener", class: "hover:underline" %>
             <% elsif occurrence.location.present? %>

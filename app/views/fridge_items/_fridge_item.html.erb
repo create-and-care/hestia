@@ -2,7 +2,7 @@
   <%= render(Ui::ItemComponent.new) do |item| %>
     <% item.with_title { fridge_item.name } %>
     <% if fridge_item.expires_on.present? %>
-      <% item.with_description { t(".until_date", date: fridge_item.expires_on.strftime("%d/%m/%Y")) } %>
+      <% item.with_description { t(".until_date", date: l(fridge_item.expires_on, format: :numeric)) } %>
     <% end %>
     <% item.with_trailing do %>
       <div class="flex flex-wrap items-center gap-2">
@@ -13,9 +13,8 @@
           <%= render(Ui::DialogComponent.new(close_on_submit: true)) do |dialog| %>
             <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :link, size: :sm)) { t(".edit") } } %>
             <% dialog.with_title { t(".edit") } %>
-            <%= turbo_frame_tag dom_id(fridge_item, :edit), src: edit_fridge_item_path(fridge_item), loading: :lazy,
-                  class: "flex min-h-24 items-center justify-center text-sm text-secondary" do %>
-              <%= t(".edit_loading") %>
+            <%= turbo_frame_tag dom_id(fridge_item, :edit), src: edit_fridge_item_path(fridge_item), loading: :lazy do %>
+              <%= render "shared/frame_skeleton", label: t(".edit_loading"), rows: 3 %>
             <% end %>
           <% end %>
           <%= button_to move_to_shopping_list_fridge_item_path(fridge_item), method: :post,

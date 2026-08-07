@@ -15,7 +15,7 @@
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: menu_path(week: @week_start + 1.week))) { t(".next_week") } %>
     </div>
   </header>
-  <p class="mb-4 text-sm text-secondary"><%= t(".week_range", start: @week_start.strftime("%d/%m"), end: (@week_start + 6.days).strftime("%d/%m/%Y")) %></p>
+  <p class="mb-4 text-sm text-secondary"><%= t(".week_range", start: l(@week_start, format: :numeric_short), end: l(@week_start + 6.days, format: :numeric)) %></p>
 
   <%= render "shared/flash" %>
 
@@ -62,7 +62,7 @@
         <%= render(Ui::CollapsibleComponent.new(id: "menu_day_#{day.iso8601}", open: day == Date.current)) do |collapsible| %>
           <% collapsible.with_trigger do %>
             <div class="flex w-full items-center justify-between text-left">
-              <span class="text-sm font-semibold"><%= day_name(day) %> <span class="text-subdued"><%= day.strftime("%d/%m") %></span></span>
+              <span class="text-sm font-semibold"><%= day_name(day) %> <span class="text-subdued"><%= l(day, format: :numeric_short) %></span></span>
               <%= lucide_icon("chevron-down", css_class: "size-4 shrink-0 text-subdued transition-transform group-aria-expanded:rotate-180") %>
             </div>
           <% end %>

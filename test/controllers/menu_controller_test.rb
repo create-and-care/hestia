@@ -20,7 +20,7 @@ class MenuControllerTest < ActionDispatch::IntegrationTest
     get menu_path
 
     assert_response :success
-    assert_includes @response.body, "Missing meal"
+    assert_body_includes I18n.t("menu.show.missing_meals_label")
   end
 
   test "show does not flag a day once all required meals are planned" do
@@ -121,6 +121,6 @@ class MenuControllerTest < ActionDispatch::IntegrationTest
     get menu_path(week: monday)
 
     assert_response :success
-    assert_includes @response.body, I18n.t("meal_plan_entries.away_label")
+    assert_body_includes I18n.t("meal_plan_entries.away_label")
   end
 end

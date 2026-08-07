@@ -20,7 +20,9 @@
           <% item.with_leading { list.icon.presence || lucide_icon("shopping-cart", css_class: "size-4") } %>
           <% item.with_title { list.name } %>
           <% item.with_trailing do %>
-            <span class="text-sm text-secondary"><%= t(".items_count", count: list.items.where(checked: false).count) %></span>
+            <%# Counted in Ruby over the preloaded items: `items.where(...).count`
+                ignores the preload and issues a query per list (PERF-06). %>
+            <span class="text-sm text-secondary"><%= t(".items_count", count: list.items.count { |item| !item.checked? }) %></span>
           <% end %>
         <% end %>
       <% end %>

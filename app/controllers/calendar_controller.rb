@@ -155,8 +155,10 @@ class CalendarController < ApplicationController
 
     # Tasks/Calendar interconnection : surface overdue tasks
     # alongside events instead of them only ever showing on the Tasks board.
+    # Same definition of "overdue" as the badge on the task itself and as the
+    # dashboard widget — spelled once, on the model.
     def overdue_tasks
-      Current.household.tasks.general.where(done: false).where("due_on < ?", Date.current).order(:due_on)
+      Current.household.tasks.general.overdue
     end
 
     # Pets/Calendar interconnection: surfaces overdue vaccine boosters across every pet in the

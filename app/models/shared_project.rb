@@ -12,8 +12,11 @@ class SharedProject < ApplicationRecord
 
   broadcasts_refreshes_to ->(project) { [ project.household, "budget" ] }
 
+  # Summed in Ruby, not with SUM(): the index renders one of these per project
+  # and preloads the expenses for it, and `sum(:amount)` would ignore that
+  # preload and fire an aggregate query per row anyway.
   def total_spent
-    shared_expenses.sum(:amount)
+    shared_expenses.sum(&:amount)
   end
 
   private

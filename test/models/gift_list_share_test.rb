@@ -15,6 +15,6 @@ class GiftListShareTest < ActiveSupport::TestCase
   test "requires a unique token" do
     share = GiftListShare.new(gift_list: gift_lists(:beta_list), token: gift_list_shares(:alpha_share).token)
     assert_not share.valid?
-    assert_includes share.errors[:token], "has already been taken"
+    assert_includes share.errors[:token], error_message(:taken)
   end
 end

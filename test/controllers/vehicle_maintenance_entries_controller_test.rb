@@ -40,7 +40,7 @@ class VehicleMaintenanceEntriesControllerTest < ActionDispatch::IntegrationTest
       post vehicle_maintenance_entries_path(vehicle), params: { vehicle_maintenance_entry: { entry_type: "" } }
     end
     assert_redirected_to vehicle
-    assert_equal "Entry type can't be blank", flash[:alert]
+    assert_equal validation_message(VehicleMaintenanceEntry, :entry_type), flash[:alert]
   end
 
   test "records a description and a linked service provider" do

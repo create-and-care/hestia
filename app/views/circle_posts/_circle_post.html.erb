@@ -2,11 +2,11 @@
   <%= render(Ui::CardComponent.new) do %>
     <div class="flex items-baseline justify-between">
       <span class="text-sm font-medium"><%= circle_post.author.name.presence || circle_post.author.email_address %></span>
-      <span class="text-xs text-subdued"><%= circle_post.created_at.strftime("%d/%m %H:%M") %></span>
+      <span class="text-xs text-subdued"><%= l(circle_post.created_at, format: :numeric_short) %></span>
     </div>
     <p class="mt-1 whitespace-pre-line"><%= circle_post.body %></p>
     <% if circle_post.photo.attached? %>
-      <%= image_tag circle_post.photo.variant(resize_to_limit: [ 480, 480 ]), alt: "", class: "mt-2 max-h-80 w-auto rounded-lg object-cover" %>
+      <%= image_tag circle_post.photo.variant(resize_to_limit: [ 480, 480 ]), alt: "", loading: :lazy, class: "mt-2 max-h-80 w-auto rounded-lg object-cover" %>
     <% end %>
 
     <% my_reaction = circle_post.circle_post_reactions.detect { |r| r.user_id == Current.user.id } %>

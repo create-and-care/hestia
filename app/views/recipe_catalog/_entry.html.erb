@@ -28,7 +28,7 @@
   <% if list_mode %>
     <%= render(Ui::ItemComponent.new) do |item| %>
       <% if entry.image_url.present? %>
-        <% item.with_leading { image_tag entry.image_url, alt: "", class: "size-12 shrink-0 rounded-md object-cover" } %>
+        <% item.with_leading { image_tag entry.image_url, alt: "", loading: :lazy, class: "size-12 shrink-0 rounded-md object-cover" } %>
       <% end %>
       <% item.with_title { entry.title } %>
       <% item.with_description { meta } %>
@@ -38,7 +38,7 @@
     <%= render(Ui::CardComponent.new) do %>
       <% if entry.image_url.present? %>
         <%= render(Ui::AspectRatioComponent.new) do %>
-          <%= image_tag entry.image_url, alt: "", class: "size-full object-cover" %>
+          <%= image_tag entry.image_url, alt: "", loading: :lazy, class: "size-full object-cover" %>
         <% end %>
       <% end %>
       <div class="<%= "mt-3" if entry.image_url.present? %> flex items-center justify-between gap-2">

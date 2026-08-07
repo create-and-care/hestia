@@ -37,7 +37,6 @@ fr:
       complete_task_aria: "Marquer comme fait"
       addresses_empty: "Aucune adresse pour l'instant."
       address_name_placeholder: "Lieu"
-      address_full_placeholder: "Adresse"
       address_phone_placeholder: "Téléphone"
       edit_address_aria: "Modifier l'adresse %{name}"
       menu_empty: "Aucun repas planifié pour ce voyage."

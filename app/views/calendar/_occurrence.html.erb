@@ -13,6 +13,6 @@
 <% else %>
   <%= link_to edit_calendar_event_path(occurrence, occurrence: time.iso8601),
         class: "mb-0.5 block truncate rounded px-1 py-0.5 text-xs #{event_color_class(occurrence.color)}" do %>
-    <% unless occurrence.all_day %><span class="font-medium"><%= time.strftime("%H:%M") %></span> <% end %><%= occurrence.title %>
+    <% unless occurrence.all_day %><span class="font-medium"><%= l(time, format: :hour_minute) %></span> <% end %><%= occurrence.title %>
   <% end %>
 <% end %>

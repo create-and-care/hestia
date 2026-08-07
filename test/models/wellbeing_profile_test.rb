@@ -14,13 +14,13 @@ class WellbeingProfileTest < ActiveSupport::TestCase
   test "rejects an unknown sex" do
     profile = WellbeingProfile.new(user: users(:one), sex: "unknown")
     assert_not profile.valid?
-    assert_includes profile.errors[:sex], "is not included in the list"
+    assert_includes profile.errors[:sex], error_message(:inclusion)
   end
 
   test "rejects an unknown activity level" do
     profile = WellbeingProfile.new(user: users(:one), activity_level: "unknown")
     assert_not profile.valid?
-    assert_includes profile.errors[:activity_level], "is not included in the list"
+    assert_includes profile.errors[:activity_level], error_message(:inclusion)
   end
 
   test "allows a blank sex and activity level" do

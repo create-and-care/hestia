@@ -77,7 +77,7 @@
           <% @weight_entries.each do |entry| %>
             <li>
               <%= render(Ui::ItemComponent.new) do |item| %>
-                <% item.with_title { "#{entry.recorded_on.strftime('%d/%m/%Y')} — #{entry.weight} kg" } %>
+                <% item.with_title { "#{l(entry.recorded_on, format: :numeric)} — #{entry.weight} kg" } %>
                 <% if (delta = @weight_deltas[entry.id]) %>
                   <% item.with_description do %>
                     <%= render(Ui::BadgeComponent.new(variant: weight_delta_variant(delta, @goal_direction))) do %>
@@ -88,12 +88,12 @@
                 <% end %>
                 <% item.with_trailing do %>
                   <div class="flex shrink-0 items-center gap-1">
-                    <%= link_to edit_weight_entry_path(entry), "aria-label": t(".edit_weight_entry_aria", date: entry.recorded_on.strftime("%d/%m/%Y")), class: "text-subdued hover:text-primary" do %>
+                    <%= link_to edit_weight_entry_path(entry), "aria-label": t(".edit_weight_entry_aria", date: l(entry.recorded_on, format: :numeric)), class: "text-subdued hover:text-primary" do %>
                       <%= lucide_icon("pencil", css_class: "size-3.5") %>
                     <% end %>
                     <%= form_with url: weight_entry_path(entry), method: :delete, data: { turbo_confirm: t(".delete_weight_entry_confirm") } do %>
                       <%= render(Ui::ButtonComponent.new(variant: :destructive, size: :icon, type: "submit",
-                            html_options: { aria: { label: t(".delete_weight_entry_aria", date: entry.recorded_on.strftime("%d/%m/%Y")) } })) { lucide_icon("x", css_class: "size-4") } %>
+                            html_options: { aria: { label: t(".delete_weight_entry_aria", date: l(entry.recorded_on, format: :numeric)) } })) { lucide_icon("x", css_class: "size-4") } %>
                     <% end %>
                   </div>
                 <% end %>
@@ -132,7 +132,7 @@
             <li>
               <%= render(Ui::ItemComponent.new) do |item| %>
                 <% item.with_title do %>
-                  <%= entry.done_on.strftime("%d/%m") %> — <%= entry.exercise %><% if entry.duration_minutes %> (<%= entry.duration_minutes %> min)<% end %>
+                  <%= l(entry.done_on, format: :numeric_short) %> — <%= entry.exercise %><% if entry.duration_minutes %> (<%= entry.duration_minutes %> min)<% end %>
                 <% end %>
                 <% item.with_trailing do %>
                   <div class="flex shrink-0 items-center gap-1">

@@ -34,7 +34,8 @@ class WasteCollectionSeriesTest < ActiveSupport::TestCase
       waste_type: "ordures", weekday: 1, starts_on: Date.current, ends_on: Date.current - 1.day
     )
     assert_not series.valid?
-    assert_includes series.errors[:ends_on], "must be on or after the start date"
+    assert_includes series.errors[:ends_on],
+      I18n.t("activerecord.errors.models.waste_collection_series.attributes.ends_on.before_starts_on")
   end
 
   test "accepts an end date equal to the start date" do

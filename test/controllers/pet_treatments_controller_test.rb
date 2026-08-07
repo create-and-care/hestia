@@ -40,7 +40,7 @@ class PetTreatmentsControllerTest < ActionDispatch::IntegrationTest
       post pet_treatments_path(pet), params: { pet_treatment: { name: "" } }
     end
     assert_redirected_to pet
-    assert_equal "Name can't be blank", flash[:alert]
+    assert_equal validation_message(PetTreatment, :name), flash[:alert]
   end
 
   test "edit and update a treatment's fields" do
@@ -69,6 +69,6 @@ class PetTreatmentsControllerTest < ActionDispatch::IntegrationTest
     pet.pet_treatments.create!(name: "Vermifuge", quantity: "2 comprimés", price: 15)
     get pet_path(pet)
     assert_includes @response.body, "2 comprimés"
-    assert_includes @response.body, "15.00"
+    assert_body_includes ActiveSupport::NumberHelper.number_to_currency(15, unit: "€", format: "%n %u")
   end
 end
