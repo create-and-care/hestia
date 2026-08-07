@@ -55,7 +55,9 @@
 
   <%= render "shared/flash" %>
 
-  <div id="recipes" class="<%= @view_mode == "list" ? "divide-y divide-primary rounded-lg border border-primary" : "grid gap-3 sm:grid-cols-2" %>">
+  <%# overflow-hidden in list mode: the rows are square-cornered and paint a hover
+      background, which otherwise spills past the container's rounded corners. %>
+  <div id="recipes" class="<%= @view_mode == "list" ? "overflow-hidden divide-y divide-primary rounded-lg border border-primary" : "grid gap-3 sm:grid-cols-2" %>">
     <%= render partial: "recipe", collection: @recipes, locals: { view_mode: @view_mode } %>
   </div>
   <% if @recipes.empty? %>

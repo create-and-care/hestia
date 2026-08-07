@@ -34,6 +34,20 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#recipes.divide-y"
   end
 
+  # Without .on-tone the card is a bare <a>, so the global `a { color: var(--link) }`
+  # paints the whole thing link-blue and `a:hover` underlines it.
+  test "a recipe card reads as a surface rather than as a prose link" do
+    get recipes_path
+    assert_response :success
+    assert_select "a##{dom_id(recipes(:alpha_pancakes))}.on-tone"
+  end
+
+  test "the list view clips its rows to the container's rounded corners" do
+    get recipes_path(view: "list")
+    assert_response :success
+    assert_select "#recipes.overflow-hidden.rounded-lg"
+  end
+
   test "show renders the ingredients" do
     get recipe_path(recipes(:alpha_pancakes))
     assert_response :success
