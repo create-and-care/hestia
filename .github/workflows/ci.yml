@@ -104,6 +104,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # `bin/rails` loads config/application.rb, which Bundler.requires the
+      # whole Gemfile — including ruby-vips, which is a binding to a shared
+      # library that is not on a bare runner. The task itself needs no image
+      # processing and no database; this is the price of invoking it through
+      # Rails at all.
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips
+
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

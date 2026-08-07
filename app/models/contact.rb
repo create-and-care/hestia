@@ -29,10 +29,11 @@ class Contact < ApplicationRecord
     pairs = dates.map { |date| [ date.month, date.day ] }
     pairs << [ 2, 29 ] if pairs.include?([ 2, 28 ])
 
-    where(
-      "(EXTRACT(MONTH FROM born_on), EXTRACT(DAY FROM born_on)) IN (#{Array.new(pairs.size, "(?, ?)").join(", ")})",
-      *pairs.flatten
-    )
+    # to_char rather than a row constructor over EXTRACT: the row-constructor
+    # form needed a placeholder list built by interpolating into the SQL
+    # string, which is indistinguishable from an injection at a glance — and
+    # Brakeman said so. One bind, one comparison, same index-less scan.
+    where("to_char(born_on, 'MM-DD') IN (?)", pairs.map { |month, day| format("%02d-%02d", month, day) })
   }
 
   broadcasts_to ->(contact) { contact.household }

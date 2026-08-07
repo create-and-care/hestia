@@ -1,7 +1,12 @@
 namespace :i18n do
-  desc "Fail on any missing translation, and on any key present in one locale but not the other (I18N-02)"
-  task check: :environment do
+  desc "Fail on a missing or unused translation, or on a key present in one locale but not the other (I18N-02)"
+  # Deliberately not `=> :environment`. Nothing here needs the app booted:
+  # i18n-tasks reads the YAML files and greps the source. Depending on the
+  # environment would mean the CI lint job needs a database, credentials and
+  # the compiled assets to answer a question about two directories of YAML.
+  task :check do
     require "i18n/tasks"
+    require "yaml"
 
     task_runner = I18n::Tasks::BaseTask.new
     missing = task_runner.missing_keys
@@ -33,7 +38,7 @@ namespace :i18n do
   end
 
   def locale_keys(locale)
-    Dir[Rails.root.join("config/locales/#{locale}/*.yml")].flat_map do |path|
+    Dir[File.expand_path("../../config/locales/#{locale}/*.yml", __dir__)].flat_map do |path|
       flatten_keys(YAML.unsafe_load_file(path)[locale.to_s] || {})
     end
   end
