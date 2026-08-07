@@ -144,6 +144,9 @@ Rails.application.routes.draw do
   # "/recipes/:id" show route.
   get "recipes/catalog", to: "recipe_catalog#index", as: :recipe_catalog
   post "recipes/catalog/:id/add_to_household", to: "recipe_catalog#add_to_household", as: :add_to_household_recipe_catalog
+  # Preview body for the catalog card's dialog, fetched by a lazy turbo-frame so
+  # a page of 24 entries doesn't ship 24 sets of ingredients and steps up front.
+  get "recipes/catalog/:id/preview", to: "recipe_catalog#preview", as: :preview_recipe_catalog
 
   # Recipes module.
   resources :recipes do

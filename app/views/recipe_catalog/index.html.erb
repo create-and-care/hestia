@@ -5,12 +5,21 @@
 
   <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("search", css_class: "size-6") %> <%= t(".title") %></h1>
+    <%# Input and NativeSelect both render w-full, so as bare flex children they
+        each claimed a whole line and the search sat stacked above the category
+        select instead of beside it. Sized wrappers put them back on one row. %>
     <%= form_with url: recipe_catalog_path, method: :get, class: "flex flex-wrap items-center gap-2" do |form| %>
-      <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
-            html_options: { id: "recipe_catalog_q" }) %>
-      <%= render Ui::NativeSelectComponent.new(name: "tag",
-            options: [ [ t(".tag_blank"), "" ] ] + @tags.map { |tag| [ t("recipe_catalog.tags.#{tag}", default: tag.humanize), tag ] },
-            selected: @tag, html_options: { id: "recipe_catalog_tag" }) %>
+      <div class="w-44">
+        <%= render(Ui::LabelComponent.new(for_id: "recipe_catalog_q", html_options: { class: "sr-only" })) { t(".search_label") } %>
+        <%= render Ui::InputComponent.new(type: "search", name: "q", value: @query, placeholder: t(".search_placeholder"),
+              size: :sm, html_options: { id: "recipe_catalog_q" }) %>
+      </div>
+      <div class="w-44">
+        <%= render(Ui::LabelComponent.new(for_id: "recipe_catalog_tag", html_options: { class: "sr-only" })) { t(".tag_label") } %>
+        <%= render Ui::NativeSelectComponent.new(name: "tag",
+              options: [ [ t(".tag_blank"), "" ] ] + @tags.map { |tag| [ t("recipe_catalog.tags.#{tag}", default: tag.humanize), tag ] },
+              selected: @tag, size: :sm, html_options: { id: "recipe_catalog_tag" }) %>
+      </div>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".filter_submit") } %>
     <% end %>
   </header>
