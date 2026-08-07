@@ -67,6 +67,16 @@ async function login(page, auth) {
   ]);
 }
 
+// Evaluated rather than added as a <script> tag: the app now sends a real
+// Content-Security-Policy in every environment, and `script-src 'self'` is
+// exactly as unimpressed by Puppeteer's injected inline script as it would be
+// by anyone else's. page.evaluate goes through the debugger protocol instead
+// of the document, so it defines window.__visualCheck without a hole having to
+// be cut in the policy the check is supposed to be measuring the app under.
+async function injectMeasure(page) {
+  await page.evaluate(MEASURE_JS);
+}
+
 async function measureRoute(page, { pass, theme, viewport, route }) {
   let response;
   try {
@@ -88,7 +98,7 @@ async function measureRoute(page, { pass, theme, viewport, route }) {
   }
 
   await settle(page);
-  await page.addScriptTag({ content: MEASURE_JS });
+  await injectMeasure(page);
   const { violations, spacingHistogram } = await page.evaluate(() => window.__visualCheck.run());
 
   const histKey = `${pass.key}/${slugFor(route)}@${viewport}-${theme}`;
@@ -107,7 +117,7 @@ async function measureRoute(page, { pass, theme, viewport, route }) {
 }
 
 async function measureTokenPairs(page, theme) {
-  await page.addScriptTag({ content: MEASURE_JS });
+  await injectMeasure(page);
   const pairResults = await page.evaluate((pairs) => {
     return pairs.map(([a, b]) => {
       const rgbA = window.__visualCheck.resolveToken(a);

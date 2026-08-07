@@ -1,4 +1,5 @@
-// Injected into the page via page.addScriptTag() and invoked through
+// Injected into the page via page.evaluate() (see injectMeasure in run.mjs —
+// not addScriptTag, which the app's CSP refuses) and invoked through
 // page.evaluate(() => window.__visualCheck.run()). Runs entirely inside the
 // browser because it needs getComputedStyle to resolve custom properties,
 // color-mix(), and inheritance the same way the browser actually renders
