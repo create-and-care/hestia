@@ -23,6 +23,19 @@ class MenuControllerTest < ActionDispatch::IntegrationTest
     assert_body_includes I18n.t("menu.show.missing_meals_label")
   end
 
+  # The flag belongs on the day's own line, so a week's gaps can be read without
+  # expanding each day in turn.
+  test "show puts the missing-meal flag on the day row itself, not inside the panel" do
+    households(:alpha).update!(required_meal_types: %w[lunch dinner])
+
+    get menu_path
+
+    assert_response :success
+    assert_select "button[data-collapsible-target='trigger']" do
+      assert_select "span", text: I18n.t("menu.show.missing_meals_label")
+    end
+  end
+
   test "show does not flag a day once all required meals are planned" do
     households(:alpha).update!(required_meal_types: %w[dinner])
     monday = Date.current.beginning_of_week
