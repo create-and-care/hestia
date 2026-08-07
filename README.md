@@ -73,6 +73,19 @@ bin/dev     # run the Rails server + esbuild/Tailwind watchers (Procfile.dev)
 
 The UI component library can be browsed at `/design-system`.
 
+## Production settings
+
+**HTTPS** — set `FORCE_SSL=1` on any installation reachable from the internet.
+It turns on `force_ssl` and `assume_ssl`, so the app redirects HTTP to HTTPS,
+sends `Strict-Transport-Security`, and marks cookies secure; `/up` stays
+reachable over plain HTTP for load balancers. It is off by default because a
+LAN-only install has no certificate to redirect to, and would just break.
+
+A Content-Security-Policy is enforced on every response
+(`config/initializers/content_security_policy.rb`). If your installation
+serves images from a host the policy doesn't cover, extend `img_src` there
+rather than removing the policy.
+
 ## Optional integrations
 
 None of these are required to run the app — each is closed/inert until configured.

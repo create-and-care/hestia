@@ -24,14 +24,24 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  # config.assume_ssl = true
+  # HTTPS is opt-in through FORCE_SSL rather than on unconditionally. The
+  # declared audience is the AGPL self-hoster, and a plain-HTTP install behind
+  # a LAN address is a supported setup — turning force_ssl on for everyone
+  # would redirect those installations to a scheme they have no certificate
+  # for, which reads as "the app is broken" rather than "the app is strict".
+  # Anyone exposing Hestia to the internet sets FORCE_SSL=1 (see README).
+  if ENV["FORCE_SSL"].present?
+    # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+    config.assume_ssl = true
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+    # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+    config.force_ssl = true
 
-  # Skip http-to-https redirect for the default health check endpoint.
-  # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
+    # Skip http-to-https redirect for the default health check endpoint, which
+    # load balancers and uptime monitors hit over plain HTTP from inside the
+    # network.
+    config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
+  end
 
   # Log to STDOUT with the current request id as a default log tag.
   config.log_tags = [ :request_id ]

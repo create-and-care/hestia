@@ -7,6 +7,14 @@ module Api
       before_action :authenticate_with_token!
       before_action :set_current_household
 
+      # Included *after* the two filters above, because the gate needs
+      # Current.household to have been resolved before it can ask whether the
+      # module is on. Same CONTROLLER_MODULES map as the web controllers — an
+      # api/v1/ prefix is stripped before lookup — so a module the household
+      # switched off is closed on both surfaces at once. It used to be closed
+      # on neither: the API was reading and writing every disabled module.
+      include ModuleGating
+
       rescue_from ActiveRecord::RecordNotFound do
         render json: { error: "not_found" }, status: :not_found
       end
@@ -45,6 +53,12 @@ module Api
 
           Current.household = Current.user.households.first
           render json: { error: "no_household" }, status: :unprocessable_entity if Current.household.nil?
+        end
+
+        # ModuleGating's HTML default redirects to the dashboard, which is not
+        # an answer an API client can act on.
+        def deny_disabled_module
+          render json: { error: "module_disabled" }, status: :forbidden
         end
     end
   end

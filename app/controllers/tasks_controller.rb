@@ -121,8 +121,15 @@ class TasksController < ApplicationController
       @task = Current.household.tasks.find(params[:id])
     end
 
+    # `ordered` is not decoration: "the task above" only means anything in the
+    # order the column is actually displayed in (#index sorts the same way).
+    # Without it the SELECT has no ORDER BY at all and Postgres is free to
+    # return rows in heap order, so move_up could swap with an arbitrary
+    # sibling — or, when the task landed last in that arbitrary order, do
+    # nothing at all.
     def swap_with_sibling(direction)
-      siblings = Current.household.tasks.general.where(done: @task.done, task_category_id: @task.task_category_id).to_a
+      siblings = Current.household.tasks.general.ordered
+        .where(done: @task.done, task_category_id: @task.task_category_id).to_a
       index = siblings.index(@task)
       sibling = siblings[index + direction] if index && (index + direction).between?(0, siblings.size - 1)
       return unless sibling
