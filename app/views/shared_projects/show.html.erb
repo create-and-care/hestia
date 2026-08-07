@@ -71,9 +71,9 @@
         <% end %>
       <% end %>
     </div>
-    <% if @project.shared_expenses.recent.any? %>
+    <% if @expenses.any? %>
       <div class="mb-2 divide-y divide-primary rounded-lg border border-primary text-sm">
-        <% @project.shared_expenses.recent.each do |expense| %>
+        <% @expenses.each do |expense| %>
           <%= render(Ui::ItemComponent.new) do |item| %>
             <% item.with_title do %>
               <%= number_to_currency(expense.amount, unit: "€", format: "%n %u") %>

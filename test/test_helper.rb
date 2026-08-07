@@ -37,6 +37,17 @@ module ActiveSupport
     # per limit and start tripping its own rate limits as it grew.
     setup { ActionController::Base.cache_store.clear }
 
+    # Rails.cache itself stays a null store here, so that a test asserting a
+    # cache actually works has to say so — and so that a test *not* about
+    # caching can never pass because of a value another test left behind.
+    def with_cache
+      previous = Rails.cache
+      Rails.cache = ActiveSupport::Cache::MemoryStore.new
+      yield
+    ensure
+      Rails.cache = previous
+    end
+
     # Add more helper methods to be used by all tests here...
   end
 end

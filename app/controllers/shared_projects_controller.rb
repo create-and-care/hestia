@@ -2,13 +2,17 @@ class SharedProjectsController < ApplicationController
   before_action :set_project, only: %i[show destroy]
 
   def index
-    @projects = Current.household.shared_projects.ordered
+    # Each row totals its own expenses (SharedProject#total_spent) — PERF-06.
+    @projects = Current.household.shared_projects.ordered.includes(:shared_expenses)
     @project = Current.household.shared_projects.new
   end
 
   def show
     @participant = SharedProjectParticipant.new
     @expense = SharedExpense.new(spent_on: Date.current)
+    # The expense list names its payer on every line (PERF-06, found by
+    # BULLET_RAISE=1 — see config/environments/test.rb).
+    @expenses = @project.shared_expenses.recent.includes(:shared_project_participant)
     @balances = Budget::SettleProject.call(project: @project)
     @transfers = Budget::SettleProject.transfers(project: @project)
   end

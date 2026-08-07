@@ -8,6 +8,33 @@ class Contact < ApplicationRecord
 
   validates :name, presence: true
 
+  # Thresholds for #proximity_status, shared with .birthday_within below.
+  WEEK_DAYS = 7
+  MONTH_DAYS = 31
+
+  # Contacts whose birthday *may* fall within the next `days` — a deliberate
+  # superset, refined by #proximity_status on the handful of rows it returns.
+  #
+  # A birthday is a (month, day) pair that recurs, so it cannot be compared to
+  # a date range directly; the window is enumerated into the pairs it covers
+  # and matched on those. Two consequences worth stating:
+  #   * the window wraps the year end for free — 30/12 → 02/01 is just six
+  #     pairs, not a range Postgres has to reason about;
+  #   * 29/02 is added whenever 28/02 is in the window, because #birthday_in
+  #     folds a leap-day birthday onto 28/02 in common years. Over-matching is
+  #     harmless here (Ruby decides), under-matching would silently drop a
+  #     contact from the dashboard three years out of four.
+  scope :birthday_within, ->(days) {
+    dates = (0..days).map { |offset| Date.current + offset }
+    pairs = dates.map { |date| [ date.month, date.day ] }
+    pairs << [ 2, 29 ] if pairs.include?([ 2, 28 ])
+
+    where(
+      "(EXTRACT(MONTH FROM born_on), EXTRACT(DAY FROM born_on)) IN (#{Array.new(pairs.size, "(?, ?)").join(", ")})",
+      *pairs.flatten
+    )
+  }
+
   broadcasts_to ->(contact) { contact.household }
 
   def next_birthday(from = Date.current)
@@ -48,9 +75,9 @@ class Contact < ApplicationRecord
 
     if days.zero?
       :today
-    elsif days <= 7
+    elsif days <= WEEK_DAYS
       :week
-    elsif days <= 31
+    elsif days <= MONTH_DAYS
       :month
     else
       :later

@@ -31,6 +31,31 @@ module NotificationsHelper
 
   def notification_icon(notification) = lucide_icon(KIND_ICONS.fetch(notification.kind, "bell"), css_class: "size-4")
 
+  # Whether a notification line should name the household it belongs to — only
+  # useful to a recipient who belongs to more than one.
+  #
+  # Memoized per recipient rather than asked per line. The partial is rendered
+  # by the sidebar popover on *every* page and the check used to sit inline as
+  # `notification.user.households.size > 1`: one COUNT per notification, on
+  # every page of the app (PERF-06). A list is one recipient's, so the memo
+  # collapses it to a single question — and it is keyed on the recipient
+  # rather than read from Current.user because Notification#broadcast_created
+  # renders this partial outside any request, and from a request whose
+  # Current.user may well be a different member of the household.
+  def name_notification_household?(notification)
+    @name_notification_household ||= {}
+    return @name_notification_household[notification.user_id] if @name_notification_household.key?(notification.user_id)
+
+    @name_notification_household[notification.user_id] = notification.user.households.size > 1
+  end
+
+  # The current user's latest notifications, preloading the household only when
+  # the lines will actually name it.
+  def recent_notifications(limit)
+    scope = Current.user.notifications.recent.limit(limit)
+    Current.user.households.size > 1 ? scope.includes(:household) : scope
+  end
+
   def notification_block_label(key) = key == "global" ? t("notifications.index.global") : t("dashboard.show.nav.#{key}")
 
   # Parenthetical listing the module(s) a "global" notification concerns —

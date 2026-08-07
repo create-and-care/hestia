@@ -69,12 +69,37 @@ Rails.application.configure do
   config.active_record.encryption.key_derivation_salt = "test" * 8
 
   # Detects N+1 queries and unused eager loading (reliability).
-  # Logs only for now (not `Bullet.raise = true`): flipping that on would fail
-  # the existing suite wherever an N+1 already lurks, which is a larger,
-  # separate cleanup rather than something to silently force through here.
+  #
+  # Logs by default; `BULLET_RAISE=1 bin/rails test` turns every detection into
+  # a failure. That is how PERF-06 enumerated the missing `includes` — asking
+  # the tool rather than reading eleven controllers by hand — and it is how the
+  # next batch should be found too, so the switch stays.
+  #
+  # It is not on by default because Bullet judges a *rendered request*: a
+  # controller can be perfectly eager-loaded and still trip it from a partial
+  # reached only by some fixtures, and a red build on that would push people to
+  # safelist rather than to look.
+  #
+  # What it still reports after PERF-06, each looked at and left alone:
+  #   * "USE eager loading" on Task => :task_reminders, PlantCareTask =>
+  #     :plant_care_completions — both raised by #destroy, where the
+  #     `dependent: :destroy` cascade has to load the children to run their
+  #     callbacks. No `includes` applies; only `delete_all` would, and that
+  #     would skip the callbacks on purpose.
+  #   * "USE eager loading" on LoyaltyCard => :address — raised by reordering,
+  #     where each card's `address_belongs_to_household` validation reads the
+  #     association on save. A view concern it is not.
+  #   * "AVOID eager loading" on WorkoutTemplate => :workout_template_exercises
+  #     — the index renders `.size`, which Bullet does not count as a read.
+  #     The preload is what keeps that `.size` from being a COUNT per row.
+  #   * "AVOID eager loading" on Task => :task_category, Document =>
+  #     :file_attachment, GiftList => :contact, CalendarEvent => :participants
+  #     — pre-existing, and each needs its own look at whether the association
+  #     is genuinely unused or merely unused by the fixtures at hand.
   config.after_initialize do
     Bullet.enable = true
     Bullet.bullet_logger = true
+    Bullet.raise = ENV["BULLET_RAISE"].present?
     # Preloading a has_many :through (participants) always preloads its join
     # association (event_participants) too — app code only ever calls
     # .participants, so Bullet permanently flags the join side as "unused".

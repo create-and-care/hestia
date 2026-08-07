@@ -46,6 +46,54 @@ class CalendarEventTest < ActiveSupport::TestCase
     assert_equal 3, occurrences.size # Jul 1, 8, 15
   end
 
+  # ── Bounded loading (PERF-05) ────────────────────────────────────────────
+  # The dashboard and the calendar ask for a window; `overlapping` is what
+  # keeps the rows that cannot answer out of memory before anything is
+  # expanded. Without it, a household's whole calendar history was loaded and
+  # unrolled on every dashboard render.
+  test "only the events that can reach the window are loaded" do
+    household = households(:alpha)
+    household.calendar_events.destroy_all
+    from = Time.zone.local(2026, 7, 1)
+    to = Time.zone.local(2026, 7, 7, 23, 59)
+
+    500.times do |index|
+      # A long-finished weekly series: recurring, but its recurrence_until is
+      # years before the window.
+      household.calendar_events.create!(title: "Ancien #{index}", starts_at: Time.zone.local(2020, 1, 6, 9),
+        frequency: "weekly", recurrence_interval: 1, recurrence_until: Date.new(2021, 1, 1))
+    end
+    live = household.calendar_events.create!(title: "En cours", starts_at: Time.zone.local(2020, 1, 6, 9),
+      frequency: "weekly", recurrence_interval: 1)
+    future = household.calendar_events.create!(title: "Plus tard", starts_at: Time.zone.local(2027, 1, 6, 9), frequency: "none")
+
+    loaded = household.calendar_events.overlapping(from, to).to_a
+
+    assert_equal [ live ], loaded
+    assert_not_includes loaded, future
+  end
+
+  test "a one-off inside the window is kept and one outside it is not" do
+    household = households(:alpha)
+    household.calendar_events.destroy_all
+    inside = household.calendar_events.create!(title: "Dedans", starts_at: Time.zone.local(2026, 7, 3, 9), frequency: "none")
+    household.calendar_events.create!(title: "Avant", starts_at: Time.zone.local(2026, 6, 3, 9), frequency: "none")
+
+    loaded = household.calendar_events.overlapping(Time.zone.local(2026, 7, 1), Time.zone.local(2026, 7, 7, 23, 59))
+
+    assert_equal [ inside ], loaded.to_a
+  end
+
+  test "an endless series older than the previous 1 000-iteration guard still expands" do
+    event = CalendarEvent.new(title: "Poubelles", starts_at: Time.zone.local(2000, 1, 5, 8),
+      frequency: "weekly", recurrence_interval: 1)
+
+    occurrences = event.occurrences_between(Time.zone.local(2026, 7, 1), Time.zone.local(2026, 7, 15, 23, 59))
+
+    assert_equal 3, occurrences.size
+    assert_equal Time.zone.local(2026, 7, 1, 8), occurrences.first
+  end
+
   test "is scoped to its household" do
     assert_not_includes households(:alpha).calendar_events, calendar_events(:beta_event)
   end

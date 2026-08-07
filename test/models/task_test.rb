@@ -55,4 +55,16 @@ class TaskTest < ActiveSupport::TestCase
     removal = streams.find { |stream| stream["action"] == "remove" }
     assert_equal "tasks_category_#{category.id}_empty", removal["target"]
   end
+
+  test "overdue matches exactly the tasks due_status flags as overdue" do
+    household = households(:alpha)
+    household.tasks.destroy_all
+    late = household.tasks.create!(title: "En retard", due_on: 2.days.ago.to_date)
+    older = household.tasks.create!(title: "Encore plus vieille", due_on: 10.days.ago.to_date)
+    household.tasks.create!(title: "Faite", due_on: 2.days.ago.to_date, done: true)
+    household.tasks.create!(title: "Aujourd'hui", due_on: Date.current)
+    household.tasks.create!(title: "Sans échéance", due_on: nil)
+
+    assert_equal [ older, late ], household.tasks.overdue.to_a
+  end
 end

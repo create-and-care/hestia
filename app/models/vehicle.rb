@@ -9,7 +9,18 @@ class Vehicle < ApplicationRecord
 
   validates :name, presence: true
 
+  # Thresholds for #inspection_status, named so the scope below and the method
+  # cannot drift apart — the dashboard asks the database the same question the
+  # badge answers in Ruby.
+  INSPECTION_URGENT_DAYS = 30
+  INSPECTION_SOON_DAYS = 90
+
   scope :ordered, -> { order(:name) }
+  # :expired or :urgent, decided in SQL. The dashboard used to load every
+  # vehicle of the household and #select in Ruby.
+  scope :inspection_due, -> {
+    where(inspection_expires_on: ..(Date.current + INSPECTION_URGENT_DAYS)).order(:inspection_expires_on)
+  }
 
   broadcasts_to ->(vehicle) { vehicle.household }
 
@@ -20,9 +31,9 @@ class Vehicle < ApplicationRecord
     days_left = (inspection_expires_on - Date.current).to_i
     if days_left.negative?
       :expired
-    elsif days_left <= 30
+    elsif days_left <= INSPECTION_URGENT_DAYS
       :urgent
-    elsif days_left <= 90
+    elsif days_left <= INSPECTION_SOON_DAYS
       :soon
     else
       :ok

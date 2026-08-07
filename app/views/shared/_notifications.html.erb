@@ -15,7 +15,7 @@
           class: "cursor-pointer text-xs text-secondary underline" %>
   </div>
   <div id="notifications_list" class="max-h-80 divide-y divide-primary overflow-y-auto">
-    <% notifications = Current.user.notifications.recent.limit(10) %>
+    <% notifications = recent_notifications(10) %>
     <% if notifications.none? %>
       <%= render(Ui::EmptyComponent.new) do |empty| %>
         <% empty.with_description { t(".none") } %>

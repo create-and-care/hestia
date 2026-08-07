@@ -9,10 +9,19 @@ class Task < ApplicationRecord
 
   validates :title, presence: true
 
+  # Thresholds for #due_status, shared with the scopes below so the dashboard's
+  # SQL and the badge's Ruby always agree on what "overdue" means.
+  URGENT_DAYS = 1
+  SOON_DAYS = 7
+
   scope :general, -> { where(trip_id: nil) }
 
   # Not-done first, then manual order (drag-and-drop), then due date.
   scope :ordered, -> { order(:done, :position, :id) }
+
+  # Unfinished and past due, soonest first. Replaces loading every task of the
+  # household on the dashboard to keep five of them.
+  scope :overdue, -> { where(done: false).where(due_on: ...Date.current).order(:due_on) }
 
   # Real-time: the card is targeted by its dom_id (replace/remove) and inserted into
   # its category's column (append) — cf. kanban view. The column's "empty" placeholder
@@ -36,9 +45,9 @@ class Task < ApplicationRecord
     days_left = (due_on - Date.current).to_i
     if days_left.negative?
       :overdue
-    elsif days_left <= 1
+    elsif days_left <= URGENT_DAYS
       :urgent
-    elsif days_left <= 7
+    elsif days_left <= SOON_DAYS
       :soon
     else
       :later

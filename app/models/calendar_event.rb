@@ -19,6 +19,23 @@ class CalendarEvent < ApplicationRecord
 
   scope :chronological, -> { order(:starts_at) }
 
+  # Events that *may* have an occurrence in [from, to] — the rows worth
+  # expanding, decided in SQL. Callers used to load every event a household
+  # had ever created and expand all of them in memory to find the next five.
+  #
+  # A series qualifies when it starts at or before the end of the window and
+  # is not already finished by its beginning; a one-off qualifies only if it
+  # falls inside. Expansion still decides the exact occurrences — this only
+  # keeps rows that cannot possibly match out of memory.
+  scope :overlapping, ->(from, to) {
+    where(starts_at: ..to).where(
+      "(calendar_events.frequency = 'none' AND calendar_events.starts_at >= :from) OR " \
+      "(calendar_events.frequency <> 'none' AND " \
+      " (calendar_events.recurrence_until IS NULL OR calendar_events.recurrence_until >= :from_date))",
+      from: from, from_date: from.to_date
+    )
+  }
+
   # Real-time: the views (month/list) are computed server-side; we broadcast a
   # page refresh (Turbo morphing) on a stream dedicated to the household's calendar.
   broadcasts_refreshes_to ->(event) { [ event.household, "calendar" ] }
@@ -33,24 +50,13 @@ class CalendarEvent < ApplicationRecord
     return (from..to).cover?(starts_at) ? [ starts_at ] : [] unless recurring?
 
     ceiling = recurrence_until ? [ to, recurrence_until.to_time.end_of_day ].min : to
-    occurrences = []
-    cursor = starts_at
-    guard = 0
 
-    while cursor <= ceiling && guard < 1_000
-      occurrences << cursor if cursor >= from && !excluded_occurrences.include?(cursor.to_date)
-      cursor = advance_from(cursor)
-      guard += 1
-    end
-
-    occurrences
+    Recurrence.occurrences_between(start: starts_at, from: from, to: ceiling,
+      frequency: frequency, interval: recurrence_interval.to_i.clamp(1, 52))
+      .reject { |moment| excluded_occurrences.include?(moment.to_date) }
   end
 
   private
-    def advance_from(time)
-      Recurrence.advance(time, frequency, recurrence_interval.to_i.clamp(1, 52))
-    end
-
     def address_belongs_to_household
       errors.add(:address, :invalid) if address && address.household_id != household_id
     end

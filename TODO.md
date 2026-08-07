@@ -109,20 +109,20 @@ Tous les gains rapides sont **ici et nulle part ailleurs** : les dupliquer dans 
 vagues thématiques est le mécanisme par lequel un document se contredit lui-même. Le
 préfixe d'ID préserve la lecture thématique.
 
-- [ ] **DOC-01 — Corriger « ~50 composants » dans le README**
+- [x] **DOC-01 — Corriger « ~50 composants » dans le README**
   - *Pourquoi* : le README annonce « ~50 components » ; il y en a 75. C'est la source
     exacte du premier chiffre faux de `design-system.md`.
   - *Fichiers* : [README.md](README.md)
   - *Effort* : S
   - *Vérif* : `ls app/components/ui/*.rb | wc -l` correspond au chiffre du README.
 
-- [ ] **DS-01 — `alt` manquant sur l'aperçu de document**
+- [x] **DS-01 — `alt` manquant sur l'aperçu de document**
   - *Pourquoi* : seule image du dépôt sans texte alternatif (19 des 20 en ont un).
   - *Fichiers* : [app/views/documents/preview.html.erb:5](app/views/documents/preview.html.erb#L5)
   - *Effort* : S · *Règle* : —
   - *Vérif* : `grep -rn "image_tag\|<img" app/views | grep -v "alt" | wc -l` → 0
 
-- [ ] **DS-02 — Enregistrer `button_to` et `view_toggle` dans le registre**
+- [x] **DS-02 — Enregistrer `button_to` et `view_toggle` dans le registre**
   - *Pourquoi* : le registre expose 73 entrées pour 75 composants ; deux composants
     n'ont donc ni page de doc ni aperçu.
   - *Fichiers* : [app/models/design_system_registry.rb](app/models/design_system_registry.rb),
@@ -131,7 +131,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Vérif* : `DesignSystemRegistry` compte 75 entrées = nombre de fichiers dans `app/components/ui/`.
   - *Note* : à fusionner avec **DS-08** si celui-ci est traité dans la même passe.
 
-- [ ] **SEC-02 — Retirer le choix de jeton API sans expiration**
+- [x] **SEC-02 — Retirer le choix de jeton API sans expiration**
   - *Pourquoi* : `EXPIRATION_CHOICES` mappe `""` sur `nil`, donc un jeton perpétuel
     reste sélectionnable dans l'UI. Tout le reste du modèle (empreinte, révocation,
     `last_used_at`) est correct — c'est le seul résidu.
@@ -140,7 +140,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Vérif* : `bin/rails test test/controllers/api_tokens_controller_test.rb` vert et
     l'option vide absente du `<select>`.
 
-- [ ] **SEC-03 — Rate-limit sur la réservation d'idée cadeau publique**
+- [x] **SEC-03 — Rate-limit sur la réservation d'idée cadeau publique**
   - *Pourquoi* : `post "g/:token/reserve/:idea_id"` est la **seule route sensible sans
     `rate_limit`** — et elle est non authentifiée. Les 3 entrées d'auth en ont un
     (`to: 10, within: 3.minutes`), pas celle-ci. Énumération de jetons possible.
@@ -150,14 +150,14 @@ préfixe d'ID préserve la lecture thématique.
   - *Vérif* : test de contrôleur asserant un `429` au-delà du seuil.
   - *Roadmap* : correspond au jalon `public_route_hardening`.
 
-- [ ] **DS-03 — `loading="lazy"` sur les images**
+- [x] **DS-03 — `loading="lazy"` sur les images**
   - *Pourquoi* : zéro image en chargement différé. Les 4 `loading: :lazy` existants
     sont des `turbo_frame_tag` (chargement de contenu différé), pas des images.
   - *Fichiers* : les 20 sites `image_tag` / `<img>` de `app/views`
   - *Effort* : S · *Règle* : —
   - *Vérif* : `grep -rn "image_tag" app/views | grep -cv "loading"` → 0 (hors logos above-the-fold).
 
-- [ ] **PERF-01 — `data-turbo-preload` sur la navigation principale**
+- [x] **PERF-01 — `data-turbo-preload` sur la navigation principale**
   - *Pourquoi* : zéro occurrence dans tout le dépôt. Turbo est déjà là ; c'est un
     attribut à poser sur les liens de la sidebar.
   - *Fichiers* : [app/components/ui/sidebar_item_component.html.erb](app/components/ui/sidebar_item_component.html.erb)
@@ -174,7 +174,7 @@ préfixe d'ID préserve la lecture thématique.
 
 # 4. Vague 1 — Bloquants 1.0 (sécurité & production)
 
-- [ ] **SEC-01 — Activer une Content-Security-Policy**
+- [x] **SEC-01 — Activer une Content-Security-Policy**
   - *Pourquoi* : [config/initializers/content_security_policy.rb](config/initializers/content_security_policy.rb)
     est **intégralement commenté — zéro ligne active**. Aucun en-tête CSP n'est émis.
     **Aucun des deux audits ne le mentionne**, alors qu'ils placent tous deux XSS en
@@ -193,7 +193,7 @@ préfixe d'ID préserve la lecture thématique.
     `bin/rails visual:check` sur les 273 routes sans erreur console (Puppeteer remonte
     les violations CSP — c'est une couverture de non-régression déjà payée).
 
-- [ ] **SEC-04 — Conditionner `force_ssl` / `assume_ssl` par variable d'environnement**
+- [x] **SEC-04 — Conditionner `force_ssl` / `assume_ssl` par variable d'environnement**
   - *Pourquoi* : les deux sont commentés en production. Mais **ne pas décommenter tel
     quel** : le public déclaré est l'auto-hébergeur AGPL, et forcer SSL sans condition
     casse les installations LAN en HTTP simple. Conditionner sur `ENV["FORCE_SSL"]`.
@@ -203,7 +203,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Vérif* : booter en production avec et sans `FORCE_SSL=1`, vérifier la redirection
     dans un cas et son absence dans l'autre.
 
-- [ ] **SEC-05 — Test de complétude de `ModuleGating::CONTROLLER_MODULES`**
+- [x] **SEC-05 — Test de complétude de `ModuleGating::CONTROLLER_MODULES`**
   - *Pourquoi* : le mapping contrôleur→module est un hash **maintenu à la main**. Un
     nouveau contrôleur de module qui n'y est pas ajouté échappe silencieusement au
     gating. Le commentaire du fichier l'admet déjà.
@@ -213,7 +213,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Vérif* : un test qui énumère les routes et échoue si un contrôleur appartenant à un
     module n'est ni listé ni explicitement exempté.
 
-- [ ] **SEC-06 — Gater les modules désactivés côté `Api::V1::*`**
+- [x] **SEC-06 — Gater les modules désactivés côté `Api::V1::*`**
   - *Pourquoi* : l'API JSON n'est **pas** gatée
     ([module_gating.rb:9](app/controllers/concerns/module_gating.rb#L9) le documente).
     Un module désactivé reste intégralement **lisible et inscriptible** par jeton API.
@@ -235,7 +235,7 @@ préfixe d'ID préserve la lecture thématique.
 
 # 5. Vague 2 — Performance mesurée
 
-- [ ] **PERF-02 — Mettre en cache les recherches Open Food Facts**
+- [x] **PERF-02 — Mettre en cache les recherches Open Food Facts**
   - *Pourquoi* : **`Rails.cache` a zéro site d'appel dans tout `app/` et `lib/`**, alors
     que `solid_cache_store` est configuré et inutilisé
     ([production.rb:50](config/environments/production.rb#L50)). À traiter **en premier**
@@ -247,7 +247,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Vérif* : test avec WebMock asserant **un seul** appel HTTP pour deux recherches du
     même code-barres.
 
-- [ ] **PERF-03 — Mettre en cache le géocodage Nominatim**
+- [x] **PERF-03 — Mettre en cache le géocodage Nominatim**
   - *Pourquoi* : une requête `Net::HTTP` par appel, sans mémoïsation. Au-delà de la
     latence, c'est la politique d'usage d'OpenStreetMap qui l'exige. TTL plus court que
     PERF-02 (une adresse peut être corrigée en amont).
@@ -255,7 +255,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Effort* : S · *Dépend de* : PERF-02
   - *Vérif* : test WebMock, un seul appel pour deux recherches identiques.
 
-- [ ] **PERF-04 — Pousser les filtres du dashboard en SQL**
+- [x] **PERF-04 — Pousser les filtres du dashboard en SQL**
   - *Pourquoi* : le dashboard charge des relations **non bornées** puis filtre en
     **Ruby** avant de tronquer à 5. Les prédicats sont du calcul de dates pur, donc
     **Bullet ne les signalera jamais** et **`includes` ne corrige rien** — c'est le
@@ -266,7 +266,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Vérif* : `bin/rails test test/controllers/dashboard_controller_test.rb` vert, et le
     log de requêtes montre des `LIMIT` en SQL au lieu de chargements complets.
 
-- [ ] **PERF-05 — Borner l'expansion des récurrences du calendrier**
+- [x] **PERF-05 — Borner l'expansion des récurrences du calendrier**
   - *Pourquoi* : [dashboard_controller.rb:44](app/controllers/dashboard_controller.rb#L44)
     charge **tous** les `calendar_events` jamais créés et déplie leurs occurrences en
     mémoire, avec une garde à 1 000 itérations **par événement**. C'est le plus fort
@@ -280,7 +280,7 @@ préfixe d'ID préserve la lecture thématique.
     dates bornée** sur le service `Recurrence`, pas un `where`. Poser cette couture
     maintenant évite de réécrire le service deux fois quand RRULE arrivera.
 
-- [ ] **PERF-06 — Eager loading sur les actions `index` qui en manquent**
+- [x] **PERF-06 — Eager loading sur les actions `index` qui en manquent**
   - *Pourquoi* : ~11 actions `index` sans `includes`/`preload` : `documents`,
     `shopping_lists`, `trips`, `shared_projects`, `baby_profiles`, `loyalty_cards`,
     `notifications`, `recipe_catalog`, `workout_templates`, `products`,

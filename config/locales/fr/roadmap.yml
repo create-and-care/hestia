@@ -180,8 +180,19 @@ fr:
       public_route_hardening:
         title: "Durcissement des routes publiques"
         items:
-          - "Limitation de débit sur la réservation de cadeau publique (g/:token/reserve/:idea_id), seule route sensible sans limite aujourd'hui"
-          - "Audit d'accessibilité automatisé — aucun outil de test a11y en place malgré les correctifs manuels déjà livrés module par module"
+          - "Limitation de débit sur la liste de cadeaux publique (g/:token) : une limite de lecture et une limite d'écriture distinctes sur la réservation, plus une page 429 aux couleurs du site"
+          - "Retrait du jeton d'API sans expiration : trois durées au choix, 90 jours par défaut"
+          - "Audit d'accessibilité automatisé : bin/rails visual:check mesure contraste, taille de cible et taille de police sur 273 routes × 2 thèmes × 2 largeurs, et test/lib/ porte les tests de contraste et d'accessibilité"
+      security_performance_hardening:
+        title: "Sécurité & performance mesurée"
+        items:
+          - "Content-Security-Policy réellement émise (elle était entièrement commentée), avec un nonce par requête sur script-src"
+          - "force_ssl / assume_ssl activables par FORCE_SSL, sans casser un accès en HTTP sur le réseau local"
+          - "Modules désactivés désormais fermés côté API JSON aussi : une seule table de correspondance pour le web et l'API, et un test qui parcourt les routes pour qu'aucun contrôleur ne reste non classé"
+          - "Mise en cache des appels Open Food Facts et Nominatim — premiers usages de Rails.cache, qui fixent les conventions de clé et de TTL"
+          - "Tableau de bord filtré en SQL : chaque encart demande à la base les cinq lignes qu'il affiche au lieu de charger la relation entière"
+          - "Expansion des récurrences bornée par la fenêtre de dates, et non plus par l'ancienneté de la série"
+          - "Chargement anticipé sur les listes qui en manquaient, énuméré en faisant échouer Bullet dans la suite de tests (BULLET_RAISE=1)"
       reference_catalog_growth:
         title: "Enrichir les catalogues & les automatismes"
         items:

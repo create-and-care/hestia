@@ -12,6 +12,9 @@ class PlantCareTask < ApplicationRecord
   validates :care_type, presence: true
   validates :frequency, inclusion: { in: Recurrence::PERIODS.keys }
 
+  # Shared with Plant.needing_care, which asks the same question in SQL.
+  SOON_DAYS = 3
+
   scope :ordered, -> { order(:next_due_on) }
 
   broadcasts_refreshes_to ->(task) { [ task.plant.household, "exterior" ] }
@@ -19,7 +22,7 @@ class PlantCareTask < ApplicationRecord
   before_validation :set_initial_due, on: :create
 
   def overdue? = next_due_on.present? && next_due_on < Date.current
-  def due_soon?(days = 3) = next_due_on.present? && next_due_on.between?(Date.current, Date.current + days.days)
+  def due_soon?(days = SOON_DAYS) = next_due_on.present? && next_due_on.between?(Date.current, Date.current + days.days)
 
   def status
     return :overdue if overdue?
