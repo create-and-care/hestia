@@ -172,6 +172,7 @@ fr:
         items:
           - "Suppression du compte utilisateur"
           - "Export des données personnelles, pour la portabilité même en auto-hébergement"
+          - "Réinitialisation des données module par module : aujourd'hui c'est tout ou rien (supprimer le foyer), et désactiver un module laisse ses lignes intactes et invisibles"
       household_activity_export:
         title: "Tableau de bord : activité & export"
         items:
@@ -234,12 +235,55 @@ fr:
           - "Inventaire des biens (photo, valeur, date d'achat, garantie), pour l'assurance et la revente"
           - "Calendrier des vacances scolaires françaises (zones A/B/C) — les jours fériés sont couverts, pas ce qui structure l'année d'un foyer avec enfants"
           - "Détection des doublons à l'ajout aux courses, et suggestions tirées de l'historique d'achat déjà en base"
+      wired_patterns:
+        title: "Des motifs déjà présents dans le dépôt, enfin branchés"
+        items:
+          - "Pièces jointes et réactions sur les messages : CirclePost porte déjà has_one_attached :photo et un modèle CirclePostReaction complet avec son contrôleur et ses routes — le motif est écrit, testé et livré, il n'est simplement pas appliqué aux messages"
+          - "Graphiques dans Budget : Ui::ChartComponent tourne déjà dans Piscine et Bien-être, quand budget/show n'a qu'une barre de progression"
+          - "quantity et unit sur les articles du frigo : les articles de courses portent les deux, ceux du frigo aucun des deux, et les deux services Frigo↔Courses traversent déjà cette frontière en perdant l'information"
+      tasks_and_recurrence:
+        title: "Tâches et récurrences, en profondeur"
+        items:
+          - "Sous-tâches, priorité et tags sur les tâches — aujourd'hui atténué par les catégories kanban, un emoji et un statut d'échéance dérivé"
+          - "Récurrences de niveau RRULE : le service Recurrence couvre quotidien/hebdomadaire/mensuel/annuel et rien d'autre — pas de « 2e mardi », pas de nombre d'occurrences, pas de règle multi-jours"
+      cooking_and_shopping:
+        title: "Cuisine et courses, au-delà de la base"
+        items:
+          - "Recherche de recettes par ingrédient — un joins(:recipe_ingredients) dans une chaîne de filtres qui existe déjà ; « que puis-je cuisiner avec du poulet ? » ne renvoie rien aujourd'hui"
+          - "Prix sur les articles de courses, avec total automatique"
+      notifications_automation:
+        title: "Notifications et automatisation sortante"
+        items:
+          - "Les trois types de notification qui ignorent les préférences : rappels de tâche, rappels d'événement et échec de synchronisation d'un calendrier externe sont inconditionnels — trois types sur six"
+          - "Webhooks sortants : l'API api/v1 lit et écrit sous jeton mais ne notifie rien, donc aucune automatisation externe (Home Assistant, n8n, IFTTT) ne peut réagir à ce qui se passe dans Hestia"
+      first_run_experience:
+        title: "Première prise en main : données de démonstration et visite guidée"
+        items:
+          - "Données de démonstration depuis l'interface : DemoData::Seeder couvre déjà quelque 22 modules mais n'est accessible que par bin/rails demo_data:default"
+          - "Visite guidée au premier lancement — la seule critique d'onboarding à retenir des audits supprimés (leur « 5+ étapes » était faux : il y en a deux)"
+      personalization:
+        title: "Se l'approprier"
+        items:
+          - "Thèmes personnalisés par foyer : toutes les couleurs passent déjà par une variable CSS derrière l'indirection --brand/--accent, la moitié du travail est faite — il manque la persistance et un sélecteur, sachant que le contrôle de contraste devient alors une contrainte à l'exécution et non plus une vérification de build"
+          - "Réordonnancement de la sidebar : SortableJS est déjà câblé aux listes, aux tâches, à la fidélité et au menu, mais pas à la navigation"
+      health_records:
+        title: "Suivi de santé des personnes"
+        items:
+          - "Suivi médical humain (traitements, vaccins, cycles) : le motif est intégralement écrit pour Animaux — PetVaccination, PetTreatment, avec rappels de rappel — et absent pour les humains ; Bien-être ne couvre que le poids et les séances"
+          - "Profil allergènes par personne, et filtrage des recettes contre lui : AllergenTest existe mais appartient à Bébé (diversification alimentaire), donc une recette d'adulte n'a rien à quoi être confrontée"
+          - "À ne pas commencer avant d'avoir tranché trois points : est-ce accroché à un compte, à un profil sans compte (comme BabyProfile), ou à une nouvelle entité personne ; qui dans le foyer peut le lire ; et ce qu'un export de foyer fait d'une donnée de santé"
       marketing_docs:
         title: "Site vitrine & documentation utilisateur"
         items:
           - "Site vitrine public (accueil, une page par module, présentation de Hest.AI)"
           - "Centre de documentation utilisateur par module"
           - "Politique de confidentialité adaptée au contexte auto-hébergé"
+      scaling_thresholds:
+        title: "Parqué jusqu'à ce qu'une mesure dise le contraire"
+        items:
+          - "Authentification à deux facteurs — la limitation de débit couvre déjà les trois entrées d'authentification, les cookies sont signés et httponly, et les sessions sont révocables depuis l'interface. Déclencheur : la première instance multi-foyers exposée sur Internet public"
+          - "Index pg_trgm / GIN sur la recherche — 28 requêtes ILIKE à joker initial, compromis documenté dans l'en-tête du service et correct en mono-foyer. Déclencheur : une latence de recherche au-delà de 300 ms sur un foyer réel"
+          - "Découpage du bundle esbuild — un seul bundle, 50 contrôleurs Stimulus chargés d'emblée, mais seulement trois dépendances tierces (Stimulus, Turbo, sortablejs). Déclencheur : l'ajout d'une dépendance tierce lourde"
       mobile_parity:
         title: "Parité fonctionnelle mobile"
         items:

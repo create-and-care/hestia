@@ -9,7 +9,11 @@
 # Text lives in config/locales/{en,fr}/roadmap.yml, keyed by the slug
 # below; only structural data (date, icon, ordering) stays in Ruby. A
 # milestone with no date is upcoming work with no committed date yet —
-# it's ordered last, by intent rather than by day shipped.
+# it's ordered last, by intent rather than by day shipped. Within that
+# upcoming block the order is roughly cost-ascending: what only needs
+# wiring first, what needs a decision before a line of code is written
+# (health_records) or a measurement before it is worth writing at all
+# (scaling_thresholds) last.
 module Roadmap
   MILESTONE_SLUGS = %w[
     foundation design_system wave_2a wave_2b wave_2c wave_2d pdf_export_reordering
@@ -21,9 +25,11 @@ module Roadmap
     refinement_wave_day3a refinement_wave_day3b
     public_route_hardening security_performance_hardening
     design_system_measured pwa i18n_guardrails
-    account_privacy household_activity_export
+    wired_patterns account_privacy household_activity_export
+    tasks_and_recurrence cooking_and_shopping
     reference_catalog_growth shared_link_controls household_logistics
-    marketing_docs mobile_parity
+    notifications_automation first_run_experience personalization health_records
+    marketing_docs scaling_thresholds mobile_parity
     cross_household_recipes hestai
   ].freeze
 
@@ -80,6 +86,10 @@ module Roadmap
     "design_system_measured" => "layout-grid", "i18n_guardrails" => "info",
     "shared_link_controls" => "link", "household_logistics" => "sofa",
     "reference_catalog_growth" => "sprout",
+    "wired_patterns" => "puzzle", "tasks_and_recurrence" => "list-checks",
+    "cooking_and_shopping" => "utensils", "notifications_automation" => "bell",
+    "first_run_experience" => "sun", "personalization" => "droplet",
+    "health_records" => "heart-pulse", "scaling_thresholds" => "trending-up",
     "pwa" => "smartphone", "marketing_docs" => "map-pin", "mobile_parity" => "smartphone",
     "cross_household_recipes" => "handshake", "hestai" => "message-circle"
   }.freeze
