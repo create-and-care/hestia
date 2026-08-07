@@ -59,6 +59,21 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
 
+  # `LOCALE=fr bin/rails test` runs the whole suite through French — the
+  # fallback locale here, and the fixture users' own locale in
+  # test/fixtures/users.yml, since every signed-in page renders in theirs.
+  #
+  # Read it as a diagnostic, not as a gate. It currently reports 57 failures,
+  # and every one of them is a test asserting English interface copy —
+  # `assert_select ... "Name can't be blank"`, `aria-label="Edit ..."`, flash
+  # messages. Not one is a date. Making it green means rewriting those
+  # assertions to be locale-independent, which is a real piece of work and not
+  # I18N-03's; what I18N-03 owns is pinned directly instead, by
+  # test/lib/localized_dates_test.rb and
+  # test/integration/localized_dates_rendering_test.rb, both of which run in
+  # both locales on every ordinary `bin/rails test`.
+  config.i18n.default_locale = ENV.fetch("LOCALE", "en").to_sym
+
   # Active Record Encryption (ExternalCalendarConnection#access_token/refresh_token,
   # needs 3 keys. Throwaway, committed values are fine here since
   # the test database is disposable — production reads real keys from credentials

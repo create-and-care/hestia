@@ -6,7 +6,7 @@
   <header class="mb-6 flex items-start justify-between">
     <div>
       <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("luggage", css_class: "size-6") %> <%= @trip.name %></h1>
-      <% if @trip.starts_on %><p class="text-sm text-secondary"><%= @trip.starts_on.strftime("%d/%m/%Y") %><%= " → #{@trip.ends_on.strftime('%d/%m/%Y')}" if @trip.ends_on %></p><% end %>
+      <% if @trip.starts_on %><p class="text-sm text-secondary"><%= l(@trip.starts_on, format: :numeric) %><%= " → #{l(@trip.ends_on, format: :numeric)}" if @trip.ends_on %></p><% end %>
     </div>
     <div class="flex items-center gap-2">
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, href: edit_trip_path(@trip))) { t(".edit_trip") } %>

@@ -14,7 +14,7 @@
       <% if @weight_entries.any? %>
         <ul class="mb-4 divide-y divide-primary text-sm">
           <% @weight_entries.each do |entry| %>
-            <li class="py-2"><%= entry.recorded_on.strftime("%d/%m/%Y") %> — <%= entry.weight %> kg</li>
+            <li class="py-2"><%= l(entry.recorded_on, format: :numeric) %> — <%= entry.weight %> kg</li>
           <% end %>
         </ul>
         <% if @weight_total_pages > 1 %>
@@ -32,7 +32,7 @@
       <% if @workout_entries.any? %>
         <ul class="mb-4 divide-y divide-primary text-sm">
           <% @workout_entries.each do |entry| %>
-            <li class="py-2"><%= entry.done_on.strftime("%d/%m/%Y") %> — <%= entry.exercise %><% if entry.duration_minutes %> (<%= entry.duration_minutes %> min)<% end %></li>
+            <li class="py-2"><%= l(entry.done_on, format: :numeric) %> — <%= entry.exercise %><% if entry.duration_minutes %> (<%= entry.duration_minutes %> min)<% end %></li>
           <% end %>
         </ul>
         <% if @workout_total_pages > 1 %>

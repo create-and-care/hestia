@@ -2,7 +2,7 @@
   <%= render(Ui::ItemComponent.new) do |item| %>
     <% item.with_title do %>
       <span class="font-medium"><%= maintenance_entry_type_label(vehicle_maintenance_entry.entry_type) %></span>
-      <% if vehicle_maintenance_entry.done_on %><span class="text-subdued">· <%= vehicle_maintenance_entry.done_on.strftime("%d/%m/%Y") %></span><% end %>
+      <% if vehicle_maintenance_entry.done_on %><span class="text-subdued">· <%= l(vehicle_maintenance_entry.done_on, format: :numeric) %></span><% end %>
       <% if vehicle_maintenance_entry.cost %><span class="text-subdued">· <%= number_to_currency(vehicle_maintenance_entry.cost, unit: "€", format: "%n %u") %></span><% end %>
       <% if vehicle_maintenance_entry.service_provider %>
         <span class="text-subdued">· <%= link_to vehicle_maintenance_entry.service_provider.name, edit_service_provider_path(vehicle_maintenance_entry.service_provider), class: "hover:underline" %></span>

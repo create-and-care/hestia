@@ -1,0 +1,74 @@
+# Configuration for i18n-tasks (I18N-02).
+#
+# The en/fr parity this repo has today was maintained by hand, and hand-kept
+# parity drifts — silently, and in the direction of whichever language the
+# person writing the feature thinks in. `i18n-tasks missing` is what turns
+# that into a red build.
+#
+# Only `missing` is enforced in CI. `unused` is deliberately left out for now:
+# on a tree of ~2 000 keys it reports a long tail on day one (keys reached
+# through interpolated names, keys used only by a mailer template, keys a
+# component looks up from a constant), and a check that fails from the first
+# commit teaches people to skip it. Cleaning that tail is its own task.
+
+base_locale: en
+locales: [ en, fr ]
+
+data:
+  read:
+    - config/locales/%{locale}/*.yml
+  write:
+    - ["{dashboard,sidebar,modules}.*", "config/locales/%{locale}/\\1.yml"]
+    - config/locales/%{locale}/common.yml
+
+search:
+  # Only where translations are actually looked up. Not app/javascript, and
+  # not the esbuild output beside it: no translation is ever read client-side
+  # here, and the JS scanner reads `(t) => t !== trigger` in a Stimulus
+  # controller as a call to `t(...)`, which is how the first run came back
+  # reporting `!` as a missing key.
+  paths:
+    - app/controllers
+    - app/helpers
+    - app/mailers
+    - app/models
+    - app/views
+    - app/components
+    - app/services
+    - app/jobs
+  relative_roots:
+    - app/controllers
+    - app/helpers
+    - app/mailers
+    - app/views
+    - app/components
+
+ignore_missing:
+  # Supplied by rails-i18n, not by this repo: pluralisation rules, model and
+  # attribute names Rails generates, and the error messages that come with
+  # them. Listing them as missing would drown the signal we do want.
+  - "activerecord.*"
+  - "activemodel.*"
+  - "errors.*"
+  - "helpers.*"
+  - "number.*"
+  - "support.*"
+  # Written per locale rather than translated key for key: the roadmap's
+  # milestone bodies and the design-system docs are French-first prose.
+  - "roadmap.milestones.*"
+  # `rate_limit(with: -> { ... t(".rate_limited") })` is declared in the class
+  # body, so the relative key has no action to hang off and i18n-tasks guesses
+  # <controller>.rate_limited. The keys exist, under sessions.create,
+  # registrations.create and passwords.create, where Rails resolves them.
+  - "*_controller.rate_limited"
+
+ignore_unused:
+  # Reached through an interpolated key rather than a literal one, so the
+  # static scan cannot see the call site.
+  - "modules.*"
+  - "dashboard.show.nav.*"
+  - "notifications.kinds.*"
+  - "roadmap.*"
+  - "date.formats.*"
+  - "time.formats.*"
+  - "pwa.*"

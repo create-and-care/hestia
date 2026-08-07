@@ -24,7 +24,7 @@
         <p class="mt-2">
           <%= render(Ui::BadgeComponent.new(variant: inspection_badge_variant(@vehicle.inspection_status))) do %>
             <%= t(".inspection_prefix") %> <%= inspection_label(@vehicle.inspection_status) %>
-            <% if @vehicle.inspection_expires_on %> (<%= @vehicle.inspection_expires_on.strftime("%d/%m/%Y") %>)<% end %>
+            <% if @vehicle.inspection_expires_on %> (<%= l(@vehicle.inspection_expires_on, format: :numeric) %>)<% end %>
           <% end %>
         </p>
       </div>

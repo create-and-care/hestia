@@ -12,9 +12,9 @@ module Pdf
       pdf.move_down 12
 
       by_day.each do |date, entries|
-        pdf.text "#{day_name(date)} #{date.strftime('%d/%m')}", size: 13, style: :bold
+        pdf.text "#{day_name(date)} #{I18n.l(date, format: :numeric_short)}", size: 13, style: :bold
         entries.each do |time, event|
-          label = event.all_day ? I18n.t("calendar.show.pdf.all_day") : time.strftime("%H:%M")
+          label = event.all_day ? I18n.t("calendar.show.pdf.all_day") : I18n.l(time, format: :hour_minute)
           line = "#{label} — #{event.title}"
           line += " (#{event.location})" if event.location.present?
           pdf.text clean(line), indent_paragraphs: 12

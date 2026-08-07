@@ -238,9 +238,9 @@
                 <%= render(Ui::ItemComponent.new) do |item| %>
                   <% item.with_title { token.name } %>
                   <% item.with_description do %>
-                    <%= t("api_tokens.index.created_on") %> <%= token.created_at.strftime("%d/%m/%Y") %>
-                    <% if token.last_used_at %> · <%= t("api_tokens.index.last_used_on") %> <%= token.last_used_at.strftime("%d/%m/%Y") %><% end %>
-                    · <%= token.expires_at ? t("api_tokens.index.expires_on", date: token.expires_at.strftime("%d/%m/%Y")) : t("api_tokens.index.never_expires") %>
+                    <%= t("api_tokens.index.created_on") %> <%= l(token.created_at.to_date, format: :numeric) %>
+                    <% if token.last_used_at %> · <%= t("api_tokens.index.last_used_on") %> <%= l(token.last_used_at.to_date, format: :numeric) %><% end %>
+                    · <%= token.expires_at ? t("api_tokens.index.expires_on", date: l(token.expires_at.to_date, format: :numeric)) : t("api_tokens.index.never_expires") %>
                   <% end %>
                   <% item.with_trailing do %>
                     <%= form_with url: api_token_path(token), method: :delete, data: { turbo_confirm: t("api_tokens.index.revoke_confirm") } do %>
@@ -292,7 +292,7 @@
               <%= render(Ui::ItemComponent.new) do |item| %>
                 <% item.with_title { session.user_agent.presence || t(".unknown_device") } %>
                 <% item.with_description do %>
-                  <%= session.ip_address %> · <%= t(".last_active_on") %> <%= session.updated_at.strftime("%d/%m/%Y %H:%M") %>
+                  <%= session.ip_address %> · <%= t(".last_active_on") %> <%= l(session.updated_at, format: :numeric) %>
                 <% end %>
                 <% item.with_trailing do %>
                   <% if session == Current.session %>

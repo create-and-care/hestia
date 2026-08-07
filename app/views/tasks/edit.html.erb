@@ -20,7 +20,7 @@
       <% @task.task_reminders.order(:remind_at).each do |reminder| %>
         <%= render(Ui::ItemComponent.new) do |item| %>
           <% item.with_title do %>
-            <%= reminder.remind_at.strftime("%d/%m/%Y %H:%M") %>
+            <%= l(reminder.remind_at, format: :numeric) %>
             <span class="text-subdued">· <%= reminder.user.name.presence || reminder.user.email_address %></span>
             <% if reminder.delivered_at %><span class="text-subdued">· <%= t(".sent") %></span><% end %>
           <% end %>

@@ -391,7 +391,7 @@ préfixe d'ID préserve la lecture thématique.
 
 **L'ordre est contraignant, pas indicatif.**
 
-- [ ] **I18N-01 — Ajouter les blocs `date:` / `time:` `formats:` aux deux locales**
+- [x] **I18N-01 — Ajouter les blocs `date:` / `time:` `formats:` aux deux locales**
   - *Pourquoi* : **aucun bloc `formats:` n'existe dans aucun fichier de locale.** Les
     11 appels `l()` actuels ne fonctionnent que grâce aux défauts de la gem `rails-i18n`.
     Sans ces clés, I18N-03 n'a rien à appeler.
@@ -400,7 +400,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Vérif* : `I18n.t("date.formats.short", locale: :fr)` renvoie une valeur du dépôt,
     pas celle de la gem.
 
-- [ ] **I18N-02 — `i18n-tasks` + job CI**
+- [x] **I18N-02 — `i18n-tasks` + job CI**
   - *Pourquoi* : la parité 1984/1984 est aujourd'hui **maintenue à la main**. Elle
     dérivera. C'est le seul noyau valide de l'affirmation « traductions incomplètes »
     des audits — laquelle est fausse au présent mais juste au futur.
@@ -410,7 +410,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Piège* : n'activer que `missing` au début. `unused` échouera dès le premier jour sur
     un arbre de 1 984 clés — prévoir un nettoyage séparé.
 
-- [ ] **I18N-03 — Migrer les 60 `strftime` vers `l()`**
+- [x] **I18N-03 — Migrer les 60 `strftime` vers `l()`**
   - *Pourquoi* : 60 `strftime` dans 30 fichiers de vues contre 11 `l()`. Les formats sont
     **codés en dur en français** (`"%d/%m/%Y"`) : un utilisateur en locale anglaise voit
     `07/08/2026` pour le 7 août — **activement faux**, pas seulement non localisé.
@@ -419,7 +419,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Piège* : exclure les `strftime` qui ne sont pas de l'affichage — paramètres d'URL,
     p. ex. `app/views/calendar/show.html.erb:47,49`.
 
-- [ ] **I18N-04 — Interdire `strftime` dans `app/views`**
+- [x] **I18N-04 — Interdire `strftime` dans `app/views`**
   - *Pourquoi* : sans garde, la migration se défait au fil des PR.
   - *Effort* : S · *Dépend de* : I18N-03
   - *Vérif* : règle RuboCop (ou grep en CI) qui échoue sur un `strftime` réintroduit.

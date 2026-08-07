@@ -30,7 +30,7 @@
               <% item.with_title { care_type_label(task.care_type) } %>
               <% item.with_description do %>
                 <%= care_frequency_label(task.frequency) %><%= " ×#{task.interval}" if task.interval.to_i > 1 %>
-                <% if task.next_due_on %> · <%= t(".next_due") %> : <%= task.next_due_on.strftime("%d/%m/%Y") %><% end %>
+                <% if task.next_due_on %> · <%= t(".next_due") %> : <%= l(task.next_due_on, format: :numeric) %><% end %>
               <% end %>
               <% item.with_trailing do %>
                 <div class="flex items-center gap-2">
@@ -50,7 +50,7 @@
               <ul class="mt-2 divide-y divide-primary text-xs text-secondary">
                 <% completions.each do |completion| %>
                   <li class="flex items-center justify-between py-1">
-                    <span><%= completion.completed_on.strftime("%d/%m/%Y") %><%= " · #{completion.note}" if completion.note.present? %></span>
+                    <span><%= l(completion.completed_on, format: :numeric) %><%= " · #{completion.note}" if completion.note.present? %></span>
                     <span><%= completion.author&.name.presence || completion.author&.email_address || t(".unknown_author") %></span>
                   </li>
                 <% end %>

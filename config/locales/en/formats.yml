@@ -1,0 +1,42 @@
+# Date and time formats. No `formats:` block existed anywhere in the repo: the
+# `l()` calls worked only on rails-i18n's defaults, and every other view spelled
+# out "%d/%m/%Y" by hand — a French date handed unchanged to an English-speaking
+# user, who reads 07/08/2026 as 8 July. Wrong, not merely untranslated.
+#
+# `default`, `short` and `long` reproduce, character for character, what
+# rails-i18n was already rendering: bringing them into the repo unchanged is
+# what lets them be changed later without moving anything today.
+#
+# The `numeric*` family is the new part — what the 51 display `strftime` calls
+# were reaching for, a day of the year written in digits. It exists in both
+# locales under the same names and in a different order, which is the entire
+# point.
+en:
+  date:
+    formats:
+      default: "%Y-%m-%d"
+      short: "%b %d"
+      long: "%B %d, %Y"
+      # 08/07/2026
+      numeric: "%m/%d/%Y"
+      # 08/07/26
+      numeric_compact: "%m/%d/%y"
+      # 08/07
+      numeric_short: "%m/%d"
+      # Fri 08/07
+      weekday_numeric: "%a %m/%d"
+      # August 2026
+      month_year: "%B %Y"
+  time:
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      short: "%d %b %H:%M"
+      long: "%B %d, %Y %H:%M"
+      # 08/07/2026 2:05 PM
+      numeric: "%m/%d/%Y %-l:%M %p"
+      # 08/07 2:05 PM
+      numeric_short: "%m/%d %-l:%M %p"
+      # Fri 08/07 — 2:05 PM
+      weekday_numeric: "%a %m/%d — %-l:%M %p"
+      # 2:05 PM
+      hour_minute: "%-l:%M %p"

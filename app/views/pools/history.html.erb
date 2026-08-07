@@ -16,7 +16,7 @@
       <% trends.each do |measure_type, readings| %>
         <div>
           <p class="mb-2 text-sm text-secondary"><%= measure_type_label(measure_type) %></p>
-          <%= render Ui::ChartComponent.new(data: readings.map { |reading| [ reading.measured_on.strftime("%d/%m"), reading.value.to_f ] }) %>
+          <%= render Ui::ChartComponent.new(data: readings.map { |reading| [ l(reading.measured_on, format: :numeric_short), reading.value.to_f ] }) %>
         </div>
       <% end %>
     </section>
@@ -27,7 +27,7 @@
     <% if @readings.any? %>
       <ul class="mb-4 divide-y divide-primary text-sm">
         <% @readings.each do |reading| %>
-          <li class="py-2"><%= reading.measured_on.strftime("%d/%m/%Y") %> · <%= measure_type_label(reading.measure_type) %> : <%= reading.value.to_s.sub(/\.0+\z/, "") %></li>
+          <li class="py-2"><%= l(reading.measured_on, format: :numeric) %> · <%= measure_type_label(reading.measure_type) %> : <%= reading.value.to_s.sub(/\.0+\z/, "") %></li>
         <% end %>
       </ul>
       <% if @readings_total_pages > 1 %>
@@ -46,7 +46,7 @@
     <% if @actions.any? %>
       <ul class="mb-4 divide-y divide-primary text-sm">
         <% @actions.each do |action| %>
-          <li class="py-2"><%= action.done_on.strftime("%d/%m/%Y") %> · <%= pool_action_label(action.action_type) %><%= " · #{action.note}" if action.note.present? %></li>
+          <li class="py-2"><%= l(action.done_on, format: :numeric) %> · <%= pool_action_label(action.action_type) %><%= " · #{action.note}" if action.note.present? %></li>
         <% end %>
       </ul>
       <% if @actions_total_pages > 1 %>

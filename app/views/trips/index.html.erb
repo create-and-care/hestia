@@ -21,7 +21,7 @@
           <%= render(Ui::CardComponent.new(class_name: "h-full transition-colors hover:bg-surface-hover")) do %>
             <p class="flex items-center gap-1.5 font-medium"><%= lucide_icon("luggage", css_class: "size-4 shrink-0") %> <%= trip.name %></p>
             <% if trip.starts_on %>
-              <p class="mt-1 text-sm text-subdued"><%= trip.starts_on.strftime("%d/%m/%y") %><%= " → #{trip.ends_on.strftime('%d/%m/%y')}" if trip.ends_on %></p>
+              <p class="mt-1 text-sm text-subdued"><%= l(trip.starts_on, format: :numeric_compact) %><%= " → #{l(trip.ends_on, format: :numeric_compact)}" if trip.ends_on %></p>
             <% end %>
           <% end %>
         <% end %>

@@ -3,7 +3,7 @@
     <% item.with_title do %><%= "#{routine.emoji} " if routine.emoji.present? %><%= routine.name %><% end %>
     <% item.with_description do %>
       <%= routine_frequency_label(routine.frequency) %><%= " ×#{routine.interval}" if routine.interval.to_i > 1 %>
-      <% if routine.next_due_on %>· <%= t(".next_due") %> : <%= routine.next_due_on.strftime("%d/%m/%Y") %><% end %>
+      <% if routine.next_due_on %>· <%= t(".next_due") %> : <%= l(routine.next_due_on, format: :numeric) %><% end %>
       <% if routine.overdue? %><span class="font-medium text-destructive">· <%= t(".overdue") %></span><% end %>
       <% if routine.assignee %>· <%= routine.assignee.name.presence || routine.assignee.email_address %><% end %>
       <% if routine.list_name.present? %>· <%= routine.list_name %><% end %>

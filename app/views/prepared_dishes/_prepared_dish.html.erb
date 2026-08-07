@@ -5,7 +5,7 @@
     <% end %>
     <% item.with_title { prepared_dish.name } %>
     <% if prepared_dish.expires_on.present? %>
-      <% item.with_description { t(".best_before", date: prepared_dish.expires_on.strftime("%d/%m/%Y")) } %>
+      <% item.with_description { t(".best_before", date: l(prepared_dish.expires_on, format: :numeric)) } %>
     <% end %>
     <% item.with_trailing do %>
       <div class="flex flex-wrap items-center gap-2">

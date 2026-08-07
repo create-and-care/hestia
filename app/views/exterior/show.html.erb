@@ -126,7 +126,7 @@
             <% pool.pool_readings.recent.first(5).each do |reading| %>
               <li>
                 <%= render(Ui::ItemComponent.new) do |item| %>
-                  <% item.with_title { "#{reading.measured_on.strftime('%d/%m')} · #{measure_type_label(reading.measure_type)} : #{reading.value.to_s.sub(/\.0+\z/, "")}" } %>
+                  <% item.with_title { "#{l(reading.measured_on, format: :numeric_short)} · #{measure_type_label(reading.measure_type)} : #{reading.value.to_s.sub(/\.0+\z/, "")}" } %>
                   <% item.with_trailing do %>
                     <%= form_with url: pool_pool_reading_path(pool, reading), method: :delete, data: { turbo_confirm: t(".delete_reading_confirm") } do %>
                       <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
@@ -169,7 +169,7 @@
             <% pool.pool_actions.recent.first(5).each do |action| %>
               <li>
                 <%= render(Ui::ItemComponent.new) do |item| %>
-                  <% item.with_title { "#{action.done_on.strftime('%d/%m')} · #{pool_action_label(action.action_type)}" } %>
+                  <% item.with_title { "#{l(action.done_on, format: :numeric_short)} · #{pool_action_label(action.action_type)}" } %>
                   <% item.with_trailing do %>
                     <%= form_with url: pool_pool_action_path(pool, action), method: :delete, data: { turbo_confirm: t(".delete_action_confirm") } do %>
                       <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",

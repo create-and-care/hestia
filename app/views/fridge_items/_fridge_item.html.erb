@@ -2,7 +2,7 @@
   <%= render(Ui::ItemComponent.new) do |item| %>
     <% item.with_title { fridge_item.name } %>
     <% if fridge_item.expires_on.present? %>
-      <% item.with_description { t(".until_date", date: fridge_item.expires_on.strftime("%d/%m/%Y")) } %>
+      <% item.with_description { t(".until_date", date: l(fridge_item.expires_on, format: :numeric)) } %>
     <% end %>
     <% item.with_trailing do %>
       <div class="flex flex-wrap items-center gap-2">
