@@ -70,7 +70,7 @@ module ModuleGating
     notifications notification_preferences
     passwords registrations sessions
     dashboard design_system roadmap
-    public_gift_lists
+    public_gift_lists pwa
     searches
   ].freeze
   # accounts/active_sessions/api_tokens/passwords/registrations/sessions — the
@@ -81,6 +81,8 @@ module ModuleGating
   # dashboard/design_system/roadmap — global pages, not owned by a module.
   # public_gift_lists — unauthenticated by design, with no Current.household to
   #   consult; guarded by the share token and its own rate limits instead.
+  # pwa — the manifest and the service worker, fetched by the browser itself
+  #   with no session at all, and carrying no household data.
   # searches — spans every module at once, so it gates per *result* rather than
   #   per request: GlobalSearch skips any definition whose module_key is
   #   disabled (global_search.rb), which is the finer control, not a missing one.

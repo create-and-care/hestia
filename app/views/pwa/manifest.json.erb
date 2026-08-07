@@ -1,22 +1,54 @@
+<%#
+  Installable-app metadata, served at /manifest.json. Everything here was still
+  the Rails scaffold's placeholder until DS-09 — including "theme_color": "red"
+  and a 480×360 icon declared as 512×512, which is on its own enough for a
+  browser to refuse to install the app.
+
+  The icons are square PNGs generated from app/assets/images/logo.png; the
+  maskable one carries a wider margin so a platform that crops it to a circle
+  or a squircle does not clip the roof.
+
+  theme_color is the brand clay (--brand / --color-clay-600) and
+  background_color the light surface (--surface): the splash screen a cold
+  start shows before the CSS loads should be the app's own paper, not white.
+%>
 {
-  "name": "Hestia",
+  "id": "/",
+  "name": "<%= Hestia %>",
+  "short_name": "<%= Hestia %>",
+  "description": "<%= t("pwa.description") %>",
+  "lang": "<%= I18n.locale %>",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#A85030",
+  "background_color": "#FBF7F4",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "/icon-192.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "192x192",
+      "purpose": "any"
     },
     {
-      "src": "/icon.png",
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
     }
-  ],
-  "start_url": "/",
-  "display": "standalone",
-  "scope": "/",
-  "description": "Hestia.",
-  "theme_color": "red",
-  "background_color": "red"
+  ]
 }

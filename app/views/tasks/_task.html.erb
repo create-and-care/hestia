@@ -41,9 +41,8 @@
                 html_options: { class: "size-auto p-0.5", aria: { label: t(".edit_aria") } })) { lucide_icon("pencil", css_class: "size-4") } %>
         <% end %>
         <% dialog.with_title { t("tasks.edit.title") } %>
-        <%= turbo_frame_tag dom_id(task, :edit), src: edit_task_path(task), loading: :lazy,
-              class: "flex min-h-24 items-center justify-center text-sm text-secondary" do %>
-          <%= t(".edit_loading") %>
+        <%= turbo_frame_tag dom_id(task, :edit), src: edit_task_path(task), loading: :lazy do %>
+          <%= render "shared/frame_skeleton", label: t(".edit_loading"), rows: 3 %>
         <% end %>
       <% end %>
       <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm"), confirm_label: t(".delete_label"),

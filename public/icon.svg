@@ -1,3 +1,10 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="256" cy="256" r="256" fill="red"/>
+<!-- The app mark: the same clay house and amber sun as app/assets/images/logo.png,
+     drawn as vectors so the browser tab stays crisp at 16px. Replaces the red
+     circle Rails scaffolds here, which is what the favicon actually was until now.
+     Colours are the brand tokens: clay-600 #A85030, its lighter face #CE7B56,
+     accent amber #F59E0B. -->
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hestia">
+  <circle cx="386" cy="132" r="46" fill="#F59E0B"/>
+  <path d="M232 88 L392 216 L392 448 L328 448 L328 165 Z" fill="#CE7B56"/>
+  <path d="M232 88 L328 165 L328 448 L268 448 L268 352 L196 352 L196 448 L104 448 L104 216 Z" fill="#A85030"/>
 </svg>

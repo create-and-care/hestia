@@ -297,7 +297,7 @@ préfixe d'ID préserve la lecture thématique.
 
 # 6. Vague 3 — Design system & violations mesurées
 
-- [ ] **DS-00 — Régénérer `bin/rails visual:check` avant tout le reste**
+- [x] **DS-00 — Régénérer `bin/rails visual:check` avant tout le reste**
   - *Pourquoi* : `tmp/visual/report.md` est **gitignoré** et date du 2026-08-02 17:48.
     **N'inscrivez aucun chiffre dans les autres items DS avant de l'avoir rejoué.**
   - *Effort* : S · *Bloque* : **tous les autres items DS**
@@ -322,7 +322,7 @@ préfixe d'ID préserve la lecture thématique.
 > écran utilisateur prime sur 306 occurrences sur la doc interne. Le tri par volume brut
 > conduira l'exécutant droit dans le mur.
 
-- [ ] **DS-04 — Aligner `Ui::ItemComponent` sur la grille de 4 px**
+- [x] **DS-04 — Aligner `Ui::ItemComponent` sur la grille de 4 px**
   - *Pourquoi* : `py-2.5` = 10 px, hors grille. Source dominante des constats
     `spacing_scale`.
   - *Fichiers* : [app/components/ui/item_component.html.erb:4](app/components/ui/item_component.html.erb#L4)
@@ -331,7 +331,7 @@ préfixe d'ID préserve la lecture thématique.
     validation humaine à l'œil** avant/après, car c'est un glissement de densité sur
     tout le produit.
 
-- [ ] **DS-05 — Utiliser `Ui::SkeletonComponent` dans les turbo-frames différés**
+- [x] **DS-05 — Utiliser `Ui::SkeletonComponent` dans les turbo-frames différés**
   - *Pourquoi* : le composant existe, est testé, et n'est utilisé **dans aucune vue de
     production** — uniquement dans son propre aperçu. Les 4 `turbo_frame_tag
     loading: :lazy` n'affichent rien pendant le chargement. Meilleur rapport
@@ -342,7 +342,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Effort* : S
   - *Vérif* : `grep -rln SkeletonComponent app/views | grep -v previews | wc -l` > 0
 
-- [ ] **DS-06 — Échelle de tokens `z-index`**
+- [x] **DS-06 — Échelle de tokens `z-index`**
   - *Pourquoi* : seule catégorie de tokens réellement absente (contrairement à ce
     qu'affirment les audits pour le rayon et les ombres, qui eux existent). Aujourd'hui :
     `z-50` ×9, `z-40`, `z-30`, `z-[100]` posés à la main — l'ordre d'empilement
@@ -353,7 +353,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Vérif* : `grep -rhoE "\bz-(\[?[0-9]+\]?)" app/views app/components` ne renvoie plus
     que des tokens nommés.
 
-- [ ] **DS-07 — Corriger les violations mesurées de `/design-system/{icons,colors}`**
+- [x] **DS-07 — Corriger les violations mesurées de `/design-system/{icons,colors}`**
   - *Pourquoi* : débordement horizontal de 80 px à 390 px (`scrollWidth` 470 vs 390),
     police à 11 px (plancher 13 px), cibles tactiles à 31 px (plancher 36 px).
   - *Fichiers* : `app/views/design_system/icons.html.erb`, `colors.html.erb`
@@ -361,7 +361,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Vérif* : `bin/rails visual:check` — zéro `overflow_page` sur ces deux routes.
   - *Priorité* : **basse malgré le volume** — voir la mise en garde n°2 ci-dessus.
 
-- [ ] **DS-09 — Activer la PWA**
+- [x] **DS-09 — Activer la PWA**
   - *Pourquoi* : `app/views/pwa/manifest.json.erb` et `service-worker.js` **existent sur
     le disque**, mais les routes et le `<link rel="manifest">` sont commentés. L'app
     n'est donc pas installable. (`amelioration.md` dit « pas de manifest.json » : c'est
@@ -374,7 +374,7 @@ préfixe d'ID préserve la lecture thématique.
   - *Roadmap* : jalon `pwa` — dont le texte français dit déjà que manifest et SW sont
     « encore commentés dans les routes et le layout ».
 
-- [ ] **DS-08 — `icon:` / `icon_position:` sur `Ui::ButtonComponent`**
+- [x] **DS-08 — `icon:` / `icon_position:` sur `Ui::ButtonComponent`**
   - *Pourquoi* : **seule affirmation design réellement juste des deux audits.** Les
     icônes passent aujourd'hui par le bloc de contenu (les `gap-*` de `SIZES` existent
     pour ça). C'est un manque de commodité, pas de capacité.

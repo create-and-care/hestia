@@ -13,9 +13,8 @@
           <%= render(Ui::DialogComponent.new(close_on_submit: true)) do |dialog| %>
             <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :link, size: :sm)) { t(".edit") } } %>
             <% dialog.with_title { t(".edit") } %>
-            <%= turbo_frame_tag dom_id(fridge_item, :edit), src: edit_fridge_item_path(fridge_item), loading: :lazy,
-                  class: "flex min-h-24 items-center justify-center text-sm text-secondary" do %>
-              <%= t(".edit_loading") %>
+            <%= turbo_frame_tag dom_id(fridge_item, :edit), src: edit_fridge_item_path(fridge_item), loading: :lazy do %>
+              <%= render "shared/frame_skeleton", label: t(".edit_loading"), rows: 3 %>
             <% end %>
           <% end %>
           <%= button_to move_to_shopping_list_fridge_item_path(fridge_item), method: :post,

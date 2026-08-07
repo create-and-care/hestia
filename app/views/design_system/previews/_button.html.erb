@@ -6,3 +6,9 @@
 <%= render(Ui::ButtonComponent.new(variant: :link)) { "Link" } %>
 <%= render(Ui::ButtonComponent.new(size: :sm)) { "Small" } %>
 <%= render(Ui::ButtonComponent.new(disabled: true)) { "Disabled" } %>
+
+<%= render(Ui::ButtonComponent.new(icon: "plus")) { "Avec icône" } %>
+<%= render(Ui::ButtonComponent.new(variant: :outline, icon: "arrow-right", icon_position: :trailing)) { "Suivant" } %>
+<%= render(Ui::ButtonComponent.new(size: :lg, icon: "search")) { "Grand" } %>
+<%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, icon: "pencil",
+      html_options: { aria: { label: "Modifier" } })) %>

@@ -1,7 +1,16 @@
 <%= content_tag(@href ? :a : :div, href: @href,
     "aria-current": (@active ? "page" : nil),
     class: cn(
-      "on-tone flex items-center gap-3 rounded-md py-2.5 px-3 transition-colors",
+      # py-2 + min-h-11, where this used to carry py-2.5: 10px is off the 4px
+      # grid, and after the design-system pages it was the largest single
+      # source of spacing_scale findings in visual:check. Padding alone could
+      # not fix it without moving every list in the app — py-2 on its own
+      # shortens a one-line row from 44px to 40px, py-3 lengthens it to 48px.
+      # The floor keeps that common case pixel-identical at 44px while putting
+      # the padding back on the grid, and lifts a row whose content is shorter
+      # than a line of text (an icon-only row) to 44px rather than leaving it
+      # under the 36px touch-target floor.
+      "on-tone flex min-h-11 items-center gap-3 rounded-md py-2 px-3 transition-colors",
       @active ? "bg-item-active" : (@href ? "hover:bg-surface-hover cursor-pointer" : nil)
     )) do %>
   <% if leading? %><div class="shrink-0"><%= leading %></div><% end %>

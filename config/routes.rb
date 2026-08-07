@@ -316,9 +316,13 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  # Installable-app files, rendered from app/views/pwa/*. Served by the app's
+  # own PwaController rather than Rails::PwaController, which cannot set the
+  # Service-Worker-Allowed header the worker needs to claim scope "/".
+  # The manifest is linked from the layout's <head>; the worker registers
+  # itself from app/javascript/application.js.
+  get "manifest" => "pwa#manifest", as: :pwa_manifest, defaults: { format: :json }
+  get "service-worker" => "pwa#service_worker", as: :pwa_service_worker
 
   get "design-system", to: "design_system#index"
   get "design-system/colors", to: "design_system#colors"

@@ -10,7 +10,7 @@
   <% sidebar.with_footer { render "shared/sidebar_user_card" } %>
 <% end %>
 
-<div class="fixed inset-x-0 top-0 z-30 flex h-14 items-center justify-between border-b border-primary bg-surface px-2 md:hidden">
+<div class="fixed inset-x-0 top-0 z-sticky flex h-14 items-center justify-between border-b border-primary bg-surface px-2 md:hidden">
   <%= render(Ui::DrawerComponent.new(side: :left, close_on_visit: true)) do |drawer| %>
     <% drawer.with_trigger do %>
       <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, html_options: { aria: { label: t("sidebar.open_nav") } })) do %>

@@ -1,0 +1,9 @@
+en:
+  pwa:
+    # Doubles as the manifest's description (/manifest.json), and so as the
+    # blurb the browser or the store shows on the install card.
+    description: "Your household's dashboard: shopping, meals, tasks, calendar, budget and everything else, in one place."
+    offline:
+      title: "You are offline"
+      body: "Hestia needs a connection to show this page. It will reload on its own as soon as the network is back."
+      retry: "Try again"

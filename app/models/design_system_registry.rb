@@ -67,7 +67,14 @@ module DesignSystemRegistry
   ENTRIES = [
     # ── Formulaires & saisie ──────────────────────────────────────────
     Entry.new(slug: "button", name: "Button", category: CATEGORIES[0], component_class: Ui::ButtonComponent,
-      description: "Déclenche une action ponctuelle ; variants default/secondary/outline/ghost/destructive/link, tailles sm/default/lg/icon."),
+      description: "Déclenche une action ponctuelle ; variants default/secondary/outline/ghost/destructive/link, tailles sm/default/lg/icon.",
+      usage: "`icon:` prend un nom d'icône Lucide et `icon_position:` (:leading par défaut, :trailing) le côté où la poser.\n" \
+        "La taille du glyphe découle de celle du bouton (size-4, size-5 en :lg) : ne la passez pas à la main, " \
+        "c'est ainsi qu'un libellé et son icône finissent par diverger d'un écran à l'autre.\n" \
+        "`size: :icon` sans bloc rend le glyphe seul — pensez alors à `html_options: { aria: { label: … } }`, " \
+        "un bouton sans texte n'annonce rien.\n" \
+        "Le bloc reste disponible pour tout le reste : `icon:` n'ajoute pas une capacité, il retire une décision répétée.",
+      related: %w[button-to button-group]),
     Entry.new(slug: "button-group", name: "Button Group", category: CATEGORIES[0], component_class: Ui::ButtonGroupComponent,
       description: "Regroupe plusieurs boutons liés (ex. sélecteur de période) avec des coins fusionnés."),
     Entry.new(slug: "button-to", name: "Button To", category: CATEGORIES[0], component_class: Ui::ButtonToComponent,
