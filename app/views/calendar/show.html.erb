@@ -18,17 +18,48 @@
             href: calendar_path(view: :day, member_id: @member_id))) { t(".day_view") } %>
       <%= render(Ui::ButtonComponent.new(variant: @view == "list" ? :secondary : :outline, size: :sm,
             href: calendar_path(view: :list, member_id: @member_id))) { t(".list_view") } %>
-      <%= form_with url: calendar_path, method: :get, class: "flex items-center gap-1" do |form| %>
-        <%= form.hidden_field :view, value: @view %>
-        <%= render Ui::NativeSelectComponent.new(name: "member_id",
-              options: [ [ t(".all_members"), "" ] ] + @members.map { |member| [ member.name.presence || member.email_address, member.id.to_s ] },
-              selected: @member_id.to_s, html_options: { id: "calendar_member_id" }) %>
-        <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".filter_submit") } %>
-      <% end %>
-      <%= form_with model: Current.household, url: household_path(Current.household), method: :patch, class: "flex items-center gap-1" do |form| %>
-        <%= render Ui::NativeSelectComponent.new(name: "household[holiday_country]",
-              options: [ [ t(".holidays_none"), "" ] ] + Household::HOLIDAY_COUNTRIES.map { |country| [ t(".holidays_country", country: country), country ] },
-              selected: Current.household.holiday_country, html_options: { id: "household_holiday_country", onchange: "this.form.requestSubmit()" }) %>
+      <%# The two filters move into a sheet, the way /recipes already does it. The
+          header carries four view buttons plus three actions; two bare selects
+          sitting among them read as more chrome than choice, and the member one
+          in particular is the page's one real filter. %>
+      <%= render(Ui::SheetComponent.new) do |sheet| %>
+        <% sheet.with_trigger do %>
+          <%= render(Ui::ButtonComponent.new(variant: @member_id.present? ? :secondary : :outline, size: :sm)) do %>
+            <%= lucide_icon("list-filter", css_class: "size-4") %> <%= t(".filters_trigger") %>
+          <% end %>
+        <% end %>
+        <% sheet.with_title { t(".filters_heading") } %>
+        <div class="flex flex-col gap-4">
+          <%= form_with url: calendar_path, method: :get, class: "flex flex-col gap-3" do |form| %>
+            <%= form.hidden_field :view, value: @view %>
+            <%# Carried through, or filtering by member from any month but the
+                current one silently snaps the calendar back to today. %>
+            <%= form.hidden_field :month, value: @month&.strftime("%Y-%m") %>
+            <%= form.hidden_field :date, value: @date&.iso8601 %>
+            <%= render(Ui::FieldComponent.new(id: "calendar_member_id")) do |field| %>
+              <% field.with_label { t(".member_label") } %>
+              <% field.with_control do %>
+                <%= render Ui::NativeSelectComponent.new(name: "member_id",
+                      options: [ [ t(".all_members"), "" ] ] + @members.map { |member| [ member.name.presence || member.email_address, member.id.to_s ] },
+                      selected: @member_id.to_s, html_options: { id: "calendar_member_id" }) %>
+              <% end %>
+            <% end %>
+            <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".filter_submit") } %>
+          <% end %>
+
+          <%= render(Ui::SeparatorComponent.new) %>
+
+          <%= form_with model: Current.household, url: household_path(Current.household), method: :patch do %>
+            <%= render(Ui::FieldComponent.new(id: "household_holiday_country")) do |field| %>
+              <% field.with_label { t(".holidays_label") } %>
+              <% field.with_control do %>
+                <%= render Ui::NativeSelectComponent.new(name: "household[holiday_country]",
+                      options: [ [ t(".holidays_none"), "" ] ] + Household::HOLIDAY_COUNTRIES.map { |country| [ t(".holidays_country", country: country), country ] },
+                      selected: Current.household.holiday_country, html_options: { id: "household_holiday_country", onchange: "this.form.requestSubmit()" }) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
       <% end %>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm,
             href: calendar_path(format: :pdf, month: (@month || Date.current).strftime("%Y-%m"), member_id: @member_id),

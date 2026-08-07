@@ -47,7 +47,10 @@
 <% end %>
 
 <% if occurrences.any? %>
-  <div class="divide-y divide-primary rounded-lg border border-primary">
+  <%# overflow-hidden, or the first/last row's own rounded-md hover background
+      shows inside the container's larger corner and the list reads as rounded
+      twice over. Same treatment as the calendar grid above. %>
+  <div class="overflow-hidden divide-y divide-primary rounded-lg border border-primary">
     <% occurrences.each do |time, occurrence| %>
       <% if birthday_occurrence?(occurrence) %>
         <%= render(Ui::ItemComponent.new) do |item| %>

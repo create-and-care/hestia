@@ -15,6 +15,27 @@ class CalendarControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-cable-stream-source"
   end
 
+  test "the member and public-holiday filters live inside a sheet" do
+    get calendar_path
+    assert_response :success
+    assert_select "[data-controller='dialog'] select#calendar_member_id"
+    assert_select "[data-controller='dialog'] select#household_holiday_country"
+  end
+
+  # The filter form used to submit only `view`, so filtering by member from any
+  # month but the current one snapped the calendar back to today.
+  test "the member filter keeps the month being displayed" do
+    get calendar_path(view: "month", month: "2030-03")
+    assert_response :success
+    assert_select "form[action=?] input[name='month'][value=?]", calendar_path, "2030-03"
+  end
+
+  test "the list view clips its rows to the container's rounded corners" do
+    get calendar_path(view: :list)
+    assert_response :success
+    assert_select "div.overflow-hidden.rounded-lg.border"
+  end
+
   test "list view shows the household's upcoming events only" do
     get calendar_path(view: :list)
     assert_response :success
