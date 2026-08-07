@@ -98,6 +98,33 @@ class Ui::DialogComponentTest < ViewComponent::TestCase
     assert_selector "[data-controller='dialog'][data-action='turbo:before-visit@document->dialog#close']"
   end
 
+  # The max-width used to live in POSITION_CLASSES, so every centered dialog was
+  # max-w-md whatever it held.
+  test "a centered dialog defaults to the content-column width and can be widened" do
+    render_inline(Ui::DialogComponent.new) { |c| c.with_trigger { "Open" } }
+    assert_selector "dialog.max-w-md", visible: :all
+
+    render_inline(Ui::DialogComponent.new(size: :lg)) { |c| c.with_trigger { "Open" } }
+    assert_selector "dialog.max-w-2xl", visible: :all
+    assert_no_selector "dialog.max-w-md", visible: :all
+  end
+
+  # A side sheet is sized as a share of the screen, not as a content column, so
+  # it reads from its own table.
+  test "a side sheet sizes from the side table" do
+    render_inline(Ui::DialogComponent.new(position: :right)) { |c| c.with_trigger { "Open" } }
+    assert_selector "dialog.max-w-sm", visible: :all
+
+    render_inline(Ui::DialogComponent.new(position: :right, size: :lg)) { |c| c.with_trigger { "Open" } }
+    assert_selector "dialog.max-w-lg", visible: :all
+  end
+
+  # Anchored to both edges — a max-width would strand it off-centre.
+  test "a bottom drawer takes no max-width" do
+    render_inline(Ui::DialogComponent.new(position: :bottom)) { |c| c.with_trigger { "Open" } }
+    assert_no_selector "dialog[class*='max-w-']", visible: :all
+  end
+
   test "combines close_on_submit and close_on_visit into one data-action" do
     render_inline(Ui::DialogComponent.new(close_on_submit: true, close_on_visit: true)) do |c|
       c.with_trigger { "Open" }

@@ -26,4 +26,30 @@ class FridgeControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Yaourts"
     assert_not_includes @response.body, "Petits pois"
   end
+
+  # What you can cook right now is a property of the fridge's contents, so it
+  # belongs beside the control that narrows them.
+  test "the recipe suggestions sit in the header next to the search field" do
+    # A suggestion needs a fridge item whose name appears in a recipe ingredient.
+    households(:alpha).fridge_items.create!(name: "farine", location: "garde_manger")
+
+    get fridge_path
+    assert_response :success
+    assert_select "header" do
+      assert_select "[data-controller='dialog'] button", minimum: 1
+      assert_select "input#fridge_q"
+    end
+  end
+
+  test "the add-food dialog is widened to hold its row of fields" do
+    get fridge_path
+    assert_response :success
+    assert_select "dialog.max-w-2xl"
+  end
+
+  test "the edit control is a button rather than a text link" do
+    get fridge_path
+    assert_response :success
+    assert_select "button.border", text: /#{Regexp.escape(I18n.t("fridge_items.fridge_item.edit"))}/
+  end
 end

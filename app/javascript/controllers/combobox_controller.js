@@ -12,6 +12,10 @@ export default class extends Controller {
 
   open() {
     openPanel(this.panelTarget)
+    // The panel is position: fixed, so it cannot inherit the trigger's width
+    // from CSS — match it here, before positionFloating measures the panel to
+    // decide whether it has to flip or shift back into the viewport.
+    this.panelTarget.style.width = `${this.triggerTarget.offsetWidth}px`
     positionFloating(this.triggerTarget, this.panelTarget, { placement: "bottom-start" })
     this.triggerTarget.setAttribute("aria-expanded", "true")
     this.searchTarget.value = ""
