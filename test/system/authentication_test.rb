@@ -30,7 +30,12 @@ class AuthenticationTest < ApplicationSystemTestCase
     click_on "Sign in"
     assert_text households(:alpha).name
 
-    click_on "Sign out"
+    # Sign out is no longer a row in the sidebar footer: it moved behind the
+    # gear in shared/_sidebar_user_card, so the account popover has to be opened
+    # before the row exists on screen. The row is a button_to, hence
+    # submit_button_to rather than click_on.
+    click_element(find("button[aria-label='Open account menu']"))
+    submit_button_to "Sign out"
 
     assert_current_path new_session_path
   end
