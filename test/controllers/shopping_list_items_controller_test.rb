@@ -56,6 +56,16 @@ class ShoppingListItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # The row just disappears otherwise, which looks the same as deleting it.
+  test "move_to_fridge raises a toast naming the item" do
+    item = shopping_list_items(:alpha_apples)
+    post move_to_fridge_shopping_list_item_path(@list, item), as: :turbo_stream
+
+    assert_response :success
+    assert_turbo_stream action: "append", target: "flash_relay"
+    assert_includes @response.body, I18n.t("shopping_list_items.move_to_fridge.notice", name: item.name)
+  end
+
   test "move_to_fridge captures an expiration date when given" do
     item = shopping_list_items(:alpha_apples)
     post move_to_fridge_shopping_list_item_path(@list, item), params: { expires_on: "2026-08-01" }
