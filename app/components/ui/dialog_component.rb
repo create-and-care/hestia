@@ -34,7 +34,7 @@ module Ui
     # background (the mobile nav drawer). Everything else is anchored to one
     # edge and grows from its content, so there the cap is what does the work.
     CONTENT_CLASSES = {
-      center: "max-h-[var(--panel-h)]", high: "max-h-[var(--panel-h)]", bottom: "max-h-[var(--panel-h)]",
+      center: "max-h-[var(--panel-h)]", high: "max-h-[var(--panel-h-high)]", bottom: "max-h-[var(--panel-h)]",
       right: "h-full min-h-0", left: "h-full min-h-0"
     }.freeze
 

@@ -30,8 +30,8 @@
       <%= form_with url: fridge_path, method: :get do |form| %>
         <%= render(Ui::LabelComponent.new(for_id: "fridge_q", html_options: { class: "sr-only" })) { t(".search_label") } %>
         <%# form.search_field rather than InputComponent so form_with keeps naming
-            the param — but it takes the component's classes instead of a copy that
-            had drifted to its own py-1.5 height. %>
+            the param — but it takes the component's classes instead of a copy of
+            them, which had already drifted to its own font size. %>
         <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"), id: "fridge_q",
               class: Ui::InputComponent.classes(size: :sm) %>
       <% end %>

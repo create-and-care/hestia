@@ -62,6 +62,10 @@
   --panel-h-sm: 60vh;
   --panel-h-md: 70vh;
   --panel-h-offset: 25vh;
+  /* ...which is why the offset placement needs its own cap: 25vh down plus an
+     80vh panel is 105vh, i.e. taller than the screen it is centred in. The
+     arithmetic belongs here rather than in a component's class list. */
+  --panel-h-high: min(var(--panel-h), calc(100vh - var(--panel-h-offset) - 2rem));
 
   /* raw palette */
   --color-white: #ffffff;
