@@ -82,7 +82,12 @@ class Ui::ComboboxComponentTest < ViewComponent::TestCase
 
     assert_selector "div[data-controller='combobox'].w-full", visible: :all
     assert_no_selector "div[data-controller='combobox'].w-56", visible: :all
-    assert_no_selector "[data-combobox-target='panel'].w-56", visible: :all
+
+    # The panel must carry no width of its own — not a fixed one and not a
+    # minimum, since a minimum would still overrule a narrower trigger.
+    panel = page.find("[data-combobox-target='panel']", visible: :all)
+    assert_empty panel[:class].split.grep(/\A(min-|max-)?w-/),
+      "the panel's width is the controller's to set from the trigger"
   end
 
   test "shows a selected value with no matching option as-is when allow_custom is set" do

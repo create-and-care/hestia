@@ -44,7 +44,11 @@ class FridgeControllerTest < ActionDispatch::IntegrationTest
   test "the add-food dialog is widened to hold its row of fields" do
     get fridge_path
     assert_response :success
-    assert_select "dialog.max-w-2xl"
+    # Scoped to the add-food dialog: the item edit dialog is also :lg, so a bare
+    # `dialog.max-w-2xl` would still pass if this one lost its size.
+    assert_select "section [data-controller='dialog'] dialog.max-w-2xl" do
+      assert_select "form[action=?]", fridge_items_path
+    end
   end
 
   test "the edit control is a button rather than a text link" do
