@@ -14,7 +14,7 @@ class NotificationPreferencesControllerTest < ActionDispatch::IntegrationTest
       notification_preference: { fridge_expiry_enabled: false, fridge_expiry_threshold_days: 5, birthday_notifications_enabled: false,
                                    plant_care_enabled: false, plant_care_threshold_days: 3 }
     }
-    assert_redirected_to household_path(households(:alpha))
+    assert_redirected_to household_path(households(:alpha), tab: "notifications")
 
     preference = users(:one).notification_preference.reload
     assert_not preference.fridge_expiry_enabled
@@ -28,7 +28,7 @@ class NotificationPreferencesControllerTest < ActionDispatch::IntegrationTest
     patch notification_preference_path, params: {
       notification_preference: { fridge_expiry_threshold_days: -1 }
     }
-    assert_redirected_to household_path(households(:alpha))
+    assert_redirected_to household_path(households(:alpha), tab: "notifications")
     assert_not_equal(-1, NotificationPreference.for_user(users(:one)).fridge_expiry_threshold_days)
   end
 end
