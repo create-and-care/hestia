@@ -15,6 +15,46 @@ class CalendarControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-cable-stream-source"
   end
 
+  test "the member and public-holiday filters live inside a sheet" do
+    get calendar_path
+    assert_response :success
+    assert_select "[data-controller='dialog'] select#calendar_member_id"
+    assert_select "[data-controller='dialog'] select#household_holiday_country"
+  end
+
+  # The filter form used to submit only `view`, so filtering by member from any
+  # month but the current one snapped the calendar back to today.
+  test "the member filter keeps the month being displayed" do
+    get calendar_path(view: "month", month: "2030-03")
+    assert_response :success
+    assert_select "form[action=?] input[name='month'][value=?]", calendar_path, "2030-03"
+  end
+
+  # The hidden field above only proves the form carries the month. This proves
+  # the round trip: submitting the filter both narrows to the member and stays
+  # on the month that was being looked at.
+  test "filtering by member narrows the events without leaving the month" do
+    month = Date.new(2030, 3, 1)
+    mine = households(:alpha).calendar_events.create!(title: "Mon rendez-vous", starts_at: month.change(day: 12, hour: 10), frequency: "none")
+    mine.participants << users(:one)
+    households(:alpha).calendar_events.create!(title: "Sans participant", starts_at: month.change(day: 13, hour: 10), frequency: "none")
+
+    get calendar_path(view: "month", month: "2030-03", member_id: users(:one).id)
+
+    assert_response :success
+    assert_includes @response.body, "Mon rendez-vous"
+    assert_not_includes @response.body, "Sans participant"
+    # Still March 2030, not snapped back to the current month.
+    assert_includes @response.body, "#{I18n.t("calendar.months")[month.month - 1]} #{month.year}"
+  end
+
+  test "the list view clips its rows to the container's rounded corners" do
+    get calendar_path(view: :list)
+    assert_response :success
+    # The occurrences container specifically, not any rounded bordered box.
+    assert_select "div.divide-y.divide-primary.overflow-hidden.rounded-lg.border.border-primary"
+  end
+
   test "list view shows the household's upcoming events only" do
     get calendar_path(view: :list)
     assert_response :success
