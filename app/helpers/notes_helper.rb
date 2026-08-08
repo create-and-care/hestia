@@ -1,29 +1,8 @@
 module NotesHelper
-  SWATCH_CLASSES = {
-    "default" => "bg-surface-inset",
-    "yellow" => "bg-yellow-300",
-    "pink" => "bg-pink-300",
-    "blue" => "bg-blue-300",
-    "green" => "bg-green-300",
-    "purple" => "bg-purple-300"
-  }.freeze
-
-  CARD_CLASSES = {
-    "default" => nil,
-    "yellow" => "bg-yellow-50 border-yellow-200 dark:bg-yellow-950/40 dark:border-yellow-900",
-    "pink" => "bg-pink-50 border-pink-200 dark:bg-pink-950/40 dark:border-pink-900",
-    "blue" => "bg-blue-50 border-blue-200 dark:bg-blue-950/40 dark:border-blue-900",
-    "green" => "bg-green-50 border-green-200 dark:bg-green-950/40 dark:border-green-900",
-    "purple" => "bg-purple-50 border-purple-200 dark:bg-purple-950/40 dark:border-purple-900"
-  }.freeze
-
-  def note_color_swatch_class(color)
-    SWATCH_CLASSES.fetch(color, SWATCH_CLASSES["default"])
-  end
-
-  def note_card_color_class(color)
-    CARD_CLASSES.fetch(color, nil)
-  end
+  # Colours live in Swatch — one table per visual role, shared with Calendar,
+  # Documents and Providers, which each had their own copy of this.
+  def note_color_swatch_class(color) = Swatch.paper_classes(color)
+  def note_card_color_class(color) = Swatch.card_classes(color)
 
   # Lightweight Markdown-subset renderer for note content: bold/italic inline spans, "# "
   # headings and "- "/"* " bullet lists. Deliberately not a full ActionText/Trix editor (would

@@ -3,10 +3,10 @@
   <% dialog.with_title { @title } %>
   <% dialog.with_description { @description } if @description %>
   <% dialog.with_footer do %>
-    <button type="button" data-action="click->dialog#close"
-      class="inline-flex h-9 items-center rounded-md px-4 text-sm font-medium text-primary bg-button-secondary hover:bg-button-secondary-hover">
-      <%= @cancel_label %>
-    </button>
+    <%# Was pinned at h-9 while the confirm button beside it renders at the
+        :default height — the two never lined up. %>
+    <%= render(Ui::ButtonComponent.new(variant: :secondary,
+          html_options: { data: { action: "click->dialog#close" } })) { @cancel_label } %>
     <% if @confirm_url %>
       <%= render(Ui::ButtonToComponent.new(@confirm_url, method: @confirm_method, variant: @confirm_variant, size: :default)) { @confirm_label } %>
     <% else %>

@@ -18,6 +18,13 @@
 
   /* Type scale — enlarged from text-sm-first to text-base-first (body 16px,
      captions 13px) for shared-family legibility. Was: xs12/sm14/lg18/xl20/2xl24/3xl30/4xl36. */
+  /* Below the 13px reading floor visual:check enforces (FONT_SIZE_MIN in
+     script/visual_check/measure.js), so it is only ever legal on what that
+     script calls a micro element: a short glyph or count in a fixed box, not
+     text anyone reads. It exists because three views had reached for
+     `text-[10px]` instead — an undeclared fourth size, and a size the rule
+     would have flagged had it not been under the micro exemption. */
+  --text-2xs: 11px;
   --text-xs: 13px;
   --text-sm: 15px;
   --text-base: 16px;
@@ -39,6 +46,22 @@
   --control-h-sm: 36px;
   --control-h-default: 40px;
   --control-h-lg: 44px;
+
+  /* The glyph-sized controls — a checkbox box, a radio dot. Smaller than any
+     --control-h-*, which are row heights for things you type into, and they
+     were carrying size-[18px]/border-[5px] at three call sites instead. */
+  --control-box: 18px;
+  --control-dot-ring: 5px;
+
+  /* How tall a panel is allowed to grow before it scrolls its own content.
+     Three components had each picked a viewport fraction on their own —
+     80vh for dialogs, 70vh for the document preview, 60vh for a conversation.
+     --panel-h-offset is the dialog's top inset, kept beside them because the
+     two are read together: a panel placed 25vh down cannot also be 80vh tall. */
+  --panel-h: 80vh;
+  --panel-h-sm: 60vh;
+  --panel-h-md: 70vh;
+  --panel-h-offset: 25vh;
 
   /* raw palette */
   --color-white: #ffffff;
@@ -137,6 +160,12 @@
   --color-violet-500: #875BF7;
   --color-violet-600: #7839EE;
   --color-violet-700: #6927DA;
+  /* The two darkest steps, absent until user swatches needed them: `purple` is
+     offered by Notes, Calendar, Documents and Providers, this ramp is what
+     renders it (see Swatch::RAMPS), and a chip needs an -800 foreground and a
+     -900 dark ground. Continues the same Untitled UI ramp as 25–700 above. */
+  --color-violet-800: #5720B7;
+  --color-violet-900: #491C96;
 
   --color-fuchsia-25: #FEFAFF;
   --color-fuchsia-50: #FDF4FF;

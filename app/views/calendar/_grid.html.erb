@@ -24,7 +24,9 @@
               title: t(".new_event_on", date: l(date, format: :long)) %>
       </div>
       <% if holiday %>
-        <p class="mb-0.5 truncate text-[10px] font-medium text-destructive"><%= holiday[:name] %></p>
+        <%# text-xs, not a smaller ad-hoc size: a holiday name is read, and 13px
+            is this system's floor for text that is. It truncates either way. %>
+        <p class="mb-0.5 truncate text-xs font-medium text-destructive"><%= holiday[:name] %></p>
       <% end %>
       <% Array(by_day[date]).each do |time, occurrence| %>
         <%= render "calendar/occurrence", time: time, occurrence: occurrence %>

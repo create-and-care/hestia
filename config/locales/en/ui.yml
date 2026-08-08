@@ -12,6 +12,9 @@ en:
       loading_aria: Loading
     select:
       placeholder: Select an option
+    data_table:
+      previous: "Previous"
+      next: "Next"
     alert_dialog:
       confirm_label: Continue
       cancel_label: Cancel

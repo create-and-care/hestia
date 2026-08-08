@@ -12,8 +12,10 @@
 
   <div data-controller="icon-search">
     <div class="mt-6 max-w-xs">
+      <%# The design-system page above all others should not be re-typing the
+          class list of the control it documents. %>
       <input type="search" placeholder="Rechercher une icône…" data-icon-search-target="input" data-action="input->icon-search#filter"
-        class="h-9 w-full rounded-md border border-primary bg-container px-3 text-sm text-primary placeholder:text-subdued focus-visible:ring-focus" />
+        class="<%= Ui::InputComponent.classes(size: :sm) %>" />
     </div>
 
     <div class="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-6">
