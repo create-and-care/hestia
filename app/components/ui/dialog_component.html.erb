@@ -6,7 +6,7 @@
   <dialog data-dialog-target="dialog" role="<%= @role %>" data-action="click->dialog#closeOnBackdrop cancel->dialog#onCancel" data-state="closed"
     class="<%= cn(
       "p-0 bg-container shadow-border-lg duration-200 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
-      POSITION_CLASSES.fetch(@position), ANIMATION_CLASSES.fetch(@position)
+      POSITION_CLASSES.fetch(@position), size_class, ANIMATION_CLASSES.fetch(@position)
     ) %>">
     <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :sm, html_options: {
           class: "absolute right-4 top-4",

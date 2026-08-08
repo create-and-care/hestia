@@ -6,11 +6,25 @@ module Ui
     renders_one :footer
 
     POSITION_CLASSES = {
-      center: "m-auto rounded-lg max-w-md w-full",
-      high: "mt-[25vh] mb-auto mx-auto rounded-lg max-w-md w-full",
-      right: "ml-auto mr-0 h-full max-w-sm w-full rounded-l-lg",
-      left: "mr-auto ml-0 h-full max-w-sm w-full rounded-r-lg",
+      center: "m-auto rounded-lg w-full",
+      high: "mt-[25vh] mb-auto mx-auto rounded-lg w-full",
+      right: "ml-auto mr-0 h-full w-full rounded-l-lg",
+      left: "mr-auto ml-0 h-full w-full rounded-r-lg",
       bottom: "mt-auto mb-0 w-full rounded-t-lg max-h-[80vh]"
+    }.freeze
+
+    # The max-width used to be baked into POSITION_CLASSES, which meant every
+    # centered dialog was max-w-md whatever it held — fine for a confirmation,
+    # too narrow for a form with a row of fields in it (the fridge "add food"
+    # dialog wrapped every one of its six controls onto its own line).
+    SIZE_CLASSES = {
+      sm: "max-w-sm", default: "max-w-md", lg: "max-w-2xl", xl: "max-w-4xl"
+    }.freeze
+
+    # Side sheets slide in from an edge, so they are sized as a share of the
+    # screen rather than as a content column.
+    SIDE_SIZE_CLASSES = {
+      sm: "max-w-xs", default: "max-w-sm", lg: "max-w-lg", xl: "max-w-2xl"
     }.freeze
 
     # The content wrapper's height rule follows the placement. A side sheet's
@@ -40,12 +54,20 @@ module Ui
       bottom: "data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom"
     }.freeze
 
-    def initialize(position: :center, role: "dialog", full_width_trigger: false, close_on_submit: false, close_on_visit: false)
+    def initialize(position: :center, size: :default, role: "dialog", full_width_trigger: false, close_on_submit: false, close_on_visit: false)
       @position = position
+      @size = size
       @role = role
       @full_width_trigger = full_width_trigger
       @close_on_submit = close_on_submit
       @close_on_visit = close_on_visit
+    end
+
+    def size_class
+      return nil if @position == :bottom # anchored to both edges; a max-width would strand it
+
+      table = %i[right left].include?(@position) ? SIDE_SIZE_CLASSES : SIZE_CLASSES
+      table.fetch(@size)
     end
 
     def trigger_wrapper_class

@@ -1,4 +1,4 @@
-<%= render(Ui::DialogComponent.new(position: @side)) do |dialog| %>
+<%= render(Ui::DialogComponent.new(position: @side, size: @size)) do |dialog| %>
   <% dialog.with_trigger { trigger.to_s } %>
   <% dialog.with_title { title.to_s } if title? %>
   <% dialog.with_description { description.to_s } if description? %>

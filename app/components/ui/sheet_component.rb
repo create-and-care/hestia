@@ -5,8 +5,9 @@ module Ui
     renders_one :description
     renders_one :footer
 
-    def initialize(side: :right)
+    def initialize(side: :right, size: :default)
       @side = side
+      @size = size
     end
   end
 end

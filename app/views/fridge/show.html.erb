@@ -4,40 +4,45 @@
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <div class="mb-4"><%= module_breadcrumb(:fridge) %></div>
 
-  <header class="mb-6 flex items-center justify-between">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("refrigerator", css_class: "size-6") %> <%= t(".title") %></h1>
-    <%= form_with url: fridge_path, method: :get do |form| %>
-      <%= render(Ui::LabelComponent.new(for_id: "fridge_q", html_options: { class: "sr-only" })) { t(".search_label") } %>
-      <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"), id: "fridge_q",
-            class: "rounded-md border border-primary bg-container px-3 py-1.5 text-sm text-primary placeholder:text-subdued" %>
-    <% end %>
+    <div class="flex flex-wrap items-center gap-2">
+      <%# Alongside the search rather than in a band of its own below it: what
+          you can cook right now is a property of the fridge's contents, so it
+          belongs with the control that narrows them, not stranded above the
+          first section with 40px of air under it. %>
+      <% if @recipe_suggestions.present? %>
+        <%= render(Ui::DialogComponent.new) do |dialog| %>
+          <% dialog.with_trigger do %>
+            <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) do %>
+              <%= render Ui::MarkerComponent.new(variant: :accent, pulse: true,
+                    label: t(".suggestions_marker", count: @recipe_suggestions.size)) %>
+            <% end %>
+          <% end %>
+          <% dialog.with_title { t(".suggestions_heading") } %>
+          <ul class="space-y-1 text-sm">
+            <% @recipe_suggestions.each do |recipe| %>
+              <li><%= link_to recipe.title, recipe_path(recipe), class: "underline" %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+      <%= form_with url: fridge_path, method: :get do |form| %>
+        <%= render(Ui::LabelComponent.new(for_id: "fridge_q", html_options: { class: "sr-only" })) { t(".search_label") } %>
+        <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"), id: "fridge_q",
+              class: "h-[var(--control-h-sm)] rounded-md border border-primary bg-container px-3 text-sm text-primary placeholder:text-subdued" %>
+      <% end %>
+    </div>
   </header>
 
   <%= render "shared/flash" %>
 
-  <% if @recipe_suggestions.present? %>
-    <div class="mb-10">
-      <%= render(Ui::DialogComponent.new) do |dialog| %>
-        <% dialog.with_trigger do %>
-          <button type="button" class="inline-flex items-center rounded-lg border border-primary px-4 py-3 hover:bg-surface-hover">
-            <%= render Ui::MarkerComponent.new(variant: :accent, pulse: true,
-                  label: t(".suggestions_marker", count: @recipe_suggestions.size)) %>
-          </button>
-        <% end %>
-        <% dialog.with_title { t(".suggestions_heading") } %>
-        <ul class="space-y-1 text-sm">
-          <% @recipe_suggestions.each do |recipe| %>
-            <li><%= link_to recipe.title, recipe_path(recipe), class: "underline" %></li>
-          <% end %>
-        </ul>
-      <% end %>
-    </div>
-  <% end %>
-
   <section class="mb-10">
     <div class="mb-3 flex items-center justify-between">
       <h2 class="font-medium"><%= t(".foods_heading") %></h2>
-      <%= render(Ui::DialogComponent.new) do |dialog| %>
+      <%# size: :lg — the form has six controls on one row and every one of them
+          was wrapping onto a line of its own at max-w-md. %>
+      <%= render(Ui::DialogComponent.new(size: :lg)) do |dialog| %>
         <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".add_food") } } %>
         <% dialog.with_title { t(".add_food") } %>
         <%= render "fridge_items/form", fridge_item: @fridge_item %>

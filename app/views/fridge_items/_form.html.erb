@@ -6,48 +6,56 @@
                 barcode_lookup_unavailable_text_value: t(".barcode_unavailable"),
                 barcode_lookup_found_text_value: t(".barcode_found_prefix"),
                 action: "combobox:select->shopping-catalog#pick" } do |form| %>
-    <div class="flex flex-wrap items-end gap-2 rounded-lg border border-primary p-3">
-      <%= render "shared/barcode_lookup_field" %>
-      <% if catalog_products.any? %>
-        <div class="w-48">
-          <%= render Ui::LabelComponent.new { t(".catalog_label") } %>
-          <div class="mt-1">
-            <%= render Ui::ComboboxComponent.new(name: "_catalog_picker", placeholder: t(".catalog_placeholder"),
-                  options: catalog_products.map { |p| [ p.name, "#{p.id}||#{p.name}" ] }) %>
+    <div class="space-y-3 rounded-lg border border-primary p-3">
+      <%# The two lookups share their own row and the fields the lookup fills in
+          share the next, instead of all six competing for one wrapping line. %>
+      <div class="flex flex-wrap items-end gap-2">
+        <%= render "shared/barcode_lookup_field", width_class: "min-w-48 flex-1" %>
+        <% if catalog_products.any? %>
+          <div class="min-w-48 flex-1">
+            <%= render Ui::LabelComponent.new { t(".catalog_label") } %>
+            <div class="mt-1">
+              <%= render Ui::ComboboxComponent.new(name: "_catalog_picker", placeholder: t(".catalog_placeholder"),
+                    options: catalog_products.map { |p| [ p.name, "#{p.id}||#{p.name}" ] }) %>
+            </div>
           </div>
+        <% end %>
+      </div>
+
+      <div class="flex flex-wrap items-end gap-2">
+        <div class="min-w-40 flex-1">
+          <%= render(Ui::FieldComponent.new(id: "fridge_item_name")) do |field| %>
+            <% field.with_label { t(".name_label") } %>
+            <% field.with_control do %>
+              <%= render Ui::InputComponent.new(name: "fridge_item[name]", value: fridge_item.name,
+                    placeholder: t(".name_placeholder"),
+                    html_options: { id: "fridge_item_name", required: true, autocomplete: "off",
+                                    data: { barcode_lookup_target: "name", shopping_catalog_target: "name" } }) %>
+            <% end %>
+          <% end %>
         </div>
-      <% end %>
-      <div class="min-w-40 flex-1">
-        <%= render(Ui::FieldComponent.new(id: "fridge_item_name")) do |field| %>
-          <% field.with_label { t(".name_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::InputComponent.new(name: "fridge_item[name]", value: fridge_item.name,
-                  placeholder: t(".name_placeholder"),
-                  html_options: { id: "fridge_item_name", required: true, autocomplete: "off",
-                                  data: { barcode_lookup_target: "name", shopping_catalog_target: "name" } }) %>
+        <div class="w-44">
+          <%= render(Ui::FieldComponent.new(id: "fridge_item_location")) do |field| %>
+            <% field.with_label { t(".location_label") } %>
+            <% field.with_control do %>
+              <%= render Ui::NativeSelectComponent.new(name: "fridge_item[location]", options: location_select_options,
+                    selected: fridge_item.location, html_options: { id: "fridge_item_location" }) %>
+            <% end %>
           <% end %>
-        <% end %>
-      </div>
-      <div class="w-44">
-        <%= render(Ui::FieldComponent.new(id: "fridge_item_location")) do |field| %>
-          <% field.with_label { t(".location_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::NativeSelectComponent.new(name: "fridge_item[location]", options: location_select_options,
-                  selected: fridge_item.location, html_options: { id: "fridge_item_location" }) %>
+        </div>
+        <div class="w-40">
+          <%= render(Ui::FieldComponent.new(id: "fridge_item_expires_on")) do |field| %>
+            <% field.with_label { t(".expires_label") } %>
+            <% field.with_control do %>
+              <%= render Ui::InputComponent.new(type: "date", name: "fridge_item[expires_on]", value: fridge_item.expires_on,
+                    html_options: { id: "fridge_item_expires_on" }) %>
+            <% end %>
           <% end %>
-        <% end %>
+        </div>
+        <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
       </div>
-      <div class="w-40">
-        <%= render(Ui::FieldComponent.new(id: "fridge_item_expires_on")) do |field| %>
-          <% field.with_label { t(".expires_label") } %>
-          <% field.with_control do %>
-            <%= render Ui::InputComponent.new(type: "date", name: "fridge_item[expires_on]", value: fridge_item.expires_on,
-                  html_options: { id: "fridge_item_expires_on" }) %>
-          <% end %>
-        <% end %>
-      </div>
-      <%= render(Ui::ButtonComponent.new(type: "submit")) { t(".submit") } %>
-      <p class="w-full text-xs text-subdued" data-barcode-lookup-target="status"></p>
+
+      <p class="text-xs text-subdued empty:hidden" data-barcode-lookup-target="status"></p>
     </div>
   <% end %>
 <% end %>

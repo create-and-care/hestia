@@ -74,6 +74,22 @@ class Ui::ComboboxComponentTest < ViewComponent::TestCase
     assert_selector "button[data-combobox-target='createOption'][hidden]", visible: :all
   end
 
+  # It was pinned at w-56 while both real callers wrap it in a w-48 box, so the
+  # trigger overflowed its container by 32px. The panel is position: fixed and
+  # takes its width from the trigger at open time instead.
+  test "fills the width it is given rather than imposing one" do
+    render_inline(Ui::ComboboxComponent.new(name: "fruit", options: OPTIONS))
+
+    assert_selector "div[data-controller='combobox'].w-full", visible: :all
+    assert_no_selector "div[data-controller='combobox'].w-56", visible: :all
+
+    # The panel must carry no width of its own — not a fixed one and not a
+    # minimum, since a minimum would still overrule a narrower trigger.
+    panel = page.find("[data-combobox-target='panel']", visible: :all)
+    assert_empty panel[:class].split.grep(/\A(min-|max-)?w-/),
+      "the panel's width is the controller's to set from the trigger"
+  end
+
   test "shows a selected value with no matching option as-is when allow_custom is set" do
     render_inline(Ui::ComboboxComponent.new(name: "fruit", options: OPTIONS, selected: "Dragonfruit", allow_custom: true))
 

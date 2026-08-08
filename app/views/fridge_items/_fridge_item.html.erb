@@ -10,8 +10,14 @@
         <%= render(Ui::BadgeComponent.new(variant: expiration_badge_variant(fridge_item.expiration_status))) { expiration_label(fridge_item.expiration_status) } %>
 
         <div class="flex shrink-0 items-center gap-2">
-          <%= render(Ui::DialogComponent.new(close_on_submit: true)) do |dialog| %>
-            <% dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :link, size: :sm)) { t(".edit") } } %>
+          <%= render(Ui::DialogComponent.new(close_on_submit: true, size: :lg)) do |dialog| %>
+            <%# An :outline button, not the :link variant: this sits between two
+                icon buttons and opens a modal, so rendering it as underlined
+                body text was the one control in the row that didn't look like
+                one. %>
+            <% dialog.with_trigger do %>
+              <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, icon: "pencil")) { t(".edit") } %>
+            <% end %>
             <% dialog.with_title { t(".edit") } %>
             <%= turbo_frame_tag dom_id(fridge_item, :edit), src: edit_fridge_item_path(fridge_item), loading: :lazy do %>
               <%= render "shared/frame_skeleton", label: t(".edit_loading"), rows: 3 %>
