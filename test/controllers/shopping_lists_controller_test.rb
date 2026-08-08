@@ -16,6 +16,14 @@ class ShoppingListsControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Courses Beta"
   end
 
+  # The rows carry their own rounded-md hover background; without the clip on
+  # the container it shows through the container's rounded-lg corner.
+  test "index clips the list rows to the container's rounded corners" do
+    get shopping_lists_path
+    assert_response :success
+    assert_select "div.overflow-hidden.rounded-lg.border"
+  end
+
   test "show renders the list and wires the real-time stream" do
     get shopping_list_path(shopping_lists(:alpha_groceries))
     assert_response :success

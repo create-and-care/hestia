@@ -40,6 +40,12 @@ module Ui
     def call
       classes = cn(
         "inline-flex items-center rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-focus",
+        # A button given `href:` renders as an anchor, and the global
+        # `a:hover { text-decoration: underline }` in application.tailwind.css
+        # then underlines its label on hover — which no button should do. The
+        # :link variant is the one exception: it asks for that underline itself,
+        # so it must not be handed the opt-out or the two would fight.
+        (@variant == :link ? nil : "no-underline hover:no-underline"),
         VARIANTS.fetch(@variant),
         SIZES.fetch(@size)
       )

@@ -14,7 +14,10 @@
   <%= render "shared/flash" %>
 
   <% if @shopping_lists.any? %>
-    <div class="rounded-lg border border-primary divide-y divide-primary">
+    <%# overflow-hidden, or the first/last row's own rounded-md hover background
+        sits inside the container's larger rounded-lg corner and the list reads as
+        being rounded twice over. Same treatment as the calendar grid. %>
+    <div class="overflow-hidden rounded-lg border border-primary divide-y divide-primary">
       <% @shopping_lists.each do |list| %>
         <%= render(Ui::ItemComponent.new(href: shopping_list_path(list))) do |item| %>
           <% item.with_leading { list.icon.presence || lucide_icon("shopping-cart", css_class: "size-4") } %>
