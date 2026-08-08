@@ -1,8 +1,8 @@
 <%= turbo_frame_tag dom_id(@document, :preview) do %>
   <% if @document.file.content_type == "application/pdf" %>
-    <iframe src="<%= rails_blob_path(@document.file, disposition: "inline") %>" class="h-[70vh] w-full rounded-md border border-primary" title="<%= @document.name %>"></iframe>
+    <iframe src="<%= rails_blob_path(@document.file, disposition: "inline") %>" class="h-[var(--panel-h-md)] w-full rounded-md border border-primary" title="<%= @document.name %>"></iframe>
   <% elsif @document.file.content_type.to_s.start_with?("image/") %>
-    <%= image_tag rails_blob_path(@document.file), alt: @document.name, loading: :lazy, class: "max-h-[70vh] w-full rounded-md object-contain" %>
+    <%= image_tag rails_blob_path(@document.file), alt: @document.name, loading: :lazy, class: "max-h-[var(--panel-h-md)] w-full rounded-md object-contain" %>
   <% else %>
     <p class="text-sm text-secondary"><%= link_to t(".download"), rails_blob_path(@document.file, disposition: "attachment") %></p>
   <% end %>

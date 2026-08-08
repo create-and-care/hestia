@@ -12,6 +12,9 @@ fr:
       loading_aria: Chargement
     select:
       placeholder: Sélectionner une option
+    data_table:
+      previous: "Précédent"
+      next: "Suivant"
     alert_dialog:
       confirm_label: Continuer
       cancel_label: Annuler

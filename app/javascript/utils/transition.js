@@ -1,3 +1,5 @@
+import { DURATION } from "./motion"
+
 // Drives the [data-state="open"|"closed"] lifecycle that the animate-in/out
 // CSS utilities (application.tailwind.css) key off of — the Stimulus-side
 // equivalent of Radix's data-state, since we have no primitive managing it
@@ -12,7 +14,7 @@ export function openPanel(panel) {
   panel._openFrame = requestAnimationFrame(() => { panel.dataset.state = "open" })
 }
 
-export function closePanel(panel, { duration = 200 } = {}) {
+export function closePanel(panel, { duration = DURATION.PANEL } = {}) {
   cancelAnimationFrame(panel._openFrame)
   panel.dataset.state = "closed"
   clearTimeout(panel._hideTimer)

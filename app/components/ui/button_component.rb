@@ -37,18 +37,19 @@ module Ui
       @html_options = html_options
     end
 
+    # The class list on its own, for the handful of call sites that cannot be
+    # this component but must look exactly like it — a <button> a Stimulus
+    # controller owns targets on, a trigger inside another component. They were
+    # retyping the list by hand, which is how DataTable's pagination ended up
+    # with a hardcoded 36px and DatePicker's trigger with a hardcoded 40px.
+    #
+    # Reach for the component first; this is the escape hatch, not the API.
+    def self.classes(variant: :default, size: :default)
+      new(variant: variant, size: size).send(:base_classes)
+    end
+
     def call
-      classes = cn(
-        "inline-flex items-center rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-focus",
-        # A button given `href:` renders as an anchor, and the global
-        # `a:hover { text-decoration: underline }` in application.tailwind.css
-        # then underlines its label on hover — which no button should do. The
-        # :link variant is the one exception: it asks for that underline itself,
-        # so it must not be handed the opt-out or the two would fight.
-        (@variant == :link ? nil : "no-underline hover:no-underline"),
-        VARIANTS.fetch(@variant),
-        SIZES.fetch(@size)
-      )
+      classes = base_classes
 
       if @href
         link_to @href, **@html_options, class: cn(classes, @html_options[:class]) do
@@ -62,6 +63,20 @@ module Ui
     end
 
     private
+      def base_classes
+        cn(
+          "inline-flex items-center rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-focus",
+          # A button given `href:` renders as an anchor, and the global
+          # `a:hover { text-decoration: underline }` in application.tailwind.css
+          # then underlines its label on hover — which no button should do. The
+          # :link variant is the one exception: it asks for that underline itself,
+          # so it must not be handed the opt-out or the two would fight.
+          (@variant == :link ? nil : "no-underline hover:no-underline"),
+          VARIANTS.fetch(@variant),
+          SIZES.fetch(@size)
+        )
+      end
+
       def body
         return content if @icon.blank?
 

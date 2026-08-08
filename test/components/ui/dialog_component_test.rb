@@ -37,7 +37,9 @@ class Ui::DialogComponentTest < ViewComponent::TestCase
   test "renders every POSITION_CLASSES variant without raising" do
     fragments = {
       center: "max-w-md",
-      high: "mt-[25vh]",
+      # The token, not the 25vh it resolves to — pinning the literal here is
+      # what made the value hard to move in the first place.
+      high: "mt-[var(--panel-h-offset)]",
       right: "rounded-l-lg",
       left: "rounded-r-lg",
       bottom: "rounded-t-lg"

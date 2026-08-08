@@ -32,13 +32,15 @@
   <div class="flex items-center justify-between text-sm text-secondary">
     <span data-data-table-target="pageLabel"></span>
     <div class="flex gap-2">
-      <button type="button" data-data-table-target="prevButton" data-action="click->data-table#previous"
-        class="inline-flex items-center rounded-md border border-primary px-3 h-[var(--control-h-sm)] text-sm font-medium text-primary hover:bg-button-outline-hover disabled:pointer-events-none disabled:opacity-50 transition-colors">
-        Précédent
+      <%# Stimulus owns these as targets, so they stay <button> rather than
+          becoming ButtonComponent — but they take its class list instead of a
+          retyped copy that had drifted to its own hardcoded height. %>
+      <% pager_classes = Ui::ButtonComponent.classes(variant: :outline, size: :sm) %>
+      <button type="button" data-data-table-target="prevButton" data-action="click->data-table#previous" class="<%= pager_classes %>">
+        <%= t("ui.data_table.previous") %>
       </button>
-      <button type="button" data-data-table-target="nextButton" data-action="click->data-table#next"
-        class="inline-flex items-center rounded-md border border-primary px-3 h-[var(--control-h-sm)] text-sm font-medium text-primary hover:bg-button-outline-hover disabled:pointer-events-none disabled:opacity-50 transition-colors">
-        Suivant
+      <button type="button" data-data-table-target="nextButton" data-action="click->data-table#next" class="<%= pager_classes %>">
+        <%= t("ui.data_table.next") %>
       </button>
     </div>
   </div>

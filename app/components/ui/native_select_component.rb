@@ -15,20 +15,30 @@ module Ui
       @html_options = html_options
     end
 
+    # The class list on its own, for a call site that must look exactly like
+    # this control but cannot be it — see Ui::ButtonComponent.classes.
+    def self.classes(size: :default, invalid: false)
+      new(size: size, invalid: invalid).send(:base_classes)
+    end
+
     def call
       content_tag :select, name: @name, disabled: @disabled, "aria-invalid": @invalid, **@html_options.except(:class),
-        class: cn(
-          "flex w-full appearance-none rounded-md border bg-container px-3 text-primary",
-          "focus-visible:outline-none focus-visible:ring-focus disabled:opacity-50",
-          SIZES.fetch(@size),
-          @invalid ? "border-destructive" : "border-primary",
-          @html_options[:class]
-        ) do
+        class: cn(base_classes, @html_options[:class]) do
         safe_join(@options.map { |opt|
           label, value = opt.is_a?(Array) ? opt : [ opt, opt ]
           content_tag :option, label, value: value, selected: value == @selected
         })
       end
     end
+
+    private
+      def base_classes
+        cn(
+          "flex w-full appearance-none rounded-md border bg-container px-3 text-primary",
+          "focus-visible:outline-none focus-visible:ring-focus disabled:opacity-50",
+          SIZES.fetch(@size),
+          @invalid ? "border-destructive" : "border-primary"
+        )
+      end
   end
 end

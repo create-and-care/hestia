@@ -17,7 +17,7 @@ module Ui
       small: "text-sm font-medium leading-none text-primary",
       muted: "text-sm text-secondary",
       blockquote: "border-l-2 border-primary pl-4 italic text-secondary",
-      inline_code: "rounded-[6px] bg-surface-inset px-1.5 py-0.5 font-mono text-sm text-primary",
+      inline_code: "rounded-sm bg-surface-inset px-1.5 py-0.5 font-mono text-sm text-primary",
       list: "list-disc list-inside space-y-1 text-sm text-primary"
     }.freeze
 

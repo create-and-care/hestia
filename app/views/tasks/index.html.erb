@@ -9,8 +9,10 @@
     <div class="flex flex-wrap items-center gap-2">
       <%= form_with url: tasks_path, method: :get do |form| %>
         <%= render(Ui::LabelComponent.new(for_id: "tasks_q", html_options: { class: "sr-only" })) { t(".search_label") } %>
+        <%# Classes from the component rather than a hand-copied list — see
+            Ui::InputComponent.classes. %>
         <%= form.search_field :q, value: @query, placeholder: t(".search_placeholder"), id: "tasks_q",
-              class: "rounded-md border border-primary bg-container px-3 py-1.5 text-sm text-primary placeholder:text-subdued" %>
+              class: Ui::InputComponent.classes(size: :sm) %>
       <% end %>
       <%= form_with url: sort_tasks_path, method: :post, class: "flex items-center gap-1" do %>
         <%= render Ui::NativeSelectComponent.new(name: "by",

@@ -31,7 +31,7 @@
       adds pinned-to-bottom auto-scroll via its own Stimulus controller. The turbo_stream append target
       "messages" is nested inside the component's viewport so appended messages land inside the
       scrollable area (and are still caught by the controller's subtree MutationObserver). %>
-  <%= render(Ui::MessageScrollerComponent.new(class_name: "mb-4 h-[60vh] w-full")) do %>
+  <%= render(Ui::MessageScrollerComponent.new(class_name: "mb-4 h-[var(--panel-h-sm)] w-full")) do %>
     <div id="messages" class="space-y-2" data-controller="message-role" data-message-role-current-user-id-value="<%= Current.user.id %>">
       <%= render @conversation.messages.chronological %>
     </div>

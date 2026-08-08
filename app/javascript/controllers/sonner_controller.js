@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { DURATION } from "../utils/motion"
 
 // Variant is carried by the status dot, not a coloured border/text — a
 // coloured card reads as alarming even for routine confirmations.
@@ -20,7 +21,7 @@ export default class extends Controller {
     window.removeEventListener("toast:show", this.onShow)
   }
 
-  show({ title, description, variant = "default", duration = 4000 } = {}) {
+  show({ title, description, variant = "default", duration = DURATION.TOAST } = {}) {
     const toast = document.createElement("div")
     toast.dataset.state = "open"
     toast.className = `pointer-events-auto flex min-w-[280px] items-start gap-2.5 rounded-lg bg-container py-3 px-4 shadow-border-lg
