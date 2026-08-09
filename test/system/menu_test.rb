@@ -46,7 +46,13 @@ class MenuTest < ApplicationSystemTestCase
     end
     assert_dialog_open
     submit_button_to "Away"
-    assert_text "Away"
+
+    # "Away" is also the label of the button that just submitted this form, so
+    # assert_text matches the dialog still fading out and passes before the
+    # entry exists at all — find_by! below then loses the race and blows up
+    # with RecordNotFound. The day's list only grows an <li> for it once the
+    # server has actually created it.
+    assert_selector "li", text: "Away"
 
     entry = MealPlanEntry.find_by!(away: true)
     within "li", text: "Away" do

@@ -15,7 +15,7 @@ class VehiclesTest < ApplicationSystemTestCase
 
     fill_in "vehicle_name", with: "Le camion"
     select "Truck", from: "vehicle_vehicle_type"
-    click_on "Save"
+    submit_button_to "Save"
 
     assert_text "Le camion"
     assert_equal "truck", Vehicle.find_by!(name: "Le camion").vehicle_type
@@ -29,7 +29,7 @@ class VehiclesTest < ApplicationSystemTestCase
     select "Other…", from: "vehicle_vehicle_type"
     assert_selector "#vehicle_vehicle_type_custom"
     fill_in "vehicle_vehicle_type_custom", with: "Quad"
-    click_on "Save"
+    submit_button_to "Save"
 
     assert_text "Le quad"
     assert_equal "Quad", Vehicle.find_by!(name: "Le quad").vehicle_type
