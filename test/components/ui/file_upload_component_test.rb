@@ -53,6 +53,26 @@ class Ui::FileUploadComponentTest < ViewComponent::TestCase
     assert_selector "input[id='pet_photo'][required]", visible: :all
   end
 
+  # The dropzone's prompt and its remove button were written in French, in
+  # English-by-default markup, and read that way in both locales. i18n:check
+  # could not see it: there was no key to be missing.
+  test "the dropzone prompt and the remove button read in the current locale" do
+    render_inline(Ui::FileUploadComponent.new(name: "photo", existing_url: "/photo.jpg"))
+
+    assert_selector "div[data-file-upload-target='placeholder']", text: "Click to choose or drag and drop a file", visible: :all
+    assert_selector "div[data-file-upload-target='placeholder'] span.text-brand", text: "Click to choose", visible: :all
+    assert_selector "button[data-file-upload-target='removeButton'][aria-label='Remove file']"
+  end
+
+  test "...and in French" do
+    I18n.with_locale(:fr) do
+      render_inline(Ui::FileUploadComponent.new(name: "photo", existing_url: "/photo.jpg"))
+    end
+
+    assert_selector "div[data-file-upload-target='placeholder']", text: "Cliquez pour choisir ou glissez-déposez un fichier", visible: :all
+    assert_selector "button[data-file-upload-target='removeButton'][aria-label='Retirer le fichier']"
+  end
+
   test "compact mode renders a single row-height control instead of the dropzone" do
     render_inline(Ui::FileUploadComponent.new(name: "photo", compact: true))
 

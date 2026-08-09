@@ -68,6 +68,19 @@ class PwaControllerTest < ActionDispatch::IntegrationTest
       "#{offline_url} is precached by the worker but does not exist"
   end
 
+  # This controller used to reach for skip_forgery_protection to get the worker
+  # served (see PwaController). It bought nothing — both routes are GET, which
+  # verify_authenticity_token waves through anyway — and it read as CSRF
+  # protection being off, which is what CodeQL rb/csrf-protection-disabled saw.
+  # The narrower skip that replaced it is pinned by the two "is served" tests
+  # above: without it, the worker's request raises InvalidCrossOriginRequest.
+  test "CSRF protection is left switched on rather than skipped wholesale" do
+    before_callbacks = PwaController._process_action_callbacks.select { |c| c.kind == :before }.map(&:filter)
+
+    assert_includes before_callbacks, :verify_authenticity_token,
+      "nothing here needs the CSRF check skipped, and skipping it would carry over to any non-GET action added later"
+  end
+
   test "the layout links the manifest" do
     sign_in_as(users(:one))
 

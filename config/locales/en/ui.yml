@@ -20,6 +20,8 @@ en:
       cancel_label: Cancel
     file_upload:
       choose: Choose a file
+      choose_action: Click to choose
+      drop_hint_html: "%{action} or drag and drop a file"
       remove_aria: Remove file
     greeting_header:
       night: Good night
