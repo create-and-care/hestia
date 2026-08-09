@@ -12,7 +12,7 @@
   <% elsif list_mode && recipe.photo.attached? %>
     <%= image_tag recipe.photo.variant(resize_to_fill: [ 64, 64 ]), alt: "", loading: :lazy, class: "size-12 shrink-0 rounded-md object-cover" %>
   <% end %>
-  <div class="<%= "mt-3" unless list_mode %>">
+  <div class="<%= "" unless list_mode %>">
     <h2 class="font-medium text-primary"><%= recipe.title %></h2>
     <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-secondary">
       <% if recipe.category.present? %>

@@ -89,5 +89,11 @@ Rails.application.configure do
     # .participants, so Bullet permanently flags the join side as "unused".
     # That's a structural false positive, not a real N+1 risk, so it's safelisted.
     Bullet.add_safelist type: :unused_eager_loading, class_name: "CalendarEvent", association: :event_participants
+
+    # Read by the gift list index, but only on a "give" list that has a
+    # recipient — a household whose give lists have none never runs that
+    # branch, so the preload reads as unused. Removing it would be a real N+1
+    # as soon as one list points at a contact.
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "GiftList", association: :contact
   end
 end
