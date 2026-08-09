@@ -34,7 +34,7 @@ class UserTest < ActiveSupport::TestCase
   test "accepts every stringified MODULES entry as a valid avatar_tint" do
     Ui::AvatarComponent::MODULES.each do |module_key|
       user = User.new(name: "Test", email_address: "test@example.com", password: "password123", avatar_tint: module_key.to_s)
-      assert user.valid?, "Expected #{module_key.to_s} to be a valid avatar_tint, but validation failed: #{user.errors.full_messages}"
+      assert user.valid?, "Expected #{module_key} to be a valid avatar_tint, but validation failed: #{user.errors.full_messages}"
     end
   end
 
