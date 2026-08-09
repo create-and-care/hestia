@@ -24,19 +24,16 @@ class ShoppingListsControllerTest < ActionDispatch::IntegrationTest
     assert_select "div.overflow-hidden.rounded-lg.border"
   end
 
-  # Rows arrive by broadcast append and leave by broadcast remove, neither of
-  # which re-runs `if items.any?`, so the empty state has to hide itself.
-  test "show keeps the empty state in the DOM, revealed only when it stands alone" do
+  test "show renders the empty state only while the list has no items" do
     list = households(:alpha).shopping_lists.create!(name: "Vide")
 
     get shopping_list_path(list)
     assert_response :success
-    assert_select "#shopping_list_items > div.only\\:block", 1
+    assert_body_includes I18n.t("shopping_lists.show.no_items")
 
     list.items.create!(name: "Pain")
     get shopping_list_path(list)
-    assert_select "#shopping_list_items > div.only\\:block", 1
-    assert_select "#shopping_list_items > *", minimum: 2
+    assert_not_includes @response.body, I18n.t("shopping_lists.show.no_items")
   end
 
   test "the PDF export is offered on an empty list too" do

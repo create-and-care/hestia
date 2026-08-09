@@ -67,7 +67,7 @@ fr:
     create:
       alert: "Impossible d'ajouter l'article."
     move_to_fridge:
-      notice: "%{name} rangé au frigo."
+      notice: "L'article « %{name} » a été rangé au frigo."
   products:
     index:
       title: "Catalogue de produits"

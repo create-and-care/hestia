@@ -67,7 +67,7 @@ en:
     create:
       alert: "Couldn't add the item."
     move_to_fridge:
-      notice: "%{name} stored in the fridge."
+      notice: "\"%{name}\" stored in the fridge."
   products:
     index:
       title: "Product catalog"
