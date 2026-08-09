@@ -43,8 +43,17 @@ module SystemTestHelper
   # a field that isn't already document.activeElement, and the select() above
   # leaves it focused. Three attempts because two were not enough — a run
   # under load dropped both, and left the task edit modal's title sitting at
-  # its original value. If none of them land, fail here, on the line that did
-  # the typing and naming the field, rather than somewhere else much later.
+  # its original value.
+  #
+  # When even three go missing — CI run 31333356531, on the menu's "Add a meal"
+  # dialog — setting the value from JS is the same remedy the two helpers above
+  # already apply to a dropped click, and it is deliberately the last resort
+  # rather than the first: real keystrokes are what the rest of the page reacts
+  # to. It cannot paper over a page that is fighting the value instead of a
+  # driver that dropped it, because anything clearing the field on input clears
+  # it again on the input event dispatched here, and the assertion below still
+  # fails — on the line that did the typing and naming the field, rather than
+  # somewhere else much later.
   def fill_in(locator = nil, **options)
     lookup = options.except(:fill_options, :currently_with)
 
@@ -54,6 +63,17 @@ module SystemTestHelper
 
       page.execute_script("document.activeElement && document.activeElement.blur()")
     end
+
+    finder = options.except(:with, :fill_options, :currently_with)
+    finder[:allow_self] = true if locator.nil?
+
+    page.execute_script(<<~JS, find(:fillable_field, locator, **finder).native, options[:with].to_s)
+      const field = arguments[0]
+      field.focus()
+      field.value = arguments[1]
+      field.dispatchEvent(new Event("input", { bubbles: true }))
+      field.dispatchEvent(new Event("change", { bubbles: true }))
+    JS
 
     assert_field locator, **lookup
   end

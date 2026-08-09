@@ -21,4 +21,22 @@ class FillInRetryTest < ApplicationSystemTestCase
 
     assert_field "email_address", with: users(:one).email_address
   end
+
+  # And when every attempt is dropped rather than just the first — the state CI
+  # reached on the menu's "Add a meal" dialog — the JS fallback is what lands
+  # the value. Preventing the default on keydown swallows real keystrokes for
+  # good, so all three attempts leave the field untouched, while a programmatic
+  # set goes through: exactly the asymmetry the fallback rests on.
+  test "fill_in sets the value from JS when no attempt's keystrokes land" do
+    visit new_session_path
+
+    page.execute_script(<<~JS)
+      document.getElementById("email_address")
+        .addEventListener("keydown", (event) => event.preventDefault())
+    JS
+
+    fill_in "email_address", with: users(:one).email_address
+
+    assert_field "email_address", with: users(:one).email_address
+  end
 end
