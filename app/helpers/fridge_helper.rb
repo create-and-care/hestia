@@ -1,11 +1,12 @@
 module FridgeHelper
   # Expiration status → Ui::BadgeComponent variant (label comes from the fridge.expiration locale scope).
   EXPIRATION_BADGE_VARIANTS = {
-    expired: :destructive,
-    urgent:  :destructive,
-    soon:    :warning,
-    ok:      :success,
-    none:    :secondary
+    expired:      :destructive,
+    urgent:       :destructive,
+    destructive:  :destructive,
+    soon:         :warning,
+    ok:           :success,
+    none:         :secondary
   }.freeze
 
   def location_label(location)

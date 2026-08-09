@@ -1,11 +1,12 @@
 module TasksHelper
   # Due-date status → Ui::BadgeComponent variant (label comes from the tasks.due locale scope).
   DUE_BADGE_VARIANTS = {
-    overdue: :destructive,
-    urgent:  :destructive,
-    soon:    :warning,
-    later:   :secondary,
-    none:    nil
+    overdue:     :destructive,
+    urgent:      :destructive,
+    destructive: :destructive,
+    soon:        :warning,
+    later:       :secondary,
+    none:        nil
   }.freeze
 
   def due_label(status) = status == :none ? nil : t("tasks.due.#{status}")

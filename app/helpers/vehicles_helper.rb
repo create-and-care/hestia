@@ -3,11 +3,12 @@ module VehiclesHelper
   # own :destructive variant (added for Tasks/Fridge) instead of collapsing onto the same :warning
   # as `soon` (<90 days) — the spec calls for 4 distinct colors, not 3.
   INSPECTION_BADGE_VARIANTS = {
-    expired: :destructive,
-    urgent:  :destructive,
-    soon:    :warning,
-    ok:      :success,
-    none:    :secondary
+    expired:      :destructive,
+    urgent:       :destructive,
+    destructive:  :destructive,
+    soon:         :warning,
+    ok:           :success,
+    none:         :secondary
   }.freeze
 
   def inspection_label(status) = t("vehicles.inspection_statuses.#{status}")
