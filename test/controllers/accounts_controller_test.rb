@@ -55,4 +55,14 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to household_path(households(:alpha), tab: "members")
     assert user.reload.authenticate("password")
   end
+
+  test "update changes the avatar_tint and persists the value" do
+    user = users(:one)
+    sign_in_as(user)
+
+    patch account_path, params: { user: { avatar_tint: "fridge", current_password: "password" } }
+
+    assert_redirected_to household_path(households(:alpha), tab: "members")
+    assert_equal "fridge", user.reload.avatar_tint
+  end
 end
