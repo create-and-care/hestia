@@ -48,6 +48,11 @@
         no listener attached and the toast is silently dropped. %>
     <%= render(Ui::SonnerComponent.new) %>
 
+    <%# Stands in for the browser's confirm() on every data-turbo-confirm in the
+        app — see the partial. Mounted beside the toast viewport for the same
+        reason: it has to exist before anything can ask it to open. %>
+    <%= render "shared/confirm_dialog" %>
+
     <%# Landing pad for turbo_stream responses that need to raise a toast without
         a full-page redirect: append shared/flash here and its relay element
         dispatches "toast:show", then deletes itself. Empty the rest of the time. %>

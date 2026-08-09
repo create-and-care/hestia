@@ -13,7 +13,10 @@ class ReorderTest < ActionDispatch::IntegrationTest
     assert_equal 1, a.reload.position
   end
 
+  # Via the board: a task's position ranks it inside its own category's column,
+  # so that is the only view allowed to write one — see Tasks::ManualOrder.
   test "reorder tasks" do
+    get tasks_path(view: "board")
     a = tasks(:alpha_dishes)
     b = tasks(:alpha_call)
     patch reorder_tasks_path, params: { ids: [ b.id, a.id ] }, as: :json
@@ -32,6 +35,7 @@ class ReorderTest < ActionDispatch::IntegrationTest
   end
 
   test "reorder ignores records from another household" do
+    get tasks_path(view: "board")
     beta = tasks(:beta_report)
     original = beta.position
     patch reorder_tasks_path, params: { ids: [ beta.id ] }, as: :json

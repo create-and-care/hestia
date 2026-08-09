@@ -1,16 +1,31 @@
 class TasksController < ApplicationController
+  include TaskViewMode
+
   FAR_FUTURE = Date.new(9999, 12, 31)
+
+  # Agenda buckets, in the order they are shown. A task lands in the first one
+  # whose test it passes, so "done" wins over any due date and the overdue
+  # bucket wins over today's.
+  AGENDA_GROUPS = [
+    [ :overdue,   ->(task) { task.due_on && task.due_on < Date.current } ],
+    [ :today,     ->(task) { task.due_on == Date.current } ],
+    [ :this_week, ->(task) { task.due_on && task.due_on <= Date.current.end_of_week } ],
+    [ :later,     ->(task) { task.due_on.present? } ],
+    [ :someday,   ->(task) { true } ]
+  ].freeze
 
   before_action :set_task, only: %i[edit update destroy toggle move_up move_down]
 
   def index
     @query = params[:q].to_s.strip
+    @view_mode = task_view_mode
     @categories = Current.household.task_categories.order(:name)
 
-    # :assignee only — the kanban groups by task_category_id (Task#board_column_id)
-    # and takes its column headings from @categories, so it never reads the
-    # association. Preloading it fetched a table nothing on the page asked for.
+    # :assignee for the card's avatar. :task_category too in agenda mode, which
+    # names each task's category on the row itself — the board doesn't, since it
+    # takes its column headings from @categories and groups on the foreign key.
     tasks = Current.household.tasks.general.ordered.includes(:assignee)
+    tasks = tasks.includes(:task_category) if @view_mode == "agenda"
     tasks = tasks.where("title ILIKE :q OR description ILIKE :q OR emoji ILIKE :q", q: "%#{@query}%") if @query.present?
     @tasks = tasks.to_a
 
@@ -18,6 +33,7 @@ class TasksController < ApplicationController
     @columns << [ nil, @tasks.select { |t| t.task_category_id.nil? } ]
     @columns = @columns.reject { |(_, tasks)| tasks.empty? } if @query.present?
 
+    @agenda = agenda_groups(@tasks)
     @task = Task.new
   end
 
@@ -32,10 +48,7 @@ class TasksController < ApplicationController
       task_category: find_category(task_params[:task_category_id])
     )
 
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to tasks_path }
-    end
+    redirect_to tasks_path
   rescue ActiveRecord::RecordInvalid
     redirect_to tasks_path, alert: t(".alert")
   end
@@ -57,7 +70,10 @@ class TasksController < ApplicationController
 
     if @task.save
       respond_to do |format|
-        format.turbo_stream { head :no_content } # closes the modal; the card updates via the real-time stream
+        # The form lives in a turbo-frame inside the dialog, so a redirect would
+        # land back inside the frame. A refresh stream re-renders the page around
+        # it instead, and the dialog still closes on turbo:submit-end.
+        format.turbo_stream { render turbo_stream: turbo_stream.refresh }
         format.html { redirect_to tasks_path, notice: t(".notice") }
       end
     else
@@ -65,38 +81,42 @@ class TasksController < ApplicationController
     end
   end
 
+  # Both redirect rather than patching the one card they touched: completing a
+  # task moves it out of its due-date bucket and into "Done", and deleting the
+  # last of a bucket has to take the heading and the count with it. The page
+  # morphs on the way back (see index.html.erb), so the scroll position and the
+  # focused control survive it.
   def toggle
     Tasks::ToggleTask.call(task: @task)
-
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace(@task) }
-      format.html { redirect_to tasks_path }
-    end
+    redirect_to tasks_path
   end
 
   def destroy
     @task.destroy
-
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(@task) }
-      format.html { redirect_to tasks_path }
-    end
+    redirect_to tasks_path
   end
 
+  # Reordering is a board operation — Tasks::ManualOrder says why, and says it
+  # for the views too, which is why the agenda mounts no sortable and draws no
+  # handle. The check is repeated here because a page left open across a view
+  # switch would still be holding the old controls.
   def reorder
-    Reordering.apply(Current.household.tasks, params[:ids])
-    head :no_content
+    if Tasks::ManualOrder.apply(household: Current.household, ids: params[:ids], view_mode: task_view_mode)
+      head :no_content
+    else
+      head :unprocessable_entity
+    end
   end
 
   # Keyboard-accessible alternative to the drag-and-drop reorder handle —
   # swaps position with the adjacent task in the same column (category).
   def move_up
-    swap_with_sibling(-1)
+    Tasks::ManualOrder.move(task: @task, direction: -1, view_mode: task_view_mode)
     redirect_to tasks_path
   end
 
   def move_down
-    swap_with_sibling(1)
+    Tasks::ManualOrder.move(task: @task, direction: 1, view_mode: task_view_mode)
     redirect_to tasks_path
   end
 
@@ -120,26 +140,26 @@ class TasksController < ApplicationController
   end
 
   private
-    def set_task
-      @task = Current.household.tasks.find(params[:id])
+    # Open tasks bucketed by when they are due, plus a trailing "done" bucket.
+    # A bucket lists its tasks in `ordered` order — each category's own position
+    # sequence, interleaved. Stable and cheap to read, but not a ranking the
+    # agenda can edit, which is why it offers no reorder control at all (see
+    # Tasks::ManualOrder).
+    def agenda_groups(tasks)
+      open_tasks, done_tasks = tasks.partition { |task| !task.done? }
+
+      groups = AGENDA_GROUPS.filter_map do |key, test|
+        matching = open_tasks.select(&test)
+        open_tasks -= matching
+        [ key, matching ] if matching.any?
+      end
+
+      groups << [ :done, done_tasks ] if done_tasks.any?
+      groups
     end
 
-    # `ordered` is not decoration: "the task above" only means anything in the
-    # order the column is actually displayed in (#index sorts the same way).
-    # Without it the SELECT has no ORDER BY at all and Postgres is free to
-    # return rows in heap order, so move_up could swap with an arbitrary
-    # sibling — or, when the task landed last in that arbitrary order, do
-    # nothing at all.
-    def swap_with_sibling(direction)
-      siblings = Current.household.tasks.general.ordered
-        .where(done: @task.done, task_category_id: @task.task_category_id).to_a
-      index = siblings.index(@task)
-      sibling = siblings[index + direction] if index && (index + direction).between?(0, siblings.size - 1)
-      return unless sibling
-
-      @task.position, sibling.position = sibling.position, @task.position
-      @task.save!
-      sibling.save!
+    def set_task
+      @task = Current.household.tasks.find(params[:id])
     end
 
     def find_member(id)

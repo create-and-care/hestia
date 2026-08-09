@@ -1,5 +1,8 @@
 <% content_for :title, t(".title") %>
-<%= turbo_stream_from Current.household %>
+<% content_for :head do %>
+  <meta name="turbo-refresh-method" content="morph">
+<% end %>
+<%= turbo_stream_from Current.household, "tasks" %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <div class="mb-4"><%= module_breadcrumb(:tasks) %></div>
@@ -15,49 +18,76 @@
               class: Ui::InputComponent.classes(size: :sm) %>
       <% end %>
       <%= form_with url: sort_tasks_path, method: :post, class: "flex items-center gap-1" do %>
-        <%= render Ui::NativeSelectComponent.new(name: "by",
-              options: [ [ t(".sort_due_date"), "due_date" ], [ t(".sort_assignee"), "assignee" ] ], size: :sm) %>
+        <%= render(Ui::LabelComponent.new(for_id: "tasks_sort_by", html_options: { class: "sr-only" })) { t(".sort_submit") } %>
+        <div class="w-40">
+          <%= render Ui::NativeSelectComponent.new(name: "by",
+                options: [ [ t(".sort_due_date"), "due_date" ], [ t(".sort_assignee"), "assignee" ] ],
+                size: :sm, html_options: { id: "tasks_sort_by" }) %>
+        </div>
         <%= render(Ui::ButtonComponent.new(type: "submit", variant: :outline, size: :sm)) { t(".sort_submit") } %>
       <% end %>
+      <div class="flex gap-1" role="group" aria-label="<%= t(".view_mode_label") %>">
+        <%= render(Ui::ButtonComponent.new(variant: @view_mode == "agenda" ? :secondary : :outline, size: :icon,
+              href: tasks_path(q: @query, view: "agenda"),
+              html_options: { aria: { label: t(".view_mode_agenda"), current: (@view_mode == "agenda" ? "page" : nil) } })) { lucide_icon("list", css_class: "size-4") } %>
+        <%= render(Ui::ButtonComponent.new(variant: @view_mode == "board" ? :secondary : :outline, size: :icon,
+              href: tasks_path(q: @query, view: "board"),
+              html_options: { aria: { label: t(".view_mode_board"), current: (@view_mode == "board" ? "page" : nil) } })) { lucide_icon("layout-grid", css_class: "size-4") } %>
+      </div>
     </div>
   </header>
-  <p class="mb-4 -mt-3 text-xs text-subdued"><%= t(".sort_hint") %></p>
+  <%# The agenda has no handles to promise (see tasks/_agenda), so it gets a hint
+      that says where reordering went instead of one that dangles it. %>
+  <p class="mb-4 -mt-3 text-xs text-subdued"><%= @view_mode == "board" ? t(".sort_hint") : t(".sort_hint_agenda") %></p>
 
   <%= render "shared/flash" %>
 
   <%= render "form", task: @task %>
 
+  <%# The row of category chips is gone: every category already names itself as
+      a board column heading, so the chips repeated all of them just to hang a
+      delete button off each one. Deleting now happens from the column heading
+      (see below) and this section keeps only the thing it alone could do. %>
   <section class="my-6 flex flex-wrap items-center gap-2">
     <span class="text-sm text-secondary"><%= t(".categories_label") %></span>
-    <% @categories.each do |category| %>
-      <%= render(Ui::BadgeComponent.new(variant: :secondary)) do %>
-        <%= category.name %>
-        <%= form_with url: task_category_path(category), method: :delete, class: "inline",
-              data: { turbo_confirm: t(".delete_category_confirm") } do %>
-          <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon, type: "submit",
-                html_options: { aria: { label: t(".delete_category_aria", name: category.name) } })) { lucide_icon("x", css_class: "size-4") } %>
-        <% end %>
-      <% end %>
-    <% end %>
     <%= form_with url: task_categories_path, method: :post, class: "inline-flex gap-1" do %>
-      <%= render Ui::InputComponent.new(type: "text", name: "task_category[name]", placeholder: t(".new_category_placeholder"),
-            html_options: { id: "task_category_name" }) %>
+      <%= render(Ui::LabelComponent.new(for_id: "task_category_name", html_options: { class: "sr-only" })) { t(".new_category_placeholder") } %>
+      <div class="w-48">
+        <%= render Ui::InputComponent.new(type: "text", name: "task_category[name]", placeholder: t(".new_category_placeholder"),
+              size: :sm, html_options: { id: "task_category_name" }) %>
+      </div>
       <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, type: "submit")) { t(".add_category_submit") } %>
     <% end %>
   </section>
 
   <% if @query.present? && @tasks.empty? %>
     <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".no_results") } } %>
-  <% else %>
+  <% elsif @view_mode == "board" %>
     <div class="flex gap-4 overflow-x-auto pb-4">
       <% @columns.each do |(category, tasks)| %>
         <div class="w-72 shrink-0">
           <%= render(Ui::CardComponent.new) do %>
-            <h2 class="mb-2 text-sm font-semibold text-secondary"><%= category&.name || t(".uncategorized") %></h2>
+            <%# Delete sits against the heading rather than in a chip row of its
+                own — the category is already named here, so this is the one
+                place it costs no extra line. %>
+            <div class="mb-2 flex items-center justify-between gap-1">
+              <h2 class="min-w-0 truncate text-sm font-semibold text-secondary"><%= category&.name || t(".uncategorized") %></h2>
+              <% if category %>
+                <%= render(Ui::AlertDialogComponent.new(title: t(".delete_category_confirm"),
+                      description: t(".delete_category_description", name: category.name),
+                      confirm_label: t(".delete_category_label"),
+                      confirm_url: task_category_path(category), confirm_method: :delete)) do |alert_dialog| %>
+                  <% alert_dialog.with_trigger do %>
+                    <%= render(Ui::ButtonComponent.new(variant: :ghost, size: :icon,
+                          html_options: { class: "size-auto shrink-0 p-0.5", aria: { label: t(".delete_category_aria", name: category.name) } })) { lucide_icon("x", css_class: "size-4") } %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
             <div id="<%= category ? "tasks_category_#{category.id}" : "tasks_uncategorized" %>" class="min-h-4 space-y-2"
                  data-controller="sortable" data-sortable-url-value="<%= reorder_tasks_path %>">
               <% if tasks.any? %>
-                <%= render tasks %>
+                <%= render partial: "tasks/task", collection: tasks, locals: { reorderable: true } %>
               <% else %>
                 <%= tag.div id: "#{category ? "tasks_category_#{category.id}" : "tasks_uncategorized"}_empty" do %>
                   <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty_column") } } %>
@@ -68,6 +98,8 @@
         </div>
       <% end %>
     </div>
+  <% else %>
+    <%= render "tasks/agenda", groups: @agenda, categories: @categories %>
   <% end %>
 
 </div>

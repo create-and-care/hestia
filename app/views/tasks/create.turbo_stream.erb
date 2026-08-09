@@ -1,4 +1,0 @@
-<%# The task is inserted into its column via the real-time stream; we just reset the form. %>
-<%= turbo_stream.replace "new_task" do %>
-  <%= render "tasks/form", task: Task.new %>
-<% end %>

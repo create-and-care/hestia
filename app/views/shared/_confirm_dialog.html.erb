@@ -1,0 +1,49 @@
+<%# The design system's answer to `data: { turbo_confirm: "…" }`.
+    Turbo's default confirm is the browser's own confirm(), which ignores the
+    theme, ignores the brand, and cannot be styled — and 59 call sites across
+    the app reach it. Rather than rewrite all 59 into Ui::AlertDialogComponent,
+    one dialog is mounted per page and confirm_controller hands it to
+    Turbo.config.forms.confirm, so every existing and future turbo_confirm gets
+    the design-system dialog for free.
+
+    Deliberately mirrors AlertDialogComponent's markup — same <dialog>, same
+    center POSITION_CLASSES, same footer, role="alertdialog" — because it is
+    the same thing, only driven from JS instead of from a trigger slot. %>
+<div data-controller="confirm">
+  <%# id, so page-level tests counting their own alert dialogs can exclude the
+      one the layout mounts on every page. %>
+  <%# Named and described by its own heading and message: role="alertdialog" is
+      not self-labelling, so without these a screen reader announces "alert
+      dialog" and nothing else — on a confirmation, where the message *is* the
+      decision. Both targets are rewritten by confirm_controller, and aria
+      follows the element, so it stays true whatever text is put in them. %>
+  <dialog id="global_confirm_dialog" data-confirm-target="dialog" role="alertdialog" data-state="closed"
+    aria-labelledby="global_confirm_dialog_title" aria-describedby="global_confirm_dialog_message"
+    data-action="click->confirm#onBackdrop cancel->confirm#onCancel close->confirm#onClose"
+    <%# max-w-md spelled out rather than taken from the component: a confirmation
+        is a sentence and a pair of buttons, and should stay that width whatever
+        the default dialog width becomes. %>
+    class="<%= Ui::DialogComponent::POSITION_CLASSES.fetch(:center) %> max-w-md
+           p-0 bg-container shadow-border-lg duration-200
+           data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95
+           data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
+    <div class="flex flex-col gap-4 p-6">
+      <div class="pr-8">
+        <h2 id="global_confirm_dialog_title" class="text-base font-semibold text-primary" data-confirm-target="title"><%= t("ui.confirm_dialog.title") %></h2>
+        <p id="global_confirm_dialog_message" class="mt-1 text-sm text-secondary" data-confirm-target="message"></p>
+      </div>
+      <%# Buttons the controller owns targets on, so they cannot be the component
+          — but they take its class list rather than a copy of it. %>
+      <div class="flex items-center justify-end gap-2">
+        <button type="button" data-action="click->confirm#cancel"
+          class="<%= Ui::ButtonComponent.classes(variant: :secondary) %>">
+          <%= t("ui.alert_dialog.cancel_label") %>
+        </button>
+        <button type="button" data-action="click->confirm#accept" data-confirm-target="accept"
+          class="<%= Ui::ButtonComponent.classes(variant: :destructive) %>">
+          <%= t("ui.alert_dialog.confirm_label") %>
+        </button>
+      </div>
+    </div>
+  </dialog>
+</div>
