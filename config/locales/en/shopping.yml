@@ -60,13 +60,14 @@ en:
       uncheck_aria: "Uncheck"
       check_aria: "Check"
       move_to_fridge_title: "Store in the fridge"
-      expires_on_title: "Expiration date (optional)"
+      expires_on_label: "Expires"
+      expires_on_title: "The product's expiry date (optional)"
       delete_aria: "Delete"
       delete_confirm: "Delete this item?"
     create:
       alert: "Couldn't add the item."
     move_to_fridge:
-      notice: "Stored in the fridge."
+      notice: "\"%{name}\" stored in the fridge."
   products:
     index:
       title: "Product catalog"

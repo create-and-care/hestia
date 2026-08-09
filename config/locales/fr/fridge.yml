@@ -58,7 +58,7 @@ fr:
     update:
       notice: "Produit mis à jour."
     move_to_shopping_list:
-      notice: "« %{name} » ajouté à la liste de courses."
+      notice: "L'article « %{name} » a été ajouté à la liste de courses."
   prepared_dishes:
     form:
       name_label: "Plat préparé"

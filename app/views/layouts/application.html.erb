@@ -53,6 +53,11 @@
         reason: it has to exist before anything can ask it to open. %>
     <%= render "shared/confirm_dialog" %>
 
+    <%# Landing pad for turbo_stream responses that need to raise a toast without
+        a full-page redirect: append shared/flash here and its relay element
+        dispatches "toast:show", then deletes itself. Empty the rest of the time. %>
+    <div id="flash_relay"></div>
+
     <% if Current.user %>
       <%# Below md this sits inside the mobile nav bar's 56px band (see
           shared/_app_sidebar); above md it floats exactly as before. Stays a

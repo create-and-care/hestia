@@ -1,6 +1,9 @@
 <div data-controller="collapsible">
   <button type="button" data-collapsible-target="trigger" data-action="click->collapsible#toggle"
-    aria-expanded="<%= @open %>" aria-controls="<%= panel_id %>" class="group">
+    <%# w-full to match Accordion's trigger: a bare <button> shrinks to its
+        content, so a trigger laying its slot out with justify-between had
+        nothing to justify against and the row collapsed to the left. %>
+    aria-expanded="<%= @open %>" aria-controls="<%= panel_id %>" class="group w-full">
     <%= trigger %>
   </button>
   <div id="<%= panel_id %>" data-collapsible-target="panel" <%= "hidden" unless @open %> data-state="<%= @open ? "open" : "closed" %>"

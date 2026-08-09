@@ -7,10 +7,15 @@
                 barcode_lookup_found_text_value: t(".barcode_found_prefix"),
                 action: "combobox:select->shopping-catalog#pick" } do |form| %>
     <div class="space-y-3 rounded-lg border border-primary p-3">
+      <%# Both pickers share the row instead of sitting in fixed 144px/192px
+          boxes with the status text eating the remainder: a barcode is ~13
+          digits and a product name is a sentence, and neither fitted. The
+          status line moves under them, where it can run long without
+          squeezing the controls that produce it. %>
       <div class="flex flex-wrap items-end gap-2">
-        <%= render "shared/barcode_lookup_field" %>
+        <%= render "shared/barcode_lookup_field", width_class: "min-w-48 flex-1" %>
         <% if catalog_products.any? %>
-          <div class="w-48">
+          <div class="min-w-48 flex-1">
             <%= render Ui::LabelComponent.new { t(".catalog_label") } %>
             <div class="mt-1">
               <%= render Ui::ComboboxComponent.new(name: "_catalog_picker", placeholder: t(".catalog_placeholder"),
@@ -18,8 +23,8 @@
             </div>
           </div>
         <% end %>
-        <p class="min-w-0 flex-1 text-xs text-subdued" data-barcode-lookup-target="status"></p>
       </div>
+      <p class="text-xs text-subdued empty:hidden" data-barcode-lookup-target="status"></p>
 
       <div class="flex flex-wrap items-end gap-2">
         <div class="min-w-40 flex-1">

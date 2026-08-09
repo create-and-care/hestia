@@ -38,6 +38,19 @@ class ShoppingListItemsControllerTest < ActionDispatch::IntegrationTest
     assert_not ShoppingListItem.exists?(item.id)
   end
 
+  # Removing a row on its own leaves its aisle band standing over nothing, and
+  # the container never becomes empty, so the empty state never appears.
+  test "destroying the last item takes its aisle band with it and shows the empty state" do
+    list = households(:alpha).shopping_lists.create!(name: "Un seul")
+    item = list.items.create!(name: "Pain", rayon: "epicerie")
+
+    delete shopping_list_item_path(list, item), as: :turbo_stream
+
+    assert_turbo_stream action: "update", target: "shopping_list_items"
+    assert_not_includes @response.body, I18n.t("shopping_list_items.rayons.epicerie")
+    assert_includes @response.body, I18n.t("shopping_lists.show.no_items")
+  end
+
   test "cannot add an item to another household's list" do
     assert_no_difference -> { ShoppingListItem.count } do
       post shopping_list_items_path(shopping_lists(:beta_groceries)),
@@ -54,6 +67,16 @@ class ShoppingListItemsControllerTest < ActionDispatch::IntegrationTest
       end
     end
     assert_response :success
+  end
+
+  # The row just disappears otherwise, which looks the same as deleting it.
+  test "move_to_fridge raises a toast naming the item" do
+    item = shopping_list_items(:alpha_apples)
+    post move_to_fridge_shopping_list_item_path(@list, item), as: :turbo_stream
+
+    assert_response :success
+    assert_turbo_stream action: "append", target: "flash_relay"
+    assert_body_includes I18n.t("shopping_list_items.move_to_fridge.notice", name: item.name)
   end
 
   test "move_to_fridge captures an expiration date when given" do
