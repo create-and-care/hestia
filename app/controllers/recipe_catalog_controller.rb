@@ -23,6 +23,15 @@ class RecipeCatalogController < ApplicationController
     @added_entry_ids = Current.household.recipes.where.not(recipe_catalog_entry_id: nil).pluck(:recipe_catalog_entry_id).to_set
   end
 
+  # Body of the preview dialog, rendered into a lazy turbo-frame on the card.
+  # The catalog is global rather than household-scoped, so there is nothing to
+  # authorize here beyond being signed in — which ApplicationController covers.
+  def preview
+    @entry = RecipeCatalogEntry.find(params[:id])
+    @already_added = Current.household.recipes.exists?(recipe_catalog_entry_id: @entry.id)
+    render partial: "recipe_catalog/preview", locals: { entry: @entry, already_added: @already_added }
+  end
+
   # Clones a catalog entry into the current household's recipe book
   # (Recipes::Catalog::AddToHousehold), then redirects to the new recipe —
   # from there, every existing Recipes feature (shopping list export, menu

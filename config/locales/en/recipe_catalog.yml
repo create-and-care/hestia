@@ -2,7 +2,9 @@ en:
   recipe_catalog:
     index:
       title: "Discover recipes"
+      search_label: "Search"
       search_placeholder: "Search…"
+      tag_label: "Category"
       tag_blank: "All categories"
       filter_submit: "Filter"
       mine_tab: "My recipes"
@@ -21,6 +23,21 @@ en:
     entry:
       add_link: "Add to my book"
       already_added: "Recipe already added"
+      preview_link: "View the recipe"
+      preview_loading: "Loading the recipe…"
+    preview:
+      ingredients_heading: "Ingredients"
+      steps_heading: "Method"
+      no_ingredients: "No ingredients listed."
+      no_steps: "No steps listed."
+      tags_heading: "Categories"
+      prep_time: "Prep"
+      cook_time: "Cook"
+      total_time: "Total time"
+      servings: "Servings"
+      ingredients_count: "Ingredients"
+      add: "Add to my book"
+      source: "View the source"
     add_to_household:
       notice: "Recipe added to your book."
       already_notice: "This recipe is already in your book."
