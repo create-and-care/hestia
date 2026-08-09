@@ -8,8 +8,12 @@
 
     So: one vertical list, bucketed by when a task is due (see
     TasksController::AGENDA_GROUPS), category demoted to a badge on the row.
-    Drag-and-drop stays per bucket, and the manual order within a bucket is
-    preserved, so the existing sort and reorder controls still mean something.
+
+    No reordering here. A bucket mixes categories and `position` counts from
+    zero inside each one, so there is no rank to drag a task up and down —
+    dragging across two categories would only shuffle their board columns. The
+    board keeps the handles until tasks carry an order of their own; see
+    Tasks::ManualOrder.
 
     The board is still one click away — nothing is taken away, only re-defaulted. %>
 <div class="space-y-6">
@@ -29,11 +33,8 @@
         <span class="text-xs text-subdued"><%= tasks.size %></span>
       </div>
 
-      <%# Each bucket is its own sortable root, so a drag reorders within the
-          bucket rather than silently moving a task between due dates. %>
-      <div id="tasks_agenda_<%= key %>" class="space-y-2"
-           data-controller="sortable" data-sortable-url-value="<%= reorder_tasks_path %>">
-        <%= render partial: "tasks/task", collection: tasks, locals: { show_category: true } %>
+      <div id="tasks_agenda_<%= key %>" class="space-y-2">
+        <%= render partial: "tasks/task", collection: tasks, locals: { show_category: true, reorderable: false } %>
       </div>
     </section>
   <% end %>

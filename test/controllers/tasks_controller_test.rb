@@ -197,9 +197,9 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  # "The task above" is whatever is above it on the screen you are looking at,
-  # and the two views do not group the same way — so which task that is depends
-  # on the view mode, and each of the two is asserted on its own terms below.
+  # A position ranks a task inside its own category's column and nowhere else,
+  # so the board is the only view that can move one — see Tasks::ManualOrder,
+  # and the agenda's half of this further down.
   test "move_up swaps position with the previous task in the same board column" do
     get tasks_path(view: "board")
     first = tasks(:alpha_dishes) # alpha_home, position 0
@@ -229,28 +229,73 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, second.reload.position
   end
 
-  test "move_up swaps with the previous task in the same agenda bucket" do
+  # A position is a place in one category's column, so a bucket that mixes
+  # categories has no order to edit: swapping across two of them reshuffles both
+  # columns on the board, and when the two hold the same number — which they do
+  # by default, every column counting from zero — the swap moves nothing at all.
+  test "tasks from two categories in one agenda bucket cannot reorder each other" do
+    get tasks_path(view: "agenda")
+    courses = households(:alpha).task_categories.create!(name: "Courses")
+    home_first = households(:alpha).tasks.create!(title: "Maison A", task_category: task_categories(:alpha_home),
+      due_on: Date.current, position: 0)
+    home_second = households(:alpha).tasks.create!(title: "Maison B", task_category: task_categories(:alpha_home),
+      due_on: Date.current, position: 1)
+    other = households(:alpha).tasks.create!(title: "Courses A", task_category: courses,
+      due_on: Date.current, position: 2)
+
+    patch move_up_task_path(other)
+
+    assert_equal 2, other.reload.position, "a cross-category swap took a position that is not its column's"
+    assert_equal 0, home_first.reload.position
+    assert_equal 1, home_second.reload.position, "the Maison column was reordered from a bucket it does not own"
+  end
+
+  test "the agenda draws no reorder controls at all" do
+    get tasks_path(view: "agenda")
+    assert_response :success
+    assert_select "[data-sortable-handle]", count: 0
+    assert_select "form[action=?]", move_up_task_path(tasks(:alpha_dishes)), count: 0
+
+    get tasks_path(view: "board")
+    assert_select "[data-sortable-handle]"
+    assert_select "form[action=?]", move_up_task_path(tasks(:alpha_dishes))
+  end
+
+  # The controls are gone from the agenda, but a page left open across a view
+  # switch still holds them, so the two write paths refuse the move themselves.
+  test "move_up does nothing while the agenda is the current view" do
     get tasks_path(view: "agenda")
     first = households(:alpha).tasks.create!(title: "Tôt", due_on: Date.current, position: 0)
     second = households(:alpha).tasks.create!(title: "Tard", due_on: Date.current, position: 5)
 
     patch move_up_task_path(second)
 
-    assert_equal 0, second.reload.position
-    assert_equal 5, first.reload.position
+    assert_equal 5, second.reload.position
+    assert_equal 0, first.reload.position
   end
 
-  # The case the category-based lookup got wrong: same column on the board, two
-  # different sections in the agenda, and a swap you can neither see nor undo.
-  test "move_up leaves a task alone when its category sibling is in another agenda bucket" do
+  test "reorder rejects a dragged order while the agenda is the current view" do
     get tasks_path(view: "agenda")
-    category = task_categories(:alpha_home)
-    households(:alpha).tasks.create!(title: "En retard", task_category: category, due_on: Date.current - 3, position: 0)
-    today = households(:alpha).tasks.create!(title: "Aujourd'hui", task_category: category, due_on: Date.current, position: 5)
+    first = tasks(:alpha_dishes)
+    second = households(:alpha).tasks.create!(title: "Ranger", task_category: task_categories(:alpha_home), position: 5)
 
-    patch move_up_task_path(today)
+    patch reorder_tasks_path, params: { ids: [ second.id, first.id ] }
 
-    assert_equal 5, today.reload.position
+    assert_response :unprocessable_entity
+    assert_equal 0, first.reload.position
+    assert_equal 5, second.reload.position
+  end
+
+  test "reorder applies a dragged board column" do
+    get tasks_path(view: "board")
+    first = tasks(:alpha_dishes)
+    second = households(:alpha).tasks.create!(title: "Ranger", task_category: task_categories(:alpha_home), position: 5)
+
+    patch reorder_tasks_path, params: { ids: [ second.id, first.id ] }
+
+    assert_response :no_content
+    assert_equal 0, second.reload.position
+    assert_equal 1, first.reload.position
   end
 
   test "sort by due_date reorders unfinished tasks within a column without touching other columns" do

@@ -1,18 +1,24 @@
 <%= tag.div id: dom_id(task), data: { sortable_id: task.id },
       class: "rounded-lg border border-primary bg-container p-3 #{'opacity-60' if task.done}" do %>
   <div class="flex items-start gap-2">
-    <div class="mt-0.5 flex shrink-0 items-center gap-0.5">
-      <span data-sortable-handle class="cursor-grab select-none text-subdued hover:text-secondary" title="<%= t('.move_title') %>"><%= lucide_icon("grip-vertical", css_class: "size-4") %></span>
-      <%# Reorder gutter: 36px each would double the row height, so this pair
-          takes the WCAG AA floor (24px) instead and says so — see
-          touchFloorFor in script/visual_check/measure.js. %>
-      <div class="flex flex-col" data-touch-target="compact">
-        <%= button_to move_up_task_path(task), method: :patch,
-              class: "flex size-6 items-center justify-center cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_up_aria") } do %><%= lucide_icon("chevron-up", css_class: "size-3") %><% end %>
-        <%= button_to move_down_task_path(task), method: :patch,
-              class: "flex size-6 items-center justify-center cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_down_aria") } do %><%= lucide_icon("chevron-down", css_class: "size-3") %><% end %>
+    <%# Only where a position is a rank the view can actually edit — the board's
+        category columns. The agenda mixes categories inside one due-date bucket
+        and passes reorderable: false; Tasks::ManualOrder has the reasoning, and
+        refuses the same moves server-side. %>
+    <% if local_assigns[:reorderable] %>
+      <div class="mt-0.5 flex shrink-0 items-center gap-0.5">
+        <span data-sortable-handle class="cursor-grab select-none text-subdued hover:text-secondary" title="<%= t('.move_title') %>"><%= lucide_icon("grip-vertical", css_class: "size-4") %></span>
+        <%# Reorder gutter: 36px each would double the row height, so this pair
+            takes the WCAG AA floor (24px) instead and says so — see
+            touchFloorFor in script/visual_check/measure.js. %>
+        <div class="flex flex-col" data-touch-target="compact">
+          <%= button_to move_up_task_path(task), method: :patch,
+                class: "flex size-6 items-center justify-center cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_up_aria") } do %><%= lucide_icon("chevron-up", css_class: "size-3") %><% end %>
+          <%= button_to move_down_task_path(task), method: :patch,
+                class: "flex size-6 items-center justify-center cursor-pointer text-subdued hover:text-primary", aria: { label: t(".move_down_aria") } do %><%= lucide_icon("chevron-down", css_class: "size-3") %><% end %>
+        </div>
       </div>
-    </div>
+    <% end %>
     <%= button_to toggle_task_path(task), method: :patch, class: "mt-0.5 shrink-0 cursor-pointer",
           aria: { label: task.done ? t(".reopen_aria") : t(".complete_aria") } do %>
       <span class="flex size-5 items-center justify-center rounded border <%= task.done ? "border-button-primary bg-button-primary text-inverse" : "border-primary" %>">

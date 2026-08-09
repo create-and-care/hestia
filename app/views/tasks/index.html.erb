@@ -36,7 +36,9 @@
       </div>
     </div>
   </header>
-  <p class="mb-4 -mt-3 text-xs text-subdued"><%= t(".sort_hint") %></p>
+  <%# The agenda has no handles to promise (see tasks/_agenda), so it gets a hint
+      that says where reordering went instead of one that dangles it. %>
+  <p class="mb-4 -mt-3 text-xs text-subdued"><%= @view_mode == "board" ? t(".sort_hint") : t(".sort_hint_agenda") %></p>
 
   <%= render "shared/flash" %>
 
@@ -85,7 +87,7 @@
             <div id="<%= category ? "tasks_category_#{category.id}" : "tasks_uncategorized" %>" class="min-h-4 space-y-2"
                  data-controller="sortable" data-sortable-url-value="<%= reorder_tasks_path %>">
               <% if tasks.any? %>
-                <%= render tasks %>
+                <%= render partial: "tasks/task", collection: tasks, locals: { reorderable: true } %>
               <% else %>
                 <%= tag.div id: "#{category ? "tasks_category_#{category.id}" : "tasks_uncategorized"}_empty" do %>
                   <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t(".empty_column") } } %>

@@ -96,20 +96,27 @@ class TasksController < ApplicationController
     redirect_to tasks_path
   end
 
+  # Reordering is a board operation — Tasks::ManualOrder says why, and says it
+  # for the views too, which is why the agenda mounts no sortable and draws no
+  # handle. The check is repeated here because a page left open across a view
+  # switch would still be holding the old controls.
   def reorder
-    Reordering.apply(Current.household.tasks, params[:ids])
-    head :no_content
+    if Tasks::ManualOrder.apply(household: Current.household, ids: params[:ids], view_mode: task_view_mode)
+      head :no_content
+    else
+      head :unprocessable_entity
+    end
   end
 
   # Keyboard-accessible alternative to the drag-and-drop reorder handle —
   # swaps position with the adjacent task in the same column (category).
   def move_up
-    swap_with_sibling(-1)
+    Tasks::ManualOrder.move(task: @task, direction: -1, view_mode: task_view_mode)
     redirect_to tasks_path
   end
 
   def move_down
-    swap_with_sibling(1)
+    Tasks::ManualOrder.move(task: @task, direction: 1, view_mode: task_view_mode)
     redirect_to tasks_path
   end
 
@@ -134,9 +141,10 @@ class TasksController < ApplicationController
 
   private
     # Open tasks bucketed by when they are due, plus a trailing "done" bucket.
-    # Within a bucket the household's own drag-and-drop order is preserved
-    # (@tasks arrives `ordered`), so sorting by due date still means something
-    # here rather than being overridden by the grouping.
+    # A bucket lists its tasks in `ordered` order — each category's own position
+    # sequence, interleaved. Stable and cheap to read, but not a ranking the
+    # agenda can edit, which is why it offers no reorder control at all (see
+    # Tasks::ManualOrder).
     def agenda_groups(tasks)
       open_tasks, done_tasks = tasks.partition { |task| !task.done? }
 
@@ -152,37 +160,6 @@ class TasksController < ApplicationController
 
     def set_task
       @task = Current.household.tasks.find(params[:id])
-    end
-
-    # "The task above" means the one above *on the screen you are looking at*,
-    # and the two views do not group the same way — the board by category, the
-    # agenda by due date. Sending the same neighbours to both would let a move
-    # inside "Today" swap with a task from "Overdue" purely because they share a
-    # category, which is a move you can neither see nor undo.
-    #
-    # `ordered` is not decoration either: without it the SELECT has no ORDER BY
-    # at all and Postgres is free to return rows in heap order, so move_up could
-    # swap with an arbitrary sibling — or, when the task landed last in that
-    # arbitrary order, do nothing at all.
-    def visible_siblings
-      tasks = Current.household.tasks.general.ordered.to_a
-
-      if task_view_mode == "agenda"
-        agenda_groups(tasks).find { |_, group| group.include?(@task) }&.last || []
-      else
-        tasks.select { |task| task.done == @task.done && task.task_category_id == @task.task_category_id }
-      end
-    end
-
-    def swap_with_sibling(direction)
-      siblings = visible_siblings
-      index = siblings.index(@task)
-      sibling = siblings[index + direction] if index && (index + direction).between?(0, siblings.size - 1)
-      return unless sibling
-
-      @task.position, sibling.position = sibling.position, @task.position
-      @task.save!
-      sibling.save!
     end
 
     def find_member(id)

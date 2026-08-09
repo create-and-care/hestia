@@ -9,6 +9,7 @@ fr:
       sort_assignee: "Par responsable"
       sort_submit: "Trier"
       sort_hint: "Le tri réorganise une fois les tâches non terminées de chaque colonne — vous pourrez toujours les glisser-déposer ensuite."
+      sort_hint_agenda: "Le tri réorganise une fois les tâches non terminées de chaque catégorie. Le classement manuel se fait dans la vue tableau, où chaque tâche garde sa place."
       categories_label: "Catégories :"
       new_category_placeholder: "Nouvelle catégorie"
       add_category_submit: "Ajouter"
