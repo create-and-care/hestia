@@ -21,7 +21,7 @@ class ServiceProvidersTest < ApplicationSystemTestCase
     visit service_providers_path
 
     select "Gardener", from: "service_provider_type_name"
-    click_on "Add"
+    submit_button_to "Add"
 
     # "Gardener" is already present as a <select> option before submission,
     # so assert_text would pass immediately without waiting for the type to
@@ -38,7 +38,7 @@ class ServiceProvidersTest < ApplicationSystemTestCase
     select "Other…", from: "service_provider_type_name"
     assert_selector "#service_provider_type_name_custom"
     fill_in "service_provider_type_name_custom", with: "Coach sportif"
-    click_on "Add"
+    submit_button_to "Add"
 
     assert_text "Coach sportif"
     assert ServiceProviderType.exists?(name: "Coach sportif")

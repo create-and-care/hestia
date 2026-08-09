@@ -73,7 +73,13 @@
             <polyline points="17 8 12 3 7 8" />
             <line x1="12" y1="3" x2="12" y2="15" />
           </svg>
-          <p class="text-sm text-secondary"><span class="font-medium text-brand">Cliquez pour choisir</span> ou glissez-déposez un fichier</p>
+          <%# One key for the whole sentence, with the emphasised half passed in:
+              splitting it into two spans would bake this word order into the
+              markup, and a translation is not free to move a fragment it does
+              not contain. tag.span is html_safe, so the _html suffix leaves it
+              alone and still escapes anything else interpolated. %>
+          <p class="text-sm text-secondary"><%= t("ui.file_upload.drop_hint_html",
+            action: tag.span(t("ui.file_upload.choose_action"), class: "font-medium text-brand")) %></p>
           <% if @accept %><p class="text-xs text-subdued"><%= @accept %></p><% end %>
         </div>
       </div>
@@ -81,7 +87,7 @@
 
     <button type="button" data-file-upload-target="removeButton" data-action="click->file-upload#remove" <%= "hidden" unless existing_preview_shown? %>
       class="absolute right-2 top-2 rounded-full bg-container p-1 text-subdued shadow-xs hover:bg-surface-hover hover:text-primary"
-      aria-label="Retirer le fichier">
+      aria-label="<%= t("ui.file_upload.remove_aria") %>">
       <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
     </button>
   </div>
