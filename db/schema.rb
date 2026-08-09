@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_01_220050) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_09_204908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -893,6 +893,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_220050) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "avatar_tint"
     t.string "calendar_view", default: "month", null: false
     t.datetime "created_at", null: false
     t.string "email_address", null: false

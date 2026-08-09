@@ -22,4 +22,25 @@ class UserTest < ActiveSupport::TestCase
     user.name = "Renamed"
     assert user.valid?
   end
+
+  test "normalizes blank avatar_tint to nil" do
+    user = User.new(name: "Test", email_address: "test@example.com", password: "password123", avatar_tint: "")
+    assert_nil user.avatar_tint
+
+    user.avatar_tint = "   "
+    assert_nil user.avatar_tint
+  end
+
+  test "accepts every stringified MODULES entry as a valid avatar_tint" do
+    Ui::AvatarComponent::MODULES.each do |module_key|
+      user = User.new(name: "Test", email_address: "test@example.com", password: "password123", avatar_tint: module_key.to_s)
+      assert user.valid?, "Expected #{module_key} to be a valid avatar_tint, but validation failed: #{user.errors.full_messages}"
+    end
+  end
+
+  test "rejects an invalid avatar_tint value" do
+    user = User.new(name: "Test", email_address: "invalid@example.com", password: "password123", avatar_tint: "invalid_module")
+    assert_not user.valid?
+    assert_includes user.errors[:avatar_tint], error_message(:inclusion)
+  end
 end

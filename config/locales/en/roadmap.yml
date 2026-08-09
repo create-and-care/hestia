@@ -252,6 +252,7 @@ en:
         items:
           - "Per-household custom themes: every colour already goes through a CSS variable behind the --brand/--accent indirection, so half the work is done — what is missing is persistence and a picker, knowing that contrast checking then becomes a runtime constraint rather than a build-time check"
           - "Sidebar reordering: SortableJS is already wired to lists, tasks, loyalty and the menu, just not to the navigation"
+          - "Celebration streaks & milestones: CelebrationMomentComponent already supports :streak and :milestone kinds, but no data model tracks a maintained streak or a reached milestone yet — birthdays are the only kind wired up today"
       health_records:
         title: "Health records for people"
         items:

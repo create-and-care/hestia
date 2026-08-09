@@ -19,8 +19,10 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
 
     get root_path
     assert_response :success
-    assert_select "h1", text: households(:alpha).name
+    assert_select "h2", text: households(:alpha).name
     assert_select "code", text: households(:alpha).invite_code
+    assert_select "img[alt]", minimum: 1, message: "Expected at least one member avatar with an accessible alt attribute"
+    assert_select "button[data-action*='copy']", minimum: 1, message: "Expected a copy/invite control to be present"
   end
 
   test "two households do not share members" do

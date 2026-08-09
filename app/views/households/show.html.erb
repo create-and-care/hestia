@@ -109,7 +109,7 @@
             <% @memberships.each do |membership| %>
               <li>
                 <%= render(Ui::ItemComponent.new) do |item| %>
-                  <% item.with_leading { render(Ui::AvatarComponent.new(alt: membership.user.name.presence || membership.user.email_address)) } %>
+                  <% item.with_leading { render(Ui::AvatarComponent.new(alt: membership.user.name.presence || membership.user.email_address, tint: membership.user.avatar_tint)) } %>
                   <% item.with_title { membership.user.name.presence || membership.user.email_address } %>
                   <% item.with_description { membership.admin? ? t(".admin") : t(".member") } %>
                   <% if current_membership&.admin? && membership.user != Current.user %>

@@ -35,6 +35,18 @@
         <% end %>
       <% end %>
 
+      <%= render(Ui::FieldComponent.new(id: "user_avatar_tint")) do |field| %>
+        <% field.with_label { t(".avatar_tint") } %>
+        <% field.with_control do %>
+          <div class="flex items-center gap-3">
+            <%= render Ui::AvatarComponent.new(alt: @user.name.presence || @user.email_address, tint: @user.avatar_tint) %>
+            <%= render Ui::NativeSelectComponent.new(name: "user[avatar_tint]", selected: @user.avatar_tint,
+                  options: [ [ t(".avatar_tint_auto"), "" ] ] + Ui::AvatarComponent::MODULES.map { |mod| [ t(".avatar_tint_modules.#{mod}"), mod.to_s ] },
+                  html_options: { id: "user_avatar_tint" }) %>
+          </div>
+        <% end %>
+      <% end %>
+
       <div class="border-t border-primary pt-4">
         <p class="mb-1 text-sm font-medium text-primary"><%= t(".password_section") %></p>
         <p class="mb-3 text-xs text-secondary"><%= t(".password_section_description") %></p>

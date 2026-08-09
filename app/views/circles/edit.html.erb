@@ -35,7 +35,7 @@
     <div class="divide-y divide-primary">
       <% @circle.circle_memberships.includes(:user).order(:role).each do |membership| %>
         <%= render(Ui::ItemComponent.new) do |item| %>
-          <% item.with_leading { render(Ui::AvatarComponent.new(alt: membership.user.name.presence || membership.user.email_address)) } %>
+          <% item.with_leading { render(Ui::AvatarComponent.new(alt: membership.user.name.presence || membership.user.email_address, tint: membership.user.avatar_tint)) } %>
           <% item.with_title { membership.user.name.presence || membership.user.email_address } %>
           <% item.with_description { t("circles.roles.#{membership.role}") } %>
           <% if membership.user != Current.user %>
