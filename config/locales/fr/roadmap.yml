@@ -3,10 +3,10 @@ fr:
     show:
       title: Feuille de route
       description: >-
-        La chronologie du projet, de la v0 au dernier chantier livré — et ce qui vient
-        ensuite. Cette page est désormais l'unique source de vérité sur l'avancement de Hestia ;
-        elle remplace la Spécification et le Plan d'implémentation d'origine, dont le contenu a
-        été entièrement repris ici. Historique précis des versions dans CHANGELOG.md.
+        Ce qui arrive ensuite, puis tout ce qui a déjà été livré, du plus récent au plus
+        ancien. Cette page est l'unique source de vérité sur l'avancement de Hestia ; elle remplace
+        la Spécification et le Plan d'implémentation d'origine, dont le contenu a été entièrement
+        repris ici. Le détail technique de chaque version vit dans CHANGELOG.md.
       status:
         done: Fait
         upcoming: À venir
@@ -15,158 +15,154 @@ fr:
       foundation:
         title: "Fondations"
         items:
-          - "Utilisateur, Session, Foyer, Membership (rôles membre/admin, code d'invitation unique)"
-          - "Cloisonnement multi-foyer (Current.household, concern HouseholdScoped)"
-          - "Inscription, onboarding (créer ou rejoindre un foyer via code), tableau de bord"
+          - "Comptes, foyers et invitations : chaque foyer est un espace clos, rejoint par code d'invitation"
+          - "Rôles membre et administrateur"
+          - "Inscription, prise en main guidée et tableau de bord d'accueil"
       design_system:
-        title: "Bibliothèque de composants Ui::"
+        title: "Identité visuelle et bibliothèque d'interface"
         items:
-          - "Une cinquantaine de ViewComponents façon shadcn/ui (boutons, dialogues, calendrier, graphiques, combobox...) exposés sur /design-system"
-          - "Base Tailwind v4 et tokens de design (couleurs sémantiques, dark mode)"
+          - "Une interface unifiée sur l'ensemble de l'application, mode sombre compris"
+          - "Bibliothèque de composants consultable directement dans l'application"
       wave_2a:
-        title: "Vague 2.a — Modules prioritaires"
+        title: "Les cinq modules du quotidien"
         items:
-          - "Courses, Frigo, Recettes, Tâches, Calendrier : modèle, contrôleur, vues, temps réel"
-          - "Services par domaine (Courses::AddItem, Frigo::AddItem, Tasks::CreateTask, Calendar::CreateEvent...)"
+          - "Courses, Frigo, Recettes, Tâches et Calendrier"
+          - "Mise à jour en temps réel entre les membres d'un même foyer"
       wave_2b:
-        title: "Vague 2.b — Modules satellites"
+        title: "Onze modules complémentaires"
         items:
-          - "11 modules : Notes, Anniversaires, Adresses, Prestataires, Fidélité, Animaux, Véhicules, Cave à vin, Déchets, Bébé, Messages"
+          - "Notes, Anniversaires, Adresses, Prestataires et Fidélité"
+          - "Animaux, Véhicules, Cave à vin, Déchets, Bébé et Messages"
       wave_2c:
-        title: "Vague 2.c — Logique métier plus riche"
+        title: "Planification et suivi du foyer"
         items:
-          - "Menu (planification des repas), Routines (moteur de récurrence partagé avec le Calendrier)"
-          - "Extérieur (jardin et piscines), Budget (calcul automatique de répartition), Documents (stockage via Active Storage)"
+          - "Menu de la semaine et routines récurrentes"
+          - "Extérieur (jardin et piscine), Budget avec répartition automatique, et Documents"
       wave_2d:
-        title: "Vague 2.d — Déviations d'architecture"
+        title: "Partage au-delà du foyer"
         items:
-          - "Cadeaux : partage public non authentifié par jeton (g/:token)"
-          - "Cercles : indépendants du foyer, regroupent des utilisateurs au-delà du foyer"
-          - "Voyage : sous-contexte transverse (trip_id) sur Adresses, Notes, Tâches, Courses"
-          - "Bien-être : cloisonnement strict par utilisateur, jamais par foyer — même un admin n'y a pas accès"
+          - "Listes de cadeaux partageables par lien public, sans compte pour l'invité"
+          - "Cercles : des groupes qui dépassent le cadre du foyer"
+          - "Voyage : un contexte transverse regroupant adresses, notes, tâches et courses d'un séjour"
+          - "Bien-être : strictement privé, visible du seul membre concerné"
       pdf_export_reordering:
-        title: "Export PDF & réordonnancement"
+        title: "Export PDF et réorganisation"
         items:
-          - "Export PDF de la liste de courses et du mois de calendrier affiché (Prawn)"
-          - "Réordonnancement par glisser-déposer sur les courses, les tâches et les cartes de fidélité"
+          - "Export PDF de la liste de courses et du mois de calendrier affiché"
+          - "Réorganisation par glisser-déposer des courses, des tâches et des cartes de fidélité"
       reminders_notifications:
-        title: "Rappels & notifications"
+        title: "Rappels et notifications"
         items:
-          - "Notification, NotificationPreference, TaskReminder, EventReminder"
-          - "Jobs Solid Queue : Reminders::DeliverDue (échéances) et Reminders::DailyDigest (récapitulatif quotidien, anniversaires du jour inclus)"
-          - "Badge de notifications non lues et page de préférences par utilisateur"
+          - "Rappels d'échéance sur les tâches et les événements"
+          - "Récapitulatif quotidien, anniversaires du jour compris"
+          - "Centre de notifications et préférences propres à chaque membre"
       external_integrations_v1:
         title: "Intégrations externes"
         items:
-          - "Open Food Facts pour le scan de code-barres (Courses, Frigo)"
-          - "Géocodage Nominatim pour la recherche d'adresses"
-          - "Jours fériés France / Belgique / Suisse sur le Calendrier, pays configurable par foyer"
+          - "Scan de code-barres pour remplir les courses et le frigo"
+          - "Recherche d'adresses avec complétion automatique"
+          - "Jours fériés France, Belgique et Suisse sur le calendrier"
       reference_catalogs:
         title: "Catalogues de référence"
         items:
-          - "Catalogue d'enseignes de fidélité (une dizaine pour commencer, Fidélité)"
-          - "Catalogue de fiches d'entretien de plantes (6 fiches pour commencer, Extérieur)"
+          - "Catalogue d'enseignes pour les cartes de fidélité"
+          - "Fiches d'entretien prêtes à l'emploi pour les plantes"
       api_and_mobile_skeleton:
-        title: "API api/v1 & squelette mobile"
+        title: "API et première application mobile"
         items:
-          - "ApiToken, Api::V1::BaseController, endpoints REST pour Courses, Frigo, Recettes, Tâches, Calendrier"
-          - "Squelette client Flutter : écran de connexion, Courses en lecture seule"
-          - "Synchronisation calendrier externe : premier scaffold (Google/Microsoft/CalDAV), flux réel pas encore branché"
+          - "API ouverte par jeton personnel sur les cinq modules du quotidien"
+          - "Première application mobile : connexion et consultation des courses"
       governance:
-        title: "Gouvernance & documentation"
+        title: "Gouvernance et documentation"
         items:
-          - "LICENSE (AGPLv3), README, CONTRIBUTING, CHANGELOG"
-          - "Première version de la page Roadmap dans l'application"
+          - "Licence libre AGPLv3, guide de contribution et journal des versions"
+          - "Feuille de route publiée dans l'application"
       i18n:
-        title: "Internationalisation complète"
+        title: "Application bilingue"
         items:
-          - "Anglais par défaut, préférence de langue par utilisateur (français disponible)"
-          - "Les 25 modules migrés vers I18n"
+          - "Hestia disponible en français et en anglais"
+          - "Langue choisie par membre, indépendamment du foyer"
       reliability_quality:
-        title: "Fiabilité & qualité"
+        title: "Fiabilité"
         items:
-          - "SimpleCov (couverture de tests), Bullet (détection des requêtes N+1), Sentry (suivi d'erreurs en production)"
-          - "mission_control-jobs : interface d'administration Solid Queue sur /jobs, fermée par défaut"
-          - "Fuseau horaire explicite par foyer pour les calculs sensibles au jour (échéances, péremption, anniversaires)"
-          - "Vrais tests système Capybara et 77 nouveaux fichiers de tests comblant le manque de couverture"
+          - "Les pannes remontent dès qu'elles surviennent, plutôt qu'au prochain qui tombe dessus"
+          - "Fuseau horaire propre à chaque foyer pour les échéances, les péremptions et les anniversaires"
+          - "Chaque module revérifié automatiquement avant chaque livraison"
       external_calendar_sync_real:
-        title: "Synchronisation calendrier externe réelle"
+        title: "Synchronisation des calendriers externes"
         items:
-          - "Flux OAuth2 complet pour Google et Microsoft, avec rafraîchissement automatique du jeton expiré"
-          - "CalDAV (Apple, Nextcloud, Fastmail...) via une véritable requête REPORT calendar-query"
-          - "Jetons d'accès chiffrés au repos (Active Record Encryption)"
+          - "Connexion des agendas Google et Microsoft"
+          - "Compatibilité CalDAV (Apple, Nextcloud, Fastmail)"
+          - "Identifiants de calendrier chiffrés au repos"
       api_v1_full:
-        title: "API api/v1 étendue aux 25 modules"
+        title: "API étendue à tous les modules"
         items:
-          - "Les 20 modules restants exposés : Notes, Anniversaires, Adresses, Prestataires, Fidélité, Animaux, Véhicules, Cave à vin, Déchets, Bébé, Messages, Menu, Routines, Extérieur, Budget, Documents, Cadeaux, Cercles, Voyage, Bien-être"
-          - "Cloisonnement respecté pour les cas particuliers : Cercles par appartenance (non par foyer), Bien-être par utilisateur, Messages par participant à la conversation"
+          - "Les 25 modules accessibles depuis l'API"
+          - "Confidentialité préservée : Bien-être reste privé, Cercles et Messages limités à leurs membres"
       navigation_settings:
-        title: "Navigation & paramètres du foyer"
+        title: "Navigation et paramètres du foyer"
         items:
-          - "Barre latérale repliable, regroupée par thème"
-          - "Paramètres du foyer réunis en onglets : général, membres, notifications, API, sessions, modules, roadmap"
+          - "Barre latérale repliable, organisée par thème"
+          - "Paramètres du foyer réunis en onglets"
       recipe_catalog:
-        title: "Catalogue de recettes & découverte"
+        title: "Catalogue de recettes et découverte"
         items:
-          - "Catalogue partagé de recettes prêtes à cloner dans son livre (jusqu'à 95 recettes rédigées à la main)"
+          - "95 recettes prêtes à ajouter à son livre en un geste"
           - "Suggestions de recettes à partir du contenu du frigo"
       visual_polish_icons:
-        title: "Polish visuel transverse"
+        title: "Cohérence visuelle"
         items:
-          - "Remplacement des émojis par la bibliothèque d'icônes Lucide dans toute l'application"
-          - "Fil d'Ariane et pagination cohérents sur chaque page de module"
+          - "Jeu d'icônes homogène sur toute l'application"
+          - "Fil d'Ariane et pagination sur chaque module"
       ui_migration_a11y:
-        title: "Migration Ui:: complète & accessibilité"
+        title: "Interface unifiée et accessibilité"
         items:
-          - "Toutes les vues de l'application migrées vers les composants Ui::, avec tests dédiés"
-          - "Premiers correctifs d'accessibilité et correction du sélecteur de langue"
+          - "Les mêmes contrôles, espacements et couleurs d'une page à l'autre"
+          - "Premiers correctifs d'accessibilité"
       global_search:
-        title: "Recherche globale ⌘K"
+        title: "Recherche globale"
         items:
-          - "Palette de commandes ⌘K remplaçant le filtre de la barre latérale"
+          - "Palette de recherche instantanée au clavier (⌘K)"
           - "Couvre l'ensemble des modules activés par le foyer"
       refinement_wave_day1:
-        title: "Vague de perfectionnement — jour 1 : Courses, Calendrier, Tâches, Cadeaux, Cercles"
+        title: "Courses, Calendrier, Tâches, Cadeaux et Cercles approfondis"
         items:
-          - "Courses : tri par ordre de rayon réel, outils de gestion du catalogue"
-          - "Calendrier : vues Jour/Semaine, distinction occurrence unique vs série récurrente, anniversaires affichés"
-          - "Tâches : confirmations de suppression, réordonnancement au clavier, tri automatique"
-          - "Cadeaux : sécurisation de l'annulation de réservation publique, propriété et visibilité des listes"
-          - "Cercles : posts avec photo, correction de bugs de cohérence"
+          - "Courses : tri par ordre de rayon et gestion du catalogue de produits"
+          - "Calendrier : vues Jour et Semaine, gestion des séries récurrentes, anniversaires intégrés"
+          - "Tâches : réorganisation au clavier et tri automatique"
+          - "Cadeaux : contrôle de la propriété et de la visibilité des listes"
+          - "Cercles : publications avec photo"
       refinement_wave_day2a:
-        title: "Vague de perfectionnement — jour 2 : Frigo, Recettes, Notes, Anniversaires, Adresses, Prestataires"
+        title: "Frigo, Recettes, Notes, Anniversaires, Adresses et Prestataires approfondis"
         items:
-          - "Frigo : photos des plats préparés, onglets par emplacement, confirmations de suppression"
-          - "Recettes : vrai mode cuisine (écran maintenu allumé), photos, filtrage par catégorie"
-          - "Notes : filtres, mise en forme enrichie, liens"
-          - "Anniversaires : vue calendrier, durcissement, accessibilité"
-          - "Adresses : photo, accessibilité, interconnexions avec les autres modules"
-          - "Prestataires : types personnalisables, accessibilité, import"
+          - "Frigo : photos des plats préparés et rangement par emplacement"
+          - "Recettes : mode cuisine avec écran maintenu allumé, photos et filtres par catégorie"
+          - "Notes : mise en forme enrichie, filtres et liens"
+          - "Anniversaires : vue calendrier"
+          - "Adresses et Prestataires : photos, types personnalisables et import"
       refinement_wave_day2b:
-        title: "Vague de perfectionnement — jour 2 : Fidélité, Animaux, Véhicules, Cave à vin, Déchets, Bébé, Messages"
+        title: "Fidélité, Animaux, Véhicules, Cave à vin, Déchets, Bébé et Messages approfondis"
         items:
-          - "Fidélité : vrais codes-barres/QR détectés, mode kiosque plein écran en caisse"
-          - "Animaux, Véhicules, Cave à vin : édition, photo, temps réel, correctif de requêtes N+1"
-          - "Déchets : édition, lien avec le Calendrier, badges visuels"
-          - "Bébé : vrai minuteur d'allaitement/biberon, édition, interconnexions"
-          - "Messages : correctif temps réel, confidentialité, interconnexions"
+          - "Fidélité : codes-barres et QR affichés en plein écran pour le passage en caisse"
+          - "Animaux, Véhicules et Cave à vin : édition complète et photos"
+          - "Déchets : collectes reportées dans le calendrier"
+          - "Bébé : minuteur d'allaitement et de biberon"
+          - "Messages : confidentialité et mise à jour en temps réel"
       refinement_wave_day3a:
-        title: "Vague de perfectionnement — jour 3 : Menu, Routines, Extérieur, Budget, Documents, Voyage, Bien-être"
+        title: "Menu, Routines, Extérieur, Budget, Documents, Voyage et Bien-être approfondis"
         items:
-          - "Menu : réordonnancement, édition, export direct vers Courses"
-          - "Routines : historique des complétions, accessibilité, dark mode"
-          - "Extérieur : édition, historique, accessibilité, dark mode"
-          - "Budget : édition, lien avec Voyage, accessibilité, dark mode"
-          - "Documents : visionneuse PDF intégrée, partage, interconnexions"
-          - "Voyage : onglets à la carte, isolation du Menu par séjour, édition"
-          - "Bien-être : graphique de poids, édition, historique complet, accessibilité"
+          - "Menu : réorganisation et export direct vers les courses"
+          - "Routines : historique des réalisations"
+          - "Budget : suivi rattaché aux voyages"
+          - "Documents : lecteur PDF intégré et partage"
+          - "Voyage : onglets à la carte et menu isolé par séjour"
+          - "Bien-être : courbe de poids et historique complet"
       refinement_wave_day3b:
-        title: "Vague de perfectionnement — jour 3 : Fondations, Design system, Navigation"
+        title: "Gestion du foyer, apparence et navigation"
         items:
-          - "Fondations : widgets du tableau de bord, gestion des membres et du foyer (quitter, exclure, promouvoir, supprimer), sessions actives révocables"
-          - "Fondations : durcissement — mot de passe minimal 8 caractères, expiration configurable des jetons API"
-          - "Design system : tokens dark mode appliqués à l'ensemble de l'application, dernières chaînes traduites"
-          - "Navigation : couverture de recherche étendue, notifications cliquables vers leur source, page Roadmap reconstruite en chronologie"
+          - "Gestion des membres : quitter, exclure, promouvoir, et révoquer une session active"
+          - "Mode sombre appliqué à l'ensemble de l'application"
+          - "Notifications cliquables menant directement à leur source"
       account_privacy:
         title: "Compte utilisateur & confidentialité"
         items:
@@ -179,21 +175,17 @@ fr:
           - "Fil d'activité du foyer (qui a fait quoi, quand)"
           - "Export des données du foyer au format JSON/CSV"
       public_route_hardening:
-        title: "Durcissement des routes publiques"
+        title: "Sécurité des liens publics"
         items:
-          - "Limitation de débit sur la liste de cadeaux publique (g/:token) : une limite de lecture et une limite d'écriture distinctes sur la réservation, plus une page 429 aux couleurs du site"
-          - "Retrait du jeton d'API sans expiration : trois durées au choix, 90 jours par défaut"
-          - "Audit d'accessibilité automatisé : bin/rails visual:check mesure contraste, taille de cible et taille de police sur 273 routes × 2 thèmes × 2 largeurs, et test/lib/ porte les tests de contraste et d'accessibilité"
+          - "Listes de cadeaux publiques protégées contre les abus"
+          - "Jetons d'API à durée de vie limitée, 90 jours par défaut"
+          - "Contrôle d'accessibilité automatisé sur l'ensemble des pages, dans les deux thèmes"
       security_performance_hardening:
-        title: "Sécurité & performance mesurée"
+        title: "Sécurité et performance"
         items:
-          - "Content-Security-Policy réellement émise (elle était entièrement commentée), avec un nonce par requête sur script-src"
-          - "force_ssl / assume_ssl activables par FORCE_SSL, sans casser un accès en HTTP sur le réseau local"
-          - "Modules désactivés désormais fermés côté API JSON aussi : une seule table de correspondance pour le web et l'API, et un test qui parcourt les routes pour qu'aucun contrôleur ne reste non classé"
-          - "Mise en cache des appels Open Food Facts et Nominatim — premiers usages de Rails.cache, qui fixent les conventions de clé et de TTL"
-          - "Tableau de bord filtré en SQL : chaque encart demande à la base les cinq lignes qu'il affiche au lieu de charger la relation entière"
-          - "Expansion des récurrences bornée par la fenêtre de dates, et non plus par l'ancienneté de la série"
-          - "Chargement anticipé sur les listes qui en manquaient, énuméré en faisant échouer Bullet dans la suite de tests (BULLET_RAISE=1)"
+          - "Politique de sécurité du contenu appliquée, et HTTPS forçable sans casser l'accès en réseau local"
+          - "Modules désactivés fermés côté API comme côté web"
+          - "Tableau de bord, calendrier et listes sensiblement plus rapides"
       reference_catalog_growth:
         title: "Enrichir les catalogues & les automatismes"
         items:
@@ -201,28 +193,22 @@ fr:
           - "Étendre le catalogue de fidélité au-delà de la dizaine de départ"
           - "Fusion intelligente des ingrédients (doublons, conversion d'unités) lors de l'ajout d'une recette aux courses"
       design_system_measured:
-        title: "Design system : les écarts mesurés"
+        title: "Design system : les écarts corrigés"
         items:
-          - "Rapport visual:check rejoué sur 273 routes × 2 thèmes × 2 largeurs, et corrigé d'après ses chiffres plutôt que d'après une impression"
-          - "Ui::ItemComponent remis sur la grille de 4 px sans déplacer les listes de l'application : un plancher de hauteur garde la ligne courante au pixel près"
-          - "Échelle de z-index nommée (sticky, floating, overlay, toast) : l'ordre d'empilement était douze nombres choisis à la main et écrit nulle part"
-          - "Squelettes de chargement dans les turbo-frames différés, avec un libellé pour lecteur d'écran — une forme grise ne dit rien"
-          - "Documentation du design system rendue utilisable sur mobile : elle débordait de 80 px à 390 px, sur les pages mêmes qui décrivent l'échelle typographique"
-          - "icon: et icon_position: sur Ui::ButtonComponent, la taille du glyphe découlant de celle du bouton"
+          - "Contrastes, tailles de cible et typographie repris d'après une mesure sur toutes les pages"
+          - "Documentation du design system utilisable sur mobile"
+          - "Écrans de chargement à la place des zones vides"
       i18n_guardrails:
-        title: "Internationalisation : des garde-fous plutôt que de la discipline"
+        title: "Dates et traductions fiables"
         items:
-          - "Blocs date/time formats dans les deux locales : il n'en existait aucun, les appels l() tenaient par les défauts de rails-i18n"
-          - "51 strftime d'affichage migrés vers l() — ils codaient « %d/%m/%Y » en dur, donc un lecteur anglophone voyait 07/08/2026 pour le 7 août et lisait 8 juillet"
-          - "bin/rails i18n:check (et son job CI) échoue sur une traduction manquante et sur toute clé présente dans une seule des deux locales"
-          - "Un test refuse tout nouveau strftime d'affichage et vérifie qu'une date numérique se lit bien différemment en anglais et en français"
+          - "Dates affichées au format attendu par la langue du lecteur"
+          - "Contrôle automatique refusant toute traduction manquante"
       pwa:
-        title: "Application installable (PWA)"
+        title: "Application installable"
         items:
-          - "Manifeste et service worker branchés : routes, lien dans le layout, et une couleur de thème et des icônes carrées qui remplacent les valeurs du gabarit Rails"
-          - "Icônes 192/512 et variante « maskable » générées depuis le logo, et une icône vectorielle à la place du cercle rouge qui servait de favicon"
-          - "Page hors-ligne servie par le service worker quand une navigation échoue — seule ressource mise en cache, servir un tableau de bord périmé serait pire que ne rien servir"
-          - "Installable sur mobile et bureau en attendant la parité complète du client Flutter"
+          - "Hestia s'installe sur mobile et sur bureau comme une application"
+          - "Icônes et couleur de thème propres à Hestia"
+          - "Page hors-ligne lorsque la connexion manque"
       shared_link_controls:
         title: "Maîtrise des liens partagés"
         items:
