@@ -26,6 +26,17 @@ class ConfirmDialogTest < ActionDispatch::IntegrationTest
     assert_select "[data-action='click->confirm#cancel']"
   end
 
+  # role="alertdialog" is not self-labelling: without these the dialog announces
+  # as "alert dialog" and nothing more, on the one screen where the message is
+  # the decision being made.
+  test "it is named and described by the elements the controller writes into" do
+    get tasks_path
+
+    assert_select "dialog#global_confirm_dialog[aria-labelledby='global_confirm_dialog_title'][aria-describedby='global_confirm_dialog_message']"
+    assert_select "#global_confirm_dialog_title[data-confirm-target='title']"
+    assert_select "#global_confirm_dialog_message[data-confirm-target='message']"
+  end
+
   # A page still carrying turbo_confirm is the whole point — those call sites are
   # deliberately left alone, and the dialog is what changes their appearance.
   test "existing turbo_confirm call sites keep working through it" do

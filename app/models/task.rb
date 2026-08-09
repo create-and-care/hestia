@@ -27,20 +27,22 @@ class Task < ApplicationRecord
   # household on the dashboard to keep five of them.
   scope :overdue, -> { where(done: false).where(due_on: ...Date.current).order(:due_on) }
 
-  # Real-time: the card is targeted by its dom_id (replace/remove) and inserted into
-  # its category's column (append) — cf. kanban view. The column's "empty" placeholder
-  # has no dom_id of its own to be replaced, so it must be explicitly removed too, or it
-  # lingers next to the newly appended card.
-  after_create_commit  -> {
-    broadcast_remove_to household, target: "#{board_column_id}_empty"
-    broadcast_append_later_to household, target: board_column_id, partial: "tasks/task", locals: { task: self }
-  }
-  after_update_commit  -> { broadcast_replace_later_to household }
-  after_destroy_commit -> { broadcast_remove_to household }
-
-  def board_column_id
-    task_category_id ? "tasks_category_#{task_category_id}" : "tasks_uncategorized"
-  end
+  # Real-time: a page refresh (Turbo morphing) on a stream of its own, the way
+  # Calendar already does it.
+  #
+  # Targeting the card used to be enough, because everyone was looking at the
+  # same board: append into the category column, replace or remove by dom_id.
+  # There are two views now, chosen per session, and no single payload is right
+  # for both — #tasks_category_3 doesn't exist for a member reading the agenda,
+  # so their screen just never moved. And a payload cannot know which one to be:
+  # the same change puts a task in a different place depending on who is looking.
+  # Refreshing lets each member's own request answer that, and it also settles
+  # what a card-shaped broadcast never could — a completed task leaving its
+  # due-date bucket for "Done", and the bucket counts that go with it.
+  #
+  # Its own stream rather than the household's: a refresh reloads the whole page,
+  # and every other module's index is subscribed to that one too.
+  broadcasts_refreshes_to ->(task) { [ task.household, "tasks" ] }
 
   # Color code that evolves as the due date approaches, computed server-side.
   def due_status

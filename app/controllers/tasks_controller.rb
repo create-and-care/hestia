@@ -48,10 +48,7 @@ class TasksController < ApplicationController
       task_category: find_category(task_params[:task_category_id])
     )
 
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to tasks_path }
-    end
+    redirect_to tasks_path
   rescue ActiveRecord::RecordInvalid
     redirect_to tasks_path, alert: t(".alert")
   end
@@ -73,7 +70,10 @@ class TasksController < ApplicationController
 
     if @task.save
       respond_to do |format|
-        format.turbo_stream { head :no_content } # closes the modal; the card updates via the real-time stream
+        # The form lives in a turbo-frame inside the dialog, so a redirect would
+        # land back inside the frame. A refresh stream re-renders the page around
+        # it instead, and the dialog still closes on turbo:submit-end.
+        format.turbo_stream { render turbo_stream: turbo_stream.refresh }
         format.html { redirect_to tasks_path, notice: t(".notice") }
       end
     else
@@ -81,22 +81,19 @@ class TasksController < ApplicationController
     end
   end
 
+  # Both redirect rather than patching the one card they touched: completing a
+  # task moves it out of its due-date bucket and into "Done", and deleting the
+  # last of a bucket has to take the heading and the count with it. The page
+  # morphs on the way back (see index.html.erb), so the scroll position and the
+  # focused control survive it.
   def toggle
     Tasks::ToggleTask.call(task: @task)
-
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace(@task) }
-      format.html { redirect_to tasks_path }
-    end
+    redirect_to tasks_path
   end
 
   def destroy
     @task.destroy
-
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(@task) }
-      format.html { redirect_to tasks_path }
-    end
+    redirect_to tasks_path
   end
 
   def reorder
@@ -157,15 +154,28 @@ class TasksController < ApplicationController
       @task = Current.household.tasks.find(params[:id])
     end
 
-    # `ordered` is not decoration: "the task above" only means anything in the
-    # order the column is actually displayed in (#index sorts the same way).
-    # Without it the SELECT has no ORDER BY at all and Postgres is free to
-    # return rows in heap order, so move_up could swap with an arbitrary
-    # sibling — or, when the task landed last in that arbitrary order, do
-    # nothing at all.
+    # "The task above" means the one above *on the screen you are looking at*,
+    # and the two views do not group the same way — the board by category, the
+    # agenda by due date. Sending the same neighbours to both would let a move
+    # inside "Today" swap with a task from "Overdue" purely because they share a
+    # category, which is a move you can neither see nor undo.
+    #
+    # `ordered` is not decoration either: without it the SELECT has no ORDER BY
+    # at all and Postgres is free to return rows in heap order, so move_up could
+    # swap with an arbitrary sibling — or, when the task landed last in that
+    # arbitrary order, do nothing at all.
+    def visible_siblings
+      tasks = Current.household.tasks.general.ordered.to_a
+
+      if task_view_mode == "agenda"
+        agenda_groups(tasks).find { |_, group| group.include?(@task) }&.last || []
+      else
+        tasks.select { |task| task.done == @task.done && task.task_category_id == @task.task_category_id }
+      end
+    end
+
     def swap_with_sibling(direction)
-      siblings = Current.household.tasks.general.ordered
-        .where(done: @task.done, task_category_id: @task.task_category_id).to_a
+      siblings = visible_siblings
       index = siblings.index(@task)
       sibling = siblings[index + direction] if index && (index + direction).between?(0, siblings.size - 1)
       return unless sibling

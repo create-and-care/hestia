@@ -115,7 +115,7 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
         title: "Balayer", task_category_id: task_categories(:alpha_home).id, assignee_id: users(:one).id
       } }, as: :turbo_stream
     end
-    assert_response :success
+    assert_redirected_to tasks_path
     task = Task.find_by!(title: "Balayer")
     assert_equal task_categories(:alpha_home), task.task_category
     assert_equal users(:one), task.assignee
@@ -126,10 +126,12 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_nil Task.find_by(title: "Intrus").assignee_id
   end
 
+  # A redirect rather than a card-shaped stream: completing a task takes it out
+  # of its due-date bucket and into "Done", counts included.
   test "toggle flips the done state" do
     task = tasks(:alpha_dishes)
     patch toggle_task_path(task), as: :turbo_stream
-    assert_response :success
+    assert_redirected_to tasks_path
     assert task.reload.done
   end
 
@@ -140,10 +142,13 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Vaisselle du soir", task.reload.title
   end
 
-  test "update via turbo_stream returns no content so the modal can close, relying on the real-time stream to refresh the card" do
+  # The form is inside a turbo-frame, so a redirect would land back in the frame.
+  # A refresh re-renders the page around it; the dialog still closes on submit-end.
+  test "update via turbo_stream refreshes the page rather than patching the card" do
     task = tasks(:alpha_dishes)
     patch task_path(task), params: { task: { title: "Vaisselle du matin" } }, as: :turbo_stream
-    assert_response :no_content
+    assert_response :success
+    assert_turbo_stream action: "refresh"
     assert_equal "Vaisselle du matin", task.reload.title
   end
 
@@ -183,7 +188,7 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   test "destroy" do
     task = tasks(:alpha_dishes)
     delete task_path(task), as: :turbo_stream
-    assert_response :success
+    assert_redirected_to tasks_path
     assert_not Task.exists?(task.id)
   end
 
@@ -192,7 +197,11 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "move_up swaps position with the previous task in the same column" do
+  # "The task above" is whatever is above it on the screen you are looking at,
+  # and the two views do not group the same way — so which task that is depends
+  # on the view mode, and each of the two is asserted on its own terms below.
+  test "move_up swaps position with the previous task in the same board column" do
+    get tasks_path(view: "board")
     first = tasks(:alpha_dishes) # alpha_home, position 0
     second = households(:alpha).tasks.create!(title: "Ranger", task_category: task_categories(:alpha_home), position: 5)
 
@@ -202,13 +211,15 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_equal 5, first.reload.position
   end
 
-  test "move_up does nothing for the first task in its column" do
+  test "move_up does nothing for the first task in its board column" do
+    get tasks_path(view: "board")
     first = tasks(:alpha_dishes)
     patch move_up_task_path(first)
     assert_equal 0, first.reload.position
   end
 
-  test "move_down swaps position with the next task in the same column" do
+  test "move_down swaps position with the next task in the same board column" do
+    get tasks_path(view: "board")
     first = tasks(:alpha_dishes) # alpha_home, position 0
     second = households(:alpha).tasks.create!(title: "Ranger", task_category: task_categories(:alpha_home), position: 5)
 
@@ -216,6 +227,30 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal 5, first.reload.position
     assert_equal 0, second.reload.position
+  end
+
+  test "move_up swaps with the previous task in the same agenda bucket" do
+    get tasks_path(view: "agenda")
+    first = households(:alpha).tasks.create!(title: "Tôt", due_on: Date.current, position: 0)
+    second = households(:alpha).tasks.create!(title: "Tard", due_on: Date.current, position: 5)
+
+    patch move_up_task_path(second)
+
+    assert_equal 0, second.reload.position
+    assert_equal 5, first.reload.position
+  end
+
+  # The case the category-based lookup got wrong: same column on the board, two
+  # different sections in the agenda, and a swap you can neither see nor undo.
+  test "move_up leaves a task alone when its category sibling is in another agenda bucket" do
+    get tasks_path(view: "agenda")
+    category = task_categories(:alpha_home)
+    households(:alpha).tasks.create!(title: "En retard", task_category: category, due_on: Date.current - 3, position: 0)
+    today = households(:alpha).tasks.create!(title: "Aujourd'hui", task_category: category, due_on: Date.current, position: 5)
+
+    patch move_up_task_path(today)
+
+    assert_equal 5, today.reload.position
   end
 
   test "sort by due_date reorders unfinished tasks within a column without touching other columns" do

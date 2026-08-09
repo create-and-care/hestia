@@ -2,6 +2,8 @@ require "test_helper"
 require "turbo/broadcastable/test_helper"
 
 class TaskTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+  include Turbo::Broadcastable::TestHelper
   include Turbo::Broadcastable::TestHelper
 
   test "requires a title" do
@@ -28,11 +30,6 @@ class TaskTest < ActiveSupport::TestCase
     assert_equal :later, task.due_status
   end
 
-  test "board_column_id reflects the category" do
-    assert_equal "tasks_category_#{task_categories(:alpha_home).id}", tasks(:alpha_dishes).board_column_id
-    assert_equal "tasks_uncategorized", tasks(:alpha_call).board_column_id
-  end
-
   test "is scoped to its household" do
     assert_not_includes households(:alpha).tasks, tasks(:beta_report)
   end
@@ -43,17 +40,26 @@ class TaskTest < ActiveSupport::TestCase
     assert_nil task.reload.task_category_id
   end
 
-  test "removes the empty-column placeholder when the first task lands in a category" do
-    category = task_categories(:alpha_home)
+  # A card-shaped payload cannot be right for both views at once, and the agenda
+  # one it would have to target does not even exist in a board reader's DOM.
+  test "a mutation broadcasts a page refresh on the tasks stream" do
     household = households(:alpha)
-    household.tasks.where(task_category: category).destroy_all
 
-    streams = capture_turbo_stream_broadcasts household do
-      household.tasks.create!(title: "Nouvelle tâche", task_category: category)
+    streams = capture_turbo_stream_broadcasts [ household, "tasks" ] do
+      perform_enqueued_jobs { household.tasks.create!(title: "Nouvelle tâche", task_category: task_categories(:alpha_home)) }
     end
 
-    removal = streams.find { |stream| stream["action"] == "remove" }
-    assert_equal "tasks_category_#{category.id}_empty", removal["target"]
+    assert_equal [ "refresh" ], streams.map { |stream| stream["action"] }.uniq
+  end
+
+  # The household's own stream carries every other module's index, which would
+  # reload wholesale on any task change.
+  test "the refresh does not go out on the household's general stream" do
+    household = households(:alpha)
+
+    assert_no_turbo_stream_broadcasts household do
+      perform_enqueued_jobs { household.tasks.create!(title: "Nouvelle tâche") }
+    end
   end
 
   test "overdue matches exactly the tasks due_status flags as overdue" do

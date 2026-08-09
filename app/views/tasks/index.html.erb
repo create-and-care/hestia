@@ -1,5 +1,8 @@
 <% content_for :title, t(".title") %>
-<%= turbo_stream_from Current.household %>
+<% content_for :head do %>
+  <meta name="turbo-refresh-method" content="morph">
+<% end %>
+<%= turbo_stream_from Current.household, "tasks" %>
 
 <div class="mt-10 max-w-5xl mx-auto px-4">
   <div class="mb-4"><%= module_breadcrumb(:tasks) %></div>
