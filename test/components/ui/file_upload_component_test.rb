@@ -56,6 +56,12 @@ class Ui::FileUploadComponentTest < ViewComponent::TestCase
   # The dropzone's prompt and its remove button were written in French, in
   # English-by-default markup, and read that way in both locales. i18n:check
   # could not see it: there was no key to be missing.
+  #
+  # Each string is asserted against the state that actually shows it, which
+  # is why there are two renders: an existing file is what reveals the remove
+  # button, and it is also what hides the prompt. Reading both off one render
+  # means asserting the prompt through visible: :all — which passes just as
+  # well when the prompt is never shown to anyone.
   test "the dropzone prompt and the remove button read in the current locale" do
     render_inline(Ui::FileUploadComponent.new(name: "photo"))
 
