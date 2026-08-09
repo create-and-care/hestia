@@ -24,6 +24,28 @@ class ShoppingListsControllerTest < ActionDispatch::IntegrationTest
     assert_select "div.overflow-hidden.rounded-lg.border"
   end
 
+  test "show renders the empty state only while the list has no items" do
+    list = households(:alpha).shopping_lists.create!(name: "Vide")
+
+    get shopping_list_path(list)
+    assert_response :success
+    assert_body_includes I18n.t("shopping_lists.show.no_items")
+
+    list.items.create!(name: "Pain")
+    get shopping_list_path(list)
+    assert_not_includes @response.body, I18n.t("shopping_lists.show.no_items")
+  end
+
+  test "the PDF export is offered on an empty list too" do
+    list = households(:alpha).shopping_lists.create!(name: "Vide")
+
+    get shopping_list_path(list)
+    assert_select "a[href=?]:not([disabled])", shopping_list_path(list, format: :pdf)
+
+    get shopping_list_path(list, format: :pdf)
+    assert_response :success
+  end
+
   test "show renders the list and wires the real-time stream" do
     get shopping_list_path(shopping_lists(:alpha_groceries))
     assert_response :success

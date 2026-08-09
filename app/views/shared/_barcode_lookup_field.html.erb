@@ -1,9 +1,14 @@
-<div class="w-36">
+<%# The wrapper width is the caller's call — `w-36` only remains the default so
+    the existing callers keep their layout. 144px is narrower than the 13-digit
+    barcode the field accepts, so a form with room to spare should pass its own. %>
+<div class="<%= local_assigns.fetch(:width_class, "w-36") %>">
   <%= render Ui::LabelComponent.new { t("shared.barcode_lookup_field.label") } %>
   <div class="mt-1 flex gap-1">
-    <%= render Ui::InputComponent.new(placeholder: t("shared.barcode_lookup_field.placeholder"),
-          html_options: { autocomplete: "off", data: { barcode_lookup_target: "barcode" } }) %>
+    <div class="min-w-0 flex-1">
+      <%= render Ui::InputComponent.new(placeholder: t("shared.barcode_lookup_field.placeholder"),
+            html_options: { autocomplete: "off", data: { barcode_lookup_target: "barcode" } }) %>
+    </div>
     <%= render(Ui::ButtonComponent.new(type: "button", variant: :outline, size: :icon,
-          html_options: { data: { action: "click->barcode-lookup#lookup" } })) { lucide_icon("search", css_class: "size-4") } %>
+          html_options: { class: "shrink-0", data: { action: "click->barcode-lookup#lookup" } })) { lucide_icon("search", css_class: "size-4") } %>
   </div>
 </div>

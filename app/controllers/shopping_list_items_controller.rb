@@ -37,13 +37,11 @@ class ShoppingListItemsController < ApplicationController
     end
   end
 
+  # The list rather than the row: removing the last item of an aisle has to take
+  # that aisle's band with it, and empty the container so the empty state shows.
   def destroy
     @item.destroy
-
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(@item) }
-      format.html { redirect_to @shopping_list }
-    end
+    respond_with_list
   end
 
   # Drag-and-drop reordering: applies the order of the received ids.
@@ -54,11 +52,20 @@ class ShoppingListItemsController < ApplicationController
 
   # Purchased item → stored in the fridge then removed from the list (Shopping → Fridge bridge).
   def move_to_fridge
+    name = @item.name
     Frigo::AddFromShoppingListItem.call(shopping_list_item: @item, expires_on: params[:expires_on].presence)
 
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(@item) }
-      format.html { redirect_to @shopping_list, notice: t(".notice") }
+      # The row simply vanishes otherwise, which is indistinguishable from
+      # having deleted it — say where it went.
+      format.turbo_stream do
+        flash.now[:notice] = t(".notice", name: name)
+        render turbo_stream: [
+          list_stream,
+          turbo_stream.append("flash_relay", partial: "shared/flash")
+        ]
+      end
+      format.html { redirect_to @shopping_list, notice: t(".notice", name: name) }
     end
   end
 
@@ -86,9 +93,13 @@ class ShoppingListItemsController < ApplicationController
   private
     def respond_with_list
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.update("shopping_list_items", partial: "shopping_list_items/list", locals: { shopping_list: @shopping_list }) }
+        format.turbo_stream { render turbo_stream: list_stream }
         format.html { redirect_to @shopping_list }
       end
+    end
+
+    def list_stream
+      turbo_stream.update("shopping_list_items", partial: "shopping_list_items/list", locals: { shopping_list: @shopping_list })
     end
 
     def swap_with_sibling(direction)

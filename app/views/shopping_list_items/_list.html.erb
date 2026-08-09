@@ -1,3 +1,8 @@
+<%# The whole container is what gets re-rendered on every mutation, by the
+    controller for whoever acted and by the broadcast for everyone else (see
+    ShoppingListItem). So the empty state and the aisle bands are decided
+    together, by one pass over the current items — which is what stopped
+    "Aucun article pour l'instant" sitting above the first item until a refresh. %>
 <% if shopping_list.items.any? %>
   <% shopping_list.items_by_rayon.each do |rayon, items| %>
     <%# A band inside the list rather than a heading floating above it, now that
