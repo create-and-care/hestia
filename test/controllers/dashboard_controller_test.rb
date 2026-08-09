@@ -19,7 +19,7 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
 
     get root_path
     assert_response :success
-    assert_select "h1", text: households(:alpha).name
+    assert_select "h2", text: households(:alpha).name
     assert_select "code", text: households(:alpha).invite_code
   end
 

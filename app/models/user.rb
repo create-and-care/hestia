@@ -27,9 +27,11 @@ class User < ApplicationRecord
   has_many :api_tokens, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+  normalizes :avatar_tint, with: ->(t) { t.presence }
 
   validates :name, presence: true
   validates :email_address, presence: true, uniqueness: true
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }
   validates :password, length: { minimum: 8 }, allow_nil: true
+  validates :avatar_tint, inclusion: { in: Ui::AvatarComponent::MODULES.map(&:to_s) }, allow_nil: true
 end

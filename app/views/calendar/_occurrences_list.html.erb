@@ -87,7 +87,7 @@
             <% item.with_trailing do %>
               <div class="flex -space-x-1.5">
                 <% occurrence.participants.first(4).each do |participant| %>
-                  <%= render(Ui::AvatarComponent.new(alt: participant.name.presence || participant.email_address, size: :sm)) %>
+                  <%= render(Ui::AvatarComponent.new(alt: participant.name.presence || participant.email_address, size: :sm, tint: participant.avatar_tint)) %>
                 <% end %>
               </div>
             <% end %>

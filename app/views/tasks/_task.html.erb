@@ -33,7 +33,7 @@
       <div class="mt-1 flex flex-wrap items-center gap-1 text-xs">
         <% if task.assignee %>
           <span class="flex items-center gap-1 text-secondary">
-            <%= render(Ui::AvatarComponent.new(alt: task.assignee.name.presence || task.assignee.email_address, size: :sm)) %>
+            <%= render(Ui::AvatarComponent.new(alt: task.assignee.name.presence || task.assignee.email_address, size: :sm, tint: task.assignee.avatar_tint)) %>
             <%= task.assignee.name.presence || task.assignee.email_address %>
           </span>
         <% end %>

@@ -9,7 +9,7 @@
       <h1 class="flex items-center gap-2 text-2xl font-semibold"><%= lucide_icon("users", css_class: "size-6") %> <%= @circle.name %></h1>
       <div class="mt-1 flex -space-x-2">
         <% @circle.members.each do |member| %>
-          <%= render(Ui::AvatarComponent.new(alt: member.name.presence || member.email_address, size: :sm)) %>
+          <%= render(Ui::AvatarComponent.new(alt: member.name.presence || member.email_address, size: :sm, tint: member.avatar_tint)) %>
         <% end %>
       </div>
       <p class="mt-1 text-sm text-secondary">

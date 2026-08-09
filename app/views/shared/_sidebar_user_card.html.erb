@@ -7,7 +7,7 @@
     is the only route to settings and sign-out now, so dropping it at 64px would
     strand anyone who works with the sidebar collapsed. %>
 <div class="<%= sidebar_card_class("flex flex-row items-center gap-2 group-data-[collapsed=true]:flex-col") %>">
-  <%= render Ui::AvatarComponent.new(alt: Current.user.name.presence || Current.user.email_address, size: :sm) %>
+  <%= render Ui::AvatarComponent.new(alt: Current.user.name.presence || Current.user.email_address, size: :sm, tint: Current.user.avatar_tint) %>
   <div class="min-w-0 flex-1 group-data-[collapsed=true]:hidden">
     <p class="truncate text-sm font-medium text-primary"><%= Current.user.name.presence || Current.user.email_address %></p>
     <p class="truncate text-xs text-secondary"><%= Current.user.email_address %></p>

@@ -252,6 +252,7 @@ fr:
         items:
           - "Thèmes personnalisés par foyer : toutes les couleurs passent déjà par une variable CSS derrière l'indirection --brand/--accent, la moitié du travail est faite — il manque la persistance et un sélecteur, sachant que le contrôle de contraste devient alors une contrainte à l'exécution et non plus une vérification de build"
           - "Réordonnancement de la sidebar : SortableJS est déjà câblé aux listes, aux tâches, à la fidélité et au menu, mais pas à la navigation"
+          - "Séries et jalons dans CelebrationMoment : le composant gère déjà les types :streak et :milestone, mais aucun modèle de données ne suit une série maintenue ou un jalon atteint — seuls les anniversaires sont branchés aujourd'hui"
       health_records:
         title: "Suivi de santé des personnes"
         items:
