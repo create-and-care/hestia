@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { DURATION } from "../utils/motion"
 import { positionFloating } from "../utils/floating"
 import { openPanel, closePanel } from "../utils/transition"
 
@@ -18,9 +19,9 @@ export default class extends Controller {
   hide() {
     clearTimeout(this.showTimeout)
     this.hideTimeout = setTimeout(() => {
-      closePanel(this.panelTarget, { duration: 100 })
+      closePanel(this.panelTarget, { duration: DURATION.TOOLTIP })
       document.removeEventListener("keydown", this.onKeydown)
-    }, 80)
+    }, DURATION.TOOLTIP_GRACE)
   }
 
   // WAI-ARIA APG: Escape dismisses the tooltip without moving focus away

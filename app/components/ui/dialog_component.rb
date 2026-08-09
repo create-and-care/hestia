@@ -7,10 +7,10 @@ module Ui
 
     POSITION_CLASSES = {
       center: "m-auto rounded-lg w-full",
-      high: "mt-[25vh] mb-auto mx-auto rounded-lg w-full",
+      high: "mt-[var(--panel-h-offset)] mb-auto mx-auto rounded-lg w-full",
       right: "ml-auto mr-0 h-full w-full rounded-l-lg",
       left: "mr-auto ml-0 h-full w-full rounded-r-lg",
-      bottom: "mt-auto mb-0 w-full rounded-t-lg max-h-[80vh]"
+      bottom: "mt-auto mb-0 w-full rounded-t-lg max-h-[var(--panel-h)]"
     }.freeze
 
     # The max-width used to be baked into POSITION_CLASSES, which meant every
@@ -28,13 +28,13 @@ module Ui
     }.freeze
 
     # The content wrapper's height rule follows the placement. A side sheet's
-    # <dialog> is already h-full, so capping its content at 80vh left the panel
+    # <dialog> is already h-full, so capping its content at --panel-h left the panel
     # taller than anything inside it — invisible while the drawer's content was
     # the same white as the dialog, obvious the moment it paints its own
     # background (the mobile nav drawer). Everything else is anchored to one
     # edge and grows from its content, so there the cap is what does the work.
     CONTENT_CLASSES = {
-      center: "max-h-[80vh]", high: "max-h-[80vh]", bottom: "max-h-[80vh]",
+      center: "max-h-[var(--panel-h)]", high: "max-h-[var(--panel-h-high)]", bottom: "max-h-[var(--panel-h)]",
       right: "h-full min-h-0", left: "h-full min-h-0"
     }.freeze
 

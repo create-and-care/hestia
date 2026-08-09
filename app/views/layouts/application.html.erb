@@ -27,7 +27,10 @@
     <%# iOS reads none of the manifest's colours; it needs its own tag. It also
         needs a square apple-touch-icon, and the /icon.png offered here was
         480×360 — hence /icon-192.png below, generated from the same logo. %>
-    <meta name="theme-color" content="#A85030">
+    <%# Read by the OS, not by the CSS engine, so it cannot be var(--brand) —
+        resolved from the token instead of copied, or changing the brand leaves
+        the installed app's chrome on the old colour with nothing to catch it. %>
+    <meta name="theme-color" content="<%= DesignTokens.hex("brand") %>">
 
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">

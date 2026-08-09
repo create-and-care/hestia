@@ -47,8 +47,9 @@ class Ui::DataTableComponentTest < ViewComponent::TestCase
 
     assert_selector "div[data-controller='data-table'][data-data-table-page-size-value='2']"
     assert_selector "span[data-data-table-target='pageLabel']"
-    assert_selector "button[data-data-table-target='prevButton'][data-action='click->data-table#previous']", text: "Précédent"
-    assert_selector "button[data-data-table-target='nextButton'][data-action='click->data-table#next']", text: "Suivant"
+    # Through I18n, not the French literal the component used to hardcode.
+    assert_selector "button[data-data-table-target='prevButton'][data-action='click->data-table#previous']", text: I18n.t("ui.data_table.previous")
+    assert_selector "button[data-data-table-target='nextButton'][data-action='click->data-table#next']", text: I18n.t("ui.data_table.next")
   end
 
   test "defaults the page size to 5" do
