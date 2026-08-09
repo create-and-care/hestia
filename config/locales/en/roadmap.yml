@@ -85,9 +85,9 @@ en:
       reliability_quality:
         title: "Reliability"
         items:
-          - "Error tracking in production"
+          - "Breakages reported the moment they happen, rather than the next time someone runs into one"
           - "A time zone per household for due dates, expiry dates and birthdays"
-          - "Test coverage extended across the whole app"
+          - "Every module re-checked automatically before each release"
       external_calendar_sync_real:
         title: "External calendar sync"
         items:
@@ -117,7 +117,7 @@ en:
       ui_migration_a11y:
         title: "Unified interface and accessibility"
         items:
-          - "Every page moved onto the component library"
+          - "The same controls, spacing and colours from one page to the next"
           - "First round of accessibility fixes"
       global_search:
         title: "Global search"

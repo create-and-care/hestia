@@ -3,8 +3,8 @@ fr:
     show:
       title: Feuille de route
       description: >-
-        Ce qui arrive ensuite, puis tout ce qui a déjà été livré, du plus récent au premier
-        jour. Cette page est l'unique source de vérité sur l'avancement de Hestia ; elle remplace
+        Ce qui arrive ensuite, puis tout ce qui a déjà été livré, du plus récent au plus
+        ancien. Cette page est l'unique source de vérité sur l'avancement de Hestia ; elle remplace
         la Spécification et le Plan d'implémentation d'origine, dont le contenu a été entièrement
         repris ici. Le détail technique de chaque version vit dans CHANGELOG.md.
       status:
@@ -85,15 +85,15 @@ fr:
       reliability_quality:
         title: "Fiabilité"
         items:
-          - "Suivi des erreurs en production"
+          - "Les pannes remontent dès qu'elles surviennent, plutôt qu'au prochain qui tombe dessus"
           - "Fuseau horaire propre à chaque foyer pour les échéances, les péremptions et les anniversaires"
-          - "Couverture de tests étendue à l'ensemble de l'application"
+          - "Chaque module revérifié automatiquement avant chaque livraison"
       external_calendar_sync_real:
         title: "Synchronisation des calendriers externes"
         items:
           - "Connexion des agendas Google et Microsoft"
           - "Compatibilité CalDAV (Apple, Nextcloud, Fastmail)"
-          - "Accès aux agendas chiffrés au repos"
+          - "Identifiants de calendrier chiffrés au repos"
       api_v1_full:
         title: "API étendue à tous les modules"
         items:
@@ -117,7 +117,7 @@ fr:
       ui_migration_a11y:
         title: "Interface unifiée et accessibilité"
         items:
-          - "Toutes les pages passées sur la bibliothèque de composants"
+          - "Les mêmes contrôles, espacements et couleurs d'une page à l'autre"
           - "Premiers correctifs d'accessibilité"
       global_search:
         title: "Recherche globale"
