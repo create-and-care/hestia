@@ -34,7 +34,7 @@ class DashboardController < ApplicationController
 
     if @household.module_enabled?("fridge")
       # expires_on is always present here: `expiring` excludes NULLs, and
-      # expiration_status only returns :expired/:urgent/:soon when it is set.
+      # expiration_status only returns :expired/:destructive/:soon when it is set.
       @fridge_items_expiring = @household.fridge_items.expiring.limit(WIDGET_LIMIT)
     end
 

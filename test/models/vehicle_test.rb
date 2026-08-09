@@ -16,7 +16,7 @@ class VehicleTest < ActiveSupport::TestCase
     assert_equal :expired, vehicle.inspection_status
 
     vehicle.inspection_expires_on = Date.current + 20
-    assert_equal :urgent, vehicle.inspection_status
+    assert_equal :destructive, vehicle.inspection_status
 
     vehicle.inspection_expires_on = Date.current + 60
     assert_equal :soon, vehicle.inspection_status

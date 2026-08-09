@@ -70,7 +70,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "distinguishes this week from this month with different badge colors" do
-    assert_equal :urgent, ContactsHelper::PROXIMITY_VARIANTS[:week]
+    assert_equal :destructive, ContactsHelper::PROXIMITY_VARIANTS[:week]
     assert_equal :warning, ContactsHelper::PROXIMITY_VARIANTS[:month]
   end
 

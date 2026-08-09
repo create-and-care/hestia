@@ -21,7 +21,7 @@ class TaskTest < ActiveSupport::TestCase
     assert_equal :overdue, task.due_status
 
     task.due_on = Date.current + 1
-    assert_equal :urgent, task.due_status
+    assert_equal :destructive, task.due_status
 
     task.due_on = Date.current + 5
     assert_equal :soon, task.due_status

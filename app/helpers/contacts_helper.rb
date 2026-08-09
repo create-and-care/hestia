@@ -1,7 +1,7 @@
 module ContactsHelper
   PROXIMITY_VARIANTS = {
     today: :destructive,
-    week:  :urgent,
+    week:  :destructive,
     month: :warning,
     later: :secondary,
     none:  :outline

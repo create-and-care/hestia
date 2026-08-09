@@ -10,7 +10,7 @@ module WasteHelper
     "ordures" => :secondary,
     "recyclage" => :warning,
     "verre" => :success,
-    "compost" => :urgent,
+    "compost" => :destructive,
     "encombrants" => :default
   }.freeze
 
