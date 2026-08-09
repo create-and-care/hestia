@@ -59,11 +59,24 @@
   <div class="space-y-3">
     <% @days.each do |day| %>
       <%= render(Ui::CardComponent.new) do %>
+        <% missing = missing_meal_types(day) %>
         <%= render(Ui::CollapsibleComponent.new(id: "menu_day_#{day.iso8601}", open: day == Date.current)) do |collapsible| %>
           <% collapsible.with_trigger do %>
-            <div class="flex w-full items-center justify-between text-left">
+            <div class="flex w-full items-center gap-2 text-left">
               <span class="text-sm font-semibold"><%= day_name(day) %> <span class="text-subdued"><%= l(day, format: :numeric_short) %></span></span>
-              <%= lucide_icon("chevron-down", css_class: "size-4 shrink-0 text-subdued transition-transform group-aria-expanded:rotate-180") %>
+              <%# On the day's own line rather than inside the panel: which days
+                  are short of a meal is the reason to open one, so it has to be
+                  readable while every day is collapsed. The detail rides along as
+                  a title — the tooltip it replaces was focusable, and nesting a
+                  focusable element inside the trigger <button> is not valid. %>
+              <% if missing.any? %>
+                <span class="ml-auto flex shrink-0 items-center gap-1.5 text-xs text-warning"
+                  title="<%= t(".missing_meals", meals: missing.map { |type| meal_type_label(type) }.join(", ")) %>">
+                  <%= lucide_icon("info", css_class: "size-3.5") %>
+                  <%= t(".missing_meals_label") %>
+                </span>
+              <% end %>
+              <%= lucide_icon("chevron-down", css_class: "size-4 shrink-0 text-subdued transition-transform group-aria-expanded:rotate-180 #{"ml-auto" if missing.empty?}") %>
             </div>
           <% end %>
 
@@ -113,16 +126,6 @@
             <%= render(Ui::EmptyComponent.new) do |empty| %>
               <% empty.with_description { t(".empty_day") } %>
             <% end %>
-          <% end %>
-
-          <% if (missing = missing_meal_types(day)).any? %>
-            <p class="mt-2 flex items-center gap-1.5 text-xs text-warning">
-              <%= render(Ui::TooltipComponent.new) do |tooltip| %>
-                <% tooltip.with_trigger { lucide_icon("info", css_class: "size-3.5") } %>
-                <%= t(".missing_meals", meals: missing.map { |type| meal_type_label(type) }.join(", ")) %>
-              <% end %>
-              <%= t(".missing_meals_label") %>
-            </p>
           <% end %>
 
           <%= render(Ui::DialogComponent.new) do |dialog| %>
