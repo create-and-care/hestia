@@ -11,7 +11,7 @@ module Perishable
   SOON_DAYS = 3   # 2 to 3 days
 
   included do
-    # Everything :expired, :urgent or :soon — i.e. anything worth showing on
+    # Everything :expired, :destructive or :soon — i.e. anything worth showing on
     # the dashboard — soonest first, without loading the whole larder.
     scope :expiring, -> { where(expires_on: ..(Date.current + SOON_DAYS)).order(:expires_on) }
   end
@@ -23,7 +23,7 @@ module Perishable
     if days_left.negative?
       :expired
     elsif days_left <= URGENT_DAYS
-      :urgent
+      :destructive
     elsif days_left <= SOON_DAYS
       :soon
     else

@@ -1,10 +1,10 @@
 module VehiclesHelper
-  # Maps inspection status to a Ui::BadgeComponent variant. `urgent` (<30 days) now gets its
-  # own :urgent variant (added for Tasks/Fridge) instead of collapsing onto the same :warning
+  # Maps inspection status to a Ui::BadgeComponent variant. `destructive` (<30 days) now gets its
+  # own :destructive variant (added for Tasks/Fridge) instead of collapsing onto the same :warning
   # as `soon` (<90 days) — the spec calls for 4 distinct colors, not 3.
   INSPECTION_BADGE_VARIANTS = {
     expired: :destructive,
-    urgent:  :urgent,
+    urgent:  :destructive,
     soon:    :warning,
     ok:      :success,
     none:    :secondary

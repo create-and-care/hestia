@@ -52,7 +52,7 @@ class Task < ApplicationRecord
     if days_left.negative?
       :overdue
     elsif days_left <= URGENT_DAYS
-      :urgent
+      :destructive
     elsif days_left <= SOON_DAYS
       :soon
     else

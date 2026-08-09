@@ -16,7 +16,7 @@ class Vehicle < ApplicationRecord
   INSPECTION_SOON_DAYS = 90
 
   scope :ordered, -> { order(:name) }
-  # :expired or :urgent, decided in SQL. The dashboard used to load every
+  # :expired or :destructive, decided in SQL. The dashboard used to load every
   # vehicle of the household and #select in Ruby.
   scope :inspection_due, -> {
     where(inspection_expires_on: ..(Date.current + INSPECTION_URGENT_DAYS)).order(:inspection_expires_on)
@@ -32,7 +32,7 @@ class Vehicle < ApplicationRecord
     if days_left.negative?
       :expired
     elsif days_left <= INSPECTION_URGENT_DAYS
-      :urgent
+      :destructive
     elsif days_left <= INSPECTION_SOON_DAYS
       :soon
     else

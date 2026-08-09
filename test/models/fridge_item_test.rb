@@ -20,10 +20,10 @@ class FridgeItemTest < ActiveSupport::TestCase
     assert_equal :expired, item.expiration_status
 
     item.expires_on = Date.current
-    assert_equal :urgent, item.expiration_status
+    assert_equal :destructive, item.expiration_status
 
     item.expires_on = Date.current + 1
-    assert_equal :urgent, item.expiration_status
+    assert_equal :destructive, item.expiration_status
 
     item.expires_on = Date.current + 3
     assert_equal :soon, item.expiration_status
