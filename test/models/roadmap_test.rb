@@ -33,6 +33,16 @@ class RoadmapTest < ActiveSupport::TestCase
     assert_equal statuses.sort_by { |status| status == :done ? 0 : 1 }, statuses
   end
 
+  # IconHelper#lucide_icon reads the SVG off disk, so a name that isn't
+  # vendored raises Errno::ENOENT when /roadmap renders. The assertions above
+  # only check the name is present, not that it resolves to a file.
+  test "every milestone icon is vendored under app/assets/icons/lucide" do
+    Roadmap::MILESTONE_ICONS.each do |slug, icon|
+      assert IconHelper::LUCIDE_ICONS_DIR.join("#{icon}.svg").exist?,
+             "#{slug} points at #{icon}.svg, which is not vendored under app/assets/icons/lucide"
+    end
+  end
+
   test "milestones are translated when the locale is French" do
     I18n.with_locale(:fr) do
       assert_equal "Fondations", Roadmap.milestones.first[:title]

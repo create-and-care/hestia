@@ -169,10 +169,16 @@ en:
           - "User account deletion"
           - "Personal-data export, for portability even when self-hosted"
           - "Per-module data reset: today it is all or nothing (delete the household), and turning a module off leaves its rows in place and invisible"
+      security_audit_trail:
+        title: "A security log, not a surveillance one"
+        items:
+          - "Sign-ins, revoked sessions, API tokens created and deleted, role changes, exports and household deletions — the only trace of any of these today is api_tokens.last_used_at"
+          - "Admin-visible and deliberately narrow: it records who held the keys, not who edited the shopping list — the household-facing answer to that is the activity feed in \"Dashboard: activity & export\""
+          - "No per-member completion statistics: a house is a place to coordinate, not a place to be scored"
       household_activity_export:
         title: "Dashboard: activity & export"
         items:
-          - "A household activity feed (who did what, when)"
+          - "A household activity feed (who did what, when), household-facing and distinct from the admin security log"
           - "Household data export in JSON/CSV"
       public_route_hardening:
         title: "Public link security"
@@ -221,6 +227,18 @@ en:
           - "A belongings inventory (photo, value, purchase date, warranty), for insurance and resale"
           - "French school-holiday calendar (zones A/B/C) — public holidays are covered, what shapes a family's year is not"
           - "Duplicate detection when adding to the shopping list, and suggestions drawn from the purchase history already in the database"
+      today_view:
+        title: "Today: one page, one question"
+        items:
+          - "A single page answering \"what needs doing today?\": DashboardController already computes overdue tasks, expiring fridge items, plants needing care and the next seven days of events — as seven module-shaped widgets, never as one day"
+          - "CalendarController already merges tasks, pet vaccinations, plant care, waste collections, birthdays and trip days into a single occurrence stream — the dashboard cannot see it"
+          - "Ordered by time of day rather than by module, so the page reads like a day and not like a menu"
+      quick_capture:
+        title: "Capture first, file later"
+        items:
+          - "One box that takes a sentence and offers where it belongs: Notes::PromoteToTask already does exactly this for one pair, and Ui::CommandComponent already provides the palette that would host it"
+          - "Rule-based rather than a model call: a date in the text offers a reminder, a known product offers the shopping list, everything else stays a note"
+          - "Unfiled items stay visible until they are filed — a capture box that silently swallows things is worse than none"
       wired_patterns:
         title: "Patterns already in the repo, finally wired up"
         items:
@@ -232,16 +250,45 @@ en:
         items:
           - "Subtasks, priority and tags on tasks — mitigated today by kanban categories, an emoji and a derived due status"
           - "RRULE-grade recurrence: the Recurrence service covers daily/weekly/monthly/yearly and nothing else — no \"second Tuesday\", no occurrence count, no multi-day rule"
+      shared_responsibility:
+        title: "Whose turn it is"
+        items:
+          - "An owner on tasks, routines, plant care and pet care: everything is household-wide today, so nothing separates \"someone should\" from \"you should\""
+          - "Automatic rotation between members week by week, reusing the Recurrence service that already drives repeating tasks"
+          - "Answers \"whose turn is it?\" without ever answering \"who does less?\""
       cooking_and_shopping:
         title: "Cooking and shopping, past the basics"
         items:
           - "Recipe search by ingredient — a joins(:recipe_ingredients) in a filter chain that already exists; \"what can I cook with chicken?\" returns nothing today"
           - "A price on shopping list items, with a running total"
+          - "What a recipe costs before you cook it, once shopping list items carry a price — the estimate is the reason to give them one"
+      backup_and_restore:
+        title: "Backups a household can actually restore"
+        items:
+          - "Scheduled dumps to a local path or S3, on Solid Queue like every other recurring job — there is no backup tooling in the repo at all today, not a rake task, not a documented pg_dump"
+          - "Restore from the interface, and a restore that has been exercised: a backup never restored is not a backup"
+          - "Uploaded files included, not the database alone — Active Storage attachments live outside the dump"
+      instance_operations:
+        title: "Knowing the instance is healthy"
+        items:
+          - "A health page beyond /up, which only proves Rails booted: database, storage, background jobs, mail, HTTPS, disk, backups and OAuth encryption keys, each with what to do when it is red"
+          - "A version the operator can see — there is no VERSION constant, no git tag and no in-app version, so \"which Hestia am I running?\" has no answer today"
+          - "A docker-compose that starts Hestia rather than PostgreSQL alone, and a config/deploy.yml that is not the untouched Kamal scaffold still pointing at 192.168.0.1"
+      api_as_a_product:
+        title: "The API treated as a product"
+        items:
+          - "A generated OpenAPI description: 29 controllers serialize through as_json(only:) and nothing describes the surface, so the mobile client and any third party read the Ruby to learn the shape"
+          - "Api::V1::BaseController pins Current.household to households.first, so a member of two households can never reach the second — and the fixtures, one membership per user, cannot catch it"
+          - "Rate limiting on tokens (the web's three authentication entry points have it, the API has none), idempotency keys for retried writes, and a total count on paginated responses"
+          - "Writes past the handful that exist: the surface is read-mostly, with no update or destroy anywhere"
       notifications_automation:
         title: "Notifications and outbound automation"
         items:
           - "The three notification types that ignore preferences: task reminders, event reminders and external calendar sync failures are unconditional — three of the six types"
           - "Outbound webhooks: the api/v1 surface reads and writes under a token but notifies nothing, so no external automation (Home Assistant, n8n, IFTTT) can react to anything happening in Hestia"
+          - "An internal event stream, introduced alongside the webhooks that are its first consumer rather than ahead of them: no publish/subscribe exists today, and infrastructure without a consumer ages badly"
+          - "Notifications that can be acted on: the notifications table carries no action column, so \"your inspection is due\" cannot also carry \"remind me\" or \"mark as done\""
+          - "Push notifications: the service worker's push listener is written and commented out, and nothing is emailed either — the only mailer in the app sends password resets"
       first_run_experience:
         title: "First run: demo data and a guided tour"
         items:
@@ -253,30 +300,63 @@ en:
           - "Per-household custom themes: every colour already goes through a CSS variable behind the --brand/--accent indirection, so half the work is done — what is missing is persistence and a picker, knowing that contrast checking then becomes a runtime constraint rather than a build-time check"
           - "Sidebar reordering: SortableJS is already wired to lists, tasks, loyalty and the menu, just not to the navigation"
           - "Celebration streaks & milestones: CelebrationMomentComponent already supports :streak and :milestone kinds, but no data model tracks a maintained streak or a reached milestone yet — birthdays are the only kind wired up today"
+      object_graph:
+        title: "Everything in the house, connected"
+        items:
+          - "A household link table joining any record to any other: some twenty typed foreign keys already cross module boundaries, plus a polymorphic documentable, yet nothing lets a vehicle gather its documents, its expenses, its maintenance tasks and its inspection reminder on one page"
+          - "An explicit allowlist of what may be linked, guarded the way ModuleGating guards controllers — a test that walks the models and fails on any that is neither listed nor excluded"
+          - "Both ends checked to belong to the same household, and the four documented deviations (Circles, Gifts, Trip, Wellbeing) excluded by name rather than by accident"
+          - "Links into a disabled module stay hidden, exactly as search results already do"
+      granular_permissions:
+        title: "Roles past admin and member"
+        items:
+          - "Membership is a boolean today — admin or not — which makes a shared calendar and a shared budget the same trust decision"
+          - "Per-module read and write, so a teenager can hold the calendar without holding the documents"
+          - "A child profile (tasks, routines, pocket money, their own calendar), with the modules they may not see simply absent, the way disabled modules already are"
+      document_intelligence:
+        title: "Documents that read themselves"
+        items:
+          - "Text extraction on upload — supplier, dates, amount, expiry — so a photographed insurance certificate stops being an opaque attachment"
+          - "The extracted expiry becomes a reminder and the amount a budget entry: the extraction is not the feature, the wiring is"
+          - "One decision first: a self-hosted engine keeps the promise that no household data leaves the instance, a hosted one reads better — a self-hosted app cannot quietly pick the second"
       health_records:
         title: "Health records for people"
         items:
           - "Human medical tracking (treatments, vaccinations, cycles): the pattern is written in full for Pets — PetVaccination, PetTreatment, with booster reminders — and absent for people; Wellbeing covers weight and sessions only"
           - "A per-person allergen profile, and recipe filtering against it: AllergenTest exists but belongs to Baby (food diversification), so an adult recipe has nothing to be checked against"
           - "Not to be started before three decisions are made: whether it hangs off an account, off a profile without one (as BabyProfile does), or off a new person entity; who in the household may read it; and what a household export does with health data"
+      automation_rules:
+        title: "When, if, then"
+        items:
+          - "Household-authored rules over the event stream the webhooks milestone introduces: a fridge item expiring in two days, an invoice added, a trip starting tomorrow"
+          - "The same events already feed notifications, the activity feed and outbound webhooks, so the rules engine is a third consumer rather than a parallel mechanism"
+          - "Every rule shows what it would have done before it is allowed to do it"
       marketing_docs:
         title: "Marketing site & user documentation"
         items:
           - "A public marketing site (home page, one page per module, a Hest.AI presentation page)"
           - "A per-module user documentation hub"
           - "A privacy policy suited to the self-hosted context"
+          - "German, Spanish and Italian: the machinery is proven — a CI job refuses a missing key and refuses an unused one too — so what remains is translation, not plumbing"
       scaling_thresholds:
         title: "Parked until a measurement says otherwise"
         items:
           - "Two-factor authentication — rate limiting already covers the three authentication entry points, cookies are signed and httponly, and sessions are revocable from the interface. Trigger: the first multi-household instance exposed on the public internet"
           - "pg_trgm / GIN indexing on search — 28 leading-wildcard ILIKE queries, a trade-off documented in the service header and correct for a single household. Trigger: search latency above 300 ms on a real household"
           - "Splitting the esbuild bundle — one bundle, 50 Stimulus controllers loaded up front, but only three third-party dependencies (Stimulus, Turbo, sortablejs). Trigger: adding a heavy third-party dependency"
+          - "Semantic search over the household, so \"when does the car insurance expire?\" is answered rather than matched. Trigger: pg_trgm shipped and still not enough"
+      offline_sync:
+        title: "The shopping list works without signal"
+        items:
+          - "A supermarket basement is the one place the app has to work offline, and the service worker caches an offline page only — no data, no queued writes"
+          - "Local storage and a sync queue in the Flutter client, which today holds 285 lines and one read-only screen"
+          - "Conflict rules decided before any of it: versions on records, idempotent writes, and an answer for two people ticking the same item"
       mobile_parity:
         title: "Mobile functional parity"
         items:
           - "Screens for the 24 remaining modules, beyond read-only Shopping"
           - "Native camera (barcode scanning, document capture), voice dictation, push notifications"
-          - "Phone contact import, offline mode"
+          - "Phone contact import"
           - "A real-time channel (WebSocket to Solid Cable) and transparent API token renewal"
       cross_household_recipes:
         title: "Cross-household recipe community"

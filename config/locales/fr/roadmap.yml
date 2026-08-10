@@ -169,10 +169,16 @@ fr:
           - "Suppression du compte utilisateur"
           - "Export des données personnelles, pour la portabilité même en auto-hébergement"
           - "Réinitialisation des données module par module : aujourd'hui c'est tout ou rien (supprimer le foyer), et désactiver un module laisse ses lignes intactes et invisibles"
+      security_audit_trail:
+        title: "Un journal de sécurité, pas un journal de surveillance"
+        items:
+          - "Connexions, sessions révoquées, jetons d'API créés et supprimés, changements de rôle, exports et suppressions de foyer — la seule trace de tout cela aujourd'hui est api_tokens.last_used_at"
+          - "Visible des administrateurs et volontairement étroit : il enregistre qui détenait les clés, pas qui a modifié la liste de courses — la réponse côté foyer à cette question, c'est le fil d'activité de « Tableau de bord : activité & export »"
+          - "Aucune statistique de complétion par membre : une maison est un lieu où l'on se coordonne, pas un lieu où l'on est noté"
       household_activity_export:
         title: "Tableau de bord : activité & export"
         items:
-          - "Fil d'activité du foyer (qui a fait quoi, quand)"
+          - "Fil d'activité du foyer (qui a fait quoi, quand), tourné vers le foyer et distinct du journal de sécurité réservé aux administrateurs"
           - "Export des données du foyer au format JSON/CSV"
       public_route_hardening:
         title: "Sécurité des liens publics"
@@ -221,6 +227,18 @@ fr:
           - "Inventaire des biens (photo, valeur, date d'achat, garantie), pour l'assurance et la revente"
           - "Calendrier des vacances scolaires françaises (zones A/B/C) — les jours fériés sont couverts, pas ce qui structure l'année d'un foyer avec enfants"
           - "Détection des doublons à l'ajout aux courses, et suggestions tirées de l'historique d'achat déjà en base"
+      today_view:
+        title: "Aujourd'hui : une page, une question"
+        items:
+          - "Une page unique répondant à « qu'est-ce qu'il y a à faire aujourd'hui ? » : DashboardController calcule déjà les tâches en retard, les articles du frigo qui expirent, les plantes à soigner et les sept prochains jours d'événements — sous forme de sept encarts découpés par module, jamais comme une journée"
+          - "CalendarController fusionne déjà tâches, vaccinations, soins des plantes, collectes de déchets, anniversaires et jours de voyage en un seul flux d'occurrences — le tableau de bord ne peut pas le voir"
+          - "Trié par heure de la journée plutôt que par module, pour que la page se lise comme une journée et non comme un menu"
+      quick_capture:
+        title: "Noter d'abord, ranger ensuite"
+        items:
+          - "Un champ unique qui prend une phrase et propose où elle va : Notes::PromoteToTask fait déjà exactement cela pour un couple de modules, et Ui::CommandComponent fournit déjà la palette qui l'accueillerait"
+          - "À base de règles plutôt que d'un appel à un modèle : une date dans le texte propose un rappel, un produit connu propose la liste de courses, tout le reste reste une note"
+          - "Ce qui n'est pas rangé reste visible jusqu'à ce qu'il le soit — une boîte de capture qui avale les choses en silence est pire que pas de boîte du tout"
       wired_patterns:
         title: "Des motifs déjà présents dans le dépôt, enfin branchés"
         items:
@@ -232,16 +250,45 @@ fr:
         items:
           - "Sous-tâches, priorité et tags sur les tâches — aujourd'hui atténué par les catégories kanban, un emoji et un statut d'échéance dérivé"
           - "Récurrences de niveau RRULE : le service Recurrence couvre quotidien/hebdomadaire/mensuel/annuel et rien d'autre — pas de « 2e mardi », pas de nombre d'occurrences, pas de règle multi-jours"
+      shared_responsibility:
+        title: "À qui le tour"
+        items:
+          - "Un responsable sur les tâches, les routines, les soins des plantes et ceux des animaux : tout est à l'échelle du foyer aujourd'hui, donc rien ne distingue « quelqu'un devrait » de « tu devrais »"
+          - "Rotation automatique entre les membres semaine après semaine, en réutilisant le service Recurrence qui pilote déjà les tâches répétées"
+          - "Répond à « à qui le tour ? » sans jamais répondre à « qui en fait le moins ? »"
       cooking_and_shopping:
         title: "Cuisine et courses, au-delà de la base"
         items:
           - "Recherche de recettes par ingrédient — un joins(:recipe_ingredients) dans une chaîne de filtres qui existe déjà ; « que puis-je cuisiner avec du poulet ? » ne renvoie rien aujourd'hui"
           - "Prix sur les articles de courses, avec total automatique"
+          - "Ce que coûte une recette avant de la cuisiner, une fois que les articles de courses portent un prix — l'estimation est la raison de leur en donner un"
+      backup_and_restore:
+        title: "Des sauvegardes qu'un foyer peut vraiment restaurer"
+        items:
+          - "Sauvegardes planifiées vers un chemin local ou S3, sur Solid Queue comme toute autre tâche récurrente — il n'existe aujourd'hui aucun outillage de sauvegarde dans le dépôt, ni tâche rake, ni pg_dump documenté"
+          - "Restauration depuis l'interface, et une restauration qui a été éprouvée : une sauvegarde jamais restaurée n'est pas une sauvegarde"
+          - "Fichiers téléversés inclus, pas seulement la base — les pièces jointes Active Storage vivent en dehors du dump"
+      instance_operations:
+        title: "Savoir que l'instance va bien"
+        items:
+          - "Une page de santé qui aille plus loin que /up, lequel prouve seulement que Rails a démarré : base de données, stockage, tâches de fond, courriel, HTTPS, disque, sauvegardes et clés de chiffrement OAuth, chacun avec quoi faire quand il passe au rouge"
+          - "Une version que l'hébergeur puisse lire — il n'y a ni constante VERSION, ni étiquette git, ni version affichée dans l'application, donc « quelle Hestia est-ce que je fais tourner ? » n'a aujourd'hui pas de réponse"
+          - "Un docker-compose qui démarre Hestia et non PostgreSQL seul, et un config/deploy.yml qui ne soit plus l'échafaudage Kamal intact pointant encore vers 192.168.0.1"
+      api_as_a_product:
+        title: "L'API traitée comme un produit"
+        items:
+          - "Une description OpenAPI générée : 29 contrôleurs sérialisent via as_json(only:) et rien ne décrit la surface, si bien que le client mobile et tout tiers lisent le Ruby pour en deviner la forme"
+          - "Api::V1::BaseController épingle Current.household à households.first, donc un membre de deux foyers ne peut jamais atteindre le second — et les fixtures, un membership par utilisateur, ne peuvent pas l'attraper"
+          - "Limitation de débit sur les jetons (les trois points d'entrée d'authentification du web en ont une, l'API aucune), clés d'idempotence pour les écritures rejouées, et un décompte total sur les réponses paginées"
+          - "Des écritures au-delà de la poignée qui existe : la surface est essentiellement en lecture, sans update ni destroy nulle part"
       notifications_automation:
         title: "Notifications et automatisation sortante"
         items:
           - "Les trois types de notification qui ignorent les préférences : rappels de tâche, rappels d'événement et échec de synchronisation d'un calendrier externe sont inconditionnels — trois types sur six"
           - "Webhooks sortants : l'API api/v1 lit et écrit sous jeton mais ne notifie rien, donc aucune automatisation externe (Home Assistant, n8n, IFTTT) ne peut réagir à ce qui se passe dans Hestia"
+          - "Un flux d'événements interne, introduit en même temps que les webhooks qui en sont le premier consommateur plutôt qu'avant eux : aucun publish/subscribe n'existe aujourd'hui, et une infrastructure sans consommateur vieillit mal"
+          - "Des notifications sur lesquelles on peut agir : la table notifications ne porte aucune colonne d'action, donc « votre contrôle technique approche » ne peut pas porter aussi « rappelle-moi » ou « marquer comme fait »"
+          - "Notifications push : l'écouteur push du service worker est écrit et mis en commentaire, et rien n'est envoyé par courriel non plus — le seul mailer de l'application envoie les réinitialisations de mot de passe"
       first_run_experience:
         title: "Première prise en main : données de démonstration et visite guidée"
         items:
@@ -253,30 +300,63 @@ fr:
           - "Thèmes personnalisés par foyer : toutes les couleurs passent déjà par une variable CSS derrière l'indirection --brand/--accent, la moitié du travail est faite — il manque la persistance et un sélecteur, sachant que le contrôle de contraste devient alors une contrainte à l'exécution et non plus une vérification de build"
           - "Réordonnancement de la sidebar : SortableJS est déjà câblé aux listes, aux tâches, à la fidélité et au menu, mais pas à la navigation"
           - "Séries et jalons dans CelebrationMoment : le composant gère déjà les types :streak et :milestone, mais aucun modèle de données ne suit une série maintenue ou un jalon atteint — seuls les anniversaires sont branchés aujourd'hui"
+      object_graph:
+        title: "Tout ce qu'il y a dans la maison, relié"
+        items:
+          - "Une table de liaison du foyer joignant n'importe quel enregistrement à n'importe quel autre : une vingtaine de clés étrangères typées traversent déjà les frontières de modules, plus un documentable polymorphe, et pourtant rien ne permet à un véhicule de réunir ses documents, ses dépenses, ses tâches d'entretien et son rappel de contrôle technique sur une seule page"
+          - "Une liste blanche explicite de ce qui peut être relié, gardée comme ModuleGating garde les contrôleurs — un test qui parcourt les modèles et échoue sur tout modèle qui n'est ni listé ni exclu"
+          - "Les deux extrémités vérifiées comme appartenant au même foyer, et les quatre déviations documentées (Cercles, Cadeaux, Voyage, Bien-être) exclues nommément plutôt que par accident"
+          - "Les liens vers un module désactivé restent masqués, exactement comme le font déjà les résultats de recherche"
+      granular_permissions:
+        title: "Des rôles au-delà d'administrateur et membre"
+        items:
+          - "L'appartenance est un booléen aujourd'hui — administrateur ou non — ce qui fait d'un calendrier partagé et d'un budget partagé la même décision de confiance"
+          - "Lecture et écriture module par module, pour qu'un adolescent puisse tenir le calendrier sans tenir les documents"
+          - "Un profil enfant (tâches, routines, argent de poche, son propre calendrier), avec les modules qu'il ne doit pas voir simplement absents, comme le sont déjà les modules désactivés"
+      document_intelligence:
+        title: "Des documents qui se lisent eux-mêmes"
+        items:
+          - "Extraction du texte au téléversement — fournisseur, dates, montant, échéance — pour qu'une attestation d'assurance photographiée cesse d'être une pièce jointe opaque"
+          - "L'échéance extraite devient un rappel et le montant une dépense : l'extraction n'est pas la fonctionnalité, le câblage l'est"
+          - "Une décision d'abord : un moteur auto-hébergé tient la promesse qu'aucune donnée du foyer ne quitte l'instance, un moteur hébergé lit mieux — une application auto-hébergée ne peut pas choisir le second en silence"
       health_records:
         title: "Suivi de santé des personnes"
         items:
           - "Suivi médical humain (traitements, vaccins, cycles) : le motif est intégralement écrit pour Animaux — PetVaccination, PetTreatment, avec rappels de rappel — et absent pour les humains ; Bien-être ne couvre que le poids et les séances"
           - "Profil allergènes par personne, et filtrage des recettes contre lui : AllergenTest existe mais appartient à Bébé (diversification alimentaire), donc une recette d'adulte n'a rien à quoi être confrontée"
           - "À ne pas commencer avant d'avoir tranché trois points : est-ce accroché à un compte, à un profil sans compte (comme BabyProfile), ou à une nouvelle entité personne ; qui dans le foyer peut le lire ; et ce qu'un export de foyer fait d'une donnée de santé"
+      automation_rules:
+        title: "Quand, si, alors"
+        items:
+          - "Des règles écrites par le foyer au-dessus du flux d'événements qu'introduit le jalon webhooks : un article du frigo qui expire dans deux jours, une facture ajoutée, un voyage qui commence demain"
+          - "Ces mêmes événements alimentent déjà les notifications, le fil d'activité et les webhooks sortants, si bien que le moteur de règles en est le troisième consommateur plutôt qu'un mécanisme parallèle"
+          - "Chaque règle montre ce qu'elle aurait fait avant d'avoir le droit de le faire"
       marketing_docs:
         title: "Site vitrine & documentation utilisateur"
         items:
           - "Site vitrine public (accueil, une page par module, présentation de Hest.AI)"
           - "Centre de documentation utilisateur par module"
           - "Politique de confidentialité adaptée au contexte auto-hébergé"
+          - "Allemand, espagnol et italien : la mécanique a fait ses preuves — un job de CI refuse une clé manquante et refuse aussi une clé inutilisée — donc ce qui reste est de la traduction, pas de la plomberie"
       scaling_thresholds:
         title: "Parqué jusqu'à ce qu'une mesure dise le contraire"
         items:
           - "Authentification à deux facteurs — la limitation de débit couvre déjà les trois entrées d'authentification, les cookies sont signés et httponly, et les sessions sont révocables depuis l'interface. Déclencheur : la première instance multi-foyers exposée sur Internet public"
           - "Index pg_trgm / GIN sur la recherche — 28 requêtes ILIKE à joker initial, compromis documenté dans l'en-tête du service et correct en mono-foyer. Déclencheur : une latence de recherche au-delà de 300 ms sur un foyer réel"
           - "Découpage du bundle esbuild — un seul bundle, 50 contrôleurs Stimulus chargés d'emblée, mais seulement trois dépendances tierces (Stimulus, Turbo, sortablejs). Déclencheur : l'ajout d'une dépendance tierce lourde"
+          - "Recherche sémantique sur le foyer, pour que « quand expire l'assurance de la voiture ? » soit répondu plutôt que trouvé par correspondance de mots. Déclencheur : pg_trgm livré et toujours insuffisant"
+      offline_sync:
+        title: "La liste de courses fonctionne sans réseau"
+        items:
+          - "Le sous-sol d'un supermarché est le seul endroit où l'application doit fonctionner hors ligne, et le service worker ne met en cache qu'une page hors ligne — aucune donnée, aucune écriture mise en attente"
+          - "Stockage local et file de synchronisation dans le client Flutter, qui compte aujourd'hui 285 lignes et un seul écran en lecture seule"
+          - "Les règles de conflit tranchées avant tout le reste : des versions sur les enregistrements, des écritures idempotentes, et une réponse pour deux personnes qui cochent le même article"
       mobile_parity:
         title: "Parité fonctionnelle mobile"
         items:
           - "Écrans pour les 24 modules restants, au-delà de Courses en lecture seule"
           - "Caméra native (scan de code-barres, capture de documents), dictée vocale, notifications push"
-          - "Import des contacts du téléphone, mode hors ligne"
+          - "Import des contacts du téléphone"
           - "Canal temps réel (WebSocket vers Solid Cable) et renouvellement transparent du jeton API"
       cross_household_recipes:
         title: "Communauté de recettes inter-foyers"
