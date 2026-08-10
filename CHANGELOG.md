@@ -137,6 +137,32 @@ survived that check.
   test environment (the null cache store's `#increment` returns `nil`), so
   the three pre-existing auth limits had never actually been exercised
   either.
+- **A third audit absorbed into the roadmap, then deleted.** A 2,000-line
+  strategy critique was checked line by line against the code like the two
+  before it, and failed the same way: its headline recommendation — a "Phase
+  2" to connect the modules to each other — listed as missing what is already
+  shipped and is the project's most distinctive capability (`Recipes::
+  AddIngredientsToShoppingList`, the two `Frigo`↔Shopping services,
+  `Frigo::SuggestRecipes`, `Notes::PromoteToTask`, `trips#track_expenses`,
+  and a calendar that already merges six modules into one occurrence stream).
+  It also proposed a rival roadmap in markdown checkboxes, which
+  `CONTRIBUTING.md` exists to prevent. What survived became **12 upcoming
+  milestones** — a Today page, quick capture, a security log kept explicitly
+  separate from the activity feed, shared responsibility with rotation,
+  backup/restore, instance operations, the API as a product, an object graph,
+  granular permissions, document extraction, automation rules and offline
+  sync — plus six amendments to existing ones. The internal event stream was
+  folded into the webhooks milestone rather than given its own: it has no
+  consumer until then.
+- One defect the audit missed, now recorded on `api_as_a_product`:
+  `Api::V1::BaseController` pins `Current.household` to `households.first`,
+  so a member of two households cannot reach the second through the API —
+  and the fixtures, one membership per user, cannot catch it.
+- `RoadmapTest` now asserts every `MILESTONE_ICONS` value resolves to a
+  vendored SVG. `IconHelper#lucide_icon` reads the file off disk, so a name
+  that isn't vendored raised `Errno::ENOENT` when `/roadmap` rendered, while
+  the existing assertion (`icon.present?`) stayed green. Eleven icons were
+  vendored for the new milestones.
 
 ## [1.0.0-beta37] — 2026-08-02
 
