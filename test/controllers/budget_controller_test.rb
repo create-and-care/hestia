@@ -20,6 +20,11 @@ class BudgetControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_body_includes I18n.t("budget.show.expense_breakdown_heading")
     assert_body_includes "Loyer : 800.0"
+
+    get budget_path(period: :annual)
+    assert_response :success
+    assert_body_includes I18n.t("budget.show.expense_breakdown_heading")
+    assert_body_includes "Loyer : 9600.0"
   end
 
   test "show renders a document count for a category with linked documents" do
