@@ -26,11 +26,16 @@ module HouseholdOccurrences
     # Birthdays (Contact#born_on) surfaced alongside real events
     # (interconnection with Birthdays) — represented as [date, contact] pairs
     # so the view can tell them apart from [time, CalendarEvent] pairs.
+    # `in_time_zone`, not `to_time`: ApplicationController wraps every request
+    # in Time.use_zone(household.time_zone), and `to_time` ignores Time.zone
+    # entirely (it anchors at midnight in the server's own system zone) — on a
+    # server whose system zone differs from the household's, this would sort
+    # a same-day birthday onto the wrong side of events near midnight.
     def birthday_occurrences_in(range)
       return [] if @member_id
 
       Current.household.contacts.where.not(born_on: nil).flat_map do |contact|
-        contact.birthdays_between(range.begin.to_date, range.end.to_date).map { |date| [ date.to_time, contact ] }
+        contact.birthdays_between(range.begin.to_date, range.end.to_date).map { |date| [ date.in_time_zone, contact ] }
       end
     end
 
@@ -41,7 +46,7 @@ module HouseholdOccurrences
 
       Current.household.waste_collection_events
         .where(collected_on: range.begin.to_date..range.end.to_date)
-        .map { |event| [ event.collected_on.to_time, event ] }
+        .map { |event| [ event.collected_on.in_time_zone, event ] }
     end
 
     # Trips/Calendar interconnection: surfaces every day of a trip on the calendar (one
@@ -60,7 +65,7 @@ module HouseholdOccurrences
         .flat_map do |trip|
           span_start = [ trip.starts_on, range.begin.to_date ].max
           span_end = [ trip.ends_on || trip.starts_on, range.end.to_date ].min
-          (span_start..span_end).map { |date| [ date.to_time, trip ] }
+          (span_start..span_end).map { |date| [ date.in_time_zone, trip ] }
         end
     end
 

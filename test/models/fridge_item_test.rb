@@ -48,6 +48,18 @@ class FridgeItemTest < ActiveSupport::TestCase
     assert item.valid?
   end
 
+  test "accepts the largest quantity the column can store" do
+    item = households(:alpha).fridge_items.build(name: "Beurre", location: "refrigerateur", quantity: 99_999_999.99)
+    assert item.valid?
+    assert item.save
+  end
+
+  test "rejects a quantity beyond the decimal(10, 2) column, without raising" do
+    item = households(:alpha).fridge_items.build(name: "Beurre", location: "refrigerateur", quantity: 100_000_000)
+    assert_not item.valid?
+    assert_not item.save
+  end
+
   test "is scoped to its household" do
     assert_not_includes households(:alpha).fridge_items, fridge_items(:beta_milk)
   end

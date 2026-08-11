@@ -46,6 +46,13 @@
   </div>
 <% end %>
 
+<%
+  # The empty state means "there is truly nothing here" — without folding in
+  # the overdue boxes above, it could say "no upcoming events" directly under
+  # a red overdue-tasks box, reading as a contradiction rather than a caveat.
+  any_overdue = [ local_assigns[:overdue_tasks], local_assigns[:overdue_vaccinations], local_assigns[:overdue_plant_care] ]
+    .any? { |list| list&.any? }
+%>
 <% if occurrences.any? %>
   <%# overflow-hidden, or the first/last row's own rounded-md hover background
       shows inside the container's larger corner and the list reads as rounded
@@ -96,6 +103,6 @@
       <% end %>
     <% end %>
   </div>
-<% else %>
+<% elsif !any_overdue %>
   <%= render(Ui::EmptyComponent.new) { |empty| empty.with_description { t("calendar.show.no_events") } } %>
 <% end %>

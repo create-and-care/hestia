@@ -130,6 +130,44 @@ class TodayControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Lointain"
   end
 
+  test "does not claim there are no events when an overdue box is the only thing shown" do
+    sign_in_as(users(:one))
+    pets(:alpha_dog).pet_vaccinations.create!(name: "Rage", booster_on: 3.days.ago.to_date)
+
+    get today_path
+
+    assert_response :success
+    assert_includes @response.body, "Rage"
+    assert_not_includes @response.body, I18n.t("calendar.show.no_events")
+  end
+
+  test "date-only occurrences anchor in the household's time zone rather than the server's own" do
+    previous_tz = ENV["TZ"]
+    ENV["TZ"] = "America/Los_Angeles"
+
+    household = households(:alpha)
+    household.update!(time_zone: "Auckland")
+    sign_in_as(users(:one))
+
+    household_today = household.in_time_zone { Date.current }
+    household.contacts.create!(name: "Mamie", born_on: household_today - 80.years)
+    household.calendar_events.create!(title: "Reunion",
+      starts_at: household.in_time_zone { Time.zone.now.middle_of_day },
+      ends_at: household.in_time_zone { Time.zone.now.middle_of_day + 1.hour })
+
+    get today_path
+
+    assert_response :success
+    assert_includes @response.body, "Mamie"
+    assert_includes @response.body, "Reunion"
+    # A birthday anchors at the start of the household's day, so it must sort
+    # before a same-day timed event — regardless of what zone the server itself
+    # runs in (ENV["TZ"] above is deliberately a different zone than Auckland).
+    assert_operator @response.body.index("Mamie"), :<, @response.body.index("Reunion")
+  ensure
+    ENV["TZ"] = previous_tz
+  end
+
   test "the calendar events query narrows to today rather than loading the whole household history" do
     sign_in_as(users(:one))
     households(:alpha).calendar_events.create!(title: "Zorglub", starts_at: Time.current.middle_of_day, ends_at: Time.current.middle_of_day + 1.hour)
