@@ -32,7 +32,7 @@ module Roadmap
     refinement_wave_day1 refinement_wave_day2a refinement_wave_day2b
     refinement_wave_day3a refinement_wave_day3b
     public_route_hardening security_performance_hardening
-    design_system_measured pwa i18n_guardrails
+    design_system_measured pwa i18n_guardrails budget_expense_chart
     wired_patterns today_view quick_capture
     account_privacy security_audit_trail household_activity_export
     tasks_and_recurrence shared_responsibility cooking_and_shopping
@@ -76,7 +76,8 @@ module Roadmap
     "security_performance_hardening" => Date.new(2026, 8, 7),
     "design_system_measured" => Date.new(2026, 8, 7),
     "pwa" => Date.new(2026, 8, 7),
-    "i18n_guardrails" => Date.new(2026, 8, 7)
+    "i18n_guardrails" => Date.new(2026, 8, 7),
+    "budget_expense_chart" => Date.new(2026, 8, 11)
   }.freeze
 
   MILESTONE_STATUSES = MILESTONE_SLUGS.index_with { |slug| MILESTONE_DATES.key?(slug) ? :done : :upcoming }.freeze
@@ -96,6 +97,7 @@ module Roadmap
     "account_privacy" => "trash-2", "household_activity_export" => "trending-up",
     "public_route_hardening" => "triangle-alert", "security_performance_hardening" => "wrench",
     "design_system_measured" => "layout-grid", "i18n_guardrails" => "info",
+    "budget_expense_chart" => "bar-chart-3",
     "shared_link_controls" => "link", "household_logistics" => "sofa",
     "reference_catalog_growth" => "sprout",
     "wired_patterns" => "puzzle", "tasks_and_recurrence" => "list-checks",
