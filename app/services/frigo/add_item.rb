@@ -4,11 +4,13 @@ module Frigo
   class AddItem
     def self.call(...) = new(...).call
 
-    def initialize(household:, name:, location: "refrigerateur", expires_on: nil, product: nil)
+    def initialize(household:, name:, location: "refrigerateur", expires_on: nil, quantity: nil, unit: nil, product: nil)
       @household = household
       @name = name.to_s.strip
       @location = location.presence || "refrigerateur"
       @expires_on = expires_on
+      @quantity = quantity
+      @unit = unit.presence
       @product = product
     end
 
@@ -19,6 +21,8 @@ module Frigo
         name: @name,
         location: @location,
         expires_on: @expires_on,
+        quantity: @quantity,
+        unit: @unit,
         product: @product
       )
     end

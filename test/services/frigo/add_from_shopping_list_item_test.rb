@@ -15,5 +15,15 @@ module Frigo
 
       assert_not ShoppingListItem.exists?(item.id)
     end
+
+    test "carries the shopping list item's quantity and unit over to the fridge item" do
+      item = shopping_list_items(:alpha_apples)
+      item.update!(quantity: 6, unit: "pièces")
+
+      fridge_item = Frigo::AddFromShoppingListItem.call(shopping_list_item: item)
+
+      assert_equal 6, fridge_item.quantity
+      assert_equal "pièces", fridge_item.unit
+    end
   end
 end

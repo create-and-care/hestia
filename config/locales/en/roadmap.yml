@@ -213,6 +213,15 @@ en:
         title: "See where the money goes"
         items:
           - "A bar chart on the Budget page breaking expenses down by category, next to the income/expense/savings totals"
+      fridge_item_quantity_unit:
+        title: "Track how much is in the fridge"
+        items:
+          - "Quantity and unit on fridge items, carried over automatically when an item moves between the shopping list and the fridge, in either direction"
+      today_view:
+        title: "Today: one page, one question"
+        items:
+          - "A single page answering \"what needs doing today?\": overdue tasks, vaccine boosters and plant care, food expiring soon, and today's calendar events, birthdays, waste collections and travel days"
+          - "Ordered by time of day instead of split across separate module widgets"
       pwa:
         title: "Installable app"
         items:
@@ -231,12 +240,6 @@ en:
           - "A belongings inventory (photo, value, purchase date, warranty), for insurance and resale"
           - "French school-holiday calendar (zones A/B/C) — public holidays are covered, what shapes a family's year is not"
           - "Duplicate detection when adding to the shopping list, and suggestions drawn from the purchase history already in the database"
-      today_view:
-        title: "Today: one page, one question"
-        items:
-          - "A single page answering \"what needs doing today?\": DashboardController already computes overdue tasks, expiring fridge items, plants needing care and the next seven days of events — as seven module-shaped widgets, never as one day"
-          - "CalendarController already merges tasks, pet vaccinations, plant care, waste collections, birthdays and trip days into a single occurrence stream — the dashboard cannot see it"
-          - "Ordered by time of day rather than by module, so the page reads like a day and not like a menu"
       quick_capture:
         title: "Capture first, file later"
         items:
@@ -247,7 +250,6 @@ en:
         title: "Patterns already in the repo, finally wired up"
         items:
           - "Attachments and reactions on messages: CirclePost already carries has_one_attached :photo and a complete CirclePostReaction model with its controller and routes — the pattern is written, tested and shipped, it is simply not applied to messages"
-          - "quantity and unit on fridge items: shopping list items carry both, fridge items carry neither, and the two Fridge↔Shopping services already cross that boundary and drop the information"
       tasks_and_recurrence:
         title: "Tasks and recurrence, in depth"
         items:

@@ -1,0 +1,45 @@
+<% content_for :title, t(".title") %>
+
+<div class="mt-10 max-w-3xl mx-auto px-4">
+  <header class="mb-8">
+    <h1 class="text-xl font-semibold"><%= t(".title") %></h1>
+    <p class="text-sm text-secondary"><%= l(Date.current, format: :long) %></p>
+  </header>
+
+  <%= render "shared/flash" %>
+
+  <% if @plants_needing_attention.any? %>
+    <section class="mb-8">
+      <h2 class="mb-3 flex items-center gap-1.5 font-medium text-destructive"><%= render Ui::ModuleMedallionComponent.new(icon: "sprout", size: :sm) %> <%= t("dashboard.show.plants_needing_attention") %></h2>
+      <div class="divide-y divide-primary rounded-lg border border-primary">
+        <% @plants_needing_attention.each do |plant| %>
+          <%= render Ui::ItemComponent.new do |item| %>
+            <% item.with_title { link_to plant.name, plant_path(plant), class: "hover:underline" } %>
+            <% item.with_trailing { render(Ui::BadgeComponent.new(variant: care_status_badge_variant(plant.care_status))) { care_status_label(plant.care_status) } } %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <% if @fridge_items_expiring.any? %>
+    <section class="mb-8">
+      <h2 class="mb-3 flex items-center gap-1.5 font-medium"><%= render Ui::ModuleMedallionComponent.new(mod: :fridge, icon: "refrigerator", size: :sm) %> <%= t("dashboard.show.fridge_expiring") %></h2>
+      <div class="divide-y divide-primary rounded-lg border border-primary">
+        <% @fridge_items_expiring.each do |item| %>
+          <%= render Ui::ItemComponent.new do |i| %>
+            <% i.with_title { link_to item.name, fridge_path, class: "hover:underline" } %>
+            <% i.with_description { l(item.expires_on, format: :short) } %>
+            <% i.with_trailing { render(Ui::BadgeComponent.new(variant: expiration_badge_variant(item.expiration_status))) { expiration_label(item.expiration_status) } } %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <section>
+    <h2 class="mb-3 font-medium"><%= t(".agenda_heading") %></h2>
+    <%= render "calendar/occurrences_list", occurrences: @occurrences, overdue_tasks: @overdue_tasks,
+          overdue_vaccinations: @overdue_vaccinations, overdue_plant_care: @overdue_plant_care %>
+  </section>
+</div>

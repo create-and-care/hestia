@@ -14,6 +14,7 @@
     single background fetch buys an instant visit from anywhere in the app. %>
 <div class="<%= sidebar_card_class("flex flex-col gap-0.5") %>">
   <%= render(Ui::SidebarItemComponent.new(variant: :plain, icon: "layout-dashboard", label: t("sidebar.home"), href: root_path, active: current_page?(root_path), preload: preload)) %>
+  <%= render(Ui::SidebarItemComponent.new(variant: :plain, icon: "sunrise", label: t("sidebar.today"), href: today_path, active: current_page?(today_path))) %>
 
   <% sidebar_groups.each do |group| %>
     <div class="flex flex-col gap-0.5" data-sidebar-target="group">
