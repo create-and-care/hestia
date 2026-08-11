@@ -16,7 +16,7 @@
     <div class="flex items-center gap-2">
       <span class="font-medium"><%= address.name %></span>
       <%= render(Ui::BadgeComponent.new(variant: :secondary)) { address_type_label(address.address_type) } %>
-      <% if address.rating %><span class="text-xs text-warning"><%= "★" * address.rating.to_i %></span><% end %>
+      <% if address.rating %><span class="text-xs text-warning"><%= address_rating_stars(address.rating) %></span><% end %>
     </div>
     <% if address.full_address.present? %>
       <p class="text-sm text-secondary"><%= address.full_address %></p>
