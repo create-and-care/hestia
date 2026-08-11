@@ -12,6 +12,7 @@ en:
       shared_projects_link: "Shared projects"
       remaining_label: "Disposable income"
       savings_rate_label: "Savings rate: %{rate}%"
+      expense_breakdown_heading: "Expense breakdown"
       new_category_heading: "New category"
       kind_label: "Type"
       name_label: "Name"

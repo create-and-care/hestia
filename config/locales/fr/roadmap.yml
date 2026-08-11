@@ -209,6 +209,10 @@ fr:
         items:
           - "Dates affichées au format attendu par la langue du lecteur"
           - "Contrôle automatique refusant toute traduction manquante"
+      budget_expense_chart:
+        title: "Voir où va l'argent"
+        items:
+          - "Un graphique en barres sur la page Budget, montrant la répartition des charges par catégorie, à côté des totaux revenus/charges/épargne"
       pwa:
         title: "Application installable"
         items:
@@ -243,7 +247,6 @@ fr:
         title: "Des motifs déjà présents dans le dépôt, enfin branchés"
         items:
           - "Pièces jointes et réactions sur les messages : CirclePost porte déjà has_one_attached :photo et un modèle CirclePostReaction complet avec son contrôleur et ses routes — le motif est écrit, testé et livré, il n'est simplement pas appliqué aux messages"
-          - "Graphiques dans Budget : Ui::ChartComponent tourne déjà dans Piscine et Bien-être, quand budget/show n'a qu'une barre de progression"
           - "quantity et unit sur les articles du frigo : les articles de courses portent les deux, ceux du frigo aucun des deux, et les deux services Frigo↔Courses traversent déjà cette frontière en perdant l'information"
       tasks_and_recurrence:
         title: "Tâches et récurrences, en profondeur"

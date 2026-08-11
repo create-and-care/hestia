@@ -7,6 +7,7 @@ class BudgetController < ApplicationController
     @envelopes = Current.household.savings_envelopes.ordered
     @projects = Current.household.shared_projects.ordered
     @summary = Budget::Summary.call(household: Current.household, period: @period)
+    @expense_chart_data = Budget::ExpenseChartData.call(categories: @categories, period: @period)
     @category = Current.household.budget_categories.new
     @envelope = Current.household.savings_envelopes.new
   end

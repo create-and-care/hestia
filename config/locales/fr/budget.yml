@@ -12,6 +12,7 @@ fr:
       shared_projects_link: "Projets partagés"
       remaining_label: "Reste à vivre"
       savings_rate_label: "Taux d'épargne : %{rate}%"
+      expense_breakdown_heading: "Répartition des charges"
       new_category_heading: "Nouvelle catégorie"
       kind_label: "Type"
       name_label: "Nom"

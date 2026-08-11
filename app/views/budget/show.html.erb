@@ -51,6 +51,15 @@
     <% end %>
   </section>
 
+  <% if @expense_chart_data.present? %>
+    <section class="mb-8">
+      <h2 class="mb-2 font-medium"><%= t(".expense_breakdown_heading") %></h2>
+      <%= render(Ui::CardComponent.new) do %>
+        <%= render Ui::ChartComponent.new(data: @expense_chart_data) %>
+      <% end %>
+    </section>
+  <% end %>
+
   <% @categories.group_by(&:kind).each do |kind, categories| %>
     <section class="mb-6">
       <h2 class="mb-2 font-medium"><%= budget_kind_label(kind) %></h2>

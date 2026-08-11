@@ -15,6 +15,18 @@ class BudgetControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Salaire"
   end
 
+  test "show renders an expense breakdown chart" do
+    get budget_path
+    assert_response :success
+    assert_body_includes I18n.t("budget.show.expense_breakdown_heading")
+    assert_body_includes "Loyer : 800.0"
+
+    get budget_path(period: :annual)
+    assert_response :success
+    assert_body_includes I18n.t("budget.show.expense_breakdown_heading")
+    assert_body_includes "Loyer : 9600.0"
+  end
+
   test "show renders a document count for a category with linked documents" do
     document = households(:alpha).documents.build(name: "Bail", documentable: budget_categories(:alpha_rent))
     document.file.attach(io: File.open(Rails.root.join("test/fixtures/files/sample.pdf")), filename: "sample.pdf", content_type: "application/pdf")

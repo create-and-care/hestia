@@ -6,6 +6,10 @@ module Budget
       new(household, period).call
     end
 
+    def self.scale(monthly, period)
+      period == :annual ? monthly * 12 : monthly
+    end
+
     def initialize(household, period)
       @household = household
       @period = period
@@ -35,7 +39,7 @@ module Budget
       end
 
       def scale(monthly)
-        @period == :annual ? monthly * 12 : monthly
+        self.class.scale(monthly, @period)
       end
   end
 end

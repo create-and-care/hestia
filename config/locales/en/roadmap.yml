@@ -209,6 +209,10 @@ en:
         items:
           - "Dates shown in the format the reader's language expects"
           - "An automated check that refuses any missing translation"
+      budget_expense_chart:
+        title: "See where the money goes"
+        items:
+          - "A bar chart on the Budget page breaking expenses down by category, next to the income/expense/savings totals"
       pwa:
         title: "Installable app"
         items:
@@ -243,7 +247,6 @@ en:
         title: "Patterns already in the repo, finally wired up"
         items:
           - "Attachments and reactions on messages: CirclePost already carries has_one_attached :photo and a complete CirclePostReaction model with its controller and routes — the pattern is written, tested and shipped, it is simply not applied to messages"
-          - "Charts in Budget: Ui::ChartComponent already runs in Pools and Wellbeing, while budget/show has nothing but a progress bar"
           - "quantity and unit on fridge items: shopping list items carry both, fridge items carry neither, and the two Fridge↔Shopping services already cross that boundary and drop the information"
       tasks_and_recurrence:
         title: "Tasks and recurrence, in depth"
