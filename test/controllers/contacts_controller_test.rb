@@ -82,7 +82,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
 
   test "does not link a restricted gift list the current user cannot see" do
     other_user = users(:two)
-    list = households(:alpha).gift_lists.create!(name: "Surprise", perspective: "give",
+    households(:alpha).gift_lists.create!(name: "Surprise", perspective: "give",
       contact: contacts(:alpha_mom), created_by: other_user, restricted: true, visible_to_ids: [ other_user.id ])
     get contacts_path
     assert_not_includes @response.body, "Surprise"

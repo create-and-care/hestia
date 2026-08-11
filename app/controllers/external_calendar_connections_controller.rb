@@ -34,7 +34,7 @@ class ExternalCalendarConnectionsController < ApplicationController
     Calendar::ExternalSync::SyncConnection.call(connection)
     redirect_with(notice: t(".connected", provider: provider.capitalize))
   rescue OAuth2::Error
-    redirect_with(alert: t(".exchange_failed", provider: provider.capitalize))
+    redirect_with(alert: t(".exchange_failed", provider: params[:provider].to_s.capitalize))
   end
 
   # CalDAV manual entry (no OAuth redirect flow).

@@ -46,7 +46,7 @@ module Reminders
 
     test "does not re-notify the same occurrence twice" do
       event = calendar_events(:alpha_meeting)
-      reminder = EventReminder.create!(
+      EventReminder.create!(
         calendar_event: event, user: users(:one),
         minutes_before: 2.days.in_minutes.to_i + 60, last_notified_occurrence_at: event.starts_at
       )

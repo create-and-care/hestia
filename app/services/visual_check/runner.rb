@@ -32,7 +32,6 @@ module VisualCheck
       empty_household, empty_user = ensure_empty_household!
 
       launcher = boot_server!
-      results = nil
 
       begin
         manifest_path = build_manifest(demo_household, demo_user, empty_household, empty_user)

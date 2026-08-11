@@ -32,7 +32,6 @@ class GiftListsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "enable a public share link" do
-    list = gift_lists(:beta_list) # no share yet — but scoped to alpha; use an alpha list without share
     list = households(:alpha).gift_lists.create!(name: "Sans partage", perspective: "receive")
     assert_difference -> { GiftListShare.count }, 1 do
       post gift_list_share_path(list)
