@@ -27,21 +27,21 @@ class TodayController < ApplicationController
     # "calendar" check: unlike CalendarController (reachable only when
     # calendar itself is enabled), this page is ungated, so a household
     # that disabled calendar but kept birthdays/waste/trips on would
-    # otherwise lose those from the page too.
+    # otherwise lose those from the page too. merge_occurrences still owns
+    # the sort, so this only decides which sources go in.
     def today_occurrences(range)
-      occurrences = []
-      occurrences += event_occurrences(range) if @household.module_enabled?("calendar")
-      occurrences += birthday_occurrences_in(range) if @household.module_enabled?("birthdays")
-      occurrences += waste_occurrences_in(range) if @household.module_enabled?("waste")
-      occurrences += trip_occurrences_in(range) if @household.module_enabled?("trips")
-      occurrences.sort_by(&:first)
+      sources = []
+      sources << event_occurrences_in(todays_events(range), range) if @household.module_enabled?("calendar")
+      sources << birthday_occurrences_in(range) if @household.module_enabled?("birthdays")
+      sources << waste_occurrences_in(range) if @household.module_enabled?("waste")
+      sources << trip_occurrences_in(range) if @household.module_enabled?("trips")
+      merge_occurrences(*sources)
     end
 
     # Narrowed in SQL via CalendarEvent.overlapping before expansion, the same
     # bound Dashboard's own @upcoming_events widget uses — otherwise this loads
     # every event a household has ever created on every visit to this page.
-    def event_occurrences(range)
+    def todays_events(range)
       @household.calendar_events.overlapping(range.begin, range.end).includes(:participants)
-                .flat_map { |event| event.occurrences_between(range.begin, range.end).map { |time| [ time, event ] } }
     end
 end

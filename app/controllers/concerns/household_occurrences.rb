@@ -46,22 +46,36 @@ module HouseholdOccurrences
 
     # Trips/Calendar interconnection: surfaces every day of a trip on the calendar (one
     # occurrence per day in range) instead of it only ever showing on the Trips module's own page.
+    #
+    # Narrowed to trips overlapping range in SQL, then each trip's own span is
+    # clamped to range before enumerating dates — a multi-week or multi-year
+    # trip otherwise walks every day it covers just to keep the handful inside
+    # the window, the same unbounded-relation cost PERF-04/05 fixed elsewhere.
     def trip_occurrences_in(range)
       return [] if @member_id
 
-      Current.household.trips.where.not(starts_on: nil).flat_map do |trip|
-        (trip.starts_on..(trip.ends_on || trip.starts_on)).filter_map do |date|
-          date.to_time.between?(range.begin, range.end) ? [ date.to_time, trip ] : nil
+      Current.household.trips.where.not(starts_on: nil)
+        .where(starts_on: ..range.end.to_date)
+        .where("COALESCE(ends_on, starts_on) >= ?", range.begin.to_date)
+        .flat_map do |trip|
+          span_start = [ trip.starts_on, range.begin.to_date ].max
+          span_end = [ trip.ends_on || trip.starts_on, range.end.to_date ].min
+          (span_start..span_end).map { |date| [ date.to_time, trip ] }
         end
-      end
     end
 
-    # Merges CalendarEvent occurrences (real start times) with the date-only
-    # interconnections above (anchored at midnight, so they sort to the start
-    # of their day) into the single [time, occurrence] shape every consumer
-    # of this concern renders via calendar/_occurrences_list.
-    def merge_occurrences(events, range)
-      event_occurrences = events.flat_map { |event| event.occurrences_between(range.begin, range.end).map { |time| [ time, event ] } }
-      (event_occurrences + birthday_occurrences_in(range) + waste_occurrences_in(range) + trip_occurrences_in(range)).sort_by(&:first)
+    # CalendarEvent occurrences (real start times) within range, as
+    # [time, event] pairs — the same shape the date-only interconnections
+    # below produce (anchored at midnight instead of a real time).
+    def event_occurrences_in(events, range)
+      events.flat_map { |event| event.occurrences_between(range.begin, range.end).map { |time| [ time, event ] } }
+    end
+
+    # Concatenates any number of already-computed [time, occurrence] lists
+    # and sorts them into the single shape calendar/_occurrences_list renders —
+    # the one place that ordering is decided, so every caller reads the same
+    # way regardless of which sources it chose to include.
+    def merge_occurrences(*occurrence_lists)
+      occurrence_lists.flatten(1).sort_by(&:first)
     end
 end

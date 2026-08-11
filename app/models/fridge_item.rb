@@ -8,6 +8,7 @@ class FridgeItem < ApplicationRecord
 
   validates :name, presence: true
   validates :location, inclusion: { in: LOCATIONS }
+  validates :quantity, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   scope :ordered, -> { order(:location, :expires_on, :name) }
 

@@ -118,6 +118,6 @@ class CalendarController < ApplicationController
     end
 
     def occurrences_in(range)
-      merge_occurrences(@events, range)
+      merge_occurrences(event_occurrences_in(@events, range), birthday_occurrences_in(range), waste_occurrences_in(range), trip_occurrences_in(range))
     end
 end

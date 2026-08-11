@@ -20,6 +20,19 @@ class FridgeControllerTest < ActionDispatch::IntegrationTest
     assert_select "##{dom_id(fridge_items(:beta_milk))}", false
   end
 
+  test "formats the quantity, stripping insignificant trailing zeros" do
+    households(:alpha).fridge_items.create!(name: "Beurre", location: "refrigerateur", quantity: 5.00, unit: "pièces")
+    households(:alpha).fridge_items.create!(name: "Lait entier", location: "refrigerateur", quantity: 1.50, unit: "L")
+    households(:alpha).fridge_items.create!(name: "Levure", location: "garde_manger", quantity: 0.25, unit: "kg")
+
+    get fridge_path
+
+    assert_response :success
+    assert_includes @response.body, "5 pièces"
+    assert_includes @response.body, "1.5 L"
+    assert_includes @response.body, "0.25 kg"
+  end
+
   test "search filters the items" do
     get fridge_path(q: "yaourt")
     assert_response :success

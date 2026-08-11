@@ -98,6 +98,38 @@ class TodayControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, "Zorglub"
   end
 
+  test "surfaces an overdue vaccine booster" do
+    sign_in_as(users(:one))
+    pets(:alpha_dog).pet_vaccinations.create!(name: "Rage", booster_on: 3.days.ago.to_date)
+
+    get today_path
+
+    assert_response :success
+    assert_includes @response.body, "Rage"
+  end
+
+  test "surfaces a waste collection happening today" do
+    sign_in_as(users(:one))
+    households(:alpha).waste_collection_events.create!(waste_type: "verre", collected_on: Date.current)
+
+    get today_path
+
+    assert_response :success
+    assert_includes @response.body, "Glass"
+  end
+
+  test "surfaces a trip spanning today and excludes one entirely outside the window" do
+    sign_in_as(users(:one))
+    households(:alpha).trips.create!(name: "Chalet", starts_on: 1.day.ago.to_date, ends_on: 1.day.from_now.to_date)
+    households(:alpha).trips.create!(name: "Lointain", starts_on: 30.days.from_now.to_date, ends_on: 32.days.from_now.to_date)
+
+    get today_path
+
+    assert_response :success
+    assert_includes @response.body, "Chalet"
+    assert_not_includes @response.body, "Lointain"
+  end
+
   test "the calendar events query narrows to today rather than loading the whole household history" do
     sign_in_as(users(:one))
     households(:alpha).calendar_events.create!(title: "Zorglub", starts_at: Time.current.middle_of_day, ends_at: Time.current.middle_of_day + 1.hour)

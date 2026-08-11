@@ -32,6 +32,22 @@ class FridgeItemTest < ActiveSupport::TestCase
     assert_equal :ok, item.expiration_status
   end
 
+  test "persists quantity and unit" do
+    item = households(:alpha).fridge_items.create!(name: "Beurre", location: "refrigerateur", quantity: 1.5, unit: "kg")
+    assert_equal 1.5.to_d, item.reload.quantity
+    assert_equal "kg", item.unit
+  end
+
+  test "rejects a negative quantity" do
+    item = households(:alpha).fridge_items.build(name: "Beurre", location: "refrigerateur", quantity: -1)
+    assert_not item.valid?
+  end
+
+  test "allows a blank quantity" do
+    item = households(:alpha).fridge_items.build(name: "Beurre", location: "refrigerateur")
+    assert item.valid?
+  end
+
   test "is scoped to its household" do
     assert_not_includes households(:alpha).fridge_items, fridge_items(:beta_milk)
   end

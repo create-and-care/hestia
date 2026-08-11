@@ -25,7 +25,7 @@
             <% field.with_label { t(".quantity_label") } %>
             <% field.with_control do %>
               <%= render Ui::InputComponent.new(type: "number", name: "fridge_item[quantity]", value: @fridge_item.quantity,
-                    html_options: { id: "fridge_item_quantity", step: "any", min: 0 }) %>
+                    html_options: { id: "fridge_item_quantity", step: "0.01", min: 0 }) %>
             <% end %>
           <% end %>
         </div>
