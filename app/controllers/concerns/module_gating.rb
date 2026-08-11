@@ -69,7 +69,7 @@ module ModuleGating
     accounts active_sessions api_tokens households locales memberships onboarding
     notifications notification_preferences
     passwords registrations sessions
-    dashboard design_system roadmap
+    dashboard today design_system roadmap
     public_gift_lists pwa
     searches
   ].freeze
@@ -78,7 +78,7 @@ module ModuleGating
   # households/memberships/locales/onboarding — including the settings page
   #   carrying the module toggles: gating it would make a module that got
   #   switched off impossible to switch back on.
-  # dashboard/design_system/roadmap — global pages, not owned by a module.
+  # dashboard/today/design_system/roadmap — global pages, not owned by a module.
   # public_gift_lists — unauthenticated by design, with no Current.household to
   #   consult; guarded by the share token and its own rate limits instead.
   # pwa — the manifest and the service worker, fetched by the browser itself

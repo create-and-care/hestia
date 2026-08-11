@@ -33,7 +33,8 @@ module Roadmap
     refinement_wave_day3a refinement_wave_day3b
     public_route_hardening security_performance_hardening
     design_system_measured pwa i18n_guardrails budget_expense_chart
-    wired_patterns today_view quick_capture
+    fridge_item_quantity_unit today_view
+    wired_patterns quick_capture
     account_privacy security_audit_trail household_activity_export
     tasks_and_recurrence shared_responsibility cooking_and_shopping
     reference_catalog_growth shared_link_controls household_logistics
@@ -77,7 +78,9 @@ module Roadmap
     "design_system_measured" => Date.new(2026, 8, 7),
     "pwa" => Date.new(2026, 8, 7),
     "i18n_guardrails" => Date.new(2026, 8, 7),
-    "budget_expense_chart" => Date.new(2026, 8, 11)
+    "budget_expense_chart" => Date.new(2026, 8, 11),
+    "fridge_item_quantity_unit" => Date.new(2026, 8, 11),
+    "today_view" => Date.new(2026, 8, 11)
   }.freeze
 
   MILESTONE_STATUSES = MILESTONE_SLUGS.index_with { |slug| MILESTONE_DATES.key?(slug) ? :done : :upcoming }.freeze
@@ -97,7 +100,7 @@ module Roadmap
     "account_privacy" => "trash-2", "household_activity_export" => "trending-up",
     "public_route_hardening" => "triangle-alert", "security_performance_hardening" => "wrench",
     "design_system_measured" => "layout-grid", "i18n_guardrails" => "info",
-    "budget_expense_chart" => "bar-chart-3",
+    "budget_expense_chart" => "bar-chart-3", "fridge_item_quantity_unit" => "ruler",
     "shared_link_controls" => "link", "household_logistics" => "sofa",
     "reference_catalog_growth" => "sprout",
     "wired_patterns" => "puzzle", "tasks_and_recurrence" => "list-checks",

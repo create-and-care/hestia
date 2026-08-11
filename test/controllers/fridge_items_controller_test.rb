@@ -14,6 +14,15 @@ class FridgeItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "create stores the quantity and unit" do
+    post fridge_items_path,
+      params: { fridge_item: { name: "Beurre", location: "refrigerateur", quantity: 250, unit: "g" } },
+      as: :turbo_stream
+    item = households(:alpha).fridge_items.find_by(name: "Beurre")
+    assert_equal 250, item.quantity
+    assert_equal "g", item.unit
+  end
+
   test "create with a blank name redirects with an alert" do
     assert_no_difference -> { FridgeItem.count } do
       post fridge_items_path,

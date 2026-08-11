@@ -8,6 +8,8 @@ module Frigo
         name: shopping_list_item.name,
         location: location,
         expires_on: expires_on,
+        quantity: shopping_list_item.quantity,
+        unit: shopping_list_item.unit,
         product: shopping_list_item.product
       )
       shopping_list_item.destroy!

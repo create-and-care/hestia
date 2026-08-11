@@ -11,6 +11,12 @@ module Frigo
       end
     end
 
+    test "stores the quantity and unit" do
+      item = Frigo::AddItem.call(household: households(:alpha), name: "Beurre", quantity: 250, unit: "g")
+      assert_equal 250, item.quantity
+      assert_equal "g", item.unit
+    end
+
     test "defaults the location to refrigerateur" do
       item = Frigo::AddItem.call(household: households(:alpha), name: "Oeufs")
       assert_equal "refrigerateur", item.location

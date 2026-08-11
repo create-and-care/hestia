@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_09_204908) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_11_183117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -332,6 +332,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_09_204908) do
     t.string "location", null: false
     t.string "name", null: false
     t.bigint "product_id"
+    t.decimal "quantity", precision: 10, scale: 2
+    t.string "unit"
     t.datetime "updated_at", null: false
     t.index ["household_id", "location"], name: "index_fridge_items_on_household_id_and_location"
     t.index ["household_id"], name: "index_fridge_items_on_household_id"

@@ -6,7 +6,9 @@ class FridgeItemsController < ApplicationController
       household: Current.household,
       name: fridge_item_params[:name],
       location: fridge_item_params[:location],
-      expires_on: fridge_item_params[:expires_on]
+      expires_on: fridge_item_params[:expires_on],
+      quantity: fridge_item_params[:quantity],
+      unit: fridge_item_params[:unit]
     )
 
     respond_to do |format|
@@ -57,6 +59,6 @@ class FridgeItemsController < ApplicationController
     end
 
     def fridge_item_params
-      params.require(:fridge_item).permit(:name, :location, :expires_on)
+      params.require(:fridge_item).permit(:name, :location, :expires_on, :quantity, :unit)
     end
 end

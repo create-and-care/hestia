@@ -213,6 +213,15 @@ fr:
         title: "Voir où va l'argent"
         items:
           - "Un graphique en barres sur la page Budget, montrant la répartition des charges par catégorie, à côté des totaux revenus/charges/épargne"
+      fridge_item_quantity_unit:
+        title: "Suivre la quantité au frigo"
+        items:
+          - "Quantité et unité sur les articles du frigo, reportées automatiquement lors du passage d'un article entre la liste de courses et le frigo, dans les deux sens"
+      today_view:
+        title: "Aujourd'hui : une page, une question"
+        items:
+          - "Une page unique qui répond à « qu'est-ce qu'il y a à faire aujourd'hui ? » : tâches en retard, rappels de vaccins et soins des plantes, aliments qui expirent bientôt, et les événements, anniversaires, collectes de déchets et jours de voyage du jour"
+          - "Triée par heure de la journée plutôt qu'éclatée entre les encarts de chaque module"
       pwa:
         title: "Application installable"
         items:
@@ -231,12 +240,6 @@ fr:
           - "Inventaire des biens (photo, valeur, date d'achat, garantie), pour l'assurance et la revente"
           - "Calendrier des vacances scolaires françaises (zones A/B/C) — les jours fériés sont couverts, pas ce qui structure l'année d'un foyer avec enfants"
           - "Détection des doublons à l'ajout aux courses, et suggestions tirées de l'historique d'achat déjà en base"
-      today_view:
-        title: "Aujourd'hui : une page, une question"
-        items:
-          - "Une page unique répondant à « qu'est-ce qu'il y a à faire aujourd'hui ? » : DashboardController calcule déjà les tâches en retard, les articles du frigo qui expirent, les plantes à soigner et les sept prochains jours d'événements — sous forme de sept encarts découpés par module, jamais comme une journée"
-          - "CalendarController fusionne déjà tâches, vaccinations, soins des plantes, collectes de déchets, anniversaires et jours de voyage en un seul flux d'occurrences — le tableau de bord ne peut pas le voir"
-          - "Trié par heure de la journée plutôt que par module, pour que la page se lise comme une journée et non comme un menu"
       quick_capture:
         title: "Noter d'abord, ranger ensuite"
         items:
@@ -247,7 +250,6 @@ fr:
         title: "Des motifs déjà présents dans le dépôt, enfin branchés"
         items:
           - "Pièces jointes et réactions sur les messages : CirclePost porte déjà has_one_attached :photo et un modèle CirclePostReaction complet avec son contrôleur et ses routes — le motif est écrit, testé et livré, il n'est simplement pas appliqué aux messages"
-          - "quantity et unit sur les articles du frigo : les articles de courses portent les deux, ceux du frigo aucun des deux, et les deux services Frigo↔Courses traversent déjà cette frontière en perdant l'information"
       tasks_and_recurrence:
         title: "Tâches et récurrences, en profondeur"
         items:

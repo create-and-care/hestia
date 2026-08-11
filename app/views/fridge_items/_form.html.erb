@@ -34,6 +34,25 @@
             <% end %>
           <% end %>
         </div>
+        <div class="w-20">
+          <%= render(Ui::FieldComponent.new(id: "fridge_item_quantity")) do |field| %>
+            <% field.with_label { t(".quantity_label") } %>
+            <% field.with_control do %>
+              <%= render Ui::InputComponent.new(type: "number", name: "fridge_item[quantity]", value: fridge_item.quantity,
+                    html_options: { id: "fridge_item_quantity", step: "0.01", min: 0 }) %>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="w-24">
+          <%= render(Ui::FieldComponent.new(id: "fridge_item_unit")) do |field| %>
+            <% field.with_label { t(".unit_label") } %>
+            <% field.with_control do %>
+              <%= render Ui::InputComponent.new(name: "fridge_item[unit]", value: fridge_item.unit,
+                    placeholder: t(".unit_placeholder"),
+                    html_options: { id: "fridge_item_unit" }) %>
+            <% end %>
+          <% end %>
+        </div>
         <div class="w-44">
           <%= render(Ui::FieldComponent.new(id: "fridge_item_location")) do |field| %>
             <% field.with_label { t(".location_label") } %>

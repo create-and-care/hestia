@@ -1,6 +1,11 @@
 <%= tag.div id: dom_id(fridge_item), class: "rounded-lg border border-primary" do %>
   <%= render(Ui::ItemComponent.new) do |item| %>
-    <% item.with_title { fridge_item.name } %>
+    <% item.with_title do %>
+      <%= fridge_item.name %>
+      <% if fridge_item.quantity.present? %>
+        <span class="text-sm text-secondary">— <%= number_with_precision(fridge_item.quantity, precision: 2, strip_insignificant_zeros: true) %> <%= fridge_item.unit %></span>
+      <% end %>
+    <% end %>
     <% if fridge_item.expires_on.present? %>
       <% item.with_description { t(".until_date", date: l(fridge_item.expires_on, format: :numeric)) } %>
     <% end %>

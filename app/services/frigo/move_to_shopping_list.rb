@@ -5,6 +5,8 @@ module Frigo
       Courses::AddItem.call(
         shopping_list: shopping_list,
         name: fridge_item.name,
+        quantity: fridge_item.quantity,
+        unit: fridge_item.unit,
         product: fridge_item.product
       )
     end

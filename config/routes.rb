@@ -177,6 +177,8 @@ Rails.application.routes.draw do
   end
   resources :task_categories, only: %i[create destroy]
 
+  resource :today, only: :show, controller: "today"
+
   # Calendar module.
   resource :calendar, only: :show, controller: "calendar"
   resources :calendar_events, only: %i[new create edit update destroy] do

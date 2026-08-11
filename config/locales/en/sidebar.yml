@@ -1,6 +1,7 @@
 en:
   sidebar:
     home: "Home"
+    today: "Today"
     unread: "Unread"
     open_nav: "Open navigation"
     groups:

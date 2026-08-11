@@ -8,6 +8,10 @@ class FridgeItem < ApplicationRecord
 
   validates :name, presence: true
   validates :location, inclusion: { in: LOCATIONS }
+  # Matches the quantity column's own decimal(10, 2): without this, a value
+  # above 99_999_999.99 doesn't fail validation, it raises PG::NumericValueOutOfRange
+  # (ActiveRecord::RangeError) straight out of the INSERT/UPDATE.
+  validates :quantity, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 99_999_999.99 }, allow_nil: true
 
   scope :ordered, -> { order(:location, :expires_on, :name) }
 
