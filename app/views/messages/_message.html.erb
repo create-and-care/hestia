@@ -24,8 +24,8 @@
 
     <% my_reaction = message.message_reactions.detect { |r| r.user_id == Current.user&.id } %>
     <div class="mt-2 flex flex-wrap items-center gap-2">
-      <% message.message_reactions.group_by(&:emoji).each do |emoji, reactions| %>
-        <%= render(Ui::BadgeComponent.new(variant: :secondary)) { "#{emoji} #{reactions.size}" } %>
+      <%= tag.div id: "message_#{message.id}_reactions", class: "contents" do %>
+        <%= render "messages/reaction_counts", message: message %>
       <% end %>
       <%# Bespoke one-tap emoji reaction pills, mirroring circle_posts/_circle_post —
           see that partial's comment on why these stay hand-rolled button_to forms
