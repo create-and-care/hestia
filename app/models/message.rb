@@ -4,10 +4,11 @@ class Message < ApplicationRecord
   has_many :message_reactions, dependent: :destroy
   has_one_attached :photo
 
+  ALLOWED_PHOTO_TYPES = %w[image/png image/jpeg image/jpg image/gif image/webp]
+  MAX_PHOTO_SIZE = 10.megabytes
+
   validates :content, presence: true
-  validates :photo, content_type: { in: %w[image/png image/jpeg image/jpg image/gif image/webp],
-                                     message: "must be an image" },
-                    size: { less_than: 10.megabytes, message: "must be less than 10MB" }
+  validate :photo_must_be_a_valid_image, if: -> { photo.attached? }
 
   scope :chronological, -> { order(:created_at) }
 
@@ -18,6 +19,11 @@ class Message < ApplicationRecord
   after_create_commit :broadcast_to_conversation_list
 
   private
+    def photo_must_be_a_valid_image
+      errors.add(:photo, "must be an image") unless ALLOWED_PHOTO_TYPES.include?(photo.content_type)
+      errors.add(:photo, "must be less than 10MB") if photo.byte_size > MAX_PHOTO_SIZE
+    end
+
     # The thread itself (broadcasts_to above) updates live, but without this
     # a participant's /messages list only reflects the new last-message
     # preview and reordering after a full page reload.

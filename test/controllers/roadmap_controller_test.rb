@@ -72,11 +72,11 @@ class RoadmapControllerTest < ActionDispatch::IntegrationTest
     v2_milestones = Roadmap.milestones.select { |m| m[:release] == :v2 }
 
     v1_milestones.each do |milestone|
-      assert_includes @response.body, milestone[:title], "V1 milestone #{milestone[:slug]} should be rendered"
+      assert_includes @response.body, ERB::Util.html_escape(milestone[:title]), "V1 milestone #{milestone[:slug]} should be rendered"
     end
 
     v2_milestones.each do |milestone|
-      assert_includes @response.body, milestone[:title], "V2 milestone #{milestone[:slug]} should be rendered"
+      assert_includes @response.body, ERB::Util.html_escape(milestone[:title]), "V2 milestone #{milestone[:slug]} should be rendered"
     end
   end
 

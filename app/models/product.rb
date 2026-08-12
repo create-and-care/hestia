@@ -14,15 +14,18 @@ class Product < ApplicationRecord
       scope.create!(name: name, rayon: rayon)
   end
 
-  # The first catalog product whose name appears anywhere inside the given
-  # text — the reverse of catalog_for's exact match, used to recognize a
+  # The most specific catalog product whose name appears anywhere inside the
+  # given text — the reverse of catalog_for's exact match, used to recognize a
   # known product inside a longer free-text phrase (Quick Capture) rather
-  # than resolve one from an already-isolated name.
+  # than resolve one from an already-isolated name. When several product
+  # names match (e.g. "Lait" and "Lait 2%" both appear in "du lait 2%"), the
+  # longest name wins as the more specific match.
   def self.matching(household:, text:)
     return if text.blank?
 
-    household.products.find do |product|
-      text.downcase.include?(product.name.downcase)
-    end
+    downcased_text = text.downcase
+    household.products
+      .select { |product| downcased_text.include?(product.name.downcase) }
+      .max_by { |product| product.name.length }
   end
 end
