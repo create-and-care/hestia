@@ -46,8 +46,8 @@ class AppShellTest < ActionDispatch::IntegrationTest
   test "the quick-capture trigger renders once for desktop and once for mobile, each with its own panel id" do
     get root_path
 
-    assert_select "#quick_capture_panel"
-    assert_select "#quick_capture_panel_mobile"
+    assert_select "#quick_capture_panel", count: 1
+    assert_select "#quick_capture_panel_mobile", count: 1
   end
 
   test "the quick-capture trigger is hidden when the notes module is disabled" do
@@ -57,5 +57,6 @@ class AppShellTest < ActionDispatch::IntegrationTest
 
     assert_select "#quick_capture_panel", false
     assert_select "#quick_capture_panel_mobile", false
+    assert_select "button[aria-label='#{I18n.t("quick_capture.trigger_aria")}']", false
   end
 end

@@ -22,7 +22,7 @@
       <%= image_tag message.photo.variant(resize_to_limit: [ 480, 480 ]), alt: "", loading: :lazy, class: "mt-2 max-h-80 w-auto rounded-lg object-cover" %>
     <% end %>
 
-    <% my_reaction = message.message_reactions.detect { |r| r.user_id == Current.user.id } %>
+    <% my_reaction = message.message_reactions.detect { |r| r.user_id == Current.user&.id } %>
     <div class="mt-2 flex flex-wrap items-center gap-2">
       <% message.message_reactions.group_by(&:emoji).each do |emoji, reactions| %>
         <%= render(Ui::BadgeComponent.new(variant: :secondary)) { "#{emoji} #{reactions.size}" } %>

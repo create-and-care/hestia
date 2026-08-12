@@ -5,6 +5,9 @@ class Message < ApplicationRecord
   has_one_attached :photo
 
   validates :content, presence: true
+  validates :photo, content_type: { in: %w[image/png image/jpeg image/jpg image/gif image/webp],
+                                     message: "must be an image" },
+                    size: { less_than: 10.megabytes, message: "must be less than 10MB" }
 
   scope :chronological, -> { order(:created_at) }
 

@@ -43,10 +43,41 @@ class RoadmapControllerTest < ActionDispatch::IntegrationTest
     get roadmap_path
     assert_response :success
 
-    assert_select "[role='separator']", text: /#{Regexp.escape(I18n.t("roadmap.show.today"))}/
+    assert_select "h2", text: /#{Regexp.escape(I18n.t("roadmap.show.today"))}/
 
     newest = Roadmap.milestones.select { |milestone| milestone[:date] }.max_by { |milestone| milestone[:date] }
     assert_includes @response.body, I18n.l(newest[:date], format: :long)
+  end
+
+  test "renders V1 and V2 release group labels in order before shipped milestones" do
+    sign_in_as(User.create!(name: "Dan", email_address: "dan@example.com", password: "secret123"))
+
+    get roadmap_path
+    assert_response :success
+
+    v1_label = I18n.t("roadmap.show.release.v1")
+    v2_label = I18n.t("roadmap.show.release.v2")
+    v1_position = @response.body.index(v1_label)
+    v2_position = @response.body.index(v2_label)
+
+    # Both labels should appear
+    assert v1_position, "V1 release label should be rendered"
+    assert v2_position, "V2 release label should be rendered"
+
+    # V1 should come before V2
+    assert_operator v1_position, :<, v2_position, "V1 should appear before V2"
+
+    # Verify V1 and V2 contain expected milestones
+    v1_milestones = Roadmap.milestones.select { |m| m[:release] == :v1 }
+    v2_milestones = Roadmap.milestones.select { |m| m[:release] == :v2 }
+
+    v1_milestones.each do |milestone|
+      assert_includes @response.body, milestone[:title], "V1 milestone #{milestone[:slug]} should be rendered"
+    end
+
+    v2_milestones.each do |milestone|
+      assert_includes @response.body, milestone[:title], "V2 milestone #{milestone[:slug]} should be rendered"
+    end
   end
 
   # The same partial is the "Roadmap" tab of household settings, which is where

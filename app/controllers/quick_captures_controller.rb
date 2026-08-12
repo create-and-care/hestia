@@ -13,5 +13,10 @@ class QuickCapturesController < ApplicationController
       @note = Current.household.notes.create!(title: text, author: Current.user)
       @suggestion = QuickCapture::AnalyzeText.call(household: Current.household, text: text)
     end
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to notes_path }
+    end
   end
 end

@@ -26,4 +26,16 @@ class ProductTest < ActiveSupport::TestCase
   test "matching returns nil for blank text" do
     assert_nil Product.matching(household: households(:alpha), text: "")
   end
+
+  test "matching treats % literally in product names" do
+    product = households(:alpha).products.create!(name: "Lait 2%")
+    assert_equal product, Product.matching(household: households(:alpha), text: "Acheter du lait 2%")
+    assert_nil Product.matching(household: households(:alpha), text: "Acheter du lait 2X")
+  end
+
+  test "matching treats _ literally in product names" do
+    product = households(:alpha).products.create!(name: "Eau_gazeuse")
+    assert_equal product, Product.matching(household: households(:alpha), text: "Acheter de l'eau_gazeuse")
+    assert_nil Product.matching(household: households(:alpha), text: "Acheter de l'eau gazeuse")
+  end
 end

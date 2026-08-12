@@ -21,6 +21,8 @@ class Product < ApplicationRecord
   def self.matching(household:, text:)
     return if text.blank?
 
-    household.products.where("LOWER(:text) LIKE '%' || LOWER(name) || '%'", text: text).first
+    household.products.find do |product|
+      text.downcase.include?(product.name.downcase)
+    end
   end
 end

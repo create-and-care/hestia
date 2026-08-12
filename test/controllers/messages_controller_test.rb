@@ -46,4 +46,14 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     post conversation_messages_path(conversation), params: { message: { content: "Regardez !", photo: photo } }, as: :turbo_stream
     assert conversation.messages.order(:created_at).last.photo.attached?
   end
+
+  test "rejects a non-image upload" do
+    conversation = conversations(:alpha_chat)
+    pdf = fixture_file_upload("sample.pdf", "application/pdf")
+    assert_no_difference -> { conversation.messages.count } do
+      post conversation_messages_path(conversation), params: { message: { content: "Document", photo: pdf } }
+    end
+    assert_redirected_to conversation
+    assert_includes flash[:alert], "must be an image"
+  end
 end
