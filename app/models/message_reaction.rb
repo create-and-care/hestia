@@ -16,8 +16,15 @@ class MessageReaction < ApplicationRecord
   after_destroy_commit :broadcast_reaction_update
 
   private
+    # find_by rather than the (possibly stale) message association, and
+    # nil-guarded: dependent destroy of the parent conversation destroys
+    # its messages first, so a reaction's after_destroy_commit can fire
+    # after the message row is already gone.
     def broadcast_reaction_update
-      message.reload.broadcast_replace_to(
+      message = Message.find_by(id: message_id)
+      return unless message
+
+      message.broadcast_replace_to(
         message.conversation,
         target: "message_#{message.id}_reactions",
         partial: "messages/reaction_counts",

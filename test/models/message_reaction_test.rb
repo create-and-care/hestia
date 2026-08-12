@@ -34,4 +34,10 @@ class MessageReactionTest < ActiveSupport::TestCase
 
     assert reaction.valid?
   end
+
+  test "destroying a conversation with a reacted message does not raise" do
+    messages(:alpha_hello).message_reactions.create!(user: users(:two), emoji: "👍")
+
+    assert_nothing_raised { conversations(:alpha_chat).destroy! }
+  end
 end
