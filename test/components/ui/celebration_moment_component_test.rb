@@ -4,7 +4,7 @@ class Ui::CelebrationMomentComponentTest < ViewComponent::TestCase
   test "renders the title, note, and the birthday medallion by default" do
     render_inline(Ui::CelebrationMomentComponent.new(title: "L'anniversaire de Camille approche", note: "Dans 3 jours"))
 
-    assert_selector "p.font-hand", text: "L'anniversaire de Camille approche"
+    assert_selector "p.font-display", text: "L'anniversaire de Camille approche"
     assert_selector "p", text: "Dans 3 jours"
     assert_selector "span.bg-module-gifts\\/12"
   end

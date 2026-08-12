@@ -4,7 +4,10 @@
   <% elsif icon? %>
     <div class="mb-2 text-subdued"><%= icon %></div>
   <% end %>
-  <% if title? %><p class="text-sm font-medium text-primary"><%= title %></p><% end %>
+  <%# The title carries the editorial serif (22px/400, was 15px/500) — an empty
+      state is the app speaking to a person, not a data label. leading-tight is
+      1.25. The rest of the component is unchanged. %>
+  <% if title? %><p class="font-display text-xl font-normal leading-tight text-primary"><%= title %></p><% end %>
   <% if description? %><p class="text-sm text-secondary max-w-sm"><%= description %></p><% end %>
   <% if action? %><div class="mt-3"><%= action %></div><% end %>
 </div>

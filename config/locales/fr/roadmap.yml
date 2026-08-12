@@ -327,7 +327,7 @@ fr:
       health_records:
         title: "Suivi de santé des personnes"
         items:
-          - "Suivi médical humain (traitements, vaccins, cycles) : le motif est intégralement écrit pour Animaux — PetVaccination, PetTreatment, avec rappels de rappel — et absent pour les humains ; Bien-être ne couvre que le poids et les séances"
+          - "Suivi médical humain (traitements, vaccins, cycles) : le motif est intégralement écrit pour Animaux — PetVaccination, PetTreatment, avec rappels de vaccinations — et absent pour les humains ; Bien-être ne couvre que le poids et les séances"
           - "Profil allergènes par personne, et filtrage des recettes contre lui : AllergenTest existe mais appartient à Bébé (diversification alimentaire), donc une recette d'adulte n'a rien à quoi être confrontée"
           - "À ne pas commencer avant d'avoir tranché trois points : est-ce accroché à un compte, à un profil sans compte (comme BabyProfile), ou à une nouvelle entité personne ; qui dans le foyer peut le lire ; et ce qu'un export de foyer fait d'une donnée de santé"
       automation_rules:

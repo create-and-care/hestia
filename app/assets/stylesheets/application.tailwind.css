@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap');
 @import "tailwindcss";
 
 /*
@@ -9,9 +9,21 @@
 @theme {
   --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  /* Handwritten accent — greetings and celebration moments ONLY. Never labels,
-     body copy, or a heading in a data view. One line at a time. */
-  --font-hand: 'Caveat', 'Segoe Script', 'Bradley Hand', cursive;
+  /* Editorial serif accent — the register where the app speaks to a person:
+     greeting, celebration title, empty-state title, plus hero amounts and
+     dashboard section titles case by case in the views. Never a label, never a
+     table cell, never under 20px.
+
+     Replaces Caveat (2026-08-12): a handwritten face can only do one thing —
+     a short line — and the same register was wanted on an amount and on an
+     empty-state title. Two accent faces was one too many.
+
+     Instrument Serif ships ONE weight (400). Any font-semibold/font-bold on it
+     fabricates a synthetic bold on screen — don't. */
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  /* Deprecated alias, so nothing breaks mid-transition. New call sites write
+     --font-display; a later pass deletes this and its remaining callers. */
+  --font-hand: var(--font-display);
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -250,6 +262,28 @@
   --color-crimson-800: #7C0C27;
   --color-crimson-900: #610A20;
 
+  /* Pine — the cold counterpoint (adopted 2026-08-12). The palette was warm
+     throughout except one colour: the generic blue behind --link and --info,
+     the last off-palette hue left in the chrome and the one you saw wherever a
+     link sat in running text. pine-600 #1F665F is a desaturated blue-green
+     that holds the same role without leaving the system's material.
+
+     It is NOT a second brand. It takes what informs without asking for an
+     action (links, --info, gauges, neutral series); terracotta keeps what
+     activates. Never in MODULE_TINTS, never a status badge, never a button
+     fill — a wish to put it there means a token is missing, not a colour. */
+  --color-pine-25: #F7FBFA;
+  --color-pine-50: #F2F8F7;
+  --color-pine-100: #DCEEEB;
+  --color-pine-200: #B5DBD5;
+  --color-pine-300: #7DC0B7;
+  --color-pine-400: #4A9F95;
+  --color-pine-500: #2A8077;
+  --color-pine-600: #1F665F;
+  --color-pine-700: #1A524C;
+  --color-pine-800: #16423E;
+  --color-pine-900: #133734;
+
   /* semantic colors — values swap in `.dark`, see below */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -309,9 +343,11 @@
   --warning: var(--color-yellow-600);
   --destructive: var(--color-crimson-600);
   --destructive-subtle: var(--color-crimson-200);
-  --info: var(--color-blue-600);
-  --link: var(--color-blue-700);
-  --link-hover: var(--color-blue-800);
+  /* Pine, not blue, since 2026-08-12 — see the scale's note above. The raw
+     blue-* ramp stays intact; it still serves charts and illustrations. */
+  --info: var(--color-pine-600);
+  --link: var(--color-pine-700);
+  --link-hover: var(--color-pine-800);
 
   /* Status text on a light tint. --success/--warning/--destructive/--info/--accent
      above are tuned as FILLS (dots, bars, borders); at 13-15px on a 10% tint
@@ -323,7 +359,9 @@
      cells. -800 gives 5.80:1 there and only more elsewhere, since every other
      background this sits on is lighter. */
   --destructive-text: var(--color-crimson-800);
-  --info-text: var(--color-blue-700);
+  /* pine-800, not -700: --info is pine-600 and a 10% tint of it is the ground
+     this lands on. 9.1:1 there, and only more on the plain surfaces. */
+  --info-text: var(--color-pine-800);
   --accent-text: var(--color-amber-800);
 
   --shadow-color: color-mix(in oklab, #4A2E1E 8%, transparent);
@@ -420,16 +458,16 @@
   --warning: var(--color-yellow-400);
   --destructive: var(--color-crimson-300);
   --destructive-subtle: var(--color-crimson-800);
-  --info: var(--color-blue-500);
-  --link: var(--color-blue-400);
-  --link-hover: var(--color-blue-300);
+  --info: var(--color-pine-400);
+  --link: var(--color-pine-300);
+  --link-hover: var(--color-pine-200);
 
   --success-text: var(--color-green-300);
   --warning-text: var(--color-yellow-300);
   /* Mirror of the light-mode note above: crimson-300 on --destructive-subtle
      (crimson-800 here) measured 4.00:1; crimson-200 gives 5.80:1. */
   --destructive-text: var(--color-crimson-200);
-  --info-text: var(--color-blue-400);
+  --info-text: var(--color-pine-200);
   --accent-text: var(--color-amber-300);
 
   --shadow-color: color-mix(in oklab, var(--color-black) 40%, transparent);
@@ -687,9 +725,10 @@ dialog[data-state="closed"]::backdrop { opacity: 0; }
   input[type="search"]::-webkit-search-cancel-button,
   input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
 
-  /* .greeting — reserved for GreetingHeader/CelebrationMoment titles. Never
-     labels, body copy, or a data-view heading. */
-  .greeting { font-family: var(--font-hand); font-weight: 600; font-size: 44px; line-height: 1.05; color: var(--text-primary); }
+  /* .greeting — reserved for the GreetingHeader title. Never labels, body copy,
+     or a data-view heading. Weight 400 because --font-display has no other one;
+     600 here used to buy Caveat's heavier cut and now only buys a fake bold. */
+  .greeting { font-family: var(--font-display); font-weight: 400; font-size: 44px; line-height: 1.05; letter-spacing: -0.01em; color: var(--text-primary); }
 
   /* Heading scale — explicit line-height/letter-spacing per level, single
      source of truth for Typography's h1-h4 variants (and any raw markup). */
@@ -716,7 +755,7 @@ dialog[data-state="closed"]::backdrop { opacity: 0; }
      descendant-only selector never matched it and the root fell through to
      `a { color: var(--link) }` above. The row's own text survived because it
      sets text-primary explicitly — but anything riding on currentColor did
-     not, which is why a linked list row drew its leading icon in link blue. */
+     not, which is why a linked list row drew its leading icon in the link color. */
   .on-tone a, a.on-tone { color: inherit; text-decoration: none; }
   .on-tone a:hover { text-decoration: underline; }
   /* A root that *is* the link is a surface, not an inline link in prose: it

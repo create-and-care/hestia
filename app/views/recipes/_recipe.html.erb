@@ -1,7 +1,7 @@
 <% list_mode = local_assigns[:view_mode] == "list" %>
 <%# on-tone: the card is a clickable surface, not an inline link in prose. Without
     the marker the global `a { color: var(--link) }` painted the whole card — title
-    and every currentColor glyph — in link blue, and `a:hover` underlined all of it.
+    and every currentColor glyph — in the link colour, and `a:hover` underlined all of it.
     The row signals hover with its own background, the way ItemComponent does. %>
 <%= link_to recipe_path(recipe), id: dom_id(recipe),
       class: "on-tone transition-colors #{list_mode ? "flex items-center gap-3 px-4 py-3 hover:bg-surface-hover" : "block rounded-lg border border-primary p-4 hover:border-secondary hover:bg-surface-hover"}" do %>

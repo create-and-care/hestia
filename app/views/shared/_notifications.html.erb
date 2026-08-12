@@ -26,8 +26,8 @@
     <% end %>
   </div>
   <%# Explicit color: the popover paints bg-container but carries no .on-tone, so
-      a bare <a> fell through to `--link` from @layer base — the one raw blue,
-      underlined link left in the app chrome. %>
+      a bare <a> fell through to `--link` from @layer base — an accented,
+      underlined link where a quiet footer link belongs. %>
   <%= link_to t(".see_all"), notifications_path,
         class: "mt-2 block text-center text-xs text-secondary no-underline transition-colors hover:text-primary hover:no-underline" %>
 <% end %>

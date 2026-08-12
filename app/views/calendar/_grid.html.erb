@@ -12,9 +12,11 @@
          title="<%= holiday&.fetch(:name) %>">
       <div class="mb-1 flex items-center justify-between">
         <%# The day number is a date first and a link second. Without an
-            explicit colour it fell back to the global link blue, which on a
-            public-holiday cell (bg-destructive-subtle) measured 3.21:1 — the
-            worst contrast finding in the whole app. %>
+            explicit colour it falls back to the global `--link`, which on a
+            public-holiday cell (bg-destructive-subtle) measured 3.21:1 back
+            when --link was blue-700 — the worst contrast finding in the whole
+            app. Pine-700 clears AA there (4.78:1), so this is no longer load-
+            bearing for contrast; it stays because a date should read as a date. %>
         <%# min-w/min-h: the day number is the "add an event on this day"
             control, and at 20 × 16px it was the smallest tap target in the app.
             The cell is 96px tall, so there is room. %>

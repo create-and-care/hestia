@@ -1,6 +1,6 @@
 module Ui
-  # Dashboard opening line — a time-of-day greeting in the handwritten accent
-  # font (see .greeting in application.tailwind.css), plus an optional
+  # Dashboard opening line — a time-of-day greeting in the editorial serif
+  # accent (see .greeting in application.tailwind.css), plus an optional
   # situational lead line underneath. One line at a time, never a data view.
   class GreetingHeaderComponent < ApplicationComponent
     GREETING_KEYS = {

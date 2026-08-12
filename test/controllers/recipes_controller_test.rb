@@ -35,7 +35,7 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
   end
 
   # Without .on-tone the card is a bare <a>, so the global `a { color: var(--link) }`
-  # paints the whole thing link-blue and `a:hover` underlines it.
+  # paints the whole thing in the link colour and `a:hover` underlines it.
   test "a recipe card reads as a surface rather than as a prose link" do
     get recipes_path
     assert_response :success

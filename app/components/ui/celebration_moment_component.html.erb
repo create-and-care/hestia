@@ -2,7 +2,9 @@
   <%= render Ui::ModuleMedallionComponent.new(mod: medallion[:mod], icon: medallion[:icon]) %>
 
   <div class="flex-1 min-w-0">
-    <p class="font-hand font-semibold text-2xl leading-tight text-primary"><%= @title %></p>
+    <%# 28px, not text-2xl's 26: the serif has a smaller x-height than Caveat at
+        the same size. font-normal is the only weight --font-display ships. %>
+    <p class="font-display font-normal text-[28px] leading-tight text-primary"><%= @title %></p>
     <% if @note %><p class="text-secondary text-sm mt-0.5"><%= @note %></p><% end %>
   </div>
 
