@@ -1,0 +1,16 @@
+<% if blank %>
+  <p class="mt-2 text-sm text-destructive"><%= t("quick_capture.blank_error") %></p>
+<% elsif note.present? %>
+  <p class="mt-2 text-sm text-secondary"><%= t("quick_capture.saved") %></p>
+  <% if suggestion == :task %>
+    <%= render(Ui::AlertComponent.new(class_name: "mt-2")) do %>
+      <p class="mb-2"><%= t("quick_capture.suggestion_task") %></p>
+      <%= render(Ui::ButtonToComponent.new(promote_to_task_note_path(note))) { t("quick_capture.create_task") } %>
+    <% end %>
+  <% elsif suggestion == :shopping %>
+    <%= render(Ui::AlertComponent.new(class_name: "mt-2")) do %>
+      <p class="mb-2"><%= t("quick_capture.suggestion_shopping") %></p>
+      <%= render(Ui::ButtonToComponent.new(promote_to_shopping_list_item_note_path(note))) { t("quick_capture.add_to_shopping") } %>
+    <% end %>
+  <% end %>
+<% end %>

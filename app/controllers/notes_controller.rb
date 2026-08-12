@@ -1,7 +1,7 @@
 class NotesController < ApplicationController
   include CollectionViewMode
 
-  before_action :set_note, only: %i[edit update destroy toggle_favorite toggle_archive promote_to_task]
+  before_action :set_note, only: %i[edit update destroy toggle_favorite toggle_archive promote_to_task promote_to_shopping_list_item]
 
   PER_PAGE = 20
 
@@ -63,6 +63,11 @@ class NotesController < ApplicationController
 
   def promote_to_task
     Notes::PromoteToTask.call(note: @note)
+    redirect_to notes_path(preserved_filter_params), notice: t(".promoted")
+  end
+
+  def promote_to_shopping_list_item
+    Notes::PromoteToShoppingListItem.call(note: @note)
     redirect_to notes_path(preserved_filter_params), notice: t(".promoted")
   end
 

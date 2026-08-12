@@ -1,0 +1,13 @@
+fr:
+  quick_capture:
+    trigger_aria: "Capture rapide"
+    title: "Capture rapide"
+    description: "Notez une phrase ; elle est enregistrée comme note, avec une suggestion si elle ressemble à un rappel ou à un article de courses."
+    placeholder: "Notez quelque chose…"
+    submit: "Enregistrer"
+    saved: "Enregistré dans Notes."
+    blank_error: "Écrivez quelque chose avant d'enregistrer."
+    suggestion_task: "On dirait une date — créer aussi une tâche ?"
+    create_task: "Créer une tâche"
+    suggestion_shopping: "Cet article existe déjà dans votre catalogue — l'ajouter aux courses ?"
+    add_to_shopping: "Ajouter aux courses"

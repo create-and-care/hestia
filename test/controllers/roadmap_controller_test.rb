@@ -43,10 +43,53 @@ class RoadmapControllerTest < ActionDispatch::IntegrationTest
     get roadmap_path
     assert_response :success
 
-    assert_select "[role='separator']", text: /#{Regexp.escape(I18n.t("roadmap.show.today"))}/
+    assert_select "h2", text: /#{Regexp.escape(I18n.t("roadmap.show.today"))}/
 
-    newest = Roadmap.milestones.select { |milestone| milestone[:date] }.max_by { |milestone| milestone[:date] }
+    newest = Roadmap.milestones.select { |milestone| milestone[:status] == :done && milestone[:date] }.max_by { |milestone| milestone[:date] }
     assert_includes @response.body, I18n.l(newest[:date], format: :long)
+  end
+
+  test "renders V1 and V2 release group labels in order before shipped milestones" do
+    sign_in_as(User.create!(name: "Dan", email_address: "dan@example.com", password: "secret123"))
+
+    get roadmap_path
+    assert_response :success
+
+    v1_label = I18n.t("roadmap.show.release.v1")
+    v2_label = I18n.t("roadmap.show.release.v2")
+    v1_position = @response.body.index(v1_label)
+    v2_position = @response.body.index(v2_label)
+
+    # Both labels should appear
+    assert v1_position, "V1 release label should be rendered"
+    assert v2_position, "V2 release label should be rendered"
+
+    # V1 should come before V2
+    assert_operator v1_position, :<, v2_position, "V1 should appear before V2"
+
+    # Verify V1 and V2 milestones appear within their correct sections
+    v1_milestones = Roadmap.milestones.select { |m| m[:release] == :v1 }
+    v2_milestones = Roadmap.milestones.select { |m| m[:release] == :v2 }
+
+    # Extract section boundaries from the rendered HTML
+    today_label = I18n.t("roadmap.show.today")
+    v1_end = v2_position  # V1 section ends where V2 section begins
+    v2_end = @response.body.index(today_label) || @response.body.length  # V2 section ends at Today divider or end of page
+
+    v1_section = @response.body[v1_position...v1_end]
+    v2_section = @response.body[v2_position...v2_end]
+
+    v1_milestones.each do |milestone|
+      escaped_title = ERB::Util.html_escape(milestone[:title])
+      assert_includes v1_section, escaped_title, "V1 milestone #{milestone[:slug]} should be rendered in V1 section"
+      assert_not_includes v2_section, escaped_title, "V1 milestone #{milestone[:slug]} should not appear in V2 section"
+    end
+
+    v2_milestones.each do |milestone|
+      escaped_title = ERB::Util.html_escape(milestone[:title])
+      assert_includes v2_section, escaped_title, "V2 milestone #{milestone[:slug]} should be rendered in V2 section"
+      assert_not_includes v1_section, escaped_title, "V2 milestone #{milestone[:slug]} should not appear in V1 section"
+    end
   end
 
   # The same partial is the "Roadmap" tab of household settings, which is where

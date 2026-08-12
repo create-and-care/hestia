@@ -1,0 +1,4 @@
+<%= tag.div id: panel_id do %>
+  <%= render "shared/quick_capture_form", panel_id: panel_id %>
+  <%= render "shared/quick_capture_result", note: note, suggestion: suggestion, blank: local_assigns.fetch(:blank, false) %>
+<% end %>

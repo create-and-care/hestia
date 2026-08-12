@@ -10,6 +10,9 @@ en:
       status:
         done: Done
         upcoming: Upcoming
+      release:
+        v1: V1
+        v2: V2 and later
       today: Today
     milestones:
       foundation:
@@ -241,15 +244,16 @@ en:
           - "French school-holiday calendar (zones A/B/C) — public holidays are covered, what shapes a family's year is not"
           - "Duplicate detection when adding to the shopping list, and suggestions drawn from the purchase history already in the database"
       quick_capture:
-        title: "Capture first, file later"
+        title: "Quick capture, from anywhere"
         items:
-          - "One box that takes a sentence and offers where it belongs: Notes::PromoteToTask already does exactly this for one pair, and Ui::CommandComponent already provides the palette that would host it"
-          - "Rule-based rather than a model call: a date in the text offers a reminder, a known product offers the shopping list, everything else stays a note"
-          - "Unfiled items stay visible until they are filed — a capture box that silently swallows things is worse than none"
+          - "A capture field reachable from any page (the sidebar icon) saves any sentence as a note in one step"
+          - "A date-looking phrase offers to create a task instead; a phrase matching a product already in your catalog offers to add it to the shopping list"
+          - "The note is always saved whether or not the suggestion is accepted — nothing is filed away without an explicit tap"
       wired_patterns:
-        title: "Patterns already in the repo, finally wired up"
+        title: "Photos and reactions on messages"
         items:
-          - "Attachments and reactions on messages: CirclePost already carries has_one_attached :photo and a complete CirclePostReaction model with its controller and routes — the pattern is written, tested and shipped, it is simply not applied to messages"
+          - "A photo can now be attached to a message, just like it already could on Circle posts"
+          - "React to a message with an emoji (👍 ❤️ 😂 🎉 😮), visible to every participant in the conversation"
       tasks_and_recurrence:
         title: "Tasks and recurrence, in depth"
         items:

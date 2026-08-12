@@ -25,6 +25,22 @@ class RoadmapTest < ActiveSupport::TestCase
     end
   end
 
+  test "a shipped milestone carries no release, an upcoming one is v1 or v2" do
+    Roadmap.milestones.each do |milestone|
+      if milestone[:status] == :done
+        assert_nil milestone[:release]
+      else
+        assert_includes %i[v1 v2], milestone[:release]
+      end
+    end
+  end
+
+  test "V1 groups the launch-blocking gaps: backups, instance health, account privacy and link controls" do
+    assert_equal %w[account_privacy security_audit_trail household_activity_export
+                     shared_link_controls backup_and_restore instance_operations].sort,
+                 Roadmap.milestones.select { |milestone| milestone[:release] == :v1 }.map { |milestone| milestone[:slug] }.sort
+  end
+
   test "milestones stay in chronological order, done entries before upcoming ones" do
     dates = Roadmap.milestones.map { |milestone| milestone[:date] }.compact
     assert_equal dates.sort, dates

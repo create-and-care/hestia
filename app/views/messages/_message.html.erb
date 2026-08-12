@@ -18,5 +18,26 @@
         timestamp: l(message.created_at, format: :numeric_short)
       )) do %>
     <p class="whitespace-pre-line"><%= message.content %></p>
+    <% if message.photo.attached? %>
+      <%= image_tag message.photo.variant(resize_to_limit: [ 480, 480 ]), alt: "", loading: :lazy, class: "mt-2 max-h-80 w-auto rounded-lg object-cover" %>
+    <% end %>
+
+    <% my_reaction = message.message_reactions.detect { |r| r.user_id == Current.user&.id } %>
+    <div class="mt-2 flex flex-wrap items-center gap-2">
+      <%= render "messages/reaction_counts", message: message %>
+      <%# Bespoke one-tap emoji reaction pills, mirroring circle_posts/_circle_post —
+          see that partial's comment on why these stay hand-rolled button_to forms
+          rather than Ui::ButtonComponent. %>
+      <% MessageReaction::ALLOWED_EMOJIS.each do |emoji| %>
+        <%= button_to emoji, react_message_path(message, emoji: emoji), method: :post,
+              class: "cursor-pointer rounded-full px-1 text-sm hover:bg-surface-hover #{"bg-surface-inset" if my_reaction&.emoji == emoji}",
+              form: { class: "inline" },
+              aria: { label: t("conversations.react_with", emoji: emoji), pressed: my_reaction&.emoji == emoji } %>
+      <% end %>
+      <% if my_reaction %>
+        <%= button_to t("conversations.remove_reaction"), unreact_message_path(message), method: :delete,
+              class: "cursor-pointer text-xs text-subdued underline", form: { class: "inline" } %>
+      <% end %>
+    </div>
   <% end %>
 <% end %>

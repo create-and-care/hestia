@@ -1,0 +1,37 @@
+<%# One connected timeline segment. Shipped items get a solid line, a
+    success-tinted ring and their ship date; upcoming items (V1 or V2) get a
+    dashed line and a subdued ring — the same look the two release buckets
+    share, since neither has shipped yet. %>
+<div class="relative">
+  <div class="absolute left-5 top-5 bottom-5 w-px <%= done ? "bg-border-primary" : "border-l border-dashed border-primary" %>" aria-hidden="true"></div>
+
+  <ol class="relative space-y-10">
+    <% milestones.each do |milestone| %>
+      <li class="relative pl-14">
+        <span class="absolute left-0 top-0 flex size-10 items-center justify-center rounded-full border <%= done ? "border-success/30 text-success" : "border-primary text-subdued" %> bg-surface-inset">
+          <%= lucide_icon(milestone[:icon], css_class: "size-5") %>
+        </span>
+
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 pt-2">
+          <%= render(Ui::BadgeComponent.new(variant: done ? :success : :secondary)) { t("roadmap.show.status.#{done ? "done" : "upcoming"}") } %>
+          <%# The ship date, which the timeline never showed: without it a
+              reverse-chronological archive gives no sense of pace. %>
+          <% if done && milestone[:date] %>
+            <span class="text-xs text-subdued"><%= l(milestone[:date], format: :long) %></span>
+          <% end %>
+        </div>
+
+        <h3 class="mt-1 font-medium"><%= milestone[:title] %></h3>
+
+        <ul class="mt-2 space-y-1.5 text-sm text-secondary">
+          <% milestone[:items].each do |item| %>
+            <li class="flex gap-2">
+              <span class="mt-2 size-1 shrink-0 rounded-full bg-subdued" aria-hidden="true"></span>
+              <span><%= item %></span>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ol>
+</div>

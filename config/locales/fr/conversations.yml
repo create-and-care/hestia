@@ -2,6 +2,8 @@ fr:
   conversations:
     message_placeholder: "Votre message…"
     send: "Envoyer"
+    react_with: "Réagir avec %{emoji}"
+    remove_reaction: "Retirer ma réaction"
     discuss_button: "Discuter de ceci"
     discuss_dialog:
       title: "Discuter de ceci"

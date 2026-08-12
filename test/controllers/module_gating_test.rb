@@ -24,6 +24,28 @@ class ModuleGatingTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
+  test "a disabled messages module blocks reacting to a message" do
+    households(:alpha).update!(disabled_modules: [ "messages" ])
+    sign_in_as(users(:one))
+
+    assert_no_difference -> { MessageReaction.count } do
+      post react_message_path(messages(:alpha_hello), emoji: "❤️")
+    end
+
+    assert_redirected_to root_path
+  end
+
+  test "a disabled notes module blocks the quick capture endpoint" do
+    households(:alpha).update!(disabled_modules: [ "notes" ])
+    sign_in_as(users(:one))
+
+    assert_no_difference -> { Note.count } do
+      post quick_capture_path, params: { quick_capture: { text: "Acheter du pain" } }
+    end
+
+    assert_redirected_to root_path
+  end
+
   test "an enabled module is reachable as usual" do
     sign_in_as(users(:one))
 

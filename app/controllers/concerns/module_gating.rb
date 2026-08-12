@@ -26,7 +26,7 @@ module ModuleGating
     "calendar" => "calendar", "calendar_events" => "calendar", "event_reminders" => "calendar", "external_calendar_connections" => "calendar",
     "routines" => "routines",
 
-    "notes" => "notes",
+    "notes" => "notes", "quick_captures" => "notes",
     "addresses" => "addresses",
     "service_providers" => "service_providers", "service_provider_types" => "service_providers",
     "vehicles" => "vehicles", "vehicle_maintenance_entries" => "vehicles",
@@ -48,7 +48,7 @@ module ModuleGating
     "wellbeing" => "wellbeing", "wellbeing_profiles" => "wellbeing", "weight_entries" => "wellbeing", "workout_entries" => "wellbeing",
     "workout_templates" => "wellbeing", "workout_template_exercises" => "wellbeing",
 
-    "conversations" => "messages", "messages" => "messages",
+    "conversations" => "messages", "messages" => "messages", "message_reactions" => "messages",
     "loyalty_cards" => "loyalty",
     "gift_lists" => "gifts", "gift_ideas" => "gifts", "gift_list_shares" => "gifts",
     # Circle data is cross-household, but access is still

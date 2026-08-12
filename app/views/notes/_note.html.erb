@@ -35,6 +35,10 @@
               confirm_url: promote_to_task_note_path(note, **filter_params), confirm_method: :post, confirm_variant: :default)) do |alert_dialog| %>
           <% alert_dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".promote_to_task") } } %>
         <% end %>
+        <%= render(Ui::AlertDialogComponent.new(title: t(".promote_to_shopping_confirm"), confirm_label: t(".promote_to_shopping_confirm_label"),
+              confirm_url: promote_to_shopping_list_item_note_path(note, **filter_params), confirm_method: :post, confirm_variant: :default)) do |alert_dialog| %>
+          <% alert_dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".promote_to_shopping") } } %>
+        <% end %>
         <%= render(Ui::AlertDialogComponent.new(title: t(".delete_confirm"), confirm_label: t(".delete"),
               confirm_url: note_path(note, **filter_params), confirm_method: :delete)) do |alert_dialog| %>
           <% alert_dialog.with_trigger { render(Ui::ButtonComponent.new(variant: :outline, size: :sm)) { t(".delete") } } %>

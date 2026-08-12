@@ -10,6 +10,9 @@ fr:
       status:
         done: Fait
         upcoming: À venir
+      release:
+        v1: V1
+        v2: V2 et plus tard
       today: Aujourd'hui
     milestones:
       foundation:
@@ -241,15 +244,16 @@ fr:
           - "Calendrier des vacances scolaires françaises (zones A/B/C) — les jours fériés sont couverts, pas ce qui structure l'année d'un foyer avec enfants"
           - "Détection des doublons à l'ajout aux courses, et suggestions tirées de l'historique d'achat déjà en base"
       quick_capture:
-        title: "Noter d'abord, ranger ensuite"
+        title: "Capture rapide, depuis n'importe où"
         items:
-          - "Un champ unique qui prend une phrase et propose où elle va : Notes::PromoteToTask fait déjà exactement cela pour un couple de modules, et Ui::CommandComponent fournit déjà la palette qui l'accueillerait"
-          - "À base de règles plutôt que d'un appel à un modèle : une date dans le texte propose un rappel, un produit connu propose la liste de courses, tout le reste reste une note"
-          - "Ce qui n'est pas rangé reste visible jusqu'à ce qu'il le soit — une boîte de capture qui avale les choses en silence est pire que pas de boîte du tout"
+          - "Un champ de capture accessible depuis n'importe quelle page (icône dans la barre latérale) enregistre toute phrase comme note en un geste"
+          - "Si le texte ressemble à une date, une suggestion propose de créer une tâche à la place ; s'il correspond à un produit déjà dans votre catalogue, elle propose de l'ajouter aux courses"
+          - "La note reste toujours enregistrée, suggestion acceptée ou non — rien n'est rangé sans un geste explicite"
       wired_patterns:
-        title: "Des motifs déjà présents dans le dépôt, enfin branchés"
+        title: "Photos et réactions dans les messages"
         items:
-          - "Pièces jointes et réactions sur les messages : CirclePost porte déjà has_one_attached :photo et un modèle CirclePostReaction complet avec son contrôleur et ses routes — le motif est écrit, testé et livré, il n'est simplement pas appliqué aux messages"
+          - "Une photo peut désormais être jointe à un message, comme c'était déjà possible sur les publications de Cercle"
+          - "Réagissez à un message avec un emoji (👍 ❤️ 😂 🎉 😮), visible par tous les participants de la conversation"
       tasks_and_recurrence:
         title: "Tâches et récurrences, en profondeur"
         items:

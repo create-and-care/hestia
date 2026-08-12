@@ -1,0 +1,5 @@
+<%= tag.div id: "message_#{message.id}_reactions", class: "contents" do %>
+  <% message.message_reactions.group_by(&:emoji).each do |emoji, reactions| %>
+    <%= render(Ui::BadgeComponent.new(variant: :secondary)) { "#{emoji} #{reactions.size}" } %>
+  <% end %>
+<% end %>

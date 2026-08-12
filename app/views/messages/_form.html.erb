@@ -2,11 +2,12 @@
   <% if message.errors.any? %>
     <%= render(Ui::AlertComponent.new(variant: :destructive, class_name: "mb-2")) { message.errors.full_messages.to_sentence } %>
   <% end %>
-  <%= form_with model: [ conversation, conversation.messages.new ], url: conversation_messages_path(conversation), class: "flex items-end gap-2" do |form| %>
+  <%= form_with model: [ conversation, conversation.messages.new ], url: conversation_messages_path(conversation), multipart: true, class: "flex items-end gap-2" do |form| %>
     <div class="flex-1">
       <%= render(Ui::TextareaComponent.new(name: "message[content]", rows: 1, placeholder: t("conversations.message_placeholder"),
             html_options: { id: "message_content", required: true, autocomplete: "off", autofocus: true })) { message.content } %>
     </div>
+    <%= render Ui::FileUploadComponent.new(name: "message[photo]", accept: "image/*", compact: true) %>
     <%= render(Ui::ButtonComponent.new(type: "submit")) { t("conversations.send") } %>
   <% end %>
 <% end %>
