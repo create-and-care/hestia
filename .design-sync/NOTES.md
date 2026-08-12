@@ -1,5 +1,73 @@
 # design-sync notes — Hestia
 
+## 2026-08-12 re-sync — 21 icons missing across three syncs; Badge divergence closed upstream
+
+**This file was stale again.** Its newest entry was 2026-08-07, but the live project's own `github.md`
+recorded a later sync (**2026-08-09T20:30Z**, a token pass). As that entry below already warns:
+`github.md` in the project is the source of truth for sync history, not this file. Read it first,
+every time — the date in its `## Last sync` header is the real baseline.
+
+That timestamp gave this sync something no previous one had: **a dated baseline**. The last commit
+before it is `6a9bad5`, so the drift is exactly `git diff 6a9bad5..HEAD` over
+`app/components/ui/ app/assets/stylesheets/ app/assets/icons/ app/assets/images/ app/views/design_system/`
+— 15 files, 13 of them icons. Use that command next time instead of reading files speculatively.
+
+**The real find: 21 Lucide icons had never been uploaded** (project had 76, repo has 97). Only 13
+came from this window; **8 had been missing since 2026-08-02** (`menu`) through 2026-08-07
+(`chevron-right`, `log-out`, `panel-left-close`, `panel-left-open`, `user` — the `d014a4e` sidebar
+commit) and 2026-08-09 (`external-link`, `eye`). Three consecutive syncs missed them because each
+one focused on components or tokens and **verified the icon count by reading the readme's own prose**
+— which was itself stale, and internally inconsistent (the readme said 75 in one section and 76 in
+another; the iconography card said 75; the truth was 76). Same failure shape as the 2026-08-07 logo
+miss: trusting a document's claim about a file instead of checking the file.
+
+**→ The rule: verify the icon set with a list diff, never by reading prose.**
+```
+ls app/assets/icons/lucide/ | sed 's/\.svg$//' | sort > /tmp/local.txt
+# vs the project's assets/icons/lucide/* from DesignSync list_files
+comm -23 /tmp/local.txt /tmp/remote.txt   # missing from the project
+```
+
+**`Badge#urgent` divergence is closed — by upstream, in the expected direction.** The 2026-08-09
+entry removed `urgent` from the project and recorded it as a deliberate divergence ("upstream keeps
+it; if the repo wants to align, that's a deletion in `badge_component.rb`"). Upstream did exactly
+that hours later: `eb10f66` drops `urgent:` from `VARIANTS`, `8a0d3b6`/`5e9807f` rename the
+`:urgent` status to `:destructive` across helpers/models, `0f46948` fixes the leftover mappings.
+Both sides now have the same 7 variants — **no code change was needed**, only prose.
+
+**Doc drift corrected in the project** (each verified against `application.tailwind.css` first):
+- `readme.md` described the nav active state as `transparent → --surface-hover → --surface-inset`.
+  That is **the exact bug fixed on 2026-08-02** (`--surface-inset` is ~1.5 ΔE from hover in light and
+  *identical* to it in dark); `--item-active` has existed in the repo since. The doc was telling a
+  design agent to reproduce the defect. Rewritten.
+- `verification-checklist.md` §2 said `--text-subdued: #7A6B61` (abandoned intermediate; repo says
+  `#72645C`) and §8 listed `--destructive-text` as crimson-700/300 (repo: crimson-800/200) — both
+  contradicted by correction bullets *lower in the same file*.
+- Its "known open points" still claimed `logo.png` is 0 bytes (false since 2026-08-05) and that the
+  illustrations were undelivered (false since 2026-08-02).
+
+### ⚠️ The project is AHEAD of `main` on two things — and the port landed mid-run
+The live project was edited on 2026-08-12 (before this sync ran) with two intentional design
+decisions, the same pattern as Terre cuite before 2026-08-01:
+- **`pine-*` scale; `--link` = pine-700, `--link-hover` = pine-800.**
+- **`--font-display` = Instrument Serif, replacing Caveat.**
+
+Both were absent from committed `main` (`31c11bb`) — verified directly: `--link: var(--color-blue-700)`,
+no `pine-*`, Caveat still imported, `.greeting` at weight 600. **But partway through this run the
+working tree gained all of it**: the full `--color-pine-25→900` ramp, `--link`/`--link-hover` on
+pine-700/800 (light) and pine-300/200 (dark), the Instrument Serif `@import`, `--font-display`,
+`--font-hand` reduced to an alias, `.greeting` back to weight 400 — plus edits to
+`greeting_header_component.rb`, `celebration_moment_component.html.erb`, `empty_component.html.erb`
+and `design-language.md`. Uncommitted at the time of writing.
+
+**Lesson for the next run: `git status` before trusting a "diff since baseline".** The initial status
+snapshot showed one modified file; by mid-run there were thirteen. The project docs were reworded to
+say "not on `main` at sync time, port written but uncommitted — recheck `main`" rather than "upstream
+hasn't done it", precisely so they don't read as false the moment this gets committed.
+
+Uploaded this pass: 21 icons + `guidelines/iconography.html` (subtitle 75→97), `readme.md`,
+`guidelines/verification-checklist.md`, `github.md`. No components or tokens changed.
+
 ## 2026-08-07 re-sync — real logo mark caught (missed by a same-day sync)
 
 Same manual process as prior re-syncs: read `github.md` in the live project first — it recorded a
