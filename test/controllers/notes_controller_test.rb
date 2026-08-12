@@ -90,6 +90,14 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to notes_path
   end
 
+  test "promote to shopping list item" do
+    shopping_list = households(:alpha).shopping_lists.general.first
+    assert_difference -> { shopping_list.items.count }, 1 do
+      post promote_to_shopping_list_item_note_path(notes(:alpha_idea))
+    end
+    assert_redirected_to notes_path
+  end
+
   test "destroy" do
     note = notes(:alpha_idea)
     delete note_path(note), as: :turbo_stream
@@ -107,8 +115,8 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   test "promoting a note to a task asks for confirmation via the design-system alert dialog" do
     get notes_path
     assert_response :success
-    # one per note fixture shown (delete + promote); the layout's own is excluded
-    assert_select "dialog[role='alertdialog']:not(#global_confirm_dialog)", count: 2
+    # one per note fixture shown (delete + promote to task + promote to shopping); the layout's own is excluded
+    assert_select "dialog[role='alertdialog']:not(#global_confirm_dialog)", count: 3
     assert_body_includes I18n.t("notes.note.promote_confirm")
   end
 

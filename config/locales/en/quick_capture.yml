@@ -1,0 +1,13 @@
+en:
+  quick_capture:
+    trigger_aria: "Quick capture"
+    title: "Quick capture"
+    description: "Jot down a sentence; it's saved as a note, with a suggestion if it looks like a reminder or a shopping item."
+    placeholder: "Jot something down…"
+    submit: "Save"
+    saved: "Saved to Notes."
+    blank_error: "Write something before saving."
+    suggestion_task: "Looks like a date — create a task too?"
+    create_task: "Create a task"
+    suggestion_shopping: "This item is already in your catalog — add it to the shopping list?"
+    add_to_shopping: "Add to shopping list"

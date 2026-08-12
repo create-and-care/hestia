@@ -13,4 +13,14 @@ class Product < ApplicationRecord
     scope.where("LOWER(name) = ?", name.to_s.downcase).first ||
       scope.create!(name: name, rayon: rayon)
   end
+
+  # The first catalog product whose name appears anywhere inside the given
+  # text — the reverse of catalog_for's exact match, used to recognize a
+  # known product inside a longer free-text phrase (Quick Capture) rather
+  # than resolve one from an already-isolated name.
+  def self.matching(household:, text:)
+    return if text.blank?
+
+    household.products.where("LOWER(:text) LIKE '%' || LOWER(name) || '%'", text: text).first
+  end
 end

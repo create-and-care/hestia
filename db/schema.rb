@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_11_183117) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_11_194944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -451,6 +451,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_11_183117) do
     t.index ["household_id"], name: "index_memberships_on_household_id"
     t.index ["user_id", "household_id"], name: "index_memberships_on_user_id_and_household_id", unique: true
     t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "message_reactions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "emoji", null: false
+    t.bigint "message_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["message_id", "user_id"], name: "index_message_reactions_on_message_id_and_user_id", unique: true
+    t.index ["message_id"], name: "index_message_reactions_on_message_id"
+    t.index ["user_id"], name: "index_message_reactions_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -1073,6 +1084,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_11_183117) do
   add_foreign_key "meal_plan_entries", "trips"
   add_foreign_key "memberships", "households"
   add_foreign_key "memberships", "users"
+  add_foreign_key "message_reactions", "messages"
+  add_foreign_key "message_reactions", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users", column: "author_id"
   add_foreign_key "notes", "documents"

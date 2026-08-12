@@ -39,4 +39,11 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     get conversation_path(conversations(:alpha_chat))
     assert_select "textarea#message_content"
   end
+
+  test "create attaches an optional photo" do
+    conversation = conversations(:alpha_chat)
+    photo = fixture_file_upload("sample.png", "image/png")
+    post conversation_messages_path(conversation), params: { message: { content: "Regardez !", photo: photo } }, as: :turbo_stream
+    assert conversation.messages.order(:created_at).last.photo.attached?
+  end
 end

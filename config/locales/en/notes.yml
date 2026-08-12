@@ -32,6 +32,9 @@ en:
       promote_to_task: "→ Task"
       promote_confirm: "Convert this note to a task?"
       promote_confirm_label: "Convert"
+      promote_to_shopping: "→ Shopping"
+      promote_to_shopping_confirm: "Add this note to the shopping list?"
+      promote_to_shopping_confirm_label: "Add"
       delete: "Delete"
       delete_confirm: "Permanently delete this note?"
       edit_aria: "Edit \"%{title}\""
@@ -52,3 +55,5 @@ en:
       updated: "Note updated."
     promote_to_task:
       promoted: "Note promoted to task."
+    promote_to_shopping_list_item:
+      promoted: "Note added to the shopping list."

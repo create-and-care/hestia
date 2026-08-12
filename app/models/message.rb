@@ -1,6 +1,8 @@
 class Message < ApplicationRecord
   belongs_to :conversation
   belongs_to :author, class_name: "User"
+  has_many :message_reactions, dependent: :destroy
+  has_one_attached :photo
 
   validates :content, presence: true
 

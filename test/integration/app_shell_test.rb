@@ -42,4 +42,20 @@ class AppShellTest < ActionDispatch::IntegrationTest
     assert_select "button[data-sidebar-target='panelToggle'].h-\\[var\\(--control-h-sm\\)\\]"
     assert_select "form[action='#{session_path}'] button.h-\\[var\\(--control-h-sm\\)\\]"
   end
+
+  test "the quick-capture trigger renders once for desktop and once for mobile, each with its own panel id" do
+    get root_path
+
+    assert_select "#quick_capture_panel"
+    assert_select "#quick_capture_panel_mobile"
+  end
+
+  test "the quick-capture trigger is hidden when the notes module is disabled" do
+    households(:alpha).update!(disabled_modules: [ "notes" ])
+
+    get root_path
+
+    assert_select "#quick_capture_panel", false
+    assert_select "#quick_capture_panel_mobile", false
+  end
 end

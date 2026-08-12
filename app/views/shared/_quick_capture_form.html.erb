@@ -1,0 +1,8 @@
+<%= form_with url: quick_capture_path, class: "flex items-end gap-2" do |form| %>
+  <%= hidden_field_tag :panel_id, panel_id %>
+  <div class="flex-1">
+    <%= render(Ui::InputComponent.new(name: "quick_capture[text]", placeholder: t("quick_capture.placeholder"),
+          html_options: { id: "#{panel_id}_text", required: true, autocomplete: "off", autofocus: true })) %>
+  </div>
+  <%= render(Ui::ButtonComponent.new(type: "submit")) { t("quick_capture.submit") } %>
+<% end %>

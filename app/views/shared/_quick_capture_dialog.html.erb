@@ -1,0 +1,18 @@
+<%
+  # A second instance renders in the mobile drawer alongside the desktop
+  # sidebar's (see shared/_app_sidebar) — panel_id lets each keep its own DOM
+  # id so a turbo_stream response replaces the one that actually submitted,
+  # not whichever copy happens to come first in the page. Mirrors
+  # shared/_search_dialog's frame_id for the same dual-mount reason.
+  panel_id = local_assigns.fetch(:panel_id, "quick_capture_panel")
+%>
+<%= render(Ui::DialogComponent.new) do |dialog| %>
+  <% dialog.with_trigger do %>
+    <%= render(Ui::ButtonComponent.new(variant: :outline, size: :sm, html_options: { aria: { label: t("quick_capture.trigger_aria") } })) do %>
+      <%= lucide_icon("inbox", css_class: "size-4") %>
+    <% end %>
+  <% end %>
+  <% dialog.with_title { t("quick_capture.title") } %>
+  <% dialog.with_description { t("quick_capture.description") } %>
+  <%= render "shared/quick_capture_panel", panel_id: panel_id, note: nil, suggestion: nil %>
+<% end %>

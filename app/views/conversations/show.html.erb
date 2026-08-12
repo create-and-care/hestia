@@ -33,7 +33,7 @@
       scrollable area (and are still caught by the controller's subtree MutationObserver). %>
   <%= render(Ui::MessageScrollerComponent.new(class_name: "mb-4 h-[var(--panel-h-sm)] w-full")) do %>
     <div id="messages" class="space-y-2" data-controller="message-role" data-message-role-current-user-id-value="<%= Current.user.id %>">
-      <%= render @conversation.messages.chronological %>
+      <%= render @conversation.messages.chronological.includes(:author, :message_reactions, photo_attachment: :blob) %>
     </div>
   <% end %>
 

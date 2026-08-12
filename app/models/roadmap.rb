@@ -80,10 +80,28 @@ module Roadmap
     "i18n_guardrails" => Date.new(2026, 8, 7),
     "budget_expense_chart" => Date.new(2026, 8, 11),
     "fridge_item_quantity_unit" => Date.new(2026, 8, 11),
-    "today_view" => Date.new(2026, 8, 11)
+    "today_view" => Date.new(2026, 8, 11),
+    "wired_patterns" => Date.new(2026, 8, 11),
+    "quick_capture" => Date.new(2026, 8, 11)
   }.freeze
 
   MILESTONE_STATUSES = MILESTONE_SLUGS.index_with { |slug| MILESTONE_DATES.key?(slug) ? :done : :upcoming }.freeze
+
+  # V1 is the subset of upcoming work judged launch-blocking or strongly
+  # recommended before other households self-host: no backup/restore path,
+  # no version or health signal beyond Rails' default /up, no account
+  # deletion or data export, no durable security log, and public gift-list
+  # links with no expiry or password. Everything else upcoming defaults to
+  # V2 — feature depth that doesn't put anyone's data or trust at risk.
+  V1_MILESTONE_SLUGS = %w[
+    account_privacy security_audit_trail household_activity_export
+    shared_link_controls backup_and_restore instance_operations
+  ].freeze
+
+  MILESTONE_RELEASES = MILESTONE_SLUGS.index_with do |slug|
+    next nil if MILESTONE_DATES.key?(slug)
+    V1_MILESTONE_SLUGS.include?(slug) ? :v1 : :v2
+  end.freeze
 
   MILESTONE_ICONS = {
     "foundation" => "house", "design_system" => "layout-grid", "wave_2a" => "package",
@@ -123,6 +141,7 @@ module Roadmap
         slug: slug,
         date: MILESTONE_DATES[slug],
         status: MILESTONE_STATUSES.fetch(slug),
+        release: MILESTONE_RELEASES.fetch(slug),
         icon: MILESTONE_ICONS.fetch(slug),
         title: I18n.t("roadmap.milestones.#{slug}.title"),
         items: I18n.t("roadmap.milestones.#{slug}.items")

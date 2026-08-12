@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
   def create
     @conversation = accessible_conversations.find(params[:conversation_id])
-    @message = @conversation.messages.new(author: Current.user, content: params.require(:message)[:content])
+    @message = @conversation.messages.new(message_params.merge(author: Current.user))
 
     if @message.save
       @conversation.touch
@@ -23,5 +23,9 @@ class MessagesController < ApplicationController
         .joins(:conversation_participants)
         .where(conversation_participants: { user_id: Current.user.id })
         .distinct
+    end
+
+    def message_params
+      params.require(:message).permit(:content, :photo)
     end
 end

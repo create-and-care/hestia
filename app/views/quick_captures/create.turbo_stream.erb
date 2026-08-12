@@ -1,0 +1,5 @@
+<%# The field resets and the suggestion (if any) appears below it; the note
+    itself surfaces in Notes via its own broadcast when that page is open. %>
+<%= turbo_stream.replace @panel_id do %>
+  <%= render "shared/quick_capture_panel", panel_id: @panel_id, note: @note, suggestion: @suggestion, blank: @blank %>
+<% end %>

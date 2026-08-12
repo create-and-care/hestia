@@ -191,8 +191,10 @@ Rails.application.routes.draw do
       patch :toggle_favorite
       patch :toggle_archive
       post :promote_to_task
+      post :promote_to_shopping_list_item
     end
   end
+  resource :quick_capture, only: :create
   resources :contacts, only: %i[index new create edit update destroy] do
     collection { get :calendar }
   end
@@ -238,6 +240,8 @@ Rails.application.routes.draw do
     resources :messages, only: :create
     collection { post :discuss }
   end
+  post   "messages/:id/react", to: "message_reactions#create",  as: :react_message
+  delete "messages/:id/react", to: "message_reactions#destroy", as: :unreact_message
 
   # Modules with richer business logic.
   resource :menu, only: :show, controller: "menu"
